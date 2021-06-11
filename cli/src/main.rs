@@ -347,7 +347,12 @@ async fn upload_file(
         .body(body)
         .send()
         .await?;
-    ensure!(res.status().is_success(), "failed to upload file");
+    ensure!(
+        res.status().is_success(),
+        "failed to upload file: {}\n{:?}",
+        res.status(),
+        res.text().await
+    );
 
     let upload_time = start.elapsed();
     println!("    Finished in {:.3}s", upload_time.as_secs_f64());
