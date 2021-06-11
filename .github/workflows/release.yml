@@ -51,7 +51,7 @@ jobs:
         STAGING=staging
         mkdir -p $STAGING
         cp target/release/rivetctl-cli $STAGING/rivetctl
-        tar czf $STAGING.tar.gz $STAGING
+        tar czf $STAGING.tar.gz $STAGING/rivetctl
         echo "ASSET_PATH=$STAGING.tar.gz" >> $GITHUB_ENV
     - name: Upload release archive
       uses: actions/upload-release-asset@v1.0.1
