@@ -1,0 +1,65 @@
+# Reference: https://eugene-babichenko.github.io/blog/2020/05/09/github-actions-cross-platform-auto-releases/
+
+name: release
+on:
+  push:
+    tags:
+    - "[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  create-release:
+    name: create-release
+    runs-on: ubuntu-20.04
+    outputs:
+      upload_url: ${{ steps.release.outputs.upload_url }}
+      tag_name: ${{ env.TAG_NAME }}
+    steps:
+      - name: Read Tag
+        shell: bash
+        run: |
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "Tag: ${{ env.TAG_NAME }}"
+      - name: Create GitHub release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.TAG_NAME }}
+
+  build-release:
+    name: build-release
+    needs: ['create-release']
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        build: [linux]
+        include:
+        - build: linux
+          os: ubuntu-20.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Build binary
+      run: cargo build --release --bin rivetctl-cli
+    - name: Strip binary
+      run: strip "target/release/rivetctl-cli"
+    - name: Build archive
+      shell: bash
+      run: |
+        STAGING=staging
+        mkdir -p $STAGING
+        cp target/release/rivetctl-cli $STAGING/rivetctl
+        tar czf $STAGING.tar.gz $STAGING
+        echo "ASSET_PATH=$STAGING.tar.gz" >> $GITHUB_ENV
+    - name: Upload release archive
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ${{ env.ASSET_PATH }}
+        asset_name: rivetctl_${{ needs.create-release.outputs.tag_name }}_linux_x86_64.tar.gz
+        asset_content_type: application/octet-stream
+

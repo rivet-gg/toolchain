@@ -1,0 +1,12 @@
+[package]
+name = "rivetctl"
+version = "0.0.1"
+authors = ["Nathan Flurry <developer@nathanflurry.com>"]
+edition = "2018"
+license = "MIT"
+
+[dependencies]
+rivet-cloud = { path = "../lib/rivet-api-cloud/", package = "rivet-api-cloud" }
+tokio = { version = "0.2", features = ["full"] }
+thiserror = "1.0"
+serde = { version = "1.0", features = ["derive"] }

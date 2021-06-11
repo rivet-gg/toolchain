@@ -1,0 +1,21 @@
+[package]
+name = "rivetctl-cli"
+version = "0.0.1"
+authors = ["Nathan Flurry <developer@nathanflurry.com>"]
+edition = "2018"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+async-recursion = "0.3"
+clap = "3.0.0-beta.2"
+futures-util = "0.3"
+home = "0.5"
+mime_guess = "2.0"
+reqwest = { version = "0.11", features = ["stream"] }
+rivetctl = { path = "../rivetctl", package = "rivetctl" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tempfile = "3.2"
+tokio = { version = "1.6", features = ["full"] }
+tokio-util = { version = "0.6", features = ["codec"] }
