@@ -82,7 +82,7 @@ async fn main() -> Result<()> {
     match opts.subcmd {
         SubCommand::Auth(auth_cmd) => match auth_cmd {
             AuthSubCommand::Token(_) => {
-                println!("Auth token: ");
+                print!("Auth token: ");
 
                 // Read token from stdin
                 let token = tokio::task::spawn_blocking(|| {
@@ -147,6 +147,7 @@ async fn main() -> Result<()> {
                     .name
                     .clone()
                     .unwrap_or_else(|| push_opts.tag.clone());
+                let content_type = "application/x-tar";
                 println!("\n\n> Creating build \"{}\"", display_name);
                 let build_res = rivetctl::apis::game_api::create_game_build(
                     &api_config,
@@ -155,7 +156,7 @@ async fn main() -> Result<()> {
                         display_name,
                         image_file: Box::new(rivetctl::models::UploadPrepareFile {
                             path: "image.tar".into(),
-                            content_type: Some("application/x-tar".into()),
+                            content_type: Some(content_type.into()),
                             content_length: image_file_meta.len() as i32,
                         }),
                     },
@@ -170,6 +171,7 @@ async fn main() -> Result<()> {
                     &api_config.client,
                     &build_res.image_presigned_request,
                     tmp_path,
+                    Some(content_type),
                 )
                 .await?;
 
@@ -230,7 +232,13 @@ async fn main() -> Result<()> {
                         .find(|f| f.prepared.path == presigned_req.path)
                         .context("missing prepared file")?;
 
-                    upload_file(&api_config.client, &presigned_req, &file.absolute_path).await?;
+                    upload_file(
+                        &api_config.client,
+                        &presigned_req,
+                        &file.absolute_path,
+                        file.prepared.content_type.as_ref(),
+                    )
+                    .await?;
                 }
 
                 println!("\n\n> Completing");
@@ -321,18 +329,22 @@ async fn upload_file(
     client: &reqwest::Client,
     presigned_req: &rivetctl::models::UploadPresignedRequest,
     path: impl AsRef<Path>,
+    content_type: Option<impl ToString>,
 ) -> Result<()> {
     use tokio::fs::File;
     use tokio_util::codec::{BytesCodec, FramedRead};
+
+    let content_type = content_type.map(|x| x.to_string());
 
     // Read file
     let file = File::open(path.as_ref()).await?;
     let file_meta = file.metadata().await?;
 
     println!(
-        "  * {path} ({size:.1} MB)",
+        "  * {path} [{size:.1} MB] [{mime}]",
         path = presigned_req.path,
-        size = (file_meta.len() as f64 / 1024. / 1024.)
+        size = (file_meta.len() as f64 / 1024. / 1024.),
+        mime = content_type.clone().unwrap_or_default(),
     );
 
     // Create body
@@ -341,12 +353,13 @@ async fn upload_file(
 
     // Upload file
     let start = Instant::now();
-    let res = client
+    let mut req = client
         .put(&presigned_req.url)
-        .header("content-length", file_meta.len())
-        .body(body)
-        .send()
-        .await?;
+        .header("content-length", file_meta.len());
+    if let Some(content_type) = content_type {
+        req = req.header("content-type", content_type.to_string());
+    }
+    let res = req.body(body).send().await?;
     ensure!(
         res.status().is_success(),
         "failed to upload file: {}\n{:?}",
