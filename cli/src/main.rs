@@ -341,8 +341,9 @@ async fn upload_file(
     let file_meta = file.metadata().await?;
 
     println!(
-        "  * {path} [{size:.1} MB] [{mime}]",
+        "  * {path} -> {url} [{size:.1} MB] [{mime}]",
         path = presigned_req.path,
+        url = presigned_req.url,
         size = (file_meta.len() as f64 / 1024. / 1024.),
         mime = content_type.clone().unwrap_or_default(),
     );
