@@ -4,7 +4,7 @@ All URIs are relative to *https://api-cloud.rivet.gg/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**inspect**](AuthApi.md#inspect) | **get** /auth/inspect | 
+[**inspect**](AuthApi.md#inspect) | **GET** /auth/inspect | 
 
 
 

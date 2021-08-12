@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**build_id** | **String** |  | 
+**build_id** | Option<**String**> |  | [optional]
 **args** | **Vec<String>** |  | 
 **ports** | [**Vec<crate::models::LobbyGroupRuntimeDockerPorts>**](LobbyGroup_runtime_docker_ports.md) |  | 
 **env_vars** | [**Vec<crate::models::LobbyGroupRuntimeDockerEnvVars>**](LobbyGroup_runtime_docker_env_vars.md) |  | 

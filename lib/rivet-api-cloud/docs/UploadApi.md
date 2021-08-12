@@ -4,7 +4,7 @@ All URIs are relative to *https://api-cloud.rivet.gg/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**complete_upload**](UploadApi.md#complete_upload) | **post** /uploads/{upload_id}/complete | 
+[**complete_upload**](UploadApi.md#complete_upload) | **POST** /uploads/{upload_id}/complete | 
 
 
 

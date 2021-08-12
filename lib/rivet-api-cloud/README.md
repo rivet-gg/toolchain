@@ -24,31 +24,46 @@ All URIs are relative to *https://api-cloud.rivet.gg/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AuthApi* | [**inspect**](docs/AuthApi.md#inspect) | **get** /auth/inspect | 
-*GameApi* | [**create_cloud_token**](docs/GameApi.md#create_cloud_token) | **post** /games/{game_id}/tokens/cloud | 
-*GameApi* | [**create_game**](docs/GameApi.md#create_game) | **post** /games | 
-*GameApi* | [**create_game_build**](docs/GameApi.md#create_game_build) | **post** /games/{game_id}/builds | 
-*GameApi* | [**create_game_cdn_site**](docs/GameApi.md#create_game_cdn_site) | **post** /games/{game_id}/cdn/sites | 
-*GameApi* | [**create_game_namespace**](docs/GameApi.md#create_game_namespace) | **post** /games/{game_id}/namespaces | 
-*GameApi* | [**create_game_namespace_token_development**](docs/GameApi.md#create_game_namespace_token_development) | **post** /games/{game_id}/namespaces/{namespace_id}/tokens/development | 
-*GameApi* | [**create_game_namespace_token_public**](docs/GameApi.md#create_game_namespace_token_public) | **post** /games/{game_id}/namespaces/{namespace_id}/tokens/public | 
-*GameApi* | [**create_game_version**](docs/GameApi.md#create_game_version) | **post** /games/{game_id}/versions | 
-*GameApi* | [**get_game_by_id**](docs/GameApi.md#get_game_by_id) | **get** /games/{game_id} | 
-*GameApi* | [**get_game_namespace_by_id**](docs/GameApi.md#get_game_namespace_by_id) | **get** /games/{game_id}/namespaces/{namespace_id} | 
-*GameApi* | [**get_game_version_by_id**](docs/GameApi.md#get_game_version_by_id) | **get** /games/{game_id}/versions/{version_id} | 
-*GameApi* | [**get_games**](docs/GameApi.md#get_games) | **get** /games | 
-*GameApi* | [**list_cdn_sites**](docs/GameApi.md#list_cdn_sites) | **get** /games/{game_id}/cdn/sites | 
-*GameApi* | [**list_game_builds**](docs/GameApi.md#list_game_builds) | **get** /games/{game_id}/builds | 
-*GameApi* | [**update_game_namespace_version**](docs/GameApi.md#update_game_namespace_version) | **put** /games/{game_id}/namespaces/{namespace_id}/version | 
-*UploadApi* | [**complete_upload**](docs/UploadApi.md#complete_upload) | **post** /uploads/{upload_id}/complete | 
+*AuthApi* | [**inspect**](docs/AuthApi.md#inspect) | **GET** /auth/inspect | 
+*GameApi* | [**convert_team**](docs/GameApi.md#convert_team) | **GET** /teams/{team_id}/convert | 
+*GameApi* | [**create_cloud_token**](docs/GameApi.md#create_cloud_token) | **POST** /games/{game_id}/tokens/cloud | 
+*GameApi* | [**create_game**](docs/GameApi.md#create_game) | **POST** /games | 
+*GameApi* | [**create_game_build**](docs/GameApi.md#create_game_build) | **POST** /games/{game_id}/builds | 
+*GameApi* | [**create_game_cdn_site**](docs/GameApi.md#create_game_cdn_site) | **POST** /games/{game_id}/cdn/sites | 
+*GameApi* | [**create_game_namespace**](docs/GameApi.md#create_game_namespace) | **POST** /games/{game_id}/namespaces | 
+*GameApi* | [**create_game_namespace_token_development**](docs/GameApi.md#create_game_namespace_token_development) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/development | 
+*GameApi* | [**create_game_namespace_token_public**](docs/GameApi.md#create_game_namespace_token_public) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/public | 
+*GameApi* | [**create_game_version**](docs/GameApi.md#create_game_version) | **POST** /games/{game_id}/versions | 
+*GameApi* | [**delete_matchmaker_lobby**](docs/GameApi.md#delete_matchmaker_lobby) | **DELETE** /games/{game_id}/matchmaker/lobbies/{lobby_id} | 
+*GameApi* | [**get_game_by_id**](docs/GameApi.md#get_game_by_id) | **GET** /games/{game_id} | 
+*GameApi* | [**get_game_namespace_by_id**](docs/GameApi.md#get_game_namespace_by_id) | **GET** /games/{game_id}/namespaces/{namespace_id} | 
+*GameApi* | [**get_game_version_by_id**](docs/GameApi.md#get_game_version_by_id) | **GET** /games/{game_id}/versions/{version_id} | 
+*GameApi* | [**get_games**](docs/GameApi.md#get_games) | **GET** /games | 
+*GameApi* | [**get_namespace_analytics_matchmaker_live**](docs/GameApi.md#get_namespace_analytics_matchmaker_live) | **GET** /games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live | 
+*GameApi* | [**get_team_billing**](docs/GameApi.md#get_team_billing) | **POST** /teams/{team_id}/billing | 
+*GameApi* | [**get_team_payments_list**](docs/GameApi.md#get_team_payments_list) | **GET** /teams/{team_id}/billing/payments | 
+*GameApi* | [**list_cdn_sites**](docs/GameApi.md#list_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
+*GameApi* | [**list_game_builds**](docs/GameApi.md#list_game_builds) | **GET** /games/{game_id}/builds | 
+*GameApi* | [**team_billing_checkout**](docs/GameApi.md#team_billing_checkout) | **POST** /teams/{team_id}/checkout | 
+*GameApi* | [**update_game_namespace_version**](docs/GameApi.md#update_game_namespace_version) | **PUT** /games/{game_id}/namespaces/{namespace_id}/version | 
+*GameApi* | [**validate_game**](docs/GameApi.md#validate_game) | **POST** /games/validate | 
+*GameApi* | [**validate_game_namespace**](docs/GameApi.md#validate_game_namespace) | **POST** /games/{game_id}/namespace/validate | 
+*GameApi* | [**validate_game_version**](docs/GameApi.md#validate_game_version) | **POST** /games/{game_id}/version/validate | 
+*GameApi* | [**validate_team**](docs/GameApi.md#validate_team) | **POST** /teams/validate | 
+*UploadApi* | [**complete_upload**](docs/UploadApi.md#complete_upload) | **POST** /uploads/{upload_id}/complete | 
 
 
 ## Documentation For Models
 
+ - [AnalyticsLobbySummary](docs/AnalyticsLobbySummary.md)
+ - [BillingPayment](docs/BillingPayment.md)
+ - [BillingSummary](docs/BillingSummary.md)
  - [BuildSummary](docs/BuildSummary.md)
+ - [CdnNamespaceConfig](docs/CdnNamespaceConfig.md)
  - [CdnSiteSummary](docs/CdnSiteSummary.md)
  - [CdnUploadResponse](docs/CdnUploadResponse.md)
  - [CdnVersionConfig](docs/CdnVersionConfig.md)
+ - [CloudMatchmakerConfig](docs/CloudMatchmakerConfig.md)
  - [CloudVersionConfig](docs/CloudVersionConfig.md)
  - [GameFull](docs/GameFull.md)
  - [GameFullAllOf](docs/GameFullAllOf.md)
@@ -56,15 +71,27 @@ Class | Method | HTTP request | Description
  - [GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts](docs/GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts.md)
  - [InlineObject](docs/InlineObject.md)
  - [InlineObject1](docs/InlineObject1.md)
+ - [InlineObject10](docs/InlineObject10.md)
+ - [InlineObject11](docs/InlineObject11.md)
+ - [InlineObject12](docs/InlineObject12.md)
  - [InlineObject2](docs/InlineObject2.md)
  - [InlineObject3](docs/InlineObject3.md)
  - [InlineObject4](docs/InlineObject4.md)
  - [InlineObject5](docs/InlineObject5.md)
  - [InlineObject6](docs/InlineObject6.md)
+ - [InlineObject7](docs/InlineObject7.md)
+ - [InlineObject8](docs/InlineObject8.md)
+ - [InlineObject9](docs/InlineObject9.md)
  - [InlineResponse200](docs/InlineResponse200.md)
  - [InlineResponse2001](docs/InlineResponse2001.md)
  - [InlineResponse20010](docs/InlineResponse20010.md)
  - [InlineResponse20011](docs/InlineResponse20011.md)
+ - [InlineResponse20012](docs/InlineResponse20012.md)
+ - [InlineResponse20013](docs/InlineResponse20013.md)
+ - [InlineResponse20014](docs/InlineResponse20014.md)
+ - [InlineResponse20015](docs/InlineResponse20015.md)
+ - [InlineResponse20016](docs/InlineResponse20016.md)
+ - [InlineResponse20017](docs/InlineResponse20017.md)
  - [InlineResponse2002](docs/InlineResponse2002.md)
  - [InlineResponse2003](docs/InlineResponse2003.md)
  - [InlineResponse2004](docs/InlineResponse2004.md)
@@ -84,8 +111,10 @@ Class | Method | HTTP request | Description
  - [LobbyGroupRuntimeDockerPorts](docs/LobbyGroupRuntimeDockerPorts.md)
  - [MatchmakerVersionConfig](docs/MatchmakerVersionConfig.md)
  - [NamespaceFull](docs/NamespaceFull.md)
+ - [NamespaceFullAllOf](docs/NamespaceFullAllOf.md)
  - [NamespaceSummary](docs/NamespaceSummary.md)
  - [RegionSummary](docs/RegionSummary.md)
+ - [RegionTierExpenses](docs/RegionTierExpenses.md)
  - [ResponseError](docs/ResponseError.md)
  - [TeamSummary](docs/TeamSummary.md)
  - [UploadPrepareFile](docs/UploadPrepareFile.md)
