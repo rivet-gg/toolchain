@@ -12,6 +12,7 @@ clap = "3.0.0-beta.2"
 futures-util = "0.3"
 home = "0.5"
 mime_guess = "2.0"
+rand = "0.8"
 reqwest = { version = "0.11", features = ["stream"] }
 rivetctl = { path = "../rivetctl", package = "rivetctl" }
 serde = { version = "1.0", features = ["derive"] }

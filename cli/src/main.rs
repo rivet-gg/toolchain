@@ -1,14 +1,15 @@
 use anyhow::*;
 use async_recursion::async_recursion;
 use clap::Clap;
+use futures_util::stream::{StreamExt, TryStreamExt};
+use rand::{thread_rng, Rng};
 use std::{
     env,
     path::{Path, PathBuf},
+    sync::Arc,
     time::Instant,
 };
 use tokio::fs;
-
-const GAME_IMAGE_TAG: &'static str = "rivet-game:latest";
 
 #[derive(Clap)]
 #[clap()]
@@ -118,13 +119,21 @@ async fn main() -> Result<()> {
                 let tmp_image_file = tempfile::NamedTempFile::new()?;
                 let tmp_path = tmp_image_file.into_temp_path();
 
-                // Archive the image
+                // Re-tag and archive the image
+                let image_tag_tag = thread_rng()
+                    .sample_iter(rand::distributions::Alphanumeric)
+                    .map(char::from)
+                    .take(16)
+                    .collect::<String>()
+                    .to_lowercase();
+                let image_tag = format!("rivet-game:{}", image_tag_tag);
+                println!("image tag {}", image_tag);
                 println!("\n\n> Archiving image");
                 let tag_cmd = tokio::process::Command::new("docker")
                     .arg("image")
                     .arg("tag")
                     .arg(&push_opts.tag)
-                    .arg(GAME_IMAGE_TAG)
+                    .arg(&image_tag)
                     .output()
                     .await?;
                 ensure!(tag_cmd.status.success(), "failed to archive docker image");
@@ -134,7 +143,7 @@ async fn main() -> Result<()> {
                     .arg("save")
                     .arg("--output")
                     .arg(&tmp_path)
-                    .arg(GAME_IMAGE_TAG)
+                    .arg(&image_tag)
                     .output()
                     .await?;
                 ensure!(save_cmd.status.success(), "failed to archive docker image");
@@ -154,6 +163,7 @@ async fn main() -> Result<()> {
                     &game_id,
                     rivetctl::models::InlineObject6 {
                         display_name,
+                        image_tag: image_tag.clone(),
                         image_file: Box::new(rivetctl::models::UploadPrepareFile {
                             path: "image.tar".into(),
                             content_type: Some(content_type.into()),
@@ -225,20 +235,33 @@ async fn main() -> Result<()> {
                 .await?;
 
                 println!("\n\n> Uploading");
-                for presigned_req in site_res.presigned_requests {
-                    // Find the matching prepared file
-                    let file = files
-                        .iter()
-                        .find(|f| f.prepared.path == presigned_req.path)
-                        .context("missing prepared file")?;
+                {
+                    let api_config = api_config.clone();
+                    let files = Arc::new(files.clone());
+                    futures_util::stream::iter(&site_res.presigned_requests)
+                        .map(Ok)
+                        .try_for_each_concurrent(8, move |presigned_req| {
+                            let api_config = api_config.clone();
+                            let files = files.clone();
+                            async move {
+                                // Find the matching prepared file
+                                let file = files
+                                    .iter()
+                                    .find(|f| f.prepared.path == presigned_req.path)
+                                    .context("missing prepared file")?;
 
-                    upload_file(
-                        &api_config.client,
-                        &presigned_req,
-                        &file.absolute_path,
-                        file.prepared.content_type.as_ref(),
-                    )
-                    .await?;
+                                upload_file(
+                                    &api_config.client,
+                                    &presigned_req,
+                                    &file.absolute_path,
+                                    file.prepared.content_type.as_ref(),
+                                )
+                                .await?;
+
+                                Result::<()>::Ok(())
+                            }
+                        })
+                        .await?;
                 }
 
                 println!("\n\n> Completing");
@@ -268,6 +291,7 @@ async fn write_config(config: &rivetctl::config::Config, path: &Path) -> Result<
 }
 
 /// Prepared file that will be uploaded to S3.
+#[derive(Clone)]
 struct UploadFile {
     absolute_path: PathBuf,
     prepared: rivetctl::models::UploadPrepareFile,
