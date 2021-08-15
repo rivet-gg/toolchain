@@ -1,5 +1,4 @@
 use anyhow::*;
-use async_recursion::async_recursion;
 use clap::Clap;
 use futures_util::stream::{StreamExt, TryStreamExt};
 use rand::{thread_rng, Rng};
@@ -7,7 +6,7 @@ use std::{
 	env,
 	path::{Path, PathBuf},
 	sync::{
-		atomic::{AtomicI32, AtomicUsize, Ordering},
+		atomic::{AtomicU64, AtomicUsize, Ordering},
 		Arc,
 	},
 	time::Instant,
@@ -221,15 +220,18 @@ async fn main() -> Result<()> {
 				println!("Upload path: {}", upload_path.display());
 
 				// Index the directory
-				let mut files = Vec::new();
-				prepare_upload_dir(&upload_path, &upload_path, &mut files).await?;
+				let files = {
+					let upload_path = upload_path.clone();
+					tokio::task::spawn_blocking(move || prepare_upload_dir(&upload_path))
+				}
+				.await??;
 				let total_len = files
 					.iter()
 					.fold(0, |acc, x| acc + x.prepared.content_length);
 				println!(
-					"Found {count} files ({len:.1} MB)",
+					"Found {count} files ({size})",
 					count = files.len(),
-					len = (total_len as f64 / 1024. / 1024.)
+					size = format_file_size(total_len as u64)?,
 				);
 
 				// Create site
@@ -253,10 +255,10 @@ async fn main() -> Result<()> {
 
 				println!("\n\n> Uploading");
 				{
-					let mut counter = Arc::new(AtomicUsize::new(0));
-					let mut counter_bytes = Arc::new(AtomicI32::new(0));
+					let counter = Arc::new(AtomicUsize::new(0));
+					let counter_bytes = Arc::new(AtomicU64::new(0));
 					let total = site_res.presigned_requests.len();
-					let total_bytes = total_len;
+					let total_bytes = total_len as u64;
 
 					let api_config = api_config.clone();
 					let files = Arc::new(files.clone());
@@ -284,15 +286,16 @@ async fn main() -> Result<()> {
 									.await?;
 
 									let progress = counter.fetch_add(1, Ordering::SeqCst) + 1;
-									let progress_bytes = counter_bytes
-										.fetch_add(file.prepared.content_length, Ordering::SeqCst)
-										+ file.prepared.content_length;
+									let progress_bytes = counter_bytes.fetch_add(
+										file.prepared.content_length as u64,
+										Ordering::SeqCst,
+									) + file.prepared.content_length as u64;
 									println!(
-										"  * {}/{} ({}/{})",
+										"    {}/{} files ({}/{})",
 										progress,
 										total,
-										format_file_size(progress_bytes),
-										format_file_size(total_bytes)
+										format_file_size(progress_bytes)?,
+										format_file_size(total_bytes)?
 									);
 
 									Result::<()>::Ok(())
@@ -336,28 +339,26 @@ struct UploadFile {
 }
 
 /// Lists all files in a directory and returns the data required to upload them.
-#[async_recursion]
-async fn prepare_upload_dir(
-	base_path: &Path,
-	path: &Path,
-	files: &mut Vec<UploadFile>,
-) -> Result<()> {
+fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 	use std::path::Component;
 
-	let mut dir = fs::read_dir(path).await?;
-	while let Some(file) = dir.next_entry().await? {
-		let file_path = file.path();
-		let file_meta = file.metadata().await?;
+	let mut files = Vec::<UploadFile>::new();
 
-		// Upload dir
-		if file_meta.is_dir() {
-			prepare_upload_dir(base_path, &file_path, files).await?;
-		}
+	// Walk files while respecting .rivet-cdn-ignore
+	let walk = ignore::WalkBuilder::new(base_path)
+		.standard_filters(false)
+		.add_custom_ignore_filename(".rivet-cdn-ignore")
+		.parents(true)
+		.build();
+	for entry in walk {
+		let entry = entry?;
+		let file_path = entry.path();
+		let file_meta = entry.metadata()?;
 
-		// Index file
 		if file_meta.is_file() {
-			// Read relative path component and change to Unix-style line endings
-			let path = file_path
+			// Convert path to Unix-style string
+			let path_str = entry
+				.path()
 				.strip_prefix(base_path)?
 				.components()
 				.filter_map(|c| match c {
@@ -373,9 +374,9 @@ async fn prepare_upload_dir(
 				.map(str::to_string);
 
 			files.push(UploadFile {
-				absolute_path: file_path.clone(),
+				absolute_path: file_path.to_path_buf(),
 				prepared: rivetctl::models::UploadPrepareFile {
-					path,
+					path: path_str,
 					content_type,
 					content_length: file_meta.len() as i32,
 				},
@@ -383,7 +384,7 @@ async fn prepare_upload_dir(
 		}
 	}
 
-	Ok(())
+	Ok(files)
 }
 
 /// Uploads a file to a given URL.
@@ -403,10 +404,9 @@ async fn upload_file(
 	let file_meta = file.metadata().await?;
 
 	println!(
-		"  * {path} -> {url} [{size}] [{mime}]",
+		"  * {path}: Uploading {size} [{mime}]",
 		path = presigned_req.path,
-		url = presigned_req.url,
-		size = format_file_size(file_meta.len() as i32),
+		size = format_file_size(file_meta.len())?,
 		mime = content_type.clone().unwrap_or_default(),
 	);
 
@@ -432,7 +432,7 @@ async fn upload_file(
 
 	let upload_time = start.elapsed();
 	println!(
-		"  * {} finished in {:.3}s",
+		"  * {}: Finished in {:.3}s",
 		presigned_req.path,
 		upload_time.as_secs_f64()
 	);
@@ -450,6 +450,15 @@ async fn infer_game_id(
 	Ok(game_cloud.game_id)
 }
 
-fn format_file_size(bytes: i32) -> String {
-	format!("{:.1} MB", bytes as f64 / 1000. / 1000.)
+fn format_file_size(bytes: u64) -> Result<String> {
+	use humansize::FileSize;
+
+	let size = format!(
+		"{}",
+		bytes
+			.file_size(humansize::file_size_opts::DECIMAL)
+			.ok()
+			.context("format file size")?
+	);
+	Ok(size)
 }
