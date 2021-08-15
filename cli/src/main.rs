@@ -6,7 +6,10 @@ use rand::{thread_rng, Rng};
 use std::{
 	env,
 	path::{Path, PathBuf},
-	sync::Arc,
+	sync::{
+		atomic::{AtomicI32, AtomicUsize, Ordering},
+		Arc,
+	},
 	time::Instant,
 };
 use tokio::fs;
@@ -250,29 +253,50 @@ async fn main() -> Result<()> {
 
 				println!("\n\n> Uploading");
 				{
+					let mut counter = Arc::new(AtomicUsize::new(0));
+					let mut counter_bytes = Arc::new(AtomicI32::new(0));
+					let total = site_res.presigned_requests.len();
+					let total_bytes = total_len;
+
 					let api_config = api_config.clone();
 					let files = Arc::new(files.clone());
 					futures_util::stream::iter(&site_res.presigned_requests)
 						.map(Ok)
-						.try_for_each_concurrent(8, move |presigned_req| {
-							let api_config = api_config.clone();
-							let files = files.clone();
-							async move {
-								// Find the matching prepared file
-								let file = files
-									.iter()
-									.find(|f| f.prepared.path == presigned_req.path)
-									.context("missing prepared file")?;
+						.try_for_each_concurrent(16, move |presigned_req| {
+							let counter = counter.clone();
+							let counter_bytes = counter_bytes.clone();
+							{
+								let api_config = api_config.clone();
+								let files = files.clone();
+								async move {
+									// Find the matching prepared file
+									let file = files
+										.iter()
+										.find(|f| f.prepared.path == presigned_req.path)
+										.context("missing prepared file")?;
 
-								upload_file(
-									&api_config.client,
-									&presigned_req,
-									&file.absolute_path,
-									file.prepared.content_type.as_ref(),
-								)
-								.await?;
+									upload_file(
+										&api_config.client,
+										&presigned_req,
+										&file.absolute_path,
+										file.prepared.content_type.as_ref(),
+									)
+									.await?;
 
-								Result::<()>::Ok(())
+									let progress = counter.fetch_add(1, Ordering::SeqCst) + 1;
+									let progress_bytes = counter_bytes
+										.fetch_add(file.prepared.content_length, Ordering::SeqCst)
+										+ file.prepared.content_length;
+									println!(
+										"  * {}/{} ({}/{})",
+										progress,
+										total,
+										format_file_size(progress_bytes),
+										format_file_size(total_bytes)
+									);
+
+									Result::<()>::Ok(())
+								}
 							}
 						})
 						.await?;
@@ -379,10 +403,10 @@ async fn upload_file(
 	let file_meta = file.metadata().await?;
 
 	println!(
-		"  * {path} -> {url} [{size:.1} MB] [{mime}]",
+		"  * {path} -> {url} [{size}] [{mime}]",
 		path = presigned_req.path,
 		url = presigned_req.url,
-		size = (file_meta.len() as f64 / 1024. / 1024.),
+		size = format_file_size(file_meta.len() as i32),
 		mime = content_type.clone().unwrap_or_default(),
 	);
 
@@ -407,7 +431,11 @@ async fn upload_file(
 	);
 
 	let upload_time = start.elapsed();
-	println!("    Finished in {:.3}s", upload_time.as_secs_f64());
+	println!(
+		"  * {} finished in {:.3}s",
+		presigned_req.path,
+		upload_time.as_secs_f64()
+	);
 
 	Ok(())
 }
@@ -420,4 +448,8 @@ async fn infer_game_id(
 	let game_cloud = inspect.agent.game_cloud.context("invalid token agent")?;
 
 	Ok(game_cloud.game_id)
+}
+
+fn format_file_size(bytes: i32) -> String {
+	format!("{:.1} MB", bytes as f64 / 1000. / 1000.)
 }
