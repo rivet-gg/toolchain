@@ -6,21 +6,28 @@ pub type Ctx = Arc<SharedCtx>;
 
 pub struct SharedCtx {
 	config: Config,
-	base_path: Option<String>,
+	api_url: Option<String>,
+	access_token: Option<String>,
 }
 
 impl SharedCtx {
-	pub async fn new(config: Config, base_path: Option<String>) -> Result<Ctx, Error> {
-		Ok(Arc::new(SharedCtx { config, base_path }))
+	pub async fn new(
+		config: Config,
+		api_url: Option<String>,
+		access_token: Option<String>,
+	) -> Result<Ctx, Error> {
+		Ok(Arc::new(SharedCtx {
+			config,
+			api_url,
+			access_token,
+		}))
 	}
 
 	/// Retrieves a token to use with the API.
-	fn token(&self) -> Result<&str, Error> {
-		self.config
-			.auth
-			.token
-			.as_ref()
-			.map(String::as_str)
+	fn token(&self) -> Result<String, Error> {
+		self.access_token
+			.clone()
+			.or_else(|| self.config.auth.token.clone())
 			.ok_or(Error::NotAuthenticated)
 	}
 
@@ -34,8 +41,8 @@ impl SharedCtx {
 			bearer_access_token: Some(self.token()?.to_owned()),
 			..Default::default()
 		};
-		if let Some(base_path) = &self.base_path {
-			config.base_path = base_path.clone();
+		if let Some(api_url) = &self.api_url {
+			config.base_path = api_url.clone();
 		}
 		Ok(config)
 	}

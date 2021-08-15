@@ -17,24 +17,33 @@ struct Opts {
 	#[clap(subcommand)]
 	subcmd: SubCommand,
 
-	#[clap(long)]
-	base_path: Option<String>,
+	#[clap(long, env = "RIVET_API_URL")]
+	api_url: Option<String>,
+
+	#[clap(long, env = "RIVET_ACCESS_TOKEN")]
+	access_token: Option<String>,
 }
 
 #[derive(Clap)]
 enum SubCommand {
-	Auth(AuthSubCommand),
-	Build(BuildSubCommand),
-	Site(SiteSubCommand),
+	Auth {
+		#[clap(subcommand)]
+		subcmd: AuthSubCommand,
+	},
+	Build {
+		#[clap(subcommand)]
+		subcmd: BuildSubCommand,
+	},
+	Site {
+		#[clap(subcommand)]
+		subcmd: SiteSubCommand,
+	},
 }
 
 #[derive(Clap)]
 enum AuthSubCommand {
-	Token(AuthTokenOpts),
+	Token,
 }
-
-#[derive(Clap)]
-struct AuthTokenOpts {}
 
 #[derive(Clap)]
 enum BuildSubCommand {
@@ -79,10 +88,15 @@ async fn main() -> Result<()> {
 	};
 
 	// Build ctx
-	let ctx = rivetctl::ctx::SharedCtx::new(config.clone(), opts.base_path.clone()).await?;
+	let ctx = rivetctl::ctx::SharedCtx::new(
+		config.clone(),
+		opts.api_url.clone(),
+		opts.access_token.clone(),
+	)
+	.await?;
 	match opts.subcmd {
-		SubCommand::Auth(auth_cmd) => match auth_cmd {
-			AuthSubCommand::Token(_) => {
+		SubCommand::Auth { subcmd } => match subcmd {
+			AuthSubCommand::Token { .. } => {
 				print!("Auth token: ");
 
 				// Read token from stdin
@@ -99,9 +113,9 @@ async fn main() -> Result<()> {
 				let mut new_config = config.clone();
 				new_config.auth.token = Some(token.trim().to_owned());
 
-				// Create new context to check the token
+				// Create new context without overridden access token to check the token
 				let new_ctx =
-					rivetctl::ctx::SharedCtx::new(new_config.clone(), opts.base_path.clone())
+					rivetctl::ctx::SharedCtx::new(new_config.clone(), opts.api_url.clone(), None)
 						.await?;
 				let inspect = rivetctl::apis::auth_api::inspect(&new_ctx.api_config()?).await?;
 				println!("{:?}", inspect);
@@ -110,7 +124,7 @@ async fn main() -> Result<()> {
 				write_config(&new_config, &config_path).await?;
 			}
 		},
-		SubCommand::Build(build_cmd) => match build_cmd {
+		SubCommand::Build { subcmd } => match subcmd {
 			BuildSubCommand::Push(push_opts) => {
 				let api_config = ctx.api_config()?;
 
@@ -194,7 +208,7 @@ async fn main() -> Result<()> {
 				.await?;
 			}
 		},
-		SubCommand::Site(cdn_cmd) => match cdn_cmd {
+		SubCommand::Site { subcmd } => match subcmd {
 			SiteSubCommand::Push(push_opts) => {
 				let api_config = ctx.api_config()?;
 
