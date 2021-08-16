@@ -190,8 +190,8 @@ async fn main() -> Result<()> {
 				.await?;
 
 				println!(
-					"\n\n> Uploading ({len:.1} MB)",
-					len = (image_file_meta.len() as f64 / 1024. / 1024.)
+					"\n\n> Uploading ({len:.1})",
+					len = format_file_size(image_file_meta.len())?,
 				);
 				upload_file(
 					&api_config.client,
@@ -217,7 +217,16 @@ async fn main() -> Result<()> {
 				let game_id = infer_game_id(&api_config).await?;
 
 				let upload_path = env::current_dir()?.join(push_opts.path);
-				println!("Upload path: {}", upload_path.display());
+
+				let display_name = push_opts.name.clone().unwrap_or_else(|| {
+					upload_path
+						.file_name()
+						.and_then(|n| n.to_str())
+						.map(str::to_owned)
+						.unwrap_or_else(|| "Site".to_owned())
+				});
+				println!("\n\n> Creating site \"{}\"", display_name);
+				println!("  * Upload path: {}", upload_path.display());
 
 				// Index the directory
 				let files = {
@@ -229,20 +238,12 @@ async fn main() -> Result<()> {
 					.iter()
 					.fold(0, |acc, x| acc + x.prepared.content_length);
 				println!(
-					"Found {count} files ({size})",
+					"  * Found {count} files ({size})",
 					count = files.len(),
 					size = format_file_size(total_len as u64)?,
 				);
 
 				// Create site
-				let display_name = push_opts.name.clone().unwrap_or_else(|| {
-					upload_path
-						.file_name()
-						.and_then(|n| n.to_str())
-						.map(str::to_owned)
-						.unwrap_or_else(|| "Site".to_owned())
-				});
-				println!("\n\n> Creating site \"{}\"", display_name);
 				let site_res = rivetctl::apis::game_api::create_game_cdn_site(
 					&api_config,
 					&game_id,
