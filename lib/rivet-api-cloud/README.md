@@ -44,8 +44,10 @@ Class | Method | HTTP request | Description
 *GameApi* | [**get_team_payments_list**](docs/GameApi.md#get_team_payments_list) | **GET** /teams/{team_id}/billing/payments | 
 *GameApi* | [**list_cdn_sites**](docs/GameApi.md#list_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
 *GameApi* | [**list_game_builds**](docs/GameApi.md#list_game_builds) | **GET** /games/{game_id}/builds | 
+*GameApi* | [**remove_namespace_domain**](docs/GameApi.md#remove_namespace_domain) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
 *GameApi* | [**team_billing_checkout**](docs/GameApi.md#team_billing_checkout) | **POST** /teams/{team_id}/checkout | 
 *GameApi* | [**update_game_namespace_version**](docs/GameApi.md#update_game_namespace_version) | **PUT** /games/{game_id}/namespaces/{namespace_id}/version | 
+*GameApi* | [**update_namespace_domain**](docs/GameApi.md#update_namespace_domain) | **POST** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
 *GameApi* | [**validate_game**](docs/GameApi.md#validate_game) | **POST** /games/validate | 
 *GameApi* | [**validate_game_namespace**](docs/GameApi.md#validate_game_namespace) | **POST** /games/{game_id}/namespace/validate | 
 *GameApi* | [**validate_game_version**](docs/GameApi.md#validate_game_version) | **POST** /games/{game_id}/version/validate | 
@@ -60,6 +62,7 @@ Class | Method | HTTP request | Description
  - [BillingSummary](docs/BillingSummary.md)
  - [BuildSummary](docs/BuildSummary.md)
  - [CdnNamespaceConfig](docs/CdnNamespaceConfig.md)
+ - [CdnNamespaceDomain](docs/CdnNamespaceDomain.md)
  - [CdnSiteSummary](docs/CdnSiteSummary.md)
  - [CdnUploadResponse](docs/CdnUploadResponse.md)
  - [CdnVersionConfig](docs/CdnVersionConfig.md)

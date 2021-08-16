@@ -13,19 +13,19 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts {
-    #[serde(rename = "source")]
-    pub source: i32,
-    #[serde(rename = "target")]
-    pub target: i32,
+    #[serde(rename = "label")]
+    pub label: String,
+    #[serde(rename = "port")]
+    pub port: i32,
     #[serde(rename = "hostname")]
     pub hostname: String,
 }
 
 impl GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts {
-    pub fn new(source: i32, target: i32, hostname: String) -> GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts {
+    pub fn new(label: String, port: i32, hostname: String) -> GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts {
         GamesGameIdNamespacesNamespaceIdTokensDevelopmentLobbyPorts {
-            source,
-            target,
+            label,
+            port,
             hostname,
         }
     }

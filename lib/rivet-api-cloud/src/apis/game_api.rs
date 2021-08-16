@@ -238,6 +238,18 @@ pub enum ListGameBuildsError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method `remove_namespace_domain`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum RemoveNamespaceDomainError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method `team_billing_checkout`
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -254,6 +266,18 @@ pub enum TeamBillingCheckoutError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum UpdateGameNamespaceVersionError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method `update_namespace_domain`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateNamespaceDomainError {
     Status400(crate::models::ResponseError),
     Status401(crate::models::ResponseError),
     Status403(crate::models::ResponseError),
@@ -874,6 +898,35 @@ pub async fn list_game_builds(configuration: &configuration::Configuration, game
     }
 }
 
+pub async fn remove_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<(), Error<RemoveNamespaceDomainError>> {
+
+    let local_var_client = &configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}", configuration.base_path, game_id=game_id, namespace_id=namespace_id, domain=crate::apis::urlencode(domain));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        Ok(())
+    } else {
+        let local_var_entity: Option<RemoveNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
 pub async fn team_billing_checkout(configuration: &configuration::Configuration, team_id: &str, inline_object8: crate::models::InlineObject8) -> Result<crate::models::InlineResponse20016, Error<TeamBillingCheckoutError>> {
 
     let local_var_client = &configuration.client;
@@ -929,6 +982,35 @@ pub async fn update_game_namespace_version(configuration: &configuration::Config
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<UpdateGameNamespaceVersionError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn update_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<(), Error<UpdateNamespaceDomainError>> {
+
+    let local_var_client = &configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}", configuration.base_path, game_id=game_id, namespace_id=namespace_id, domain=crate::apis::urlencode(domain));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        Ok(())
+    } else {
+        let local_var_entity: Option<UpdateNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -23,8 +23,10 @@ Method | HTTP request | Description
 [**get_team_payments_list**](GameApi.md#get_team_payments_list) | **GET** /teams/{team_id}/billing/payments | 
 [**list_cdn_sites**](GameApi.md#list_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
 [**list_game_builds**](GameApi.md#list_game_builds) | **GET** /games/{game_id}/builds | 
+[**remove_namespace_domain**](GameApi.md#remove_namespace_domain) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
 [**team_billing_checkout**](GameApi.md#team_billing_checkout) | **POST** /teams/{team_id}/checkout | 
 [**update_game_namespace_version**](GameApi.md#update_game_namespace_version) | **PUT** /games/{game_id}/namespaces/{namespace_id}/version | 
+[**update_namespace_domain**](GameApi.md#update_namespace_domain) | **POST** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
 [**validate_game**](GameApi.md#validate_game) | **POST** /games/validate | 
 [**validate_game_namespace**](GameApi.md#validate_game_namespace) | **POST** /games/{game_id}/namespace/validate | 
 [**validate_game_version**](GameApi.md#validate_game_version) | **POST** /games/{game_id}/version/validate | 
@@ -576,6 +578,36 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## remove_namespace_domain
+
+> remove_namespace_domain(game_id, namespace_id, domain)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | [**String**](.md) |  | [required] |
+**namespace_id** | [**String**](.md) |  | [required] |
+**domain** | **String** |  | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## team_billing_checkout
 
 > crate::models::InlineResponse20016 team_billing_checkout(team_id, inline_object8)
@@ -630,6 +662,36 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## update_namespace_domain
+
+> update_namespace_domain(game_id, namespace_id, domain)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | [**String**](.md) |  | [required] |
+**namespace_id** | [**String**](.md) |  | [required] |
+**domain** | **String** |  | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

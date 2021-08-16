@@ -9,6 +9,7 @@ docs/BillingPayment.md
 docs/BillingSummary.md
 docs/BuildSummary.md
 docs/CdnNamespaceConfig.md
+docs/CdnNamespaceDomain.md
 docs/CdnSiteSummary.md
 docs/CdnUploadResponse.md
 docs/CdnVersionConfig.md
@@ -86,6 +87,7 @@ src/models/billing_payment.rs
 src/models/billing_summary.rs
 src/models/build_summary.rs
 src/models/cdn_namespace_config.rs
+src/models/cdn_namespace_domain.rs
 src/models/cdn_site_summary.rs
 src/models/cdn_upload_response.rs
 src/models/cdn_version_config.rs

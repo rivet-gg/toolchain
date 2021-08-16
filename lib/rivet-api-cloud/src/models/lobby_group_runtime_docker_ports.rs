@@ -13,22 +13,30 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LobbyGroupRuntimeDockerPorts {
-    #[serde(rename = "port")]
-    pub port: i32,
-    #[serde(rename = "enable_insecure_80")]
-    pub enable_insecure_80: bool,
-    #[serde(rename = "enable_secure_443")]
-    pub enable_secure_443: bool,
+    #[serde(rename = "label")]
+    pub label: String,
+    #[serde(rename = "target_port")]
+    pub target_port: i32,
+    #[serde(rename = "proxy_protocol")]
+    pub proxy_protocol: ProxyProtocol,
 }
 
 impl LobbyGroupRuntimeDockerPorts {
-    pub fn new(port: i32, enable_insecure_80: bool, enable_secure_443: bool) -> LobbyGroupRuntimeDockerPorts {
+    pub fn new(label: String, target_port: i32, proxy_protocol: ProxyProtocol) -> LobbyGroupRuntimeDockerPorts {
         LobbyGroupRuntimeDockerPorts {
-            port,
-            enable_insecure_80,
-            enable_secure_443,
+            label,
+            target_port,
+            proxy_protocol,
         }
     }
 }
 
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum ProxyProtocol {
+    #[serde(rename = "Http")]
+    Http,
+    #[serde(rename = "Https")]
+    Https,
+}
 

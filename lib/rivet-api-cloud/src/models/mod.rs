@@ -8,6 +8,8 @@ pub mod build_summary;
 pub use self::build_summary::BuildSummary;
 pub mod cdn_namespace_config;
 pub use self::cdn_namespace_config::CdnNamespaceConfig;
+pub mod cdn_namespace_domain;
+pub use self::cdn_namespace_domain::CdnNamespaceDomain;
 pub mod cdn_site_summary;
 pub use self::cdn_site_summary::CdnSiteSummary;
 pub mod cdn_upload_response;
