@@ -13,6 +13,8 @@ use std::{
 };
 use tokio::fs;
 
+const CONCURRENT_UPLOADS: usize = 8;
+
 #[derive(Clap)]
 #[clap()]
 struct Opts {
@@ -143,7 +145,6 @@ async fn main() -> Result<()> {
 					.collect::<String>()
 					.to_lowercase();
 				let image_tag = format!("rivet-game:{}", image_tag_tag);
-				println!("image tag {}", image_tag);
 				println!("\n\n> Archiving image");
 				let tag_cmd = tokio::process::Command::new("docker")
 					.arg("image")
@@ -152,7 +153,10 @@ async fn main() -> Result<()> {
 					.arg(&image_tag)
 					.output()
 					.await?;
-				ensure!(tag_cmd.status.success(), "failed to archive docker image");
+				if !tag_cmd.status.success() {
+					eprintln!("  ! Failed to archive Docker image:\n\nStatus: {}\n\nStdout:\n{}\n\nStderr:\n{}", tag_cmd.status, String::from_utf8_lossy(&tag_cmd.stdout), String::from_utf8_lossy(&tag_cmd.stderr));
+					bail!("failed to tag docker image");
+				}
 
 				let save_cmd = tokio::process::Command::new("docker")
 					.arg("image")
@@ -162,7 +166,10 @@ async fn main() -> Result<()> {
 					.arg(&image_tag)
 					.output()
 					.await?;
-				ensure!(save_cmd.status.success(), "failed to archive docker image");
+				if !save_cmd.status.success() {
+					eprintln!("  ! Failed to archive Docker image:\n\nStatus: {}\n\nStdout:\n{}\n\nStderr:\n{}", save_cmd.status, String::from_utf8_lossy(&save_cmd.stdout), String::from_utf8_lossy(&save_cmd.stderr));
+					bail!("failed to save docker image");
+				}
 
 				// Inspect the image
 				let image_file_meta = fs::metadata(&tmp_path).await?;
@@ -265,7 +272,7 @@ async fn main() -> Result<()> {
 					let files = Arc::new(files.clone());
 					futures_util::stream::iter(&site_res.presigned_requests)
 						.map(Ok)
-						.try_for_each_concurrent(16, move |presigned_req| {
+						.try_for_each_concurrent(CONCURRENT_UPLOADS, move |presigned_req| {
 							let counter = counter.clone();
 							let counter_bytes = counter_bytes.clone();
 							{
