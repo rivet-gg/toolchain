@@ -13,7 +13,7 @@ use std::{
 };
 use tokio::fs;
 
-const CONCURRENT_UPLOADS: usize = 8;
+const CONCURRENT_UPLOADS: usize = 4;
 
 #[derive(Clap)]
 #[clap()]
