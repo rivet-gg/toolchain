@@ -9,11 +9,11 @@ use std::{
 		atomic::{AtomicU64, AtomicUsize, Ordering},
 		Arc,
 	},
-	time::Instant,
+	time::{Duration, Instant},
 };
 use tokio::fs;
 
-const CONCURRENT_UPLOADS: usize = 4;
+const CONCURRENT_UPLOADS: usize = 8;
 
 #[derive(Clap)]
 #[clap()]
@@ -407,38 +407,56 @@ async fn upload_file(
 
 	let content_type = content_type.map(|x| x.to_string());
 
-	// Read file
-	let file = File::open(path.as_ref()).await?;
-	let file_meta = file.metadata().await?;
+	let mut attempts = 0;
+	let upload_time = 'upload: loop {
+		// Read file
+		let file = File::open(path.as_ref()).await?;
+		let file_meta = file.metadata().await?;
 
-	println!(
-		"  * {path}: Uploading {size} [{mime}]",
-		path = presigned_req.path,
-		size = format_file_size(file_meta.len())?,
-		mime = content_type.clone().unwrap_or_default(),
-	);
+		println!(
+			"  * {path}: Uploading {size} [{mime}]",
+			path = presigned_req.path,
+			size = format_file_size(file_meta.len())?,
+			mime = content_type.clone().unwrap_or_default(),
+		);
 
-	// Create body
-	let stream = FramedRead::new(file, BytesCodec::new());
-	let body = reqwest::Body::wrap_stream(stream);
+		// Create body
+		let stream = FramedRead::new(file, BytesCodec::new());
+		let body = reqwest::Body::wrap_stream(stream);
 
-	// Upload file
-	let start = Instant::now();
-	let mut req = client
-		.put(&presigned_req.url)
-		.header("content-length", file_meta.len());
-	if let Some(content_type) = content_type {
-		req = req.header("content-type", content_type.to_string());
-	}
-	let res = req.body(body).send().await?;
-	ensure!(
-		res.status().is_success(),
-		"failed to upload file: {}\n{:?}",
-		res.status(),
-		res.text().await
-	);
+		// Upload file
+		let start = Instant::now();
+		let mut req = client
+			.put(&presigned_req.url)
+			.header("content-length", file_meta.len());
+		if let Some(content_type) = &content_type {
+			req = req.header("content-type", content_type.to_string());
+		}
+		let res = req.body(body).send().await?;
+		if res.status().is_success() {
+			let upload_time = start.elapsed();
+			break 'upload upload_time;
+		} else {
+			if attempts > 4 {
+				bail!(
+					"failed to upload file: {}\n{:?}",
+					res.status(),
+					res.text().await
+				);
+			} else {
+				attempts += 1;
+				println!(
+					"  ! Upload failed with status {status}, will retry (attempt #{attempt}): {body:?}",
+					attempt = attempts,
+					status = res.status(),
+					body = res.text().await,
+				);
+				tokio::time::sleep(Duration::from_secs(5)).await;
+				continue 'upload;
+			}
+		}
+	};
 
-	let upload_time = start.elapsed();
 	println!(
 		"  * {}: Finished in {:.3}s",
 		presigned_req.path,
