@@ -407,6 +407,10 @@ async fn upload_file(
 
 	let content_type = content_type.map(|x| x.to_string());
 
+	// Try the upload multiple times since DigitalOcean spaces is incredibly
+	// buggy and spotty internet connections may cause issues. This is
+	// especially important since we have files that we need to batch upload, so
+	// one failing request is bad.
 	let mut attempts = 0;
 	let upload_time = 'upload: loop {
 		// Read file
