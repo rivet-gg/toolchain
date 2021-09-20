@@ -180,7 +180,11 @@ async fn main() -> Result<()> {
 					.clone()
 					.unwrap_or_else(|| push_opts.tag.clone());
 				let content_type = "application/x-tar";
-				println!("\n\n> Creating build \"{}\"", display_name);
+				println!(
+					"\n\n> Creating build \"{name}\" ({size})",
+					name = display_name,
+					size = format_file_size(image_file_meta.len())?,
+				);
 				let build_res = rivetctl::apis::game_api::create_game_build(
 					&api_config,
 					&game_id,
@@ -197,8 +201,8 @@ async fn main() -> Result<()> {
 				.await?;
 
 				println!(
-					"\n\n> Uploading ({len:.1})",
-					len = format_file_size(image_file_meta.len())?,
+					"\n\n> Uploading ({size})",
+					size = format_file_size(image_file_meta.len())?,
 				);
 				upload_file(
 					&api_config.client,
