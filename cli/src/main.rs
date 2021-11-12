@@ -1,5 +1,5 @@
 use anyhow::*;
-use clap::Clap;
+use clap::Parser;
 use futures_util::stream::{StreamExt, TryStreamExt};
 use rand::{thread_rng, Rng};
 use std::{
@@ -15,7 +15,7 @@ use tokio::fs;
 
 const CONCURRENT_UPLOADS: usize = 8;
 
-#[derive(Clap)]
+#[derive(Parser)]
 #[clap()]
 struct Opts {
 	#[clap(subcommand)]
@@ -28,7 +28,7 @@ struct Opts {
 	access_token: Option<String>,
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 enum SubCommand {
 	Auth {
 		#[clap(subcommand)]
@@ -44,17 +44,17 @@ enum SubCommand {
 	},
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 enum AuthSubCommand {
 	Token,
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 enum BuildSubCommand {
 	Push(BuildPushOpts),
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 struct BuildPushOpts {
 	#[clap(index(1))]
 	tag: String,
@@ -63,12 +63,12 @@ struct BuildPushOpts {
 	name: Option<String>,
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 enum SiteSubCommand {
 	Push(SitePushOptions),
 }
 
-#[derive(Clap)]
+#[derive(Parser)]
 struct SitePushOptions {
 	#[clap(index(1))]
 	path: String,
@@ -121,7 +121,9 @@ async fn main() -> Result<()> {
 				let new_ctx =
 					rivetctl::ctx::SharedCtx::new(new_config.clone(), opts.api_url.clone(), None)
 						.await?;
-				let inspect = rivetctl::apis::auth_api::inspect(&new_ctx.api_config()?).await?;
+				let inspect = rivetctl::apis::auth_api::inspect(&new_ctx.api_config()?)
+					.await
+					.context("auth_api::inspect")?;
 				println!("{:?}", inspect);
 
 				// Save new config
@@ -198,7 +200,8 @@ async fn main() -> Result<()> {
 						}),
 					},
 				)
-				.await?;
+				.await
+				.context("game_api::create_game_build")?;
 
 				println!(
 					"\n\n> Uploading ({size})",
@@ -218,7 +221,8 @@ async fn main() -> Result<()> {
 					&build_res.upload_id,
 					serde_json::json!({}),
 				)
-				.await?;
+				.await
+				.context("upload_api::complete_upload")?;
 			}
 		},
 		SubCommand::Site { subcmd } => match subcmd {
@@ -263,7 +267,8 @@ async fn main() -> Result<()> {
 						files: files.iter().map(|f| f.prepared.clone()).collect(),
 					},
 				)
-				.await?;
+				.await
+				.context("game_api::create_game_cdn_site")?;
 
 				println!("\n\n> Uploading");
 				{
@@ -323,7 +328,8 @@ async fn main() -> Result<()> {
 					&site_res.upload_id,
 					serde_json::json!({}),
 				)
-				.await?;
+				.await
+				.context("upload_api::complete_upload")?;
 			}
 		},
 	}
@@ -478,7 +484,9 @@ async fn upload_file(
 async fn infer_game_id(
 	api_config: &rivetctl::apis::configuration::Configuration,
 ) -> Result<String> {
-	let inspect = rivetctl::apis::auth_api::inspect(&api_config).await?;
+	let inspect = rivetctl::apis::auth_api::inspect(&api_config)
+		.await
+		.context("auth_api::inspect")?;
 	let game_cloud = inspect.agent.game_cloud.context("invalid token agent")?;
 
 	Ok(game_cloud.game_id)
