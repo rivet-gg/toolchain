@@ -1,4 +1,4 @@
-use anyhow::*;
+use anyhow::{bail, Result, Context};
 use clap::Parser;
 use futures_util::stream::{StreamExt, TryStreamExt};
 use rand::{thread_rng, Rng};
