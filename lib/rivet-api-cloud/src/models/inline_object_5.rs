@@ -13,17 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineObject5 {
-    #[serde(rename = "files")]
-    pub files: Vec<crate::models::UploadPrepareFile>,
-    #[serde(rename = "display_name")]
-    pub display_name: String,
+    #[serde(rename = "enabled")]
+    pub enabled: bool,
 }
 
 impl InlineObject5 {
-    pub fn new(files: Vec<crate::models::UploadPrepareFile>, display_name: String) -> InlineObject5 {
+    pub fn new(enabled: bool) -> InlineObject5 {
         InlineObject5 {
-            files,
-            display_name,
+            enabled,
         }
     }
 }

@@ -13,14 +13,20 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineResponse20016 {
-    #[serde(rename = "url")]
-    pub url: String,
+    #[serde(rename = "billing")]
+    pub billing: Box<crate::models::BillingSummary>,
+    #[serde(rename = "bank_source")]
+    pub bank_source: Box<crate::models::BankSource>,
+    #[serde(rename = "available_regions")]
+    pub available_regions: Vec<crate::models::RegionSummary>,
 }
 
 impl InlineResponse20016 {
-    pub fn new(url: String) -> InlineResponse20016 {
+    pub fn new(billing: crate::models::BillingSummary, bank_source: crate::models::BankSource, available_regions: Vec<crate::models::RegionSummary>) -> InlineResponse20016 {
         InlineResponse20016 {
-            url,
+            billing: Box::new(billing),
+            bank_source: Box::new(bank_source),
+            available_regions,
         }
     }
 }

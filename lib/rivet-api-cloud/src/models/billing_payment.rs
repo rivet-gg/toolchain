@@ -22,11 +22,11 @@ pub struct BillingPayment {
     #[serde(rename = "created_ts")]
     pub created_ts: i64,
     #[serde(rename = "status")]
-    pub status: Status,
+    pub status: crate::models::BillingStatus,
 }
 
 impl BillingPayment {
-    pub fn new(amount: i64, from_invoice: bool, created_ts: i64, status: Status) -> BillingPayment {
+    pub fn new(amount: i64, from_invoice: bool, created_ts: i64, status: crate::models::BillingStatus) -> BillingPayment {
         BillingPayment {
             amount,
             description: None,
@@ -37,12 +37,4 @@ impl BillingPayment {
     }
 }
 
-/// 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Status {
-    #[serde(rename = "Succeeded")]
-    Succeeded,
-    #[serde(rename = "Processing")]
-    Processing,
-}
 

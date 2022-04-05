@@ -12,18 +12,21 @@
 
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct LobbyGroupRegions {
+pub struct LobbyGroupRegion {
     #[serde(rename = "region_id")]
     pub region_id: String,
     #[serde(rename = "tier_name_id")]
     pub tier_name_id: String,
+    #[serde(rename = "idle_lobbies", skip_serializing_if = "Option::is_none")]
+    pub idle_lobbies: Option<Box<crate::models::LobbyGroupRegionIdleLobbies>>,
 }
 
-impl LobbyGroupRegions {
-    pub fn new(region_id: String, tier_name_id: String) -> LobbyGroupRegions {
-        LobbyGroupRegions {
+impl LobbyGroupRegion {
+    pub fn new(region_id: String, tier_name_id: String) -> LobbyGroupRegion {
+        LobbyGroupRegion {
             region_id,
             tier_name_id,
+            idle_lobbies: None,
         }
     }
 }

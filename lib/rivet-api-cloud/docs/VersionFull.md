@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **version_id** | **String** |  | 
-**create_ts** | **i32** |  | 
+**create_ts** | **i64** |  | 
 **display_name** | **String** |  | 
 **config** | [**crate::models::CloudVersionConfig**](CloudVersionConfig.md) |  | 
 

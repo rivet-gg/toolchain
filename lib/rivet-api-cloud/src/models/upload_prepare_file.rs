@@ -18,11 +18,11 @@ pub struct UploadPrepareFile {
     #[serde(rename = "content_type", skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
     #[serde(rename = "content_length")]
-    pub content_length: i32,
+    pub content_length: i64,
 }
 
 impl UploadPrepareFile {
-    pub fn new(path: String, content_length: i32) -> UploadPrepareFile {
+    pub fn new(path: String, content_length: i64) -> UploadPrepareFile {
         UploadPrepareFile {
             path,
             content_type: None,

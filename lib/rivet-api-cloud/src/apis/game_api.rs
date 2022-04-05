@@ -15,7 +15,7 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method `convert_team`
+/// struct for typed errors of method [`convert_team`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ConvertTeamError {
@@ -27,7 +27,7 @@ pub enum ConvertTeamError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_cloud_token`
+/// struct for typed errors of method [`create_cloud_token`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateCloudTokenError {
@@ -39,7 +39,7 @@ pub enum CreateCloudTokenError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game`
+/// struct for typed errors of method [`create_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameError {
@@ -51,7 +51,7 @@ pub enum CreateGameError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game_build`
+/// struct for typed errors of method [`create_game_build`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameBuildError {
@@ -63,7 +63,7 @@ pub enum CreateGameBuildError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game_cdn_site`
+/// struct for typed errors of method [`create_game_cdn_site`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameCdnSiteError {
@@ -75,7 +75,7 @@ pub enum CreateGameCdnSiteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game_namespace`
+/// struct for typed errors of method [`create_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameNamespaceError {
@@ -87,7 +87,7 @@ pub enum CreateGameNamespaceError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game_namespace_token_development`
+/// struct for typed errors of method [`create_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameNamespaceTokenDevelopmentError {
@@ -99,7 +99,7 @@ pub enum CreateGameNamespaceTokenDevelopmentError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game_namespace_token_public`
+/// struct for typed errors of method [`create_game_namespace_token_public`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameNamespaceTokenPublicError {
@@ -111,7 +111,7 @@ pub enum CreateGameNamespaceTokenPublicError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `create_game_version`
+/// struct for typed errors of method [`create_game_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CreateGameVersionError {
@@ -123,7 +123,7 @@ pub enum CreateGameVersionError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `delete_matchmaker_lobby`
+/// struct for typed errors of method [`delete_matchmaker_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum DeleteMatchmakerLobbyError {
@@ -135,7 +135,19 @@ pub enum DeleteMatchmakerLobbyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_game_by_id`
+/// struct for typed errors of method [`export_matchmaker_lobby_history`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ExportMatchmakerLobbyHistoryError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_game_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetGameByIdError {
@@ -147,7 +159,7 @@ pub enum GetGameByIdError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_game_namespace_by_id`
+/// struct for typed errors of method [`get_game_namespace_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetGameNamespaceByIdError {
@@ -159,7 +171,7 @@ pub enum GetGameNamespaceByIdError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_game_version_by_id`
+/// struct for typed errors of method [`get_game_version_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetGameVersionByIdError {
@@ -171,14 +183,19 @@ pub enum GetGameVersionByIdError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_games`
+/// struct for typed errors of method [`get_games`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetGamesError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_namespace_analytics_matchmaker_live`
+/// struct for typed errors of method [`get_namespace_analytics_matchmaker_live`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetNamespaceAnalyticsMatchmakerLiveError {
@@ -190,7 +207,38 @@ pub enum GetNamespaceAnalyticsMatchmakerLiveError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_team_billing`
+/// struct for typed errors of method [`get_namespace_lobby`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetNamespaceLobbyError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_region_tiers`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetRegionTiersError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_team_bank_transfers_list`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetTeamBankTransfersListError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_team_billing`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetTeamBillingError {
@@ -202,7 +250,7 @@ pub enum GetTeamBillingError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `get_team_payments_list`
+/// struct for typed errors of method [`get_team_payments_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetTeamPaymentsListError {
@@ -214,7 +262,7 @@ pub enum GetTeamPaymentsListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `list_cdn_sites`
+/// struct for typed errors of method [`list_cdn_sites`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListCdnSitesError {
@@ -226,7 +274,7 @@ pub enum ListCdnSitesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `list_game_builds`
+/// struct for typed errors of method [`list_game_builds`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListGameBuildsError {
@@ -238,7 +286,19 @@ pub enum ListGameBuildsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `remove_namespace_domain`
+/// struct for typed errors of method [`list_namespace_lobbies`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListNamespaceLobbiesError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`remove_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RemoveNamespaceDomainError {
@@ -250,7 +310,7 @@ pub enum RemoveNamespaceDomainError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `team_billing_checkout`
+/// struct for typed errors of method [`team_billing_checkout`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum TeamBillingCheckoutError {
@@ -262,7 +322,31 @@ pub enum TeamBillingCheckoutError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `update_game_namespace_version`
+/// struct for typed errors of method [`toggle_namespace_domain_public_auth`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ToggleNamespaceDomainPublicAuthError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`update_game_namespace_matchmaker_config`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateGameNamespaceMatchmakerConfigError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`update_game_namespace_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum UpdateGameNamespaceVersionError {
@@ -274,7 +358,7 @@ pub enum UpdateGameNamespaceVersionError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `update_namespace_domain`
+/// struct for typed errors of method [`update_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum UpdateNamespaceDomainError {
@@ -286,7 +370,7 @@ pub enum UpdateNamespaceDomainError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `validate_game`
+/// struct for typed errors of method [`validate_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ValidateGameError {
@@ -298,7 +382,7 @@ pub enum ValidateGameError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `validate_game_namespace`
+/// struct for typed errors of method [`validate_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ValidateGameNamespaceError {
@@ -310,7 +394,31 @@ pub enum ValidateGameNamespaceError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `validate_game_version`
+/// struct for typed errors of method [`validate_game_namespace_matchmaker_config`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ValidateGameNamespaceMatchmakerConfigError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`validate_game_namespace_token_development`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ValidateGameNamespaceTokenDevelopmentError {
+    Status400(crate::models::ResponseError),
+    Status401(crate::models::ResponseError),
+    Status403(crate::models::ResponseError),
+    Status404(crate::models::ResponseError),
+    Status500(crate::models::ResponseError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`validate_game_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ValidateGameVersionError {
@@ -322,7 +430,7 @@ pub enum ValidateGameVersionError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method `validate_team`
+/// struct for typed errors of method [`validate_team`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ValidateTeamError {
@@ -335,19 +443,21 @@ pub enum ValidateTeamError {
 }
 
 
-pub async fn convert_team(configuration: &configuration::Configuration, team_id: &str) -> Result<(), Error<ConvertTeamError>> {
+pub async fn convert_team(configuration: &configuration::Configuration, team_id: &str, body: serde_json::Value) -> Result<(), Error<ConvertTeamError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/teams/{team_id}/convert", configuration.base_path, team_id=team_id);
-    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+    let local_var_uri_str = format!("{}/teams/{team_id}/convert", local_var_configuration.base_path, team_id=crate::apis::urlencode(team_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
+    local_var_req_builder = local_var_req_builder.json(&body);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -365,16 +475,17 @@ pub async fn convert_team(configuration: &configuration::Configuration, team_id:
 }
 
 pub async fn create_cloud_token(configuration: &configuration::Configuration, game_id: &str, body: serde_json::Value) -> Result<crate::models::InlineResponse2007, Error<CreateCloudTokenError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/tokens/cloud", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/tokens/cloud", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&body);
@@ -395,16 +506,17 @@ pub async fn create_cloud_token(configuration: &configuration::Configuration, ga
 }
 
 pub async fn create_game(configuration: &configuration::Configuration, inline_object: crate::models::InlineObject) -> Result<crate::models::InlineResponse200AgentGameCloud, Error<CreateGameError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games", configuration.base_path);
+    let local_var_uri_str = format!("{}/games", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&inline_object);
@@ -424,20 +536,21 @@ pub async fn create_game(configuration: &configuration::Configuration, inline_ob
     }
 }
 
-pub async fn create_game_build(configuration: &configuration::Configuration, game_id: &str, inline_object6: crate::models::InlineObject6) -> Result<crate::models::InlineResponse20012, Error<CreateGameBuildError>> {
+pub async fn create_game_build(configuration: &configuration::Configuration, game_id: &str, inline_object8: crate::models::InlineObject8) -> Result<crate::models::InlineResponse20014, Error<CreateGameBuildError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/builds", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/builds", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object6);
+    local_var_req_builder = local_var_req_builder.json(&inline_object8);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -454,20 +567,21 @@ pub async fn create_game_build(configuration: &configuration::Configuration, gam
     }
 }
 
-pub async fn create_game_cdn_site(configuration: &configuration::Configuration, game_id: &str, inline_object5: crate::models::InlineObject5) -> Result<crate::models::InlineResponse20010, Error<CreateGameCdnSiteError>> {
+pub async fn create_game_cdn_site(configuration: &configuration::Configuration, game_id: &str, inline_object7: crate::models::InlineObject7) -> Result<crate::models::InlineResponse20012, Error<CreateGameCdnSiteError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/cdn/sites", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/cdn/sites", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object5);
+    local_var_req_builder = local_var_req_builder.json(&inline_object7);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -485,16 +599,17 @@ pub async fn create_game_cdn_site(configuration: &configuration::Configuration, 
 }
 
 pub async fn create_game_namespace(configuration: &configuration::Configuration, game_id: &str, inline_object2: crate::models::InlineObject2) -> Result<crate::models::InlineResponse2005, Error<CreateGameNamespaceError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&inline_object2);
@@ -515,16 +630,17 @@ pub async fn create_game_namespace(configuration: &configuration::Configuration,
 }
 
 pub async fn create_game_namespace_token_development(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object4: crate::models::InlineObject4) -> Result<crate::models::InlineResponse2007, Error<CreateGameNamespaceTokenDevelopmentError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/tokens/development", configuration.base_path, game_id=game_id, namespace_id=namespace_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/tokens/development", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&inline_object4);
@@ -545,16 +661,17 @@ pub async fn create_game_namespace_token_development(configuration: &configurati
 }
 
 pub async fn create_game_namespace_token_public(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, body: serde_json::Value) -> Result<crate::models::InlineResponse2007, Error<CreateGameNamespaceTokenPublicError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/tokens/public", configuration.base_path, game_id=game_id, namespace_id=namespace_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/tokens/public", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&body);
@@ -575,16 +692,17 @@ pub async fn create_game_namespace_token_public(configuration: &configuration::C
 }
 
 pub async fn create_game_version(configuration: &configuration::Configuration, game_id: &str, inline_object1: crate::models::InlineObject1) -> Result<crate::models::InlineResponse2003, Error<CreateGameVersionError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/versions", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/versions", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&inline_object1);
@@ -604,17 +722,18 @@ pub async fn create_game_version(configuration: &configuration::Configuration, g
     }
 }
 
-pub async fn delete_matchmaker_lobby(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str) -> Result<crate::models::InlineResponse20013, Error<DeleteMatchmakerLobbyError>> {
+pub async fn delete_matchmaker_lobby(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str) -> Result<crate::models::InlineResponse20015, Error<DeleteMatchmakerLobbyError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/matchmaker/lobbies/{lobby_id}", configuration.base_path, game_id=game_id, lobby_id=lobby_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/matchmaker/lobbies/{lobby_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), lobby_id=crate::apis::urlencode(lobby_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -633,17 +752,49 @@ pub async fn delete_matchmaker_lobby(configuration: &configuration::Configuratio
     }
 }
 
-pub async fn get_game_by_id(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::InlineResponse2002, Error<GetGameByIdError>> {
+pub async fn export_matchmaker_lobby_history(configuration: &configuration::Configuration, game_id: &str, matchmaker_lobbies_export_history_request: crate::models::MatchmakerLobbiesExportHistoryRequest) -> Result<crate::models::MatchmakerLobbiesExportHistoryResponse, Error<ExportMatchmakerLobbyHistoryError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}", configuration.base_path, game_id=game_id);
-    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+    let local_var_uri_str = format!("{}/games/{game_id}/matchmaker/lobbies/export-history", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&matchmaker_lobbies_export_history_request);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<ExportMatchmakerLobbyHistoryError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_game_by_id(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::InlineResponse2002, Error<GetGameByIdError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -663,16 +814,17 @@ pub async fn get_game_by_id(configuration: &configuration::Configuration, game_i
 }
 
 pub async fn get_game_namespace_by_id(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::InlineResponse2006, Error<GetGameNamespaceByIdError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}", configuration.base_path, game_id=game_id, namespace_id=namespace_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -692,16 +844,17 @@ pub async fn get_game_namespace_by_id(configuration: &configuration::Configurati
 }
 
 pub async fn get_game_version_by_id(configuration: &configuration::Configuration, game_id: &str, version_id: &str) -> Result<crate::models::InlineResponse2004, Error<GetGameVersionByIdError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/versions/{version_id}", configuration.base_path, game_id=game_id, version_id=version_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/versions/{version_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), version_id=crate::apis::urlencode(version_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -721,16 +874,17 @@ pub async fn get_game_version_by_id(configuration: &configuration::Configuration
 }
 
 pub async fn get_games(configuration: &configuration::Configuration, ) -> Result<crate::models::InlineResponse2001, Error<GetGamesError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games", configuration.base_path);
+    let local_var_uri_str = format!("{}/games", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -750,16 +904,17 @@ pub async fn get_games(configuration: &configuration::Configuration, ) -> Result
 }
 
 pub async fn get_namespace_analytics_matchmaker_live(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::InlineResponse2008, Error<GetNamespaceAnalyticsMatchmakerLiveError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live", configuration.base_path, game_id=game_id, namespace_id=namespace_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -778,20 +933,119 @@ pub async fn get_namespace_analytics_matchmaker_live(configuration: &configurati
     }
 }
 
-pub async fn get_team_billing(configuration: &configuration::Configuration, team_id: &str, inline_object7: crate::models::InlineObject7) -> Result<crate::models::InlineResponse20014, Error<GetTeamBillingError>> {
+pub async fn get_namespace_lobby(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, lobby_id: &str) -> Result<crate::models::InlineResponse20010, Error<GetNamespaceLobbyError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/teams/{team_id}/billing", configuration.base_path, team_id=team_id);
-    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id), lobby_id=crate::apis::urlencode(lobby_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object7);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetNamespaceLobbyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_region_tiers(configuration: &configuration::Configuration, ) -> Result<crate::models::InlineResponse20020, Error<GetRegionTiersError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/region-tiers", local_var_configuration.base_path);
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetRegionTiersError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_team_bank_transfers_list(configuration: &configuration::Configuration, team_id: &str, start_transfer_id: Option<&str>) -> Result<crate::models::InlineResponse20018, Error<GetTeamBankTransfersListError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/teams/{team_id}/billing/transfers", local_var_configuration.base_path, team_id=crate::apis::urlencode(team_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_str) = start_transfer_id {
+        local_var_req_builder = local_var_req_builder.query(&[("start_transfer_id", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetTeamBankTransfersListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_team_billing(configuration: &configuration::Configuration, team_id: &str, query_start: Option<i64>, query_end: Option<i64>) -> Result<crate::models::InlineResponse20016, Error<GetTeamBillingError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/teams/{team_id}/billing", local_var_configuration.base_path, team_id=crate::apis::urlencode(team_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_str) = query_start {
+        local_var_req_builder = local_var_req_builder.query(&[("query_start", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_str) = query_end {
+        local_var_req_builder = local_var_req_builder.query(&[("query_end", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -808,20 +1062,21 @@ pub async fn get_team_billing(configuration: &configuration::Configuration, team
     }
 }
 
-pub async fn get_team_payments_list(configuration: &configuration::Configuration, team_id: &str, start_payment_id: Option<&str>) -> Result<crate::models::InlineResponse20015, Error<GetTeamPaymentsListError>> {
+pub async fn get_team_payments_list(configuration: &configuration::Configuration, team_id: &str, start_payment_id: Option<&str>) -> Result<crate::models::InlineResponse20017, Error<GetTeamPaymentsListError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/teams/{team_id}/billing/payments", configuration.base_path, team_id=team_id);
+    let local_var_uri_str = format!("{}/teams/{team_id}/billing/payments", local_var_configuration.base_path, team_id=crate::apis::urlencode(team_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     if let Some(ref local_var_str) = start_payment_id {
         local_var_req_builder = local_var_req_builder.query(&[("start_payment_id", &local_var_str.to_string())]);
     }
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -840,17 +1095,18 @@ pub async fn get_team_payments_list(configuration: &configuration::Configuration
     }
 }
 
-pub async fn list_cdn_sites(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::InlineResponse2009, Error<ListCdnSitesError>> {
+pub async fn list_cdn_sites(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::InlineResponse20011, Error<ListCdnSitesError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/cdn/sites", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/cdn/sites", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -869,17 +1125,18 @@ pub async fn list_cdn_sites(configuration: &configuration::Configuration, game_i
     }
 }
 
-pub async fn list_game_builds(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::InlineResponse20011, Error<ListGameBuildsError>> {
+pub async fn list_game_builds(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::InlineResponse20013, Error<ListGameBuildsError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/builds", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/builds", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -898,17 +1155,21 @@ pub async fn list_game_builds(configuration: &configuration::Configuration, game
     }
 }
 
-pub async fn remove_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<(), Error<RemoveNamespaceDomainError>> {
+pub async fn list_namespace_lobbies(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, before_create_ts: Option<i64>) -> Result<crate::models::InlineResponse2009, Error<ListNamespaceLobbiesError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}", configuration.base_path, game_id=game_id, namespace_id=namespace_id, domain=crate::apis::urlencode(domain));
-    let mut local_var_req_builder = local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/logs/lobbies", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_str) = before_create_ts {
+        local_var_req_builder = local_var_req_builder.query(&[("before_create_ts", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
 
@@ -919,7 +1180,37 @@ pub async fn remove_namespace_domain(configuration: &configuration::Configuratio
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        Ok(())
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<ListNamespaceLobbiesError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn remove_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<serde_json::Value, Error<RemoveNamespaceDomainError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id), domain=crate::apis::urlencode(domain));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<RemoveNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -927,20 +1218,21 @@ pub async fn remove_namespace_domain(configuration: &configuration::Configuratio
     }
 }
 
-pub async fn team_billing_checkout(configuration: &configuration::Configuration, team_id: &str, inline_object8: crate::models::InlineObject8) -> Result<crate::models::InlineResponse20016, Error<TeamBillingCheckoutError>> {
+pub async fn team_billing_checkout(configuration: &configuration::Configuration, team_id: &str, inline_object9: crate::models::InlineObject9) -> Result<crate::models::InlineResponse20019, Error<TeamBillingCheckoutError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/teams/{team_id}/checkout", configuration.base_path, team_id=team_id);
+    let local_var_uri_str = format!("{}/teams/{team_id}/checkout", local_var_configuration.base_path, team_id=crate::apis::urlencode(team_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object8);
+    local_var_req_builder = local_var_req_builder.json(&inline_object9);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -957,17 +1249,80 @@ pub async fn team_billing_checkout(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn update_game_namespace_version(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object3: crate::models::InlineObject3) -> Result<crate::models::InlineObject3, Error<UpdateGameNamespaceVersionError>> {
+pub async fn toggle_namespace_domain_public_auth(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object5: crate::models::InlineObject5) -> Result<serde_json::Value, Error<ToggleNamespaceDomainPublicAuthError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/version", configuration.base_path, game_id=game_id, namespace_id=namespace_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domain-public-auth", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::PUT, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&inline_object5);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<ToggleNamespaceDomainPublicAuthError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn update_game_namespace_matchmaker_config(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object6: crate::models::InlineObject6) -> Result<serde_json::Value, Error<UpdateGameNamespaceMatchmakerConfigError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/mm-config", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&inline_object6);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<UpdateGameNamespaceMatchmakerConfigError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn update_game_namespace_version(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object3: crate::models::InlineObject3) -> Result<serde_json::Value, Error<UpdateGameNamespaceVersionError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/version", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::PUT, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&inline_object3);
@@ -987,19 +1342,21 @@ pub async fn update_game_namespace_version(configuration: &configuration::Config
     }
 }
 
-pub async fn update_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<(), Error<UpdateNamespaceDomainError>> {
+pub async fn update_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str, body: serde_json::Value) -> Result<serde_json::Value, Error<UpdateNamespaceDomainError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}", configuration.base_path, game_id=game_id, namespace_id=namespace_id, domain=crate::apis::urlencode(domain));
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id), domain=crate::apis::urlencode(domain));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
+    local_var_req_builder = local_var_req_builder.json(&body);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -1008,7 +1365,7 @@ pub async fn update_namespace_domain(configuration: &configuration::Configuratio
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        Ok(())
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<UpdateNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
@@ -1016,20 +1373,21 @@ pub async fn update_namespace_domain(configuration: &configuration::Configuratio
     }
 }
 
-pub async fn validate_game(configuration: &configuration::Configuration, inline_object11: crate::models::InlineObject11) -> Result<crate::models::InlineResponse20017, Error<ValidateGameError>> {
+pub async fn validate_game(configuration: &configuration::Configuration, inline_object12: crate::models::InlineObject12) -> Result<crate::models::ValidationErrors, Error<ValidateGameError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/validate", configuration.base_path);
+    let local_var_uri_str = format!("{}/games/validate", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object11);
+    local_var_req_builder = local_var_req_builder.json(&inline_object12);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -1046,20 +1404,21 @@ pub async fn validate_game(configuration: &configuration::Configuration, inline_
     }
 }
 
-pub async fn validate_game_namespace(configuration: &configuration::Configuration, game_id: &str, inline_object10: crate::models::InlineObject10) -> Result<crate::models::InlineResponse20017, Error<ValidateGameNamespaceError>> {
+pub async fn validate_game_namespace(configuration: &configuration::Configuration, game_id: &str, inline_object11: crate::models::InlineObject11) -> Result<crate::models::ValidationErrors, Error<ValidateGameNamespaceError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/namespace/validate", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespace/validate", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object10);
+    local_var_req_builder = local_var_req_builder.json(&inline_object11);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -1076,20 +1435,83 @@ pub async fn validate_game_namespace(configuration: &configuration::Configuratio
     }
 }
 
-pub async fn validate_game_version(configuration: &configuration::Configuration, game_id: &str, inline_object9: crate::models::InlineObject9) -> Result<crate::models::InlineResponse20017, Error<ValidateGameVersionError>> {
+pub async fn validate_game_namespace_matchmaker_config(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object15: crate::models::InlineObject15) -> Result<crate::models::ValidationErrors, Error<ValidateGameNamespaceMatchmakerConfigError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/version/validate", configuration.base_path, game_id=game_id);
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/mm-config/validate", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object9);
+    local_var_req_builder = local_var_req_builder.json(&inline_object15);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<ValidateGameNamespaceMatchmakerConfigError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn validate_game_namespace_token_development(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, inline_object14: crate::models::InlineObject14) -> Result<crate::models::ValidationErrors, Error<ValidateGameNamespaceTokenDevelopmentError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/namespaces/{namespace_id}/tokens/development/validate", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), namespace_id=crate::apis::urlencode(namespace_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&inline_object14);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<ValidateGameNamespaceTokenDevelopmentError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn validate_game_version(configuration: &configuration::Configuration, game_id: &str, inline_object10: crate::models::InlineObject10) -> Result<crate::models::ValidationErrors, Error<ValidateGameVersionError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/games/{game_id}/version/validate", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
+    let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&inline_object10);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -1106,20 +1528,21 @@ pub async fn validate_game_version(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn validate_team(configuration: &configuration::Configuration, inline_object12: crate::models::InlineObject12) -> Result<crate::models::InlineResponse20017, Error<ValidateTeamError>> {
+pub async fn validate_team(configuration: &configuration::Configuration, inline_object13: crate::models::InlineObject13) -> Result<crate::models::ValidationErrors, Error<ValidateTeamError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/teams/validate", configuration.base_path);
+    let local_var_uri_str = format!("{}/teams/validate", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&inline_object12);
+    local_var_req_builder = local_var_req_builder.json(&inline_object13);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;

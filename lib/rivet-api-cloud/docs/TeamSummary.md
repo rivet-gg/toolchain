@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **team_id** | **String** |  | 
-**create_ts** | **i32** |  | 
+**avatar_url** | Option<**String**> |  | [optional]
 **display_name** | **String** |  | 
 **is_developer** | **bool** |  | 
 

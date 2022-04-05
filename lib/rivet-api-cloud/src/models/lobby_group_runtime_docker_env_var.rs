@@ -12,16 +12,16 @@
 
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct LobbyGroupRuntimeDockerEnvVars {
+pub struct LobbyGroupRuntimeDockerEnvVar {
     #[serde(rename = "key")]
     pub key: String,
     #[serde(rename = "value")]
     pub value: String,
 }
 
-impl LobbyGroupRuntimeDockerEnvVars {
-    pub fn new(key: String, value: String) -> LobbyGroupRuntimeDockerEnvVars {
-        LobbyGroupRuntimeDockerEnvVars {
+impl LobbyGroupRuntimeDockerEnvVar {
+    pub fn new(key: String, value: String) -> LobbyGroupRuntimeDockerEnvVar {
+        LobbyGroupRuntimeDockerEnvVar {
             key,
             value,
         }

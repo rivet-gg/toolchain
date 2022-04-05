@@ -13,14 +13,20 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineObject8 {
-    #[serde(rename = "amount")]
-    pub amount: i32,
+    #[serde(rename = "display_name")]
+    pub display_name: String,
+    #[serde(rename = "image_tag")]
+    pub image_tag: String,
+    #[serde(rename = "image_file")]
+    pub image_file: Box<crate::models::UploadPrepareFile>,
 }
 
 impl InlineObject8 {
-    pub fn new(amount: i32) -> InlineObject8 {
+    pub fn new(display_name: String, image_tag: String, image_file: crate::models::UploadPrepareFile) -> InlineObject8 {
         InlineObject8 {
-            amount,
+            display_name,
+            image_tag,
+            image_file: Box::new(image_file),
         }
     }
 }

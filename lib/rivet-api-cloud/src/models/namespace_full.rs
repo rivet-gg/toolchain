@@ -16,7 +16,7 @@ pub struct NamespaceFull {
     #[serde(rename = "namespace_id")]
     pub namespace_id: String,
     #[serde(rename = "create_ts")]
-    pub create_ts: i32,
+    pub create_ts: i64,
     #[serde(rename = "display_name")]
     pub display_name: String,
     #[serde(rename = "version_id")]
@@ -28,7 +28,7 @@ pub struct NamespaceFull {
 }
 
 impl NamespaceFull {
-    pub fn new(namespace_id: String, create_ts: i32, display_name: String, version_id: String, name_id: String, config: crate::models::CloudMatchmakerConfig) -> NamespaceFull {
+    pub fn new(namespace_id: String, create_ts: i64, display_name: String, version_id: String, name_id: String, config: crate::models::CloudMatchmakerConfig) -> NamespaceFull {
         NamespaceFull {
             namespace_id,
             create_ts,

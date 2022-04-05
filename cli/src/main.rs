@@ -190,13 +190,13 @@ async fn main() -> Result<()> {
 				let build_res = rivetctl::apis::game_api::create_game_build(
 					&api_config,
 					&game_id,
-					rivetctl::models::InlineObject6 {
+					rivetctl::models::InlineObject8 {
 						display_name,
 						image_tag: image_tag.clone(),
 						image_file: Box::new(rivetctl::models::UploadPrepareFile {
 							path: "image.tar".into(),
 							content_type: Some(content_type.into()),
-							content_length: image_file_meta.len() as i32,
+							content_length: image_file_meta.len() as i64,
 						}),
 					},
 				)
@@ -262,7 +262,7 @@ async fn main() -> Result<()> {
 				let site_res = rivetctl::apis::game_api::create_game_cdn_site(
 					&api_config,
 					&game_id,
-					rivetctl::models::InlineObject5 {
+					rivetctl::models::InlineObject7 {
 						display_name,
 						files: files.iter().map(|f| f.prepared.clone()).collect(),
 					},
@@ -396,7 +396,7 @@ fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 				prepared: rivetctl::models::UploadPrepareFile {
 					path: path_str,
 					content_type,
-					content_length: file_meta.len() as i32,
+					content_length: file_meta.len() as i64,
 				},
 			});
 		}

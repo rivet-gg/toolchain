@@ -22,9 +22,13 @@ pub struct AnalyticsLobbySummary {
     #[serde(rename = "region_id")]
     pub region_id: String,
     #[serde(rename = "create_ts")]
-    pub create_ts: i32,
+    pub create_ts: i64,
     #[serde(rename = "is_ready")]
     pub is_ready: bool,
+    #[serde(rename = "is_idle")]
+    pub is_idle: bool,
+    #[serde(rename = "is_closed")]
+    pub is_closed: bool,
     #[serde(rename = "is_outdated")]
     pub is_outdated: bool,
     #[serde(rename = "max_players_normal")]
@@ -40,7 +44,7 @@ pub struct AnalyticsLobbySummary {
 }
 
 impl AnalyticsLobbySummary {
-    pub fn new(lobby_id: String, lobby_group_id: String, lobby_group_name_id: String, region_id: String, create_ts: i32, is_ready: bool, is_outdated: bool, max_players_normal: i32, max_players_direct: i32, max_players_party: i32, total_player_count: i32, registered_player_count: i32) -> AnalyticsLobbySummary {
+    pub fn new(lobby_id: String, lobby_group_id: String, lobby_group_name_id: String, region_id: String, create_ts: i64, is_ready: bool, is_idle: bool, is_closed: bool, is_outdated: bool, max_players_normal: i32, max_players_direct: i32, max_players_party: i32, total_player_count: i32, registered_player_count: i32) -> AnalyticsLobbySummary {
         AnalyticsLobbySummary {
             lobby_id,
             lobby_group_id,
@@ -48,6 +52,8 @@ impl AnalyticsLobbySummary {
             region_id,
             create_ts,
             is_ready,
+            is_idle,
+            is_closed,
             is_outdated,
             max_players_normal,
             max_players_direct,

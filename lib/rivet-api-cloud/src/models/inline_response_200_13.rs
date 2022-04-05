@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineResponse20013 {
-    #[serde(rename = "did_remove")]
-    pub did_remove: bool,
+    #[serde(rename = "builds")]
+    pub builds: Vec<crate::models::BuildSummary>,
 }
 
 impl InlineResponse20013 {
-    pub fn new(did_remove: bool) -> InlineResponse20013 {
+    pub fn new(builds: Vec<crate::models::BuildSummary>) -> InlineResponse20013 {
         InlineResponse20013 {
-            did_remove,
+            builds,
         }
     }
 }

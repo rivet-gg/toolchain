@@ -15,7 +15,7 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method `complete_upload`
+/// struct for typed errors of method [`complete_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CompleteUploadError {
@@ -29,16 +29,17 @@ pub enum CompleteUploadError {
 
 
 pub async fn complete_upload(configuration: &configuration::Configuration, upload_id: &str, body: serde_json::Value) -> Result<serde_json::Value, Error<CompleteUploadError>> {
+    let local_var_configuration = configuration;
 
-    let local_var_client = &configuration.client;
+    let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/uploads/{upload_id}/complete", configuration.base_path, upload_id=upload_id);
+    let local_var_uri_str = format!("{}/uploads/{upload_id}/complete", local_var_configuration.base_path, upload_id=crate::apis::urlencode(upload_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_user_agent) = configuration.user_agent {
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    if let Some(ref local_var_token) = configuration.bearer_access_token {
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
     local_var_req_builder = local_var_req_builder.json(&body);

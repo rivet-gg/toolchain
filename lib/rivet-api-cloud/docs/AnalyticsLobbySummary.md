@@ -8,8 +8,10 @@ Name | Type | Description | Notes
 **lobby_group_id** | **String** |  | 
 **lobby_group_name_id** | **String** |  | 
 **region_id** | **String** |  | 
-**create_ts** | **i32** |  | 
+**create_ts** | **i64** |  | 
 **is_ready** | **bool** |  | 
+**is_idle** | **bool** |  | 
+**is_closed** | **bool** |  | 
 **is_outdated** | **bool** |  | 
 **max_players_normal** | **i32** |  | 
 **max_players_direct** | **i32** |  | 

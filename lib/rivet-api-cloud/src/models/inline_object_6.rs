@@ -13,20 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineObject6 {
-    #[serde(rename = "display_name")]
-    pub display_name: String,
-    #[serde(rename = "image_tag")]
-    pub image_tag: String,
-    #[serde(rename = "image_file")]
-    pub image_file: Box<crate::models::UploadPrepareFile>,
+    #[serde(rename = "lobby_count_max")]
+    pub lobby_count_max: i32,
+    #[serde(rename = "max_players")]
+    pub max_players: i32,
 }
 
 impl InlineObject6 {
-    pub fn new(display_name: String, image_tag: String, image_file: crate::models::UploadPrepareFile) -> InlineObject6 {
+    pub fn new(lobby_count_max: i32, max_players: i32) -> InlineObject6 {
         InlineObject6 {
-            display_name,
-            image_tag,
-            image_file: Box::new(image_file),
+            lobby_count_max,
+            max_players,
         }
     }
 }

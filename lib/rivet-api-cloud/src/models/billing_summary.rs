@@ -13,16 +13,16 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct BillingSummary {
-    #[serde(rename = "expenses")]
-    pub expenses: Vec<crate::models::RegionTierExpenses>,
+    #[serde(rename = "games")]
+    pub games: Vec<crate::models::GameLobbyExpenses>,
     #[serde(rename = "balance")]
     pub balance: i64,
 }
 
 impl BillingSummary {
-    pub fn new(expenses: Vec<crate::models::RegionTierExpenses>, balance: i64) -> BillingSummary {
+    pub fn new(games: Vec<crate::models::GameLobbyExpenses>, balance: i64) -> BillingSummary {
         BillingSummary {
-            expenses,
+            games,
             balance,
         }
     }

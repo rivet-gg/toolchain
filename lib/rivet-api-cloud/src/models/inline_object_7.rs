@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineObject7 {
-    #[serde(rename = "query_start")]
-    pub query_start: i32,
-    #[serde(rename = "query_end")]
-    pub query_end: i32,
+    #[serde(rename = "files")]
+    pub files: Vec<crate::models::UploadPrepareFile>,
+    #[serde(rename = "display_name")]
+    pub display_name: String,
 }
 
 impl InlineObject7 {
-    pub fn new(query_start: i32, query_end: i32) -> InlineObject7 {
+    pub fn new(files: Vec<crate::models::UploadPrepareFile>, display_name: String) -> InlineObject7 {
         InlineObject7 {
-            query_start,
-            query_end,
+            files,
+            display_name,
         }
     }
 }

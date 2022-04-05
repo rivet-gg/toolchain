@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **description** | Option<**String**> |  | [optional]
 **from_invoice** | **bool** |  | 
 **created_ts** | **i64** |  | 
-**status** | **String** |  | 
+**status** | [**crate::models::BillingStatus**](BillingStatus.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

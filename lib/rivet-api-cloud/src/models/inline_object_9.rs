@@ -13,17 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InlineObject9 {
-    #[serde(rename = "display_name")]
-    pub display_name: String,
-    #[serde(rename = "config")]
-    pub config: Box<crate::models::CloudVersionConfig>,
+    #[serde(rename = "amount")]
+    pub amount: i64,
 }
 
 impl InlineObject9 {
-    pub fn new(display_name: String, config: crate::models::CloudVersionConfig) -> InlineObject9 {
+    pub fn new(amount: i64) -> InlineObject9 {
         InlineObject9 {
-            display_name,
-            config: Box::new(config),
+            amount,
         }
     }
 }

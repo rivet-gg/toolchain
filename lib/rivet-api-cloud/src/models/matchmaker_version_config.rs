@@ -15,12 +15,15 @@
 pub struct MatchmakerVersionConfig {
     #[serde(rename = "lobby_groups")]
     pub lobby_groups: Vec<crate::models::LobbyGroup>,
+    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
+    pub captcha: Option<Box<crate::models::MatchmakerCaptcha>>,
 }
 
 impl MatchmakerVersionConfig {
     pub fn new(lobby_groups: Vec<crate::models::LobbyGroup>) -> MatchmakerVersionConfig {
         MatchmakerVersionConfig {
             lobby_groups,
+            captcha: None,
         }
     }
 }

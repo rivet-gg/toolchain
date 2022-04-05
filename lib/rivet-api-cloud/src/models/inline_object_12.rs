@@ -15,12 +15,15 @@
 pub struct InlineObject12 {
     #[serde(rename = "display_name")]
     pub display_name: String,
+    #[serde(rename = "name_id")]
+    pub name_id: String,
 }
 
 impl InlineObject12 {
-    pub fn new(display_name: String) -> InlineObject12 {
+    pub fn new(display_name: String, name_id: String) -> InlineObject12 {
         InlineObject12 {
             display_name,
+            name_id,
         }
     }
 }

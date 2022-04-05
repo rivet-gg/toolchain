@@ -13,25 +13,31 @@
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RegionTierExpenses {
+    #[serde(rename = "namespace_id")]
+    pub namespace_id: String,
     #[serde(rename = "region_id")]
     pub region_id: String,
     #[serde(rename = "tier_name_id")]
     pub tier_name_id: String,
+    #[serde(rename = "lobby_group_name_id")]
+    pub lobby_group_name_id: String,
+    #[serde(rename = "uptime", skip_serializing_if = "Option::is_none")]
+    pub uptime: Option<i64>,
     #[serde(rename = "expenses")]
-    pub expenses: i32,
-    #[serde(rename = "create_ts", skip_serializing_if = "Option::is_none")]
-    pub create_ts: Option<i32>,
+    pub expenses: i64,
     #[serde(rename = "display_name", skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
 }
 
 impl RegionTierExpenses {
-    pub fn new(region_id: String, tier_name_id: String, expenses: i32) -> RegionTierExpenses {
+    pub fn new(namespace_id: String, region_id: String, tier_name_id: String, lobby_group_name_id: String, expenses: i64) -> RegionTierExpenses {
         RegionTierExpenses {
+            namespace_id,
             region_id,
             tier_name_id,
+            lobby_group_name_id,
+            uptime: None,
             expenses,
-            create_ts: None,
             display_name: None,
         }
     }

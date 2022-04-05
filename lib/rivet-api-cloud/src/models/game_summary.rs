@@ -16,7 +16,7 @@ pub struct GameSummary {
     #[serde(rename = "game_id")]
     pub game_id: String,
     #[serde(rename = "create_ts")]
-    pub create_ts: i32,
+    pub create_ts: i64,
     #[serde(rename = "name_id")]
     pub name_id: String,
     #[serde(rename = "display_name")]
@@ -28,7 +28,7 @@ pub struct GameSummary {
 }
 
 impl GameSummary {
-    pub fn new(game_id: String, create_ts: i32, name_id: String, display_name: String, developer_team_id: String, total_player_count: i32) -> GameSummary {
+    pub fn new(game_id: String, create_ts: i64, name_id: String, display_name: String, developer_team_id: String, total_player_count: i32) -> GameSummary {
         GameSummary {
             game_id,
             create_ts,

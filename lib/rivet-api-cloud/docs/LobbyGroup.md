@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name_id** | **String** |  | 
-**regions** | [**Vec<crate::models::LobbyGroupRegions>**](LobbyGroup_regions.md) |  | 
+**regions** | [**Vec<crate::models::LobbyGroupRegion>**](LobbyGroupRegion.md) |  | 
 **max_players_normal** | **i32** |  | 
 **max_players_direct** | **i32** |  | 
 **max_players_party** | **i32** |  | 

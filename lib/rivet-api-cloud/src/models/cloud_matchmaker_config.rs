@@ -16,14 +16,14 @@ pub struct CloudMatchmakerConfig {
     #[serde(rename = "cdn")]
     pub cdn: Box<crate::models::CdnNamespaceConfig>,
     #[serde(rename = "matchmaker")]
-    pub matchmaker: serde_json::Value,
+    pub matchmaker: Box<crate::models::MatchmakerNamespaceConfig>,
 }
 
 impl CloudMatchmakerConfig {
-    pub fn new(cdn: crate::models::CdnNamespaceConfig, matchmaker: serde_json::Value) -> CloudMatchmakerConfig {
+    pub fn new(cdn: crate::models::CdnNamespaceConfig, matchmaker: crate::models::MatchmakerNamespaceConfig) -> CloudMatchmakerConfig {
         CloudMatchmakerConfig {
             cdn: Box::new(cdn),
-            matchmaker,
+            matchmaker: Box::new(matchmaker),
         }
     }
 }

@@ -18,11 +18,11 @@ pub struct InlineObject2 {
     #[serde(rename = "version_id")]
     pub version_id: String,
     #[serde(rename = "name_id")]
-    pub name_id: Option<serde_json::Value>,
+    pub name_id: String,
 }
 
 impl InlineObject2 {
-    pub fn new(display_name: String, version_id: String, name_id: Option<serde_json::Value>) -> InlineObject2 {
+    pub fn new(display_name: String, version_id: String, name_id: String) -> InlineObject2 {
         InlineObject2 {
             display_name,
             version_id,

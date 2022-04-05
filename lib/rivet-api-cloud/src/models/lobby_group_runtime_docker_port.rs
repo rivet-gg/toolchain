@@ -12,7 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct LobbyGroupRuntimeDockerPorts {
+pub struct LobbyGroupRuntimeDockerPort {
     #[serde(rename = "label")]
     pub label: String,
     #[serde(rename = "target_port")]
@@ -21,9 +21,9 @@ pub struct LobbyGroupRuntimeDockerPorts {
     pub proxy_protocol: ProxyProtocol,
 }
 
-impl LobbyGroupRuntimeDockerPorts {
-    pub fn new(label: String, target_port: i32, proxy_protocol: ProxyProtocol) -> LobbyGroupRuntimeDockerPorts {
-        LobbyGroupRuntimeDockerPorts {
+impl LobbyGroupRuntimeDockerPort {
+    pub fn new(label: String, target_port: i32, proxy_protocol: ProxyProtocol) -> LobbyGroupRuntimeDockerPort {
+        LobbyGroupRuntimeDockerPort {
             label,
             target_port,
             proxy_protocol,

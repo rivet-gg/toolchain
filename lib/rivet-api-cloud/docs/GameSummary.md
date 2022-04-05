@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **game_id** | **String** |  | 
-**create_ts** | **i32** |  | 
+**create_ts** | **i64** |  | 
 **name_id** | **String** |  | 
 **display_name** | **String** |  | 
 **developer_team_id** | **String** |  | 

@@ -15,15 +15,15 @@
 pub struct InlineObject10 {
     #[serde(rename = "display_name")]
     pub display_name: String,
-    #[serde(rename = "name_id")]
-    pub name_id: String,
+    #[serde(rename = "config")]
+    pub config: Box<crate::models::CloudVersionConfig>,
 }
 
 impl InlineObject10 {
-    pub fn new(display_name: String, name_id: String) -> InlineObject10 {
+    pub fn new(display_name: String, config: crate::models::CloudVersionConfig) -> InlineObject10 {
         InlineObject10 {
             display_name,
-            name_id,
+            config: Box::new(config),
         }
     }
 }

@@ -4,7 +4,7 @@ All URIs are relative to *https://api-cloud.rivet.gg/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**convert_team**](GameApi.md#convert_team) | **GET** /teams/{team_id}/convert | 
+[**convert_team**](GameApi.md#convert_team) | **POST** /teams/{team_id}/convert | 
 [**create_cloud_token**](GameApi.md#create_cloud_token) | **POST** /games/{game_id}/tokens/cloud | 
 [**create_game**](GameApi.md#create_game) | **POST** /games | 
 [**create_game_build**](GameApi.md#create_game_build) | **POST** /games/{game_id}/builds | 
@@ -14,21 +14,30 @@ Method | HTTP request | Description
 [**create_game_namespace_token_public**](GameApi.md#create_game_namespace_token_public) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/public | 
 [**create_game_version**](GameApi.md#create_game_version) | **POST** /games/{game_id}/versions | 
 [**delete_matchmaker_lobby**](GameApi.md#delete_matchmaker_lobby) | **DELETE** /games/{game_id}/matchmaker/lobbies/{lobby_id} | 
+[**export_matchmaker_lobby_history**](GameApi.md#export_matchmaker_lobby_history) | **POST** /games/{game_id}/matchmaker/lobbies/export-history | 
 [**get_game_by_id**](GameApi.md#get_game_by_id) | **GET** /games/{game_id} | 
 [**get_game_namespace_by_id**](GameApi.md#get_game_namespace_by_id) | **GET** /games/{game_id}/namespaces/{namespace_id} | 
 [**get_game_version_by_id**](GameApi.md#get_game_version_by_id) | **GET** /games/{game_id}/versions/{version_id} | 
 [**get_games**](GameApi.md#get_games) | **GET** /games | 
 [**get_namespace_analytics_matchmaker_live**](GameApi.md#get_namespace_analytics_matchmaker_live) | **GET** /games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live | 
-[**get_team_billing**](GameApi.md#get_team_billing) | **POST** /teams/{team_id}/billing | 
+[**get_namespace_lobby**](GameApi.md#get_namespace_lobby) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
+[**get_region_tiers**](GameApi.md#get_region_tiers) | **GET** /region-tiers | 
+[**get_team_bank_transfers_list**](GameApi.md#get_team_bank_transfers_list) | **GET** /teams/{team_id}/billing/transfers | 
+[**get_team_billing**](GameApi.md#get_team_billing) | **GET** /teams/{team_id}/billing | 
 [**get_team_payments_list**](GameApi.md#get_team_payments_list) | **GET** /teams/{team_id}/billing/payments | 
 [**list_cdn_sites**](GameApi.md#list_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
 [**list_game_builds**](GameApi.md#list_game_builds) | **GET** /games/{game_id}/builds | 
+[**list_namespace_lobbies**](GameApi.md#list_namespace_lobbies) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
 [**remove_namespace_domain**](GameApi.md#remove_namespace_domain) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
 [**team_billing_checkout**](GameApi.md#team_billing_checkout) | **POST** /teams/{team_id}/checkout | 
+[**toggle_namespace_domain_public_auth**](GameApi.md#toggle_namespace_domain_public_auth) | **PUT** /games/{game_id}/namespaces/{namespace_id}/domain-public-auth | 
+[**update_game_namespace_matchmaker_config**](GameApi.md#update_game_namespace_matchmaker_config) | **POST** /games/{game_id}/namespaces/{namespace_id}/mm-config | 
 [**update_game_namespace_version**](GameApi.md#update_game_namespace_version) | **PUT** /games/{game_id}/namespaces/{namespace_id}/version | 
 [**update_namespace_domain**](GameApi.md#update_namespace_domain) | **POST** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
 [**validate_game**](GameApi.md#validate_game) | **POST** /games/validate | 
 [**validate_game_namespace**](GameApi.md#validate_game_namespace) | **POST** /games/{game_id}/namespace/validate | 
+[**validate_game_namespace_matchmaker_config**](GameApi.md#validate_game_namespace_matchmaker_config) | **POST** /games/{game_id}/namespaces/{namespace_id}/mm-config/validate | 
+[**validate_game_namespace_token_development**](GameApi.md#validate_game_namespace_token_development) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/development/validate | 
 [**validate_game_version**](GameApi.md#validate_game_version) | **POST** /games/{game_id}/version/validate | 
 [**validate_team**](GameApi.md#validate_team) | **POST** /teams/validate | 
 
@@ -36,7 +45,7 @@ Method | HTTP request | Description
 
 ## convert_team
 
-> convert_team(team_id)
+> convert_team(team_id, body)
 
 
 ### Parameters
@@ -44,7 +53,8 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**team_id** | [**String**](.md) |  | [required] |
+**team_id** | **String** |  | [required] |
+**body** | **serde_json::Value** |  | [required] |
 
 ### Return type
 
@@ -56,7 +66,7 @@ Name | Type | Description  | Required | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -72,7 +82,7 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
 **body** | **serde_json::Value** |  | [required] |
 
 ### Return type
@@ -121,7 +131,7 @@ Name | Type | Description  | Required | Notes
 
 ## create_game_build
 
-> crate::models::InlineResponse20012 create_game_build(game_id, inline_object6)
+> crate::models::InlineResponse20014 create_game_build(game_id, inline_object8)
 
 
 ### Parameters
@@ -129,12 +139,12 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**inline_object6** | [**InlineObject6**](InlineObject6.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**inline_object8** | [**InlineObject8**](InlineObject8.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20012**](inline_response_200_12.md)
+[**crate::models::InlineResponse20014**](inline_response_200_14.md)
 
 ### Authorization
 
@@ -150,7 +160,7 @@ Name | Type | Description  | Required | Notes
 
 ## create_game_cdn_site
 
-> crate::models::InlineResponse20010 create_game_cdn_site(game_id, inline_object5)
+> crate::models::InlineResponse20012 create_game_cdn_site(game_id, inline_object7)
 
 
 ### Parameters
@@ -158,12 +168,12 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**inline_object5** | [**InlineObject5**](InlineObject5.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**inline_object7** | [**InlineObject7**](InlineObject7.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20010**](inline_response_200_10.md)
+[**crate::models::InlineResponse20012**](inline_response_200_12.md)
 
 ### Authorization
 
@@ -187,7 +197,7 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
 **inline_object2** | [**InlineObject2**](InlineObject2.md) |  | [required] |
 
 ### Return type
@@ -216,8 +226,8 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 **inline_object4** | [**InlineObject4**](InlineObject4.md) |  | [required] |
 
 ### Return type
@@ -246,8 +256,8 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 **body** | **serde_json::Value** |  | [required] |
 
 ### Return type
@@ -276,7 +286,7 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
 **inline_object1** | [**InlineObject1**](InlineObject1.md) |  | [required] |
 
 ### Return type
@@ -297,7 +307,7 @@ Name | Type | Description  | Required | Notes
 
 ## delete_matchmaker_lobby
 
-> crate::models::InlineResponse20013 delete_matchmaker_lobby(game_id, lobby_id)
+> crate::models::InlineResponse20015 delete_matchmaker_lobby(game_id, lobby_id)
 
 
 ### Parameters
@@ -305,12 +315,12 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**lobby_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**lobby_id** | **String** |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20013**](inline_response_200_13.md)
+[**crate::models::InlineResponse20015**](inline_response_200_15.md)
 
 ### Authorization
 
@@ -319,6 +329,35 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## export_matchmaker_lobby_history
+
+> crate::models::MatchmakerLobbiesExportHistoryResponse export_matchmaker_lobby_history(game_id, matchmaker_lobbies_export_history_request)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**matchmaker_lobbies_export_history_request** | [**MatchmakerLobbiesExportHistoryRequest**](MatchmakerLobbiesExportHistoryRequest.md) |  | [required] |
+
+### Return type
+
+[**crate::models::MatchmakerLobbiesExportHistoryResponse**](MatchmakerLobbiesExportHistoryResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -334,7 +373,7 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
 
 ### Return type
 
@@ -362,8 +401,8 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 
 ### Return type
 
@@ -391,8 +430,8 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**version_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**version_id** | **String** |  | [required] |
 
 ### Return type
 
@@ -445,8 +484,8 @@ This endpoint does not need any parameter.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 
 ### Return type
 
@@ -464,9 +503,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## get_team_billing
+## get_namespace_lobby
 
-> crate::models::InlineResponse20014 get_team_billing(team_id, inline_object7)
+> crate::models::InlineResponse20010 get_namespace_lobby(game_id, namespace_id, lobby_id)
 
 
 ### Parameters
@@ -474,12 +513,13 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**team_id** | [**String**](.md) |  | [required] |
-**inline_object7** | [**InlineObject7**](InlineObject7.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
+**lobby_id** | **String** |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20014**](inline_response_200_14.md)
+[**crate::models::InlineResponse20010**](inline_response_200_10.md)
 
 ### Authorization
 
@@ -487,15 +527,40 @@ Name | Type | Description  | Required | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## get_team_payments_list
+## get_region_tiers
 
-> crate::models::InlineResponse20015 get_team_payments_list(team_id, start_payment_id)
+> crate::models::InlineResponse20020 get_region_tiers()
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**crate::models::InlineResponse20020**](inline_response_200_20.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_team_bank_transfers_list
+
+> crate::models::InlineResponse20018 get_team_bank_transfers_list(team_id, start_transfer_id)
 
 
 ### Parameters
@@ -503,12 +568,71 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**team_id** | [**String**](.md) |  | [required] |
+**team_id** | **String** |  | [required] |
+**start_transfer_id** | Option<**String**> |  |  |
+
+### Return type
+
+[**crate::models::InlineResponse20018**](inline_response_200_18.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_team_billing
+
+> crate::models::InlineResponse20016 get_team_billing(team_id, query_start, query_end)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**team_id** | **String** |  | [required] |
+**query_start** | Option<**i64**> |  |  |
+**query_end** | Option<**i64**> |  |  |
+
+### Return type
+
+[**crate::models::InlineResponse20016**](inline_response_200_16.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_team_payments_list
+
+> crate::models::InlineResponse20017 get_team_payments_list(team_id, start_payment_id)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**team_id** | **String** |  | [required] |
 **start_payment_id** | Option<**String**> |  |  |
 
 ### Return type
 
-[**crate::models::InlineResponse20015**](inline_response_200_15.md)
+[**crate::models::InlineResponse20017**](inline_response_200_17.md)
 
 ### Authorization
 
@@ -524,7 +648,7 @@ Name | Type | Description  | Required | Notes
 
 ## list_cdn_sites
 
-> crate::models::InlineResponse2009 list_cdn_sites(game_id)
+> crate::models::InlineResponse20011 list_cdn_sites(game_id)
 
 
 ### Parameters
@@ -532,35 +656,7 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-
-### Return type
-
-[**crate::models::InlineResponse2009**](inline_response_200_9.md)
-
-### Authorization
-
-[BearerAuth](../README.md#BearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## list_game_builds
-
-> crate::models::InlineResponse20011 list_game_builds(game_id)
-
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
 
 ### Return type
 
@@ -578,9 +674,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## remove_namespace_domain
+## list_game_builds
 
-> remove_namespace_domain(game_id, namespace_id, domain)
+> crate::models::InlineResponse20013 list_game_builds(game_id)
 
 
 ### Parameters
@@ -588,13 +684,71 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+
+### Return type
+
+[**crate::models::InlineResponse20013**](inline_response_200_13.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## list_namespace_lobbies
+
+> crate::models::InlineResponse2009 list_namespace_lobbies(game_id, namespace_id, before_create_ts)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
+**before_create_ts** | Option<**i64**> |  |  |
+
+### Return type
+
+[**crate::models::InlineResponse2009**](inline_response_200_9.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## remove_namespace_domain
+
+> serde_json::Value remove_namespace_domain(game_id, namespace_id, domain)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 **domain** | **String** |  | [required] |
 
 ### Return type
 
- (empty response body)
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -610,7 +764,7 @@ Name | Type | Description  | Required | Notes
 
 ## team_billing_checkout
 
-> crate::models::InlineResponse20016 team_billing_checkout(team_id, inline_object8)
+> crate::models::InlineResponse20019 team_billing_checkout(team_id, inline_object9)
 
 
 ### Parameters
@@ -618,12 +772,72 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**team_id** | [**String**](.md) |  | [required] |
-**inline_object8** | [**InlineObject8**](InlineObject8.md) |  | [required] |
+**team_id** | **String** |  | [required] |
+**inline_object9** | [**InlineObject9**](InlineObject9.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20016**](inline_response_200_16.md)
+[**crate::models::InlineResponse20019**](inline_response_200_19.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## toggle_namespace_domain_public_auth
+
+> serde_json::Value toggle_namespace_domain_public_auth(game_id, namespace_id, inline_object5)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
+**inline_object5** | [**InlineObject5**](InlineObject5.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## update_game_namespace_matchmaker_config
+
+> serde_json::Value update_game_namespace_matchmaker_config(game_id, namespace_id, inline_object6)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
+**inline_object6** | [**InlineObject6**](InlineObject6.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -639,7 +853,7 @@ Name | Type | Description  | Required | Notes
 
 ## update_game_namespace_version
 
-> crate::models::InlineObject3 update_game_namespace_version(game_id, namespace_id, inline_object3)
+> serde_json::Value update_game_namespace_version(game_id, namespace_id, inline_object3)
 
 
 ### Parameters
@@ -647,13 +861,13 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 **inline_object3** | [**InlineObject3**](InlineObject3.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineObject3**](inline_object_3.md)
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -669,7 +883,7 @@ Name | Type | Description  | Required | Notes
 
 ## update_namespace_domain
 
-> update_namespace_domain(game_id, namespace_id, domain)
+> serde_json::Value update_namespace_domain(game_id, namespace_id, domain, body)
 
 
 ### Parameters
@@ -677,13 +891,14 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**namespace_id** | [**String**](.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
 **domain** | **String** |  | [required] |
+**body** | **serde_json::Value** |  | [required] |
 
 ### Return type
 
- (empty response body)
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -691,7 +906,7 @@ Name | Type | Description  | Required | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -699,7 +914,7 @@ Name | Type | Description  | Required | Notes
 
 ## validate_game
 
-> crate::models::InlineResponse20017 validate_game(inline_object11)
+> crate::models::ValidationErrors validate_game(inline_object12)
 
 
 ### Parameters
@@ -707,11 +922,11 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**inline_object11** | [**InlineObject11**](InlineObject11.md) |  | [required] |
+**inline_object12** | [**InlineObject12**](InlineObject12.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20017**](inline_response_200_17.md)
+[**crate::models::ValidationErrors**](ValidationErrors.md)
 
 ### Authorization
 
@@ -727,7 +942,7 @@ Name | Type | Description  | Required | Notes
 
 ## validate_game_namespace
 
-> crate::models::InlineResponse20017 validate_game_namespace(game_id, inline_object10)
+> crate::models::ValidationErrors validate_game_namespace(game_id, inline_object11)
 
 
 ### Parameters
@@ -735,12 +950,72 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**inline_object10** | [**InlineObject10**](InlineObject10.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**inline_object11** | [**InlineObject11**](InlineObject11.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20017**](inline_response_200_17.md)
+[**crate::models::ValidationErrors**](ValidationErrors.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## validate_game_namespace_matchmaker_config
+
+> crate::models::ValidationErrors validate_game_namespace_matchmaker_config(game_id, namespace_id, inline_object15)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
+**inline_object15** | [**InlineObject15**](InlineObject15.md) |  | [required] |
+
+### Return type
+
+[**crate::models::ValidationErrors**](ValidationErrors.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## validate_game_namespace_token_development
+
+> crate::models::ValidationErrors validate_game_namespace_token_development(game_id, namespace_id, inline_object14)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**game_id** | **String** |  | [required] |
+**namespace_id** | **String** |  | [required] |
+**inline_object14** | [**InlineObject14**](InlineObject14.md) |  | [required] |
+
+### Return type
+
+[**crate::models::ValidationErrors**](ValidationErrors.md)
 
 ### Authorization
 
@@ -756,7 +1031,7 @@ Name | Type | Description  | Required | Notes
 
 ## validate_game_version
 
-> crate::models::InlineResponse20017 validate_game_version(game_id, inline_object9)
+> crate::models::ValidationErrors validate_game_version(game_id, inline_object10)
 
 
 ### Parameters
@@ -764,12 +1039,12 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | [**String**](.md) |  | [required] |
-**inline_object9** | [**InlineObject9**](InlineObject9.md) |  | [required] |
+**game_id** | **String** |  | [required] |
+**inline_object10** | [**InlineObject10**](InlineObject10.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20017**](inline_response_200_17.md)
+[**crate::models::ValidationErrors**](ValidationErrors.md)
 
 ### Authorization
 
@@ -785,7 +1060,7 @@ Name | Type | Description  | Required | Notes
 
 ## validate_team
 
-> crate::models::InlineResponse20017 validate_team(inline_object12)
+> crate::models::ValidationErrors validate_team(inline_object13)
 
 
 ### Parameters
@@ -793,11 +1068,11 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**inline_object12** | [**InlineObject12**](InlineObject12.md) |  | [required] |
+**inline_object13** | [**InlineObject13**](InlineObject13.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::InlineResponse20017**](inline_response_200_17.md)
+[**crate::models::ValidationErrors**](ValidationErrors.md)
 
 ### Authorization
 

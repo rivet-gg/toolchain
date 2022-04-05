@@ -15,8 +15,8 @@
 pub struct TeamSummary {
     #[serde(rename = "team_id")]
     pub team_id: String,
-    #[serde(rename = "create_ts")]
-    pub create_ts: i32,
+    #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
+    pub avatar_url: Option<String>,
     #[serde(rename = "display_name")]
     pub display_name: String,
     #[serde(rename = "is_developer")]
@@ -24,10 +24,10 @@ pub struct TeamSummary {
 }
 
 impl TeamSummary {
-    pub fn new(team_id: String, create_ts: i32, display_name: String, is_developer: bool) -> TeamSummary {
+    pub fn new(team_id: String, display_name: String, is_developer: bool) -> TeamSummary {
         TeamSummary {
             team_id,
-            create_ts,
+            avatar_url: None,
             display_name,
             is_developer,
         }

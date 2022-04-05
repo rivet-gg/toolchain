@@ -973,16 +973,6 @@ dependencies = [
 name = "rivetctl"
 version = "0.0.1"
 dependencies = [
- "rivet-api-cloud",
- "serde",
- "thiserror",
- "tokio 0.2.25",
-]
-
-[[package]]
-name = "rivetctl-cli"
-version = "0.0.1"
-dependencies = [
  "anyhow",
  "clap",
  "futures-util",
@@ -992,12 +982,22 @@ dependencies = [
  "mime_guess",
  "rand",
  "reqwest",
- "rivetctl",
+ "rivetctl-lib",
  "serde",
  "serde_json",
  "tempfile",
  "tokio 1.6.1",
  "tokio-util",
+]
+
+[[package]]
+name = "rivetctl-lib"
+version = "0.0.1"
+dependencies = [
+ "rivet-api-cloud",
+ "serde",
+ "thiserror",
+ "tokio 0.2.25",
 ]
 
 [[package]]

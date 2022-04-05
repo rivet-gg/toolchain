@@ -18,13 +18,13 @@ pub struct LobbyGroupRuntimeDocker {
     #[serde(rename = "args")]
     pub args: Vec<String>,
     #[serde(rename = "ports")]
-    pub ports: Vec<crate::models::LobbyGroupRuntimeDockerPorts>,
+    pub ports: Vec<crate::models::LobbyGroupRuntimeDockerPort>,
     #[serde(rename = "env_vars")]
-    pub env_vars: Vec<crate::models::LobbyGroupRuntimeDockerEnvVars>,
+    pub env_vars: Vec<crate::models::LobbyGroupRuntimeDockerEnvVar>,
 }
 
 impl LobbyGroupRuntimeDocker {
-    pub fn new(args: Vec<String>, ports: Vec<crate::models::LobbyGroupRuntimeDockerPorts>, env_vars: Vec<crate::models::LobbyGroupRuntimeDockerEnvVars>) -> LobbyGroupRuntimeDocker {
+    pub fn new(args: Vec<String>, ports: Vec<crate::models::LobbyGroupRuntimeDockerPort>, env_vars: Vec<crate::models::LobbyGroupRuntimeDockerEnvVar>) -> LobbyGroupRuntimeDocker {
         LobbyGroupRuntimeDocker {
             build_id: None,
             args,

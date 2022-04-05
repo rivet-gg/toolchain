@@ -18,7 +18,7 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**upload_id** | [**String**](.md) |  | [required] |
+**upload_id** | **String** |  | [required] |
 **body** | **serde_json::Value** |  | [required] |
 
 ### Return type

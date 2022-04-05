@@ -16,7 +16,7 @@ pub struct LobbyGroup {
     #[serde(rename = "name_id")]
     pub name_id: String,
     #[serde(rename = "regions")]
-    pub regions: Vec<crate::models::LobbyGroupRegions>,
+    pub regions: Vec<crate::models::LobbyGroupRegion>,
     #[serde(rename = "max_players_normal")]
     pub max_players_normal: i32,
     #[serde(rename = "max_players_direct")]
@@ -28,7 +28,7 @@ pub struct LobbyGroup {
 }
 
 impl LobbyGroup {
-    pub fn new(name_id: String, regions: Vec<crate::models::LobbyGroupRegions>, max_players_normal: i32, max_players_direct: i32, max_players_party: i32, runtime: crate::models::LobbyGroupRuntime) -> LobbyGroup {
+    pub fn new(name_id: String, regions: Vec<crate::models::LobbyGroupRegion>, max_players_normal: i32, max_players_direct: i32, max_players_party: i32, runtime: crate::models::LobbyGroupRuntime) -> LobbyGroup {
         LobbyGroup {
             name_id,
             regions,
