@@ -87,8 +87,8 @@ async fn main() -> Result<()> {
 		.join(".config")
 		.join("rivetctl.json");
 	let config = match fs::read(&config_path).await {
-		Ok(buf) => serde_json::from_slice::<rivetctl::config::Config>(buf.as_slice())?,
-		Err(_) => rivetctl::config::Config::default(),
+		Result::Ok(buf) => serde_json::from_slice::<rivetctl::config::Config>(buf.as_slice())?,
+		Result::Err(_) => rivetctl::config::Config::default(),
 	};
 
 	// Build ctx

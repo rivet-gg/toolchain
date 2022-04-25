@@ -4,6 +4,7 @@
 Cargo.toml
 README.md
 docs/AnalyticsLobbySummary.md
+docs/AuthApi.md
 docs/BankSource.md
 docs/BillingPayment.md
 docs/BillingStatus.md
@@ -71,6 +72,7 @@ docs/LobbyGroupRuntime.md
 docs/LobbyGroupRuntimeDocker.md
 docs/LobbyGroupRuntimeDockerEnvVar.md
 docs/LobbyGroupRuntimeDockerPort.md
+docs/LogsApi.md
 docs/LogsLobbyStatus.md
 docs/LogsLobbyStatusStopped.md
 docs/LogsLobbySummary.md
@@ -102,6 +104,8 @@ docs/VersionSummary.md
 git_push.sh
 src/apis/cloud_api.rs
 src/apis/configuration.rs
+src/apis/game_api.rs
+src/apis/logs_api.rs
 src/apis/mod.rs
 src/apis/portal_api.rs
 src/lib.rs
