@@ -11,11 +11,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct NamespaceFullAllOf {
 	#[serde(rename = "config")]
-	pub config: Box<crate::models::CloudMatchmakerConfig>,
+	pub config: Box<crate::models::CloudNamespaceConfig>,
 }
 
 impl NamespaceFullAllOf {
-	pub fn new(config: crate::models::CloudMatchmakerConfig) -> NamespaceFullAllOf {
+	pub fn new(config: crate::models::CloudNamespaceConfig) -> NamespaceFullAllOf {
 		NamespaceFullAllOf {
 			config: Box::new(config),
 		}

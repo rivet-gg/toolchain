@@ -14,6 +14,8 @@ pub struct CloudVersionConfig {
 	pub cdn: Option<Box<crate::models::CdnVersionConfig>>,
 	#[serde(rename = "matchmaker", skip_serializing_if = "Option::is_none")]
 	pub matchmaker: Option<Box<crate::models::MatchmakerVersionConfig>>,
+	#[serde(rename = "kv", skip_serializing_if = "Option::is_none")]
+	pub kv: Option<serde_json::Value>,
 }
 
 impl CloudVersionConfig {
@@ -21,6 +23,7 @@ impl CloudVersionConfig {
 		CloudVersionConfig {
 			cdn: None,
 			matchmaker: None,
+			kv: None,
 		}
 	}
 }

@@ -9,21 +9,25 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct CloudMatchmakerConfig {
+pub struct CloudNamespaceConfig {
 	#[serde(rename = "cdn")]
 	pub cdn: Box<crate::models::CdnNamespaceConfig>,
 	#[serde(rename = "matchmaker")]
 	pub matchmaker: Box<crate::models::MatchmakerNamespaceConfig>,
+	#[serde(rename = "kv")]
+	pub kv: serde_json::Value,
 }
 
-impl CloudMatchmakerConfig {
+impl CloudNamespaceConfig {
 	pub fn new(
 		cdn: crate::models::CdnNamespaceConfig,
 		matchmaker: crate::models::MatchmakerNamespaceConfig,
-	) -> CloudMatchmakerConfig {
-		CloudMatchmakerConfig {
+		kv: serde_json::Value,
+	) -> CloudNamespaceConfig {
+		CloudNamespaceConfig {
 			cdn: Box::new(cdn),
 			matchmaker: Box::new(matchmaker),
+			kv,
 		}
 	}
 }

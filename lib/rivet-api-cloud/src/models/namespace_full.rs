@@ -21,7 +21,7 @@ pub struct NamespaceFull {
 	#[serde(rename = "name_id")]
 	pub name_id: String,
 	#[serde(rename = "config")]
-	pub config: Box<crate::models::CloudMatchmakerConfig>,
+	pub config: Box<crate::models::CloudNamespaceConfig>,
 }
 
 impl NamespaceFull {
@@ -31,7 +31,7 @@ impl NamespaceFull {
 		display_name: String,
 		version_id: String,
 		name_id: String,
-		config: crate::models::CloudMatchmakerConfig,
+		config: crate::models::CloudNamespaceConfig,
 	) -> NamespaceFull {
 		NamespaceFull {
 			namespace_id,

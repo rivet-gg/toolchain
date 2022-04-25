@@ -10,17 +10,20 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct InlineResponse20017 {
-    #[serde(rename = "payments")]
-    pub payments: Vec<crate::models::BillingPayment>,
-    #[serde(rename = "end_payment_id")]
-    pub end_payment_id: String,
+	#[serde(rename = "payments")]
+	pub payments: Vec<crate::models::BillingPayment>,
+	#[serde(rename = "end_payment_id")]
+	pub end_payment_id: String,
 }
 
 impl InlineResponse20017 {
-    pub fn new(payments: Vec<crate::models::BillingPayment>, end_payment_id: String) -> InlineResponse20017 {
-        InlineResponse20017 {
-            payments,
-            end_payment_id,
-        }
-    }
+	pub fn new(
+		payments: Vec<crate::models::BillingPayment>,
+		end_payment_id: String,
+	) -> InlineResponse20017 {
+		InlineResponse20017 {
+			payments,
+			end_payment_id,
+		}
+	}
 }

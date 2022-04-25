@@ -4,7 +4,6 @@
 Cargo.toml
 README.md
 docs/AnalyticsLobbySummary.md
-docs/AuthApi.md
 docs/BankSource.md
 docs/BillingPayment.md
 docs/BillingStatus.md
@@ -17,7 +16,7 @@ docs/CdnSiteSummary.md
 docs/CdnUploadResponse.md
 docs/CdnVersionConfig.md
 docs/CloudApi.md
-docs/CloudMatchmakerConfig.md
+docs/CloudNamespaceConfig.md
 docs/CloudVersionConfig.md
 docs/GameFull.md
 docs/GameFullAllOf.md
@@ -72,7 +71,6 @@ docs/LobbyGroupRuntime.md
 docs/LobbyGroupRuntimeDocker.md
 docs/LobbyGroupRuntimeDockerEnvVar.md
 docs/LobbyGroupRuntimeDockerPort.md
-docs/LogsApi.md
 docs/LogsLobbyStatus.md
 docs/LogsLobbyStatusStopped.md
 docs/LogsLobbySummary.md
@@ -104,8 +102,6 @@ docs/VersionSummary.md
 git_push.sh
 src/apis/cloud_api.rs
 src/apis/configuration.rs
-src/apis/game_api.rs
-src/apis/logs_api.rs
 src/apis/mod.rs
 src/apis/portal_api.rs
 src/lib.rs
@@ -121,7 +117,7 @@ src/models/cdn_namespace_domain.rs
 src/models/cdn_site_summary.rs
 src/models/cdn_upload_response.rs
 src/models/cdn_version_config.rs
-src/models/cloud_matchmaker_config.rs
+src/models/cloud_namespace_config.rs
 src/models/cloud_version_config.rs
 src/models/game_full.rs
 src/models/game_full_all_of.rs
