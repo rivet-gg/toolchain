@@ -123,7 +123,7 @@ async fn main() -> Result<()> {
 						.await?;
 				let inspect = rivetctl::apis::cloud_api::inspect(&new_ctx.api_config()?)
 					.await
-					.context("auth_api::inspect")?;
+					.context("cloud_api::inspect")?;
 				println!("{:?}", inspect);
 
 				// Save new config
@@ -201,7 +201,7 @@ async fn main() -> Result<()> {
 					},
 				)
 				.await
-				.context("game_api::create_game_build")?;
+				.context("cloud_api::create_game_build")?;
 
 				println!(
 					"\n\n> Uploading ({size})",
@@ -222,7 +222,7 @@ async fn main() -> Result<()> {
 					serde_json::json!({}),
 				)
 				.await
-				.context("upload_api::complete_upload")?;
+				.context("cloud_api::complete_upload")?;
 			}
 		},
 		SubCommand::Site { subcmd } => match subcmd {
@@ -268,7 +268,7 @@ async fn main() -> Result<()> {
 					},
 				)
 				.await
-				.context("game_api::create_game_cdn_site")?;
+				.context("cloud_api::create_game_cdn_site")?;
 
 				println!("\n\n> Uploading");
 				{
@@ -329,7 +329,7 @@ async fn main() -> Result<()> {
 					serde_json::json!({}),
 				)
 				.await
-				.context("upload_api::complete_upload")?;
+				.context("cloud_api::complete_upload")?;
 			}
 		},
 	}
@@ -486,7 +486,7 @@ async fn infer_game_id(
 ) -> Result<String> {
 	let inspect = rivetctl::apis::cloud_api::inspect(&api_config)
 		.await
-		.context("auth_api::inspect")?;
+		.context("cloud_api::inspect")?;
 	let game_cloud = inspect.agent.game_cloud.context("invalid token agent")?;
 
 	Ok(game_cloud.game_id)
