@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **namespace_id** | **String** |  | 
-**create_ts** | **i32** |  | 
+**create_ts** | **i64** |  | 
 **display_name** | **String** |  | 
 **version_id** | **String** |  | 
 **name_id** | **String** |  | 

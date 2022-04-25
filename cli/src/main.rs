@@ -121,7 +121,7 @@ async fn main() -> Result<()> {
 				let new_ctx =
 					rivetctl::ctx::SharedCtx::new(new_config.clone(), opts.api_url.clone(), None)
 						.await?;
-				let inspect = rivetctl::apis::auth_api::inspect(&new_ctx.api_config()?)
+				let inspect = rivetctl::apis::cloud_api::inspect(&new_ctx.api_config()?)
 					.await
 					.context("auth_api::inspect")?;
 				println!("{:?}", inspect);
@@ -187,16 +187,16 @@ async fn main() -> Result<()> {
 					name = display_name,
 					size = format_file_size(image_file_meta.len())?,
 				);
-				let build_res = rivetctl::apis::game_api::create_game_build(
+				let build_res = rivetctl::apis::cloud_api::create_game_build(
 					&api_config,
 					&game_id,
-					rivetctl::models::InlineObject6 {
+					rivetctl::models::InlineObject8 {
 						display_name,
 						image_tag: image_tag.clone(),
 						image_file: Box::new(rivetctl::models::UploadPrepareFile {
 							path: "image.tar".into(),
 							content_type: Some(content_type.into()),
-							content_length: image_file_meta.len() as i32,
+							content_length: image_file_meta.len() as i64,
 						}),
 					},
 				)
@@ -216,7 +216,7 @@ async fn main() -> Result<()> {
 				.await?;
 
 				println!("\n\n> Completing");
-				rivetctl::apis::upload_api::complete_upload(
+				rivetctl::apis::cloud_api::complete_upload(
 					&api_config,
 					&build_res.upload_id,
 					serde_json::json!({}),
@@ -259,10 +259,10 @@ async fn main() -> Result<()> {
 				);
 
 				// Create site
-				let site_res = rivetctl::apis::game_api::create_game_cdn_site(
+				let site_res = rivetctl::apis::cloud_api::create_game_cdn_site(
 					&api_config,
 					&game_id,
-					rivetctl::models::InlineObject5 {
+					rivetctl::models::InlineObject7 {
 						display_name,
 						files: files.iter().map(|f| f.prepared.clone()).collect(),
 					},
@@ -323,7 +323,7 @@ async fn main() -> Result<()> {
 				}
 
 				println!("\n\n> Completing");
-				rivetctl::apis::upload_api::complete_upload(
+				rivetctl::apis::cloud_api::complete_upload(
 					&api_config,
 					&site_res.upload_id,
 					serde_json::json!({}),
@@ -396,7 +396,7 @@ fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 				prepared: rivetctl::models::UploadPrepareFile {
 					path: path_str,
 					content_type,
-					content_length: file_meta.len() as i32,
+					content_length: file_meta.len() as i64,
 				},
 			});
 		}
@@ -484,7 +484,7 @@ async fn upload_file(
 async fn infer_game_id(
 	api_config: &rivetctl::apis::configuration::Configuration,
 ) -> Result<String> {
-	let inspect = rivetctl::apis::auth_api::inspect(&api_config)
+	let inspect = rivetctl::apis::cloud_api::inspect(&api_config)
 		.await
 		.context("auth_api::inspect")?;
 	let game_cloud = inspect.agent.game_cloud.context("invalid token agent")?;
