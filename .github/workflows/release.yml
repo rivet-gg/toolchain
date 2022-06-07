@@ -4,7 +4,7 @@ name: release
 on:
   push:
     tags:
-    - "[0-9]+.[0-9]+.[0-9]+"
+      - '[0-9]+.[0-9]+.[0-9]+'
 jobs:
   create-release:
     name: create-release
@@ -35,31 +35,30 @@ jobs:
       matrix:
         build: [linux]
         include:
-        - build: linux
-          os: ubuntu-20.04
+          - build: linux
+            os: ubuntu-20.04
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Build binary
-      run: cargo build --release --bin rivetctl-cli
-    - name: Strip binary
-      run: strip "target/release/rivetctl-cli"
-    - name: Build archive
-      shell: bash
-      run: |
-        mkdir -p staging
-        cp target/release/rivetctl-cli staging/rivetctl
-        cd staging
-        tar vczf ../rivetctl.tar.gz .
-        echo "ASSET_PATH=rivetctl.tar.gz" >> $GITHUB_ENV
-    - name: Upload release archive
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ${{ env.ASSET_PATH }}
-        asset_name: rivetctl_${{ needs.create-release.outputs.tag_name }}_linux_x86_64.tar.gz
-        asset_content_type: application/octet-stream
-
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build binary
+        run: cargo build --release --bin rivetctl
+      - name: Strip binary
+        run: strip "target/release/rivetctl"
+      - name: Build archive
+        shell: bash
+        run: |
+          mkdir -p staging
+          cp target/release/rivetctl staging/rivetctl
+          cd staging
+          tar vczf ../rivetctl.tar.gz .
+          echo "ASSET_PATH=rivetctl.tar.gz" >> $GITHUB_ENV
+      - name: Upload release archive
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: ${{ env.ASSET_PATH }}
+          asset_name: rivetctl_${{ needs.create-release.outputs.tag_name }}_linux_x86_64.tar.gz
+          asset_content_type: application/octet-stream

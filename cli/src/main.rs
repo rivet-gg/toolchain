@@ -1,4 +1,4 @@
-use anyhow::{bail, Result, Context};
+use anyhow::{bail, Context, Result};
 use clap::Parser;
 use futures_util::stream::{StreamExt, TryStreamExt};
 use rand::{thread_rng, Rng};
@@ -21,7 +21,7 @@ struct Opts {
 	#[clap(subcommand)]
 	subcmd: SubCommand,
 
-	#[clap(long, env = "RIVET_API_URL")]
+	#[clap(long, env = "RIVET_CLOUD_API_URL")]
 	api_url: Option<String>,
 
 	#[clap(long, env = "RIVET_ACCESS_TOKEN")]
@@ -98,6 +98,9 @@ async fn main() -> Result<()> {
 		opts.access_token.clone(),
 	)
 	.await?;
+
+	let client = Arc::new(reqwest::Client::new());
+
 	match opts.subcmd {
 		SubCommand::Auth { subcmd } => match subcmd {
 			AuthSubCommand::Token { .. } => {
@@ -121,9 +124,12 @@ async fn main() -> Result<()> {
 				let new_ctx =
 					rivetctl::ctx::SharedCtx::new(new_config.clone(), opts.api_url.clone(), None)
 						.await?;
-				let inspect = rivetctl::apis::cloud_api::inspect(&new_ctx.api_config()?)
+				let inspect = new_ctx
+					.http_client
+					.inspect()
+					.send()
 					.await
-					.context("cloud_api::inspect")?;
+					.context("http_client.inspect")?;
 				println!("{:?}", inspect);
 
 				// Save new config
@@ -132,9 +138,7 @@ async fn main() -> Result<()> {
 		},
 		SubCommand::Build { subcmd } => match subcmd {
 			BuildSubCommand::Push(push_opts) => {
-				let api_config = ctx.api_config()?;
-
-				let game_id = infer_game_id(&api_config).await?;
+				let game_id = infer_game_id(&ctx).await?;
 
 				let tmp_image_file = tempfile::NamedTempFile::new()?;
 				let tmp_path = tmp_image_file.into_temp_path();
@@ -187,49 +191,47 @@ async fn main() -> Result<()> {
 					name = display_name,
 					size = format_file_size(image_file_meta.len())?,
 				);
-				let build_res = rivetctl::apis::cloud_api::create_game_build(
-					&api_config,
-					&game_id,
-					rivetctl::models::InlineObject8 {
-						display_name,
-						image_tag: image_tag.clone(),
-						image_file: Box::new(rivetctl::models::UploadPrepareFile {
-							path: "image.tar".into(),
-							content_type: Some(content_type.into()),
-							content_length: image_file_meta.len() as i64,
-						}),
-					},
-				)
-				.await
-				.context("cloud_api::create_game_build")?;
+				let build_res = ctx
+					.http_client
+					.create_game_build()
+					.game_id(&game_id)
+					.display_name(&display_name)
+					.image_tag(&image_tag)
+					.image_file(
+						rivetctl::model::upload_prepare_file::Builder::default()
+							.path("image.tar")
+							.content_type(content_type)
+							.content_length(image_file_meta.len() as i64)
+							.build(),
+					)
+					.send()
+					.await
+					.context("http_client.create_game_build")?;
 
 				println!(
 					"\n\n> Uploading ({size})",
 					size = format_file_size(image_file_meta.len())?,
 				);
 				upload_file(
-					&api_config.client,
-					&build_res.image_presigned_request,
+					&client,
+					&build_res.image_presigned_request().unwrap(),
 					tmp_path,
 					Some(content_type),
 				)
 				.await?;
 
 				println!("\n\n> Completing");
-				rivetctl::apis::cloud_api::complete_upload(
-					&api_config,
-					&build_res.upload_id,
-					serde_json::json!({}),
-				)
-				.await
-				.context("cloud_api::complete_upload")?;
+				ctx.http_client
+					.complete_upload()
+					.upload_id(build_res.upload_id().unwrap())
+					.send()
+					.await
+					.context("http_client.complete_upload")?;
 			}
 		},
 		SubCommand::Site { subcmd } => match subcmd {
 			SiteSubCommand::Push(push_opts) => {
-				let api_config = ctx.api_config()?;
-
-				let game_id = infer_game_id(&api_config).await?;
+				let game_id = infer_game_id(&ctx).await?;
 
 				let upload_path = env::current_dir()?.join(push_opts.path);
 
@@ -251,7 +253,7 @@ async fn main() -> Result<()> {
 				.await??;
 				let total_len = files
 					.iter()
-					.fold(0, |acc, x| acc + x.prepared.content_length);
+					.fold(0, |acc, x| acc + x.prepared.content_length().unwrap());
 				println!(
 					"  * Found {count} files ({size})",
 					count = files.len(),
@@ -259,34 +261,34 @@ async fn main() -> Result<()> {
 				);
 
 				// Create site
-				let site_res = rivetctl::apis::cloud_api::create_game_cdn_site(
-					&api_config,
-					&game_id,
-					rivetctl::models::InlineObject7 {
-						display_name,
-						files: files.iter().map(|f| f.prepared.clone()).collect(),
-					},
-				)
-				.await
-				.context("cloud_api::create_game_cdn_site")?;
+				let site_res = ctx
+					.http_client
+					.create_game_cdn_site()
+					.game_id(&game_id)
+					.display_name(&display_name)
+					.set_files(Some(files.iter().map(|f| f.prepared.clone()).collect()))
+					.send()
+					.await
+					.context("http_client.create_game_cdn_site")?;
 
 				println!("\n\n> Uploading");
 				{
 					let counter = Arc::new(AtomicUsize::new(0));
 					let counter_bytes = Arc::new(AtomicU64::new(0));
-					let total = site_res.presigned_requests.len();
+					let presigned_requests = site_res.presigned_requests().unwrap();
+					let total = presigned_requests.len();
 					let total_bytes = total_len as u64;
 
-					let api_config = api_config.clone();
 					let files = Arc::new(files.clone());
-					futures_util::stream::iter(&site_res.presigned_requests)
+					futures_util::stream::iter(presigned_requests)
 						.map(Ok)
 						.try_for_each_concurrent(CONCURRENT_UPLOADS, move |presigned_req| {
 							let counter = counter.clone();
 							let counter_bytes = counter_bytes.clone();
 							{
-								let api_config = api_config.clone();
 								let files = files.clone();
+								let client = client.clone();
+
 								async move {
 									// Find the matching prepared file
 									let file = files
@@ -295,7 +297,7 @@ async fn main() -> Result<()> {
 										.context("missing prepared file")?;
 
 									upload_file(
-										&api_config.client,
+										&client,
 										&presigned_req,
 										&file.absolute_path,
 										file.prepared.content_type.as_ref(),
@@ -304,9 +306,10 @@ async fn main() -> Result<()> {
 
 									let progress = counter.fetch_add(1, Ordering::SeqCst) + 1;
 									let progress_bytes = counter_bytes.fetch_add(
-										file.prepared.content_length as u64,
+										file.prepared.content_length().unwrap() as u64,
 										Ordering::SeqCst,
-									) + file.prepared.content_length as u64;
+									) + file.prepared.content_length().unwrap()
+										as u64;
 									println!(
 										"    {}/{} files ({}/{})",
 										progress,
@@ -323,13 +326,12 @@ async fn main() -> Result<()> {
 				}
 
 				println!("\n\n> Completing");
-				rivetctl::apis::cloud_api::complete_upload(
-					&api_config,
-					&site_res.upload_id,
-					serde_json::json!({}),
-				)
-				.await
-				.context("cloud_api::complete_upload")?;
+				ctx.http_client
+					.complete_upload()
+					.upload_id(site_res.upload_id().unwrap())
+					.send()
+					.await
+					.context("http_client.complete_upload")?;
 			}
 		},
 	}
@@ -353,7 +355,7 @@ async fn write_config(config: &rivetctl::config::Config, path: &Path) -> Result<
 #[derive(Clone)]
 struct UploadFile {
 	absolute_path: PathBuf,
-	prepared: rivetctl::models::UploadPrepareFile,
+	prepared: rivetctl::model::UploadPrepareFile,
 }
 
 /// Lists all files in a directory and returns the data required to upload them.
@@ -393,11 +395,11 @@ fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 
 			files.push(UploadFile {
 				absolute_path: file_path.to_path_buf(),
-				prepared: rivetctl::models::UploadPrepareFile {
-					path: path_str,
-					content_type,
-					content_length: file_meta.len() as i64,
-				},
+				prepared: rivetctl::model::upload_prepare_file::Builder::default()
+					.path(path_str)
+					.set_content_type(content_type)
+					.content_length(file_meta.len() as i64)
+					.build(),
 			});
 		}
 	}
@@ -408,7 +410,7 @@ fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 /// Uploads a file to a given URL.
 async fn upload_file(
 	client: &reqwest::Client,
-	presigned_req: &rivetctl::models::UploadPresignedRequest,
+	presigned_req: &rivetctl::model::UploadPresignedRequest,
 	path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
 ) -> Result<()> {
@@ -429,7 +431,7 @@ async fn upload_file(
 
 		println!(
 			"  * {path}: Uploading {size} [{mime}]",
-			path = presigned_req.path,
+			path = presigned_req.path().unwrap(),
 			size = format_file_size(file_meta.len())?,
 			mime = content_type.clone().unwrap_or_default(),
 		);
@@ -441,7 +443,7 @@ async fn upload_file(
 		// Upload file
 		let start = Instant::now();
 		let mut req = client
-			.put(&presigned_req.url)
+			.put(presigned_req.url().unwrap())
 			.header("content-length", file_meta.len());
 		if let Some(content_type) = &content_type {
 			req = req.header("content-type", content_type.to_string());
@@ -473,7 +475,7 @@ async fn upload_file(
 
 	println!(
 		"  * {}: Finished in {:.3}s",
-		presigned_req.path,
+		presigned_req.path().unwrap(),
 		upload_time.as_secs_f64()
 	);
 
@@ -481,15 +483,21 @@ async fn upload_file(
 }
 
 /// Uses the provided token to find the game ID to modify.
-async fn infer_game_id(
-	api_config: &rivetctl::apis::configuration::Configuration,
-) -> Result<String> {
-	let inspect = rivetctl::apis::cloud_api::inspect(&api_config)
+async fn infer_game_id(ctx: &rivetctl::ctx::SharedCtx) -> Result<String> {
+	let inspect = ctx
+		.http_client
+		.inspect()
+		.send()
 		.await
-		.context("cloud_api::inspect")?;
-	let game_cloud = inspect.agent.game_cloud.context("invalid token agent")?;
+		.context("http_client.inspect")?;
+	let game_cloud =
+		if let rivetctl::model::AuthAgent::GameCloud(game_cloud) = inspect.agent().unwrap() {
+			game_cloud
+		} else {
+			bail!("invalid token agent");
+		};
 
-	Ok(game_cloud.game_id)
+	Ok(game_cloud.game_id().unwrap().to_string())
 }
 
 fn format_file_size(bytes: u64) -> Result<String> {
