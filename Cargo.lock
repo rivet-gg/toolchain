@@ -1142,7 +1142,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rivet-client-api-cloud"
+name = "rivet-cloud"
 version = "0.0.1"
 dependencies = [
  "aws-smithy-client",
@@ -1179,7 +1179,7 @@ name = "rivetctl-lib"
 version = "0.0.1"
 dependencies = [
  "aws-smithy-client",
- "rivet-client-api-cloud",
+ "rivet-cloud",
  "serde",
  "thiserror",
  "tokio 0.2.25",
