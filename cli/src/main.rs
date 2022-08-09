@@ -19,7 +19,7 @@ const CONCURRENT_UPLOADS: usize = 8;
 #[clap()]
 struct Opts {
 	#[clap(subcommand)]
-	subcmd: SubCommand,
+	command: SubCommand,
 
 	#[clap(long, env = "RIVET_CLOUD_API_URL")]
 	api_url: Option<String>,
@@ -32,23 +32,23 @@ struct Opts {
 enum SubCommand {
 	Auth {
 		#[clap(subcommand)]
-		subcmd: AuthSubCommand,
+		command: AuthSubCommand,
 	},
 	Build {
 		#[clap(subcommand)]
-		subcmd: BuildSubCommand,
+		command: BuildSubCommand,
 	},
 	Site {
 		#[clap(subcommand)]
-		subcmd: SiteSubCommand,
+		command: SiteSubCommand,
 	},
 	// Version {
 	// 	#[clap(subcommand)]
-	// 	subcmd: VersionSubcommand,
+	// 	command: VersionSubcommand,
 	// },
 	// Namespace {
 	// 	#[clap(subcommand)]
-	// 	subcmd: NamespaceSubcommand,
+	// 	command: NamespaceSubcommand,
 	// },
 }
 
@@ -115,8 +115,8 @@ async fn main() -> Result<()> {
 
 	let client = Arc::new(reqwest::Client::new());
 
-	match opts.subcmd {
-		SubCommand::Auth { subcmd } => match subcmd {
+	match opts.command {
+		SubCommand::Auth { command } => match command {
 			AuthSubCommand::Token { .. } => {
 				print!("Auth token: ");
 
@@ -150,7 +150,7 @@ async fn main() -> Result<()> {
 				write_config(&new_config, &config_path).await?;
 			}
 		},
-		SubCommand::Build { subcmd } => match subcmd {
+		SubCommand::Build { command } => match command {
 			BuildSubCommand::Push(push_opts) => {
 				let game_id = infer_game_id(&ctx).await?;
 
@@ -243,7 +243,7 @@ async fn main() -> Result<()> {
 					.context("http_client.complete_upload")?;
 			}
 		},
-		SubCommand::Site { subcmd } => match subcmd {
+		SubCommand::Site { command } => match command {
 			SiteSubCommand::Push(push_opts) => {
 				let game_id = infer_game_id(&ctx).await?;
 
