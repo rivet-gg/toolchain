@@ -24,7 +24,7 @@ struct Opts {
 	#[clap(long, env = "RIVET_CLOUD_API_URL")]
 	api_url: Option<String>,
 
-	#[clap(long, env = "RIVET_ACCESS_TOKEN")]
+	#[clap(long, env = "RIVET_CLOUD_ACCESS_TOKEN")]
 	access_token: Option<String>,
 }
 
@@ -42,6 +42,14 @@ enum SubCommand {
 		#[clap(subcommand)]
 		subcmd: SiteSubCommand,
 	},
+	// Version {
+	// 	#[clap(subcommand)]
+	// 	subcmd: VersionSubcommand,
+	// },
+	// Namespace {
+	// 	#[clap(subcommand)]
+	// 	subcmd: NamespaceSubcommand,
+	// },
 }
 
 #[derive(Parser)]
@@ -67,6 +75,12 @@ struct BuildPushOpts {
 enum SiteSubCommand {
 	Push(SitePushOptions),
 }
+
+#[derive(Parser)]
+enum VersionSubcommand {}
+
+#[derive(Parser)]
+enum NamespaceSubcommand {}
 
 #[derive(Parser)]
 struct SitePushOptions {

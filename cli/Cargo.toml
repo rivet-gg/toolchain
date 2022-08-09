@@ -7,7 +7,7 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0"
-clap = "=3.0.0-beta.5"
+clap = { version = "3.2.16", features = ["derive", "env"] }
 futures-util = "0.3"
 home = "0.5"
 humansize = "1.1"
