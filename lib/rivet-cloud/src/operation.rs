@@ -31,34 +31,34 @@ impl aws_smithy_http::response::ParseStrictResponse for CompleteUpload {
 	}
 }
 
-/// Operation shape for `ConvertTeam`.
+/// Operation shape for `ConvertGroup`.
 ///
 /// This is usually constructed for you using the the fluent builder returned by
-/// [`convert_team`](crate::client::Client::convert_team).
+/// [`convert_group`](crate::client::Client::convert_group).
 ///
-/// See [`crate::client::fluent_builders::ConvertTeam`] for more details about the operation.
+/// See [`crate::client::fluent_builders::ConvertGroup`] for more details about the operation.
 #[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct ConvertTeam {
+pub struct ConvertGroup {
 	_private: (),
 }
-impl ConvertTeam {
-	/// Creates a new builder-style object to manufacture [`ConvertTeamInput`](crate::input::ConvertTeamInput)
-	pub fn builder() -> crate::input::convert_team_input::Builder {
-		crate::input::convert_team_input::Builder::default()
+impl ConvertGroup {
+	/// Creates a new builder-style object to manufacture [`ConvertGroupInput`](crate::input::ConvertGroupInput)
+	pub fn builder() -> crate::input::convert_group_input::Builder {
+		crate::input::convert_group_input::Builder::default()
 	}
-	/// Creates a new `ConvertTeam` operation.
+	/// Creates a new `ConvertGroup` operation.
 	pub fn new() -> Self {
 		Self { _private: () }
 	}
 }
-impl aws_smithy_http::response::ParseStrictResponse for ConvertTeam {
+impl aws_smithy_http::response::ParseStrictResponse for ConvertGroup {
 	type Output =
-		std::result::Result<crate::output::ConvertTeamOutput, crate::error::ConvertTeamError>;
+		std::result::Result<crate::output::ConvertGroupOutput, crate::error::ConvertGroupError>;
 	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
 		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_convert_team_error(response)
+			crate::operation_deser::parse_convert_group_error(response)
 		} else {
-			crate::operation_deser::parse_convert_team_response(response)
+			crate::operation_deser::parse_convert_group_response(response)
 		}
 	}
 }
@@ -401,6 +401,142 @@ impl aws_smithy_http::response::ParseStrictResponse for ExportMatchmakerLobbyHis
 	}
 }
 
+/// Operation shape for `GameBannerUploadComplete`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`game_banner_upload_complete`](crate::client::Client::game_banner_upload_complete).
+///
+/// See [`crate::client::fluent_builders::GameBannerUploadComplete`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GameBannerUploadComplete {
+	_private: (),
+}
+impl GameBannerUploadComplete {
+	/// Creates a new builder-style object to manufacture [`GameBannerUploadCompleteInput`](crate::input::GameBannerUploadCompleteInput)
+	pub fn builder() -> crate::input::game_banner_upload_complete_input::Builder {
+		crate::input::game_banner_upload_complete_input::Builder::default()
+	}
+	/// Creates a new `GameBannerUploadComplete` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GameBannerUploadComplete {
+	type Output = std::result::Result<
+		crate::output::GameBannerUploadCompleteOutput,
+		crate::error::GameBannerUploadCompleteError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_game_banner_upload_complete_error(response)
+		} else {
+			crate::operation_deser::parse_game_banner_upload_complete_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GameBannerUploadPrepare`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`game_banner_upload_prepare`](crate::client::Client::game_banner_upload_prepare).
+///
+/// See [`crate::client::fluent_builders::GameBannerUploadPrepare`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GameBannerUploadPrepare {
+	_private: (),
+}
+impl GameBannerUploadPrepare {
+	/// Creates a new builder-style object to manufacture [`GameBannerUploadPrepareInput`](crate::input::GameBannerUploadPrepareInput)
+	pub fn builder() -> crate::input::game_banner_upload_prepare_input::Builder {
+		crate::input::game_banner_upload_prepare_input::Builder::default()
+	}
+	/// Creates a new `GameBannerUploadPrepare` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GameBannerUploadPrepare {
+	type Output = std::result::Result<
+		crate::output::GameBannerUploadPrepareOutput,
+		crate::error::GameBannerUploadPrepareError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_game_banner_upload_prepare_error(response)
+		} else {
+			crate::operation_deser::parse_game_banner_upload_prepare_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GameLogoUploadComplete`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`game_logo_upload_complete`](crate::client::Client::game_logo_upload_complete).
+///
+/// See [`crate::client::fluent_builders::GameLogoUploadComplete`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GameLogoUploadComplete {
+	_private: (),
+}
+impl GameLogoUploadComplete {
+	/// Creates a new builder-style object to manufacture [`GameLogoUploadCompleteInput`](crate::input::GameLogoUploadCompleteInput)
+	pub fn builder() -> crate::input::game_logo_upload_complete_input::Builder {
+		crate::input::game_logo_upload_complete_input::Builder::default()
+	}
+	/// Creates a new `GameLogoUploadComplete` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GameLogoUploadComplete {
+	type Output = std::result::Result<
+		crate::output::GameLogoUploadCompleteOutput,
+		crate::error::GameLogoUploadCompleteError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_game_logo_upload_complete_error(response)
+		} else {
+			crate::operation_deser::parse_game_logo_upload_complete_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GameLogoUploadPrepare`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`game_logo_upload_prepare`](crate::client::Client::game_logo_upload_prepare).
+///
+/// See [`crate::client::fluent_builders::GameLogoUploadPrepare`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GameLogoUploadPrepare {
+	_private: (),
+}
+impl GameLogoUploadPrepare {
+	/// Creates a new builder-style object to manufacture [`GameLogoUploadPrepareInput`](crate::input::GameLogoUploadPrepareInput)
+	pub fn builder() -> crate::input::game_logo_upload_prepare_input::Builder {
+		crate::input::game_logo_upload_prepare_input::Builder::default()
+	}
+	/// Creates a new `GameLogoUploadPrepare` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GameLogoUploadPrepare {
+	type Output = std::result::Result<
+		crate::output::GameLogoUploadPrepareOutput,
+		crate::error::GameLogoUploadPrepareError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_game_logo_upload_prepare_error(response)
+		} else {
+			crate::operation_deser::parse_game_logo_upload_prepare_response(response)
+		}
+	}
+}
+
 /// Operation shape for `GetGameById`.
 ///
 /// This is usually constructed for you using the the fluent builder returned by
@@ -528,6 +664,142 @@ impl aws_smithy_http::response::ParseStrictResponse for GetGameVersionById {
 			crate::operation_deser::parse_get_game_version_by_id_error(response)
 		} else {
 			crate::operation_deser::parse_get_game_version_by_id_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GetGroupBilling`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`get_group_billing`](crate::client::Client::get_group_billing).
+///
+/// See [`crate::client::fluent_builders::GetGroupBilling`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GetGroupBilling {
+	_private: (),
+}
+impl GetGroupBilling {
+	/// Creates a new builder-style object to manufacture [`GetGroupBillingInput`](crate::input::GetGroupBillingInput)
+	pub fn builder() -> crate::input::get_group_billing_input::Builder {
+		crate::input::get_group_billing_input::Builder::default()
+	}
+	/// Creates a new `GetGroupBilling` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GetGroupBilling {
+	type Output = std::result::Result<
+		crate::output::GetGroupBillingOutput,
+		crate::error::GetGroupBillingError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_get_group_billing_error(response)
+		} else {
+			crate::operation_deser::parse_get_group_billing_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GetGroupInvoicesList`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`get_group_invoices_list`](crate::client::Client::get_group_invoices_list).
+///
+/// See [`crate::client::fluent_builders::GetGroupInvoicesList`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GetGroupInvoicesList {
+	_private: (),
+}
+impl GetGroupInvoicesList {
+	/// Creates a new builder-style object to manufacture [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
+	pub fn builder() -> crate::input::get_group_invoices_list_input::Builder {
+		crate::input::get_group_invoices_list_input::Builder::default()
+	}
+	/// Creates a new `GetGroupInvoicesList` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GetGroupInvoicesList {
+	type Output = std::result::Result<
+		crate::output::GetGroupInvoicesListOutput,
+		crate::error::GetGroupInvoicesListError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_get_group_invoices_list_error(response)
+		} else {
+			crate::operation_deser::parse_get_group_invoices_list_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GetGroupPaymentsList`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`get_group_payments_list`](crate::client::Client::get_group_payments_list).
+///
+/// See [`crate::client::fluent_builders::GetGroupPaymentsList`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GetGroupPaymentsList {
+	_private: (),
+}
+impl GetGroupPaymentsList {
+	/// Creates a new builder-style object to manufacture [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
+	pub fn builder() -> crate::input::get_group_payments_list_input::Builder {
+		crate::input::get_group_payments_list_input::Builder::default()
+	}
+	/// Creates a new `GetGroupPaymentsList` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GetGroupPaymentsList {
+	type Output = std::result::Result<
+		crate::output::GetGroupPaymentsListOutput,
+		crate::error::GetGroupPaymentsListError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_get_group_payments_list_error(response)
+		} else {
+			crate::operation_deser::parse_get_group_payments_list_response(response)
+		}
+	}
+}
+
+/// Operation shape for `GetGroupTransfersList`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`get_group_transfers_list`](crate::client::Client::get_group_transfers_list).
+///
+/// See [`crate::client::fluent_builders::GetGroupTransfersList`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct GetGroupTransfersList {
+	_private: (),
+}
+impl GetGroupTransfersList {
+	/// Creates a new builder-style object to manufacture [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
+	pub fn builder() -> crate::input::get_group_transfers_list_input::Builder {
+		crate::input::get_group_transfers_list_input::Builder::default()
+	}
+	/// Creates a new `GetGroupTransfersList` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for GetGroupTransfersList {
+	type Output = std::result::Result<
+		crate::output::GetGroupTransfersListOutput,
+		crate::error::GetGroupTransfersListError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_get_group_transfers_list_error(response)
+		} else {
+			crate::operation_deser::parse_get_group_transfers_list_response(response)
 		}
 	}
 }
@@ -664,102 +936,36 @@ impl aws_smithy_http::response::ParseStrictResponse for GetRegionTiers {
 	}
 }
 
-/// Operation shape for `GetTeamBilling`.
+/// Operation shape for `GroupBillingCheckout`.
 ///
 /// This is usually constructed for you using the the fluent builder returned by
-/// [`get_team_billing`](crate::client::Client::get_team_billing).
+/// [`group_billing_checkout`](crate::client::Client::group_billing_checkout).
 ///
-/// See [`crate::client::fluent_builders::GetTeamBilling`] for more details about the operation.
+/// See [`crate::client::fluent_builders::GroupBillingCheckout`] for more details about the operation.
 #[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct GetTeamBilling {
+pub struct GroupBillingCheckout {
 	_private: (),
 }
-impl GetTeamBilling {
-	/// Creates a new builder-style object to manufacture [`GetTeamBillingInput`](crate::input::GetTeamBillingInput)
-	pub fn builder() -> crate::input::get_team_billing_input::Builder {
-		crate::input::get_team_billing_input::Builder::default()
+impl GroupBillingCheckout {
+	/// Creates a new builder-style object to manufacture [`GroupBillingCheckoutInput`](crate::input::GroupBillingCheckoutInput)
+	pub fn builder() -> crate::input::group_billing_checkout_input::Builder {
+		crate::input::group_billing_checkout_input::Builder::default()
 	}
-	/// Creates a new `GetTeamBilling` operation.
+	/// Creates a new `GroupBillingCheckout` operation.
 	pub fn new() -> Self {
 		Self { _private: () }
 	}
 }
-impl aws_smithy_http::response::ParseStrictResponse for GetTeamBilling {
-	type Output =
-		std::result::Result<crate::output::GetTeamBillingOutput, crate::error::GetTeamBillingError>;
-	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
-		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_get_team_billing_error(response)
-		} else {
-			crate::operation_deser::parse_get_team_billing_response(response)
-		}
-	}
-}
-
-/// Operation shape for `GetTeamPaymentsList`.
-///
-/// This is usually constructed for you using the the fluent builder returned by
-/// [`get_team_payments_list`](crate::client::Client::get_team_payments_list).
-///
-/// See [`crate::client::fluent_builders::GetTeamPaymentsList`] for more details about the operation.
-#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct GetTeamPaymentsList {
-	_private: (),
-}
-impl GetTeamPaymentsList {
-	/// Creates a new builder-style object to manufacture [`GetTeamPaymentsListInput`](crate::input::GetTeamPaymentsListInput)
-	pub fn builder() -> crate::input::get_team_payments_list_input::Builder {
-		crate::input::get_team_payments_list_input::Builder::default()
-	}
-	/// Creates a new `GetTeamPaymentsList` operation.
-	pub fn new() -> Self {
-		Self { _private: () }
-	}
-}
-impl aws_smithy_http::response::ParseStrictResponse for GetTeamPaymentsList {
+impl aws_smithy_http::response::ParseStrictResponse for GroupBillingCheckout {
 	type Output = std::result::Result<
-		crate::output::GetTeamPaymentsListOutput,
-		crate::error::GetTeamPaymentsListError,
+		crate::output::GroupBillingCheckoutOutput,
+		crate::error::GroupBillingCheckoutError,
 	>;
 	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
 		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_get_team_payments_list_error(response)
+			crate::operation_deser::parse_group_billing_checkout_error(response)
 		} else {
-			crate::operation_deser::parse_get_team_payments_list_response(response)
-		}
-	}
-}
-
-/// Operation shape for `GetTeamTransfersList`.
-///
-/// This is usually constructed for you using the the fluent builder returned by
-/// [`get_team_transfers_list`](crate::client::Client::get_team_transfers_list).
-///
-/// See [`crate::client::fluent_builders::GetTeamTransfersList`] for more details about the operation.
-#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct GetTeamTransfersList {
-	_private: (),
-}
-impl GetTeamTransfersList {
-	/// Creates a new builder-style object to manufacture [`GetTeamTransfersListInput`](crate::input::GetTeamTransfersListInput)
-	pub fn builder() -> crate::input::get_team_transfers_list_input::Builder {
-		crate::input::get_team_transfers_list_input::Builder::default()
-	}
-	/// Creates a new `GetTeamTransfersList` operation.
-	pub fn new() -> Self {
-		Self { _private: () }
-	}
-}
-impl aws_smithy_http::response::ParseStrictResponse for GetTeamTransfersList {
-	type Output = std::result::Result<
-		crate::output::GetTeamTransfersListOutput,
-		crate::error::GetTeamTransfersListError,
-	>;
-	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
-		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_get_team_transfers_list_error(response)
-		} else {
-			crate::operation_deser::parse_get_team_transfers_list_response(response)
+			crate::operation_deser::parse_group_billing_checkout_response(response)
 		}
 	}
 }
@@ -925,40 +1131,6 @@ impl aws_smithy_http::response::ParseStrictResponse for RemoveNamespaceDomain {
 			crate::operation_deser::parse_remove_namespace_domain_error(response)
 		} else {
 			crate::operation_deser::parse_remove_namespace_domain_response(response)
-		}
-	}
-}
-
-/// Operation shape for `TeamBillingCheckout`.
-///
-/// This is usually constructed for you using the the fluent builder returned by
-/// [`team_billing_checkout`](crate::client::Client::team_billing_checkout).
-///
-/// See [`crate::client::fluent_builders::TeamBillingCheckout`] for more details about the operation.
-#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct TeamBillingCheckout {
-	_private: (),
-}
-impl TeamBillingCheckout {
-	/// Creates a new builder-style object to manufacture [`TeamBillingCheckoutInput`](crate::input::TeamBillingCheckoutInput)
-	pub fn builder() -> crate::input::team_billing_checkout_input::Builder {
-		crate::input::team_billing_checkout_input::Builder::default()
-	}
-	/// Creates a new `TeamBillingCheckout` operation.
-	pub fn new() -> Self {
-		Self { _private: () }
-	}
-}
-impl aws_smithy_http::response::ParseStrictResponse for TeamBillingCheckout {
-	type Output = std::result::Result<
-		crate::output::TeamBillingCheckoutOutput,
-		crate::error::TeamBillingCheckoutError,
-	>;
-	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
-		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_team_billing_checkout_error(response)
-		} else {
-			crate::operation_deser::parse_team_billing_checkout_response(response)
 		}
 	}
 }
@@ -1271,34 +1443,34 @@ impl aws_smithy_http::response::ParseStrictResponse for ValidateGameVersion {
 	}
 }
 
-/// Operation shape for `ValidateTeam`.
+/// Operation shape for `ValidateGroup`.
 ///
 /// This is usually constructed for you using the the fluent builder returned by
-/// [`validate_team`](crate::client::Client::validate_team).
+/// [`validate_group`](crate::client::Client::validate_group).
 ///
-/// See [`crate::client::fluent_builders::ValidateTeam`] for more details about the operation.
+/// See [`crate::client::fluent_builders::ValidateGroup`] for more details about the operation.
 #[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct ValidateTeam {
+pub struct ValidateGroup {
 	_private: (),
 }
-impl ValidateTeam {
-	/// Creates a new builder-style object to manufacture [`ValidateTeamInput`](crate::input::ValidateTeamInput)
-	pub fn builder() -> crate::input::validate_team_input::Builder {
-		crate::input::validate_team_input::Builder::default()
+impl ValidateGroup {
+	/// Creates a new builder-style object to manufacture [`ValidateGroupInput`](crate::input::ValidateGroupInput)
+	pub fn builder() -> crate::input::validate_group_input::Builder {
+		crate::input::validate_group_input::Builder::default()
 	}
-	/// Creates a new `ValidateTeam` operation.
+	/// Creates a new `ValidateGroup` operation.
 	pub fn new() -> Self {
 		Self { _private: () }
 	}
 }
-impl aws_smithy_http::response::ParseStrictResponse for ValidateTeam {
+impl aws_smithy_http::response::ParseStrictResponse for ValidateGroup {
 	type Output =
-		std::result::Result<crate::output::ValidateTeamOutput, crate::error::ValidateTeamError>;
+		std::result::Result<crate::output::ValidateGroupOutput, crate::error::ValidateGroupError>;
 	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
 		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_validate_team_error(response)
+			crate::operation_deser::parse_validate_group_error(response)
 		} else {
-			crate::operation_deser::parse_validate_team_response(response)
+			crate::operation_deser::parse_validate_group_response(response)
 		}
 	}
 }

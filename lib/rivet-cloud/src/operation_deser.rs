@@ -146,21 +146,21 @@ pub fn parse_complete_upload_response(
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_convert_team_error(
+pub fn parse_convert_group_error(
 	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<crate::output::ConvertTeamOutput, crate::error::ConvertTeamError> {
+) -> std::result::Result<crate::output::ConvertGroupOutput, crate::error::ConvertGroupError> {
 	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::ConvertTeamError::unhandled)?;
+		.map_err(crate::error::ConvertGroupError::unhandled)?;
 	let error_code = match generic.code() {
 		Some(code) => code,
-		None => return Err(crate::error::ConvertTeamError::unhandled(generic)),
+		None => return Err(crate::error::ConvertGroupError::unhandled(generic)),
 	};
 
 	let _error_message = generic.message().map(|msg| msg.to_owned());
 	Err(match error_code {
-		"InternalError" => crate::error::ConvertTeamError {
+		"InternalError" => crate::error::ConvertGroupError {
 			meta: generic,
-			kind: crate::error::ConvertTeamErrorKind::InternalError({
+			kind: crate::error::ConvertGroupErrorKind::InternalError({
 				#[allow(unused_mut)]
 				let mut tmp = {
 					#[allow(unused_mut)]
@@ -171,7 +171,7 @@ pub fn parse_convert_team_error(
 							response.body().as_ref(),
 							output,
 						)
-						.map_err(crate::error::ConvertTeamError::unhandled)?;
+						.map_err(crate::error::ConvertGroupError::unhandled)?;
 					output.build()
 				};
 				if (&tmp.message).is_none() {
@@ -181,15 +181,15 @@ pub fn parse_convert_team_error(
 			}),
 		},
 		"RateLimitError" => {
-			crate::error::ConvertTeamError {
+			crate::error::ConvertGroupError {
 				meta: generic,
-				kind: crate::error::ConvertTeamErrorKind::RateLimitError({
+				kind: crate::error::ConvertGroupErrorKind::RateLimitError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::rate_limit_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -200,15 +200,15 @@ pub fn parse_convert_team_error(
 			}
 		}
 		"ForbiddenError" => {
-			crate::error::ConvertTeamError {
+			crate::error::ConvertGroupError {
 				meta: generic,
-				kind: crate::error::ConvertTeamErrorKind::ForbiddenError({
+				kind: crate::error::ConvertGroupErrorKind::ForbiddenError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::forbidden_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -219,15 +219,15 @@ pub fn parse_convert_team_error(
 			}
 		}
 		"UnauthorizedError" => {
-			crate::error::ConvertTeamError {
+			crate::error::ConvertGroupError {
 				meta: generic,
-				kind: crate::error::ConvertTeamErrorKind::UnauthorizedError({
+				kind: crate::error::ConvertGroupErrorKind::UnauthorizedError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::unauthorized_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -238,15 +238,15 @@ pub fn parse_convert_team_error(
 			}
 		}
 		"NotFoundError" => {
-			crate::error::ConvertTeamError {
+			crate::error::ConvertGroupError {
 				meta: generic,
-				kind: crate::error::ConvertTeamErrorKind::NotFoundError({
+				kind: crate::error::ConvertGroupErrorKind::NotFoundError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::not_found_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -257,15 +257,15 @@ pub fn parse_convert_team_error(
 			}
 		}
 		"BadRequestError" => {
-			crate::error::ConvertTeamError {
+			crate::error::ConvertGroupError {
 				meta: generic,
-				kind: crate::error::ConvertTeamErrorKind::BadRequestError({
+				kind: crate::error::ConvertGroupErrorKind::BadRequestError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::bad_request_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::ConvertGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -275,17 +275,17 @@ pub fn parse_convert_team_error(
 				}),
 			}
 		}
-		_ => crate::error::ConvertTeamError::generic(generic),
+		_ => crate::error::ConvertGroupError::generic(generic),
 	})
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_convert_team_response(
+pub fn parse_convert_group_response(
 	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<crate::output::ConvertTeamOutput, crate::error::ConvertTeamError> {
+) -> std::result::Result<crate::output::ConvertGroupOutput, crate::error::ConvertGroupError> {
 	Ok({
 		#[allow(unused_mut)]
-		let mut output = crate::output::convert_team_output::Builder::default();
+		let mut output = crate::output::convert_group_output::Builder::default();
 		let _ = response;
 		output.build()
 	})
@@ -1848,6 +1848,636 @@ pub fn parse_export_matchmaker_lobby_history_response(
 }
 
 #[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_banner_upload_complete_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameBannerUploadCompleteOutput,
+	crate::error::GameBannerUploadCompleteError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => {
+			return Err(crate::error::GameBannerUploadCompleteError::unhandled(
+				generic,
+			))
+		}
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GameBannerUploadCompleteError {
+			meta: generic,
+			kind: crate::error::GameBannerUploadCompleteErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GameBannerUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadCompleteErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GameBannerUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadCompleteErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GameBannerUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadCompleteErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GameBannerUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadCompleteErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GameBannerUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadCompleteErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GameBannerUploadCompleteError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_banner_upload_complete_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameBannerUploadCompleteOutput,
+	crate::error::GameBannerUploadCompleteError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::game_banner_upload_complete_output::Builder::default();
+		let _ = response;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_banner_upload_prepare_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameBannerUploadPrepareOutput,
+	crate::error::GameBannerUploadPrepareError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => {
+			return Err(crate::error::GameBannerUploadPrepareError::unhandled(
+				generic,
+			))
+		}
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GameBannerUploadPrepareError {
+			meta: generic,
+			kind: crate::error::GameBannerUploadPrepareErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GameBannerUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadPrepareErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GameBannerUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadPrepareErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GameBannerUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadPrepareErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GameBannerUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadPrepareErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GameBannerUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameBannerUploadPrepareErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GameBannerUploadPrepareError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_banner_upload_prepare_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameBannerUploadPrepareOutput,
+	crate::error::GameBannerUploadPrepareError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::game_banner_upload_prepare_output::Builder::default();
+		let _ = response;
+		output = crate::json_deser::deser_operation_crate_operation_game_banner_upload_prepare(
+			response.body().as_ref(),
+			output,
+		)
+		.map_err(crate::error::GameBannerUploadPrepareError::unhandled)?;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_logo_upload_complete_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameLogoUploadCompleteOutput,
+	crate::error::GameLogoUploadCompleteError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => {
+			return Err(crate::error::GameLogoUploadCompleteError::unhandled(
+				generic,
+			))
+		}
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GameLogoUploadCompleteError {
+			meta: generic,
+			kind: crate::error::GameLogoUploadCompleteErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GameLogoUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadCompleteErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GameLogoUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadCompleteErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GameLogoUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadCompleteErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GameLogoUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadCompleteErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GameLogoUploadCompleteError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadCompleteErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadCompleteError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GameLogoUploadCompleteError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_logo_upload_complete_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameLogoUploadCompleteOutput,
+	crate::error::GameLogoUploadCompleteError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::game_logo_upload_complete_output::Builder::default();
+		let _ = response;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_logo_upload_prepare_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameLogoUploadPrepareOutput,
+	crate::error::GameLogoUploadPrepareError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => return Err(crate::error::GameLogoUploadPrepareError::unhandled(generic)),
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GameLogoUploadPrepareError {
+			meta: generic,
+			kind: crate::error::GameLogoUploadPrepareErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GameLogoUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadPrepareErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GameLogoUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadPrepareErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GameLogoUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadPrepareErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GameLogoUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadPrepareErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GameLogoUploadPrepareError {
+				meta: generic,
+				kind: crate::error::GameLogoUploadPrepareErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GameLogoUploadPrepareError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_game_logo_upload_prepare_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GameLogoUploadPrepareOutput,
+	crate::error::GameLogoUploadPrepareError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::game_logo_upload_prepare_output::Builder::default();
+		let _ = response;
+		output = crate::json_deser::deser_operation_crate_operation_game_logo_upload_prepare(
+			response.body().as_ref(),
+			output,
+		)
+		.map_err(crate::error::GameLogoUploadPrepareError::unhandled)?;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
 pub fn parse_get_game_by_id_error(
 	response: &http::Response<bytes::Bytes>,
 ) -> std::result::Result<crate::output::GetGameByIdOutput, crate::error::GetGameByIdError> {
@@ -2459,6 +3089,628 @@ pub fn parse_get_game_version_by_id_response(
 			output,
 		)
 		.map_err(crate::error::GetGameVersionByIdError::unhandled)?;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_billing_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<crate::output::GetGroupBillingOutput, crate::error::GetGroupBillingError> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GetGroupBillingError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => return Err(crate::error::GetGroupBillingError::unhandled(generic)),
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GetGroupBillingError {
+			meta: generic,
+			kind: crate::error::GetGroupBillingErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GetGroupBillingError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GetGroupBillingError {
+				meta: generic,
+				kind: crate::error::GetGroupBillingErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupBillingError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GetGroupBillingError {
+				meta: generic,
+				kind: crate::error::GetGroupBillingErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupBillingError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GetGroupBillingError {
+				meta: generic,
+				kind: crate::error::GetGroupBillingErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupBillingError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GetGroupBillingError {
+				meta: generic,
+				kind: crate::error::GetGroupBillingErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupBillingError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GetGroupBillingError {
+				meta: generic,
+				kind: crate::error::GetGroupBillingErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupBillingError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GetGroupBillingError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_billing_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<crate::output::GetGroupBillingOutput, crate::error::GetGroupBillingError> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::get_group_billing_output::Builder::default();
+		let _ = response;
+		output = crate::json_deser::deser_operation_crate_operation_get_group_billing(
+			response.body().as_ref(),
+			output,
+		)
+		.map_err(crate::error::GetGroupBillingError::unhandled)?;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_invoices_list_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GetGroupInvoicesListOutput,
+	crate::error::GetGroupInvoicesListError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => return Err(crate::error::GetGroupInvoicesListError::unhandled(generic)),
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GetGroupInvoicesListError {
+			meta: generic,
+			kind: crate::error::GetGroupInvoicesListErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GetGroupInvoicesListError {
+				meta: generic,
+				kind: crate::error::GetGroupInvoicesListErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GetGroupInvoicesListError {
+				meta: generic,
+				kind: crate::error::GetGroupInvoicesListErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GetGroupInvoicesListError {
+				meta: generic,
+				kind: crate::error::GetGroupInvoicesListErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GetGroupInvoicesListError {
+				meta: generic,
+				kind: crate::error::GetGroupInvoicesListErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GetGroupInvoicesListError {
+				meta: generic,
+				kind: crate::error::GetGroupInvoicesListErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GetGroupInvoicesListError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_invoices_list_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GetGroupInvoicesListOutput,
+	crate::error::GetGroupInvoicesListError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::get_group_invoices_list_output::Builder::default();
+		let _ = response;
+		output = crate::json_deser::deser_operation_crate_operation_get_group_invoices_list(
+			response.body().as_ref(),
+			output,
+		)
+		.map_err(crate::error::GetGroupInvoicesListError::unhandled)?;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_payments_list_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GetGroupPaymentsListOutput,
+	crate::error::GetGroupPaymentsListError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => return Err(crate::error::GetGroupPaymentsListError::unhandled(generic)),
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GetGroupPaymentsListError {
+			meta: generic,
+			kind: crate::error::GetGroupPaymentsListErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GetGroupPaymentsListError {
+				meta: generic,
+				kind: crate::error::GetGroupPaymentsListErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GetGroupPaymentsListError {
+				meta: generic,
+				kind: crate::error::GetGroupPaymentsListErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GetGroupPaymentsListError {
+				meta: generic,
+				kind: crate::error::GetGroupPaymentsListErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GetGroupPaymentsListError {
+				meta: generic,
+				kind: crate::error::GetGroupPaymentsListErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GetGroupPaymentsListError {
+				meta: generic,
+				kind: crate::error::GetGroupPaymentsListErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GetGroupPaymentsListError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_payments_list_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GetGroupPaymentsListOutput,
+	crate::error::GetGroupPaymentsListError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::get_group_payments_list_output::Builder::default();
+		let _ = response;
+		output = crate::json_deser::deser_operation_crate_operation_get_group_payments_list(
+			response.body().as_ref(),
+			output,
+		)
+		.map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_transfers_list_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GetGroupTransfersListOutput,
+	crate::error::GetGroupTransfersListError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => return Err(crate::error::GetGroupTransfersListError::unhandled(generic)),
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::GetGroupTransfersListError {
+			meta: generic,
+			kind: crate::error::GetGroupTransfersListErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::GetGroupTransfersListError {
+				meta: generic,
+				kind: crate::error::GetGroupTransfersListErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::GetGroupTransfersListError {
+				meta: generic,
+				kind: crate::error::GetGroupTransfersListErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::GetGroupTransfersListError {
+				meta: generic,
+				kind: crate::error::GetGroupTransfersListErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::GetGroupTransfersListError {
+				meta: generic,
+				kind: crate::error::GetGroupTransfersListErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::GetGroupTransfersListError {
+				meta: generic,
+				kind: crate::error::GetGroupTransfersListErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::GetGroupTransfersListError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_get_group_transfers_list_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::GetGroupTransfersListOutput,
+	crate::error::GetGroupTransfersListError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::get_group_transfers_list_output::Builder::default();
+		let _ = response;
+		output = crate::json_deser::deser_operation_crate_operation_get_group_transfers_list(
+			response.body().as_ref(),
+			output,
+		)
+		.map_err(crate::error::GetGroupTransfersListError::unhandled)?;
 		output.build()
 	})
 }
@@ -3080,21 +4332,24 @@ pub fn parse_get_region_tiers_response(
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_team_billing_error(
+pub fn parse_group_billing_checkout_error(
 	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<crate::output::GetTeamBillingOutput, crate::error::GetTeamBillingError> {
+) -> std::result::Result<
+	crate::output::GroupBillingCheckoutOutput,
+	crate::error::GroupBillingCheckoutError,
+> {
 	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::GetTeamBillingError::unhandled)?;
+		.map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 	let error_code = match generic.code() {
 		Some(code) => code,
-		None => return Err(crate::error::GetTeamBillingError::unhandled(generic)),
+		None => return Err(crate::error::GroupBillingCheckoutError::unhandled(generic)),
 	};
 
 	let _error_message = generic.message().map(|msg| msg.to_owned());
 	Err(match error_code {
-		"InternalError" => crate::error::GetTeamBillingError {
+		"InternalError" => crate::error::GroupBillingCheckoutError {
 			meta: generic,
-			kind: crate::error::GetTeamBillingErrorKind::InternalError({
+			kind: crate::error::GroupBillingCheckoutErrorKind::InternalError({
 				#[allow(unused_mut)]
 				let mut tmp = {
 					#[allow(unused_mut)]
@@ -3105,7 +4360,7 @@ pub fn parse_get_team_billing_error(
 							response.body().as_ref(),
 							output,
 						)
-						.map_err(crate::error::GetTeamBillingError::unhandled)?;
+						.map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 					output.build()
 				};
 				if (&tmp.message).is_none() {
@@ -3115,15 +4370,15 @@ pub fn parse_get_team_billing_error(
 			}),
 		},
 		"RateLimitError" => {
-			crate::error::GetTeamBillingError {
+			crate::error::GroupBillingCheckoutError {
 				meta: generic,
-				kind: crate::error::GetTeamBillingErrorKind::RateLimitError({
+				kind: crate::error::GroupBillingCheckoutErrorKind::RateLimitError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::rate_limit_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamBillingError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -3134,15 +4389,15 @@ pub fn parse_get_team_billing_error(
 			}
 		}
 		"ForbiddenError" => {
-			crate::error::GetTeamBillingError {
+			crate::error::GroupBillingCheckoutError {
 				meta: generic,
-				kind: crate::error::GetTeamBillingErrorKind::ForbiddenError({
+				kind: crate::error::GroupBillingCheckoutErrorKind::ForbiddenError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::forbidden_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamBillingError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -3153,15 +4408,15 @@ pub fn parse_get_team_billing_error(
 			}
 		}
 		"UnauthorizedError" => {
-			crate::error::GetTeamBillingError {
+			crate::error::GroupBillingCheckoutError {
 				meta: generic,
-				kind: crate::error::GetTeamBillingErrorKind::UnauthorizedError({
+				kind: crate::error::GroupBillingCheckoutErrorKind::UnauthorizedError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::unauthorized_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamBillingError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -3172,15 +4427,15 @@ pub fn parse_get_team_billing_error(
 			}
 		}
 		"NotFoundError" => {
-			crate::error::GetTeamBillingError {
+			crate::error::GroupBillingCheckoutError {
 				meta: generic,
-				kind: crate::error::GetTeamBillingErrorKind::NotFoundError({
+				kind: crate::error::GroupBillingCheckoutErrorKind::NotFoundError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::not_found_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamBillingError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -3191,15 +4446,15 @@ pub fn parse_get_team_billing_error(
 			}
 		}
 		"BadRequestError" => {
-			crate::error::GetTeamBillingError {
+			crate::error::GroupBillingCheckoutError {
 				meta: generic,
-				kind: crate::error::GetTeamBillingErrorKind::BadRequestError({
+				kind: crate::error::GroupBillingCheckoutErrorKind::BadRequestError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::bad_request_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamBillingError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -3209,337 +4464,26 @@ pub fn parse_get_team_billing_error(
 				}),
 			}
 		}
-		_ => crate::error::GetTeamBillingError::generic(generic),
+		_ => crate::error::GroupBillingCheckoutError::generic(generic),
 	})
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_team_billing_response(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<crate::output::GetTeamBillingOutput, crate::error::GetTeamBillingError> {
-	Ok({
-		#[allow(unused_mut)]
-		let mut output = crate::output::get_team_billing_output::Builder::default();
-		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_get_team_billing(
-			response.body().as_ref(),
-			output,
-		)
-		.map_err(crate::error::GetTeamBillingError::unhandled)?;
-		output.build()
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_team_payments_list_error(
+pub fn parse_group_billing_checkout_response(
 	response: &http::Response<bytes::Bytes>,
 ) -> std::result::Result<
-	crate::output::GetTeamPaymentsListOutput,
-	crate::error::GetTeamPaymentsListError,
-> {
-	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-	let error_code = match generic.code() {
-		Some(code) => code,
-		None => return Err(crate::error::GetTeamPaymentsListError::unhandled(generic)),
-	};
-
-	let _error_message = generic.message().map(|msg| msg.to_owned());
-	Err(match error_code {
-		"InternalError" => crate::error::GetTeamPaymentsListError {
-			meta: generic,
-			kind: crate::error::GetTeamPaymentsListErrorKind::InternalError({
-				#[allow(unused_mut)]
-				let mut tmp = {
-					#[allow(unused_mut)]
-					let mut output = crate::error::internal_error::Builder::default();
-					let _ = response;
-					output =
-						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
-							response.body().as_ref(),
-							output,
-						)
-						.map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-					output.build()
-				};
-				if (&tmp.message).is_none() {
-					tmp.message = _error_message;
-				}
-				tmp
-			}),
-		},
-		"RateLimitError" => {
-			crate::error::GetTeamPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetTeamPaymentsListErrorKind::RateLimitError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::rate_limit_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"ForbiddenError" => {
-			crate::error::GetTeamPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetTeamPaymentsListErrorKind::ForbiddenError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::forbidden_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"UnauthorizedError" => {
-			crate::error::GetTeamPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetTeamPaymentsListErrorKind::UnauthorizedError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::unauthorized_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"NotFoundError" => {
-			crate::error::GetTeamPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetTeamPaymentsListErrorKind::NotFoundError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::not_found_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"BadRequestError" => {
-			crate::error::GetTeamPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetTeamPaymentsListErrorKind::BadRequestError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::bad_request_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		_ => crate::error::GetTeamPaymentsListError::generic(generic),
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_team_payments_list_response(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetTeamPaymentsListOutput,
-	crate::error::GetTeamPaymentsListError,
+	crate::output::GroupBillingCheckoutOutput,
+	crate::error::GroupBillingCheckoutError,
 > {
 	Ok({
 		#[allow(unused_mut)]
-		let mut output = crate::output::get_team_payments_list_output::Builder::default();
+		let mut output = crate::output::group_billing_checkout_output::Builder::default();
 		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_get_team_payments_list(
+		output = crate::json_deser::deser_operation_crate_operation_group_billing_checkout(
 			response.body().as_ref(),
 			output,
 		)
-		.map_err(crate::error::GetTeamPaymentsListError::unhandled)?;
-		output.build()
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_team_transfers_list_error(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetTeamTransfersListOutput,
-	crate::error::GetTeamTransfersListError,
-> {
-	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-	let error_code = match generic.code() {
-		Some(code) => code,
-		None => return Err(crate::error::GetTeamTransfersListError::unhandled(generic)),
-	};
-
-	let _error_message = generic.message().map(|msg| msg.to_owned());
-	Err(match error_code {
-		"InternalError" => crate::error::GetTeamTransfersListError {
-			meta: generic,
-			kind: crate::error::GetTeamTransfersListErrorKind::InternalError({
-				#[allow(unused_mut)]
-				let mut tmp = {
-					#[allow(unused_mut)]
-					let mut output = crate::error::internal_error::Builder::default();
-					let _ = response;
-					output =
-						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
-							response.body().as_ref(),
-							output,
-						)
-						.map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-					output.build()
-				};
-				if (&tmp.message).is_none() {
-					tmp.message = _error_message;
-				}
-				tmp
-			}),
-		},
-		"RateLimitError" => {
-			crate::error::GetTeamTransfersListError {
-				meta: generic,
-				kind: crate::error::GetTeamTransfersListErrorKind::RateLimitError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::rate_limit_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"ForbiddenError" => {
-			crate::error::GetTeamTransfersListError {
-				meta: generic,
-				kind: crate::error::GetTeamTransfersListErrorKind::ForbiddenError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::forbidden_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"UnauthorizedError" => {
-			crate::error::GetTeamTransfersListError {
-				meta: generic,
-				kind: crate::error::GetTeamTransfersListErrorKind::UnauthorizedError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::unauthorized_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"NotFoundError" => {
-			crate::error::GetTeamTransfersListError {
-				meta: generic,
-				kind: crate::error::GetTeamTransfersListErrorKind::NotFoundError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::not_found_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"BadRequestError" => {
-			crate::error::GetTeamTransfersListError {
-				meta: generic,
-				kind: crate::error::GetTeamTransfersListErrorKind::BadRequestError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::bad_request_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetTeamTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		_ => crate::error::GetTeamTransfersListError::generic(generic),
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_team_transfers_list_response(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetTeamTransfersListOutput,
-	crate::error::GetTeamTransfersListError,
-> {
-	Ok({
-		#[allow(unused_mut)]
-		let mut output = crate::output::get_team_transfers_list_output::Builder::default();
-		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_get_team_transfers_list(
-			response.body().as_ref(),
-			output,
-		)
-		.map_err(crate::error::GetTeamTransfersListError::unhandled)?;
+		.map_err(crate::error::GroupBillingCheckoutError::unhandled)?;
 		output.build()
 	})
 }
@@ -4304,163 +5248,6 @@ pub fn parse_remove_namespace_domain_response(
 		#[allow(unused_mut)]
 		let mut output = crate::output::remove_namespace_domain_output::Builder::default();
 		let _ = response;
-		output.build()
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_team_billing_checkout_error(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::TeamBillingCheckoutOutput,
-	crate::error::TeamBillingCheckoutError,
-> {
-	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-	let error_code = match generic.code() {
-		Some(code) => code,
-		None => return Err(crate::error::TeamBillingCheckoutError::unhandled(generic)),
-	};
-
-	let _error_message = generic.message().map(|msg| msg.to_owned());
-	Err(match error_code {
-		"InternalError" => crate::error::TeamBillingCheckoutError {
-			meta: generic,
-			kind: crate::error::TeamBillingCheckoutErrorKind::InternalError({
-				#[allow(unused_mut)]
-				let mut tmp = {
-					#[allow(unused_mut)]
-					let mut output = crate::error::internal_error::Builder::default();
-					let _ = response;
-					output =
-						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
-							response.body().as_ref(),
-							output,
-						)
-						.map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-					output.build()
-				};
-				if (&tmp.message).is_none() {
-					tmp.message = _error_message;
-				}
-				tmp
-			}),
-		},
-		"RateLimitError" => {
-			crate::error::TeamBillingCheckoutError {
-				meta: generic,
-				kind: crate::error::TeamBillingCheckoutErrorKind::RateLimitError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::rate_limit_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"ForbiddenError" => {
-			crate::error::TeamBillingCheckoutError {
-				meta: generic,
-				kind: crate::error::TeamBillingCheckoutErrorKind::ForbiddenError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::forbidden_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"UnauthorizedError" => {
-			crate::error::TeamBillingCheckoutError {
-				meta: generic,
-				kind: crate::error::TeamBillingCheckoutErrorKind::UnauthorizedError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::unauthorized_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"NotFoundError" => {
-			crate::error::TeamBillingCheckoutError {
-				meta: generic,
-				kind: crate::error::TeamBillingCheckoutErrorKind::NotFoundError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::not_found_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"BadRequestError" => {
-			crate::error::TeamBillingCheckoutError {
-				meta: generic,
-				kind: crate::error::TeamBillingCheckoutErrorKind::BadRequestError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::bad_request_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		_ => crate::error::TeamBillingCheckoutError::generic(generic),
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_team_billing_checkout_response(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::TeamBillingCheckoutOutput,
-	crate::error::TeamBillingCheckoutError,
-> {
-	Ok({
-		#[allow(unused_mut)]
-		let mut output = crate::output::team_billing_checkout_output::Builder::default();
-		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_team_billing_checkout(
-			response.body().as_ref(),
-			output,
-		)
-		.map_err(crate::error::TeamBillingCheckoutError::unhandled)?;
 		output.build()
 	})
 }
@@ -5881,21 +6668,21 @@ pub fn parse_validate_game_version_response(
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_validate_team_error(
+pub fn parse_validate_group_error(
 	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<crate::output::ValidateTeamOutput, crate::error::ValidateTeamError> {
+) -> std::result::Result<crate::output::ValidateGroupOutput, crate::error::ValidateGroupError> {
 	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::ValidateTeamError::unhandled)?;
+		.map_err(crate::error::ValidateGroupError::unhandled)?;
 	let error_code = match generic.code() {
 		Some(code) => code,
-		None => return Err(crate::error::ValidateTeamError::unhandled(generic)),
+		None => return Err(crate::error::ValidateGroupError::unhandled(generic)),
 	};
 
 	let _error_message = generic.message().map(|msg| msg.to_owned());
 	Err(match error_code {
-		"InternalError" => crate::error::ValidateTeamError {
+		"InternalError" => crate::error::ValidateGroupError {
 			meta: generic,
-			kind: crate::error::ValidateTeamErrorKind::InternalError({
+			kind: crate::error::ValidateGroupErrorKind::InternalError({
 				#[allow(unused_mut)]
 				let mut tmp = {
 					#[allow(unused_mut)]
@@ -5906,7 +6693,7 @@ pub fn parse_validate_team_error(
 							response.body().as_ref(),
 							output,
 						)
-						.map_err(crate::error::ValidateTeamError::unhandled)?;
+						.map_err(crate::error::ValidateGroupError::unhandled)?;
 					output.build()
 				};
 				if (&tmp.message).is_none() {
@@ -5916,15 +6703,15 @@ pub fn parse_validate_team_error(
 			}),
 		},
 		"RateLimitError" => {
-			crate::error::ValidateTeamError {
+			crate::error::ValidateGroupError {
 				meta: generic,
-				kind: crate::error::ValidateTeamErrorKind::RateLimitError({
+				kind: crate::error::ValidateGroupErrorKind::RateLimitError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::rate_limit_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -5935,15 +6722,15 @@ pub fn parse_validate_team_error(
 			}
 		}
 		"ForbiddenError" => {
-			crate::error::ValidateTeamError {
+			crate::error::ValidateGroupError {
 				meta: generic,
-				kind: crate::error::ValidateTeamErrorKind::ForbiddenError({
+				kind: crate::error::ValidateGroupErrorKind::ForbiddenError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::forbidden_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -5954,15 +6741,15 @@ pub fn parse_validate_team_error(
 			}
 		}
 		"UnauthorizedError" => {
-			crate::error::ValidateTeamError {
+			crate::error::ValidateGroupError {
 				meta: generic,
-				kind: crate::error::ValidateTeamErrorKind::UnauthorizedError({
+				kind: crate::error::ValidateGroupErrorKind::UnauthorizedError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::unauthorized_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -5973,15 +6760,15 @@ pub fn parse_validate_team_error(
 			}
 		}
 		"NotFoundError" => {
-			crate::error::ValidateTeamError {
+			crate::error::ValidateGroupError {
 				meta: generic,
-				kind: crate::error::ValidateTeamErrorKind::NotFoundError({
+				kind: crate::error::ValidateGroupErrorKind::NotFoundError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::not_found_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -5992,15 +6779,15 @@ pub fn parse_validate_team_error(
 			}
 		}
 		"BadRequestError" => {
-			crate::error::ValidateTeamError {
+			crate::error::ValidateGroupError {
 				meta: generic,
-				kind: crate::error::ValidateTeamErrorKind::BadRequestError({
+				kind: crate::error::ValidateGroupErrorKind::BadRequestError({
 					#[allow(unused_mut)]
 					let mut tmp = {
 						#[allow(unused_mut)]
 						let mut output = crate::error::bad_request_error::Builder::default();
 						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateTeamError::unhandled)?;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::ValidateGroupError::unhandled)?;
 						output.build()
 					};
 					if (&tmp.message).is_none() {
@@ -6010,23 +6797,23 @@ pub fn parse_validate_team_error(
 				}),
 			}
 		}
-		_ => crate::error::ValidateTeamError::generic(generic),
+		_ => crate::error::ValidateGroupError::generic(generic),
 	})
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_validate_team_response(
+pub fn parse_validate_group_response(
 	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<crate::output::ValidateTeamOutput, crate::error::ValidateTeamError> {
+) -> std::result::Result<crate::output::ValidateGroupOutput, crate::error::ValidateGroupError> {
 	Ok({
 		#[allow(unused_mut)]
-		let mut output = crate::output::validate_team_output::Builder::default();
+		let mut output = crate::output::validate_group_output::Builder::default();
 		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_validate_team(
+		output = crate::json_deser::deser_operation_crate_operation_validate_group(
 			response.body().as_ref(),
 			output,
 		)
-		.map_err(crate::error::ValidateTeamError::unhandled)?;
+		.map_err(crate::error::ValidateGroupError::unhandled)?;
 		output.build()
 	})
 }

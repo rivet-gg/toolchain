@@ -9,12 +9,12 @@ pub mod complete_upload_input {
 		pub(crate) upload_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.upload_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.upload_id = input;
 			self
@@ -119,44 +119,44 @@ impl CompleteUploadInput {
 	}
 }
 
-/// See [`ConvertTeamInput`](crate::input::ConvertTeamInput)
-pub mod convert_team_input {
-	/// A builder for [`ConvertTeamInput`](crate::input::ConvertTeamInput)
+/// See [`ConvertGroupInput`](crate::input::ConvertGroupInput)
+pub mod convert_group_input {
+	/// A builder for [`ConvertGroupInput`](crate::input::ConvertGroupInput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) team_id: std::option::Option<std::string::String>,
+		pub(crate) group_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.team_id = Some(input.into());
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.team_id = input;
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`ConvertTeamInput`](crate::input::ConvertTeamInput)
+		/// Consumes the builder and constructs a [`ConvertGroupInput`](crate::input::ConvertGroupInput)
 		pub fn build(
 			self,
 		) -> std::result::Result<
-			crate::input::ConvertTeamInput,
+			crate::input::ConvertGroupInput,
 			aws_smithy_http::operation::BuildError,
 		> {
-			Ok(crate::input::ConvertTeamInput {
-				team_id: self.team_id,
+			Ok(crate::input::ConvertGroupInput {
+				group_id: self.group_id,
 			})
 		}
 	}
 }
 #[doc(hidden)]
-pub type ConvertTeamInputOperationOutputAlias = crate::operation::ConvertTeam;
+pub type ConvertGroupInputOperationOutputAlias = crate::operation::ConvertGroup;
 #[doc(hidden)]
-pub type ConvertTeamInputOperationRetryAlias = ();
-impl ConvertTeamInput {
-	/// Consumes the builder and constructs an Operation<[`ConvertTeam`](crate::operation::ConvertTeam)>
+pub type ConvertGroupInputOperationRetryAlias = ();
+impl ConvertGroupInput {
+	/// Consumes the builder and constructs an Operation<[`ConvertGroup`](crate::operation::ConvertGroup)>
 	#[allow(unused_mut)]
 	#[allow(clippy::let_and_return)]
 	#[allow(clippy::needless_borrow)]
@@ -164,35 +164,35 @@ impl ConvertTeamInput {
 		&self,
 		_config: &crate::config::Config,
 	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::ConvertTeam, ()>,
+		aws_smithy_http::operation::Operation<crate::operation::ConvertGroup, ()>,
 		aws_smithy_http::operation::BuildError,
 	> {
 		let mut request = {
 			fn uri_base(
-				_input: &crate::input::ConvertTeamInput,
+				_input: &crate::input::ConvertGroupInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_2 = &_input.team_id;
+				let input_2 = &_input.group_id;
 				let input_2 = input_2.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
+						field: "group_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let team_id = aws_smithy_http::label::fmt_string(input_2, false);
-				if team_id.is_empty() {
+				let group_id = aws_smithy_http::label::fmt_string(input_2, false);
+				if group_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
+						field: "group_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				write!(output, "/teams/{team_id}/convert", team_id = team_id)
+				write!(output, "/groups/{group_id}/convert", group_id = group_id)
 					.expect("formatting should succeed");
 				Ok(())
 			}
 			#[allow(clippy::unnecessary_wraps)]
 			fn update_http_builder(
-				input: &crate::input::ConvertTeamInput,
+				input: &crate::input::ConvertGroupInput,
 				_config: &crate::config::Config,
 				builder: http::request::Builder,
 			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
@@ -220,17 +220,17 @@ impl ConvertTeamInput {
 			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
 		let op = aws_smithy_http::operation::Operation::new(
 			request,
-			crate::operation::ConvertTeam::new(),
+			crate::operation::ConvertGroup::new(),
 		)
 		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"ConvertTeam",
+			"ConvertGroup",
 			"CloudService",
 		));
 		Ok(op)
 	}
-	/// Creates a new builder-style object to manufacture [`ConvertTeamInput`](crate::input::ConvertTeamInput)
-	pub fn builder() -> crate::input::convert_team_input::Builder {
-		crate::input::convert_team_input::Builder::default()
+	/// Creates a new builder-style object to manufacture [`ConvertGroupInput`](crate::input::ConvertGroupInput)
+	pub fn builder() -> crate::input::convert_group_input::Builder {
+		crate::input::convert_group_input::Builder::default()
 	}
 }
 
@@ -243,12 +243,12 @@ pub mod create_cloud_token_input {
 		pub(crate) game_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
@@ -357,40 +357,40 @@ pub mod create_game_input {
 	pub struct Builder {
 		pub(crate) name_id: std::option::Option<std::string::String>,
 		pub(crate) display_name: std::option::Option<std::string::String>,
-		pub(crate) developer_team_id: std::option::Option<std::string::String>,
+		pub(crate) developer_group_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.name_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.name_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn developer_team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.developer_team_id = Some(input.into());
+		/// A universally unique identifier.
+		pub fn developer_group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.developer_group_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_developer_team_id(
+		/// A universally unique identifier.
+		pub fn set_developer_group_id(
 			mut self,
 			input: std::option::Option<std::string::String>,
 		) -> Self {
-			self.developer_team_id = input;
+			self.developer_group_id = input;
 			self
 		}
 		/// Consumes the builder and constructs a [`CreateGameInput`](crate::input::CreateGameInput)
@@ -403,7 +403,7 @@ pub mod create_game_input {
 			Ok(crate::input::CreateGameInput {
 				name_id: self.name_id,
 				display_name: self.display_name,
-				developer_team_id: self.developer_team_id,
+				developer_group_id: self.developer_group_id,
 			})
 		}
 	}
@@ -502,42 +502,42 @@ pub mod create_game_build_input {
 		pub(crate) image_file: std::option::Option<crate::model::UploadPrepareFile>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A tag given to the game build.
 		pub fn image_tag(mut self, input: impl Into<std::string::String>) -> Self {
 			self.image_tag = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A tag given to the game build.
 		pub fn set_image_tag(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.image_tag = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A file being prepared to upload.
 		pub fn image_file(mut self, input: crate::model::UploadPrepareFile) -> Self {
 			self.image_file = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A file being prepared to upload.
 		pub fn set_image_file(
 			mut self,
 			input: std::option::Option<crate::model::UploadPrepareFile>,
@@ -669,22 +669,22 @@ pub mod create_game_cdn_site_input {
 		pub(crate) files: std::option::Option<std::vec::Vec<crate::model::UploadPrepareFile>>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
@@ -693,13 +693,14 @@ pub mod create_game_cdn_site_input {
 		///
 		/// To override the contents of this collection use [`set_files`](Self::set_files).
 		///
+		/// A list of files preparing to upload.
 		pub fn files(mut self, input: crate::model::UploadPrepareFile) -> Self {
 			let mut v = self.files.unwrap_or_default();
 			v.push(input);
 			self.files = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of files preparing to upload.
 		pub fn set_files(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::UploadPrepareFile>>,
@@ -831,42 +832,42 @@ pub mod create_game_namespace_input {
 		pub(crate) name_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.version_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.version_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.name_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.name_id = input;
 			self
@@ -997,32 +998,32 @@ pub mod create_game_namespace_token_development_input {
 			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The hostname used for the token.
 		pub fn hostname(mut self, input: impl Into<std::string::String>) -> Self {
 			self.hostname = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The hostname used for the token.
 		pub fn set_hostname(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.hostname = input;
 			self
@@ -1031,13 +1032,14 @@ pub mod create_game_namespace_token_development_input {
 		///
 		/// To override the contents of this collection use [`set_lobby_ports`](Self::set_lobby_ports).
 		///
+		/// A list of docker ports.
 		pub fn lobby_ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
 			let mut v = self.lobby_ports.unwrap_or_default();
 			v.push(input);
 			self.lobby_ports = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of docker ports.
 		pub fn set_lobby_ports(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
@@ -1190,22 +1192,22 @@ pub mod create_game_namespace_token_public_input {
 		pub(crate) namespace_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
@@ -1338,32 +1340,32 @@ pub mod create_game_version_input {
 		pub(crate) config: std::option::Option<crate::model::CloudVersionConfig>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn config(mut self, input: crate::model::CloudVersionConfig) -> Self {
 			self.config = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn set_config(
 			mut self,
 			input: std::option::Option<crate::model::CloudVersionConfig>,
@@ -1493,22 +1495,22 @@ pub mod delete_matchmaker_lobby_input {
 		pub(crate) lobby_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn lobby_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.lobby_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.lobby_id = input;
 			self
@@ -1640,32 +1642,32 @@ pub mod export_matchmaker_lobby_history_input {
 		pub(crate) query_end: std::option::Option<i64>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn query_start(mut self, input: i64) -> Self {
 			self.query_start = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn set_query_start(mut self, input: std::option::Option<i64>) -> Self {
 			self.query_start = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn query_end(mut self, input: i64) -> Self {
 			self.query_end = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn set_query_end(mut self, input: std::option::Option<i64>) -> Self {
 			self.query_end = input;
 			self
@@ -1786,6 +1788,642 @@ impl ExportMatchmakerLobbyHistoryInput {
 	}
 }
 
+/// See [`GameBannerUploadCompleteInput`](crate::input::GameBannerUploadCompleteInput)
+pub mod game_banner_upload_complete_input {
+	/// A builder for [`GameBannerUploadCompleteInput`](crate::input::GameBannerUploadCompleteInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) upload_id: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.upload_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.upload_id = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameBannerUploadCompleteInput`](crate::input::GameBannerUploadCompleteInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GameBannerUploadCompleteInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GameBannerUploadCompleteInput {
+				game_id: self.game_id,
+				upload_id: self.upload_id,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GameBannerUploadCompleteInputOperationOutputAlias =
+	crate::operation::GameBannerUploadComplete;
+#[doc(hidden)]
+pub type GameBannerUploadCompleteInputOperationRetryAlias = ();
+impl GameBannerUploadCompleteInput {
+	/// Consumes the builder and constructs an Operation<[`GameBannerUploadComplete`](crate::operation::GameBannerUploadComplete)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GameBannerUploadComplete, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GameBannerUploadCompleteInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_15 = &_input.game_id;
+				let input_15 = input_15.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_15, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				let input_16 = &_input.upload_id;
+				let input_16 = input_16.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "upload_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let upload_id = aws_smithy_http::label::fmt_string(input_16, false);
+				if upload_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "upload_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/banner-upload/{upload_id}/complete",
+					game_id = game_id,
+					upload_id = upload_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GameBannerUploadCompleteInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("POST").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("{}");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GameBannerUploadComplete::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GameBannerUploadComplete",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GameBannerUploadCompleteInput`](crate::input::GameBannerUploadCompleteInput)
+	pub fn builder() -> crate::input::game_banner_upload_complete_input::Builder {
+		crate::input::game_banner_upload_complete_input::Builder::default()
+	}
+}
+
+/// See [`GameBannerUploadPrepareInput`](crate::input::GameBannerUploadPrepareInput)
+pub mod game_banner_upload_prepare_input {
+	/// A builder for [`GameBannerUploadPrepareInput`](crate::input::GameBannerUploadPrepareInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) path: std::option::Option<std::string::String>,
+		pub(crate) mime: std::option::Option<std::string::String>,
+		pub(crate) content_length: std::option::Option<i64>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// The path/filename of the game banner.
+		pub fn path(mut self, input: impl Into<std::string::String>) -> Self {
+			self.path = Some(input.into());
+			self
+		}
+		/// The path/filename of the game banner.
+		pub fn set_path(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.path = input;
+			self
+		}
+		/// The MIME type of the game banner.
+		pub fn mime(mut self, input: impl Into<std::string::String>) -> Self {
+			self.mime = Some(input.into());
+			self
+		}
+		/// The MIME type of the game banner.
+		pub fn set_mime(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.mime = input;
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn content_length(mut self, input: i64) -> Self {
+			self.content_length = Some(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_content_length(mut self, input: std::option::Option<i64>) -> Self {
+			self.content_length = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameBannerUploadPrepareInput`](crate::input::GameBannerUploadPrepareInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GameBannerUploadPrepareInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GameBannerUploadPrepareInput {
+				game_id: self.game_id,
+				path: self.path,
+				mime: self.mime,
+				content_length: self.content_length,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GameBannerUploadPrepareInputOperationOutputAlias =
+	crate::operation::GameBannerUploadPrepare;
+#[doc(hidden)]
+pub type GameBannerUploadPrepareInputOperationRetryAlias = ();
+impl GameBannerUploadPrepareInput {
+	/// Consumes the builder and constructs an Operation<[`GameBannerUploadPrepare`](crate::operation::GameBannerUploadPrepare)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GameBannerUploadPrepare, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GameBannerUploadPrepareInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_17 = &_input.game_id;
+				let input_17 = input_17.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_17, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/banner-upload/prepare",
+					game_id = game_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GameBannerUploadPrepareInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("POST").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from(
+			crate::operation_ser::serialize_operation_crate_operation_game_banner_upload_prepare(
+				&self,
+			)?,
+		);
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GameBannerUploadPrepare::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GameBannerUploadPrepare",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GameBannerUploadPrepareInput`](crate::input::GameBannerUploadPrepareInput)
+	pub fn builder() -> crate::input::game_banner_upload_prepare_input::Builder {
+		crate::input::game_banner_upload_prepare_input::Builder::default()
+	}
+}
+
+/// See [`GameLogoUploadCompleteInput`](crate::input::GameLogoUploadCompleteInput)
+pub mod game_logo_upload_complete_input {
+	/// A builder for [`GameLogoUploadCompleteInput`](crate::input::GameLogoUploadCompleteInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) upload_id: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.upload_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.upload_id = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameLogoUploadCompleteInput`](crate::input::GameLogoUploadCompleteInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GameLogoUploadCompleteInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GameLogoUploadCompleteInput {
+				game_id: self.game_id,
+				upload_id: self.upload_id,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GameLogoUploadCompleteInputOperationOutputAlias = crate::operation::GameLogoUploadComplete;
+#[doc(hidden)]
+pub type GameLogoUploadCompleteInputOperationRetryAlias = ();
+impl GameLogoUploadCompleteInput {
+	/// Consumes the builder and constructs an Operation<[`GameLogoUploadComplete`](crate::operation::GameLogoUploadComplete)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GameLogoUploadComplete, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GameLogoUploadCompleteInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_18 = &_input.game_id;
+				let input_18 = input_18.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_18, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				let input_19 = &_input.upload_id;
+				let input_19 = input_19.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "upload_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let upload_id = aws_smithy_http::label::fmt_string(input_19, false);
+				if upload_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "upload_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/logo-upload/{upload_id}/complete",
+					game_id = game_id,
+					upload_id = upload_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GameLogoUploadCompleteInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("POST").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("{}");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GameLogoUploadComplete::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GameLogoUploadComplete",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GameLogoUploadCompleteInput`](crate::input::GameLogoUploadCompleteInput)
+	pub fn builder() -> crate::input::game_logo_upload_complete_input::Builder {
+		crate::input::game_logo_upload_complete_input::Builder::default()
+	}
+}
+
+/// See [`GameLogoUploadPrepareInput`](crate::input::GameLogoUploadPrepareInput)
+pub mod game_logo_upload_prepare_input {
+	/// A builder for [`GameLogoUploadPrepareInput`](crate::input::GameLogoUploadPrepareInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) path: std::option::Option<std::string::String>,
+		pub(crate) mime: std::option::Option<std::string::String>,
+		pub(crate) content_length: std::option::Option<i64>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// The path/filename of the game logo.
+		pub fn path(mut self, input: impl Into<std::string::String>) -> Self {
+			self.path = Some(input.into());
+			self
+		}
+		/// The path/filename of the game logo.
+		pub fn set_path(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.path = input;
+			self
+		}
+		/// The MIME type of the game logo.
+		pub fn mime(mut self, input: impl Into<std::string::String>) -> Self {
+			self.mime = Some(input.into());
+			self
+		}
+		/// The MIME type of the game logo.
+		pub fn set_mime(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.mime = input;
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn content_length(mut self, input: i64) -> Self {
+			self.content_length = Some(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_content_length(mut self, input: std::option::Option<i64>) -> Self {
+			self.content_length = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameLogoUploadPrepareInput`](crate::input::GameLogoUploadPrepareInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GameLogoUploadPrepareInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GameLogoUploadPrepareInput {
+				game_id: self.game_id,
+				path: self.path,
+				mime: self.mime,
+				content_length: self.content_length,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GameLogoUploadPrepareInputOperationOutputAlias = crate::operation::GameLogoUploadPrepare;
+#[doc(hidden)]
+pub type GameLogoUploadPrepareInputOperationRetryAlias = ();
+impl GameLogoUploadPrepareInput {
+	/// Consumes the builder and constructs an Operation<[`GameLogoUploadPrepare`](crate::operation::GameLogoUploadPrepare)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GameLogoUploadPrepare, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GameLogoUploadPrepareInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_20 = &_input.game_id;
+				let input_20 = input_20.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_20, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/logo-upload/prepare",
+					game_id = game_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GameLogoUploadPrepareInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("POST").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from(
+			crate::operation_ser::serialize_operation_crate_operation_game_logo_upload_prepare(
+				&self,
+			)?,
+		);
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GameLogoUploadPrepare::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GameLogoUploadPrepare",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GameLogoUploadPrepareInput`](crate::input::GameLogoUploadPrepareInput)
+	pub fn builder() -> crate::input::game_logo_upload_prepare_input::Builder {
+		crate::input::game_logo_upload_prepare_input::Builder::default()
+	}
+}
+
 /// See [`GetGameByIdInput`](crate::input::GetGameByIdInput)
 pub mod get_game_by_id_input {
 	/// A builder for [`GetGameByIdInput`](crate::input::GetGameByIdInput)
@@ -1793,16 +2431,27 @@ pub mod get_game_by_id_input {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) watch_index: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.watch_index = Some(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.watch_index = input;
 			self
 		}
 		/// Consumes the builder and constructs a [`GetGameByIdInput`](crate::input::GetGameByIdInput)
@@ -1814,6 +2463,7 @@ pub mod get_game_by_id_input {
 		> {
 			Ok(crate::input::GetGameByIdInput {
 				game_id: self.game_id,
+				watch_index: self.watch_index,
 			})
 		}
 	}
@@ -1839,14 +2489,14 @@ impl GetGameByIdInput {
 				_input: &crate::input::GetGameByIdInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_15 = &_input.game_id;
-				let input_15 = input_15.as_ref().ok_or(
+				let input_21 = &_input.game_id;
+				let input_21 = input_21.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_15, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_21, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -1855,6 +2505,19 @@ impl GetGameByIdInput {
 				}
 				write!(output, "/games/{game_id}", game_id = game_id)
 					.expect("formatting should succeed");
+				Ok(())
+			}
+			fn uri_query(
+				_input: &crate::input::GetGameByIdInput,
+				mut output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let mut query = aws_smithy_http::query::Writer::new(&mut output);
+				if let Some(inner_22) = &_input.watch_index {
+					query.push_kv(
+						"watch_index",
+						&aws_smithy_http::query::fmt_string(&inner_22),
+					);
+				}
 				Ok(())
 			}
 			#[allow(clippy::unnecessary_wraps)]
@@ -1867,6 +2530,7 @@ impl GetGameByIdInput {
 				let mut _uri = String::new();
 				_uri = format!("{}{}", _config.uri.clone(), _uri);
 				uri_base(input, &mut _uri)?;
+				uri_query(input, &mut _uri)?;
 				Ok(builder.method("GET").uri(_uri))
 			}
 			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
@@ -1911,22 +2575,22 @@ pub mod get_game_namespace_by_id_input {
 		pub(crate) namespace_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
@@ -1966,28 +2630,28 @@ impl GetGameNamespaceByIdInput {
 				_input: &crate::input::GetGameNamespaceByIdInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_16 = &_input.game_id;
-				let input_16 = input_16.as_ref().ok_or(
+				let input_23 = &_input.game_id;
+				let input_23 = input_23.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_16, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_23, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_17 = &_input.namespace_id;
-				let input_17 = input_17.as_ref().ok_or(
+				let input_24 = &_input.namespace_id;
+				let input_24 = input_24.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_17, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_24, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -2052,14 +2716,28 @@ pub mod get_games_input {
 	/// A builder for [`GetGamesInput`](crate::input::GetGamesInput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {}
+	pub struct Builder {
+		pub(crate) watch_index: std::option::Option<std::string::String>,
+	}
 	impl Builder {
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.watch_index = Some(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.watch_index = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`GetGamesInput`](crate::input::GetGamesInput)
 		pub fn build(
 			self,
 		) -> std::result::Result<crate::input::GetGamesInput, aws_smithy_http::operation::BuildError>
 		{
-			Ok(crate::input::GetGamesInput {})
+			Ok(crate::input::GetGamesInput {
+				watch_index: self.watch_index,
+			})
 		}
 	}
 }
@@ -2087,6 +2765,19 @@ impl GetGamesInput {
 				write!(output, "/games").expect("formatting should succeed");
 				Ok(())
 			}
+			fn uri_query(
+				_input: &crate::input::GetGamesInput,
+				mut output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let mut query = aws_smithy_http::query::Writer::new(&mut output);
+				if let Some(inner_25) = &_input.watch_index {
+					query.push_kv(
+						"watch_index",
+						&aws_smithy_http::query::fmt_string(&inner_25),
+					);
+				}
+				Ok(())
+			}
 			#[allow(clippy::unnecessary_wraps)]
 			fn update_http_builder(
 				input: &crate::input::GetGamesInput,
@@ -2097,6 +2788,7 @@ impl GetGamesInput {
 				let mut _uri = String::new();
 				_uri = format!("{}{}", _config.uri.clone(), _uri);
 				uri_base(input, &mut _uri)?;
+				uri_query(input, &mut _uri)?;
 				Ok(builder.method("GET").uri(_uri))
 			}
 			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
@@ -2139,22 +2831,22 @@ pub mod get_game_version_by_id_input {
 		pub(crate) version_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.version_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.version_id = input;
 			self
@@ -2194,28 +2886,28 @@ impl GetGameVersionByIdInput {
 				_input: &crate::input::GetGameVersionByIdInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_18 = &_input.game_id;
-				let input_18 = input_18.as_ref().ok_or(
+				let input_26 = &_input.game_id;
+				let input_26 = input_26.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_18, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_26, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_19 = &_input.version_id;
-				let input_19 = input_19.as_ref().ok_or(
+				let input_27 = &_input.version_id;
+				let input_27 = input_27.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "version_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let version_id = aws_smithy_http::label::fmt_string(input_19, false);
+				let version_id = aws_smithy_http::label::fmt_string(input_27, false);
 				if version_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "version_id",
@@ -2275,6 +2967,621 @@ impl GetGameVersionByIdInput {
 	}
 }
 
+/// See [`GetGroupBillingInput`](crate::input::GetGroupBillingInput)
+pub mod get_group_billing_input {
+	/// A builder for [`GetGroupBillingInput`](crate::input::GetGroupBillingInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) group_id: std::option::Option<std::string::String>,
+		pub(crate) query_start: std::option::Option<i64>,
+		pub(crate) query_end: std::option::Option<i64>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn query_start(mut self, input: i64) -> Self {
+			self.query_start = Some(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_query_start(mut self, input: std::option::Option<i64>) -> Self {
+			self.query_start = input;
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn query_end(mut self, input: i64) -> Self {
+			self.query_end = Some(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_query_end(mut self, input: std::option::Option<i64>) -> Self {
+			self.query_end = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GetGroupBillingInput`](crate::input::GetGroupBillingInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GetGroupBillingInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GetGroupBillingInput {
+				group_id: self.group_id,
+				query_start: self.query_start,
+				query_end: self.query_end,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GetGroupBillingInputOperationOutputAlias = crate::operation::GetGroupBilling;
+#[doc(hidden)]
+pub type GetGroupBillingInputOperationRetryAlias = ();
+impl GetGroupBillingInput {
+	/// Consumes the builder and constructs an Operation<[`GetGroupBilling`](crate::operation::GetGroupBilling)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GetGroupBilling, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GetGroupBillingInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_28 = &_input.group_id;
+				let input_28 = input_28.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let group_id = aws_smithy_http::label::fmt_string(input_28, false);
+				if group_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(output, "/groups/{group_id}/billing", group_id = group_id)
+					.expect("formatting should succeed");
+				Ok(())
+			}
+			fn uri_query(
+				_input: &crate::input::GetGroupBillingInput,
+				mut output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let mut query = aws_smithy_http::query::Writer::new(&mut output);
+				if let Some(inner_29) = &_input.query_start {
+					query.push_kv(
+						"query_start",
+						aws_smithy_types::primitive::Encoder::from(*inner_29).encode(),
+					);
+				}
+				if let Some(inner_30) = &_input.query_end {
+					query.push_kv(
+						"query_end",
+						aws_smithy_types::primitive::Encoder::from(*inner_30).encode(),
+					);
+				}
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GetGroupBillingInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				uri_query(input, &mut _uri)?;
+				Ok(builder.method("GET").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GetGroupBilling::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GetGroupBilling",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GetGroupBillingInput`](crate::input::GetGroupBillingInput)
+	pub fn builder() -> crate::input::get_group_billing_input::Builder {
+		crate::input::get_group_billing_input::Builder::default()
+	}
+}
+
+/// See [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
+pub mod get_group_invoices_list_input {
+	/// A builder for [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) group_id: std::option::Option<std::string::String>,
+		pub(crate) anchor: std::option::Option<std::string::String>,
+		pub(crate) limit: std::option::Option<i32>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
+			self
+		}
+		/// How many invoices to offset the search by.
+		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
+			self.anchor = Some(input.into());
+			self
+		}
+		/// How many invoices to offset the search by.
+		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.anchor = input;
+			self
+		}
+		/// Amount of invoices to return.
+		pub fn limit(mut self, input: i32) -> Self {
+			self.limit = Some(input);
+			self
+		}
+		/// Amount of invoices to return.
+		pub fn set_limit(mut self, input: std::option::Option<i32>) -> Self {
+			self.limit = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GetGroupInvoicesListInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GetGroupInvoicesListInput {
+				group_id: self.group_id,
+				anchor: self.anchor,
+				limit: self.limit,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GetGroupInvoicesListInputOperationOutputAlias = crate::operation::GetGroupInvoicesList;
+#[doc(hidden)]
+pub type GetGroupInvoicesListInputOperationRetryAlias = ();
+impl GetGroupInvoicesListInput {
+	/// Consumes the builder and constructs an Operation<[`GetGroupInvoicesList`](crate::operation::GetGroupInvoicesList)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GetGroupInvoicesList, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GetGroupInvoicesListInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_31 = &_input.group_id;
+				let input_31 = input_31.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let group_id = aws_smithy_http::label::fmt_string(input_31, false);
+				if group_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/groups/{group_id}/billing/invoices",
+					group_id = group_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			fn uri_query(
+				_input: &crate::input::GetGroupInvoicesListInput,
+				mut output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let mut query = aws_smithy_http::query::Writer::new(&mut output);
+				if let Some(inner_32) = &_input.anchor {
+					query.push_kv("anchor", &aws_smithy_http::query::fmt_string(&inner_32));
+				}
+				if let Some(inner_33) = &_input.limit {
+					query.push_kv(
+						"limit",
+						aws_smithy_types::primitive::Encoder::from(*inner_33).encode(),
+					);
+				}
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GetGroupInvoicesListInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				uri_query(input, &mut _uri)?;
+				Ok(builder.method("GET").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GetGroupInvoicesList::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GetGroupInvoicesList",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
+	pub fn builder() -> crate::input::get_group_invoices_list_input::Builder {
+		crate::input::get_group_invoices_list_input::Builder::default()
+	}
+}
+
+/// See [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
+pub mod get_group_payments_list_input {
+	/// A builder for [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) group_id: std::option::Option<std::string::String>,
+		pub(crate) start_payment_id: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
+			self
+		}
+		/// The payment ID of the payment after which to start listing.
+		pub fn start_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.start_payment_id = Some(input.into());
+			self
+		}
+		/// The payment ID of the payment after which to start listing.
+		pub fn set_start_payment_id(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.start_payment_id = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GetGroupPaymentsListInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GetGroupPaymentsListInput {
+				group_id: self.group_id,
+				start_payment_id: self.start_payment_id,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GetGroupPaymentsListInputOperationOutputAlias = crate::operation::GetGroupPaymentsList;
+#[doc(hidden)]
+pub type GetGroupPaymentsListInputOperationRetryAlias = ();
+impl GetGroupPaymentsListInput {
+	/// Consumes the builder and constructs an Operation<[`GetGroupPaymentsList`](crate::operation::GetGroupPaymentsList)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GetGroupPaymentsList, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GetGroupPaymentsListInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_34 = &_input.group_id;
+				let input_34 = input_34.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let group_id = aws_smithy_http::label::fmt_string(input_34, false);
+				if group_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/groups/{group_id}/billing/payments",
+					group_id = group_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			fn uri_query(
+				_input: &crate::input::GetGroupPaymentsListInput,
+				mut output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let mut query = aws_smithy_http::query::Writer::new(&mut output);
+				if let Some(inner_35) = &_input.start_payment_id {
+					query.push_kv(
+						"start_payment_id",
+						&aws_smithy_http::query::fmt_string(&inner_35),
+					);
+				}
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GetGroupPaymentsListInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				uri_query(input, &mut _uri)?;
+				Ok(builder.method("GET").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GetGroupPaymentsList::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GetGroupPaymentsList",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
+	pub fn builder() -> crate::input::get_group_payments_list_input::Builder {
+		crate::input::get_group_payments_list_input::Builder::default()
+	}
+}
+
+/// See [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
+pub mod get_group_transfers_list_input {
+	/// A builder for [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) group_id: std::option::Option<std::string::String>,
+		pub(crate) start_transfer_id: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
+			self
+		}
+		/// The transfer ID of the transfer after which to start listing.
+		pub fn start_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.start_transfer_id = Some(input.into());
+			self
+		}
+		/// The transfer ID of the transfer after which to start listing.
+		pub fn set_start_transfer_id(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.start_transfer_id = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::GetGroupTransfersListInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::GetGroupTransfersListInput {
+				group_id: self.group_id,
+				start_transfer_id: self.start_transfer_id,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type GetGroupTransfersListInputOperationOutputAlias = crate::operation::GetGroupTransfersList;
+#[doc(hidden)]
+pub type GetGroupTransfersListInputOperationRetryAlias = ();
+impl GetGroupTransfersListInput {
+	/// Consumes the builder and constructs an Operation<[`GetGroupTransfersList`](crate::operation::GetGroupTransfersList)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::GetGroupTransfersList, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::GetGroupTransfersListInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_36 = &_input.group_id;
+				let input_36 = input_36.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let group_id = aws_smithy_http::label::fmt_string(input_36, false);
+				if group_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/groups/{group_id}/billing/transfers",
+					group_id = group_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			fn uri_query(
+				_input: &crate::input::GetGroupTransfersListInput,
+				mut output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let mut query = aws_smithy_http::query::Writer::new(&mut output);
+				if let Some(inner_37) = &_input.start_transfer_id {
+					query.push_kv(
+						"start_transfer_id",
+						&aws_smithy_http::query::fmt_string(&inner_37),
+					);
+				}
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::GetGroupTransfersListInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				uri_query(input, &mut _uri)?;
+				Ok(builder.method("GET").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::GetGroupTransfersList::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"GetGroupTransfersList",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
+	pub fn builder() -> crate::input::get_group_transfers_list_input::Builder {
+		crate::input::get_group_transfers_list_input::Builder::default()
+	}
+}
+
 /// See [`GetNamespaceAnalyticsMatchmakerLiveInput`](crate::input::GetNamespaceAnalyticsMatchmakerLiveInput)
 pub mod get_namespace_analytics_matchmaker_live_input {
 	/// A builder for [`GetNamespaceAnalyticsMatchmakerLiveInput`](crate::input::GetNamespaceAnalyticsMatchmakerLiveInput)
@@ -2285,22 +3592,22 @@ pub mod get_namespace_analytics_matchmaker_live_input {
 		pub(crate) namespace_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
@@ -2344,28 +3651,28 @@ impl GetNamespaceAnalyticsMatchmakerLiveInput {
 				_input: &crate::input::GetNamespaceAnalyticsMatchmakerLiveInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_20 = &_input.game_id;
-				let input_20 = input_20.as_ref().ok_or(
+				let input_38 = &_input.game_id;
+				let input_38 = input_38.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_20, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_38, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_21 = &_input.namespace_id;
-				let input_21 = input_21.as_ref().ok_or(
+				let input_39 = &_input.namespace_id;
+				let input_39 = input_39.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_21, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_39, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -2436,32 +3743,32 @@ pub mod get_namespace_lobby_input {
 		pub(crate) lobby_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn lobby_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.lobby_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.lobby_id = input;
 			self
@@ -2502,42 +3809,42 @@ impl GetNamespaceLobbyInput {
 				_input: &crate::input::GetNamespaceLobbyInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_22 = &_input.game_id;
-				let input_22 = input_22.as_ref().ok_or(
+				let input_40 = &_input.game_id;
+				let input_40 = input_40.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_22, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_40, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_23 = &_input.namespace_id;
-				let input_23 = input_23.as_ref().ok_or(
+				let input_41 = &_input.namespace_id;
+				let input_41 = input_41.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_23, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_41, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_24 = &_input.lobby_id;
-				let input_24 = input_24.as_ref().ok_or(
+				let input_42 = &_input.lobby_id;
+				let input_42 = input_42.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "lobby_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let lobby_id = aws_smithy_http::label::fmt_string(input_24, false);
+				let lobby_id = aws_smithy_http::label::fmt_string(input_42, false);
 				if lobby_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "lobby_id",
@@ -2607,12 +3914,12 @@ pub mod get_ray_perf_logs_input {
 		pub(crate) ray_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn ray_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.ray_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_ray_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.ray_id = input;
 			self
@@ -2651,14 +3958,14 @@ impl GetRayPerfLogsInput {
 				_input: &crate::input::GetRayPerfLogsInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_25 = &_input.ray_id;
-				let input_25 = input_25.as_ref().ok_or(
+				let input_43 = &_input.ray_id;
+				let input_43 = input_43.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "ray_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let ray_id = aws_smithy_http::label::fmt_string(input_25, false);
+				let ray_id = aws_smithy_http::label::fmt_string(input_43, false);
 				if ray_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "ray_id",
@@ -2799,68 +4106,56 @@ impl GetRegionTiersInput {
 	}
 }
 
-/// See [`GetTeamBillingInput`](crate::input::GetTeamBillingInput)
-pub mod get_team_billing_input {
-	/// A builder for [`GetTeamBillingInput`](crate::input::GetTeamBillingInput)
+/// See [`GroupBillingCheckoutInput`](crate::input::GroupBillingCheckoutInput)
+pub mod group_billing_checkout_input {
+	/// A builder for [`GroupBillingCheckoutInput`](crate::input::GroupBillingCheckoutInput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) team_id: std::option::Option<std::string::String>,
-		pub(crate) query_start: std::option::Option<i64>,
-		pub(crate) query_end: std::option::Option<i64>,
+		pub(crate) group_id: std::option::Option<std::string::String>,
+		pub(crate) amount: std::option::Option<i64>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.team_id = Some(input.into());
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.team_id = input;
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn query_start(mut self, input: i64) -> Self {
-			self.query_start = Some(input);
+		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
+		pub fn amount(mut self, input: i64) -> Self {
+			self.amount = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_query_start(mut self, input: std::option::Option<i64>) -> Self {
-			self.query_start = input;
+		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
+		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
+			self.amount = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn query_end(mut self, input: i64) -> Self {
-			self.query_end = Some(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_query_end(mut self, input: std::option::Option<i64>) -> Self {
-			self.query_end = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetTeamBillingInput`](crate::input::GetTeamBillingInput)
+		/// Consumes the builder and constructs a [`GroupBillingCheckoutInput`](crate::input::GroupBillingCheckoutInput)
 		pub fn build(
 			self,
 		) -> std::result::Result<
-			crate::input::GetTeamBillingInput,
+			crate::input::GroupBillingCheckoutInput,
 			aws_smithy_http::operation::BuildError,
 		> {
-			Ok(crate::input::GetTeamBillingInput {
-				team_id: self.team_id,
-				query_start: self.query_start,
-				query_end: self.query_end,
+			Ok(crate::input::GroupBillingCheckoutInput {
+				group_id: self.group_id,
+				amount: self.amount,
 			})
 		}
 	}
 }
 #[doc(hidden)]
-pub type GetTeamBillingInputOperationOutputAlias = crate::operation::GetTeamBilling;
+pub type GroupBillingCheckoutInputOperationOutputAlias = crate::operation::GroupBillingCheckout;
 #[doc(hidden)]
-pub type GetTeamBillingInputOperationRetryAlias = ();
-impl GetTeamBillingInput {
-	/// Consumes the builder and constructs an Operation<[`GetTeamBilling`](crate::operation::GetTeamBilling)>
+pub type GroupBillingCheckoutInputOperationRetryAlias = ();
+impl GroupBillingCheckoutInput {
+	/// Consumes the builder and constructs an Operation<[`GroupBillingCheckout`](crate::operation::GroupBillingCheckout)>
 	#[allow(unused_mut)]
 	#[allow(clippy::let_and_return)]
 	#[allow(clippy::needless_borrow)]
@@ -2868,54 +4163,35 @@ impl GetTeamBillingInput {
 		&self,
 		_config: &crate::config::Config,
 	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::GetTeamBilling, ()>,
+		aws_smithy_http::operation::Operation<crate::operation::GroupBillingCheckout, ()>,
 		aws_smithy_http::operation::BuildError,
 	> {
 		let mut request = {
 			fn uri_base(
-				_input: &crate::input::GetTeamBillingInput,
+				_input: &crate::input::GroupBillingCheckoutInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_26 = &_input.team_id;
-				let input_26 = input_26.as_ref().ok_or(
+				let input_44 = &_input.group_id;
+				let input_44 = input_44.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
+						field: "group_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let team_id = aws_smithy_http::label::fmt_string(input_26, false);
-				if team_id.is_empty() {
+				let group_id = aws_smithy_http::label::fmt_string(input_44, false);
+				if group_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
+						field: "group_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				write!(output, "/teams/{team_id}/billing", team_id = team_id)
+				write!(output, "/groups/{group_id}/checkout", group_id = group_id)
 					.expect("formatting should succeed");
 				Ok(())
 			}
-			fn uri_query(
-				_input: &crate::input::GetTeamBillingInput,
-				mut output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_27) = &_input.query_start {
-					query.push_kv(
-						"query_start",
-						aws_smithy_types::primitive::Encoder::from(*inner_27).encode(),
-					);
-				}
-				if let Some(inner_28) = &_input.query_end {
-					query.push_kv(
-						"query_end",
-						aws_smithy_types::primitive::Encoder::from(*inner_28).encode(),
-					);
-				}
-				Ok(())
-			}
 			#[allow(clippy::unnecessary_wraps)]
 			fn update_http_builder(
-				input: &crate::input::GetTeamBillingInput,
+				input: &crate::input::GroupBillingCheckoutInput,
 				_config: &crate::config::Config,
 				builder: http::request::Builder,
 			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
@@ -2923,8 +4199,7 @@ impl GetTeamBillingInput {
 				let mut _uri = String::new();
 				_uri = format!("{}{}", _config.uri.clone(), _uri);
 				uri_base(input, &mut _uri)?;
-				uri_query(input, &mut _uri)?;
-				Ok(builder.method("GET").uri(_uri))
+				Ok(builder.method("POST").uri(_uri))
 			}
 			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
 			let mut builder = if let Some(auth) = &_config.auth {
@@ -2932,11 +4207,27 @@ impl GetTeamBillingInput {
 			} else {
 				builder
 			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
 			builder
 		};
 		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
 		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from("");
+		let body = aws_smithy_http::body::SdkBody::from(
+			crate::operation_ser::serialize_operation_crate_operation_group_billing_checkout(
+				&self,
+			)?,
+		);
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
 		let request = request.body(body).expect("should be valid request");
 		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
 		request
@@ -2944,313 +4235,17 @@ impl GetTeamBillingInput {
 			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
 		let op = aws_smithy_http::operation::Operation::new(
 			request,
-			crate::operation::GetTeamBilling::new(),
+			crate::operation::GroupBillingCheckout::new(),
 		)
 		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"GetTeamBilling",
+			"GroupBillingCheckout",
 			"CloudService",
 		));
 		Ok(op)
 	}
-	/// Creates a new builder-style object to manufacture [`GetTeamBillingInput`](crate::input::GetTeamBillingInput)
-	pub fn builder() -> crate::input::get_team_billing_input::Builder {
-		crate::input::get_team_billing_input::Builder::default()
-	}
-}
-
-/// See [`GetTeamPaymentsListInput`](crate::input::GetTeamPaymentsListInput)
-pub mod get_team_payments_list_input {
-	/// A builder for [`GetTeamPaymentsListInput`](crate::input::GetTeamPaymentsListInput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) team_id: std::option::Option<std::string::String>,
-		pub(crate) start_payment_id: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.team_id = Some(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.team_id = input;
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn start_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.start_payment_id = Some(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_start_payment_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.start_payment_id = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetTeamPaymentsListInput`](crate::input::GetTeamPaymentsListInput)
-		pub fn build(
-			self,
-		) -> std::result::Result<
-			crate::input::GetTeamPaymentsListInput,
-			aws_smithy_http::operation::BuildError,
-		> {
-			Ok(crate::input::GetTeamPaymentsListInput {
-				team_id: self.team_id,
-				start_payment_id: self.start_payment_id,
-			})
-		}
-	}
-}
-#[doc(hidden)]
-pub type GetTeamPaymentsListInputOperationOutputAlias = crate::operation::GetTeamPaymentsList;
-#[doc(hidden)]
-pub type GetTeamPaymentsListInputOperationRetryAlias = ();
-impl GetTeamPaymentsListInput {
-	/// Consumes the builder and constructs an Operation<[`GetTeamPaymentsList`](crate::operation::GetTeamPaymentsList)>
-	#[allow(unused_mut)]
-	#[allow(clippy::let_and_return)]
-	#[allow(clippy::needless_borrow)]
-	pub async fn make_operation(
-		&self,
-		_config: &crate::config::Config,
-	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::GetTeamPaymentsList, ()>,
-		aws_smithy_http::operation::BuildError,
-	> {
-		let mut request = {
-			fn uri_base(
-				_input: &crate::input::GetTeamPaymentsListInput,
-				output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_29 = &_input.team_id;
-				let input_29 = input_29.as_ref().ok_or(
-					aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
-						details: "cannot be empty or unset",
-					},
-				)?;
-				let team_id = aws_smithy_http::label::fmt_string(input_29, false);
-				if team_id.is_empty() {
-					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
-						details: "cannot be empty or unset",
-					});
-				}
-				write!(
-					output,
-					"/teams/{team_id}/billing/payments",
-					team_id = team_id
-				)
-				.expect("formatting should succeed");
-				Ok(())
-			}
-			fn uri_query(
-				_input: &crate::input::GetTeamPaymentsListInput,
-				mut output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_30) = &_input.start_payment_id {
-					query.push_kv(
-						"start_payment_id",
-						&aws_smithy_http::query::fmt_string(&inner_30),
-					);
-				}
-				Ok(())
-			}
-			#[allow(clippy::unnecessary_wraps)]
-			fn update_http_builder(
-				input: &crate::input::GetTeamPaymentsListInput,
-				_config: &crate::config::Config,
-				builder: http::request::Builder,
-			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
-			{
-				let mut _uri = String::new();
-				_uri = format!("{}{}", _config.uri.clone(), _uri);
-				uri_base(input, &mut _uri)?;
-				uri_query(input, &mut _uri)?;
-				Ok(builder.method("GET").uri(_uri))
-			}
-			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
-			let mut builder = if let Some(auth) = &_config.auth {
-				builder.header(http::header::AUTHORIZATION, auth.clone())
-			} else {
-				builder
-			};
-			builder
-		};
-		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
-		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from("");
-		let request = request.body(body).expect("should be valid request");
-		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
-		request
-			.properties_mut()
-			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
-		let op = aws_smithy_http::operation::Operation::new(
-			request,
-			crate::operation::GetTeamPaymentsList::new(),
-		)
-		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"GetTeamPaymentsList",
-			"CloudService",
-		));
-		Ok(op)
-	}
-	/// Creates a new builder-style object to manufacture [`GetTeamPaymentsListInput`](crate::input::GetTeamPaymentsListInput)
-	pub fn builder() -> crate::input::get_team_payments_list_input::Builder {
-		crate::input::get_team_payments_list_input::Builder::default()
-	}
-}
-
-/// See [`GetTeamTransfersListInput`](crate::input::GetTeamTransfersListInput)
-pub mod get_team_transfers_list_input {
-	/// A builder for [`GetTeamTransfersListInput`](crate::input::GetTeamTransfersListInput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) team_id: std::option::Option<std::string::String>,
-		pub(crate) start_transfer_id: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.team_id = Some(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.team_id = input;
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn start_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.start_transfer_id = Some(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_start_transfer_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.start_transfer_id = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetTeamTransfersListInput`](crate::input::GetTeamTransfersListInput)
-		pub fn build(
-			self,
-		) -> std::result::Result<
-			crate::input::GetTeamTransfersListInput,
-			aws_smithy_http::operation::BuildError,
-		> {
-			Ok(crate::input::GetTeamTransfersListInput {
-				team_id: self.team_id,
-				start_transfer_id: self.start_transfer_id,
-			})
-		}
-	}
-}
-#[doc(hidden)]
-pub type GetTeamTransfersListInputOperationOutputAlias = crate::operation::GetTeamTransfersList;
-#[doc(hidden)]
-pub type GetTeamTransfersListInputOperationRetryAlias = ();
-impl GetTeamTransfersListInput {
-	/// Consumes the builder and constructs an Operation<[`GetTeamTransfersList`](crate::operation::GetTeamTransfersList)>
-	#[allow(unused_mut)]
-	#[allow(clippy::let_and_return)]
-	#[allow(clippy::needless_borrow)]
-	pub async fn make_operation(
-		&self,
-		_config: &crate::config::Config,
-	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::GetTeamTransfersList, ()>,
-		aws_smithy_http::operation::BuildError,
-	> {
-		let mut request = {
-			fn uri_base(
-				_input: &crate::input::GetTeamTransfersListInput,
-				output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_31 = &_input.team_id;
-				let input_31 = input_31.as_ref().ok_or(
-					aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
-						details: "cannot be empty or unset",
-					},
-				)?;
-				let team_id = aws_smithy_http::label::fmt_string(input_31, false);
-				if team_id.is_empty() {
-					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
-						details: "cannot be empty or unset",
-					});
-				}
-				write!(
-					output,
-					"/teams/{team_id}/billing/transfers",
-					team_id = team_id
-				)
-				.expect("formatting should succeed");
-				Ok(())
-			}
-			fn uri_query(
-				_input: &crate::input::GetTeamTransfersListInput,
-				mut output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_32) = &_input.start_transfer_id {
-					query.push_kv(
-						"start_transfer_id",
-						&aws_smithy_http::query::fmt_string(&inner_32),
-					);
-				}
-				Ok(())
-			}
-			#[allow(clippy::unnecessary_wraps)]
-			fn update_http_builder(
-				input: &crate::input::GetTeamTransfersListInput,
-				_config: &crate::config::Config,
-				builder: http::request::Builder,
-			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
-			{
-				let mut _uri = String::new();
-				_uri = format!("{}{}", _config.uri.clone(), _uri);
-				uri_base(input, &mut _uri)?;
-				uri_query(input, &mut _uri)?;
-				Ok(builder.method("GET").uri(_uri))
-			}
-			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
-			let mut builder = if let Some(auth) = &_config.auth {
-				builder.header(http::header::AUTHORIZATION, auth.clone())
-			} else {
-				builder
-			};
-			builder
-		};
-		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
-		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from("");
-		let request = request.body(body).expect("should be valid request");
-		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
-		request
-			.properties_mut()
-			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
-		let op = aws_smithy_http::operation::Operation::new(
-			request,
-			crate::operation::GetTeamTransfersList::new(),
-		)
-		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"GetTeamTransfersList",
-			"CloudService",
-		));
-		Ok(op)
-	}
-	/// Creates a new builder-style object to manufacture [`GetTeamTransfersListInput`](crate::input::GetTeamTransfersListInput)
-	pub fn builder() -> crate::input::get_team_transfers_list_input::Builder {
-		crate::input::get_team_transfers_list_input::Builder::default()
+	/// Creates a new builder-style object to manufacture [`GroupBillingCheckoutInput`](crate::input::GroupBillingCheckoutInput)
+	pub fn builder() -> crate::input::group_billing_checkout_input::Builder {
+		crate::input::group_billing_checkout_input::Builder::default()
 	}
 }
 
@@ -3345,12 +4340,12 @@ pub mod list_game_builds_input {
 		pub(crate) game_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
@@ -3389,14 +4384,14 @@ impl ListGameBuildsInput {
 				_input: &crate::input::ListGameBuildsInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_33 = &_input.game_id;
-				let input_33 = input_33.as_ref().ok_or(
+				let input_45 = &_input.game_id;
+				let input_45 = input_45.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_33, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_45, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -3460,12 +4455,12 @@ pub mod list_game_cdn_sites_input {
 		pub(crate) game_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
@@ -3504,14 +4499,14 @@ impl ListGameCdnSitesInput {
 				_input: &crate::input::ListGameCdnSitesInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_34 = &_input.game_id;
-				let input_34 = input_34.as_ref().ok_or(
+				let input_46 = &_input.game_id;
+				let input_46 = input_46.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_34, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_46, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -3574,36 +4569,39 @@ pub mod list_namespace_lobbies_input {
 	pub struct Builder {
 		pub(crate) game_id: std::option::Option<std::string::String>,
 		pub(crate) namespace_id: std::option::Option<std::string::String>,
-		pub(crate) before_create_ts: std::option::Option<i64>,
+		pub(crate) before_create_ts: std::option::Option<aws_smithy_types::DateTime>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn before_create_ts(mut self, input: i64) -> Self {
+		/// Returns lobbies created before this timestamp.
+		pub fn before_create_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
 			self.before_create_ts = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_before_create_ts(mut self, input: std::option::Option<i64>) -> Self {
+		/// Returns lobbies created before this timestamp.
+		pub fn set_before_create_ts(
+			mut self,
+			input: std::option::Option<aws_smithy_types::DateTime>,
+		) -> Self {
 			self.before_create_ts = input;
 			self
 		}
@@ -3643,28 +4641,28 @@ impl ListNamespaceLobbiesInput {
 				_input: &crate::input::ListNamespaceLobbiesInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_35 = &_input.game_id;
-				let input_35 = input_35.as_ref().ok_or(
+				let input_47 = &_input.game_id;
+				let input_47 = input_47.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_35, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_47, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_36 = &_input.namespace_id;
-				let input_36 = input_36.as_ref().ok_or(
+				let input_48 = &_input.namespace_id;
+				let input_48 = input_48.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_36, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_48, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -3685,10 +4683,13 @@ impl ListNamespaceLobbiesInput {
 				mut output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
 				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_37) = &_input.before_create_ts {
+				if let Some(inner_49) = &_input.before_create_ts {
 					query.push_kv(
 						"before_create_ts",
-						aws_smithy_types::primitive::Encoder::from(*inner_37).encode(),
+						&aws_smithy_http::query::fmt_timestamp(
+							inner_49,
+							aws_smithy_types::date_time::Format::DateTime,
+						)?,
 					);
 				}
 				Ok(())
@@ -3749,32 +4750,32 @@ pub mod remove_namespace_domain_input {
 		pub(crate) domain: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn domain(mut self, input: impl Into<std::string::String>) -> Self {
 			self.domain = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.domain = input;
 			self
@@ -3815,42 +4816,42 @@ impl RemoveNamespaceDomainInput {
 				_input: &crate::input::RemoveNamespaceDomainInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_38 = &_input.game_id;
-				let input_38 = input_38.as_ref().ok_or(
+				let input_50 = &_input.game_id;
+				let input_50 = input_50.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_38, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_50, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_39 = &_input.namespace_id;
-				let input_39 = input_39.as_ref().ok_or(
+				let input_51 = &_input.namespace_id;
+				let input_51 = input_51.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_39, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_51, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_40 = &_input.domain;
-				let input_40 = input_40.as_ref().ok_or(
+				let input_52 = &_input.domain;
+				let input_52 = input_52.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let domain = aws_smithy_http::label::fmt_string(input_40, false);
+				let domain = aws_smithy_http::label::fmt_string(input_52, false);
 				if domain.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
@@ -3911,147 +4912,6 @@ impl RemoveNamespaceDomainInput {
 	}
 }
 
-/// See [`TeamBillingCheckoutInput`](crate::input::TeamBillingCheckoutInput)
-pub mod team_billing_checkout_input {
-	/// A builder for [`TeamBillingCheckoutInput`](crate::input::TeamBillingCheckoutInput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) team_id: std::option::Option<std::string::String>,
-		pub(crate) amount: std::option::Option<i64>,
-	}
-	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.team_id = Some(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.team_id = input;
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn amount(mut self, input: i64) -> Self {
-			self.amount = Some(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
-			self.amount = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`TeamBillingCheckoutInput`](crate::input::TeamBillingCheckoutInput)
-		pub fn build(
-			self,
-		) -> std::result::Result<
-			crate::input::TeamBillingCheckoutInput,
-			aws_smithy_http::operation::BuildError,
-		> {
-			Ok(crate::input::TeamBillingCheckoutInput {
-				team_id: self.team_id,
-				amount: self.amount,
-			})
-		}
-	}
-}
-#[doc(hidden)]
-pub type TeamBillingCheckoutInputOperationOutputAlias = crate::operation::TeamBillingCheckout;
-#[doc(hidden)]
-pub type TeamBillingCheckoutInputOperationRetryAlias = ();
-impl TeamBillingCheckoutInput {
-	/// Consumes the builder and constructs an Operation<[`TeamBillingCheckout`](crate::operation::TeamBillingCheckout)>
-	#[allow(unused_mut)]
-	#[allow(clippy::let_and_return)]
-	#[allow(clippy::needless_borrow)]
-	pub async fn make_operation(
-		&self,
-		_config: &crate::config::Config,
-	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::TeamBillingCheckout, ()>,
-		aws_smithy_http::operation::BuildError,
-	> {
-		let mut request = {
-			fn uri_base(
-				_input: &crate::input::TeamBillingCheckoutInput,
-				output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_41 = &_input.team_id;
-				let input_41 = input_41.as_ref().ok_or(
-					aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
-						details: "cannot be empty or unset",
-					},
-				)?;
-				let team_id = aws_smithy_http::label::fmt_string(input_41, false);
-				if team_id.is_empty() {
-					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "team_id",
-						details: "cannot be empty or unset",
-					});
-				}
-				write!(output, "/teams/{team_id}/checkout", team_id = team_id)
-					.expect("formatting should succeed");
-				Ok(())
-			}
-			#[allow(clippy::unnecessary_wraps)]
-			fn update_http_builder(
-				input: &crate::input::TeamBillingCheckoutInput,
-				_config: &crate::config::Config,
-				builder: http::request::Builder,
-			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
-			{
-				let mut _uri = String::new();
-				_uri = format!("{}{}", _config.uri.clone(), _uri);
-				uri_base(input, &mut _uri)?;
-				Ok(builder.method("POST").uri(_uri))
-			}
-			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
-			let mut builder = if let Some(auth) = &_config.auth {
-				builder.header(http::header::AUTHORIZATION, auth.clone())
-			} else {
-				builder
-			};
-			builder = aws_smithy_http::header::set_request_header_if_absent(
-				builder,
-				http::header::CONTENT_TYPE,
-				"application/json",
-			);
-			builder
-		};
-		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
-		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from(
-			crate::operation_ser::serialize_operation_crate_operation_team_billing_checkout(&self)?,
-		);
-		if let Some(content_length) = body.content_length() {
-			request = aws_smithy_http::header::set_request_header_if_absent(
-				request,
-				http::header::CONTENT_LENGTH,
-				content_length,
-			);
-		}
-		let request = request.body(body).expect("should be valid request");
-		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
-		request
-			.properties_mut()
-			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
-		let op = aws_smithy_http::operation::Operation::new(
-			request,
-			crate::operation::TeamBillingCheckout::new(),
-		)
-		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"TeamBillingCheckout",
-			"CloudService",
-		));
-		Ok(op)
-	}
-	/// Creates a new builder-style object to manufacture [`TeamBillingCheckoutInput`](crate::input::TeamBillingCheckoutInput)
-	pub fn builder() -> crate::input::team_billing_checkout_input::Builder {
-		crate::input::team_billing_checkout_input::Builder::default()
-	}
-}
-
 /// See [`ToggleNamespaceDomainPublicAuthInput`](crate::input::ToggleNamespaceDomainPublicAuthInput)
 pub mod toggle_namespace_domain_public_auth_input {
 	/// A builder for [`ToggleNamespaceDomainPublicAuthInput`](crate::input::ToggleNamespaceDomainPublicAuthInput)
@@ -4063,32 +4923,32 @@ pub mod toggle_namespace_domain_public_auth_input {
 		pub(crate) enabled: std::option::Option<bool>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Whether or not to enable authentication based on domain.
 		pub fn enabled(mut self, input: bool) -> Self {
 			self.enabled = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Whether or not to enable authentication based on domain.
 		pub fn set_enabled(mut self, input: std::option::Option<bool>) -> Self {
 			self.enabled = input;
 			self
@@ -4133,28 +4993,28 @@ impl ToggleNamespaceDomainPublicAuthInput {
 				_input: &crate::input::ToggleNamespaceDomainPublicAuthInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_42 = &_input.game_id;
-				let input_42 = input_42.as_ref().ok_or(
+				let input_53 = &_input.game_id;
+				let input_53 = input_53.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_42, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_53, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_43 = &_input.namespace_id;
-				let input_43 = input_43.as_ref().ok_or(
+				let input_54 = &_input.namespace_id;
+				let input_54 = input_54.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_43, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_54, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -4239,42 +5099,42 @@ pub mod update_game_namespace_matchmaker_config_input {
 		pub(crate) max_players: std::option::Option<i32>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn lobby_count_max(mut self, input: i32) -> Self {
 			self.lobby_count_max = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_lobby_count_max(mut self, input: std::option::Option<i32>) -> Self {
 			self.lobby_count_max = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn max_players(mut self, input: i32) -> Self {
 			self.max_players = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_max_players(mut self, input: std::option::Option<i32>) -> Self {
 			self.max_players = input;
 			self
@@ -4320,28 +5180,28 @@ impl UpdateGameNamespaceMatchmakerConfigInput {
 				_input: &crate::input::UpdateGameNamespaceMatchmakerConfigInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_44 = &_input.game_id;
-				let input_44 = input_44.as_ref().ok_or(
+				let input_55 = &_input.game_id;
+				let input_55 = input_55.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_44, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_55, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_45 = &_input.namespace_id;
-				let input_45 = input_45.as_ref().ok_or(
+				let input_56 = &_input.namespace_id;
+				let input_56 = input_56.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_45, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_56, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -4425,32 +5285,32 @@ pub mod update_game_namespace_version_input {
 		pub(crate) version_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.version_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.version_id = input;
 			self
@@ -4492,28 +5352,28 @@ impl UpdateGameNamespaceVersionInput {
 				_input: &crate::input::UpdateGameNamespaceVersionInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_46 = &_input.game_id;
-				let input_46 = input_46.as_ref().ok_or(
+				let input_57 = &_input.game_id;
+				let input_57 = input_57.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_46, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_57, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_47 = &_input.namespace_id;
-				let input_47 = input_47.as_ref().ok_or(
+				let input_58 = &_input.namespace_id;
+				let input_58 = input_58.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_47, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_58, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -4597,32 +5457,32 @@ pub mod update_namespace_domain_input {
 		pub(crate) domain: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn domain(mut self, input: impl Into<std::string::String>) -> Self {
 			self.domain = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.domain = input;
 			self
@@ -4663,42 +5523,42 @@ impl UpdateNamespaceDomainInput {
 				_input: &crate::input::UpdateNamespaceDomainInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_48 = &_input.game_id;
-				let input_48 = input_48.as_ref().ok_or(
+				let input_59 = &_input.game_id;
+				let input_59 = input_59.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_48, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_59, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_49 = &_input.namespace_id;
-				let input_49 = input_49.as_ref().ok_or(
+				let input_60 = &_input.namespace_id;
+				let input_60 = input_60.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_49, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_60, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_50 = &_input.domain;
-				let input_50 = input_50.as_ref().ok_or(
+				let input_61 = &_input.domain;
+				let input_61 = input_61.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let domain = aws_smithy_http::label::fmt_string(input_50, false);
+				let domain = aws_smithy_http::label::fmt_string(input_61, false);
 				if domain.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
@@ -4769,22 +5629,22 @@ pub mod validate_game_input {
 		pub(crate) name_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.name_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.name_id = input;
 			self
@@ -4896,32 +5756,32 @@ pub mod validate_game_namespace_input {
 		pub(crate) name_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.name_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.name_id = input;
 			self
@@ -4962,14 +5822,14 @@ impl ValidateGameNamespaceInput {
 				_input: &crate::input::ValidateGameNamespaceInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_51 = &_input.game_id;
-				let input_51 = input_51.as_ref().ok_or(
+				let input_62 = &_input.game_id;
+				let input_62 = input_62.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_51, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_62, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5056,42 +5916,42 @@ pub mod validate_game_namespace_matchmaker_config_input {
 		pub(crate) max_players: std::option::Option<i32>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn lobby_count_max(mut self, input: i32) -> Self {
 			self.lobby_count_max = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_lobby_count_max(mut self, input: std::option::Option<i32>) -> Self {
 			self.lobby_count_max = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn max_players(mut self, input: i32) -> Self {
 			self.max_players = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_max_players(mut self, input: std::option::Option<i32>) -> Self {
 			self.max_players = input;
 			self
@@ -5137,28 +5997,28 @@ impl ValidateGameNamespaceMatchmakerConfigInput {
 				_input: &crate::input::ValidateGameNamespaceMatchmakerConfigInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_52 = &_input.game_id;
-				let input_52 = input_52.as_ref().ok_or(
+				let input_63 = &_input.game_id;
+				let input_63 = input_63.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_52, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_63, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_53 = &_input.namespace_id;
-				let input_53 = input_53.as_ref().ok_or(
+				let input_64 = &_input.namespace_id;
+				let input_64 = input_64.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_53, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_64, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -5244,22 +6104,22 @@ pub mod validate_game_namespace_token_development_input {
 			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
@@ -5278,13 +6138,14 @@ pub mod validate_game_namespace_token_development_input {
 		///
 		/// To override the contents of this collection use [`set_lobby_ports`](Self::set_lobby_ports).
 		///
+		/// A list of docker ports.
 		pub fn lobby_ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
 			let mut v = self.lobby_ports.unwrap_or_default();
 			v.push(input);
 			self.lobby_ports = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of docker ports.
 		pub fn set_lobby_ports(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
@@ -5333,28 +6194,28 @@ impl ValidateGameNamespaceTokenDevelopmentInput {
 				_input: &crate::input::ValidateGameNamespaceTokenDevelopmentInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_54 = &_input.game_id;
-				let input_54 = input_54.as_ref().ok_or(
+				let input_65 = &_input.game_id;
+				let input_65 = input_65.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_54, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_65, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_55 = &_input.namespace_id;
-				let input_55 = input_55.as_ref().ok_or(
+				let input_66 = &_input.namespace_id;
+				let input_66 = input_66.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_55, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_66, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -5438,32 +6299,32 @@ pub mod validate_game_version_input {
 		pub(crate) config: std::option::Option<crate::model::CloudVersionConfig>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn config(mut self, input: crate::model::CloudVersionConfig) -> Self {
 			self.config = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn set_config(
 			mut self,
 			input: std::option::Option<crate::model::CloudVersionConfig>,
@@ -5507,14 +6368,14 @@ impl ValidateGameVersionInput {
 				_input: &crate::input::ValidateGameVersionInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_56 = &_input.game_id;
-				let input_56 = input_56.as_ref().ok_or(
+				let input_67 = &_input.game_id;
+				let input_67 = input_67.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_56, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_67, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5587,44 +6448,44 @@ impl ValidateGameVersionInput {
 	}
 }
 
-/// See [`ValidateTeamInput`](crate::input::ValidateTeamInput)
-pub mod validate_team_input {
-	/// A builder for [`ValidateTeamInput`](crate::input::ValidateTeamInput)
+/// See [`ValidateGroupInput`](crate::input::ValidateGroupInput)
+pub mod validate_group_input {
+	/// A builder for [`ValidateGroupInput`](crate::input::ValidateGroupInput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) display_name: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.display_name = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.display_name = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`ValidateTeamInput`](crate::input::ValidateTeamInput)
+		/// Consumes the builder and constructs a [`ValidateGroupInput`](crate::input::ValidateGroupInput)
 		pub fn build(
 			self,
 		) -> std::result::Result<
-			crate::input::ValidateTeamInput,
+			crate::input::ValidateGroupInput,
 			aws_smithy_http::operation::BuildError,
 		> {
-			Ok(crate::input::ValidateTeamInput {
+			Ok(crate::input::ValidateGroupInput {
 				display_name: self.display_name,
 			})
 		}
 	}
 }
 #[doc(hidden)]
-pub type ValidateTeamInputOperationOutputAlias = crate::operation::ValidateTeam;
+pub type ValidateGroupInputOperationOutputAlias = crate::operation::ValidateGroup;
 #[doc(hidden)]
-pub type ValidateTeamInputOperationRetryAlias = ();
-impl ValidateTeamInput {
-	/// Consumes the builder and constructs an Operation<[`ValidateTeam`](crate::operation::ValidateTeam)>
+pub type ValidateGroupInputOperationRetryAlias = ();
+impl ValidateGroupInput {
+	/// Consumes the builder and constructs an Operation<[`ValidateGroup`](crate::operation::ValidateGroup)>
 	#[allow(unused_mut)]
 	#[allow(clippy::let_and_return)]
 	#[allow(clippy::needless_borrow)]
@@ -5632,20 +6493,20 @@ impl ValidateTeamInput {
 		&self,
 		_config: &crate::config::Config,
 	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::ValidateTeam, ()>,
+		aws_smithy_http::operation::Operation<crate::operation::ValidateGroup, ()>,
 		aws_smithy_http::operation::BuildError,
 	> {
 		let mut request = {
 			fn uri_base(
-				_input: &crate::input::ValidateTeamInput,
+				_input: &crate::input::ValidateGroupInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				write!(output, "/teams/validate").expect("formatting should succeed");
+				write!(output, "/groups/validate").expect("formatting should succeed");
 				Ok(())
 			}
 			#[allow(clippy::unnecessary_wraps)]
 			fn update_http_builder(
-				input: &crate::input::ValidateTeamInput,
+				input: &crate::input::ValidateGroupInput,
 				_config: &crate::config::Config,
 				builder: http::request::Builder,
 			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
@@ -5671,7 +6532,7 @@ impl ValidateTeamInput {
 		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
 		#[allow(clippy::useless_conversion)]
 		let body = aws_smithy_http::body::SdkBody::from(
-			crate::operation_ser::serialize_operation_crate_operation_validate_team(&self)?,
+			crate::operation_ser::serialize_operation_crate_operation_validate_group(&self)?,
 		);
 		if let Some(content_length) = body.content_length() {
 			request = aws_smithy_http::header::set_request_header_if_absent(
@@ -5687,17 +6548,17 @@ impl ValidateTeamInput {
 			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
 		let op = aws_smithy_http::operation::Operation::new(
 			request,
-			crate::operation::ValidateTeam::new(),
+			crate::operation::ValidateGroup::new(),
 		)
 		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"ValidateTeam",
+			"ValidateGroup",
 			"CloudService",
 		));
 		Ok(op)
 	}
-	/// Creates a new builder-style object to manufacture [`ValidateTeamInput`](crate::input::ValidateTeamInput)
-	pub fn builder() -> crate::input::validate_team_input::Builder {
-		crate::input::validate_team_input::Builder::default()
+	/// Creates a new builder-style object to manufacture [`ValidateGroupInput`](crate::input::ValidateGroupInput)
+	pub fn builder() -> crate::input::validate_group_input::Builder {
+		crate::input::validate_group_input::Builder::default()
 	}
 }
 
@@ -5705,11 +6566,11 @@ impl ValidateTeamInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetRayPerfLogsInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub ray_id: std::option::Option<std::string::String>,
 }
 impl GetRayPerfLogsInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn ray_id(&self) -> std::option::Option<&str> {
 		self.ray_id.as_deref()
 	}
@@ -5725,19 +6586,19 @@ impl std::fmt::Debug for GetRayPerfLogsInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct ValidateTeamInput {
-	#[allow(missing_docs)] // documentation missing in model
+pub struct ValidateGroupInput {
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
 }
-impl ValidateTeamInput {
-	#[allow(missing_docs)] // documentation missing in model
+impl ValidateGroupInput {
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
 }
-impl std::fmt::Debug for ValidateTeamInput {
+impl std::fmt::Debug for ValidateGroupInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("ValidateTeamInput");
+		let mut formatter = f.debug_struct("ValidateGroupInput");
 		formatter.field("display_name", &self.display_name);
 		formatter.finish()
 	}
@@ -5746,26 +6607,26 @@ impl std::fmt::Debug for ValidateTeamInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct TeamBillingCheckoutInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub team_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GroupBillingCheckoutInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
+	/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
 	pub amount: std::option::Option<i64>,
 }
-impl TeamBillingCheckoutInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn team_id(&self) -> std::option::Option<&str> {
-		self.team_id.as_deref()
+impl GroupBillingCheckoutInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
 	pub fn amount(&self) -> std::option::Option<i64> {
 		self.amount
 	}
 }
-impl std::fmt::Debug for TeamBillingCheckoutInput {
+impl std::fmt::Debug for GroupBillingCheckoutInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("TeamBillingCheckoutInput");
-		formatter.field("team_id", &self.team_id);
+		let mut formatter = f.debug_struct("GroupBillingCheckoutInput");
+		formatter.field("group_id", &self.group_id);
 		formatter.field("amount", &self.amount);
 		formatter.finish()
 	}
@@ -5774,20 +6635,20 @@ impl std::fmt::Debug for TeamBillingCheckoutInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct ConvertTeamInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub team_id: std::option::Option<std::string::String>,
+pub struct ConvertGroupInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
 }
-impl ConvertTeamInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn team_id(&self) -> std::option::Option<&str> {
-		self.team_id.as_deref()
+impl ConvertGroupInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
 	}
 }
-impl std::fmt::Debug for ConvertTeamInput {
+impl std::fmt::Debug for ConvertGroupInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("ConvertTeamInput");
-		formatter.field("team_id", &self.team_id);
+		let mut formatter = f.debug_struct("ConvertGroupInput");
+		formatter.field("group_id", &self.group_id);
 		formatter.finish()
 	}
 }
@@ -5795,26 +6656,61 @@ impl std::fmt::Debug for ConvertTeamInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetTeamTransfersListInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub team_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GetGroupInvoicesListInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
+	/// How many invoices to offset the search by.
+	pub anchor: std::option::Option<std::string::String>,
+	/// Amount of invoices to return.
+	pub limit: std::option::Option<i32>,
+}
+impl GetGroupInvoicesListInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
+	}
+	/// How many invoices to offset the search by.
+	pub fn anchor(&self) -> std::option::Option<&str> {
+		self.anchor.as_deref()
+	}
+	/// Amount of invoices to return.
+	pub fn limit(&self) -> std::option::Option<i32> {
+		self.limit
+	}
+}
+impl std::fmt::Debug for GetGroupInvoicesListInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GetGroupInvoicesListInput");
+		formatter.field("group_id", &self.group_id);
+		formatter.field("anchor", &self.anchor);
+		formatter.field("limit", &self.limit);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GetGroupTransfersListInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
+	/// The transfer ID of the transfer after which to start listing.
 	pub start_transfer_id: std::option::Option<std::string::String>,
 }
-impl GetTeamTransfersListInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn team_id(&self) -> std::option::Option<&str> {
-		self.team_id.as_deref()
+impl GetGroupTransfersListInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// The transfer ID of the transfer after which to start listing.
 	pub fn start_transfer_id(&self) -> std::option::Option<&str> {
 		self.start_transfer_id.as_deref()
 	}
 }
-impl std::fmt::Debug for GetTeamTransfersListInput {
+impl std::fmt::Debug for GetGroupTransfersListInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetTeamTransfersListInput");
-		formatter.field("team_id", &self.team_id);
+		let mut formatter = f.debug_struct("GetGroupTransfersListInput");
+		formatter.field("group_id", &self.group_id);
 		formatter.field("start_transfer_id", &self.start_transfer_id);
 		formatter.finish()
 	}
@@ -5823,26 +6719,26 @@ impl std::fmt::Debug for GetTeamTransfersListInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetTeamPaymentsListInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub team_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GetGroupPaymentsListInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
+	/// The payment ID of the payment after which to start listing.
 	pub start_payment_id: std::option::Option<std::string::String>,
 }
-impl GetTeamPaymentsListInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn team_id(&self) -> std::option::Option<&str> {
-		self.team_id.as_deref()
+impl GetGroupPaymentsListInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// The payment ID of the payment after which to start listing.
 	pub fn start_payment_id(&self) -> std::option::Option<&str> {
 		self.start_payment_id.as_deref()
 	}
 }
-impl std::fmt::Debug for GetTeamPaymentsListInput {
+impl std::fmt::Debug for GetGroupPaymentsListInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetTeamPaymentsListInput");
-		formatter.field("team_id", &self.team_id);
+		let mut formatter = f.debug_struct("GetGroupPaymentsListInput");
+		formatter.field("group_id", &self.group_id);
 		formatter.field("start_payment_id", &self.start_payment_id);
 		formatter.finish()
 	}
@@ -5851,32 +6747,32 @@ impl std::fmt::Debug for GetTeamPaymentsListInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetTeamBillingInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub team_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GetGroupBillingInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
+	/// Unsigned 64 bit integer.
 	pub query_start: std::option::Option<i64>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub query_end: std::option::Option<i64>,
 }
-impl GetTeamBillingInput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn team_id(&self) -> std::option::Option<&str> {
-		self.team_id.as_deref()
+impl GetGroupBillingInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub fn query_start(&self) -> std::option::Option<i64> {
 		self.query_start
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub fn query_end(&self) -> std::option::Option<i64> {
 		self.query_end
 	}
 }
-impl std::fmt::Debug for GetTeamBillingInput {
+impl std::fmt::Debug for GetGroupBillingInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetTeamBillingInput");
-		formatter.field("team_id", &self.team_id);
+		let mut formatter = f.debug_struct("GetGroupBillingInput");
+		formatter.field("group_id", &self.group_id);
 		formatter.field("query_start", &self.query_start);
 		formatter.field("query_end", &self.query_end);
 		formatter.finish()
@@ -5898,23 +6794,23 @@ impl std::fmt::Debug for GetRegionTiersInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ExportMatchmakerLobbyHistoryInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub query_start: std::option::Option<i64>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub query_end: std::option::Option<i64>,
 }
 impl ExportMatchmakerLobbyHistoryInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub fn query_start(&self) -> std::option::Option<i64> {
 		self.query_start
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 64 bit integer.
 	pub fn query_end(&self) -> std::option::Option<i64> {
 		self.query_end
 	}
@@ -5933,17 +6829,17 @@ impl std::fmt::Debug for ExportMatchmakerLobbyHistoryInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct DeleteMatchmakerLobbyInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub lobby_id: std::option::Option<std::string::String>,
 }
 impl DeleteMatchmakerLobbyInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn lobby_id(&self) -> std::option::Option<&str> {
 		self.lobby_id.as_deref()
 	}
@@ -5961,23 +6857,23 @@ impl std::fmt::Debug for DeleteMatchmakerLobbyInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameCdnSiteInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of files preparing to upload.
 	pub files: std::option::Option<std::vec::Vec<crate::model::UploadPrepareFile>>,
 }
 impl CreateGameCdnSiteInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of files preparing to upload.
 	pub fn files(&self) -> std::option::Option<&[crate::model::UploadPrepareFile]> {
 		self.files.as_deref()
 	}
@@ -5996,11 +6892,11 @@ impl std::fmt::Debug for CreateGameCdnSiteInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ListGameCdnSitesInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
 }
 impl ListGameCdnSitesInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
@@ -6017,29 +6913,29 @@ impl std::fmt::Debug for ListGameCdnSitesInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameBuildInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A tag given to the game build.
 	pub image_tag: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A file being prepared to upload.
 	pub image_file: std::option::Option<crate::model::UploadPrepareFile>,
 }
 impl CreateGameBuildInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A tag given to the game build.
 	pub fn image_tag(&self) -> std::option::Option<&str> {
 		self.image_tag.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A file being prepared to upload.
 	pub fn image_file(&self) -> std::option::Option<&crate::model::UploadPrepareFile> {
 		self.image_file.as_ref()
 	}
@@ -6059,11 +6955,11 @@ impl std::fmt::Debug for CreateGameBuildInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ListGameBuildsInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
 }
 impl ListGameBuildsInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
@@ -6080,11 +6976,11 @@ impl std::fmt::Debug for ListGameBuildsInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateCloudTokenInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
 }
 impl CreateCloudTokenInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
@@ -6101,23 +6997,23 @@ impl std::fmt::Debug for CreateCloudTokenInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetNamespaceLobbyInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub lobby_id: std::option::Option<std::string::String>,
 }
 impl GetNamespaceLobbyInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn lobby_id(&self) -> std::option::Option<&str> {
 		self.lobby_id.as_deref()
 	}
@@ -6136,25 +7032,25 @@ impl std::fmt::Debug for GetNamespaceLobbyInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ListNamespaceLobbiesInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub before_create_ts: std::option::Option<i64>,
+	/// Returns lobbies created before this timestamp.
+	pub before_create_ts: std::option::Option<aws_smithy_types::DateTime>,
 }
 impl ListNamespaceLobbiesInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn before_create_ts(&self) -> std::option::Option<i64> {
-		self.before_create_ts
+	/// Returns lobbies created before this timestamp.
+	pub fn before_create_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
+		self.before_create_ts.as_ref()
 	}
 }
 impl std::fmt::Debug for ListNamespaceLobbiesInput {
@@ -6171,17 +7067,17 @@ impl std::fmt::Debug for ListNamespaceLobbiesInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetNamespaceAnalyticsMatchmakerLiveInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
 }
 impl GetNamespaceAnalyticsMatchmakerLiveInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
@@ -6199,29 +7095,29 @@ impl std::fmt::Debug for GetNamespaceAnalyticsMatchmakerLiveInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceMatchmakerConfigInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub lobby_count_max: std::option::Option<i32>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub max_players: std::option::Option<i32>,
 }
 impl ValidateGameNamespaceMatchmakerConfigInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub fn lobby_count_max(&self) -> std::option::Option<i32> {
 		self.lobby_count_max
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub fn max_players(&self) -> std::option::Option<i32> {
 		self.max_players
 	}
@@ -6241,21 +7137,21 @@ impl std::fmt::Debug for ValidateGameNamespaceMatchmakerConfigInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceTokenDevelopmentInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub hostname: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of docker ports.
 	pub lobby_ports: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 }
 impl ValidateGameNamespaceTokenDevelopmentInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
@@ -6263,7 +7159,7 @@ impl ValidateGameNamespaceTokenDevelopmentInput {
 	pub fn hostname(&self) -> std::option::Option<&str> {
 		self.hostname.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of docker ports.
 	pub fn lobby_ports(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerPort]> {
 		self.lobby_ports.as_deref()
 	}
@@ -6283,23 +7179,23 @@ impl std::fmt::Debug for ValidateGameNamespaceTokenDevelopmentInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub name_id: std::option::Option<std::string::String>,
 }
 impl ValidateGameNamespaceInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub fn name_id(&self) -> std::option::Option<&str> {
 		self.name_id.as_deref()
 	}
@@ -6318,29 +7214,29 @@ impl std::fmt::Debug for ValidateGameNamespaceInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct UpdateGameNamespaceMatchmakerConfigInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub lobby_count_max: std::option::Option<i32>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub max_players: std::option::Option<i32>,
 }
 impl UpdateGameNamespaceMatchmakerConfigInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub fn lobby_count_max(&self) -> std::option::Option<i32> {
 		self.lobby_count_max
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Unsigned 32 bit integer.
 	pub fn max_players(&self) -> std::option::Option<i32> {
 		self.max_players
 	}
@@ -6360,23 +7256,23 @@ impl std::fmt::Debug for UpdateGameNamespaceMatchmakerConfigInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ToggleNamespaceDomainPublicAuthInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Whether or not to enable authentication based on domain.
 	pub enabled: std::option::Option<bool>,
 }
 impl ToggleNamespaceDomainPublicAuthInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Whether or not to enable authentication based on domain.
 	pub fn enabled(&self) -> std::option::Option<bool> {
 		self.enabled
 	}
@@ -6395,23 +7291,23 @@ impl std::fmt::Debug for ToggleNamespaceDomainPublicAuthInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct RemoveNamespaceDomainInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A valid domain name (no protocol).
 	pub domain: std::option::Option<std::string::String>,
 }
 impl RemoveNamespaceDomainInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A valid domain name (no protocol).
 	pub fn domain(&self) -> std::option::Option<&str> {
 		self.domain.as_deref()
 	}
@@ -6430,23 +7326,23 @@ impl std::fmt::Debug for RemoveNamespaceDomainInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct UpdateNamespaceDomainInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A valid domain name (no protocol).
 	pub domain: std::option::Option<std::string::String>,
 }
 impl UpdateNamespaceDomainInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A valid domain name (no protocol).
 	pub fn domain(&self) -> std::option::Option<&str> {
 		self.domain.as_deref()
 	}
@@ -6465,29 +7361,29 @@ impl std::fmt::Debug for UpdateNamespaceDomainInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameNamespaceTokenDevelopmentInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// The hostname used for the token.
 	pub hostname: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of docker ports.
 	pub lobby_ports: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 }
 impl CreateGameNamespaceTokenDevelopmentInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// The hostname used for the token.
 	pub fn hostname(&self) -> std::option::Option<&str> {
 		self.hostname.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of docker ports.
 	pub fn lobby_ports(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerPort]> {
 		self.lobby_ports.as_deref()
 	}
@@ -6507,17 +7403,17 @@ impl std::fmt::Debug for CreateGameNamespaceTokenDevelopmentInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameNamespaceTokenPublicInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
 }
 impl CreateGameNamespaceTokenPublicInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
@@ -6535,23 +7431,23 @@ impl std::fmt::Debug for CreateGameNamespaceTokenPublicInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct UpdateGameNamespaceVersionInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub version_id: std::option::Option<std::string::String>,
 }
 impl UpdateGameNamespaceVersionInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn version_id(&self) -> std::option::Option<&str> {
 		self.version_id.as_deref()
 	}
@@ -6570,17 +7466,17 @@ impl std::fmt::Debug for UpdateGameNamespaceVersionInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGameNamespaceByIdInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
 }
 impl GetGameNamespaceByIdInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
@@ -6598,29 +7494,29 @@ impl std::fmt::Debug for GetGameNamespaceByIdInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameNamespaceInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub version_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub name_id: std::option::Option<std::string::String>,
 }
 impl CreateGameNamespaceInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn version_id(&self) -> std::option::Option<&str> {
 		self.version_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub fn name_id(&self) -> std::option::Option<&str> {
 		self.name_id.as_deref()
 	}
@@ -6640,23 +7536,23 @@ impl std::fmt::Debug for CreateGameNamespaceInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameVersionInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Cloud configuration for a given version.
 	pub config: std::option::Option<crate::model::CloudVersionConfig>,
 }
 impl ValidateGameVersionInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Cloud configuration for a given version.
 	pub fn config(&self) -> std::option::Option<&crate::model::CloudVersionConfig> {
 		self.config.as_ref()
 	}
@@ -6675,17 +7571,17 @@ impl std::fmt::Debug for ValidateGameVersionInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGameVersionByIdInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub version_id: std::option::Option<std::string::String>,
 }
 impl GetGameVersionByIdInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn version_id(&self) -> std::option::Option<&str> {
 		self.version_id.as_deref()
 	}
@@ -6703,23 +7599,23 @@ impl std::fmt::Debug for GetGameVersionByIdInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameVersionInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Cloud configuration for a given version.
 	pub config: std::option::Option<crate::model::CloudVersionConfig>,
 }
 impl CreateGameVersionInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Cloud configuration for a given version.
 	pub fn config(&self) -> std::option::Option<&crate::model::CloudVersionConfig> {
 		self.config.as_ref()
 	}
@@ -6737,18 +7633,158 @@ impl std::fmt::Debug for CreateGameVersionInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameBannerUploadCompleteInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub upload_id: std::option::Option<std::string::String>,
+}
+impl GameBannerUploadCompleteInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// A universally unique identifier.
+	pub fn upload_id(&self) -> std::option::Option<&str> {
+		self.upload_id.as_deref()
+	}
+}
+impl std::fmt::Debug for GameBannerUploadCompleteInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameBannerUploadCompleteInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("upload_id", &self.upload_id);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameBannerUploadPrepareInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// The path/filename of the game banner.
+	pub path: std::option::Option<std::string::String>,
+	/// The MIME type of the game banner.
+	pub mime: std::option::Option<std::string::String>,
+	/// Unsigned 64 bit integer.
+	pub content_length: std::option::Option<i64>,
+}
+impl GameBannerUploadPrepareInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// The path/filename of the game banner.
+	pub fn path(&self) -> std::option::Option<&str> {
+		self.path.as_deref()
+	}
+	/// The MIME type of the game banner.
+	pub fn mime(&self) -> std::option::Option<&str> {
+		self.mime.as_deref()
+	}
+	/// Unsigned 64 bit integer.
+	pub fn content_length(&self) -> std::option::Option<i64> {
+		self.content_length
+	}
+}
+impl std::fmt::Debug for GameBannerUploadPrepareInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameBannerUploadPrepareInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("path", &self.path);
+		formatter.field("mime", &self.mime);
+		formatter.field("content_length", &self.content_length);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameLogoUploadCompleteInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub upload_id: std::option::Option<std::string::String>,
+}
+impl GameLogoUploadCompleteInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// A universally unique identifier.
+	pub fn upload_id(&self) -> std::option::Option<&str> {
+		self.upload_id.as_deref()
+	}
+}
+impl std::fmt::Debug for GameLogoUploadCompleteInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameLogoUploadCompleteInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("upload_id", &self.upload_id);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameLogoUploadPrepareInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// The path/filename of the game logo.
+	pub path: std::option::Option<std::string::String>,
+	/// The MIME type of the game logo.
+	pub mime: std::option::Option<std::string::String>,
+	/// Unsigned 64 bit integer.
+	pub content_length: std::option::Option<i64>,
+}
+impl GameLogoUploadPrepareInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// The path/filename of the game logo.
+	pub fn path(&self) -> std::option::Option<&str> {
+		self.path.as_deref()
+	}
+	/// The MIME type of the game logo.
+	pub fn mime(&self) -> std::option::Option<&str> {
+		self.mime.as_deref()
+	}
+	/// Unsigned 64 bit integer.
+	pub fn content_length(&self) -> std::option::Option<i64> {
+		self.content_length
+	}
+}
+impl std::fmt::Debug for GameLogoUploadPrepareInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameLogoUploadPrepareInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("path", &self.path);
+		formatter.field("mime", &self.mime);
+		formatter.field("content_length", &self.content_length);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub name_id: std::option::Option<std::string::String>,
 }
 impl ValidateGameInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub fn name_id(&self) -> std::option::Option<&str> {
 		self.name_id.as_deref()
 	}
@@ -6766,19 +7802,26 @@ impl std::fmt::Debug for ValidateGameInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGameByIdInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
+	/// A query parameter denoting the requests watch index.
+	pub watch_index: std::option::Option<std::string::String>,
 }
 impl GetGameByIdInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
+	}
+	/// A query parameter denoting the requests watch index.
+	pub fn watch_index(&self) -> std::option::Option<&str> {
+		self.watch_index.as_deref()
 	}
 }
 impl std::fmt::Debug for GetGameByIdInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGameByIdInput");
 		formatter.field("game_id", &self.game_id);
+		formatter.field("watch_index", &self.watch_index);
 		formatter.finish()
 	}
 }
@@ -6787,25 +7830,25 @@ impl std::fmt::Debug for GetGameByIdInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub name_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub developer_team_id: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub developer_group_id: std::option::Option<std::string::String>,
 }
 impl CreateGameInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub fn name_id(&self) -> std::option::Option<&str> {
 		self.name_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Represent a resource's readable display name.
 	pub fn display_name(&self) -> std::option::Option<&str> {
 		self.display_name.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn developer_team_id(&self) -> std::option::Option<&str> {
-		self.developer_team_id.as_deref()
+	/// A universally unique identifier.
+	pub fn developer_group_id(&self) -> std::option::Option<&str> {
+		self.developer_group_id.as_deref()
 	}
 }
 impl std::fmt::Debug for CreateGameInput {
@@ -6813,7 +7856,7 @@ impl std::fmt::Debug for CreateGameInput {
 		let mut formatter = f.debug_struct("CreateGameInput");
 		formatter.field("name_id", &self.name_id);
 		formatter.field("display_name", &self.display_name);
-		formatter.field("developer_team_id", &self.developer_team_id);
+		formatter.field("developer_group_id", &self.developer_group_id);
 		formatter.finish()
 	}
 }
@@ -6821,10 +7864,20 @@ impl std::fmt::Debug for CreateGameInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetGamesInput {}
+pub struct GetGamesInput {
+	/// A query parameter denoting the requests watch index.
+	pub watch_index: std::option::Option<std::string::String>,
+}
+impl GetGamesInput {
+	/// A query parameter denoting the requests watch index.
+	pub fn watch_index(&self) -> std::option::Option<&str> {
+		self.watch_index.as_deref()
+	}
+}
 impl std::fmt::Debug for GetGamesInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGamesInput");
+		formatter.field("watch_index", &self.watch_index);
 		formatter.finish()
 	}
 }
@@ -6833,11 +7886,11 @@ impl std::fmt::Debug for GetGamesInput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CompleteUploadInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub upload_id: std::option::Option<std::string::String>,
 }
 impl CompleteUploadInput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn upload_id(&self) -> std::option::Option<&str> {
 		self.upload_id.as_deref()
 	}

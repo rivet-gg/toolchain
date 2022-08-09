@@ -81,12 +81,38 @@ pub fn serialize_operation_crate_operation_export_matchmaker_lobby_history(
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }
 
-pub fn serialize_operation_crate_operation_team_billing_checkout(
-	input: &crate::input::TeamBillingCheckoutInput,
+pub fn serialize_operation_crate_operation_game_banner_upload_prepare(
+	input: &crate::input::GameBannerUploadPrepareInput,
 ) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
 	let mut out = String::new();
 	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
-	crate::json_ser::serialize_structure_crate_input_team_billing_checkout_input(
+	crate::json_ser::serialize_structure_crate_input_game_banner_upload_prepare_input(
+		&mut object,
+		input,
+	)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
+pub fn serialize_operation_crate_operation_game_logo_upload_prepare(
+	input: &crate::input::GameLogoUploadPrepareInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_game_logo_upload_prepare_input(
+		&mut object,
+		input,
+	)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
+pub fn serialize_operation_crate_operation_group_billing_checkout(
+	input: &crate::input::GroupBillingCheckoutInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_group_billing_checkout_input(
 		&mut object,
 		input,
 	)?;
@@ -189,12 +215,12 @@ pub fn serialize_operation_crate_operation_validate_game_version(
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }
 
-pub fn serialize_operation_crate_operation_validate_team(
-	input: &crate::input::ValidateTeamInput,
+pub fn serialize_operation_crate_operation_validate_group(
+	input: &crate::input::ValidateGroupInput,
 ) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
 	let mut out = String::new();
 	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
-	crate::json_ser::serialize_structure_crate_input_validate_team_input(&mut object, input)?;
+	crate::json_ser::serialize_structure_crate_input_validate_group_input(&mut object, input)?;
 	object.finish();
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }

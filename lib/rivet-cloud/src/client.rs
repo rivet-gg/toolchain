@@ -46,7 +46,7 @@ pub(crate) struct Handle<C, M, R = aws_smithy_client::retry::Standard> {
 /// to construct a client:
 ///
 /// ```
-/// use rivet_client_api_cloud::{Builder, Client, Config};
+/// use rivet_cloud::{Builder, Client, Config};
 /// let raw_client =
 ///     Builder::dyn_https()
 /// #     /*
@@ -196,29 +196,29 @@ where
 	/// Constructs a fluent builder for the [`CompleteUpload`](crate::client::fluent_builders::CompleteUpload) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`upload_id(impl Into<String>)`](crate::client::fluent_builders::CompleteUpload::upload_id) / [`set_upload_id(Option<String>)`](crate::client::fluent_builders::CompleteUpload::set_upload_id): (undocumented)
+	///   - [`upload_id(impl Into<String>)`](crate::client::fluent_builders::CompleteUpload::upload_id) / [`set_upload_id(Option<String>)`](crate::client::fluent_builders::CompleteUpload::set_upload_id): A universally unique identifier.
 	/// - On success, responds with [`CompleteUploadOutput`](crate::output::CompleteUploadOutput)
 
 	/// - On failure, responds with [`SdkError<CompleteUploadError>`](crate::error::CompleteUploadError)
 	pub fn complete_upload(&self) -> fluent_builders::CompleteUpload<C, M, R> {
 		fluent_builders::CompleteUpload::new(self.handle.clone())
 	}
-	/// Constructs a fluent builder for the [`ConvertTeam`](crate::client::fluent_builders::ConvertTeam) operation.
+	/// Constructs a fluent builder for the [`ConvertGroup`](crate::client::fluent_builders::ConvertGroup) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`team_id(impl Into<String>)`](crate::client::fluent_builders::ConvertTeam::team_id) / [`set_team_id(Option<String>)`](crate::client::fluent_builders::ConvertTeam::set_team_id): (undocumented)
-	/// - On success, responds with [`ConvertTeamOutput`](crate::output::ConvertTeamOutput)
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::ConvertGroup::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::ConvertGroup::set_group_id): A universally unique identifier.
+	/// - On success, responds with [`ConvertGroupOutput`](crate::output::ConvertGroupOutput)
 
-	/// - On failure, responds with [`SdkError<ConvertTeamError>`](crate::error::ConvertTeamError)
-	pub fn convert_team(&self) -> fluent_builders::ConvertTeam<C, M, R> {
-		fluent_builders::ConvertTeam::new(self.handle.clone())
+	/// - On failure, responds with [`SdkError<ConvertGroupError>`](crate::error::ConvertGroupError)
+	pub fn convert_group(&self) -> fluent_builders::ConvertGroup<C, M, R> {
+		fluent_builders::ConvertGroup::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`CreateCloudToken`](crate::client::fluent_builders::CreateCloudToken) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateCloudToken::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateCloudToken::set_game_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateCloudToken::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateCloudToken::set_game_id): A universally unique identifier.
 	/// - On success, responds with [`CreateCloudTokenOutput`](crate::output::CreateCloudTokenOutput) with field(s):
-	///   - [`token(Option<String>)`](crate::output::CreateCloudTokenOutput::token): (undocumented)
+	///   - [`token(Option<String>)`](crate::output::CreateCloudTokenOutput::token): A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	/// - On failure, responds with [`SdkError<CreateCloudTokenError>`](crate::error::CreateCloudTokenError)
 	pub fn create_cloud_token(&self) -> fluent_builders::CreateCloudToken<C, M, R> {
 		fluent_builders::CreateCloudToken::new(self.handle.clone())
@@ -226,11 +226,11 @@ where
 	/// Constructs a fluent builder for the [`CreateGame`](crate::client::fluent_builders::CreateGame) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::CreateGame::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::CreateGame::set_name_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGame::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGame::set_display_name): (undocumented)
-	///   - [`developer_team_id(impl Into<String>)`](crate::client::fluent_builders::CreateGame::developer_team_id) / [`set_developer_team_id(Option<String>)`](crate::client::fluent_builders::CreateGame::set_developer_team_id): (undocumented)
+	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::CreateGame::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::CreateGame::set_name_id): A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGame::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGame::set_display_name): Represent a resource's readable display name.
+	///   - [`developer_group_id(impl Into<String>)`](crate::client::fluent_builders::CreateGame::developer_group_id) / [`set_developer_group_id(Option<String>)`](crate::client::fluent_builders::CreateGame::set_developer_group_id): A universally unique identifier.
 	/// - On success, responds with [`CreateGameOutput`](crate::output::CreateGameOutput) with field(s):
-	///   - [`game_id(Option<String>)`](crate::output::CreateGameOutput::game_id): (undocumented)
+	///   - [`game_id(Option<String>)`](crate::output::CreateGameOutput::game_id): A universally unique identifier.
 	/// - On failure, responds with [`SdkError<CreateGameError>`](crate::error::CreateGameError)
 	pub fn create_game(&self) -> fluent_builders::CreateGame<C, M, R> {
 		fluent_builders::CreateGame::new(self.handle.clone())
@@ -238,14 +238,14 @@ where
 	/// Constructs a fluent builder for the [`CreateGameBuild`](crate::client::fluent_builders::CreateGameBuild) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameBuild::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameBuild::set_game_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameBuild::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameBuild::set_display_name): (undocumented)
-	///   - [`image_tag(impl Into<String>)`](crate::client::fluent_builders::CreateGameBuild::image_tag) / [`set_image_tag(Option<String>)`](crate::client::fluent_builders::CreateGameBuild::set_image_tag): (undocumented)
-	///   - [`image_file(UploadPrepareFile)`](crate::client::fluent_builders::CreateGameBuild::image_file) / [`set_image_file(Option<UploadPrepareFile>)`](crate::client::fluent_builders::CreateGameBuild::set_image_file): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameBuild::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameBuild::set_game_id): A universally unique identifier.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameBuild::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameBuild::set_display_name): Represent a resource's readable display name.
+	///   - [`image_tag(impl Into<String>)`](crate::client::fluent_builders::CreateGameBuild::image_tag) / [`set_image_tag(Option<String>)`](crate::client::fluent_builders::CreateGameBuild::set_image_tag): A tag given to the game build.
+	///   - [`image_file(UploadPrepareFile)`](crate::client::fluent_builders::CreateGameBuild::image_file) / [`set_image_file(Option<UploadPrepareFile>)`](crate::client::fluent_builders::CreateGameBuild::set_image_file): A file being prepared to upload.
 	/// - On success, responds with [`CreateGameBuildOutput`](crate::output::CreateGameBuildOutput) with field(s):
-	///   - [`build_id(Option<String>)`](crate::output::CreateGameBuildOutput::build_id): (undocumented)
-	///   - [`upload_id(Option<String>)`](crate::output::CreateGameBuildOutput::upload_id): (undocumented)
-	///   - [`image_presigned_request(Option<UploadPresignedRequest>)`](crate::output::CreateGameBuildOutput::image_presigned_request): (undocumented)
+	///   - [`build_id(Option<String>)`](crate::output::CreateGameBuildOutput::build_id): A universally unique identifier.
+	///   - [`upload_id(Option<String>)`](crate::output::CreateGameBuildOutput::upload_id): A universally unique identifier.
+	///   - [`image_presigned_request(Option<UploadPresignedRequest>)`](crate::output::CreateGameBuildOutput::image_presigned_request): A presigned request used to upload files. Upload your file to the given URL via a PUT request.
 	/// - On failure, responds with [`SdkError<CreateGameBuildError>`](crate::error::CreateGameBuildError)
 	pub fn create_game_build(&self) -> fluent_builders::CreateGameBuild<C, M, R> {
 		fluent_builders::CreateGameBuild::new(self.handle.clone())
@@ -253,12 +253,12 @@ where
 	/// Constructs a fluent builder for the [`CreateGameCdnSite`](crate::client::fluent_builders::CreateGameCdnSite) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameCdnSite::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameCdnSite::set_game_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameCdnSite::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameCdnSite::set_display_name): (undocumented)
-	///   - [`files(Vec<UploadPrepareFile>)`](crate::client::fluent_builders::CreateGameCdnSite::files) / [`set_files(Option<Vec<UploadPrepareFile>>)`](crate::client::fluent_builders::CreateGameCdnSite::set_files): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameCdnSite::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameCdnSite::set_game_id): A universally unique identifier.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameCdnSite::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameCdnSite::set_display_name): Represent a resource's readable display name.
+	///   - [`files(Vec<UploadPrepareFile>)`](crate::client::fluent_builders::CreateGameCdnSite::files) / [`set_files(Option<Vec<UploadPrepareFile>>)`](crate::client::fluent_builders::CreateGameCdnSite::set_files): A list of files preparing to upload.
 	/// - On success, responds with [`CreateGameCdnSiteOutput`](crate::output::CreateGameCdnSiteOutput) with field(s):
-	///   - [`site_id(Option<String>)`](crate::output::CreateGameCdnSiteOutput::site_id): (undocumented)
-	///   - [`upload_id(Option<String>)`](crate::output::CreateGameCdnSiteOutput::upload_id): (undocumented)
+	///   - [`site_id(Option<String>)`](crate::output::CreateGameCdnSiteOutput::site_id): A universally unique identifier.
+	///   - [`upload_id(Option<String>)`](crate::output::CreateGameCdnSiteOutput::upload_id): A universally unique identifier.
 	///   - [`presigned_requests(Option<Vec<UploadPresignedRequest>>)`](crate::output::CreateGameCdnSiteOutput::presigned_requests): (undocumented)
 	/// - On failure, responds with [`SdkError<CreateGameCdnSiteError>`](crate::error::CreateGameCdnSiteError)
 	pub fn create_game_cdn_site(&self) -> fluent_builders::CreateGameCdnSite<C, M, R> {
@@ -267,12 +267,12 @@ where
 	/// Constructs a fluent builder for the [`CreateGameNamespace`](crate::client::fluent_builders::CreateGameNamespace) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_game_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_display_name): (undocumented)
-	///   - [`version_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::version_id) / [`set_version_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_version_id): (undocumented)
-	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_name_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_game_id): A universally unique identifier.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_display_name): Represent a resource's readable display name.
+	///   - [`version_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::version_id) / [`set_version_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_version_id): A universally unique identifier.
+	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespace::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespace::set_name_id): A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	/// - On success, responds with [`CreateGameNamespaceOutput`](crate::output::CreateGameNamespaceOutput) with field(s):
-	///   - [`namespace_id(Option<String>)`](crate::output::CreateGameNamespaceOutput::namespace_id): (undocumented)
+	///   - [`namespace_id(Option<String>)`](crate::output::CreateGameNamespaceOutput::namespace_id): A universally unique identifier.
 	/// - On failure, responds with [`SdkError<CreateGameNamespaceError>`](crate::error::CreateGameNamespaceError)
 	pub fn create_game_namespace(&self) -> fluent_builders::CreateGameNamespace<C, M, R> {
 		fluent_builders::CreateGameNamespace::new(self.handle.clone())
@@ -280,12 +280,12 @@ where
 	/// Constructs a fluent builder for the [`CreateGameNamespaceTokenDevelopment`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_namespace_id): (undocumented)
-	///   - [`hostname(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::hostname) / [`set_hostname(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_hostname): (undocumented)
-	///   - [`lobby_ports(Vec<LobbyGroupRuntimeDockerPort>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::lobby_ports) / [`set_lobby_ports(Option<Vec<LobbyGroupRuntimeDockerPort>>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_lobby_ports): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_namespace_id): A universally unique identifier.
+	///   - [`hostname(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::hostname) / [`set_hostname(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_hostname): The hostname used for the token.
+	///   - [`lobby_ports(Vec<LobbyGroupRuntimeDockerPort>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::lobby_ports) / [`set_lobby_ports(Option<Vec<LobbyGroupRuntimeDockerPort>>)`](crate::client::fluent_builders::CreateGameNamespaceTokenDevelopment::set_lobby_ports): A list of docker ports.
 	/// - On success, responds with [`CreateGameNamespaceTokenDevelopmentOutput`](crate::output::CreateGameNamespaceTokenDevelopmentOutput) with field(s):
-	///   - [`token(Option<String>)`](crate::output::CreateGameNamespaceTokenDevelopmentOutput::token): (undocumented)
+	///   - [`token(Option<String>)`](crate::output::CreateGameNamespaceTokenDevelopmentOutput::token): A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	/// - On failure, responds with [`SdkError<CreateGameNamespaceTokenDevelopmentError>`](crate::error::CreateGameNamespaceTokenDevelopmentError)
 	pub fn create_game_namespace_token_development(
 		&self,
@@ -295,10 +295,10 @@ where
 	/// Constructs a fluent builder for the [`CreateGameNamespaceTokenPublic`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::set_namespace_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::CreateGameNamespaceTokenPublic::set_namespace_id): A universally unique identifier.
 	/// - On success, responds with [`CreateGameNamespaceTokenPublicOutput`](crate::output::CreateGameNamespaceTokenPublicOutput) with field(s):
-	///   - [`token(Option<String>)`](crate::output::CreateGameNamespaceTokenPublicOutput::token): (undocumented)
+	///   - [`token(Option<String>)`](crate::output::CreateGameNamespaceTokenPublicOutput::token): A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	/// - On failure, responds with [`SdkError<CreateGameNamespaceTokenPublicError>`](crate::error::CreateGameNamespaceTokenPublicError)
 	pub fn create_game_namespace_token_public(
 		&self,
@@ -308,11 +308,11 @@ where
 	/// Constructs a fluent builder for the [`CreateGameVersion`](crate::client::fluent_builders::CreateGameVersion) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameVersion::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameVersion::set_game_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameVersion::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameVersion::set_display_name): (undocumented)
-	///   - [`config(CloudVersionConfig)`](crate::client::fluent_builders::CreateGameVersion::config) / [`set_config(Option<CloudVersionConfig>)`](crate::client::fluent_builders::CreateGameVersion::set_config): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CreateGameVersion::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CreateGameVersion::set_game_id): A universally unique identifier.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::CreateGameVersion::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::CreateGameVersion::set_display_name): Represent a resource's readable display name.
+	///   - [`config(CloudVersionConfig)`](crate::client::fluent_builders::CreateGameVersion::config) / [`set_config(Option<CloudVersionConfig>)`](crate::client::fluent_builders::CreateGameVersion::set_config): Cloud configuration for a given version.
 	/// - On success, responds with [`CreateGameVersionOutput`](crate::output::CreateGameVersionOutput) with field(s):
-	///   - [`version_id(Option<String>)`](crate::output::CreateGameVersionOutput::version_id): (undocumented)
+	///   - [`version_id(Option<String>)`](crate::output::CreateGameVersionOutput::version_id): A universally unique identifier.
 	/// - On failure, responds with [`SdkError<CreateGameVersionError>`](crate::error::CreateGameVersionError)
 	pub fn create_game_version(&self) -> fluent_builders::CreateGameVersion<C, M, R> {
 		fluent_builders::CreateGameVersion::new(self.handle.clone())
@@ -320,10 +320,10 @@ where
 	/// Constructs a fluent builder for the [`DeleteMatchmakerLobby`](crate::client::fluent_builders::DeleteMatchmakerLobby) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::set_game_id): (undocumented)
-	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::set_lobby_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::set_game_id): A universally unique identifier.
+	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::DeleteMatchmakerLobby::set_lobby_id): A universally unique identifier.
 	/// - On success, responds with [`DeleteMatchmakerLobbyOutput`](crate::output::DeleteMatchmakerLobbyOutput) with field(s):
-	///   - [`did_remove(Option<bool>)`](crate::output::DeleteMatchmakerLobbyOutput::did_remove): (undocumented)
+	///   - [`did_remove(Option<bool>)`](crate::output::DeleteMatchmakerLobbyOutput::did_remove): Whether or not the lobby was successfully stopped.
 	/// - On failure, responds with [`SdkError<DeleteMatchmakerLobbyError>`](crate::error::DeleteMatchmakerLobbyError)
 	pub fn delete_matchmaker_lobby(&self) -> fluent_builders::DeleteMatchmakerLobby<C, M, R> {
 		fluent_builders::DeleteMatchmakerLobby::new(self.handle.clone())
@@ -331,23 +331,77 @@ where
 	/// Constructs a fluent builder for the [`ExportMatchmakerLobbyHistory`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::set_game_id): (undocumented)
-	///   - [`query_start(i64)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::query_start) / [`set_query_start(Option<i64>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::set_query_start): (undocumented)
-	///   - [`query_end(i64)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::query_end) / [`set_query_end(Option<i64>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::set_query_end): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::set_game_id): A universally unique identifier.
+	///   - [`query_start(i64)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::query_start) / [`set_query_start(Option<i64>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::set_query_start): Unsigned 64 bit integer.
+	///   - [`query_end(i64)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::query_end) / [`set_query_end(Option<i64>)`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory::set_query_end): Unsigned 64 bit integer.
 	/// - On success, responds with [`ExportMatchmakerLobbyHistoryOutput`](crate::output::ExportMatchmakerLobbyHistoryOutput) with field(s):
-	///   - [`url(Option<String>)`](crate::output::ExportMatchmakerLobbyHistoryOutput::url): (undocumented)
+	///   - [`url(Option<String>)`](crate::output::ExportMatchmakerLobbyHistoryOutput::url): The URL to a CSV file for the given lobby history.
 	/// - On failure, responds with [`SdkError<ExportMatchmakerLobbyHistoryError>`](crate::error::ExportMatchmakerLobbyHistoryError)
 	pub fn export_matchmaker_lobby_history(
 		&self,
 	) -> fluent_builders::ExportMatchmakerLobbyHistory<C, M, R> {
 		fluent_builders::ExportMatchmakerLobbyHistory::new(self.handle.clone())
 	}
+	/// Constructs a fluent builder for the [`GameBannerUploadComplete`](crate::client::fluent_builders::GameBannerUploadComplete) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GameBannerUploadComplete::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GameBannerUploadComplete::set_game_id): A universally unique identifier.
+	///   - [`upload_id(impl Into<String>)`](crate::client::fluent_builders::GameBannerUploadComplete::upload_id) / [`set_upload_id(Option<String>)`](crate::client::fluent_builders::GameBannerUploadComplete::set_upload_id): A universally unique identifier.
+	/// - On success, responds with [`GameBannerUploadCompleteOutput`](crate::output::GameBannerUploadCompleteOutput)
+
+	/// - On failure, responds with [`SdkError<GameBannerUploadCompleteError>`](crate::error::GameBannerUploadCompleteError)
+	pub fn game_banner_upload_complete(
+		&self,
+	) -> fluent_builders::GameBannerUploadComplete<C, M, R> {
+		fluent_builders::GameBannerUploadComplete::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`GameBannerUploadPrepare`](crate::client::fluent_builders::GameBannerUploadPrepare) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GameBannerUploadPrepare::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GameBannerUploadPrepare::set_game_id): A universally unique identifier.
+	///   - [`path(impl Into<String>)`](crate::client::fluent_builders::GameBannerUploadPrepare::path) / [`set_path(Option<String>)`](crate::client::fluent_builders::GameBannerUploadPrepare::set_path): The path/filename of the game banner.
+	///   - [`mime(impl Into<String>)`](crate::client::fluent_builders::GameBannerUploadPrepare::mime) / [`set_mime(Option<String>)`](crate::client::fluent_builders::GameBannerUploadPrepare::set_mime): The MIME type of the game banner.
+	///   - [`content_length(i64)`](crate::client::fluent_builders::GameBannerUploadPrepare::content_length) / [`set_content_length(Option<i64>)`](crate::client::fluent_builders::GameBannerUploadPrepare::set_content_length): Unsigned 64 bit integer.
+	/// - On success, responds with [`GameBannerUploadPrepareOutput`](crate::output::GameBannerUploadPrepareOutput) with field(s):
+	///   - [`upload_id(Option<String>)`](crate::output::GameBannerUploadPrepareOutput::upload_id): A universally unique identifier.
+	///   - [`presigned_request(Option<UploadPresignedRequest>)`](crate::output::GameBannerUploadPrepareOutput::presigned_request): A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	/// - On failure, responds with [`SdkError<GameBannerUploadPrepareError>`](crate::error::GameBannerUploadPrepareError)
+	pub fn game_banner_upload_prepare(&self) -> fluent_builders::GameBannerUploadPrepare<C, M, R> {
+		fluent_builders::GameBannerUploadPrepare::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`GameLogoUploadComplete`](crate::client::fluent_builders::GameLogoUploadComplete) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GameLogoUploadComplete::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GameLogoUploadComplete::set_game_id): A universally unique identifier.
+	///   - [`upload_id(impl Into<String>)`](crate::client::fluent_builders::GameLogoUploadComplete::upload_id) / [`set_upload_id(Option<String>)`](crate::client::fluent_builders::GameLogoUploadComplete::set_upload_id): A universally unique identifier.
+	/// - On success, responds with [`GameLogoUploadCompleteOutput`](crate::output::GameLogoUploadCompleteOutput)
+
+	/// - On failure, responds with [`SdkError<GameLogoUploadCompleteError>`](crate::error::GameLogoUploadCompleteError)
+	pub fn game_logo_upload_complete(&self) -> fluent_builders::GameLogoUploadComplete<C, M, R> {
+		fluent_builders::GameLogoUploadComplete::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`GameLogoUploadPrepare`](crate::client::fluent_builders::GameLogoUploadPrepare) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GameLogoUploadPrepare::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GameLogoUploadPrepare::set_game_id): A universally unique identifier.
+	///   - [`path(impl Into<String>)`](crate::client::fluent_builders::GameLogoUploadPrepare::path) / [`set_path(Option<String>)`](crate::client::fluent_builders::GameLogoUploadPrepare::set_path): The path/filename of the game logo.
+	///   - [`mime(impl Into<String>)`](crate::client::fluent_builders::GameLogoUploadPrepare::mime) / [`set_mime(Option<String>)`](crate::client::fluent_builders::GameLogoUploadPrepare::set_mime): The MIME type of the game logo.
+	///   - [`content_length(i64)`](crate::client::fluent_builders::GameLogoUploadPrepare::content_length) / [`set_content_length(Option<i64>)`](crate::client::fluent_builders::GameLogoUploadPrepare::set_content_length): Unsigned 64 bit integer.
+	/// - On success, responds with [`GameLogoUploadPrepareOutput`](crate::output::GameLogoUploadPrepareOutput) with field(s):
+	///   - [`upload_id(Option<String>)`](crate::output::GameLogoUploadPrepareOutput::upload_id): A universally unique identifier.
+	///   - [`presigned_request(Option<UploadPresignedRequest>)`](crate::output::GameLogoUploadPrepareOutput::presigned_request): A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	/// - On failure, responds with [`SdkError<GameLogoUploadPrepareError>`](crate::error::GameLogoUploadPrepareError)
+	pub fn game_logo_upload_prepare(&self) -> fluent_builders::GameLogoUploadPrepare<C, M, R> {
+		fluent_builders::GameLogoUploadPrepare::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`GetGameById`](crate::client::fluent_builders::GetGameById) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetGameById::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetGameById::set_game_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetGameById::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetGameById::set_game_id): A universally unique identifier.
+	///   - [`watch_index(impl Into<String>)`](crate::client::fluent_builders::GetGameById::watch_index) / [`set_watch_index(Option<String>)`](crate::client::fluent_builders::GetGameById::set_watch_index): A query parameter denoting the requests watch index.
 	/// - On success, responds with [`GetGameByIdOutput`](crate::output::GetGameByIdOutput) with field(s):
-	///   - [`game(Option<GameFull>)`](crate::output::GetGameByIdOutput::game): (undocumented)
+	///   - [`game(Option<GameFull>)`](crate::output::GetGameByIdOutput::game): A full game.
+	///   - [`watch(Option<WatchResponse>)`](crate::output::GetGameByIdOutput::watch): Provided by watchable endpoints used in blocking loops.
 	/// - On failure, responds with [`SdkError<GetGameByIdError>`](crate::error::GetGameByIdError)
 	pub fn get_game_by_id(&self) -> fluent_builders::GetGameById<C, M, R> {
 		fluent_builders::GetGameById::new(self.handle.clone())
@@ -355,21 +409,22 @@ where
 	/// Constructs a fluent builder for the [`GetGameNamespaceById`](crate::client::fluent_builders::GetGameNamespaceById) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetGameNamespaceById::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetGameNamespaceById::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::GetGameNamespaceById::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::GetGameNamespaceById::set_namespace_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetGameNamespaceById::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetGameNamespaceById::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::GetGameNamespaceById::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::GetGameNamespaceById::set_namespace_id): A universally unique identifier.
 	/// - On success, responds with [`GetGameNamespaceByIdOutput`](crate::output::GetGameNamespaceByIdOutput) with field(s):
-	///   - [`namespace(Option<NamespaceFull>)`](crate::output::GetGameNamespaceByIdOutput::namespace): (undocumented)
+	///   - [`namespace(Option<NamespaceFull>)`](crate::output::GetGameNamespaceByIdOutput::namespace): A full namespace.
 	/// - On failure, responds with [`SdkError<GetGameNamespaceByIdError>`](crate::error::GetGameNamespaceByIdError)
 	pub fn get_game_namespace_by_id(&self) -> fluent_builders::GetGameNamespaceById<C, M, R> {
 		fluent_builders::GetGameNamespaceById::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`GetGames`](crate::client::fluent_builders::GetGames) operation.
 	///
-	/// - The fluent builder takes no input, just [`send`](crate::client::fluent_builders::GetGames::send) it.
-
+	/// - The fluent builder is configurable:
+	///   - [`watch_index(impl Into<String>)`](crate::client::fluent_builders::GetGames::watch_index) / [`set_watch_index(Option<String>)`](crate::client::fluent_builders::GetGames::set_watch_index): A query parameter denoting the requests watch index.
 	/// - On success, responds with [`GetGamesOutput`](crate::output::GetGamesOutput) with field(s):
-	///   - [`games(Option<Vec<GameSummary>>)`](crate::output::GetGamesOutput::games): (undocumented)
-	///   - [`teams(Option<Vec<TeamSummary>>)`](crate::output::GetGamesOutput::teams): (undocumented)
+	///   - [`games(Option<Vec<GameSummary>>)`](crate::output::GetGamesOutput::games): A list of game summaries.
+	///   - [`groups(Option<Vec<GroupSummary>>)`](crate::output::GetGamesOutput::groups): A list of group summaries.
+	///   - [`watch(Option<WatchResponse>)`](crate::output::GetGamesOutput::watch): Provided by watchable endpoints used in blocking loops.
 	/// - On failure, responds with [`SdkError<GetGamesError>`](crate::error::GetGamesError)
 	pub fn get_games(&self) -> fluent_builders::GetGames<C, M, R> {
 		fluent_builders::GetGames::new(self.handle.clone())
@@ -377,21 +432,72 @@ where
 	/// Constructs a fluent builder for the [`GetGameVersionById`](crate::client::fluent_builders::GetGameVersionById) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetGameVersionById::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetGameVersionById::set_game_id): (undocumented)
-	///   - [`version_id(impl Into<String>)`](crate::client::fluent_builders::GetGameVersionById::version_id) / [`set_version_id(Option<String>)`](crate::client::fluent_builders::GetGameVersionById::set_version_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetGameVersionById::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetGameVersionById::set_game_id): A universally unique identifier.
+	///   - [`version_id(impl Into<String>)`](crate::client::fluent_builders::GetGameVersionById::version_id) / [`set_version_id(Option<String>)`](crate::client::fluent_builders::GetGameVersionById::set_version_id): A universally unique identifier.
 	/// - On success, responds with [`GetGameVersionByIdOutput`](crate::output::GetGameVersionByIdOutput) with field(s):
-	///   - [`version(Option<VersionFull>)`](crate::output::GetGameVersionByIdOutput::version): (undocumented)
+	///   - [`version(Option<VersionFull>)`](crate::output::GetGameVersionByIdOutput::version): A full version.
 	/// - On failure, responds with [`SdkError<GetGameVersionByIdError>`](crate::error::GetGameVersionByIdError)
 	pub fn get_game_version_by_id(&self) -> fluent_builders::GetGameVersionById<C, M, R> {
 		fluent_builders::GetGameVersionById::new(self.handle.clone())
 	}
+	/// Constructs a fluent builder for the [`GetGroupBilling`](crate::client::fluent_builders::GetGroupBilling) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupBilling::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupBilling::set_group_id): A universally unique identifier.
+	///   - [`query_start(i64)`](crate::client::fluent_builders::GetGroupBilling::query_start) / [`set_query_start(Option<i64>)`](crate::client::fluent_builders::GetGroupBilling::set_query_start): Unsigned 64 bit integer.
+	///   - [`query_end(i64)`](crate::client::fluent_builders::GetGroupBilling::query_end) / [`set_query_end(Option<i64>)`](crate::client::fluent_builders::GetGroupBilling::set_query_end): Unsigned 64 bit integer.
+	/// - On success, responds with [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput) with field(s):
+	///   - [`billing(Option<GroupBillingSummary>)`](crate::output::GetGroupBillingOutput::billing): A group billing summary.
+	///   - [`bank_source(Option<GroupBankSource>)`](crate::output::GetGroupBillingOutput::bank_source): (undocumented)
+	///   - [`available_regions(Option<Vec<RegionSummary>>)`](crate::output::GetGroupBillingOutput::available_regions): A list of region summaries.
+	/// - On failure, responds with [`SdkError<GetGroupBillingError>`](crate::error::GetGroupBillingError)
+	pub fn get_group_billing(&self) -> fluent_builders::GetGroupBilling<C, M, R> {
+		fluent_builders::GetGroupBilling::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`GetGroupInvoicesList`](crate::client::fluent_builders::GetGroupInvoicesList) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_group_id): A universally unique identifier.
+	///   - [`anchor(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::anchor) / [`set_anchor(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_anchor): How many invoices to offset the search by.
+	///   - [`limit(i32)`](crate::client::fluent_builders::GetGroupInvoicesList::limit) / [`set_limit(Option<i32>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_limit): Amount of invoices to return.
+	/// - On success, responds with [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput) with field(s):
+	///   - [`invoices(Option<Vec<GroupBillingInvoice>>)`](crate::output::GetGroupInvoicesListOutput::invoices): A list of a group's billing invoices.
+	///   - [`anchor(Option<String>)`](crate::output::GetGroupInvoicesListOutput::anchor): The pagination anchor.
+	/// - On failure, responds with [`SdkError<GetGroupInvoicesListError>`](crate::error::GetGroupInvoicesListError)
+	pub fn get_group_invoices_list(&self) -> fluent_builders::GetGroupInvoicesList<C, M, R> {
+		fluent_builders::GetGroupInvoicesList::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`GetGroupPaymentsList`](crate::client::fluent_builders::GetGroupPaymentsList) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::set_group_id): A universally unique identifier.
+	///   - [`start_payment_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::start_payment_id) / [`set_start_payment_id(Option<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::set_start_payment_id): The payment ID of the payment after which to start listing.
+	/// - On success, responds with [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput) with field(s):
+	///   - [`payments(Option<Vec<GroupBillingPayment>>)`](crate::output::GetGroupPaymentsListOutput::payments): A list of a group's billing payments.
+	///   - [`end_payment_id(Option<String>)`](crate::output::GetGroupPaymentsListOutput::end_payment_id): The ID of the last payment listed.
+	/// - On failure, responds with [`SdkError<GetGroupPaymentsListError>`](crate::error::GetGroupPaymentsListError)
+	pub fn get_group_payments_list(&self) -> fluent_builders::GetGroupPaymentsList<C, M, R> {
+		fluent_builders::GetGroupPaymentsList::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`GetGroupTransfersList`](crate::client::fluent_builders::GetGroupTransfersList) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupTransfersList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupTransfersList::set_group_id): A universally unique identifier.
+	///   - [`start_transfer_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupTransfersList::start_transfer_id) / [`set_start_transfer_id(Option<String>)`](crate::client::fluent_builders::GetGroupTransfersList::set_start_transfer_id): The transfer ID of the transfer after which to start listing.
+	/// - On success, responds with [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput) with field(s):
+	///   - [`transfers(Option<Vec<GroupBillingTransfer>>)`](crate::output::GetGroupTransfersListOutput::transfers): A list of a group's billing transfers.
+	///   - [`end_transfer_id(Option<String>)`](crate::output::GetGroupTransfersListOutput::end_transfer_id): The ID of the last transfer listed.
+	/// - On failure, responds with [`SdkError<GetGroupTransfersListError>`](crate::error::GetGroupTransfersListError)
+	pub fn get_group_transfers_list(&self) -> fluent_builders::GetGroupTransfersList<C, M, R> {
+		fluent_builders::GetGroupTransfersList::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`GetNamespaceAnalyticsMatchmakerLive`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::set_namespace_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive::set_namespace_id): A universally unique identifier.
 	/// - On success, responds with [`GetNamespaceAnalyticsMatchmakerLiveOutput`](crate::output::GetNamespaceAnalyticsMatchmakerLiveOutput) with field(s):
-	///   - [`lobbies(Option<Vec<AnalyticsLobbySummary>>)`](crate::output::GetNamespaceAnalyticsMatchmakerLiveOutput::lobbies): (undocumented)
+	///   - [`lobbies(Option<Vec<AnalyticsLobbySummary>>)`](crate::output::GetNamespaceAnalyticsMatchmakerLiveOutput::lobbies): A list of analytics lobby summaries.
 	/// - On failure, responds with [`SdkError<GetNamespaceAnalyticsMatchmakerLiveError>`](crate::error::GetNamespaceAnalyticsMatchmakerLiveError)
 	pub fn get_namespace_analytics_matchmaker_live(
 		&self,
@@ -401,15 +507,15 @@ where
 	/// Constructs a fluent builder for the [`GetNamespaceLobby`](crate::client::fluent_builders::GetNamespaceLobby) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_namespace_id): (undocumented)
-	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_lobby_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_namespace_id): A universally unique identifier.
+	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_lobby_id): A universally unique identifier.
 	/// - On success, responds with [`GetNamespaceLobbyOutput`](crate::output::GetNamespaceLobbyOutput) with field(s):
-	///   - [`lobby(Option<LogsLobbySummary>)`](crate::output::GetNamespaceLobbyOutput::lobby): (undocumented)
-	///   - [`stdout_presigned_urls(Option<Vec<String>>)`](crate::output::GetNamespaceLobbyOutput::stdout_presigned_urls): (undocumented)
-	///   - [`stderr_presigned_urls(Option<Vec<String>>)`](crate::output::GetNamespaceLobbyOutput::stderr_presigned_urls): (undocumented)
-	///   - [`perf_lists(Option<Vec<SvcPerf>>)`](crate::output::GetNamespaceLobbyOutput::perf_lists): (undocumented)
-	///   - [`metrics(Option<SvcMetrics>)`](crate::output::GetNamespaceLobbyOutput::metrics): (undocumented)
+	///   - [`lobby(Option<LogsLobbySummary>)`](crate::output::GetNamespaceLobbyOutput::lobby): A logs summary for a lobby.
+	///   - [`stdout_presigned_urls(Option<Vec<String>>)`](crate::output::GetNamespaceLobbyOutput::stdout_presigned_urls): A list of URLs.
+	///   - [`stderr_presigned_urls(Option<Vec<String>>)`](crate::output::GetNamespaceLobbyOutput::stderr_presigned_urls): A list of URLs.
+	///   - [`perf_lists(Option<Vec<SvcPerf>>)`](crate::output::GetNamespaceLobbyOutput::perf_lists): A list of service performance summaries.
+	///   - [`metrics(Option<SvcMetrics>)`](crate::output::GetNamespaceLobbyOutput::metrics): Metrics relating to a job service.
 	/// - On failure, responds with [`SdkError<GetNamespaceLobbyError>`](crate::error::GetNamespaceLobbyError)
 	pub fn get_namespace_lobby(&self) -> fluent_builders::GetNamespaceLobby<C, M, R> {
 		fluent_builders::GetNamespaceLobby::new(self.handle.clone())
@@ -417,9 +523,9 @@ where
 	/// Constructs a fluent builder for the [`GetRayPerfLogs`](crate::client::fluent_builders::GetRayPerfLogs) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`ray_id(impl Into<String>)`](crate::client::fluent_builders::GetRayPerfLogs::ray_id) / [`set_ray_id(Option<String>)`](crate::client::fluent_builders::GetRayPerfLogs::set_ray_id): (undocumented)
+	///   - [`ray_id(impl Into<String>)`](crate::client::fluent_builders::GetRayPerfLogs::ray_id) / [`set_ray_id(Option<String>)`](crate::client::fluent_builders::GetRayPerfLogs::set_ray_id): A universally unique identifier.
 	/// - On success, responds with [`GetRayPerfLogsOutput`](crate::output::GetRayPerfLogsOutput) with field(s):
-	///   - [`perf_lists(Option<Vec<SvcPerf>>)`](crate::output::GetRayPerfLogsOutput::perf_lists): (undocumented)
+	///   - [`perf_lists(Option<Vec<SvcPerf>>)`](crate::output::GetRayPerfLogsOutput::perf_lists): A list of service performance summaries.
 	/// - On failure, responds with [`SdkError<GetRayPerfLogsError>`](crate::error::GetRayPerfLogsError)
 	pub fn get_ray_perf_logs(&self) -> fluent_builders::GetRayPerfLogs<C, M, R> {
 		fluent_builders::GetRayPerfLogs::new(self.handle.clone())
@@ -429,55 +535,28 @@ where
 	/// - The fluent builder takes no input, just [`send`](crate::client::fluent_builders::GetRegionTiers::send) it.
 
 	/// - On success, responds with [`GetRegionTiersOutput`](crate::output::GetRegionTiersOutput) with field(s):
-	///   - [`tiers(Option<Vec<RegionTier>>)`](crate::output::GetRegionTiersOutput::tiers): (undocumented)
+	///   - [`tiers(Option<Vec<RegionTier>>)`](crate::output::GetRegionTiersOutput::tiers): A list of region server tiers.
 	/// - On failure, responds with [`SdkError<GetRegionTiersError>`](crate::error::GetRegionTiersError)
 	pub fn get_region_tiers(&self) -> fluent_builders::GetRegionTiers<C, M, R> {
 		fluent_builders::GetRegionTiers::new(self.handle.clone())
 	}
-	/// Constructs a fluent builder for the [`GetTeamBilling`](crate::client::fluent_builders::GetTeamBilling) operation.
+	/// Constructs a fluent builder for the [`GroupBillingCheckout`](crate::client::fluent_builders::GroupBillingCheckout) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`team_id(impl Into<String>)`](crate::client::fluent_builders::GetTeamBilling::team_id) / [`set_team_id(Option<String>)`](crate::client::fluent_builders::GetTeamBilling::set_team_id): (undocumented)
-	///   - [`query_start(i64)`](crate::client::fluent_builders::GetTeamBilling::query_start) / [`set_query_start(Option<i64>)`](crate::client::fluent_builders::GetTeamBilling::set_query_start): (undocumented)
-	///   - [`query_end(i64)`](crate::client::fluent_builders::GetTeamBilling::query_end) / [`set_query_end(Option<i64>)`](crate::client::fluent_builders::GetTeamBilling::set_query_end): (undocumented)
-	/// - On success, responds with [`GetTeamBillingOutput`](crate::output::GetTeamBillingOutput) with field(s):
-	///   - [`billing(Option<TeamBillingSummary>)`](crate::output::GetTeamBillingOutput::billing): (undocumented)
-	///   - [`bank_source(Option<TeamBankSource>)`](crate::output::GetTeamBillingOutput::bank_source): (undocumented)
-	///   - [`available_regions(Option<Vec<RegionSummary>>)`](crate::output::GetTeamBillingOutput::available_regions): (undocumented)
-	/// - On failure, responds with [`SdkError<GetTeamBillingError>`](crate::error::GetTeamBillingError)
-	pub fn get_team_billing(&self) -> fluent_builders::GetTeamBilling<C, M, R> {
-		fluent_builders::GetTeamBilling::new(self.handle.clone())
-	}
-	/// Constructs a fluent builder for the [`GetTeamPaymentsList`](crate::client::fluent_builders::GetTeamPaymentsList) operation.
-	///
-	/// - The fluent builder is configurable:
-	///   - [`team_id(impl Into<String>)`](crate::client::fluent_builders::GetTeamPaymentsList::team_id) / [`set_team_id(Option<String>)`](crate::client::fluent_builders::GetTeamPaymentsList::set_team_id): (undocumented)
-	///   - [`start_payment_id(impl Into<String>)`](crate::client::fluent_builders::GetTeamPaymentsList::start_payment_id) / [`set_start_payment_id(Option<String>)`](crate::client::fluent_builders::GetTeamPaymentsList::set_start_payment_id): (undocumented)
-	/// - On success, responds with [`GetTeamPaymentsListOutput`](crate::output::GetTeamPaymentsListOutput) with field(s):
-	///   - [`payments(Option<Vec<TeamBillingPayment>>)`](crate::output::GetTeamPaymentsListOutput::payments): (undocumented)
-	///   - [`end_payment_id(Option<String>)`](crate::output::GetTeamPaymentsListOutput::end_payment_id): (undocumented)
-	/// - On failure, responds with [`SdkError<GetTeamPaymentsListError>`](crate::error::GetTeamPaymentsListError)
-	pub fn get_team_payments_list(&self) -> fluent_builders::GetTeamPaymentsList<C, M, R> {
-		fluent_builders::GetTeamPaymentsList::new(self.handle.clone())
-	}
-	/// Constructs a fluent builder for the [`GetTeamTransfersList`](crate::client::fluent_builders::GetTeamTransfersList) operation.
-	///
-	/// - The fluent builder is configurable:
-	///   - [`team_id(impl Into<String>)`](crate::client::fluent_builders::GetTeamTransfersList::team_id) / [`set_team_id(Option<String>)`](crate::client::fluent_builders::GetTeamTransfersList::set_team_id): (undocumented)
-	///   - [`start_transfer_id(impl Into<String>)`](crate::client::fluent_builders::GetTeamTransfersList::start_transfer_id) / [`set_start_transfer_id(Option<String>)`](crate::client::fluent_builders::GetTeamTransfersList::set_start_transfer_id): (undocumented)
-	/// - On success, responds with [`GetTeamTransfersListOutput`](crate::output::GetTeamTransfersListOutput) with field(s):
-	///   - [`transfers(Option<Vec<TeamBillingTransfer>>)`](crate::output::GetTeamTransfersListOutput::transfers): (undocumented)
-	///   - [`end_transfer_id(Option<String>)`](crate::output::GetTeamTransfersListOutput::end_transfer_id): (undocumented)
-	/// - On failure, responds with [`SdkError<GetTeamTransfersListError>`](crate::error::GetTeamTransfersListError)
-	pub fn get_team_transfers_list(&self) -> fluent_builders::GetTeamTransfersList<C, M, R> {
-		fluent_builders::GetTeamTransfersList::new(self.handle.clone())
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GroupBillingCheckout::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GroupBillingCheckout::set_group_id): A universally unique identifier.
+	///   - [`amount(i64)`](crate::client::fluent_builders::GroupBillingCheckout::amount) / [`set_amount(Option<i64>)`](crate::client::fluent_builders::GroupBillingCheckout::set_amount): How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
+	/// - On success, responds with [`GroupBillingCheckoutOutput`](crate::output::GroupBillingCheckoutOutput) with field(s):
+	///   - [`url(Option<String>)`](crate::output::GroupBillingCheckoutOutput::url): The URL of the checkout session.
+	/// - On failure, responds with [`SdkError<GroupBillingCheckoutError>`](crate::error::GroupBillingCheckoutError)
+	pub fn group_billing_checkout(&self) -> fluent_builders::GroupBillingCheckout<C, M, R> {
+		fluent_builders::GroupBillingCheckout::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`Inspect`](crate::client::fluent_builders::Inspect) operation.
 	///
 	/// - The fluent builder takes no input, just [`send`](crate::client::fluent_builders::Inspect::send) it.
 
 	/// - On success, responds with [`InspectOutput`](crate::output::InspectOutput) with field(s):
-	///   - [`agent(Option<AuthAgent>)`](crate::output::InspectOutput::agent): (undocumented)
+	///   - [`agent(Option<AuthAgent>)`](crate::output::InspectOutput::agent): The current authenticated agent.
 	/// - On failure, responds with [`SdkError<InspectError>`](crate::error::InspectError)
 	pub fn inspect(&self) -> fluent_builders::Inspect<C, M, R> {
 		fluent_builders::Inspect::new(self.handle.clone())
@@ -485,9 +564,9 @@ where
 	/// Constructs a fluent builder for the [`ListGameBuilds`](crate::client::fluent_builders::ListGameBuilds) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListGameBuilds::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListGameBuilds::set_game_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListGameBuilds::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListGameBuilds::set_game_id): A universally unique identifier.
 	/// - On success, responds with [`ListGameBuildsOutput`](crate::output::ListGameBuildsOutput) with field(s):
-	///   - [`builds(Option<Vec<BuildSummary>>)`](crate::output::ListGameBuildsOutput::builds): (undocumented)
+	///   - [`builds(Option<Vec<BuildSummary>>)`](crate::output::ListGameBuildsOutput::builds): A list of build summaries.
 	/// - On failure, responds with [`SdkError<ListGameBuildsError>`](crate::error::ListGameBuildsError)
 	pub fn list_game_builds(&self) -> fluent_builders::ListGameBuilds<C, M, R> {
 		fluent_builders::ListGameBuilds::new(self.handle.clone())
@@ -495,9 +574,9 @@ where
 	/// Constructs a fluent builder for the [`ListGameCdnSites`](crate::client::fluent_builders::ListGameCdnSites) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListGameCdnSites::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListGameCdnSites::set_game_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListGameCdnSites::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListGameCdnSites::set_game_id): A universally unique identifier.
 	/// - On success, responds with [`ListGameCdnSitesOutput`](crate::output::ListGameCdnSitesOutput) with field(s):
-	///   - [`sites(Option<Vec<CdnSiteSummary>>)`](crate::output::ListGameCdnSitesOutput::sites): (undocumented)
+	///   - [`sites(Option<Vec<CdnSiteSummary>>)`](crate::output::ListGameCdnSitesOutput::sites): A list of CDN site summaries.
 	/// - On failure, responds with [`SdkError<ListGameCdnSitesError>`](crate::error::ListGameCdnSitesError)
 	pub fn list_game_cdn_sites(&self) -> fluent_builders::ListGameCdnSites<C, M, R> {
 		fluent_builders::ListGameCdnSites::new(self.handle.clone())
@@ -505,11 +584,11 @@ where
 	/// Constructs a fluent builder for the [`ListNamespaceLobbies`](crate::client::fluent_builders::ListNamespaceLobbies) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::set_namespace_id): (undocumented)
-	///   - [`before_create_ts(i64)`](crate::client::fluent_builders::ListNamespaceLobbies::before_create_ts) / [`set_before_create_ts(Option<i64>)`](crate::client::fluent_builders::ListNamespaceLobbies::set_before_create_ts): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ListNamespaceLobbies::set_namespace_id): A universally unique identifier.
+	///   - [`before_create_ts(DateTime)`](crate::client::fluent_builders::ListNamespaceLobbies::before_create_ts) / [`set_before_create_ts(Option<DateTime>)`](crate::client::fluent_builders::ListNamespaceLobbies::set_before_create_ts): Returns lobbies created before this timestamp.
 	/// - On success, responds with [`ListNamespaceLobbiesOutput`](crate::output::ListNamespaceLobbiesOutput) with field(s):
-	///   - [`lobbies(Option<Vec<LogsLobbySummary>>)`](crate::output::ListNamespaceLobbiesOutput::lobbies): (undocumented)
+	///   - [`lobbies(Option<Vec<LogsLobbySummary>>)`](crate::output::ListNamespaceLobbiesOutput::lobbies): A list of lobby log summaries.
 	/// - On failure, responds with [`SdkError<ListNamespaceLobbiesError>`](crate::error::ListNamespaceLobbiesError)
 	pub fn list_namespace_lobbies(&self) -> fluent_builders::ListNamespaceLobbies<C, M, R> {
 		fluent_builders::ListNamespaceLobbies::new(self.handle.clone())
@@ -517,32 +596,21 @@ where
 	/// Constructs a fluent builder for the [`RemoveNamespaceDomain`](crate::client::fluent_builders::RemoveNamespaceDomain) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::set_namespace_id): (undocumented)
-	///   - [`domain(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::domain) / [`set_domain(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::set_domain): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::set_namespace_id): A universally unique identifier.
+	///   - [`domain(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::domain) / [`set_domain(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceDomain::set_domain): A valid domain name (no protocol).
 	/// - On success, responds with [`RemoveNamespaceDomainOutput`](crate::output::RemoveNamespaceDomainOutput)
 
 	/// - On failure, responds with [`SdkError<RemoveNamespaceDomainError>`](crate::error::RemoveNamespaceDomainError)
 	pub fn remove_namespace_domain(&self) -> fluent_builders::RemoveNamespaceDomain<C, M, R> {
 		fluent_builders::RemoveNamespaceDomain::new(self.handle.clone())
 	}
-	/// Constructs a fluent builder for the [`TeamBillingCheckout`](crate::client::fluent_builders::TeamBillingCheckout) operation.
-	///
-	/// - The fluent builder is configurable:
-	///   - [`team_id(impl Into<String>)`](crate::client::fluent_builders::TeamBillingCheckout::team_id) / [`set_team_id(Option<String>)`](crate::client::fluent_builders::TeamBillingCheckout::set_team_id): (undocumented)
-	///   - [`amount(i64)`](crate::client::fluent_builders::TeamBillingCheckout::amount) / [`set_amount(Option<i64>)`](crate::client::fluent_builders::TeamBillingCheckout::set_amount): (undocumented)
-	/// - On success, responds with [`TeamBillingCheckoutOutput`](crate::output::TeamBillingCheckoutOutput) with field(s):
-	///   - [`url(Option<String>)`](crate::output::TeamBillingCheckoutOutput::url): (undocumented)
-	/// - On failure, responds with [`SdkError<TeamBillingCheckoutError>`](crate::error::TeamBillingCheckoutError)
-	pub fn team_billing_checkout(&self) -> fluent_builders::TeamBillingCheckout<C, M, R> {
-		fluent_builders::TeamBillingCheckout::new(self.handle.clone())
-	}
 	/// Constructs a fluent builder for the [`ToggleNamespaceDomainPublicAuth`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::set_namespace_id): (undocumented)
-	///   - [`enabled(bool)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::enabled) / [`set_enabled(Option<bool>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::set_enabled): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::set_namespace_id): A universally unique identifier.
+	///   - [`enabled(bool)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::enabled) / [`set_enabled(Option<bool>)`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth::set_enabled): Whether or not to enable authentication based on domain.
 	/// - On success, responds with [`ToggleNamespaceDomainPublicAuthOutput`](crate::output::ToggleNamespaceDomainPublicAuthOutput)
 
 	/// - On failure, responds with [`SdkError<ToggleNamespaceDomainPublicAuthError>`](crate::error::ToggleNamespaceDomainPublicAuthError)
@@ -554,10 +622,10 @@ where
 	/// Constructs a fluent builder for the [`UpdateGameNamespaceMatchmakerConfig`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_namespace_id): (undocumented)
-	///   - [`lobby_count_max(i32)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::lobby_count_max) / [`set_lobby_count_max(Option<i32>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_lobby_count_max): (undocumented)
-	///   - [`max_players(i32)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::max_players) / [`set_max_players(Option<i32>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_max_players): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_namespace_id): A universally unique identifier.
+	///   - [`lobby_count_max(i32)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::lobby_count_max) / [`set_lobby_count_max(Option<i32>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_lobby_count_max): Unsigned 32 bit integer.
+	///   - [`max_players(i32)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::max_players) / [`set_max_players(Option<i32>)`](crate::client::fluent_builders::UpdateGameNamespaceMatchmakerConfig::set_max_players): Unsigned 32 bit integer.
 	/// - On success, responds with [`UpdateGameNamespaceMatchmakerConfigOutput`](crate::output::UpdateGameNamespaceMatchmakerConfigOutput)
 
 	/// - On failure, responds with [`SdkError<UpdateGameNamespaceMatchmakerConfigError>`](crate::error::UpdateGameNamespaceMatchmakerConfigError)
@@ -569,9 +637,9 @@ where
 	/// Constructs a fluent builder for the [`UpdateGameNamespaceVersion`](crate::client::fluent_builders::UpdateGameNamespaceVersion) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::set_namespace_id): (undocumented)
-	///   - [`version_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::version_id) / [`set_version_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::set_version_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::set_namespace_id): A universally unique identifier.
+	///   - [`version_id(impl Into<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::version_id) / [`set_version_id(Option<String>)`](crate::client::fluent_builders::UpdateGameNamespaceVersion::set_version_id): A universally unique identifier.
 	/// - On success, responds with [`UpdateGameNamespaceVersionOutput`](crate::output::UpdateGameNamespaceVersionOutput)
 
 	/// - On failure, responds with [`SdkError<UpdateGameNamespaceVersionError>`](crate::error::UpdateGameNamespaceVersionError)
@@ -583,9 +651,9 @@ where
 	/// Constructs a fluent builder for the [`UpdateNamespaceDomain`](crate::client::fluent_builders::UpdateNamespaceDomain) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_namespace_id): (undocumented)
-	///   - [`domain(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::domain) / [`set_domain(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_domain): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_namespace_id): A universally unique identifier.
+	///   - [`domain(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::domain) / [`set_domain(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_domain): A valid domain name (no protocol).
 	/// - On success, responds with [`UpdateNamespaceDomainOutput`](crate::output::UpdateNamespaceDomainOutput)
 
 	/// - On failure, responds with [`SdkError<UpdateNamespaceDomainError>`](crate::error::UpdateNamespaceDomainError)
@@ -595,10 +663,10 @@ where
 	/// Constructs a fluent builder for the [`ValidateGame`](crate::client::fluent_builders::ValidateGame) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGame::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGame::set_display_name): (undocumented)
-	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGame::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::ValidateGame::set_name_id): (undocumented)
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGame::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGame::set_display_name): Represent a resource's readable display name.
+	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGame::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::ValidateGame::set_name_id): A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	/// - On success, responds with [`ValidateGameOutput`](crate::output::ValidateGameOutput) with field(s):
-	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameOutput::errors): (undocumented)
+	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameOutput::errors): A list of validation errors.
 	/// - On failure, responds with [`SdkError<ValidateGameError>`](crate::error::ValidateGameError)
 	pub fn validate_game(&self) -> fluent_builders::ValidateGame<C, M, R> {
 		fluent_builders::ValidateGame::new(self.handle.clone())
@@ -606,11 +674,11 @@ where
 	/// Constructs a fluent builder for the [`ValidateGameNamespace`](crate::client::fluent_builders::ValidateGameNamespace) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespace::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespace::set_game_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespace::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespace::set_display_name): (undocumented)
-	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespace::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespace::set_name_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespace::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespace::set_game_id): A universally unique identifier.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespace::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespace::set_display_name): Represent a resource's readable display name.
+	///   - [`name_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespace::name_id) / [`set_name_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespace::set_name_id): A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	/// - On success, responds with [`ValidateGameNamespaceOutput`](crate::output::ValidateGameNamespaceOutput) with field(s):
-	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameNamespaceOutput::errors): (undocumented)
+	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameNamespaceOutput::errors): A list of validation errors.
 	/// - On failure, responds with [`SdkError<ValidateGameNamespaceError>`](crate::error::ValidateGameNamespaceError)
 	pub fn validate_game_namespace(&self) -> fluent_builders::ValidateGameNamespace<C, M, R> {
 		fluent_builders::ValidateGameNamespace::new(self.handle.clone())
@@ -618,12 +686,12 @@ where
 	/// Constructs a fluent builder for the [`ValidateGameNamespaceMatchmakerConfig`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_namespace_id): (undocumented)
-	///   - [`lobby_count_max(i32)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::lobby_count_max) / [`set_lobby_count_max(Option<i32>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_lobby_count_max): (undocumented)
-	///   - [`max_players(i32)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::max_players) / [`set_max_players(Option<i32>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_max_players): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_namespace_id): A universally unique identifier.
+	///   - [`lobby_count_max(i32)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::lobby_count_max) / [`set_lobby_count_max(Option<i32>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_lobby_count_max): Unsigned 32 bit integer.
+	///   - [`max_players(i32)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::max_players) / [`set_max_players(Option<i32>)`](crate::client::fluent_builders::ValidateGameNamespaceMatchmakerConfig::set_max_players): Unsigned 32 bit integer.
 	/// - On success, responds with [`ValidateGameNamespaceMatchmakerConfigOutput`](crate::output::ValidateGameNamespaceMatchmakerConfigOutput) with field(s):
-	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameNamespaceMatchmakerConfigOutput::errors): (undocumented)
+	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameNamespaceMatchmakerConfigOutput::errors): A list of validation errors.
 	/// - On failure, responds with [`SdkError<ValidateGameNamespaceMatchmakerConfigError>`](crate::error::ValidateGameNamespaceMatchmakerConfigError)
 	pub fn validate_game_namespace_matchmaker_config(
 		&self,
@@ -633,12 +701,12 @@ where
 	/// Constructs a fluent builder for the [`ValidateGameNamespaceTokenDevelopment`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_game_id): (undocumented)
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_namespace_id): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_namespace_id): A universally unique identifier.
 	///   - [`hostname(impl Into<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::hostname) / [`set_hostname(Option<String>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_hostname): (undocumented)
-	///   - [`lobby_ports(Vec<LobbyGroupRuntimeDockerPort>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::lobby_ports) / [`set_lobby_ports(Option<Vec<LobbyGroupRuntimeDockerPort>>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_lobby_ports): (undocumented)
+	///   - [`lobby_ports(Vec<LobbyGroupRuntimeDockerPort>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::lobby_ports) / [`set_lobby_ports(Option<Vec<LobbyGroupRuntimeDockerPort>>)`](crate::client::fluent_builders::ValidateGameNamespaceTokenDevelopment::set_lobby_ports): A list of docker ports.
 	/// - On success, responds with [`ValidateGameNamespaceTokenDevelopmentOutput`](crate::output::ValidateGameNamespaceTokenDevelopmentOutput) with field(s):
-	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameNamespaceTokenDevelopmentOutput::errors): (undocumented)
+	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameNamespaceTokenDevelopmentOutput::errors): A list of validation errors.
 	/// - On failure, responds with [`SdkError<ValidateGameNamespaceTokenDevelopmentError>`](crate::error::ValidateGameNamespaceTokenDevelopmentError)
 	pub fn validate_game_namespace_token_development(
 		&self,
@@ -648,24 +716,24 @@ where
 	/// Constructs a fluent builder for the [`ValidateGameVersion`](crate::client::fluent_builders::ValidateGameVersion) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameVersion::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameVersion::set_game_id): (undocumented)
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGameVersion::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGameVersion::set_display_name): (undocumented)
-	///   - [`config(CloudVersionConfig)`](crate::client::fluent_builders::ValidateGameVersion::config) / [`set_config(Option<CloudVersionConfig>)`](crate::client::fluent_builders::ValidateGameVersion::set_config): (undocumented)
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ValidateGameVersion::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ValidateGameVersion::set_game_id): A universally unique identifier.
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGameVersion::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGameVersion::set_display_name): Represent a resource's readable display name.
+	///   - [`config(CloudVersionConfig)`](crate::client::fluent_builders::ValidateGameVersion::config) / [`set_config(Option<CloudVersionConfig>)`](crate::client::fluent_builders::ValidateGameVersion::set_config): Cloud configuration for a given version.
 	/// - On success, responds with [`ValidateGameVersionOutput`](crate::output::ValidateGameVersionOutput) with field(s):
-	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameVersionOutput::errors): (undocumented)
+	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGameVersionOutput::errors): A list of validation errors.
 	/// - On failure, responds with [`SdkError<ValidateGameVersionError>`](crate::error::ValidateGameVersionError)
 	pub fn validate_game_version(&self) -> fluent_builders::ValidateGameVersion<C, M, R> {
 		fluent_builders::ValidateGameVersion::new(self.handle.clone())
 	}
-	/// Constructs a fluent builder for the [`ValidateTeam`](crate::client::fluent_builders::ValidateTeam) operation.
+	/// Constructs a fluent builder for the [`ValidateGroup`](crate::client::fluent_builders::ValidateGroup) operation.
 	///
 	/// - The fluent builder is configurable:
-	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateTeam::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateTeam::set_display_name): (undocumented)
-	/// - On success, responds with [`ValidateTeamOutput`](crate::output::ValidateTeamOutput) with field(s):
-	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateTeamOutput::errors): (undocumented)
-	/// - On failure, responds with [`SdkError<ValidateTeamError>`](crate::error::ValidateTeamError)
-	pub fn validate_team(&self) -> fluent_builders::ValidateTeam<C, M, R> {
-		fluent_builders::ValidateTeam::new(self.handle.clone())
+	///   - [`display_name(impl Into<String>)`](crate::client::fluent_builders::ValidateGroup::display_name) / [`set_display_name(Option<String>)`](crate::client::fluent_builders::ValidateGroup::set_display_name): Represent a resource's readable display name.
+	/// - On success, responds with [`ValidateGroupOutput`](crate::output::ValidateGroupOutput) with field(s):
+	///   - [`errors(Option<Vec<ValidationError>>)`](crate::output::ValidateGroupOutput::errors): A list of validation errors.
+	/// - On failure, responds with [`SdkError<ValidateGroupError>`](crate::error::ValidateGroupError)
+	pub fn validate_group(&self) -> fluent_builders::ValidateGroup<C, M, R> {
+		fluent_builders::ValidateGroup::new(self.handle.clone())
 	}
 }
 pub mod fluent_builders {
@@ -678,6 +746,7 @@ pub mod fluent_builders {
 	//!
 	/// Fluent builder constructing a request to `CompleteUpload`.
 	///
+	/// Marks an upload as complete.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CompleteUpload<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -730,31 +799,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.upload_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_upload_id(input);
 			self
 		}
 	}
-	/// Fluent builder constructing a request to `ConvertTeam`.
+	/// Fluent builder constructing a request to `ConvertGroup`.
 	///
+	/// Converts the given group into a developer group.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct ConvertTeam<C, M, R = aws_smithy_client::retry::Standard> {
+	pub struct ConvertGroup<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::convert_team_input::Builder,
+		inner: crate::input::convert_group_input::Builder,
 	}
-	impl<C, M, R> ConvertTeam<C, M, R>
+	impl<C, M, R> ConvertGroup<C, M, R>
 	where
 		C: aws_smithy_client::bounds::SmithyConnector,
 		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
 		R: aws_smithy_client::retry::NewRequestPolicy,
 	{
-		/// Creates a new `ConvertTeam`.
+		/// Creates a new `ConvertGroup`.
 		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
 			Self {
 				handle,
@@ -773,15 +843,15 @@ pub mod fluent_builders {
 		pub async fn send(
 			self,
 		) -> std::result::Result<
-			crate::output::ConvertTeamOutput,
-			aws_smithy_http::result::SdkError<crate::error::ConvertTeamError>,
+			crate::output::ConvertGroupOutput,
+			aws_smithy_http::result::SdkError<crate::error::ConvertGroupError>,
 		>
 		where
 			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::ConvertTeamInputOperationOutputAlias,
-				crate::output::ConvertTeamOutput,
-				crate::error::ConvertTeamError,
-				crate::input::ConvertTeamInputOperationRetryAlias,
+				crate::input::ConvertGroupInputOperationOutputAlias,
+				crate::output::ConvertGroupOutput,
+				crate::error::ConvertGroupError,
+				crate::input::ConvertGroupInputOperationRetryAlias,
 			>,
 		{
 			let op = self
@@ -795,19 +865,20 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.team_id(input.into());
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_team_id(input);
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
 			self
 		}
 	}
 	/// Fluent builder constructing a request to `CreateCloudToken`.
 	///
+	/// Creates a new game cloud token.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateCloudToken<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -860,12 +931,12 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
@@ -873,6 +944,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `CreateGame`.
 	///
+	/// Creates a new game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGame<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -925,42 +997,43 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.name_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_name_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn developer_team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.developer_team_id(input.into());
+		/// A universally unique identifier.
+		pub fn developer_group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.developer_group_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_developer_team_id(
+		/// A universally unique identifier.
+		pub fn set_developer_group_id(
 			mut self,
 			input: std::option::Option<std::string::String>,
 		) -> Self {
-			self.inner = self.inner.set_developer_team_id(input);
+			self.inner = self.inner.set_developer_group_id(input);
 			self
 		}
 	}
 	/// Fluent builder constructing a request to `CreateGameBuild`.
 	///
+	/// Creates a new game build for the given game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGameBuild<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1013,42 +1086,42 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A tag given to the game build.
 		pub fn image_tag(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.image_tag(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A tag given to the game build.
 		pub fn set_image_tag(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_image_tag(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A file being prepared to upload.
 		pub fn image_file(mut self, input: crate::model::UploadPrepareFile) -> Self {
 			self.inner = self.inner.image_file(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A file being prepared to upload.
 		pub fn set_image_file(
 			mut self,
 			input: std::option::Option<crate::model::UploadPrepareFile>,
@@ -1059,6 +1132,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `CreateGameCdnSite`.
 	///
+	/// Creates a new CDN site for the given game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGameCdnSite<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1111,22 +1185,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
@@ -1135,12 +1209,12 @@ pub mod fluent_builders {
 		///
 		/// To override the contents of this collection use [`set_files`](Self::set_files).
 		///
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of files preparing to upload.
 		pub fn files(mut self, input: crate::model::UploadPrepareFile) -> Self {
 			self.inner = self.inner.files(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of files preparing to upload.
 		pub fn set_files(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::UploadPrepareFile>>,
@@ -1151,6 +1225,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `CreateGameNamespace`.
 	///
+	/// Creates a new namespace for the given game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGameNamespace<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1203,42 +1278,42 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.version_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_version_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.name_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_name_id(input);
 			self
@@ -1246,6 +1321,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `CreateGameNamespaceTokenDevelopment`.
 	///
+	/// Creates a development token for the given namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGameNamespaceTokenDevelopment<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1300,32 +1376,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The hostname used for the token.
 		pub fn hostname(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.hostname(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The hostname used for the token.
 		pub fn set_hostname(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_hostname(input);
 			self
@@ -1334,12 +1410,12 @@ pub mod fluent_builders {
 		///
 		/// To override the contents of this collection use [`set_lobby_ports`](Self::set_lobby_ports).
 		///
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of docker ports.
 		pub fn lobby_ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
 			self.inner = self.inner.lobby_ports(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of docker ports.
 		pub fn set_lobby_ports(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
@@ -1350,6 +1426,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `CreateGameNamespaceTokenPublic`.
 	///
+	/// Creates a public token for the given namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGameNamespaceTokenPublic<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1402,22 +1479,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
@@ -1425,6 +1502,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `CreateGameVersion`.
 	///
+	/// Creates a new game version.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct CreateGameVersion<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1477,32 +1555,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn config(mut self, input: crate::model::CloudVersionConfig) -> Self {
 			self.inner = self.inner.config(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn set_config(
 			mut self,
 			input: std::option::Option<crate::model::CloudVersionConfig>,
@@ -1513,6 +1591,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `DeleteMatchmakerLobby`.
 	///
+	/// Deletes a matchmaker lobby, stopping it immediately.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct DeleteMatchmakerLobby<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1565,22 +1644,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn lobby_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.lobby_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_lobby_id(input);
 			self
@@ -1588,6 +1667,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ExportMatchmakerLobbyHistory`.
 	///
+	/// Exports lobby history over a given query time span.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ExportMatchmakerLobbyHistory<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1640,39 +1720,384 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn query_start(mut self, input: i64) -> Self {
 			self.inner = self.inner.query_start(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn set_query_start(mut self, input: std::option::Option<i64>) -> Self {
 			self.inner = self.inner.set_query_start(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn query_end(mut self, input: i64) -> Self {
 			self.inner = self.inner.query_end(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 64 bit integer.
 		pub fn set_query_end(mut self, input: std::option::Option<i64>) -> Self {
 			self.inner = self.inner.set_query_end(input);
 			self
 		}
 	}
+	/// Fluent builder constructing a request to `GameBannerUploadComplete`.
+	///
+	/// Completes an game banner image upload. Must be called after the file upload process completes.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GameBannerUploadComplete<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::game_banner_upload_complete_input::Builder,
+	}
+	impl<C, M, R> GameBannerUploadComplete<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GameBannerUploadComplete`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GameBannerUploadCompleteOutput,
+			aws_smithy_http::result::SdkError<crate::error::GameBannerUploadCompleteError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GameBannerUploadCompleteInputOperationOutputAlias,
+				crate::output::GameBannerUploadCompleteOutput,
+				crate::error::GameBannerUploadCompleteError,
+				crate::input::GameBannerUploadCompleteInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.upload_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_upload_id(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `GameBannerUploadPrepare`.
+	///
+	/// Prepares a game banner image upload.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GameBannerUploadPrepare<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::game_banner_upload_prepare_input::Builder,
+	}
+	impl<C, M, R> GameBannerUploadPrepare<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GameBannerUploadPrepare`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GameBannerUploadPrepareOutput,
+			aws_smithy_http::result::SdkError<crate::error::GameBannerUploadPrepareError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GameBannerUploadPrepareInputOperationOutputAlias,
+				crate::output::GameBannerUploadPrepareOutput,
+				crate::error::GameBannerUploadPrepareError,
+				crate::input::GameBannerUploadPrepareInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// The path/filename of the game banner.
+		pub fn path(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.path(input.into());
+			self
+		}
+		/// The path/filename of the game banner.
+		pub fn set_path(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_path(input);
+			self
+		}
+		/// The MIME type of the game banner.
+		pub fn mime(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.mime(input.into());
+			self
+		}
+		/// The MIME type of the game banner.
+		pub fn set_mime(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_mime(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn content_length(mut self, input: i64) -> Self {
+			self.inner = self.inner.content_length(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_content_length(mut self, input: std::option::Option<i64>) -> Self {
+			self.inner = self.inner.set_content_length(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `GameLogoUploadComplete`.
+	///
+	/// Completes a game logo image upload. Must be called after the file upload process completes.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GameLogoUploadComplete<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::game_logo_upload_complete_input::Builder,
+	}
+	impl<C, M, R> GameLogoUploadComplete<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GameLogoUploadComplete`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GameLogoUploadCompleteOutput,
+			aws_smithy_http::result::SdkError<crate::error::GameLogoUploadCompleteError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GameLogoUploadCompleteInputOperationOutputAlias,
+				crate::output::GameLogoUploadCompleteOutput,
+				crate::error::GameLogoUploadCompleteError,
+				crate::input::GameLogoUploadCompleteInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.upload_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_upload_id(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `GameLogoUploadPrepare`.
+	///
+	/// Prepares a game logo image upload.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GameLogoUploadPrepare<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::game_logo_upload_prepare_input::Builder,
+	}
+	impl<C, M, R> GameLogoUploadPrepare<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GameLogoUploadPrepare`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GameLogoUploadPrepareOutput,
+			aws_smithy_http::result::SdkError<crate::error::GameLogoUploadPrepareError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GameLogoUploadPrepareInputOperationOutputAlias,
+				crate::output::GameLogoUploadPrepareOutput,
+				crate::error::GameLogoUploadPrepareError,
+				crate::input::GameLogoUploadPrepareInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// The path/filename of the game logo.
+		pub fn path(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.path(input.into());
+			self
+		}
+		/// The path/filename of the game logo.
+		pub fn set_path(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_path(input);
+			self
+		}
+		/// The MIME type of the game logo.
+		pub fn mime(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.mime(input.into());
+			self
+		}
+		/// The MIME type of the game logo.
+		pub fn set_mime(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_mime(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn content_length(mut self, input: i64) -> Self {
+			self.inner = self.inner.content_length(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_content_length(mut self, input: std::option::Option<i64>) -> Self {
+			self.inner = self.inner.set_content_length(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `GetGameById`.
 	///
+	/// Returns a game by its game id.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetGameById<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1725,19 +2150,30 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.watch_index(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_watch_index(input);
 			self
 		}
 	}
 	/// Fluent builder constructing a request to `GetGameNamespaceById`.
 	///
+	/// Gets a game namespace by namespace ID.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetGameNamespaceById<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1790,22 +2226,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
@@ -1813,6 +2249,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `GetGames`.
 	///
+	/// Returns a list of games in which the current identity is a group member of its development team.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetGames<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1865,9 +2302,20 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.watch_index(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_watch_index(input);
+			self
+		}
 	}
 	/// Fluent builder constructing a request to `GetGameVersionById`.
 	///
+	/// Returns a game version by its version ID.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetGameVersionById<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1920,29 +2368,360 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.version_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_version_id(input);
 			self
 		}
 	}
+	/// Fluent builder constructing a request to `GetGroupBilling`.
+	///
+	/// Returns billing information for the given group over the given query time span.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GetGroupBilling<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::get_group_billing_input::Builder,
+	}
+	impl<C, M, R> GetGroupBilling<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GetGroupBilling`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GetGroupBillingOutput,
+			aws_smithy_http::result::SdkError<crate::error::GetGroupBillingError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GetGroupBillingInputOperationOutputAlias,
+				crate::output::GetGroupBillingOutput,
+				crate::error::GetGroupBillingError,
+				crate::input::GetGroupBillingInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn query_start(mut self, input: i64) -> Self {
+			self.inner = self.inner.query_start(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_query_start(mut self, input: std::option::Option<i64>) -> Self {
+			self.inner = self.inner.set_query_start(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn query_end(mut self, input: i64) -> Self {
+			self.inner = self.inner.query_end(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_query_end(mut self, input: std::option::Option<i64>) -> Self {
+			self.inner = self.inner.set_query_end(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `GetGroupInvoicesList`.
+	///
+	/// Returns a list of invoices for the given group.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GetGroupInvoicesList<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::get_group_invoices_list_input::Builder,
+	}
+	impl<C, M, R> GetGroupInvoicesList<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GetGroupInvoicesList`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GetGroupInvoicesListOutput,
+			aws_smithy_http::result::SdkError<crate::error::GetGroupInvoicesListError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GetGroupInvoicesListInputOperationOutputAlias,
+				crate::output::GetGroupInvoicesListOutput,
+				crate::error::GetGroupInvoicesListError,
+				crate::input::GetGroupInvoicesListInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
+			self
+		}
+		/// How many invoices to offset the search by.
+		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.anchor(input.into());
+			self
+		}
+		/// How many invoices to offset the search by.
+		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_anchor(input);
+			self
+		}
+		/// Amount of invoices to return.
+		pub fn limit(mut self, input: i32) -> Self {
+			self.inner = self.inner.limit(input);
+			self
+		}
+		/// Amount of invoices to return.
+		pub fn set_limit(mut self, input: std::option::Option<i32>) -> Self {
+			self.inner = self.inner.set_limit(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `GetGroupPaymentsList`.
+	///
+	/// Returns a list of payments for the given group.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GetGroupPaymentsList<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::get_group_payments_list_input::Builder,
+	}
+	impl<C, M, R> GetGroupPaymentsList<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GetGroupPaymentsList`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GetGroupPaymentsListOutput,
+			aws_smithy_http::result::SdkError<crate::error::GetGroupPaymentsListError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GetGroupPaymentsListInputOperationOutputAlias,
+				crate::output::GetGroupPaymentsListOutput,
+				crate::error::GetGroupPaymentsListError,
+				crate::input::GetGroupPaymentsListInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
+			self
+		}
+		/// The payment ID of the payment after which to start listing.
+		pub fn start_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.start_payment_id(input.into());
+			self
+		}
+		/// The payment ID of the payment after which to start listing.
+		pub fn set_start_payment_id(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.inner = self.inner.set_start_payment_id(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `GetGroupTransfersList`.
+	///
+	/// Returns a list of bank transfers for the given group.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GetGroupTransfersList<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::get_group_transfers_list_input::Builder,
+	}
+	impl<C, M, R> GetGroupTransfersList<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GetGroupTransfersList`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GetGroupTransfersListOutput,
+			aws_smithy_http::result::SdkError<crate::error::GetGroupTransfersListError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GetGroupTransfersListInputOperationOutputAlias,
+				crate::output::GetGroupTransfersListOutput,
+				crate::error::GetGroupTransfersListError,
+				crate::input::GetGroupTransfersListInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
+			self
+		}
+		/// The transfer ID of the transfer after which to start listing.
+		pub fn start_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.start_transfer_id(input.into());
+			self
+		}
+		/// The transfer ID of the transfer after which to start listing.
+		pub fn set_start_transfer_id(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.inner = self.inner.set_start_transfer_id(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `GetNamespaceAnalyticsMatchmakerLive`.
 	///
+	/// Returns live information about all active lobies for a given namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetNamespaceAnalyticsMatchmakerLive<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -1997,22 +2776,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
@@ -2020,6 +2799,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `GetNamespaceLobby`.
 	///
+	/// Returns a lobby from the given game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetNamespaceLobby<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2072,32 +2852,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn lobby_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.lobby_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_lobby_id(input);
 			self
@@ -2105,6 +2885,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `GetRayPerfLogs`.
 	///
+	/// Returns performance information about a Rivet Ray.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetRayPerfLogs<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2157,12 +2938,12 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn ray_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.ray_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_ray_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_ray_id(input);
 			self
@@ -2170,6 +2951,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `GetRegionTiers`.
 	///
+	/// Returns all available region tiers.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct GetRegionTiers<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2223,20 +3005,21 @@ pub mod fluent_builders {
 			self.handle.client.call(op).await
 		}
 	}
-	/// Fluent builder constructing a request to `GetTeamBilling`.
+	/// Fluent builder constructing a request to `GroupBillingCheckout`.
 	///
+	/// Creates a checkout session for the given group.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct GetTeamBilling<C, M, R = aws_smithy_client::retry::Standard> {
+	pub struct GroupBillingCheckout<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::get_team_billing_input::Builder,
+		inner: crate::input::group_billing_checkout_input::Builder,
 	}
-	impl<C, M, R> GetTeamBilling<C, M, R>
+	impl<C, M, R> GroupBillingCheckout<C, M, R>
 	where
 		C: aws_smithy_client::bounds::SmithyConnector,
 		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
 		R: aws_smithy_client::retry::NewRequestPolicy,
 	{
-		/// Creates a new `GetTeamBilling`.
+		/// Creates a new `GroupBillingCheckout`.
 		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
 			Self {
 				handle,
@@ -2255,15 +3038,15 @@ pub mod fluent_builders {
 		pub async fn send(
 			self,
 		) -> std::result::Result<
-			crate::output::GetTeamBillingOutput,
-			aws_smithy_http::result::SdkError<crate::error::GetTeamBillingError>,
+			crate::output::GroupBillingCheckoutOutput,
+			aws_smithy_http::result::SdkError<crate::error::GroupBillingCheckoutError>,
 		>
 		where
 			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::GetTeamBillingInputOperationOutputAlias,
-				crate::output::GetTeamBillingOutput,
-				crate::error::GetTeamBillingError,
-				crate::input::GetTeamBillingInputOperationRetryAlias,
+				crate::input::GroupBillingCheckoutInputOperationOutputAlias,
+				crate::output::GroupBillingCheckoutOutput,
+				crate::error::GroupBillingCheckoutError,
+				crate::input::GroupBillingCheckoutInputOperationRetryAlias,
 			>,
 		{
 			let op = self
@@ -2277,195 +3060,30 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.team_id(input.into());
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_team_id(input);
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn query_start(mut self, input: i64) -> Self {
-			self.inner = self.inner.query_start(input);
+		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
+		pub fn amount(mut self, input: i64) -> Self {
+			self.inner = self.inner.amount(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_query_start(mut self, input: std::option::Option<i64>) -> Self {
-			self.inner = self.inner.set_query_start(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn query_end(mut self, input: i64) -> Self {
-			self.inner = self.inner.query_end(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_query_end(mut self, input: std::option::Option<i64>) -> Self {
-			self.inner = self.inner.set_query_end(input);
-			self
-		}
-	}
-	/// Fluent builder constructing a request to `GetTeamPaymentsList`.
-	///
-	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct GetTeamPaymentsList<C, M, R = aws_smithy_client::retry::Standard> {
-		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::get_team_payments_list_input::Builder,
-	}
-	impl<C, M, R> GetTeamPaymentsList<C, M, R>
-	where
-		C: aws_smithy_client::bounds::SmithyConnector,
-		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
-		R: aws_smithy_client::retry::NewRequestPolicy,
-	{
-		/// Creates a new `GetTeamPaymentsList`.
-		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
-			Self {
-				handle,
-				inner: Default::default(),
-			}
-		}
-
-		/// Sends the request and returns the response.
-		///
-		/// If an error occurs, an `SdkError` will be returned with additional details that
-		/// can be matched against.
-		///
-		/// By default, any retryable failures will be retried twice. Retry behavior
-		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
-		/// set when configuring the client.
-		pub async fn send(
-			self,
-		) -> std::result::Result<
-			crate::output::GetTeamPaymentsListOutput,
-			aws_smithy_http::result::SdkError<crate::error::GetTeamPaymentsListError>,
-		>
-		where
-			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::GetTeamPaymentsListInputOperationOutputAlias,
-				crate::output::GetTeamPaymentsListOutput,
-				crate::error::GetTeamPaymentsListError,
-				crate::input::GetTeamPaymentsListInputOperationRetryAlias,
-			>,
-		{
-			let op = self
-				.inner
-				.build()
-				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
-				.make_operation(&self.handle.conf)
-				.await
-				.map_err(|err| {
-					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
-				})?;
-			self.handle.client.call(op).await
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.team_id(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_team_id(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn start_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.start_payment_id(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_start_payment_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.inner = self.inner.set_start_payment_id(input);
-			self
-		}
-	}
-	/// Fluent builder constructing a request to `GetTeamTransfersList`.
-	///
-	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct GetTeamTransfersList<C, M, R = aws_smithy_client::retry::Standard> {
-		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::get_team_transfers_list_input::Builder,
-	}
-	impl<C, M, R> GetTeamTransfersList<C, M, R>
-	where
-		C: aws_smithy_client::bounds::SmithyConnector,
-		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
-		R: aws_smithy_client::retry::NewRequestPolicy,
-	{
-		/// Creates a new `GetTeamTransfersList`.
-		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
-			Self {
-				handle,
-				inner: Default::default(),
-			}
-		}
-
-		/// Sends the request and returns the response.
-		///
-		/// If an error occurs, an `SdkError` will be returned with additional details that
-		/// can be matched against.
-		///
-		/// By default, any retryable failures will be retried twice. Retry behavior
-		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
-		/// set when configuring the client.
-		pub async fn send(
-			self,
-		) -> std::result::Result<
-			crate::output::GetTeamTransfersListOutput,
-			aws_smithy_http::result::SdkError<crate::error::GetTeamTransfersListError>,
-		>
-		where
-			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::GetTeamTransfersListInputOperationOutputAlias,
-				crate::output::GetTeamTransfersListOutput,
-				crate::error::GetTeamTransfersListError,
-				crate::input::GetTeamTransfersListInputOperationRetryAlias,
-			>,
-		{
-			let op = self
-				.inner
-				.build()
-				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
-				.make_operation(&self.handle.conf)
-				.await
-				.map_err(|err| {
-					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
-				})?;
-			self.handle.client.call(op).await
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.team_id(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_team_id(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn start_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.start_transfer_id(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_start_transfer_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.inner = self.inner.set_start_transfer_id(input);
+		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
+		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
+			self.inner = self.inner.set_amount(input);
 			self
 		}
 	}
 	/// Fluent builder constructing a request to `Inspect`.
 	///
+	/// Returns information about the current authenticated agent.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct Inspect<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2521,6 +3139,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ListGameBuilds`.
 	///
+	/// Lists game builds for the given game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ListGameBuilds<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2573,12 +3192,12 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
@@ -2586,6 +3205,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ListGameCdnSites`.
 	///
+	/// Lists CDN sites for a game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ListGameCdnSites<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2638,12 +3258,12 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
@@ -2651,6 +3271,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ListNamespaceLobbies`.
 	///
+	/// Returns a list of lobbies for the given game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ListNamespaceLobbies<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2703,39 +3324,43 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn before_create_ts(mut self, input: i64) -> Self {
+		/// Returns lobbies created before this timestamp.
+		pub fn before_create_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
 			self.inner = self.inner.before_create_ts(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_before_create_ts(mut self, input: std::option::Option<i64>) -> Self {
+		/// Returns lobbies created before this timestamp.
+		pub fn set_before_create_ts(
+			mut self,
+			input: std::option::Option<aws_smithy_types::DateTime>,
+		) -> Self {
 			self.inner = self.inner.set_before_create_ts(input);
 			self
 		}
 	}
 	/// Fluent builder constructing a request to `RemoveNamespaceDomain`.
 	///
+	/// Removes a domain from the given game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct RemoveNamespaceDomain<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2788,114 +3413,40 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn domain(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.domain(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_domain(input);
 			self
 		}
 	}
-	/// Fluent builder constructing a request to `TeamBillingCheckout`.
-	///
-	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct TeamBillingCheckout<C, M, R = aws_smithy_client::retry::Standard> {
-		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::team_billing_checkout_input::Builder,
-	}
-	impl<C, M, R> TeamBillingCheckout<C, M, R>
-	where
-		C: aws_smithy_client::bounds::SmithyConnector,
-		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
-		R: aws_smithy_client::retry::NewRequestPolicy,
-	{
-		/// Creates a new `TeamBillingCheckout`.
-		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
-			Self {
-				handle,
-				inner: Default::default(),
-			}
-		}
-
-		/// Sends the request and returns the response.
-		///
-		/// If an error occurs, an `SdkError` will be returned with additional details that
-		/// can be matched against.
-		///
-		/// By default, any retryable failures will be retried twice. Retry behavior
-		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
-		/// set when configuring the client.
-		pub async fn send(
-			self,
-		) -> std::result::Result<
-			crate::output::TeamBillingCheckoutOutput,
-			aws_smithy_http::result::SdkError<crate::error::TeamBillingCheckoutError>,
-		>
-		where
-			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::TeamBillingCheckoutInputOperationOutputAlias,
-				crate::output::TeamBillingCheckoutOutput,
-				crate::error::TeamBillingCheckoutError,
-				crate::input::TeamBillingCheckoutInputOperationRetryAlias,
-			>,
-		{
-			let op = self
-				.inner
-				.build()
-				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
-				.make_operation(&self.handle.conf)
-				.await
-				.map_err(|err| {
-					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
-				})?;
-			self.handle.client.call(op).await
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn team_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.team_id(input.into());
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_team_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_team_id(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn amount(mut self, input: i64) -> Self {
-			self.inner = self.inner.amount(input);
-			self
-		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
-			self.inner = self.inner.set_amount(input);
-			self
-		}
-	}
 	/// Fluent builder constructing a request to `ToggleNamespaceDomainPublicAuth`.
 	///
+	/// Toggles whether or not to allow authentication based on domain for the given game namesapce.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ToggleNamespaceDomainPublicAuth<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -2948,32 +3499,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Whether or not to enable authentication based on domain.
 		pub fn enabled(mut self, input: bool) -> Self {
 			self.inner = self.inner.enabled(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Whether or not to enable authentication based on domain.
 		pub fn set_enabled(mut self, input: std::option::Option<bool>) -> Self {
 			self.inner = self.inner.set_enabled(input);
 			self
@@ -2981,6 +3532,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `UpdateGameNamespaceMatchmakerConfig`.
 	///
+	/// Updates matchmaker config for the given game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct UpdateGameNamespaceMatchmakerConfig<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3035,42 +3587,42 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn lobby_count_max(mut self, input: i32) -> Self {
 			self.inner = self.inner.lobby_count_max(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_lobby_count_max(mut self, input: std::option::Option<i32>) -> Self {
 			self.inner = self.inner.set_lobby_count_max(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn max_players(mut self, input: i32) -> Self {
 			self.inner = self.inner.max_players(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_max_players(mut self, input: std::option::Option<i32>) -> Self {
 			self.inner = self.inner.set_max_players(input);
 			self
@@ -3078,6 +3630,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `UpdateGameNamespaceVersion`.
 	///
+	/// Updates the version of a game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct UpdateGameNamespaceVersion<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3130,32 +3683,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.version_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_version_id(input);
 			self
@@ -3163,6 +3716,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `UpdateNamespaceDomain`.
 	///
+	/// Adds a domain to the given game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct UpdateNamespaceDomain<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3215,32 +3769,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn domain(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.domain(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A valid domain name (no protocol).
 		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_domain(input);
 			self
@@ -3248,6 +3802,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ValidateGame`.
 	///
+	/// Validates information used to create a new game.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ValidateGame<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3300,22 +3855,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.name_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_name_id(input);
 			self
@@ -3323,6 +3878,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ValidateGameNamespace`.
 	///
+	/// Validates information used to create a new game namespace.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ValidateGameNamespace<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3375,32 +3931,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn name_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.name_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 		pub fn set_name_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_name_id(input);
 			self
@@ -3408,6 +3964,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ValidateGameNamespaceMatchmakerConfig`.
 	///
+	/// Validates information used to update a game namespace's matchmaker config.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ValidateGameNamespaceMatchmakerConfig<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3462,42 +4019,42 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn lobby_count_max(mut self, input: i32) -> Self {
 			self.inner = self.inner.lobby_count_max(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_lobby_count_max(mut self, input: std::option::Option<i32>) -> Self {
 			self.inner = self.inner.set_lobby_count_max(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn max_players(mut self, input: i32) -> Self {
 			self.inner = self.inner.max_players(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Unsigned 32 bit integer.
 		pub fn set_max_players(mut self, input: std::option::Option<i32>) -> Self {
 			self.inner = self.inner.set_max_players(input);
 			self
@@ -3505,6 +4062,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ValidateGameNamespaceTokenDevelopment`.
 	///
+	/// Validates information used to create a new game namespace development token.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ValidateGameNamespaceTokenDevelopment<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3559,22 +4117,22 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.namespace_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_namespace_id(input);
 			self
@@ -3593,12 +4151,12 @@ pub mod fluent_builders {
 		///
 		/// To override the contents of this collection use [`set_lobby_ports`](Self::set_lobby_ports).
 		///
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of docker ports.
 		pub fn lobby_ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
 			self.inner = self.inner.lobby_ports(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of docker ports.
 		pub fn set_lobby_ports(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
@@ -3609,6 +4167,7 @@ pub mod fluent_builders {
 	}
 	/// Fluent builder constructing a request to `ValidateGameVersion`.
 	///
+	/// Validates information used to create a new game version.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
 	pub struct ValidateGameVersion<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
@@ -3661,32 +4220,32 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.game_id(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_game_id(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn config(mut self, input: crate::model::CloudVersionConfig) -> Self {
 			self.inner = self.inner.config(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Cloud configuration for a given version.
 		pub fn set_config(
 			mut self,
 			input: std::option::Option<crate::model::CloudVersionConfig>,
@@ -3695,20 +4254,21 @@ pub mod fluent_builders {
 			self
 		}
 	}
-	/// Fluent builder constructing a request to `ValidateTeam`.
+	/// Fluent builder constructing a request to `ValidateGroup`.
 	///
+	/// Validates information used to create a new group.
 	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct ValidateTeam<C, M, R = aws_smithy_client::retry::Standard> {
+	pub struct ValidateGroup<C, M, R = aws_smithy_client::retry::Standard> {
 		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::validate_team_input::Builder,
+		inner: crate::input::validate_group_input::Builder,
 	}
-	impl<C, M, R> ValidateTeam<C, M, R>
+	impl<C, M, R> ValidateGroup<C, M, R>
 	where
 		C: aws_smithy_client::bounds::SmithyConnector,
 		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
 		R: aws_smithy_client::retry::NewRequestPolicy,
 	{
-		/// Creates a new `ValidateTeam`.
+		/// Creates a new `ValidateGroup`.
 		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
 			Self {
 				handle,
@@ -3727,15 +4287,15 @@ pub mod fluent_builders {
 		pub async fn send(
 			self,
 		) -> std::result::Result<
-			crate::output::ValidateTeamOutput,
-			aws_smithy_http::result::SdkError<crate::error::ValidateTeamError>,
+			crate::output::ValidateGroupOutput,
+			aws_smithy_http::result::SdkError<crate::error::ValidateGroupError>,
 		>
 		where
 			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::ValidateTeamInputOperationOutputAlias,
-				crate::output::ValidateTeamOutput,
-				crate::error::ValidateTeamError,
-				crate::input::ValidateTeamInputOperationRetryAlias,
+				crate::input::ValidateGroupInputOperationOutputAlias,
+				crate::output::ValidateGroupOutput,
+				crate::error::ValidateGroupError,
+				crate::input::ValidateGroupInputOperationRetryAlias,
 			>,
 		{
 			let op = self
@@ -3749,12 +4309,12 @@ pub mod fluent_builders {
 				})?;
 			self.handle.client.call(op).await
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn display_name(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.display_name(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Represent a resource's readable display name.
 		pub fn set_display_name(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_display_name(input);
 			self

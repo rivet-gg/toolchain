@@ -12,17 +12,17 @@ pub struct CompleteUploadError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CompleteUploadErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -133,78 +133,78 @@ impl std::error::Error for CompleteUploadError {
 	}
 }
 
-/// Error type for the `ConvertTeam` operation.
+/// Error type for the `ConvertGroup` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
-pub struct ConvertTeamError {
+pub struct ConvertGroupError {
 	/// Kind of error that occurred.
-	pub kind: ConvertTeamErrorKind,
+	pub kind: ConvertGroupErrorKind,
 	/// Additional metadata about the error, including error code, message, and request ID.
 	pub(crate) meta: aws_smithy_types::Error,
 }
-/// Types of errors that can occur for the `ConvertTeam` operation.
+/// Types of errors that can occur for the `ConvertGroup` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
-pub enum ConvertTeamErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+pub enum ConvertGroupErrorKind {
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
 }
-impl std::fmt::Display for ConvertTeamError {
+impl std::fmt::Display for ConvertGroupError {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self.kind {
-			ConvertTeamErrorKind::InternalError(_inner) => _inner.fmt(f),
-			ConvertTeamErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			ConvertTeamErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			ConvertTeamErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			ConvertTeamErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			ConvertTeamErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			ConvertTeamErrorKind::Unhandled(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::InternalError(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			ConvertGroupErrorKind::Unhandled(_inner) => _inner.fmt(f),
 		}
 	}
 }
-impl aws_smithy_types::retry::ProvideErrorKind for ConvertTeamError {
+impl aws_smithy_types::retry::ProvideErrorKind for ConvertGroupError {
 	fn code(&self) -> Option<&str> {
-		ConvertTeamError::code(self)
+		ConvertGroupError::code(self)
 	}
 	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
 		match &self.kind {
-			ConvertTeamErrorKind::InternalError(inner) => Some(inner.retryable_error_kind()),
-			ConvertTeamErrorKind::UnauthorizedError(inner) => Some(inner.retryable_error_kind()),
+			ConvertGroupErrorKind::InternalError(inner) => Some(inner.retryable_error_kind()),
+			ConvertGroupErrorKind::UnauthorizedError(inner) => Some(inner.retryable_error_kind()),
 			_ => None,
 		}
 	}
 }
-impl ConvertTeamError {
-	/// Creates a new `ConvertTeamError`.
-	pub fn new(kind: ConvertTeamErrorKind, meta: aws_smithy_types::Error) -> Self {
+impl ConvertGroupError {
+	/// Creates a new `ConvertGroupError`.
+	pub fn new(kind: ConvertGroupErrorKind, meta: aws_smithy_types::Error) -> Self {
 		Self { kind, meta }
 	}
 
-	/// Creates the `ConvertTeamError::Unhandled` variant from any error type.
+	/// Creates the `ConvertGroupError::Unhandled` variant from any error type.
 	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
 		Self {
-			kind: ConvertTeamErrorKind::Unhandled(err.into()),
+			kind: ConvertGroupErrorKind::Unhandled(err.into()),
 			meta: Default::default(),
 		}
 	}
 
-	/// Creates the `ConvertTeamError::Unhandled` variant from a `aws_smithy_types::Error`.
+	/// Creates the `ConvertGroupError::Unhandled` variant from a `aws_smithy_types::Error`.
 	pub fn generic(err: aws_smithy_types::Error) -> Self {
 		Self {
 			meta: err.clone(),
-			kind: ConvertTeamErrorKind::Unhandled(err.into()),
+			kind: ConvertGroupErrorKind::Unhandled(err.into()),
 		}
 	}
 
@@ -228,41 +228,41 @@ impl ConvertTeamError {
 	pub fn code(&self) -> Option<&str> {
 		self.meta.code()
 	}
-	/// Returns `true` if the error kind is `ConvertTeamErrorKind::InternalError`.
+	/// Returns `true` if the error kind is `ConvertGroupErrorKind::InternalError`.
 	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, ConvertTeamErrorKind::InternalError(_))
+		matches!(&self.kind, ConvertGroupErrorKind::InternalError(_))
 	}
-	/// Returns `true` if the error kind is `ConvertTeamErrorKind::RateLimitError`.
+	/// Returns `true` if the error kind is `ConvertGroupErrorKind::RateLimitError`.
 	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, ConvertTeamErrorKind::RateLimitError(_))
+		matches!(&self.kind, ConvertGroupErrorKind::RateLimitError(_))
 	}
-	/// Returns `true` if the error kind is `ConvertTeamErrorKind::ForbiddenError`.
+	/// Returns `true` if the error kind is `ConvertGroupErrorKind::ForbiddenError`.
 	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, ConvertTeamErrorKind::ForbiddenError(_))
+		matches!(&self.kind, ConvertGroupErrorKind::ForbiddenError(_))
 	}
-	/// Returns `true` if the error kind is `ConvertTeamErrorKind::UnauthorizedError`.
+	/// Returns `true` if the error kind is `ConvertGroupErrorKind::UnauthorizedError`.
 	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(&self.kind, ConvertTeamErrorKind::UnauthorizedError(_))
+		matches!(&self.kind, ConvertGroupErrorKind::UnauthorizedError(_))
 	}
-	/// Returns `true` if the error kind is `ConvertTeamErrorKind::NotFoundError`.
+	/// Returns `true` if the error kind is `ConvertGroupErrorKind::NotFoundError`.
 	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, ConvertTeamErrorKind::NotFoundError(_))
+		matches!(&self.kind, ConvertGroupErrorKind::NotFoundError(_))
 	}
-	/// Returns `true` if the error kind is `ConvertTeamErrorKind::BadRequestError`.
+	/// Returns `true` if the error kind is `ConvertGroupErrorKind::BadRequestError`.
 	pub fn is_bad_request_error(&self) -> bool {
-		matches!(&self.kind, ConvertTeamErrorKind::BadRequestError(_))
+		matches!(&self.kind, ConvertGroupErrorKind::BadRequestError(_))
 	}
 }
-impl std::error::Error for ConvertTeamError {
+impl std::error::Error for ConvertGroupError {
 	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
 		match &self.kind {
-			ConvertTeamErrorKind::InternalError(_inner) => Some(_inner),
-			ConvertTeamErrorKind::RateLimitError(_inner) => Some(_inner),
-			ConvertTeamErrorKind::ForbiddenError(_inner) => Some(_inner),
-			ConvertTeamErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			ConvertTeamErrorKind::NotFoundError(_inner) => Some(_inner),
-			ConvertTeamErrorKind::BadRequestError(_inner) => Some(_inner),
-			ConvertTeamErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+			ConvertGroupErrorKind::InternalError(_inner) => Some(_inner),
+			ConvertGroupErrorKind::RateLimitError(_inner) => Some(_inner),
+			ConvertGroupErrorKind::ForbiddenError(_inner) => Some(_inner),
+			ConvertGroupErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			ConvertGroupErrorKind::NotFoundError(_inner) => Some(_inner),
+			ConvertGroupErrorKind::BadRequestError(_inner) => Some(_inner),
+			ConvertGroupErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
 		}
 	}
 }
@@ -280,17 +280,17 @@ pub struct CreateCloudTokenError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateCloudTokenErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -416,17 +416,17 @@ pub struct CreateGameError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -550,17 +550,17 @@ pub struct CreateGameBuildError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameBuildErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -686,17 +686,17 @@ pub struct CreateGameCdnSiteError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameCdnSiteErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -822,17 +822,17 @@ pub struct CreateGameNamespaceError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameNamespaceErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -963,17 +963,17 @@ pub struct CreateGameNamespaceTokenDevelopmentError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameNamespaceTokenDevelopmentErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -1126,17 +1126,17 @@ pub struct CreateGameNamespaceTokenPublicError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameNamespaceTokenPublicErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -1285,17 +1285,17 @@ pub struct CreateGameVersionError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum CreateGameVersionErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -1421,17 +1421,17 @@ pub struct DeleteMatchmakerLobbyError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum DeleteMatchmakerLobbyErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -1571,17 +1571,17 @@ pub struct ExportMatchmakerLobbyHistoryError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ExportMatchmakerLobbyHistoryErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -1714,6 +1714,624 @@ impl std::error::Error for ExportMatchmakerLobbyHistoryError {
 	}
 }
 
+/// Error type for the `GameBannerUploadComplete` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GameBannerUploadCompleteError {
+	/// Kind of error that occurred.
+	pub kind: GameBannerUploadCompleteErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GameBannerUploadComplete` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GameBannerUploadCompleteErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GameBannerUploadCompleteError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GameBannerUploadCompleteErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GameBannerUploadCompleteErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GameBannerUploadCompleteErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GameBannerUploadCompleteErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GameBannerUploadCompleteErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GameBannerUploadCompleteErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GameBannerUploadCompleteErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GameBannerUploadCompleteError {
+	fn code(&self) -> Option<&str> {
+		GameBannerUploadCompleteError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GameBannerUploadCompleteErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GameBannerUploadCompleteErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GameBannerUploadCompleteError {
+	/// Creates a new `GameBannerUploadCompleteError`.
+	pub fn new(kind: GameBannerUploadCompleteErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GameBannerUploadCompleteError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GameBannerUploadCompleteErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GameBannerUploadCompleteError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GameBannerUploadCompleteErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadCompleteErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadCompleteErrorKind::InternalError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadCompleteErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadCompleteErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadCompleteErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadCompleteErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadCompleteErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadCompleteErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadCompleteErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadCompleteErrorKind::NotFoundError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadCompleteErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadCompleteErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GameBannerUploadCompleteError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GameBannerUploadCompleteErrorKind::InternalError(_inner) => Some(_inner),
+			GameBannerUploadCompleteErrorKind::RateLimitError(_inner) => Some(_inner),
+			GameBannerUploadCompleteErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GameBannerUploadCompleteErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GameBannerUploadCompleteErrorKind::NotFoundError(_inner) => Some(_inner),
+			GameBannerUploadCompleteErrorKind::BadRequestError(_inner) => Some(_inner),
+			GameBannerUploadCompleteErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `GameBannerUploadPrepare` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GameBannerUploadPrepareError {
+	/// Kind of error that occurred.
+	pub kind: GameBannerUploadPrepareErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GameBannerUploadPrepare` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GameBannerUploadPrepareErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GameBannerUploadPrepareError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GameBannerUploadPrepareErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GameBannerUploadPrepareErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GameBannerUploadPrepareErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GameBannerUploadPrepareErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GameBannerUploadPrepareErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GameBannerUploadPrepareErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GameBannerUploadPrepareErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GameBannerUploadPrepareError {
+	fn code(&self) -> Option<&str> {
+		GameBannerUploadPrepareError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GameBannerUploadPrepareErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GameBannerUploadPrepareErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GameBannerUploadPrepareError {
+	/// Creates a new `GameBannerUploadPrepareError`.
+	pub fn new(kind: GameBannerUploadPrepareErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GameBannerUploadPrepareError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GameBannerUploadPrepareErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GameBannerUploadPrepareError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GameBannerUploadPrepareErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadPrepareErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadPrepareErrorKind::InternalError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadPrepareErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadPrepareErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadPrepareErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadPrepareErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadPrepareErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadPrepareErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadPrepareErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadPrepareErrorKind::NotFoundError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameBannerUploadPrepareErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameBannerUploadPrepareErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GameBannerUploadPrepareError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GameBannerUploadPrepareErrorKind::InternalError(_inner) => Some(_inner),
+			GameBannerUploadPrepareErrorKind::RateLimitError(_inner) => Some(_inner),
+			GameBannerUploadPrepareErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GameBannerUploadPrepareErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GameBannerUploadPrepareErrorKind::NotFoundError(_inner) => Some(_inner),
+			GameBannerUploadPrepareErrorKind::BadRequestError(_inner) => Some(_inner),
+			GameBannerUploadPrepareErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `GameLogoUploadComplete` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GameLogoUploadCompleteError {
+	/// Kind of error that occurred.
+	pub kind: GameLogoUploadCompleteErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GameLogoUploadComplete` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GameLogoUploadCompleteErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GameLogoUploadCompleteError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GameLogoUploadCompleteErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GameLogoUploadCompleteErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GameLogoUploadCompleteErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GameLogoUploadCompleteErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GameLogoUploadCompleteErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GameLogoUploadCompleteErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GameLogoUploadCompleteErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GameLogoUploadCompleteError {
+	fn code(&self) -> Option<&str> {
+		GameLogoUploadCompleteError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GameLogoUploadCompleteErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GameLogoUploadCompleteErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GameLogoUploadCompleteError {
+	/// Creates a new `GameLogoUploadCompleteError`.
+	pub fn new(kind: GameLogoUploadCompleteErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GameLogoUploadCompleteError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GameLogoUploadCompleteErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GameLogoUploadCompleteError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GameLogoUploadCompleteErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadCompleteErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadCompleteErrorKind::InternalError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadCompleteErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadCompleteErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadCompleteErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadCompleteErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadCompleteErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadCompleteErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadCompleteErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadCompleteErrorKind::NotFoundError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadCompleteErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadCompleteErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GameLogoUploadCompleteError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GameLogoUploadCompleteErrorKind::InternalError(_inner) => Some(_inner),
+			GameLogoUploadCompleteErrorKind::RateLimitError(_inner) => Some(_inner),
+			GameLogoUploadCompleteErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GameLogoUploadCompleteErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GameLogoUploadCompleteErrorKind::NotFoundError(_inner) => Some(_inner),
+			GameLogoUploadCompleteErrorKind::BadRequestError(_inner) => Some(_inner),
+			GameLogoUploadCompleteErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `GameLogoUploadPrepare` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GameLogoUploadPrepareError {
+	/// Kind of error that occurred.
+	pub kind: GameLogoUploadPrepareErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GameLogoUploadPrepare` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GameLogoUploadPrepareErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GameLogoUploadPrepareError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GameLogoUploadPrepareErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GameLogoUploadPrepareErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GameLogoUploadPrepareErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GameLogoUploadPrepareErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GameLogoUploadPrepareErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GameLogoUploadPrepareErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GameLogoUploadPrepareErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GameLogoUploadPrepareError {
+	fn code(&self) -> Option<&str> {
+		GameLogoUploadPrepareError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GameLogoUploadPrepareErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GameLogoUploadPrepareErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GameLogoUploadPrepareError {
+	/// Creates a new `GameLogoUploadPrepareError`.
+	pub fn new(kind: GameLogoUploadPrepareErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GameLogoUploadPrepareError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GameLogoUploadPrepareErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GameLogoUploadPrepareError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GameLogoUploadPrepareErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadPrepareErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(&self.kind, GameLogoUploadPrepareErrorKind::InternalError(_))
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadPrepareErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadPrepareErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadPrepareErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadPrepareErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadPrepareErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadPrepareErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadPrepareErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(&self.kind, GameLogoUploadPrepareErrorKind::NotFoundError(_))
+	}
+	/// Returns `true` if the error kind is `GameLogoUploadPrepareErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GameLogoUploadPrepareErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GameLogoUploadPrepareError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GameLogoUploadPrepareErrorKind::InternalError(_inner) => Some(_inner),
+			GameLogoUploadPrepareErrorKind::RateLimitError(_inner) => Some(_inner),
+			GameLogoUploadPrepareErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GameLogoUploadPrepareErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GameLogoUploadPrepareErrorKind::NotFoundError(_inner) => Some(_inner),
+			GameLogoUploadPrepareErrorKind::BadRequestError(_inner) => Some(_inner),
+			GameLogoUploadPrepareErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
 /// Error type for the `GetGameById` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
@@ -1727,17 +2345,17 @@ pub struct GetGameByIdError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetGameByIdErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -1861,17 +2479,17 @@ pub struct GetGameNamespaceByIdError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetGameNamespaceByIdErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2005,17 +2623,17 @@ pub struct GetGamesError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetGamesErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2139,17 +2757,17 @@ pub struct GetGameVersionByIdError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetGameVersionByIdErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2265,6 +2883,580 @@ impl std::error::Error for GetGameVersionByIdError {
 	}
 }
 
+/// Error type for the `GetGroupBilling` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GetGroupBillingError {
+	/// Kind of error that occurred.
+	pub kind: GetGroupBillingErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GetGroupBilling` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GetGroupBillingErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GetGroupBillingError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GetGroupBillingErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GetGroupBillingErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GetGroupBillingErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GetGroupBillingErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GetGroupBillingErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GetGroupBillingErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GetGroupBillingErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GetGroupBillingError {
+	fn code(&self) -> Option<&str> {
+		GetGroupBillingError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GetGroupBillingErrorKind::InternalError(inner) => Some(inner.retryable_error_kind()),
+			GetGroupBillingErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GetGroupBillingError {
+	/// Creates a new `GetGroupBillingError`.
+	pub fn new(kind: GetGroupBillingErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GetGroupBillingError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GetGroupBillingErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GetGroupBillingError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GetGroupBillingErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GetGroupBillingErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(&self.kind, GetGroupBillingErrorKind::InternalError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupBillingErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(&self.kind, GetGroupBillingErrorKind::RateLimitError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupBillingErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(&self.kind, GetGroupBillingErrorKind::ForbiddenError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupBillingErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(&self.kind, GetGroupBillingErrorKind::UnauthorizedError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupBillingErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(&self.kind, GetGroupBillingErrorKind::NotFoundError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupBillingErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(&self.kind, GetGroupBillingErrorKind::BadRequestError(_))
+	}
+}
+impl std::error::Error for GetGroupBillingError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GetGroupBillingErrorKind::InternalError(_inner) => Some(_inner),
+			GetGroupBillingErrorKind::RateLimitError(_inner) => Some(_inner),
+			GetGroupBillingErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GetGroupBillingErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GetGroupBillingErrorKind::NotFoundError(_inner) => Some(_inner),
+			GetGroupBillingErrorKind::BadRequestError(_inner) => Some(_inner),
+			GetGroupBillingErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `GetGroupInvoicesList` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GetGroupInvoicesListError {
+	/// Kind of error that occurred.
+	pub kind: GetGroupInvoicesListErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GetGroupInvoicesList` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GetGroupInvoicesListErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GetGroupInvoicesListError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GetGroupInvoicesListErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GetGroupInvoicesListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GetGroupInvoicesListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GetGroupInvoicesListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GetGroupInvoicesListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GetGroupInvoicesListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GetGroupInvoicesListErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GetGroupInvoicesListError {
+	fn code(&self) -> Option<&str> {
+		GetGroupInvoicesListError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GetGroupInvoicesListErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GetGroupInvoicesListErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GetGroupInvoicesListError {
+	/// Creates a new `GetGroupInvoicesListError`.
+	pub fn new(kind: GetGroupInvoicesListErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GetGroupInvoicesListError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GetGroupInvoicesListErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GetGroupInvoicesListError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GetGroupInvoicesListErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GetGroupInvoicesListErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(&self.kind, GetGroupInvoicesListErrorKind::InternalError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupInvoicesListErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(&self.kind, GetGroupInvoicesListErrorKind::RateLimitError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupInvoicesListErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(&self.kind, GetGroupInvoicesListErrorKind::ForbiddenError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupInvoicesListErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupInvoicesListErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GetGroupInvoicesListErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(&self.kind, GetGroupInvoicesListErrorKind::NotFoundError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupInvoicesListErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupInvoicesListErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GetGroupInvoicesListError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GetGroupInvoicesListErrorKind::InternalError(_inner) => Some(_inner),
+			GetGroupInvoicesListErrorKind::RateLimitError(_inner) => Some(_inner),
+			GetGroupInvoicesListErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GetGroupInvoicesListErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GetGroupInvoicesListErrorKind::NotFoundError(_inner) => Some(_inner),
+			GetGroupInvoicesListErrorKind::BadRequestError(_inner) => Some(_inner),
+			GetGroupInvoicesListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `GetGroupPaymentsList` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GetGroupPaymentsListError {
+	/// Kind of error that occurred.
+	pub kind: GetGroupPaymentsListErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GetGroupPaymentsList` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GetGroupPaymentsListErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GetGroupPaymentsListError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GetGroupPaymentsListErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GetGroupPaymentsListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GetGroupPaymentsListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GetGroupPaymentsListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GetGroupPaymentsListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GetGroupPaymentsListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GetGroupPaymentsListErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GetGroupPaymentsListError {
+	fn code(&self) -> Option<&str> {
+		GetGroupPaymentsListError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GetGroupPaymentsListErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GetGroupPaymentsListErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GetGroupPaymentsListError {
+	/// Creates a new `GetGroupPaymentsListError`.
+	pub fn new(kind: GetGroupPaymentsListErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GetGroupPaymentsListError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GetGroupPaymentsListErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GetGroupPaymentsListError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GetGroupPaymentsListErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(&self.kind, GetGroupPaymentsListErrorKind::InternalError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(&self.kind, GetGroupPaymentsListErrorKind::RateLimitError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(&self.kind, GetGroupPaymentsListErrorKind::ForbiddenError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupPaymentsListErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(&self.kind, GetGroupPaymentsListErrorKind::NotFoundError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupPaymentsListErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GetGroupPaymentsListError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GetGroupPaymentsListErrorKind::InternalError(_inner) => Some(_inner),
+			GetGroupPaymentsListErrorKind::RateLimitError(_inner) => Some(_inner),
+			GetGroupPaymentsListErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GetGroupPaymentsListErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GetGroupPaymentsListErrorKind::NotFoundError(_inner) => Some(_inner),
+			GetGroupPaymentsListErrorKind::BadRequestError(_inner) => Some(_inner),
+			GetGroupPaymentsListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `GetGroupTransfersList` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct GetGroupTransfersListError {
+	/// Kind of error that occurred.
+	pub kind: GetGroupTransfersListErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `GetGroupTransfersList` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum GetGroupTransfersListErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for GetGroupTransfersListError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			GetGroupTransfersListErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GetGroupTransfersListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GetGroupTransfersListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GetGroupTransfersListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GetGroupTransfersListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GetGroupTransfersListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GetGroupTransfersListErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for GetGroupTransfersListError {
+	fn code(&self) -> Option<&str> {
+		GetGroupTransfersListError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			GetGroupTransfersListErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GetGroupTransfersListErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl GetGroupTransfersListError {
+	/// Creates a new `GetGroupTransfersListError`.
+	pub fn new(kind: GetGroupTransfersListErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `GetGroupTransfersListError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: GetGroupTransfersListErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `GetGroupTransfersListError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: GetGroupTransfersListErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(&self.kind, GetGroupTransfersListErrorKind::InternalError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupTransfersListErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupTransfersListErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupTransfersListErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(&self.kind, GetGroupTransfersListErrorKind::NotFoundError(_))
+	}
+	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			GetGroupTransfersListErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for GetGroupTransfersListError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			GetGroupTransfersListErrorKind::InternalError(_inner) => Some(_inner),
+			GetGroupTransfersListErrorKind::RateLimitError(_inner) => Some(_inner),
+			GetGroupTransfersListErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GetGroupTransfersListErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GetGroupTransfersListErrorKind::NotFoundError(_inner) => Some(_inner),
+			GetGroupTransfersListErrorKind::BadRequestError(_inner) => Some(_inner),
+			GetGroupTransfersListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
 /// Error type for the `GetNamespaceAnalyticsMatchmakerLive` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
@@ -2278,17 +3470,17 @@ pub struct GetNamespaceAnalyticsMatchmakerLiveError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetNamespaceAnalyticsMatchmakerLiveErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2441,17 +3633,17 @@ pub struct GetNamespaceLobbyError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetNamespaceLobbyErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2577,17 +3769,17 @@ pub struct GetRayPerfLogsError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetRayPerfLogsErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2711,17 +3903,17 @@ pub struct GetRegionTiersError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum GetRegionTiersErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -2832,78 +4024,82 @@ impl std::error::Error for GetRegionTiersError {
 	}
 }
 
-/// Error type for the `GetTeamBilling` operation.
+/// Error type for the `GroupBillingCheckout` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
-pub struct GetTeamBillingError {
+pub struct GroupBillingCheckoutError {
 	/// Kind of error that occurred.
-	pub kind: GetTeamBillingErrorKind,
+	pub kind: GroupBillingCheckoutErrorKind,
 	/// Additional metadata about the error, including error code, message, and request ID.
 	pub(crate) meta: aws_smithy_types::Error,
 }
-/// Types of errors that can occur for the `GetTeamBilling` operation.
+/// Types of errors that can occur for the `GroupBillingCheckout` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
-pub enum GetTeamBillingErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+pub enum GroupBillingCheckoutErrorKind {
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
 }
-impl std::fmt::Display for GetTeamBillingError {
+impl std::fmt::Display for GroupBillingCheckoutError {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self.kind {
-			GetTeamBillingErrorKind::InternalError(_inner) => _inner.fmt(f),
-			GetTeamBillingErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			GetTeamBillingErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			GetTeamBillingErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			GetTeamBillingErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			GetTeamBillingErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			GetTeamBillingErrorKind::Unhandled(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::InternalError(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			GroupBillingCheckoutErrorKind::Unhandled(_inner) => _inner.fmt(f),
 		}
 	}
 }
-impl aws_smithy_types::retry::ProvideErrorKind for GetTeamBillingError {
+impl aws_smithy_types::retry::ProvideErrorKind for GroupBillingCheckoutError {
 	fn code(&self) -> Option<&str> {
-		GetTeamBillingError::code(self)
+		GroupBillingCheckoutError::code(self)
 	}
 	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
 		match &self.kind {
-			GetTeamBillingErrorKind::InternalError(inner) => Some(inner.retryable_error_kind()),
-			GetTeamBillingErrorKind::UnauthorizedError(inner) => Some(inner.retryable_error_kind()),
+			GroupBillingCheckoutErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			GroupBillingCheckoutErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
 			_ => None,
 		}
 	}
 }
-impl GetTeamBillingError {
-	/// Creates a new `GetTeamBillingError`.
-	pub fn new(kind: GetTeamBillingErrorKind, meta: aws_smithy_types::Error) -> Self {
+impl GroupBillingCheckoutError {
+	/// Creates a new `GroupBillingCheckoutError`.
+	pub fn new(kind: GroupBillingCheckoutErrorKind, meta: aws_smithy_types::Error) -> Self {
 		Self { kind, meta }
 	}
 
-	/// Creates the `GetTeamBillingError::Unhandled` variant from any error type.
+	/// Creates the `GroupBillingCheckoutError::Unhandled` variant from any error type.
 	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
 		Self {
-			kind: GetTeamBillingErrorKind::Unhandled(err.into()),
+			kind: GroupBillingCheckoutErrorKind::Unhandled(err.into()),
 			meta: Default::default(),
 		}
 	}
 
-	/// Creates the `GetTeamBillingError::Unhandled` variant from a `aws_smithy_types::Error`.
+	/// Creates the `GroupBillingCheckoutError::Unhandled` variant from a `aws_smithy_types::Error`.
 	pub fn generic(err: aws_smithy_types::Error) -> Self {
 		Self {
 			meta: err.clone(),
-			kind: GetTeamBillingErrorKind::Unhandled(err.into()),
+			kind: GroupBillingCheckoutErrorKind::Unhandled(err.into()),
 		}
 	}
 
@@ -2927,326 +4123,47 @@ impl GetTeamBillingError {
 	pub fn code(&self) -> Option<&str> {
 		self.meta.code()
 	}
-	/// Returns `true` if the error kind is `GetTeamBillingErrorKind::InternalError`.
+	/// Returns `true` if the error kind is `GroupBillingCheckoutErrorKind::InternalError`.
 	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, GetTeamBillingErrorKind::InternalError(_))
+		matches!(&self.kind, GroupBillingCheckoutErrorKind::InternalError(_))
 	}
-	/// Returns `true` if the error kind is `GetTeamBillingErrorKind::RateLimitError`.
+	/// Returns `true` if the error kind is `GroupBillingCheckoutErrorKind::RateLimitError`.
 	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, GetTeamBillingErrorKind::RateLimitError(_))
+		matches!(&self.kind, GroupBillingCheckoutErrorKind::RateLimitError(_))
 	}
-	/// Returns `true` if the error kind is `GetTeamBillingErrorKind::ForbiddenError`.
+	/// Returns `true` if the error kind is `GroupBillingCheckoutErrorKind::ForbiddenError`.
 	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, GetTeamBillingErrorKind::ForbiddenError(_))
+		matches!(&self.kind, GroupBillingCheckoutErrorKind::ForbiddenError(_))
 	}
-	/// Returns `true` if the error kind is `GetTeamBillingErrorKind::UnauthorizedError`.
-	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(&self.kind, GetTeamBillingErrorKind::UnauthorizedError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamBillingErrorKind::NotFoundError`.
-	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, GetTeamBillingErrorKind::NotFoundError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamBillingErrorKind::BadRequestError`.
-	pub fn is_bad_request_error(&self) -> bool {
-		matches!(&self.kind, GetTeamBillingErrorKind::BadRequestError(_))
-	}
-}
-impl std::error::Error for GetTeamBillingError {
-	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-		match &self.kind {
-			GetTeamBillingErrorKind::InternalError(_inner) => Some(_inner),
-			GetTeamBillingErrorKind::RateLimitError(_inner) => Some(_inner),
-			GetTeamBillingErrorKind::ForbiddenError(_inner) => Some(_inner),
-			GetTeamBillingErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			GetTeamBillingErrorKind::NotFoundError(_inner) => Some(_inner),
-			GetTeamBillingErrorKind::BadRequestError(_inner) => Some(_inner),
-			GetTeamBillingErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
-		}
-	}
-}
-
-/// Error type for the `GetTeamPaymentsList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub struct GetTeamPaymentsListError {
-	/// Kind of error that occurred.
-	pub kind: GetTeamPaymentsListErrorKind,
-	/// Additional metadata about the error, including error code, message, and request ID.
-	pub(crate) meta: aws_smithy_types::Error,
-}
-/// Types of errors that can occur for the `GetTeamPaymentsList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub enum GetTeamPaymentsListErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
-	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
-	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
-	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
-	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
-	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
-	BadRequestError(crate::error::BadRequestError),
-	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
-	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
-}
-impl std::fmt::Display for GetTeamPaymentsListError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match &self.kind {
-			GetTeamPaymentsListErrorKind::InternalError(_inner) => _inner.fmt(f),
-			GetTeamPaymentsListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			GetTeamPaymentsListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			GetTeamPaymentsListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			GetTeamPaymentsListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			GetTeamPaymentsListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			GetTeamPaymentsListErrorKind::Unhandled(_inner) => _inner.fmt(f),
-		}
-	}
-}
-impl aws_smithy_types::retry::ProvideErrorKind for GetTeamPaymentsListError {
-	fn code(&self) -> Option<&str> {
-		GetTeamPaymentsListError::code(self)
-	}
-	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
-		match &self.kind {
-			GetTeamPaymentsListErrorKind::InternalError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			GetTeamPaymentsListErrorKind::UnauthorizedError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			_ => None,
-		}
-	}
-}
-impl GetTeamPaymentsListError {
-	/// Creates a new `GetTeamPaymentsListError`.
-	pub fn new(kind: GetTeamPaymentsListErrorKind, meta: aws_smithy_types::Error) -> Self {
-		Self { kind, meta }
-	}
-
-	/// Creates the `GetTeamPaymentsListError::Unhandled` variant from any error type.
-	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
-		Self {
-			kind: GetTeamPaymentsListErrorKind::Unhandled(err.into()),
-			meta: Default::default(),
-		}
-	}
-
-	/// Creates the `GetTeamPaymentsListError::Unhandled` variant from a `aws_smithy_types::Error`.
-	pub fn generic(err: aws_smithy_types::Error) -> Self {
-		Self {
-			meta: err.clone(),
-			kind: GetTeamPaymentsListErrorKind::Unhandled(err.into()),
-		}
-	}
-
-	/// Returns the error message if one is available.
-	pub fn message(&self) -> Option<&str> {
-		self.meta.message()
-	}
-
-	/// Returns error metadata, which includes the error code, message,
-	/// request ID, and potentially additional information.
-	pub fn meta(&self) -> &aws_smithy_types::Error {
-		&self.meta
-	}
-
-	/// Returns the request ID if it's available.
-	pub fn request_id(&self) -> Option<&str> {
-		self.meta.request_id()
-	}
-
-	/// Returns the error code if it's available.
-	pub fn code(&self) -> Option<&str> {
-		self.meta.code()
-	}
-	/// Returns `true` if the error kind is `GetTeamPaymentsListErrorKind::InternalError`.
-	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, GetTeamPaymentsListErrorKind::InternalError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamPaymentsListErrorKind::RateLimitError`.
-	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, GetTeamPaymentsListErrorKind::RateLimitError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamPaymentsListErrorKind::ForbiddenError`.
-	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, GetTeamPaymentsListErrorKind::ForbiddenError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamPaymentsListErrorKind::UnauthorizedError`.
+	/// Returns `true` if the error kind is `GroupBillingCheckoutErrorKind::UnauthorizedError`.
 	pub fn is_unauthorized_error(&self) -> bool {
 		matches!(
 			&self.kind,
-			GetTeamPaymentsListErrorKind::UnauthorizedError(_)
+			GroupBillingCheckoutErrorKind::UnauthorizedError(_)
 		)
 	}
-	/// Returns `true` if the error kind is `GetTeamPaymentsListErrorKind::NotFoundError`.
+	/// Returns `true` if the error kind is `GroupBillingCheckoutErrorKind::NotFoundError`.
 	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, GetTeamPaymentsListErrorKind::NotFoundError(_))
+		matches!(&self.kind, GroupBillingCheckoutErrorKind::NotFoundError(_))
 	}
-	/// Returns `true` if the error kind is `GetTeamPaymentsListErrorKind::BadRequestError`.
-	pub fn is_bad_request_error(&self) -> bool {
-		matches!(&self.kind, GetTeamPaymentsListErrorKind::BadRequestError(_))
-	}
-}
-impl std::error::Error for GetTeamPaymentsListError {
-	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-		match &self.kind {
-			GetTeamPaymentsListErrorKind::InternalError(_inner) => Some(_inner),
-			GetTeamPaymentsListErrorKind::RateLimitError(_inner) => Some(_inner),
-			GetTeamPaymentsListErrorKind::ForbiddenError(_inner) => Some(_inner),
-			GetTeamPaymentsListErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			GetTeamPaymentsListErrorKind::NotFoundError(_inner) => Some(_inner),
-			GetTeamPaymentsListErrorKind::BadRequestError(_inner) => Some(_inner),
-			GetTeamPaymentsListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
-		}
-	}
-}
-
-/// Error type for the `GetTeamTransfersList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub struct GetTeamTransfersListError {
-	/// Kind of error that occurred.
-	pub kind: GetTeamTransfersListErrorKind,
-	/// Additional metadata about the error, including error code, message, and request ID.
-	pub(crate) meta: aws_smithy_types::Error,
-}
-/// Types of errors that can occur for the `GetTeamTransfersList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub enum GetTeamTransfersListErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
-	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
-	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
-	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
-	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
-	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
-	BadRequestError(crate::error::BadRequestError),
-	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
-	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
-}
-impl std::fmt::Display for GetTeamTransfersListError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match &self.kind {
-			GetTeamTransfersListErrorKind::InternalError(_inner) => _inner.fmt(f),
-			GetTeamTransfersListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			GetTeamTransfersListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			GetTeamTransfersListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			GetTeamTransfersListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			GetTeamTransfersListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			GetTeamTransfersListErrorKind::Unhandled(_inner) => _inner.fmt(f),
-		}
-	}
-}
-impl aws_smithy_types::retry::ProvideErrorKind for GetTeamTransfersListError {
-	fn code(&self) -> Option<&str> {
-		GetTeamTransfersListError::code(self)
-	}
-	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
-		match &self.kind {
-			GetTeamTransfersListErrorKind::InternalError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			GetTeamTransfersListErrorKind::UnauthorizedError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			_ => None,
-		}
-	}
-}
-impl GetTeamTransfersListError {
-	/// Creates a new `GetTeamTransfersListError`.
-	pub fn new(kind: GetTeamTransfersListErrorKind, meta: aws_smithy_types::Error) -> Self {
-		Self { kind, meta }
-	}
-
-	/// Creates the `GetTeamTransfersListError::Unhandled` variant from any error type.
-	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
-		Self {
-			kind: GetTeamTransfersListErrorKind::Unhandled(err.into()),
-			meta: Default::default(),
-		}
-	}
-
-	/// Creates the `GetTeamTransfersListError::Unhandled` variant from a `aws_smithy_types::Error`.
-	pub fn generic(err: aws_smithy_types::Error) -> Self {
-		Self {
-			meta: err.clone(),
-			kind: GetTeamTransfersListErrorKind::Unhandled(err.into()),
-		}
-	}
-
-	/// Returns the error message if one is available.
-	pub fn message(&self) -> Option<&str> {
-		self.meta.message()
-	}
-
-	/// Returns error metadata, which includes the error code, message,
-	/// request ID, and potentially additional information.
-	pub fn meta(&self) -> &aws_smithy_types::Error {
-		&self.meta
-	}
-
-	/// Returns the request ID if it's available.
-	pub fn request_id(&self) -> Option<&str> {
-		self.meta.request_id()
-	}
-
-	/// Returns the error code if it's available.
-	pub fn code(&self) -> Option<&str> {
-		self.meta.code()
-	}
-	/// Returns `true` if the error kind is `GetTeamTransfersListErrorKind::InternalError`.
-	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, GetTeamTransfersListErrorKind::InternalError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamTransfersListErrorKind::RateLimitError`.
-	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, GetTeamTransfersListErrorKind::RateLimitError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamTransfersListErrorKind::ForbiddenError`.
-	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, GetTeamTransfersListErrorKind::ForbiddenError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamTransfersListErrorKind::UnauthorizedError`.
-	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetTeamTransfersListErrorKind::UnauthorizedError(_)
-		)
-	}
-	/// Returns `true` if the error kind is `GetTeamTransfersListErrorKind::NotFoundError`.
-	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, GetTeamTransfersListErrorKind::NotFoundError(_))
-	}
-	/// Returns `true` if the error kind is `GetTeamTransfersListErrorKind::BadRequestError`.
+	/// Returns `true` if the error kind is `GroupBillingCheckoutErrorKind::BadRequestError`.
 	pub fn is_bad_request_error(&self) -> bool {
 		matches!(
 			&self.kind,
-			GetTeamTransfersListErrorKind::BadRequestError(_)
+			GroupBillingCheckoutErrorKind::BadRequestError(_)
 		)
 	}
 }
-impl std::error::Error for GetTeamTransfersListError {
+impl std::error::Error for GroupBillingCheckoutError {
 	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
 		match &self.kind {
-			GetTeamTransfersListErrorKind::InternalError(_inner) => Some(_inner),
-			GetTeamTransfersListErrorKind::RateLimitError(_inner) => Some(_inner),
-			GetTeamTransfersListErrorKind::ForbiddenError(_inner) => Some(_inner),
-			GetTeamTransfersListErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			GetTeamTransfersListErrorKind::NotFoundError(_inner) => Some(_inner),
-			GetTeamTransfersListErrorKind::BadRequestError(_inner) => Some(_inner),
-			GetTeamTransfersListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+			GroupBillingCheckoutErrorKind::InternalError(_inner) => Some(_inner),
+			GroupBillingCheckoutErrorKind::RateLimitError(_inner) => Some(_inner),
+			GroupBillingCheckoutErrorKind::ForbiddenError(_inner) => Some(_inner),
+			GroupBillingCheckoutErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			GroupBillingCheckoutErrorKind::NotFoundError(_inner) => Some(_inner),
+			GroupBillingCheckoutErrorKind::BadRequestError(_inner) => Some(_inner),
+			GroupBillingCheckoutErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
 		}
 	}
 }
@@ -3264,17 +4181,17 @@ pub struct InspectError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum InspectErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -3398,17 +4315,17 @@ pub struct ListGameBuildsError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ListGameBuildsErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -3532,17 +4449,17 @@ pub struct ListGameCdnSitesError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ListGameCdnSitesErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -3668,17 +4585,17 @@ pub struct ListNamespaceLobbiesError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ListNamespaceLobbiesErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -3812,17 +4729,17 @@ pub struct RemoveNamespaceDomainError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum RemoveNamespaceDomainErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -3949,147 +4866,6 @@ impl std::error::Error for RemoveNamespaceDomainError {
 	}
 }
 
-/// Error type for the `TeamBillingCheckout` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub struct TeamBillingCheckoutError {
-	/// Kind of error that occurred.
-	pub kind: TeamBillingCheckoutErrorKind,
-	/// Additional metadata about the error, including error code, message, and request ID.
-	pub(crate) meta: aws_smithy_types::Error,
-}
-/// Types of errors that can occur for the `TeamBillingCheckout` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub enum TeamBillingCheckoutErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
-	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
-	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
-	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
-	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
-	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
-	BadRequestError(crate::error::BadRequestError),
-	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
-	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
-}
-impl std::fmt::Display for TeamBillingCheckoutError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match &self.kind {
-			TeamBillingCheckoutErrorKind::InternalError(_inner) => _inner.fmt(f),
-			TeamBillingCheckoutErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			TeamBillingCheckoutErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			TeamBillingCheckoutErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			TeamBillingCheckoutErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			TeamBillingCheckoutErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			TeamBillingCheckoutErrorKind::Unhandled(_inner) => _inner.fmt(f),
-		}
-	}
-}
-impl aws_smithy_types::retry::ProvideErrorKind for TeamBillingCheckoutError {
-	fn code(&self) -> Option<&str> {
-		TeamBillingCheckoutError::code(self)
-	}
-	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
-		match &self.kind {
-			TeamBillingCheckoutErrorKind::InternalError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			TeamBillingCheckoutErrorKind::UnauthorizedError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			_ => None,
-		}
-	}
-}
-impl TeamBillingCheckoutError {
-	/// Creates a new `TeamBillingCheckoutError`.
-	pub fn new(kind: TeamBillingCheckoutErrorKind, meta: aws_smithy_types::Error) -> Self {
-		Self { kind, meta }
-	}
-
-	/// Creates the `TeamBillingCheckoutError::Unhandled` variant from any error type.
-	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
-		Self {
-			kind: TeamBillingCheckoutErrorKind::Unhandled(err.into()),
-			meta: Default::default(),
-		}
-	}
-
-	/// Creates the `TeamBillingCheckoutError::Unhandled` variant from a `aws_smithy_types::Error`.
-	pub fn generic(err: aws_smithy_types::Error) -> Self {
-		Self {
-			meta: err.clone(),
-			kind: TeamBillingCheckoutErrorKind::Unhandled(err.into()),
-		}
-	}
-
-	/// Returns the error message if one is available.
-	pub fn message(&self) -> Option<&str> {
-		self.meta.message()
-	}
-
-	/// Returns error metadata, which includes the error code, message,
-	/// request ID, and potentially additional information.
-	pub fn meta(&self) -> &aws_smithy_types::Error {
-		&self.meta
-	}
-
-	/// Returns the request ID if it's available.
-	pub fn request_id(&self) -> Option<&str> {
-		self.meta.request_id()
-	}
-
-	/// Returns the error code if it's available.
-	pub fn code(&self) -> Option<&str> {
-		self.meta.code()
-	}
-	/// Returns `true` if the error kind is `TeamBillingCheckoutErrorKind::InternalError`.
-	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, TeamBillingCheckoutErrorKind::InternalError(_))
-	}
-	/// Returns `true` if the error kind is `TeamBillingCheckoutErrorKind::RateLimitError`.
-	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, TeamBillingCheckoutErrorKind::RateLimitError(_))
-	}
-	/// Returns `true` if the error kind is `TeamBillingCheckoutErrorKind::ForbiddenError`.
-	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, TeamBillingCheckoutErrorKind::ForbiddenError(_))
-	}
-	/// Returns `true` if the error kind is `TeamBillingCheckoutErrorKind::UnauthorizedError`.
-	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			TeamBillingCheckoutErrorKind::UnauthorizedError(_)
-		)
-	}
-	/// Returns `true` if the error kind is `TeamBillingCheckoutErrorKind::NotFoundError`.
-	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, TeamBillingCheckoutErrorKind::NotFoundError(_))
-	}
-	/// Returns `true` if the error kind is `TeamBillingCheckoutErrorKind::BadRequestError`.
-	pub fn is_bad_request_error(&self) -> bool {
-		matches!(&self.kind, TeamBillingCheckoutErrorKind::BadRequestError(_))
-	}
-}
-impl std::error::Error for TeamBillingCheckoutError {
-	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-		match &self.kind {
-			TeamBillingCheckoutErrorKind::InternalError(_inner) => Some(_inner),
-			TeamBillingCheckoutErrorKind::RateLimitError(_inner) => Some(_inner),
-			TeamBillingCheckoutErrorKind::ForbiddenError(_inner) => Some(_inner),
-			TeamBillingCheckoutErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			TeamBillingCheckoutErrorKind::NotFoundError(_inner) => Some(_inner),
-			TeamBillingCheckoutErrorKind::BadRequestError(_inner) => Some(_inner),
-			TeamBillingCheckoutErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
-		}
-	}
-}
-
 /// Error type for the `ToggleNamespaceDomainPublicAuth` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
@@ -4103,17 +4879,17 @@ pub struct ToggleNamespaceDomainPublicAuthError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ToggleNamespaceDomainPublicAuthErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -4262,17 +5038,17 @@ pub struct UpdateGameNamespaceMatchmakerConfigError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum UpdateGameNamespaceMatchmakerConfigErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -4425,17 +5201,17 @@ pub struct UpdateGameNamespaceVersionError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum UpdateGameNamespaceVersionErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -4581,17 +5357,17 @@ pub struct UpdateNamespaceDomainError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum UpdateNamespaceDomainErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -4731,17 +5507,17 @@ pub struct ValidateGameError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ValidateGameErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -4865,17 +5641,17 @@ pub struct ValidateGameNamespaceError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ValidateGameNamespaceErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -5015,17 +5791,17 @@ pub struct ValidateGameNamespaceMatchmakerConfigError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ValidateGameNamespaceMatchmakerConfigErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -5182,17 +5958,17 @@ pub struct ValidateGameNamespaceTokenDevelopmentError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ValidateGameNamespaceTokenDevelopmentErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -5349,17 +6125,17 @@ pub struct ValidateGameVersionError {
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum ValidateGameVersionErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -5477,78 +6253,78 @@ impl std::error::Error for ValidateGameVersionError {
 	}
 }
 
-/// Error type for the `ValidateTeam` operation.
+/// Error type for the `ValidateGroup` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
-pub struct ValidateTeamError {
+pub struct ValidateGroupError {
 	/// Kind of error that occurred.
-	pub kind: ValidateTeamErrorKind,
+	pub kind: ValidateGroupErrorKind,
 	/// Additional metadata about the error, including error code, message, and request ID.
 	pub(crate) meta: aws_smithy_types::Error,
 }
-/// Types of errors that can occur for the `ValidateTeam` operation.
+/// Types of errors that can occur for the `ValidateGroup` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
-pub enum ValidateTeamErrorKind {
-	#[allow(missing_docs)] // documentation missing in model
+pub enum ValidateGroupErrorKind {
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
 	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
 }
-impl std::fmt::Display for ValidateTeamError {
+impl std::fmt::Display for ValidateGroupError {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self.kind {
-			ValidateTeamErrorKind::InternalError(_inner) => _inner.fmt(f),
-			ValidateTeamErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			ValidateTeamErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			ValidateTeamErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			ValidateTeamErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			ValidateTeamErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			ValidateTeamErrorKind::Unhandled(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::InternalError(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			ValidateGroupErrorKind::Unhandled(_inner) => _inner.fmt(f),
 		}
 	}
 }
-impl aws_smithy_types::retry::ProvideErrorKind for ValidateTeamError {
+impl aws_smithy_types::retry::ProvideErrorKind for ValidateGroupError {
 	fn code(&self) -> Option<&str> {
-		ValidateTeamError::code(self)
+		ValidateGroupError::code(self)
 	}
 	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
 		match &self.kind {
-			ValidateTeamErrorKind::InternalError(inner) => Some(inner.retryable_error_kind()),
-			ValidateTeamErrorKind::UnauthorizedError(inner) => Some(inner.retryable_error_kind()),
+			ValidateGroupErrorKind::InternalError(inner) => Some(inner.retryable_error_kind()),
+			ValidateGroupErrorKind::UnauthorizedError(inner) => Some(inner.retryable_error_kind()),
 			_ => None,
 		}
 	}
 }
-impl ValidateTeamError {
-	/// Creates a new `ValidateTeamError`.
-	pub fn new(kind: ValidateTeamErrorKind, meta: aws_smithy_types::Error) -> Self {
+impl ValidateGroupError {
+	/// Creates a new `ValidateGroupError`.
+	pub fn new(kind: ValidateGroupErrorKind, meta: aws_smithy_types::Error) -> Self {
 		Self { kind, meta }
 	}
 
-	/// Creates the `ValidateTeamError::Unhandled` variant from any error type.
+	/// Creates the `ValidateGroupError::Unhandled` variant from any error type.
 	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
 		Self {
-			kind: ValidateTeamErrorKind::Unhandled(err.into()),
+			kind: ValidateGroupErrorKind::Unhandled(err.into()),
 			meta: Default::default(),
 		}
 	}
 
-	/// Creates the `ValidateTeamError::Unhandled` variant from a `aws_smithy_types::Error`.
+	/// Creates the `ValidateGroupError::Unhandled` variant from a `aws_smithy_types::Error`.
 	pub fn generic(err: aws_smithy_types::Error) -> Self {
 		Self {
 			meta: err.clone(),
-			kind: ValidateTeamErrorKind::Unhandled(err.into()),
+			kind: ValidateGroupErrorKind::Unhandled(err.into()),
 		}
 	}
 
@@ -5572,46 +6348,46 @@ impl ValidateTeamError {
 	pub fn code(&self) -> Option<&str> {
 		self.meta.code()
 	}
-	/// Returns `true` if the error kind is `ValidateTeamErrorKind::InternalError`.
+	/// Returns `true` if the error kind is `ValidateGroupErrorKind::InternalError`.
 	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, ValidateTeamErrorKind::InternalError(_))
+		matches!(&self.kind, ValidateGroupErrorKind::InternalError(_))
 	}
-	/// Returns `true` if the error kind is `ValidateTeamErrorKind::RateLimitError`.
+	/// Returns `true` if the error kind is `ValidateGroupErrorKind::RateLimitError`.
 	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, ValidateTeamErrorKind::RateLimitError(_))
+		matches!(&self.kind, ValidateGroupErrorKind::RateLimitError(_))
 	}
-	/// Returns `true` if the error kind is `ValidateTeamErrorKind::ForbiddenError`.
+	/// Returns `true` if the error kind is `ValidateGroupErrorKind::ForbiddenError`.
 	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, ValidateTeamErrorKind::ForbiddenError(_))
+		matches!(&self.kind, ValidateGroupErrorKind::ForbiddenError(_))
 	}
-	/// Returns `true` if the error kind is `ValidateTeamErrorKind::UnauthorizedError`.
+	/// Returns `true` if the error kind is `ValidateGroupErrorKind::UnauthorizedError`.
 	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(&self.kind, ValidateTeamErrorKind::UnauthorizedError(_))
+		matches!(&self.kind, ValidateGroupErrorKind::UnauthorizedError(_))
 	}
-	/// Returns `true` if the error kind is `ValidateTeamErrorKind::NotFoundError`.
+	/// Returns `true` if the error kind is `ValidateGroupErrorKind::NotFoundError`.
 	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, ValidateTeamErrorKind::NotFoundError(_))
+		matches!(&self.kind, ValidateGroupErrorKind::NotFoundError(_))
 	}
-	/// Returns `true` if the error kind is `ValidateTeamErrorKind::BadRequestError`.
+	/// Returns `true` if the error kind is `ValidateGroupErrorKind::BadRequestError`.
 	pub fn is_bad_request_error(&self) -> bool {
-		matches!(&self.kind, ValidateTeamErrorKind::BadRequestError(_))
+		matches!(&self.kind, ValidateGroupErrorKind::BadRequestError(_))
 	}
 }
-impl std::error::Error for ValidateTeamError {
+impl std::error::Error for ValidateGroupError {
 	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
 		match &self.kind {
-			ValidateTeamErrorKind::InternalError(_inner) => Some(_inner),
-			ValidateTeamErrorKind::RateLimitError(_inner) => Some(_inner),
-			ValidateTeamErrorKind::ForbiddenError(_inner) => Some(_inner),
-			ValidateTeamErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			ValidateTeamErrorKind::NotFoundError(_inner) => Some(_inner),
-			ValidateTeamErrorKind::BadRequestError(_inner) => Some(_inner),
-			ValidateTeamErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+			ValidateGroupErrorKind::InternalError(_inner) => Some(_inner),
+			ValidateGroupErrorKind::RateLimitError(_inner) => Some(_inner),
+			ValidateGroupErrorKind::ForbiddenError(_inner) => Some(_inner),
+			ValidateGroupErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			ValidateGroupErrorKind::NotFoundError(_inner) => Some(_inner),
+			ValidateGroupErrorKind::BadRequestError(_inner) => Some(_inner),
+			ValidateGroupErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
 		}
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// An error thrown when the requestee has sent an invalid or malformed request.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct BadRequestError {
@@ -5619,11 +6395,17 @@ pub struct BadRequestError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
 impl BadRequestError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
+		self.metadata.as_ref()
 	}
 }
 impl std::fmt::Debug for BadRequestError {
@@ -5631,6 +6413,7 @@ impl std::fmt::Debug for BadRequestError {
 		let mut formatter = f.debug_struct("BadRequestError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
 }
@@ -5658,6 +6441,7 @@ pub mod bad_request_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -5680,11 +6464,25 @@ pub mod bad_request_error {
 			self.message = input;
 			self
 		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
+			self.metadata = Some(input);
+			self
+		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn set_metadata(
+			mut self,
+			input: std::option::Option<aws_smithy_types::Document>,
+		) -> Self {
+			self.metadata = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`BadRequestError`](crate::error::BadRequestError)
 		pub fn build(self) -> crate::error::BadRequestError {
 			crate::error::BadRequestError {
 				code: self.code,
 				message: self.message,
+				metadata: self.metadata,
 			}
 		}
 	}
@@ -5696,7 +6494,7 @@ impl BadRequestError {
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// An error thrown when the requestee requests a non existant resource.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct NotFoundError {
@@ -5704,11 +6502,17 @@ pub struct NotFoundError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
 impl NotFoundError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
+		self.metadata.as_ref()
 	}
 }
 impl std::fmt::Debug for NotFoundError {
@@ -5716,6 +6520,7 @@ impl std::fmt::Debug for NotFoundError {
 		let mut formatter = f.debug_struct("NotFoundError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
 }
@@ -5743,6 +6548,7 @@ pub mod not_found_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -5765,11 +6571,25 @@ pub mod not_found_error {
 			self.message = input;
 			self
 		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
+			self.metadata = Some(input);
+			self
+		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn set_metadata(
+			mut self,
+			input: std::option::Option<aws_smithy_types::Document>,
+		) -> Self {
+			self.metadata = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`NotFoundError`](crate::error::NotFoundError)
 		pub fn build(self) -> crate::error::NotFoundError {
 			crate::error::NotFoundError {
 				code: self.code,
 				message: self.message,
+				metadata: self.metadata,
 			}
 		}
 	}
@@ -5781,7 +6601,7 @@ impl NotFoundError {
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// An error thrown when the requestee is not authenticated.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct UnauthorizedError {
@@ -5789,11 +6609,17 @@ pub struct UnauthorizedError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
 impl UnauthorizedError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
+		self.metadata.as_ref()
 	}
 }
 impl std::fmt::Debug for UnauthorizedError {
@@ -5801,6 +6627,7 @@ impl std::fmt::Debug for UnauthorizedError {
 		let mut formatter = f.debug_struct("UnauthorizedError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
 }
@@ -5832,6 +6659,7 @@ pub mod unauthorized_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -5854,11 +6682,25 @@ pub mod unauthorized_error {
 			self.message = input;
 			self
 		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
+			self.metadata = Some(input);
+			self
+		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn set_metadata(
+			mut self,
+			input: std::option::Option<aws_smithy_types::Document>,
+		) -> Self {
+			self.metadata = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`UnauthorizedError`](crate::error::UnauthorizedError)
 		pub fn build(self) -> crate::error::UnauthorizedError {
 			crate::error::UnauthorizedError {
 				code: self.code,
 				message: self.message,
+				metadata: self.metadata,
 			}
 		}
 	}
@@ -5870,7 +6712,7 @@ impl UnauthorizedError {
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// An error thrown when the requestee requests a resource they do not have access to.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ForbiddenError {
@@ -5878,11 +6720,17 @@ pub struct ForbiddenError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
 impl ForbiddenError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
+		self.metadata.as_ref()
 	}
 }
 impl std::fmt::Debug for ForbiddenError {
@@ -5890,6 +6738,7 @@ impl std::fmt::Debug for ForbiddenError {
 		let mut formatter = f.debug_struct("ForbiddenError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
 }
@@ -5917,6 +6766,7 @@ pub mod forbidden_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -5939,11 +6789,25 @@ pub mod forbidden_error {
 			self.message = input;
 			self
 		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
+			self.metadata = Some(input);
+			self
+		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn set_metadata(
+			mut self,
+			input: std::option::Option<aws_smithy_types::Document>,
+		) -> Self {
+			self.metadata = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`ForbiddenError`](crate::error::ForbiddenError)
 		pub fn build(self) -> crate::error::ForbiddenError {
 			crate::error::ForbiddenError {
 				code: self.code,
 				message: self.message,
+				metadata: self.metadata,
 			}
 		}
 	}
@@ -5955,7 +6819,7 @@ impl ForbiddenError {
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct RateLimitError {
@@ -5963,11 +6827,17 @@ pub struct RateLimitError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
 impl RateLimitError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
+		self.metadata.as_ref()
 	}
 }
 impl std::fmt::Debug for RateLimitError {
@@ -5975,6 +6845,7 @@ impl std::fmt::Debug for RateLimitError {
 		let mut formatter = f.debug_struct("RateLimitError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
 }
@@ -6002,6 +6873,7 @@ pub mod rate_limit_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -6024,11 +6896,25 @@ pub mod rate_limit_error {
 			self.message = input;
 			self
 		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
+			self.metadata = Some(input);
+			self
+		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn set_metadata(
+			mut self,
+			input: std::option::Option<aws_smithy_types::Document>,
+		) -> Self {
+			self.metadata = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`RateLimitError`](crate::error::RateLimitError)
 		pub fn build(self) -> crate::error::RateLimitError {
 			crate::error::RateLimitError {
 				code: self.code,
 				message: self.message,
+				metadata: self.metadata,
 			}
 		}
 	}
@@ -6040,7 +6926,7 @@ impl RateLimitError {
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// An error caused by internal server problems.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct InternalError {
@@ -6048,11 +6934,17 @@ pub struct InternalError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
 impl InternalError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	/// Unstructured metadata relating to an error. Must be manually parsed.
+	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
+		self.metadata.as_ref()
 	}
 }
 impl std::fmt::Debug for InternalError {
@@ -6060,6 +6952,7 @@ impl std::fmt::Debug for InternalError {
 		let mut formatter = f.debug_struct("InternalError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
 }
@@ -6091,6 +6984,7 @@ pub mod internal_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -6113,11 +7007,25 @@ pub mod internal_error {
 			self.message = input;
 			self
 		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
+			self.metadata = Some(input);
+			self
+		}
+		/// Unstructured metadata relating to an error. Must be manually parsed.
+		pub fn set_metadata(
+			mut self,
+			input: std::option::Option<aws_smithy_types::Document>,
+		) -> Self {
+			self.metadata = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`InternalError`](crate::error::InternalError)
 		pub fn build(self) -> crate::error::InternalError {
 			crate::error::InternalError {
 				code: self.code,
 				message: self.message,
+				metadata: self.metadata,
 			}
 		}
 	}

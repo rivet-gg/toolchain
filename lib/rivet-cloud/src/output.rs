@@ -3,11 +3,11 @@
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetRayPerfLogsOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of service performance summaries.
 	pub perf_lists: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
 }
 impl GetRayPerfLogsOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of service performance summaries.
 	pub fn perf_lists(&self) -> std::option::Option<&[crate::model::SvcPerf]> {
 		self.perf_lists.as_deref()
 	}
@@ -32,13 +32,14 @@ pub mod get_ray_perf_logs_output {
 		///
 		/// To override the contents of this collection use [`set_perf_lists`](Self::set_perf_lists).
 		///
+		/// A list of service performance summaries.
 		pub fn perf_lists(mut self, input: crate::model::SvcPerf) -> Self {
 			let mut v = self.perf_lists.unwrap_or_default();
 			v.push(input);
 			self.perf_lists = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of service performance summaries.
 		pub fn set_perf_lists(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
@@ -64,26 +65,26 @@ impl GetRayPerfLogsOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct ValidateTeamOutput {
-	#[allow(missing_docs)] // documentation missing in model
+pub struct ValidateGroupOutput {
+	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
 }
-impl ValidateTeamOutput {
-	#[allow(missing_docs)] // documentation missing in model
+impl ValidateGroupOutput {
+	/// A list of validation errors.
 	pub fn errors(&self) -> std::option::Option<&[crate::model::ValidationError]> {
 		self.errors.as_deref()
 	}
 }
-impl std::fmt::Debug for ValidateTeamOutput {
+impl std::fmt::Debug for ValidateGroupOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("ValidateTeamOutput");
+		let mut formatter = f.debug_struct("ValidateGroupOutput");
 		formatter.field("errors", &self.errors);
 		formatter.finish()
 	}
 }
-/// See [`ValidateTeamOutput`](crate::output::ValidateTeamOutput)
-pub mod validate_team_output {
-	/// A builder for [`ValidateTeamOutput`](crate::output::ValidateTeamOutput)
+/// See [`ValidateGroupOutput`](crate::output::ValidateGroupOutput)
+pub mod validate_group_output {
+	/// A builder for [`ValidateGroupOutput`](crate::output::ValidateGroupOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
@@ -94,13 +95,14 @@ pub mod validate_team_output {
 		///
 		/// To override the contents of this collection use [`set_errors`](Self::set_errors).
 		///
+		/// A list of validation errors.
 		pub fn errors(mut self, input: crate::model::ValidationError) -> Self {
 			let mut v = self.errors.unwrap_or_default();
 			v.push(input);
 			self.errors = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of validation errors.
 		pub fn set_errors(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
@@ -108,137 +110,220 @@ pub mod validate_team_output {
 			self.errors = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`ValidateTeamOutput`](crate::output::ValidateTeamOutput)
-		pub fn build(self) -> crate::output::ValidateTeamOutput {
-			crate::output::ValidateTeamOutput {
+		/// Consumes the builder and constructs a [`ValidateGroupOutput`](crate::output::ValidateGroupOutput)
+		pub fn build(self) -> crate::output::ValidateGroupOutput {
+			crate::output::ValidateGroupOutput {
 				errors: self.errors,
 			}
 		}
 	}
 }
-impl ValidateTeamOutput {
-	/// Creates a new builder-style object to manufacture [`ValidateTeamOutput`](crate::output::ValidateTeamOutput)
-	pub fn builder() -> crate::output::validate_team_output::Builder {
-		crate::output::validate_team_output::Builder::default()
+impl ValidateGroupOutput {
+	/// Creates a new builder-style object to manufacture [`ValidateGroupOutput`](crate::output::ValidateGroupOutput)
+	pub fn builder() -> crate::output::validate_group_output::Builder {
+		crate::output::validate_group_output::Builder::default()
 	}
 }
 
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct TeamBillingCheckoutOutput {
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GroupBillingCheckoutOutput {
+	/// The URL of the checkout session.
 	pub url: std::option::Option<std::string::String>,
 }
-impl TeamBillingCheckoutOutput {
-	#[allow(missing_docs)] // documentation missing in model
+impl GroupBillingCheckoutOutput {
+	/// The URL of the checkout session.
 	pub fn url(&self) -> std::option::Option<&str> {
 		self.url.as_deref()
 	}
 }
-impl std::fmt::Debug for TeamBillingCheckoutOutput {
+impl std::fmt::Debug for GroupBillingCheckoutOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("TeamBillingCheckoutOutput");
+		let mut formatter = f.debug_struct("GroupBillingCheckoutOutput");
 		formatter.field("url", &self.url);
 		formatter.finish()
 	}
 }
-/// See [`TeamBillingCheckoutOutput`](crate::output::TeamBillingCheckoutOutput)
-pub mod team_billing_checkout_output {
-	/// A builder for [`TeamBillingCheckoutOutput`](crate::output::TeamBillingCheckoutOutput)
+/// See [`GroupBillingCheckoutOutput`](crate::output::GroupBillingCheckoutOutput)
+pub mod group_billing_checkout_output {
+	/// A builder for [`GroupBillingCheckoutOutput`](crate::output::GroupBillingCheckoutOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) url: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// The URL of the checkout session.
 		pub fn url(mut self, input: impl Into<std::string::String>) -> Self {
 			self.url = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The URL of the checkout session.
 		pub fn set_url(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.url = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`TeamBillingCheckoutOutput`](crate::output::TeamBillingCheckoutOutput)
-		pub fn build(self) -> crate::output::TeamBillingCheckoutOutput {
-			crate::output::TeamBillingCheckoutOutput { url: self.url }
+		/// Consumes the builder and constructs a [`GroupBillingCheckoutOutput`](crate::output::GroupBillingCheckoutOutput)
+		pub fn build(self) -> crate::output::GroupBillingCheckoutOutput {
+			crate::output::GroupBillingCheckoutOutput { url: self.url }
 		}
 	}
 }
-impl TeamBillingCheckoutOutput {
-	/// Creates a new builder-style object to manufacture [`TeamBillingCheckoutOutput`](crate::output::TeamBillingCheckoutOutput)
-	pub fn builder() -> crate::output::team_billing_checkout_output::Builder {
-		crate::output::team_billing_checkout_output::Builder::default()
+impl GroupBillingCheckoutOutput {
+	/// Creates a new builder-style object to manufacture [`GroupBillingCheckoutOutput`](crate::output::GroupBillingCheckoutOutput)
+	pub fn builder() -> crate::output::group_billing_checkout_output::Builder {
+		crate::output::group_billing_checkout_output::Builder::default()
 	}
 }
 
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct ConvertTeamOutput {}
-impl std::fmt::Debug for ConvertTeamOutput {
+pub struct ConvertGroupOutput {}
+impl std::fmt::Debug for ConvertGroupOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("ConvertTeamOutput");
+		let mut formatter = f.debug_struct("ConvertGroupOutput");
 		formatter.finish()
 	}
 }
-/// See [`ConvertTeamOutput`](crate::output::ConvertTeamOutput)
-pub mod convert_team_output {
-	/// A builder for [`ConvertTeamOutput`](crate::output::ConvertTeamOutput)
+/// See [`ConvertGroupOutput`](crate::output::ConvertGroupOutput)
+pub mod convert_group_output {
+	/// A builder for [`ConvertGroupOutput`](crate::output::ConvertGroupOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {}
 	impl Builder {
-		/// Consumes the builder and constructs a [`ConvertTeamOutput`](crate::output::ConvertTeamOutput)
-		pub fn build(self) -> crate::output::ConvertTeamOutput {
-			crate::output::ConvertTeamOutput {}
+		/// Consumes the builder and constructs a [`ConvertGroupOutput`](crate::output::ConvertGroupOutput)
+		pub fn build(self) -> crate::output::ConvertGroupOutput {
+			crate::output::ConvertGroupOutput {}
 		}
 	}
 }
-impl ConvertTeamOutput {
-	/// Creates a new builder-style object to manufacture [`ConvertTeamOutput`](crate::output::ConvertTeamOutput)
-	pub fn builder() -> crate::output::convert_team_output::Builder {
-		crate::output::convert_team_output::Builder::default()
+impl ConvertGroupOutput {
+	/// Creates a new builder-style object to manufacture [`ConvertGroupOutput`](crate::output::ConvertGroupOutput)
+	pub fn builder() -> crate::output::convert_group_output::Builder {
+		crate::output::convert_group_output::Builder::default()
 	}
 }
 
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetTeamTransfersListOutput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub transfers: std::option::Option<std::vec::Vec<crate::model::TeamBillingTransfer>>,
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GetGroupInvoicesListOutput {
+	/// A list of a group's billing invoices.
+	pub invoices: std::option::Option<std::vec::Vec<crate::model::GroupBillingInvoice>>,
+	/// The pagination anchor.
+	pub anchor: std::option::Option<std::string::String>,
+}
+impl GetGroupInvoicesListOutput {
+	/// A list of a group's billing invoices.
+	pub fn invoices(&self) -> std::option::Option<&[crate::model::GroupBillingInvoice]> {
+		self.invoices.as_deref()
+	}
+	/// The pagination anchor.
+	pub fn anchor(&self) -> std::option::Option<&str> {
+		self.anchor.as_deref()
+	}
+}
+impl std::fmt::Debug for GetGroupInvoicesListOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GetGroupInvoicesListOutput");
+		formatter.field("invoices", &self.invoices);
+		formatter.field("anchor", &self.anchor);
+		formatter.finish()
+	}
+}
+/// See [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput)
+pub mod get_group_invoices_list_output {
+	/// A builder for [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) invoices: std::option::Option<std::vec::Vec<crate::model::GroupBillingInvoice>>,
+		pub(crate) anchor: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// Appends an item to `invoices`.
+		///
+		/// To override the contents of this collection use [`set_invoices`](Self::set_invoices).
+		///
+		/// A list of a group's billing invoices.
+		pub fn invoices(mut self, input: crate::model::GroupBillingInvoice) -> Self {
+			let mut v = self.invoices.unwrap_or_default();
+			v.push(input);
+			self.invoices = Some(v);
+			self
+		}
+		/// A list of a group's billing invoices.
+		pub fn set_invoices(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::GroupBillingInvoice>>,
+		) -> Self {
+			self.invoices = input;
+			self
+		}
+		/// The pagination anchor.
+		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
+			self.anchor = Some(input.into());
+			self
+		}
+		/// The pagination anchor.
+		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.anchor = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput)
+		pub fn build(self) -> crate::output::GetGroupInvoicesListOutput {
+			crate::output::GetGroupInvoicesListOutput {
+				invoices: self.invoices,
+				anchor: self.anchor,
+			}
+		}
+	}
+}
+impl GetGroupInvoicesListOutput {
+	/// Creates a new builder-style object to manufacture [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput)
+	pub fn builder() -> crate::output::get_group_invoices_list_output::Builder {
+		crate::output::get_group_invoices_list_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GetGroupTransfersListOutput {
+	/// A list of a group's billing transfers.
+	pub transfers: std::option::Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
+	/// The ID of the last transfer listed.
 	pub end_transfer_id: std::option::Option<std::string::String>,
 }
-impl GetTeamTransfersListOutput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn transfers(&self) -> std::option::Option<&[crate::model::TeamBillingTransfer]> {
+impl GetGroupTransfersListOutput {
+	/// A list of a group's billing transfers.
+	pub fn transfers(&self) -> std::option::Option<&[crate::model::GroupBillingTransfer]> {
 		self.transfers.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// The ID of the last transfer listed.
 	pub fn end_transfer_id(&self) -> std::option::Option<&str> {
 		self.end_transfer_id.as_deref()
 	}
 }
-impl std::fmt::Debug for GetTeamTransfersListOutput {
+impl std::fmt::Debug for GetGroupTransfersListOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetTeamTransfersListOutput");
+		let mut formatter = f.debug_struct("GetGroupTransfersListOutput");
 		formatter.field("transfers", &self.transfers);
 		formatter.field("end_transfer_id", &self.end_transfer_id);
 		formatter.finish()
 	}
 }
-/// See [`GetTeamTransfersListOutput`](crate::output::GetTeamTransfersListOutput)
-pub mod get_team_transfers_list_output {
-	/// A builder for [`GetTeamTransfersListOutput`](crate::output::GetTeamTransfersListOutput)
+/// See [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
+pub mod get_group_transfers_list_output {
+	/// A builder for [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) transfers: std::option::Option<std::vec::Vec<crate::model::TeamBillingTransfer>>,
+		pub(crate) transfers:
+			std::option::Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
 		pub(crate) end_transfer_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
@@ -246,26 +331,27 @@ pub mod get_team_transfers_list_output {
 		///
 		/// To override the contents of this collection use [`set_transfers`](Self::set_transfers).
 		///
-		pub fn transfers(mut self, input: crate::model::TeamBillingTransfer) -> Self {
+		/// A list of a group's billing transfers.
+		pub fn transfers(mut self, input: crate::model::GroupBillingTransfer) -> Self {
 			let mut v = self.transfers.unwrap_or_default();
 			v.push(input);
 			self.transfers = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of a group's billing transfers.
 		pub fn set_transfers(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::TeamBillingTransfer>>,
+			input: std::option::Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
 		) -> Self {
 			self.transfers = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The ID of the last transfer listed.
 		pub fn end_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.end_transfer_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The ID of the last transfer listed.
 		pub fn set_end_transfer_id(
 			mut self,
 			input: std::option::Option<std::string::String>,
@@ -273,56 +359,56 @@ pub mod get_team_transfers_list_output {
 			self.end_transfer_id = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`GetTeamTransfersListOutput`](crate::output::GetTeamTransfersListOutput)
-		pub fn build(self) -> crate::output::GetTeamTransfersListOutput {
-			crate::output::GetTeamTransfersListOutput {
+		/// Consumes the builder and constructs a [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
+		pub fn build(self) -> crate::output::GetGroupTransfersListOutput {
+			crate::output::GetGroupTransfersListOutput {
 				transfers: self.transfers,
 				end_transfer_id: self.end_transfer_id,
 			}
 		}
 	}
 }
-impl GetTeamTransfersListOutput {
-	/// Creates a new builder-style object to manufacture [`GetTeamTransfersListOutput`](crate::output::GetTeamTransfersListOutput)
-	pub fn builder() -> crate::output::get_team_transfers_list_output::Builder {
-		crate::output::get_team_transfers_list_output::Builder::default()
+impl GetGroupTransfersListOutput {
+	/// Creates a new builder-style object to manufacture [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
+	pub fn builder() -> crate::output::get_group_transfers_list_output::Builder {
+		crate::output::get_group_transfers_list_output::Builder::default()
 	}
 }
 
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetTeamPaymentsListOutput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub payments: std::option::Option<std::vec::Vec<crate::model::TeamBillingPayment>>,
-	#[allow(missing_docs)] // documentation missing in model
+pub struct GetGroupPaymentsListOutput {
+	/// A list of a group's billing payments.
+	pub payments: std::option::Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
+	/// The ID of the last payment listed.
 	pub end_payment_id: std::option::Option<std::string::String>,
 }
-impl GetTeamPaymentsListOutput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn payments(&self) -> std::option::Option<&[crate::model::TeamBillingPayment]> {
+impl GetGroupPaymentsListOutput {
+	/// A list of a group's billing payments.
+	pub fn payments(&self) -> std::option::Option<&[crate::model::GroupBillingPayment]> {
 		self.payments.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// The ID of the last payment listed.
 	pub fn end_payment_id(&self) -> std::option::Option<&str> {
 		self.end_payment_id.as_deref()
 	}
 }
-impl std::fmt::Debug for GetTeamPaymentsListOutput {
+impl std::fmt::Debug for GetGroupPaymentsListOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetTeamPaymentsListOutput");
+		let mut formatter = f.debug_struct("GetGroupPaymentsListOutput");
 		formatter.field("payments", &self.payments);
 		formatter.field("end_payment_id", &self.end_payment_id);
 		formatter.finish()
 	}
 }
-/// See [`GetTeamPaymentsListOutput`](crate::output::GetTeamPaymentsListOutput)
-pub mod get_team_payments_list_output {
-	/// A builder for [`GetTeamPaymentsListOutput`](crate::output::GetTeamPaymentsListOutput)
+/// See [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
+pub mod get_group_payments_list_output {
+	/// A builder for [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) payments: std::option::Option<std::vec::Vec<crate::model::TeamBillingPayment>>,
+		pub(crate) payments: std::option::Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
 		pub(crate) end_payment_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
@@ -330,26 +416,27 @@ pub mod get_team_payments_list_output {
 		///
 		/// To override the contents of this collection use [`set_payments`](Self::set_payments).
 		///
-		pub fn payments(mut self, input: crate::model::TeamBillingPayment) -> Self {
+		/// A list of a group's billing payments.
+		pub fn payments(mut self, input: crate::model::GroupBillingPayment) -> Self {
 			let mut v = self.payments.unwrap_or_default();
 			v.push(input);
 			self.payments = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of a group's billing payments.
 		pub fn set_payments(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::TeamBillingPayment>>,
+			input: std::option::Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
 		) -> Self {
 			self.payments = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The ID of the last payment listed.
 		pub fn end_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.end_payment_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The ID of the last payment listed.
 		pub fn set_end_payment_id(
 			mut self,
 			input: std::option::Option<std::string::String>,
@@ -357,90 +444,90 @@ pub mod get_team_payments_list_output {
 			self.end_payment_id = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`GetTeamPaymentsListOutput`](crate::output::GetTeamPaymentsListOutput)
-		pub fn build(self) -> crate::output::GetTeamPaymentsListOutput {
-			crate::output::GetTeamPaymentsListOutput {
+		/// Consumes the builder and constructs a [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
+		pub fn build(self) -> crate::output::GetGroupPaymentsListOutput {
+			crate::output::GetGroupPaymentsListOutput {
 				payments: self.payments,
 				end_payment_id: self.end_payment_id,
 			}
 		}
 	}
 }
-impl GetTeamPaymentsListOutput {
-	/// Creates a new builder-style object to manufacture [`GetTeamPaymentsListOutput`](crate::output::GetTeamPaymentsListOutput)
-	pub fn builder() -> crate::output::get_team_payments_list_output::Builder {
-		crate::output::get_team_payments_list_output::Builder::default()
+impl GetGroupPaymentsListOutput {
+	/// Creates a new builder-style object to manufacture [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
+	pub fn builder() -> crate::output::get_group_payments_list_output::Builder {
+		crate::output::get_group_payments_list_output::Builder::default()
 	}
 }
 
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetTeamBillingOutput {
+pub struct GetGroupBillingOutput {
+	/// A group billing summary.
+	pub billing: std::option::Option<crate::model::GroupBillingSummary>,
 	#[allow(missing_docs)] // documentation missing in model
-	pub billing: std::option::Option<crate::model::TeamBillingSummary>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub bank_source: std::option::Option<crate::model::TeamBankSource>,
-	#[allow(missing_docs)] // documentation missing in model
+	pub bank_source: std::option::Option<crate::model::GroupBankSource>,
+	/// A list of region summaries.
 	pub available_regions: std::option::Option<std::vec::Vec<crate::model::RegionSummary>>,
 }
-impl GetTeamBillingOutput {
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn billing(&self) -> std::option::Option<&crate::model::TeamBillingSummary> {
+impl GetGroupBillingOutput {
+	/// A group billing summary.
+	pub fn billing(&self) -> std::option::Option<&crate::model::GroupBillingSummary> {
 		self.billing.as_ref()
 	}
 	#[allow(missing_docs)] // documentation missing in model
-	pub fn bank_source(&self) -> std::option::Option<&crate::model::TeamBankSource> {
+	pub fn bank_source(&self) -> std::option::Option<&crate::model::GroupBankSource> {
 		self.bank_source.as_ref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of region summaries.
 	pub fn available_regions(&self) -> std::option::Option<&[crate::model::RegionSummary]> {
 		self.available_regions.as_deref()
 	}
 }
-impl std::fmt::Debug for GetTeamBillingOutput {
+impl std::fmt::Debug for GetGroupBillingOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetTeamBillingOutput");
+		let mut formatter = f.debug_struct("GetGroupBillingOutput");
 		formatter.field("billing", &self.billing);
-		formatter.field("bank_source", &self.bank_source);
+		formatter.field("bank_source", &"*** Sensitive Data Redacted ***");
 		formatter.field("available_regions", &self.available_regions);
 		formatter.finish()
 	}
 }
-/// See [`GetTeamBillingOutput`](crate::output::GetTeamBillingOutput)
-pub mod get_team_billing_output {
-	/// A builder for [`GetTeamBillingOutput`](crate::output::GetTeamBillingOutput)
+/// See [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput)
+pub mod get_group_billing_output {
+	/// A builder for [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) billing: std::option::Option<crate::model::TeamBillingSummary>,
-		pub(crate) bank_source: std::option::Option<crate::model::TeamBankSource>,
+		pub(crate) billing: std::option::Option<crate::model::GroupBillingSummary>,
+		pub(crate) bank_source: std::option::Option<crate::model::GroupBankSource>,
 		pub(crate) available_regions:
 			std::option::Option<std::vec::Vec<crate::model::RegionSummary>>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn billing(mut self, input: crate::model::TeamBillingSummary) -> Self {
+		/// A group billing summary.
+		pub fn billing(mut self, input: crate::model::GroupBillingSummary) -> Self {
 			self.billing = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A group billing summary.
 		pub fn set_billing(
 			mut self,
-			input: std::option::Option<crate::model::TeamBillingSummary>,
+			input: std::option::Option<crate::model::GroupBillingSummary>,
 		) -> Self {
 			self.billing = input;
 			self
 		}
 		#[allow(missing_docs)] // documentation missing in model
-		pub fn bank_source(mut self, input: crate::model::TeamBankSource) -> Self {
+		pub fn bank_source(mut self, input: crate::model::GroupBankSource) -> Self {
 			self.bank_source = Some(input);
 			self
 		}
 		#[allow(missing_docs)] // documentation missing in model
 		pub fn set_bank_source(
 			mut self,
-			input: std::option::Option<crate::model::TeamBankSource>,
+			input: std::option::Option<crate::model::GroupBankSource>,
 		) -> Self {
 			self.bank_source = input;
 			self
@@ -449,13 +536,14 @@ pub mod get_team_billing_output {
 		///
 		/// To override the contents of this collection use [`set_available_regions`](Self::set_available_regions).
 		///
+		/// A list of region summaries.
 		pub fn available_regions(mut self, input: crate::model::RegionSummary) -> Self {
 			let mut v = self.available_regions.unwrap_or_default();
 			v.push(input);
 			self.available_regions = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of region summaries.
 		pub fn set_available_regions(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::RegionSummary>>,
@@ -463,9 +551,9 @@ pub mod get_team_billing_output {
 			self.available_regions = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`GetTeamBillingOutput`](crate::output::GetTeamBillingOutput)
-		pub fn build(self) -> crate::output::GetTeamBillingOutput {
-			crate::output::GetTeamBillingOutput {
+		/// Consumes the builder and constructs a [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput)
+		pub fn build(self) -> crate::output::GetGroupBillingOutput {
+			crate::output::GetGroupBillingOutput {
 				billing: self.billing,
 				bank_source: self.bank_source,
 				available_regions: self.available_regions,
@@ -473,10 +561,10 @@ pub mod get_team_billing_output {
 		}
 	}
 }
-impl GetTeamBillingOutput {
-	/// Creates a new builder-style object to manufacture [`GetTeamBillingOutput`](crate::output::GetTeamBillingOutput)
-	pub fn builder() -> crate::output::get_team_billing_output::Builder {
-		crate::output::get_team_billing_output::Builder::default()
+impl GetGroupBillingOutput {
+	/// Creates a new builder-style object to manufacture [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput)
+	pub fn builder() -> crate::output::get_group_billing_output::Builder {
+		crate::output::get_group_billing_output::Builder::default()
 	}
 }
 
@@ -484,11 +572,11 @@ impl GetTeamBillingOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetRegionTiersOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of region server tiers.
 	pub tiers: std::option::Option<std::vec::Vec<crate::model::RegionTier>>,
 }
 impl GetRegionTiersOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of region server tiers.
 	pub fn tiers(&self) -> std::option::Option<&[crate::model::RegionTier]> {
 		self.tiers.as_deref()
 	}
@@ -513,13 +601,14 @@ pub mod get_region_tiers_output {
 		///
 		/// To override the contents of this collection use [`set_tiers`](Self::set_tiers).
 		///
+		/// A list of region server tiers.
 		pub fn tiers(mut self, input: crate::model::RegionTier) -> Self {
 			let mut v = self.tiers.unwrap_or_default();
 			v.push(input);
 			self.tiers = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of region server tiers.
 		pub fn set_tiers(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::RegionTier>>,
@@ -544,11 +633,11 @@ impl GetRegionTiersOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ExportMatchmakerLobbyHistoryOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// The URL to a CSV file for the given lobby history.
 	pub url: std::option::Option<std::string::String>,
 }
 impl ExportMatchmakerLobbyHistoryOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// The URL to a CSV file for the given lobby history.
 	pub fn url(&self) -> std::option::Option<&str> {
 		self.url.as_deref()
 	}
@@ -569,12 +658,12 @@ pub mod export_matchmaker_lobby_history_output {
 		pub(crate) url: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// The URL to a CSV file for the given lobby history.
 		pub fn url(mut self, input: impl Into<std::string::String>) -> Self {
 			self.url = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The URL to a CSV file for the given lobby history.
 		pub fn set_url(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.url = input;
 			self
@@ -596,11 +685,11 @@ impl ExportMatchmakerLobbyHistoryOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct DeleteMatchmakerLobbyOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// Whether or not the lobby was successfully stopped.
 	pub did_remove: std::option::Option<bool>,
 }
 impl DeleteMatchmakerLobbyOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// Whether or not the lobby was successfully stopped.
 	pub fn did_remove(&self) -> std::option::Option<bool> {
 		self.did_remove
 	}
@@ -621,12 +710,12 @@ pub mod delete_matchmaker_lobby_output {
 		pub(crate) did_remove: std::option::Option<bool>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// Whether or not the lobby was successfully stopped.
 		pub fn did_remove(mut self, input: bool) -> Self {
 			self.did_remove = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Whether or not the lobby was successfully stopped.
 		pub fn set_did_remove(mut self, input: std::option::Option<bool>) -> Self {
 			self.did_remove = input;
 			self
@@ -650,20 +739,20 @@ impl DeleteMatchmakerLobbyOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameCdnSiteOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub site_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub upload_id: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub presigned_requests:
 		std::option::Option<std::vec::Vec<crate::model::UploadPresignedRequest>>,
 }
 impl CreateGameCdnSiteOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn site_id(&self) -> std::option::Option<&str> {
 		self.site_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn upload_id(&self) -> std::option::Option<&str> {
 		self.upload_id.as_deref()
 	}
@@ -695,22 +784,22 @@ pub mod create_game_cdn_site_output {
 			std::option::Option<std::vec::Vec<crate::model::UploadPresignedRequest>>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn site_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.site_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_site_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.site_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.upload_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.upload_id = input;
 			self
@@ -754,11 +843,11 @@ impl CreateGameCdnSiteOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ListGameCdnSitesOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of CDN site summaries.
 	pub sites: std::option::Option<std::vec::Vec<crate::model::CdnSiteSummary>>,
 }
 impl ListGameCdnSitesOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of CDN site summaries.
 	pub fn sites(&self) -> std::option::Option<&[crate::model::CdnSiteSummary]> {
 		self.sites.as_deref()
 	}
@@ -783,13 +872,14 @@ pub mod list_game_cdn_sites_output {
 		///
 		/// To override the contents of this collection use [`set_sites`](Self::set_sites).
 		///
+		/// A list of CDN site summaries.
 		pub fn sites(mut self, input: crate::model::CdnSiteSummary) -> Self {
 			let mut v = self.sites.unwrap_or_default();
 			v.push(input);
 			self.sites = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of CDN site summaries.
 		pub fn set_sites(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::CdnSiteSummary>>,
@@ -814,23 +904,23 @@ impl ListGameCdnSitesOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameBuildOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub build_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub upload_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
 	pub image_presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
 }
 impl CreateGameBuildOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn build_id(&self) -> std::option::Option<&str> {
 		self.build_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn upload_id(&self) -> std::option::Option<&str> {
 		self.upload_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
 	pub fn image_presigned_request(
 		&self,
 	) -> std::option::Option<&crate::model::UploadPresignedRequest> {
@@ -858,27 +948,27 @@ pub mod create_game_build_output {
 			std::option::Option<crate::model::UploadPresignedRequest>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn build_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.build_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_build_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.build_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.upload_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.upload_id = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
 		pub fn image_presigned_request(
 			mut self,
 			input: crate::model::UploadPresignedRequest,
@@ -886,7 +976,7 @@ pub mod create_game_build_output {
 			self.image_presigned_request = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
 		pub fn set_image_presigned_request(
 			mut self,
 			input: std::option::Option<crate::model::UploadPresignedRequest>,
@@ -915,11 +1005,11 @@ impl CreateGameBuildOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ListGameBuildsOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of build summaries.
 	pub builds: std::option::Option<std::vec::Vec<crate::model::BuildSummary>>,
 }
 impl ListGameBuildsOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of build summaries.
 	pub fn builds(&self) -> std::option::Option<&[crate::model::BuildSummary]> {
 		self.builds.as_deref()
 	}
@@ -944,13 +1034,14 @@ pub mod list_game_builds_output {
 		///
 		/// To override the contents of this collection use [`set_builds`](Self::set_builds).
 		///
+		/// A list of build summaries.
 		pub fn builds(mut self, input: crate::model::BuildSummary) -> Self {
 			let mut v = self.builds.unwrap_or_default();
 			v.push(input);
 			self.builds = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of build summaries.
 		pub fn set_builds(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::BuildSummary>>,
@@ -977,11 +1068,11 @@ impl ListGameBuildsOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateCloudTokenOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	pub token: std::option::Option<std::string::String>,
 }
 impl CreateCloudTokenOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	pub fn token(&self) -> std::option::Option<&str> {
 		self.token.as_deref()
 	}
@@ -989,7 +1080,7 @@ impl CreateCloudTokenOutput {
 impl std::fmt::Debug for CreateCloudTokenOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CreateCloudTokenOutput");
-		formatter.field("token", &self.token);
+		formatter.field("token", &"*** Sensitive Data Redacted ***");
 		formatter.finish()
 	}
 }
@@ -1002,12 +1093,12 @@ pub mod create_cloud_token_output {
 		pub(crate) token: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 		pub fn token(mut self, input: impl Into<std::string::String>) -> Self {
 			self.token = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 		pub fn set_token(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.token = input;
 			self
@@ -1029,35 +1120,35 @@ impl CreateCloudTokenOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetNamespaceLobbyOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A logs summary for a lobby.
 	pub lobby: std::option::Option<crate::model::LogsLobbySummary>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of URLs.
 	pub stdout_presigned_urls: std::option::Option<std::vec::Vec<std::string::String>>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of URLs.
 	pub stderr_presigned_urls: std::option::Option<std::vec::Vec<std::string::String>>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of service performance summaries.
 	pub perf_lists: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
-	#[allow(missing_docs)] // documentation missing in model
+	/// Metrics relating to a job service.
 	pub metrics: std::option::Option<crate::model::SvcMetrics>,
 }
 impl GetNamespaceLobbyOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A logs summary for a lobby.
 	pub fn lobby(&self) -> std::option::Option<&crate::model::LogsLobbySummary> {
 		self.lobby.as_ref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of URLs.
 	pub fn stdout_presigned_urls(&self) -> std::option::Option<&[std::string::String]> {
 		self.stdout_presigned_urls.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of URLs.
 	pub fn stderr_presigned_urls(&self) -> std::option::Option<&[std::string::String]> {
 		self.stderr_presigned_urls.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of service performance summaries.
 	pub fn perf_lists(&self) -> std::option::Option<&[crate::model::SvcPerf]> {
 		self.perf_lists.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
+	/// Metrics relating to a job service.
 	pub fn metrics(&self) -> std::option::Option<&crate::model::SvcMetrics> {
 		self.metrics.as_ref()
 	}
@@ -1086,12 +1177,12 @@ pub mod get_namespace_lobby_output {
 		pub(crate) metrics: std::option::Option<crate::model::SvcMetrics>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A logs summary for a lobby.
 		pub fn lobby(mut self, input: crate::model::LogsLobbySummary) -> Self {
 			self.lobby = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A logs summary for a lobby.
 		pub fn set_lobby(
 			mut self,
 			input: std::option::Option<crate::model::LogsLobbySummary>,
@@ -1103,13 +1194,14 @@ pub mod get_namespace_lobby_output {
 		///
 		/// To override the contents of this collection use [`set_stdout_presigned_urls`](Self::set_stdout_presigned_urls).
 		///
+		/// A list of URLs.
 		pub fn stdout_presigned_urls(mut self, input: impl Into<std::string::String>) -> Self {
 			let mut v = self.stdout_presigned_urls.unwrap_or_default();
 			v.push(input.into());
 			self.stdout_presigned_urls = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of URLs.
 		pub fn set_stdout_presigned_urls(
 			mut self,
 			input: std::option::Option<std::vec::Vec<std::string::String>>,
@@ -1121,13 +1213,14 @@ pub mod get_namespace_lobby_output {
 		///
 		/// To override the contents of this collection use [`set_stderr_presigned_urls`](Self::set_stderr_presigned_urls).
 		///
+		/// A list of URLs.
 		pub fn stderr_presigned_urls(mut self, input: impl Into<std::string::String>) -> Self {
 			let mut v = self.stderr_presigned_urls.unwrap_or_default();
 			v.push(input.into());
 			self.stderr_presigned_urls = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of URLs.
 		pub fn set_stderr_presigned_urls(
 			mut self,
 			input: std::option::Option<std::vec::Vec<std::string::String>>,
@@ -1139,13 +1232,14 @@ pub mod get_namespace_lobby_output {
 		///
 		/// To override the contents of this collection use [`set_perf_lists`](Self::set_perf_lists).
 		///
+		/// A list of service performance summaries.
 		pub fn perf_lists(mut self, input: crate::model::SvcPerf) -> Self {
 			let mut v = self.perf_lists.unwrap_or_default();
 			v.push(input);
 			self.perf_lists = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of service performance summaries.
 		pub fn set_perf_lists(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
@@ -1153,12 +1247,12 @@ pub mod get_namespace_lobby_output {
 			self.perf_lists = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Metrics relating to a job service.
 		pub fn metrics(mut self, input: crate::model::SvcMetrics) -> Self {
 			self.metrics = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// Metrics relating to a job service.
 		pub fn set_metrics(mut self, input: std::option::Option<crate::model::SvcMetrics>) -> Self {
 			self.metrics = input;
 			self
@@ -1186,11 +1280,11 @@ impl GetNamespaceLobbyOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ListNamespaceLobbiesOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of lobby log summaries.
 	pub lobbies: std::option::Option<std::vec::Vec<crate::model::LogsLobbySummary>>,
 }
 impl ListNamespaceLobbiesOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of lobby log summaries.
 	pub fn lobbies(&self) -> std::option::Option<&[crate::model::LogsLobbySummary]> {
 		self.lobbies.as_deref()
 	}
@@ -1215,13 +1309,14 @@ pub mod list_namespace_lobbies_output {
 		///
 		/// To override the contents of this collection use [`set_lobbies`](Self::set_lobbies).
 		///
+		/// A list of lobby log summaries.
 		pub fn lobbies(mut self, input: crate::model::LogsLobbySummary) -> Self {
 			let mut v = self.lobbies.unwrap_or_default();
 			v.push(input);
 			self.lobbies = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of lobby log summaries.
 		pub fn set_lobbies(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::LogsLobbySummary>>,
@@ -1248,11 +1343,11 @@ impl ListNamespaceLobbiesOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetNamespaceAnalyticsMatchmakerLiveOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of analytics lobby summaries.
 	pub lobbies: std::option::Option<std::vec::Vec<crate::model::AnalyticsLobbySummary>>,
 }
 impl GetNamespaceAnalyticsMatchmakerLiveOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of analytics lobby summaries.
 	pub fn lobbies(&self) -> std::option::Option<&[crate::model::AnalyticsLobbySummary]> {
 		self.lobbies.as_deref()
 	}
@@ -1277,13 +1372,14 @@ pub mod get_namespace_analytics_matchmaker_live_output {
 		///
 		/// To override the contents of this collection use [`set_lobbies`](Self::set_lobbies).
 		///
+		/// A list of analytics lobby summaries.
 		pub fn lobbies(mut self, input: crate::model::AnalyticsLobbySummary) -> Self {
 			let mut v = self.lobbies.unwrap_or_default();
 			v.push(input);
 			self.lobbies = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of analytics lobby summaries.
 		pub fn set_lobbies(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::AnalyticsLobbySummary>>,
@@ -1310,11 +1406,11 @@ impl GetNamespaceAnalyticsMatchmakerLiveOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceMatchmakerConfigOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
 }
 impl ValidateGameNamespaceMatchmakerConfigOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub fn errors(&self) -> std::option::Option<&[crate::model::ValidationError]> {
 		self.errors.as_deref()
 	}
@@ -1339,13 +1435,14 @@ pub mod validate_game_namespace_matchmaker_config_output {
 		///
 		/// To override the contents of this collection use [`set_errors`](Self::set_errors).
 		///
+		/// A list of validation errors.
 		pub fn errors(mut self, input: crate::model::ValidationError) -> Self {
 			let mut v = self.errors.unwrap_or_default();
 			v.push(input);
 			self.errors = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of validation errors.
 		pub fn set_errors(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
@@ -1372,11 +1469,11 @@ impl ValidateGameNamespaceMatchmakerConfigOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceTokenDevelopmentOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
 }
 impl ValidateGameNamespaceTokenDevelopmentOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub fn errors(&self) -> std::option::Option<&[crate::model::ValidationError]> {
 		self.errors.as_deref()
 	}
@@ -1401,13 +1498,14 @@ pub mod validate_game_namespace_token_development_output {
 		///
 		/// To override the contents of this collection use [`set_errors`](Self::set_errors).
 		///
+		/// A list of validation errors.
 		pub fn errors(mut self, input: crate::model::ValidationError) -> Self {
 			let mut v = self.errors.unwrap_or_default();
 			v.push(input);
 			self.errors = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of validation errors.
 		pub fn set_errors(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
@@ -1434,11 +1532,11 @@ impl ValidateGameNamespaceTokenDevelopmentOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
 }
 impl ValidateGameNamespaceOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub fn errors(&self) -> std::option::Option<&[crate::model::ValidationError]> {
 		self.errors.as_deref()
 	}
@@ -1463,13 +1561,14 @@ pub mod validate_game_namespace_output {
 		///
 		/// To override the contents of this collection use [`set_errors`](Self::set_errors).
 		///
+		/// A list of validation errors.
 		pub fn errors(mut self, input: crate::model::ValidationError) -> Self {
 			let mut v = self.errors.unwrap_or_default();
 			v.push(input);
 			self.errors = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of validation errors.
 		pub fn set_errors(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
@@ -1616,11 +1715,11 @@ impl UpdateNamespaceDomainOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameNamespaceTokenDevelopmentOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	pub token: std::option::Option<std::string::String>,
 }
 impl CreateGameNamespaceTokenDevelopmentOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	pub fn token(&self) -> std::option::Option<&str> {
 		self.token.as_deref()
 	}
@@ -1628,7 +1727,7 @@ impl CreateGameNamespaceTokenDevelopmentOutput {
 impl std::fmt::Debug for CreateGameNamespaceTokenDevelopmentOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CreateGameNamespaceTokenDevelopmentOutput");
-		formatter.field("token", &self.token);
+		formatter.field("token", &"*** Sensitive Data Redacted ***");
 		formatter.finish()
 	}
 }
@@ -1641,12 +1740,12 @@ pub mod create_game_namespace_token_development_output {
 		pub(crate) token: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 		pub fn token(mut self, input: impl Into<std::string::String>) -> Self {
 			self.token = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 		pub fn set_token(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.token = input;
 			self
@@ -1668,11 +1767,11 @@ impl CreateGameNamespaceTokenDevelopmentOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameNamespaceTokenPublicOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	pub token: std::option::Option<std::string::String>,
 }
 impl CreateGameNamespaceTokenPublicOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	pub fn token(&self) -> std::option::Option<&str> {
 		self.token.as_deref()
 	}
@@ -1680,7 +1779,7 @@ impl CreateGameNamespaceTokenPublicOutput {
 impl std::fmt::Debug for CreateGameNamespaceTokenPublicOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CreateGameNamespaceTokenPublicOutput");
-		formatter.field("token", &self.token);
+		formatter.field("token", &"*** Sensitive Data Redacted ***");
 		formatter.finish()
 	}
 }
@@ -1693,12 +1792,12 @@ pub mod create_game_namespace_token_public_output {
 		pub(crate) token: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 		pub fn token(mut self, input: impl Into<std::string::String>) -> Self {
 			self.token = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 		pub fn set_token(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.token = input;
 			self
@@ -1750,11 +1849,11 @@ impl UpdateGameNamespaceVersionOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGameNamespaceByIdOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A full namespace.
 	pub namespace: std::option::Option<crate::model::NamespaceFull>,
 }
 impl GetGameNamespaceByIdOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A full namespace.
 	pub fn namespace(&self) -> std::option::Option<&crate::model::NamespaceFull> {
 		self.namespace.as_ref()
 	}
@@ -1775,12 +1874,12 @@ pub mod get_game_namespace_by_id_output {
 		pub(crate) namespace: std::option::Option<crate::model::NamespaceFull>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A full namespace.
 		pub fn namespace(mut self, input: crate::model::NamespaceFull) -> Self {
 			self.namespace = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A full namespace.
 		pub fn set_namespace(
 			mut self,
 			input: std::option::Option<crate::model::NamespaceFull>,
@@ -1807,11 +1906,11 @@ impl GetGameNamespaceByIdOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameNamespaceOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
 }
 impl CreateGameNamespaceOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
 	}
@@ -1832,12 +1931,12 @@ pub mod create_game_namespace_output {
 		pub(crate) namespace_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.namespace_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.namespace_id = input;
 			self
@@ -1861,11 +1960,11 @@ impl CreateGameNamespaceOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameVersionOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
 }
 impl ValidateGameVersionOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub fn errors(&self) -> std::option::Option<&[crate::model::ValidationError]> {
 		self.errors.as_deref()
 	}
@@ -1890,13 +1989,14 @@ pub mod validate_game_version_output {
 		///
 		/// To override the contents of this collection use [`set_errors`](Self::set_errors).
 		///
+		/// A list of validation errors.
 		pub fn errors(mut self, input: crate::model::ValidationError) -> Self {
 			let mut v = self.errors.unwrap_or_default();
 			v.push(input);
 			self.errors = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of validation errors.
 		pub fn set_errors(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
@@ -1923,11 +2023,11 @@ impl ValidateGameVersionOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGameVersionByIdOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A full version.
 	pub version: std::option::Option<crate::model::VersionFull>,
 }
 impl GetGameVersionByIdOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A full version.
 	pub fn version(&self) -> std::option::Option<&crate::model::VersionFull> {
 		self.version.as_ref()
 	}
@@ -1948,12 +2048,12 @@ pub mod get_game_version_by_id_output {
 		pub(crate) version: std::option::Option<crate::model::VersionFull>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A full version.
 		pub fn version(mut self, input: crate::model::VersionFull) -> Self {
 			self.version = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A full version.
 		pub fn set_version(
 			mut self,
 			input: std::option::Option<crate::model::VersionFull>,
@@ -1980,11 +2080,11 @@ impl GetGameVersionByIdOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameVersionOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub version_id: std::option::Option<std::string::String>,
 }
 impl CreateGameVersionOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn version_id(&self) -> std::option::Option<&str> {
 		self.version_id.as_deref()
 	}
@@ -2005,12 +2105,12 @@ pub mod create_game_version_output {
 		pub(crate) version_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn version_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.version_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.version_id = input;
 			self
@@ -2033,12 +2133,224 @@ impl CreateGameVersionOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameBannerUploadCompleteOutput {}
+impl std::fmt::Debug for GameBannerUploadCompleteOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameBannerUploadCompleteOutput");
+		formatter.finish()
+	}
+}
+/// See [`GameBannerUploadCompleteOutput`](crate::output::GameBannerUploadCompleteOutput)
+pub mod game_banner_upload_complete_output {
+	/// A builder for [`GameBannerUploadCompleteOutput`](crate::output::GameBannerUploadCompleteOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`GameBannerUploadCompleteOutput`](crate::output::GameBannerUploadCompleteOutput)
+		pub fn build(self) -> crate::output::GameBannerUploadCompleteOutput {
+			crate::output::GameBannerUploadCompleteOutput {}
+		}
+	}
+}
+impl GameBannerUploadCompleteOutput {
+	/// Creates a new builder-style object to manufacture [`GameBannerUploadCompleteOutput`](crate::output::GameBannerUploadCompleteOutput)
+	pub fn builder() -> crate::output::game_banner_upload_complete_output::Builder {
+		crate::output::game_banner_upload_complete_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameBannerUploadPrepareOutput {
+	/// A universally unique identifier.
+	pub upload_id: std::option::Option<std::string::String>,
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	pub presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
+}
+impl GameBannerUploadPrepareOutput {
+	/// A universally unique identifier.
+	pub fn upload_id(&self) -> std::option::Option<&str> {
+		self.upload_id.as_deref()
+	}
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	pub fn presigned_request(&self) -> std::option::Option<&crate::model::UploadPresignedRequest> {
+		self.presigned_request.as_ref()
+	}
+}
+impl std::fmt::Debug for GameBannerUploadPrepareOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameBannerUploadPrepareOutput");
+		formatter.field("upload_id", &self.upload_id);
+		formatter.field("presigned_request", &self.presigned_request);
+		formatter.finish()
+	}
+}
+/// See [`GameBannerUploadPrepareOutput`](crate::output::GameBannerUploadPrepareOutput)
+pub mod game_banner_upload_prepare_output {
+	/// A builder for [`GameBannerUploadPrepareOutput`](crate::output::GameBannerUploadPrepareOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) upload_id: std::option::Option<std::string::String>,
+		pub(crate) presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.upload_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.upload_id = input;
+			self
+		}
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+		pub fn presigned_request(mut self, input: crate::model::UploadPresignedRequest) -> Self {
+			self.presigned_request = Some(input);
+			self
+		}
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+		pub fn set_presigned_request(
+			mut self,
+			input: std::option::Option<crate::model::UploadPresignedRequest>,
+		) -> Self {
+			self.presigned_request = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameBannerUploadPrepareOutput`](crate::output::GameBannerUploadPrepareOutput)
+		pub fn build(self) -> crate::output::GameBannerUploadPrepareOutput {
+			crate::output::GameBannerUploadPrepareOutput {
+				upload_id: self.upload_id,
+				presigned_request: self.presigned_request,
+			}
+		}
+	}
+}
+impl GameBannerUploadPrepareOutput {
+	/// Creates a new builder-style object to manufacture [`GameBannerUploadPrepareOutput`](crate::output::GameBannerUploadPrepareOutput)
+	pub fn builder() -> crate::output::game_banner_upload_prepare_output::Builder {
+		crate::output::game_banner_upload_prepare_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameLogoUploadCompleteOutput {}
+impl std::fmt::Debug for GameLogoUploadCompleteOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameLogoUploadCompleteOutput");
+		formatter.finish()
+	}
+}
+/// See [`GameLogoUploadCompleteOutput`](crate::output::GameLogoUploadCompleteOutput)
+pub mod game_logo_upload_complete_output {
+	/// A builder for [`GameLogoUploadCompleteOutput`](crate::output::GameLogoUploadCompleteOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`GameLogoUploadCompleteOutput`](crate::output::GameLogoUploadCompleteOutput)
+		pub fn build(self) -> crate::output::GameLogoUploadCompleteOutput {
+			crate::output::GameLogoUploadCompleteOutput {}
+		}
+	}
+}
+impl GameLogoUploadCompleteOutput {
+	/// Creates a new builder-style object to manufacture [`GameLogoUploadCompleteOutput`](crate::output::GameLogoUploadCompleteOutput)
+	pub fn builder() -> crate::output::game_logo_upload_complete_output::Builder {
+		crate::output::game_logo_upload_complete_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameLogoUploadPrepareOutput {
+	/// A universally unique identifier.
+	pub upload_id: std::option::Option<std::string::String>,
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	pub presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
+}
+impl GameLogoUploadPrepareOutput {
+	/// A universally unique identifier.
+	pub fn upload_id(&self) -> std::option::Option<&str> {
+		self.upload_id.as_deref()
+	}
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	pub fn presigned_request(&self) -> std::option::Option<&crate::model::UploadPresignedRequest> {
+		self.presigned_request.as_ref()
+	}
+}
+impl std::fmt::Debug for GameLogoUploadPrepareOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameLogoUploadPrepareOutput");
+		formatter.field("upload_id", &self.upload_id);
+		formatter.field("presigned_request", &self.presigned_request);
+		formatter.finish()
+	}
+}
+/// See [`GameLogoUploadPrepareOutput`](crate::output::GameLogoUploadPrepareOutput)
+pub mod game_logo_upload_prepare_output {
+	/// A builder for [`GameLogoUploadPrepareOutput`](crate::output::GameLogoUploadPrepareOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) upload_id: std::option::Option<std::string::String>,
+		pub(crate) presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.upload_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.upload_id = input;
+			self
+		}
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+		pub fn presigned_request(mut self, input: crate::model::UploadPresignedRequest) -> Self {
+			self.presigned_request = Some(input);
+			self
+		}
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+		pub fn set_presigned_request(
+			mut self,
+			input: std::option::Option<crate::model::UploadPresignedRequest>,
+		) -> Self {
+			self.presigned_request = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameLogoUploadPrepareOutput`](crate::output::GameLogoUploadPrepareOutput)
+		pub fn build(self) -> crate::output::GameLogoUploadPrepareOutput {
+			crate::output::GameLogoUploadPrepareOutput {
+				upload_id: self.upload_id,
+				presigned_request: self.presigned_request,
+			}
+		}
+	}
+}
+impl GameLogoUploadPrepareOutput {
+	/// Creates a new builder-style object to manufacture [`GameLogoUploadPrepareOutput`](crate::output::GameLogoUploadPrepareOutput)
+	pub fn builder() -> crate::output::game_logo_upload_prepare_output::Builder {
+		crate::output::game_logo_upload_prepare_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
 }
 impl ValidateGameOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of validation errors.
 	pub fn errors(&self) -> std::option::Option<&[crate::model::ValidationError]> {
 		self.errors.as_deref()
 	}
@@ -2063,13 +2375,14 @@ pub mod validate_game_output {
 		///
 		/// To override the contents of this collection use [`set_errors`](Self::set_errors).
 		///
+		/// A list of validation errors.
 		pub fn errors(mut self, input: crate::model::ValidationError) -> Self {
 			let mut v = self.errors.unwrap_or_default();
 			v.push(input);
 			self.errors = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of validation errors.
 		pub fn set_errors(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,
@@ -2096,19 +2409,26 @@ impl ValidateGameOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGameByIdOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A full game.
 	pub game: std::option::Option<crate::model::GameFull>,
+	/// Provided by watchable endpoints used in blocking loops.
+	pub watch: std::option::Option<crate::model::WatchResponse>,
 }
 impl GetGameByIdOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A full game.
 	pub fn game(&self) -> std::option::Option<&crate::model::GameFull> {
 		self.game.as_ref()
+	}
+	/// Provided by watchable endpoints used in blocking loops.
+	pub fn watch(&self) -> std::option::Option<&crate::model::WatchResponse> {
+		self.watch.as_ref()
 	}
 }
 impl std::fmt::Debug for GetGameByIdOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGameByIdOutput");
 		formatter.field("game", &self.game);
+		formatter.field("watch", &self.watch);
 		formatter.finish()
 	}
 }
@@ -2119,21 +2439,38 @@ pub mod get_game_by_id_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) game: std::option::Option<crate::model::GameFull>,
+		pub(crate) watch: std::option::Option<crate::model::WatchResponse>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A full game.
 		pub fn game(mut self, input: crate::model::GameFull) -> Self {
 			self.game = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A full game.
 		pub fn set_game(mut self, input: std::option::Option<crate::model::GameFull>) -> Self {
 			self.game = input;
 			self
 		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn watch(mut self, input: crate::model::WatchResponse) -> Self {
+			self.watch = Some(input);
+			self
+		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn set_watch(
+			mut self,
+			input: std::option::Option<crate::model::WatchResponse>,
+		) -> Self {
+			self.watch = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`GetGameByIdOutput`](crate::output::GetGameByIdOutput)
 		pub fn build(self) -> crate::output::GetGameByIdOutput {
-			crate::output::GetGameByIdOutput { game: self.game }
+			crate::output::GetGameByIdOutput {
+				game: self.game,
+				watch: self.watch,
+			}
 		}
 	}
 }
@@ -2148,11 +2485,11 @@ impl GetGameByIdOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct CreateGameOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub game_id: std::option::Option<std::string::String>,
 }
 impl CreateGameOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A universally unique identifier.
 	pub fn game_id(&self) -> std::option::Option<&str> {
 		self.game_id.as_deref()
 	}
@@ -2173,12 +2510,12 @@ pub mod create_game_output {
 		pub(crate) game_id: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
 			self.game_id = Some(input.into());
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A universally unique identifier.
 		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.game_id = input;
 			self
@@ -2202,26 +2539,33 @@ impl CreateGameOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGamesOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of game summaries.
 	pub games: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub teams: std::option::Option<std::vec::Vec<crate::model::TeamSummary>>,
+	/// A list of group summaries.
+	pub groups: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
+	/// Provided by watchable endpoints used in blocking loops.
+	pub watch: std::option::Option<crate::model::WatchResponse>,
 }
 impl GetGamesOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// A list of game summaries.
 	pub fn games(&self) -> std::option::Option<&[crate::model::GameSummary]> {
 		self.games.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn teams(&self) -> std::option::Option<&[crate::model::TeamSummary]> {
-		self.teams.as_deref()
+	/// A list of group summaries.
+	pub fn groups(&self) -> std::option::Option<&[crate::model::GroupSummary]> {
+		self.groups.as_deref()
+	}
+	/// Provided by watchable endpoints used in blocking loops.
+	pub fn watch(&self) -> std::option::Option<&crate::model::WatchResponse> {
+		self.watch.as_ref()
 	}
 }
 impl std::fmt::Debug for GetGamesOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGamesOutput");
 		formatter.field("games", &self.games);
-		formatter.field("teams", &self.teams);
+		formatter.field("groups", &self.groups);
+		formatter.field("watch", &self.watch);
 		formatter.finish()
 	}
 }
@@ -2232,20 +2576,22 @@ pub mod get_games_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) games: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
-		pub(crate) teams: std::option::Option<std::vec::Vec<crate::model::TeamSummary>>,
+		pub(crate) groups: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
+		pub(crate) watch: std::option::Option<crate::model::WatchResponse>,
 	}
 	impl Builder {
 		/// Appends an item to `games`.
 		///
 		/// To override the contents of this collection use [`set_games`](Self::set_games).
 		///
+		/// A list of game summaries.
 		pub fn games(mut self, input: crate::model::GameSummary) -> Self {
 			let mut v = self.games.unwrap_or_default();
 			v.push(input);
 			self.games = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// A list of game summaries.
 		pub fn set_games(
 			mut self,
 			input: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
@@ -2253,29 +2599,44 @@ pub mod get_games_output {
 			self.games = input;
 			self
 		}
-		/// Appends an item to `teams`.
+		/// Appends an item to `groups`.
 		///
-		/// To override the contents of this collection use [`set_teams`](Self::set_teams).
+		/// To override the contents of this collection use [`set_groups`](Self::set_groups).
 		///
-		pub fn teams(mut self, input: crate::model::TeamSummary) -> Self {
-			let mut v = self.teams.unwrap_or_default();
+		/// A list of group summaries.
+		pub fn groups(mut self, input: crate::model::GroupSummary) -> Self {
+			let mut v = self.groups.unwrap_or_default();
 			v.push(input);
-			self.teams = Some(v);
+			self.groups = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_teams(
+		/// A list of group summaries.
+		pub fn set_groups(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::TeamSummary>>,
+			input: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
 		) -> Self {
-			self.teams = input;
+			self.groups = input;
+			self
+		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn watch(mut self, input: crate::model::WatchResponse) -> Self {
+			self.watch = Some(input);
+			self
+		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn set_watch(
+			mut self,
+			input: std::option::Option<crate::model::WatchResponse>,
+		) -> Self {
+			self.watch = input;
 			self
 		}
 		/// Consumes the builder and constructs a [`GetGamesOutput`](crate::output::GetGamesOutput)
 		pub fn build(self) -> crate::output::GetGamesOutput {
 			crate::output::GetGamesOutput {
 				games: self.games,
-				teams: self.teams,
+				groups: self.groups,
+				watch: self.watch,
 			}
 		}
 	}
@@ -2321,11 +2682,11 @@ impl CompleteUploadOutput {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct InspectOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// The current authenticated agent.
 	pub agent: std::option::Option<crate::model::AuthAgent>,
 }
 impl InspectOutput {
-	#[allow(missing_docs)] // documentation missing in model
+	/// The current authenticated agent.
 	pub fn agent(&self) -> std::option::Option<&crate::model::AuthAgent> {
 		self.agent.as_ref()
 	}
@@ -2346,12 +2707,12 @@ pub mod inspect_output {
 		pub(crate) agent: std::option::Option<crate::model::AuthAgent>,
 	}
 	impl Builder {
-		#[allow(missing_docs)] // documentation missing in model
+		/// The current authenticated agent.
 		pub fn agent(mut self, input: crate::model::AuthAgent) -> Self {
 			self.agent = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
+		/// The current authenticated agent.
 		pub fn set_agent(mut self, input: std::option::Option<crate::model::AuthAgent>) -> Self {
 			self.agent = input;
 			self

@@ -7,7 +7,7 @@
 #![allow(clippy::vec_init_then_push)]
 #![allow(rustdoc::bare_urls)]
 #![warn(missing_docs)]
-//! rivet-client-api-cloud
+//! rivet-cloud
 //!
 //! # Crate Organization
 //!
@@ -53,4 +53,5 @@ pub static PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Re-exported types from supporting crates.
 pub mod types {
 	pub use aws_smithy_http::result::SdkError;
+	pub use aws_smithy_types::DateTime;
 }

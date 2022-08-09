@@ -3,17 +3,17 @@
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
 pub enum Error {
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has sent an invalid or malformed request.
 	BadRequestError(crate::error::BadRequestError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a resource they do not have access to.
 	ForbiddenError(crate::error::ForbiddenError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error caused by internal server problems.
 	InternalError(crate::error::InternalError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee requests a non existant resource.
 	NotFoundError(crate::error::NotFoundError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
 	RateLimitError(crate::error::RateLimitError),
-	#[allow(missing_docs)] // documentation missing in model
+	/// An error thrown when the requestee is not authenticated.
 	UnauthorizedError(crate::error::UnauthorizedError),
 	/// An unhandled error occurred.
 	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
@@ -62,32 +62,32 @@ where
 		}
 	}
 }
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::ConvertTeamError, R>> for Error
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::ConvertGroupError, R>> for Error
 where
 	R: Send + Sync + std::fmt::Debug + 'static,
 {
-	fn from(err: aws_smithy_http::result::SdkError<crate::error::ConvertTeamError, R>) -> Self {
+	fn from(err: aws_smithy_http::result::SdkError<crate::error::ConvertGroupError, R>) -> Self {
 		match err {
 			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::ConvertTeamErrorKind::InternalError(inner) => {
+				crate::error::ConvertGroupErrorKind::InternalError(inner) => {
 					Error::InternalError(inner)
 				}
-				crate::error::ConvertTeamErrorKind::RateLimitError(inner) => {
+				crate::error::ConvertGroupErrorKind::RateLimitError(inner) => {
 					Error::RateLimitError(inner)
 				}
-				crate::error::ConvertTeamErrorKind::ForbiddenError(inner) => {
+				crate::error::ConvertGroupErrorKind::ForbiddenError(inner) => {
 					Error::ForbiddenError(inner)
 				}
-				crate::error::ConvertTeamErrorKind::UnauthorizedError(inner) => {
+				crate::error::ConvertGroupErrorKind::UnauthorizedError(inner) => {
 					Error::UnauthorizedError(inner)
 				}
-				crate::error::ConvertTeamErrorKind::NotFoundError(inner) => {
+				crate::error::ConvertGroupErrorKind::NotFoundError(inner) => {
 					Error::NotFoundError(inner)
 				}
-				crate::error::ConvertTeamErrorKind::BadRequestError(inner) => {
+				crate::error::ConvertGroupErrorKind::BadRequestError(inner) => {
 					Error::BadRequestError(inner)
 				}
-				crate::error::ConvertTeamErrorKind::Unhandled(inner) => Error::Unhandled(inner),
+				crate::error::ConvertGroupErrorKind::Unhandled(inner) => Error::Unhandled(inner),
 			},
 			_ => Error::Unhandled(err.into()),
 		}
@@ -451,6 +451,150 @@ where
 		}
 	}
 }
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GameBannerUploadCompleteError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GameBannerUploadCompleteError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GameBannerUploadCompleteErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GameBannerUploadCompleteErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GameBannerUploadCompleteErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GameBannerUploadCompleteErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GameBannerUploadCompleteErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GameBannerUploadCompleteErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GameBannerUploadCompleteErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GameBannerUploadPrepareError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GameBannerUploadPrepareError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GameBannerUploadPrepareErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GameBannerUploadPrepareErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GameBannerUploadPrepareErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GameBannerUploadPrepareErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GameBannerUploadPrepareErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GameBannerUploadPrepareErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GameBannerUploadPrepareErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GameLogoUploadCompleteError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GameLogoUploadCompleteError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GameLogoUploadCompleteErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GameLogoUploadCompleteErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GameLogoUploadCompleteErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GameLogoUploadCompleteErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GameLogoUploadCompleteErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GameLogoUploadCompleteErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GameLogoUploadCompleteErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GameLogoUploadPrepareError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GameLogoUploadPrepareError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GameLogoUploadPrepareErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GameLogoUploadPrepareErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GameLogoUploadPrepareErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GameLogoUploadPrepareErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GameLogoUploadPrepareErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GameLogoUploadPrepareErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GameLogoUploadPrepareErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
 impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGameByIdError, R>> for Error
 where
 	R: Send + Sync + std::fmt::Debug + 'static,
@@ -577,6 +721,145 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::GetGameVersionByIdErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGroupBillingError, R>> for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(err: aws_smithy_http::result::SdkError<crate::error::GetGroupBillingError, R>) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GetGroupBillingErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GetGroupBillingErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GetGroupBillingErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GetGroupBillingErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GetGroupBillingErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GetGroupBillingErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GetGroupBillingErrorKind::Unhandled(inner) => Error::Unhandled(inner),
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGroupInvoicesListError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GetGroupInvoicesListError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GetGroupInvoicesListErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GetGroupInvoicesListErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GetGroupInvoicesListErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GetGroupInvoicesListErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GetGroupInvoicesListErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GetGroupInvoicesListErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GetGroupInvoicesListErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGroupPaymentsListError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GetGroupPaymentsListError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GetGroupPaymentsListErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GetGroupPaymentsListErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GetGroupPaymentsListErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GetGroupPaymentsListErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GetGroupPaymentsListErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GetGroupPaymentsListErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GetGroupPaymentsListErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGroupTransfersListError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::GetGroupTransfersListError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GetGroupTransfersListErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GetGroupTransfersListErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GetGroupTransfersListErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GetGroupTransfersListErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GetGroupTransfersListErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GetGroupTransfersListErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GetGroupTransfersListErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},
@@ -725,101 +1008,35 @@ where
 		}
 	}
 }
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetTeamBillingError, R>> for Error
-where
-	R: Send + Sync + std::fmt::Debug + 'static,
-{
-	fn from(err: aws_smithy_http::result::SdkError<crate::error::GetTeamBillingError, R>) -> Self {
-		match err {
-			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::GetTeamBillingErrorKind::InternalError(inner) => {
-					Error::InternalError(inner)
-				}
-				crate::error::GetTeamBillingErrorKind::RateLimitError(inner) => {
-					Error::RateLimitError(inner)
-				}
-				crate::error::GetTeamBillingErrorKind::ForbiddenError(inner) => {
-					Error::ForbiddenError(inner)
-				}
-				crate::error::GetTeamBillingErrorKind::UnauthorizedError(inner) => {
-					Error::UnauthorizedError(inner)
-				}
-				crate::error::GetTeamBillingErrorKind::NotFoundError(inner) => {
-					Error::NotFoundError(inner)
-				}
-				crate::error::GetTeamBillingErrorKind::BadRequestError(inner) => {
-					Error::BadRequestError(inner)
-				}
-				crate::error::GetTeamBillingErrorKind::Unhandled(inner) => Error::Unhandled(inner),
-			},
-			_ => Error::Unhandled(err.into()),
-		}
-	}
-}
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetTeamPaymentsListError, R>> for Error
-where
-	R: Send + Sync + std::fmt::Debug + 'static,
-{
-	fn from(
-		err: aws_smithy_http::result::SdkError<crate::error::GetTeamPaymentsListError, R>,
-	) -> Self {
-		match err {
-			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::GetTeamPaymentsListErrorKind::InternalError(inner) => {
-					Error::InternalError(inner)
-				}
-				crate::error::GetTeamPaymentsListErrorKind::RateLimitError(inner) => {
-					Error::RateLimitError(inner)
-				}
-				crate::error::GetTeamPaymentsListErrorKind::ForbiddenError(inner) => {
-					Error::ForbiddenError(inner)
-				}
-				crate::error::GetTeamPaymentsListErrorKind::UnauthorizedError(inner) => {
-					Error::UnauthorizedError(inner)
-				}
-				crate::error::GetTeamPaymentsListErrorKind::NotFoundError(inner) => {
-					Error::NotFoundError(inner)
-				}
-				crate::error::GetTeamPaymentsListErrorKind::BadRequestError(inner) => {
-					Error::BadRequestError(inner)
-				}
-				crate::error::GetTeamPaymentsListErrorKind::Unhandled(inner) => {
-					Error::Unhandled(inner)
-				}
-			},
-			_ => Error::Unhandled(err.into()),
-		}
-	}
-}
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetTeamTransfersListError, R>>
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GroupBillingCheckoutError, R>>
 	for Error
 where
 	R: Send + Sync + std::fmt::Debug + 'static,
 {
 	fn from(
-		err: aws_smithy_http::result::SdkError<crate::error::GetTeamTransfersListError, R>,
+		err: aws_smithy_http::result::SdkError<crate::error::GroupBillingCheckoutError, R>,
 	) -> Self {
 		match err {
 			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::GetTeamTransfersListErrorKind::InternalError(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::InternalError(inner) => {
 					Error::InternalError(inner)
 				}
-				crate::error::GetTeamTransfersListErrorKind::RateLimitError(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::RateLimitError(inner) => {
 					Error::RateLimitError(inner)
 				}
-				crate::error::GetTeamTransfersListErrorKind::ForbiddenError(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::ForbiddenError(inner) => {
 					Error::ForbiddenError(inner)
 				}
-				crate::error::GetTeamTransfersListErrorKind::UnauthorizedError(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::UnauthorizedError(inner) => {
 					Error::UnauthorizedError(inner)
 				}
-				crate::error::GetTeamTransfersListErrorKind::NotFoundError(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::NotFoundError(inner) => {
 					Error::NotFoundError(inner)
 				}
-				crate::error::GetTeamTransfersListErrorKind::BadRequestError(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::BadRequestError(inner) => {
 					Error::BadRequestError(inner)
 				}
-				crate::error::GetTeamTransfersListErrorKind::Unhandled(inner) => {
+				crate::error::GroupBillingCheckoutErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},
@@ -985,41 +1202,6 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::RemoveNamespaceDomainErrorKind::Unhandled(inner) => {
-					Error::Unhandled(inner)
-				}
-			},
-			_ => Error::Unhandled(err.into()),
-		}
-	}
-}
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::TeamBillingCheckoutError, R>> for Error
-where
-	R: Send + Sync + std::fmt::Debug + 'static,
-{
-	fn from(
-		err: aws_smithy_http::result::SdkError<crate::error::TeamBillingCheckoutError, R>,
-	) -> Self {
-		match err {
-			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::TeamBillingCheckoutErrorKind::InternalError(inner) => {
-					Error::InternalError(inner)
-				}
-				crate::error::TeamBillingCheckoutErrorKind::RateLimitError(inner) => {
-					Error::RateLimitError(inner)
-				}
-				crate::error::TeamBillingCheckoutErrorKind::ForbiddenError(inner) => {
-					Error::ForbiddenError(inner)
-				}
-				crate::error::TeamBillingCheckoutErrorKind::UnauthorizedError(inner) => {
-					Error::UnauthorizedError(inner)
-				}
-				crate::error::TeamBillingCheckoutErrorKind::NotFoundError(inner) => {
-					Error::NotFoundError(inner)
-				}
-				crate::error::TeamBillingCheckoutErrorKind::BadRequestError(inner) => {
-					Error::BadRequestError(inner)
-				}
-				crate::error::TeamBillingCheckoutErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},
@@ -1373,32 +1555,32 @@ where
 		}
 	}
 }
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::ValidateTeamError, R>> for Error
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::ValidateGroupError, R>> for Error
 where
 	R: Send + Sync + std::fmt::Debug + 'static,
 {
-	fn from(err: aws_smithy_http::result::SdkError<crate::error::ValidateTeamError, R>) -> Self {
+	fn from(err: aws_smithy_http::result::SdkError<crate::error::ValidateGroupError, R>) -> Self {
 		match err {
 			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::ValidateTeamErrorKind::InternalError(inner) => {
+				crate::error::ValidateGroupErrorKind::InternalError(inner) => {
 					Error::InternalError(inner)
 				}
-				crate::error::ValidateTeamErrorKind::RateLimitError(inner) => {
+				crate::error::ValidateGroupErrorKind::RateLimitError(inner) => {
 					Error::RateLimitError(inner)
 				}
-				crate::error::ValidateTeamErrorKind::ForbiddenError(inner) => {
+				crate::error::ValidateGroupErrorKind::ForbiddenError(inner) => {
 					Error::ForbiddenError(inner)
 				}
-				crate::error::ValidateTeamErrorKind::UnauthorizedError(inner) => {
+				crate::error::ValidateGroupErrorKind::UnauthorizedError(inner) => {
 					Error::UnauthorizedError(inner)
 				}
-				crate::error::ValidateTeamErrorKind::NotFoundError(inner) => {
+				crate::error::ValidateGroupErrorKind::NotFoundError(inner) => {
 					Error::NotFoundError(inner)
 				}
-				crate::error::ValidateTeamErrorKind::BadRequestError(inner) => {
+				crate::error::ValidateGroupErrorKind::BadRequestError(inner) => {
 					Error::BadRequestError(inner)
 				}
-				crate::error::ValidateTeamErrorKind::Unhandled(inner) => Error::Unhandled(inner),
+				crate::error::ValidateGroupErrorKind::Unhandled(inner) => Error::Unhandled(inner),
 			},
 			_ => Error::Unhandled(err.into()),
 		}

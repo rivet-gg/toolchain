@@ -1,4 +1,5 @@
 #!/bin/sh
 
-rm -rf lib/rivet-api-cloud/
-cp -r ../backend/gen/svc/api-cloud/smithy/rust/ lib/rivet-api-cloud/
+rm -rf lib/rivet-cloud/
+cp -r ../backend/gen/svc/api-cloud/smithy/rust/ lib/rivet-cloud/
+

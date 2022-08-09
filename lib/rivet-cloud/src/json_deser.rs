@@ -37,6 +37,11 @@ pub fn deser_structure_crate_error_internal_error_json_err(
 							.transpose()?,
 						);
 					}
+					"metadata" => {
+						builder = builder.set_metadata(Some(
+							aws_smithy_json::deserialize::token::expect_document(tokens)?,
+						));
+					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
 			}
@@ -87,6 +92,11 @@ pub fn deser_structure_crate_error_rate_limit_error_json_err(
 							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
 							.transpose()?,
 						);
+					}
+					"metadata" => {
+						builder = builder.set_metadata(Some(
+							aws_smithy_json::deserialize::token::expect_document(tokens)?,
+						));
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
@@ -139,6 +149,11 @@ pub fn deser_structure_crate_error_forbidden_error_json_err(
 							.transpose()?,
 						);
 					}
+					"metadata" => {
+						builder = builder.set_metadata(Some(
+							aws_smithy_json::deserialize::token::expect_document(tokens)?,
+						));
+					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
 			}
@@ -189,6 +204,11 @@ pub fn deser_structure_crate_error_unauthorized_error_json_err(
 							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
 							.transpose()?,
 						);
+					}
+					"metadata" => {
+						builder = builder.set_metadata(Some(
+							aws_smithy_json::deserialize::token::expect_document(tokens)?,
+						));
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
@@ -241,6 +261,11 @@ pub fn deser_structure_crate_error_not_found_error_json_err(
 							.transpose()?,
 						);
 					}
+					"metadata" => {
+						builder = builder.set_metadata(Some(
+							aws_smithy_json::deserialize::token::expect_document(tokens)?,
+						));
+					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
 			}
@@ -291,6 +316,11 @@ pub fn deser_structure_crate_error_bad_request_error_json_err(
 							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
 							.transpose()?,
 						);
+					}
+					"metadata" => {
+						builder = builder.set_metadata(Some(
+							aws_smithy_json::deserialize::token::expect_document(tokens)?,
+						));
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
@@ -775,6 +805,106 @@ pub fn deser_operation_crate_operation_export_matchmaker_lobby_history(
 	Ok(builder)
 }
 
+pub fn deser_operation_crate_operation_game_banner_upload_prepare(
+	value: &[u8],
+	mut builder: crate::output::game_banner_upload_prepare_output::Builder,
+) -> Result<
+	crate::output::game_banner_upload_prepare_output::Builder,
+	aws_smithy_json::deserialize::Error,
+> {
+	let mut tokens_owned =
+		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
+			.peekable();
+	let tokens = &mut tokens_owned;
+	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
+	loop {
+		match tokens.next().transpose()? {
+			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+				match key.to_unescaped()?.as_ref() {
+					"presigned_request" => {
+						builder = builder.set_presigned_request(
+                            crate::json_deser::deser_structure_crate_model_upload_presigned_request(tokens)?
+                        );
+					}
+					"upload_id" => {
+						builder = builder.set_upload_id(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+				}
+			}
+			other => {
+				return Err(aws_smithy_json::deserialize::Error::custom(format!(
+					"expected object key or end object, found: {:?}",
+					other
+				)))
+			}
+		}
+	}
+	if tokens.next().is_some() {
+		return Err(aws_smithy_json::deserialize::Error::custom(
+			"found more JSON tokens after completing parsing",
+		));
+	}
+	Ok(builder)
+}
+
+pub fn deser_operation_crate_operation_game_logo_upload_prepare(
+	value: &[u8],
+	mut builder: crate::output::game_logo_upload_prepare_output::Builder,
+) -> Result<
+	crate::output::game_logo_upload_prepare_output::Builder,
+	aws_smithy_json::deserialize::Error,
+> {
+	let mut tokens_owned =
+		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
+			.peekable();
+	let tokens = &mut tokens_owned;
+	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
+	loop {
+		match tokens.next().transpose()? {
+			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+				match key.to_unescaped()?.as_ref() {
+					"presigned_request" => {
+						builder = builder.set_presigned_request(
+                            crate::json_deser::deser_structure_crate_model_upload_presigned_request(tokens)?
+                        );
+					}
+					"upload_id" => {
+						builder = builder.set_upload_id(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+				}
+			}
+			other => {
+				return Err(aws_smithy_json::deserialize::Error::custom(format!(
+					"expected object key or end object, found: {:?}",
+					other
+				)))
+			}
+		}
+	}
+	if tokens.next().is_some() {
+		return Err(aws_smithy_json::deserialize::Error::custom(
+			"found more JSON tokens after completing parsing",
+		));
+	}
+	Ok(builder)
+}
+
 pub fn deser_operation_crate_operation_get_game_by_id(
 	value: &[u8],
 	mut builder: crate::output::get_game_by_id_output::Builder,
@@ -792,6 +922,11 @@ pub fn deser_operation_crate_operation_get_game_by_id(
 					"game" => {
 						builder = builder.set_game(
 							crate::json_deser::deser_structure_crate_model_game_full(tokens)?,
+						);
+					}
+					"watch" => {
+						builder = builder.set_watch(
+							crate::json_deser::deser_structure_crate_model_watch_response(tokens)?,
 						);
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -873,9 +1008,14 @@ pub fn deser_operation_crate_operation_get_games(
 							crate::json_deser::deser_list_rivet_cloud_game_summaries(tokens)?,
 						);
 					}
-					"teams" => {
-						builder = builder.set_teams(
-							crate::json_deser::deser_list_rivet_cloud_team_summaries(tokens)?,
+					"groups" => {
+						builder = builder.set_groups(
+							crate::json_deser::deser_list_rivet_cloud_group_summaries(tokens)?,
+						);
+					}
+					"watch" => {
+						builder = builder.set_watch(
+							crate::json_deser::deser_structure_crate_model_watch_response(tokens)?,
 						);
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -917,6 +1057,214 @@ pub fn deser_operation_crate_operation_get_game_version_by_id(
 					"version" => {
 						builder = builder.set_version(
 							crate::json_deser::deser_structure_crate_model_version_full(tokens)?,
+						);
+					}
+					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+				}
+			}
+			other => {
+				return Err(aws_smithy_json::deserialize::Error::custom(format!(
+					"expected object key or end object, found: {:?}",
+					other
+				)))
+			}
+		}
+	}
+	if tokens.next().is_some() {
+		return Err(aws_smithy_json::deserialize::Error::custom(
+			"found more JSON tokens after completing parsing",
+		));
+	}
+	Ok(builder)
+}
+
+pub fn deser_operation_crate_operation_get_group_billing(
+	value: &[u8],
+	mut builder: crate::output::get_group_billing_output::Builder,
+) -> Result<crate::output::get_group_billing_output::Builder, aws_smithy_json::deserialize::Error> {
+	let mut tokens_owned =
+		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
+			.peekable();
+	let tokens = &mut tokens_owned;
+	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
+	loop {
+		match tokens.next().transpose()? {
+			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+				match key.to_unescaped()?.as_ref() {
+					"available_regions" => {
+						builder = builder.set_available_regions(
+							crate::json_deser::deser_list_rivet_cloud_region_summaries(tokens)?,
+						);
+					}
+					"bank_source" => {
+						builder = builder.set_bank_source(
+							crate::json_deser::deser_structure_crate_model_group_bank_source(
+								tokens,
+							)?,
+						);
+					}
+					"billing" => {
+						builder = builder.set_billing(
+							crate::json_deser::deser_structure_crate_model_group_billing_summary(
+								tokens,
+							)?,
+						);
+					}
+					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+				}
+			}
+			other => {
+				return Err(aws_smithy_json::deserialize::Error::custom(format!(
+					"expected object key or end object, found: {:?}",
+					other
+				)))
+			}
+		}
+	}
+	if tokens.next().is_some() {
+		return Err(aws_smithy_json::deserialize::Error::custom(
+			"found more JSON tokens after completing parsing",
+		));
+	}
+	Ok(builder)
+}
+
+pub fn deser_operation_crate_operation_get_group_invoices_list(
+	value: &[u8],
+	mut builder: crate::output::get_group_invoices_list_output::Builder,
+) -> Result<
+	crate::output::get_group_invoices_list_output::Builder,
+	aws_smithy_json::deserialize::Error,
+> {
+	let mut tokens_owned =
+		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
+			.peekable();
+	let tokens = &mut tokens_owned;
+	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
+	loop {
+		match tokens.next().transpose()? {
+			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+				match key.to_unescaped()?.as_ref() {
+					"anchor" => {
+						builder = builder.set_anchor(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					"invoices" => {
+						builder = builder.set_invoices(
+							crate::json_deser::deser_list_rivet_cloud_group_billing_invoices(
+								tokens,
+							)?,
+						);
+					}
+					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+				}
+			}
+			other => {
+				return Err(aws_smithy_json::deserialize::Error::custom(format!(
+					"expected object key or end object, found: {:?}",
+					other
+				)))
+			}
+		}
+	}
+	if tokens.next().is_some() {
+		return Err(aws_smithy_json::deserialize::Error::custom(
+			"found more JSON tokens after completing parsing",
+		));
+	}
+	Ok(builder)
+}
+
+pub fn deser_operation_crate_operation_get_group_payments_list(
+	value: &[u8],
+	mut builder: crate::output::get_group_payments_list_output::Builder,
+) -> Result<
+	crate::output::get_group_payments_list_output::Builder,
+	aws_smithy_json::deserialize::Error,
+> {
+	let mut tokens_owned =
+		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
+			.peekable();
+	let tokens = &mut tokens_owned;
+	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
+	loop {
+		match tokens.next().transpose()? {
+			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+				match key.to_unescaped()?.as_ref() {
+					"end_payment_id" => {
+						builder = builder.set_end_payment_id(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					"payments" => {
+						builder = builder.set_payments(
+							crate::json_deser::deser_list_rivet_cloud_group_billing_payments(
+								tokens,
+							)?,
+						);
+					}
+					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+				}
+			}
+			other => {
+				return Err(aws_smithy_json::deserialize::Error::custom(format!(
+					"expected object key or end object, found: {:?}",
+					other
+				)))
+			}
+		}
+	}
+	if tokens.next().is_some() {
+		return Err(aws_smithy_json::deserialize::Error::custom(
+			"found more JSON tokens after completing parsing",
+		));
+	}
+	Ok(builder)
+}
+
+pub fn deser_operation_crate_operation_get_group_transfers_list(
+	value: &[u8],
+	mut builder: crate::output::get_group_transfers_list_output::Builder,
+) -> Result<
+	crate::output::get_group_transfers_list_output::Builder,
+	aws_smithy_json::deserialize::Error,
+> {
+	let mut tokens_owned =
+		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
+			.peekable();
+	let tokens = &mut tokens_owned;
+	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
+	loop {
+		match tokens.next().transpose()? {
+			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+				match key.to_unescaped()?.as_ref() {
+					"end_transfer_id" => {
+						builder = builder.set_end_transfer_id(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					"transfers" => {
+						builder = builder.set_transfers(
+							crate::json_deser::deser_list_rivet_cloud_group_billing_transfers(
+								tokens,
+							)?,
 						);
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -1116,63 +1464,11 @@ pub fn deser_operation_crate_operation_get_region_tiers(
 	Ok(builder)
 }
 
-pub fn deser_operation_crate_operation_get_team_billing(
+pub fn deser_operation_crate_operation_group_billing_checkout(
 	value: &[u8],
-	mut builder: crate::output::get_team_billing_output::Builder,
-) -> Result<crate::output::get_team_billing_output::Builder, aws_smithy_json::deserialize::Error> {
-	let mut tokens_owned =
-		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
-			.peekable();
-	let tokens = &mut tokens_owned;
-	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
-	loop {
-		match tokens.next().transpose()? {
-			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-				match key.to_unescaped()?.as_ref() {
-					"available_regions" => {
-						builder = builder.set_available_regions(
-							crate::json_deser::deser_list_rivet_cloud_region_summaries(tokens)?,
-						);
-					}
-					"bank_source" => {
-						builder = builder.set_bank_source(
-							crate::json_deser::deser_structure_crate_model_team_bank_source(
-								tokens,
-							)?,
-						);
-					}
-					"billing" => {
-						builder = builder.set_billing(
-							crate::json_deser::deser_structure_crate_model_team_billing_summary(
-								tokens,
-							)?,
-						);
-					}
-					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-				}
-			}
-			other => {
-				return Err(aws_smithy_json::deserialize::Error::custom(format!(
-					"expected object key or end object, found: {:?}",
-					other
-				)))
-			}
-		}
-	}
-	if tokens.next().is_some() {
-		return Err(aws_smithy_json::deserialize::Error::custom(
-			"found more JSON tokens after completing parsing",
-		));
-	}
-	Ok(builder)
-}
-
-pub fn deser_operation_crate_operation_get_team_payments_list(
-	value: &[u8],
-	mut builder: crate::output::get_team_payments_list_output::Builder,
+	mut builder: crate::output::group_billing_checkout_output::Builder,
 ) -> Result<
-	crate::output::get_team_payments_list_output::Builder,
+	crate::output::group_billing_checkout_output::Builder,
 	aws_smithy_json::deserialize::Error,
 > {
 	let mut tokens_owned =
@@ -1185,72 +1481,13 @@ pub fn deser_operation_crate_operation_get_team_payments_list(
 			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
 			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
 				match key.to_unescaped()?.as_ref() {
-					"end_payment_id" => {
-						builder = builder.set_end_payment_id(
+					"url" => {
+						builder = builder.set_url(
 							aws_smithy_json::deserialize::token::expect_string_or_null(
 								tokens.next(),
 							)?
 							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
 							.transpose()?,
-						);
-					}
-					"payments" => {
-						builder = builder.set_payments(
-							crate::json_deser::deser_list_rivet_cloud_team_billing_payments(
-								tokens,
-							)?,
-						);
-					}
-					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-				}
-			}
-			other => {
-				return Err(aws_smithy_json::deserialize::Error::custom(format!(
-					"expected object key or end object, found: {:?}",
-					other
-				)))
-			}
-		}
-	}
-	if tokens.next().is_some() {
-		return Err(aws_smithy_json::deserialize::Error::custom(
-			"found more JSON tokens after completing parsing",
-		));
-	}
-	Ok(builder)
-}
-
-pub fn deser_operation_crate_operation_get_team_transfers_list(
-	value: &[u8],
-	mut builder: crate::output::get_team_transfers_list_output::Builder,
-) -> Result<
-	crate::output::get_team_transfers_list_output::Builder,
-	aws_smithy_json::deserialize::Error,
-> {
-	let mut tokens_owned =
-		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
-			.peekable();
-	let tokens = &mut tokens_owned;
-	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
-	loop {
-		match tokens.next().transpose()? {
-			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-				match key.to_unescaped()?.as_ref() {
-					"end_transfer_id" => {
-						builder = builder.set_end_transfer_id(
-							aws_smithy_json::deserialize::token::expect_string_or_null(
-								tokens.next(),
-							)?
-							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-							.transpose()?,
-						);
-					}
-					"transfers" => {
-						builder = builder.set_transfers(
-							crate::json_deser::deser_list_rivet_cloud_team_billing_transfers(
-								tokens,
-							)?,
 						);
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -1408,49 +1645,6 @@ pub fn deser_operation_crate_operation_list_namespace_lobbies(
 						builder = builder.set_lobbies(
                             crate::json_deser::deser_list_rivet_api_cloud_common_logs_lobby_summaries(tokens)?
                         );
-					}
-					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-				}
-			}
-			other => {
-				return Err(aws_smithy_json::deserialize::Error::custom(format!(
-					"expected object key or end object, found: {:?}",
-					other
-				)))
-			}
-		}
-	}
-	if tokens.next().is_some() {
-		return Err(aws_smithy_json::deserialize::Error::custom(
-			"found more JSON tokens after completing parsing",
-		));
-	}
-	Ok(builder)
-}
-
-pub fn deser_operation_crate_operation_team_billing_checkout(
-	value: &[u8],
-	mut builder: crate::output::team_billing_checkout_output::Builder,
-) -> Result<crate::output::team_billing_checkout_output::Builder, aws_smithy_json::deserialize::Error>
-{
-	let mut tokens_owned =
-		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
-			.peekable();
-	let tokens = &mut tokens_owned;
-	aws_smithy_json::deserialize::token::expect_start_object(tokens.next())?;
-	loop {
-		match tokens.next().transpose()? {
-			Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-			Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-				match key.to_unescaped()?.as_ref() {
-					"url" => {
-						builder = builder.set_url(
-							aws_smithy_json::deserialize::token::expect_string_or_null(
-								tokens.next(),
-							)?
-							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-							.transpose()?,
-						);
 					}
 					_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 				}
@@ -1671,10 +1865,10 @@ pub fn deser_operation_crate_operation_validate_game_version(
 	Ok(builder)
 }
 
-pub fn deser_operation_crate_operation_validate_team(
+pub fn deser_operation_crate_operation_validate_group(
 	value: &[u8],
-	mut builder: crate::output::validate_team_output::Builder,
-) -> Result<crate::output::validate_team_output::Builder, aws_smithy_json::deserialize::Error> {
+	mut builder: crate::output::validate_group_output::Builder,
+) -> Result<crate::output::validate_group_output::Builder, aws_smithy_json::deserialize::Error> {
 	let mut tokens_owned =
 		aws_smithy_json::deserialize::json_token_iter(crate::json_deser::or_empty_doc(value))
 			.peekable();
@@ -1841,10 +2035,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"name_id" => {
@@ -1865,8 +2059,8 @@ where
 									.transpose()?,
 								);
 							}
-							"developer_team_id" => {
-								builder = builder.set_developer_team_id(
+							"developer_group_id" => {
+								builder = builder.set_developer_group_id(
 									aws_smithy_json::deserialize::token::expect_string_or_null(
 										tokens.next(),
 									)?
@@ -1880,6 +2074,24 @@ where
 										tokens.next(),
 									)?
 									.map(|v| v.to_i32()),
+								);
+							}
+							"logo_url" => {
+								builder = builder.set_logo_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"banner_url" => {
+								builder = builder.set_banner_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
 								);
 							}
 							"namespaces" => {
@@ -1901,6 +2113,52 @@ where
 									crate::json_deser::deser_list_rivet_cloud_region_summaries(
 										tokens,
 									)?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_watch_response<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::WatchResponse>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::WatchResponse::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"index" => {
+								builder = builder.set_index(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
 								);
 							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -1951,10 +2209,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"display_name" => {
@@ -2045,9 +2303,9 @@ where
 }
 
 #[allow(clippy::type_complexity, non_snake_case)]
-pub fn deser_list_rivet_cloud_team_summaries<'a, I>(
+pub fn deser_list_rivet_cloud_group_summaries<'a, I>(
 	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<std::vec::Vec<crate::model::TeamSummary>>, aws_smithy_json::deserialize::Error>
+) -> Result<Option<std::vec::Vec<crate::model::GroupSummary>>, aws_smithy_json::deserialize::Error>
 where
 	I: Iterator<
 		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
@@ -2065,7 +2323,7 @@ where
 					}
 					_ => {
 						let value =
-							crate::json_deser::deser_structure_crate_model_team_summary(tokens)?;
+							crate::json_deser::deser_structure_crate_model_group_summary(tokens)?;
 						if let Some(value) = value {
 							items.push(value);
 						}
@@ -2109,10 +2367,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"display_name" => {
@@ -2144,6 +2402,270 @@ where
 		}
 		_ => Err(aws_smithy_json::deserialize::Error::custom(
 			"expected start object or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_region_summaries<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<std::vec::Vec<crate::model::RegionSummary>>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+							crate::json_deser::deser_structure_crate_model_region_summary(tokens)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_group_bank_source<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GroupBankSource>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GroupBankSource::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"account_number" => {
+								builder = builder.set_account_number(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"routing_number" => {
+								builder = builder.set_routing_number(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_group_billing_summary<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GroupBillingSummary>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GroupBillingSummary::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"games" => {
+								builder = builder.set_games(
+                                    crate::json_deser::deser_list_rivet_cloud_multiple_game_lobby_expenses(tokens)?
+                                );
+							}
+							"balance" => {
+								builder = builder.set_balance(
+									aws_smithy_json::deserialize::token::expect_number_or_null(
+										tokens.next(),
+									)?
+									.map(|v| v.to_i64()),
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_group_billing_invoices<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::vec::Vec<crate::model::GroupBillingInvoice>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+							crate::json_deser::deser_structure_crate_model_group_billing_invoice(
+								tokens,
+							)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_group_billing_payments<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+							crate::json_deser::deser_structure_crate_model_group_billing_payment(
+								tokens,
+							)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_group_billing_transfers<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+							crate::json_deser::deser_structure_crate_model_group_billing_transfer(
+								tokens,
+							)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
 		)),
 	}
 }
@@ -2245,10 +2767,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"status" => {
@@ -2443,229 +2965,6 @@ where
 					_ => {
 						let value =
 							crate::json_deser::deser_structure_crate_model_region_tier(tokens)?;
-						if let Some(value) = value {
-							items.push(value);
-						}
-					}
-				}
-			}
-			Ok(Some(items))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start array or null",
-		)),
-	}
-}
-
-#[allow(clippy::type_complexity, non_snake_case)]
-pub fn deser_list_rivet_cloud_region_summaries<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<std::vec::Vec<crate::model::RegionSummary>>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
-			let mut items = Vec::new();
-			loop {
-				match tokens.peek() {
-					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
-						tokens.next().transpose().unwrap();
-						break;
-					}
-					_ => {
-						let value =
-							crate::json_deser::deser_structure_crate_model_region_summary(tokens)?;
-						if let Some(value) = value {
-							items.push(value);
-						}
-					}
-				}
-			}
-			Ok(Some(items))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start array or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_team_bank_source<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::TeamBankSource>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::TeamBankSource::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"account_number" => {
-								builder = builder.set_account_number(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"routing_number" => {
-								builder = builder.set_routing_number(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_team_billing_summary<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::TeamBillingSummary>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::TeamBillingSummary::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"games" => {
-								builder = builder.set_games(
-                                    crate::json_deser::deser_list_rivet_cloud_multiple_game_lobby_expenses(tokens)?
-                                );
-							}
-							"balance" => {
-								builder = builder.set_balance(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
-#[allow(clippy::type_complexity, non_snake_case)]
-pub fn deser_list_rivet_cloud_team_billing_payments<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<
-	Option<std::vec::Vec<crate::model::TeamBillingPayment>>,
-	aws_smithy_json::deserialize::Error,
->
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
-			let mut items = Vec::new();
-			loop {
-				match tokens.peek() {
-					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
-						tokens.next().transpose().unwrap();
-						break;
-					}
-					_ => {
-						let value =
-							crate::json_deser::deser_structure_crate_model_team_billing_payment(
-								tokens,
-							)?;
-						if let Some(value) = value {
-							items.push(value);
-						}
-					}
-				}
-			}
-			Ok(Some(items))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start array or null",
-		)),
-	}
-}
-
-#[allow(clippy::type_complexity, non_snake_case)]
-pub fn deser_list_rivet_cloud_team_billing_transfers<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<
-	Option<std::vec::Vec<crate::model::TeamBillingTransfer>>,
-	aws_smithy_json::deserialize::Error,
->
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
-			let mut items = Vec::new();
-			loop {
-				match tokens.peek() {
-					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
-						tokens.next().transpose().unwrap();
-						break;
-					}
-					_ => {
-						let value =
-							crate::json_deser::deser_structure_crate_model_team_billing_transfer(
-								tokens,
-							)?;
 						if let Some(value) = value {
 							items.push(value);
 						}
@@ -3049,10 +3348,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"name_id" => {
@@ -3073,8 +3372,8 @@ where
 									.transpose()?,
 								);
 							}
-							"developer_team_id" => {
-								builder = builder.set_developer_team_id(
+							"developer_group_id" => {
+								builder = builder.set_developer_group_id(
 									aws_smithy_json::deserialize::token::expect_string_or_null(
 										tokens.next(),
 									)?
@@ -3088,6 +3387,24 @@ where
 										tokens.next(),
 									)?
 									.map(|v| v.to_i32()),
+								);
+							}
+							"logo_url" => {
+								builder = builder.set_logo_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"banner_url" => {
+								builder = builder.set_banner_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
 								);
 							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -3109,9 +3426,9 @@ where
 	}
 }
 
-pub fn deser_structure_crate_model_team_summary<'a, I>(
+pub fn deser_structure_crate_model_group_summary<'a, I>(
 	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::TeamSummary>, aws_smithy_json::deserialize::Error>
+) -> Result<Option<crate::model::GroupSummary>, aws_smithy_json::deserialize::Error>
 where
 	I: Iterator<
 		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
@@ -3121,14 +3438,14 @@ where
 		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
 		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
 			#[allow(unused_mut)]
-			let mut builder = crate::model::TeamSummary::builder();
+			let mut builder = crate::model::GroupSummary::builder();
 			loop {
 				match tokens.next().transpose()? {
 					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
 					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
 						match key.to_unescaped()?.as_ref() {
-							"team_id" => {
-								builder = builder.set_team_id(
+							"group_id" => {
+								builder = builder.set_group_id(
 									aws_smithy_json::deserialize::token::expect_string_or_null(
 										tokens.next(),
 									)?
@@ -3160,6 +3477,11 @@ where
 										tokens.next(),
 									)?,
 								);
+							}
+							"external" => {
+								builder = builder.set_external(
+                                    crate::json_deser::deser_structure_crate_model_group_external_links(tokens)?
+                                );
 							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 						}
@@ -3212,6 +3534,356 @@ where
 								builder = builder.set_kv(
                                     crate::json_deser::deser_structure_crate_model_kv_version_config(tokens)?
                                 );
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_region_summary<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::RegionSummary>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::RegionSummary::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"region_id" => {
+								builder = builder.set_region_id(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"provider" => {
+								builder = builder.set_provider(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"universal_region" => {
+								builder = builder.set_universal_region(
+									aws_smithy_json::deserialize::token::expect_number_or_null(
+										tokens.next(),
+									)?
+									.map(|v| v.to_i16()),
+								);
+							}
+							"provider_display_name" => {
+								builder = builder.set_provider_display_name(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"region_display_name" => {
+								builder = builder.set_region_display_name(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_multiple_game_lobby_expenses<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::vec::Vec<crate::model::GameLobbyExpenses>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+							crate::json_deser::deser_structure_crate_model_game_lobby_expenses(
+								tokens,
+							)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_group_billing_invoice<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GroupBillingInvoice>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GroupBillingInvoice::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"csv_url" => {
+								builder = builder.set_csv_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"pdf_url" => {
+								builder = builder.set_pdf_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"period_start_ts" => {
+								builder = builder.set_period_start_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							"period_end_ts" => {
+								builder = builder.set_period_end_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_group_billing_payment<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GroupBillingPayment>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GroupBillingPayment::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"amount" => {
+								builder = builder.set_amount(
+									aws_smithy_json::deserialize::token::expect_number_or_null(
+										tokens.next(),
+									)?
+									.map(|v| v.to_i64()),
+								);
+							}
+							"description" => {
+								builder = builder.set_description(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"from_invoice" => {
+								builder = builder.set_from_invoice(
+									aws_smithy_json::deserialize::token::expect_bool_or_null(
+										tokens.next(),
+									)?,
+								);
+							}
+							"created_ts" => {
+								builder = builder.set_created_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							"status" => {
+								builder = builder.set_status(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| {
+										s.to_unescaped().map(|u| {
+											crate::model::GroupBillingStatus::from(u.as_ref())
+										})
+									})
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_group_billing_transfer<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GroupBillingTransfer>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GroupBillingTransfer::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"amount" => {
+								builder = builder.set_amount(
+									aws_smithy_json::deserialize::token::expect_number_or_null(
+										tokens.next(),
+									)?
+									.map(|v| v.to_i64()),
+								);
+							}
+							"description" => {
+								builder = builder.set_description(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"created_ts" => {
+								builder = builder.set_created_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							"status" => {
+								builder = builder.set_status(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| {
+										s.to_unescaped().map(|u| {
+											crate::model::GroupBillingStatus::from(u.as_ref())
+										})
+									})
+									.transpose()?,
+								);
 							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 						}
@@ -3288,10 +3960,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"is_ready" => {
@@ -3542,10 +4214,10 @@ where
 							}
 							"ts" => {
 								builder = builder.set_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"duration" => {
@@ -3675,285 +4347,6 @@ where
 										tokens.next(),
 									)?
 									.map(|v| v.to_i64()),
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_region_summary<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::RegionSummary>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::RegionSummary::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"region_id" => {
-								builder = builder.set_region_id(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"provider" => {
-								builder = builder.set_provider(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"universal_region" => {
-								builder = builder.set_universal_region(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i16()),
-								);
-							}
-							"provider_display_name" => {
-								builder = builder.set_provider_display_name(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"region_display_name" => {
-								builder = builder.set_region_display_name(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
-#[allow(clippy::type_complexity, non_snake_case)]
-pub fn deser_list_rivet_cloud_multiple_game_lobby_expenses<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<
-	Option<std::vec::Vec<crate::model::GameLobbyExpenses>>,
-	aws_smithy_json::deserialize::Error,
->
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
-			let mut items = Vec::new();
-			loop {
-				match tokens.peek() {
-					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
-						tokens.next().transpose().unwrap();
-						break;
-					}
-					_ => {
-						let value =
-							crate::json_deser::deser_structure_crate_model_game_lobby_expenses(
-								tokens,
-							)?;
-						if let Some(value) = value {
-							items.push(value);
-						}
-					}
-				}
-			}
-			Ok(Some(items))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start array or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_team_billing_payment<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::TeamBillingPayment>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::TeamBillingPayment::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"amount" => {
-								builder = builder.set_amount(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"description" => {
-								builder = builder.set_description(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"from_invoice" => {
-								builder = builder.set_from_invoice(
-									aws_smithy_json::deserialize::token::expect_bool_or_null(
-										tokens.next(),
-									)?,
-								);
-							}
-							"created_ts" => {
-								builder = builder.set_created_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"status" => {
-								builder = builder.set_status(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| {
-										s.to_unescaped().map(|u| {
-											crate::model::TeamBillingStatus::from(u.as_ref())
-										})
-									})
-									.transpose()?,
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_team_billing_transfer<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::TeamBillingTransfer>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::TeamBillingTransfer::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"amount" => {
-								builder = builder.set_amount(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"description" => {
-								builder = builder.set_description(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"created_ts" => {
-								builder = builder.set_created_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"status" => {
-								builder = builder.set_status(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| {
-										s.to_unescaped().map(|u| {
-											crate::model::TeamBillingStatus::from(u.as_ref())
-										})
-									})
-									.transpose()?,
 								);
 							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
@@ -4114,10 +4507,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"content_length" => {
@@ -4201,10 +4594,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"content_length" => {
@@ -4312,10 +4705,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"display_name" => {
@@ -4393,10 +4786,10 @@ where
 							}
 							"create_ts" => {
 								builder = builder.set_create_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"display_name" => {
@@ -4583,6 +4976,61 @@ where
 	}
 }
 
+pub fn deser_structure_crate_model_group_external_links<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GroupExternalLinks>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GroupExternalLinks::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"profile" => {
+								builder = builder.set_profile(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"chat" => {
+								builder = builder.set_chat(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
 pub fn deser_structure_crate_model_cdn_version_config<'a, I>(
 	tokens: &mut std::iter::Peekable<I>,
 ) -> Result<Option<crate::model::CdnVersionConfig>, aws_smithy_json::deserialize::Error>
@@ -4698,6 +5146,62 @@ where
 	}
 }
 
+pub fn deser_structure_crate_model_game_lobby_expenses<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::GameLobbyExpenses>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::GameLobbyExpenses::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"game" => {
+								builder = builder.set_game(
+									crate::json_deser::deser_structure_crate_model_game_handle(
+										tokens,
+									)?,
+								);
+							}
+							"namespaces" => {
+								builder = builder.set_namespaces(
+									crate::json_deser::deser_list_rivet_cloud_namespace_summaries(
+										tokens,
+									)?,
+								);
+							}
+							"expenses" => {
+								builder = builder.set_expenses(
+                                    crate::json_deser::deser_list_rivet_cloud_multiple_region_tier_expenses(tokens)?
+                                );
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
 pub fn deser_structure_crate_model_unit<'a, I>(
 	tokens: &mut std::iter::Peekable<I>,
 ) -> Result<Option<crate::model::Unit>, aws_smithy_json::deserialize::Error>
@@ -4740,10 +5244,10 @@ where
 						match key.to_unescaped()?.as_ref() {
 							"stop_ts" => {
 								builder = builder.set_stop_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
 										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
 								);
 							}
 							"failed" => {
@@ -4848,62 +5352,6 @@ where
 		}
 		_ => Err(aws_smithy_json::deserialize::Error::custom(
 			"expected start array or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_game_lobby_expenses<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::GameLobbyExpenses>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::GameLobbyExpenses::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"game" => {
-								builder = builder.set_game(
-									crate::json_deser::deser_structure_crate_model_game_handle(
-										tokens,
-									)?,
-								);
-							}
-							"namespaces" => {
-								builder = builder.set_namespaces(
-									crate::json_deser::deser_list_rivet_cloud_namespace_summaries(
-										tokens,
-									)?,
-								);
-							}
-							"expenses" => {
-								builder = builder.set_expenses(
-                                    crate::json_deser::deser_list_rivet_cloud_multiple_region_tier_expenses(tokens)?
-                                );
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
 		)),
 	}
 }
@@ -5082,149 +5530,6 @@ where
 	}
 }
 
-pub fn deser_structure_crate_model_logs_perf_span<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::LogsPerfSpan>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::LogsPerfSpan::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"label" => {
-								builder = builder.set_label(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"start_ts" => {
-								builder = builder.set_start_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"finish_ts" => {
-								builder = builder.set_finish_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"req_id" => {
-								builder = builder.set_req_id(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
-pub fn deser_structure_crate_model_logs_perf_mark<'a, I>(
-	tokens: &mut std::iter::Peekable<I>,
-) -> Result<Option<crate::model::LogsPerfMark>, aws_smithy_json::deserialize::Error>
-where
-	I: Iterator<
-		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
-	>,
-{
-	match tokens.next().transpose()? {
-		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
-		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
-			#[allow(unused_mut)]
-			let mut builder = crate::model::LogsPerfMark::builder();
-			loop {
-				match tokens.next().transpose()? {
-					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
-					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
-						match key.to_unescaped()?.as_ref() {
-							"label" => {
-								builder = builder.set_label(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"ts" => {
-								builder = builder.set_ts(
-									aws_smithy_json::deserialize::token::expect_number_or_null(
-										tokens.next(),
-									)?
-									.map(|v| v.to_i64()),
-								);
-							}
-							"ray_id" => {
-								builder = builder.set_ray_id(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							"req_id" => {
-								builder = builder.set_req_id(
-									aws_smithy_json::deserialize::token::expect_string_or_null(
-										tokens.next(),
-									)?
-									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
-									.transpose()?,
-								);
-							}
-							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
-						}
-					}
-					other => {
-						return Err(aws_smithy_json::deserialize::Error::custom(format!(
-							"expected object key or end object, found: {:?}",
-							other
-						)))
-					}
-				}
-			}
-			Ok(Some(builder.build()))
-		}
-		_ => Err(aws_smithy_json::deserialize::Error::custom(
-			"expected start object or null",
-		)),
-	}
-}
-
 pub fn deser_structure_crate_model_game_handle<'a, I>(
 	tokens: &mut std::iter::Peekable<I>,
 ) -> Result<Option<crate::model::GameHandle>, aws_smithy_json::deserialize::Error>
@@ -5263,6 +5568,24 @@ where
 							}
 							"display_name" => {
 								builder = builder.set_display_name(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"logo_url" => {
+								builder = builder.set_logo_url(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"banner_url" => {
+								builder = builder.set_banner_url(
 									aws_smithy_json::deserialize::token::expect_string_or_null(
 										tokens.next(),
 									)?
@@ -5326,6 +5649,149 @@ where
 		}
 		_ => Err(aws_smithy_json::deserialize::Error::custom(
 			"expected start array or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_logs_perf_span<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::LogsPerfSpan>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::LogsPerfSpan::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"label" => {
+								builder = builder.set_label(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"start_ts" => {
+								builder = builder.set_start_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							"finish_ts" => {
+								builder = builder.set_finish_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							"req_id" => {
+								builder = builder.set_req_id(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_logs_perf_mark<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::LogsPerfMark>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::LogsPerfMark::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"label" => {
+								builder = builder.set_label(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"ts" => {
+								builder = builder.set_ts(
+									aws_smithy_json::deserialize::token::expect_timestamp_or_null(
+										tokens.next(),
+										aws_smithy_types::date_time::Format::DateTime,
+									)?,
+								);
+							}
+							"ray_id" => {
+								builder = builder.set_ray_id(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"req_id" => {
+								builder = builder.set_req_id(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
 		)),
 	}
 }
