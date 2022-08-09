@@ -7,6 +7,7 @@ pub type Ctx = Arc<SharedCtx>;
 pub struct SharedCtx {
 	pub http_client:
 		rivet_cloud::Client<aws_smithy_client::erase::DynConnector, tower::layer::util::Identity>,
+	pub concurrent_uploads: usize,
 }
 
 impl SharedCtx {
@@ -31,6 +32,9 @@ impl SharedCtx {
 			.build();
 		let http_client = rivet_cloud::Client::with_config(raw_client, config);
 
-		Ok(Arc::new(SharedCtx { http_client }))
+		Ok(Arc::new(SharedCtx {
+			http_client,
+			concurrent_uploads: 8,
+		}))
 	}
 }
