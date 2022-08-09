@@ -1,5 +1,6 @@
 use anyhow::{bail, Context, Result};
 use clap::Parser;
+use commands::*;
 use futures_util::stream::{StreamExt, TryStreamExt};
 use rand::{thread_rng, Rng};
 use std::{
@@ -12,6 +13,8 @@ use std::{
 	time::{Duration, Instant},
 };
 use tokio::fs;
+
+mod commands;
 
 const CONCURRENT_UPLOADS: usize = 8;
 
@@ -32,63 +35,16 @@ struct Opts {
 enum SubCommand {
 	Auth {
 		#[clap(subcommand)]
-		command: AuthSubCommand,
+		command: auth::SubCommand,
 	},
 	Build {
 		#[clap(subcommand)]
-		command: BuildSubCommand,
+		command: build::SubCommand,
 	},
 	Site {
 		#[clap(subcommand)]
-		command: SiteSubCommand,
+		command: site::SubCommand,
 	},
-	// Version {
-	// 	#[clap(subcommand)]
-	// 	command: VersionSubcommand,
-	// },
-	// Namespace {
-	// 	#[clap(subcommand)]
-	// 	command: NamespaceSubcommand,
-	// },
-}
-
-#[derive(Parser)]
-enum AuthSubCommand {
-	Token,
-}
-
-#[derive(Parser)]
-enum BuildSubCommand {
-	Push(BuildPushOpts),
-}
-
-#[derive(Parser)]
-struct BuildPushOpts {
-	#[clap(index(1))]
-	tag: String,
-
-	#[clap(long)]
-	name: Option<String>,
-}
-
-#[derive(Parser)]
-enum SiteSubCommand {
-	Push(SitePushOptions),
-}
-
-#[derive(Parser)]
-enum VersionSubcommand {}
-
-#[derive(Parser)]
-enum NamespaceSubcommand {}
-
-#[derive(Parser)]
-struct SitePushOptions {
-	#[clap(index(1))]
-	path: String,
-
-	#[clap(long)]
-	name: Option<String>,
 }
 
 #[tokio::main]
@@ -117,7 +73,7 @@ async fn main() -> Result<()> {
 
 	match opts.command {
 		SubCommand::Auth { command } => match command {
-			AuthSubCommand::Token { .. } => {
+			auth::SubCommand::Token { .. } => {
 				print!("Auth token: ");
 
 				// Read token from stdin
@@ -151,7 +107,7 @@ async fn main() -> Result<()> {
 			}
 		},
 		SubCommand::Build { command } => match command {
-			BuildSubCommand::Push(push_opts) => {
+			build::SubCommand::Push(push_opts) => {
 				let game_id = infer_game_id(&ctx).await?;
 
 				let tmp_image_file = tempfile::NamedTempFile::new()?;
@@ -244,7 +200,7 @@ async fn main() -> Result<()> {
 			}
 		},
 		SubCommand::Site { command } => match command {
-			SiteSubCommand::Push(push_opts) => {
+			site::SubCommand::Push(push_opts) => {
 				let game_id = infer_game_id(&ctx).await?;
 
 				let upload_path = env::current_dir()?.join(push_opts.path);
