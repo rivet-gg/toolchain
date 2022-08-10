@@ -9,7 +9,6 @@ license = "MIT"
 anyhow = "1.0"
 clap = { version = "3.2.16", features = ["derive", "env"] }
 futures-util = "0.3"
-home = "0.5"
 humansize = "1.1"
 ignore = "0.4"
 mime_guess = "2.0"

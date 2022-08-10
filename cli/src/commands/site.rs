@@ -26,7 +26,7 @@ pub struct SitePushOptions {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &rivetctl::ctx::SharedCtx) -> Result<()> {
+	pub async fn execute(&self, ctx: &rivetctl::Ctx) -> Result<()> {
 		match self {
 			SubCommand::Push(push_opts) => {
 				let reqwest_client = Arc::new(reqwest::Client::new());

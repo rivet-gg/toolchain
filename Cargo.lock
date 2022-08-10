@@ -1162,7 +1162,6 @@ dependencies = [
  "anyhow",
  "clap",
  "futures-util",
- "home",
  "humansize",
  "ignore",
  "mime_guess",
@@ -1181,8 +1180,10 @@ name = "rivetctl-lib"
 version = "0.0.1"
 dependencies = [
  "aws-smithy-client",
+ "home",
  "rivet-cloud",
  "serde",
+ "serde_json",
  "thiserror",
  "tokio 0.2.25",
  "tower",
@@ -1299,9 +1300,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.81"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b7ce2b32a1aed03c558dc61a5cd328f15aff2dbc17daad8fb8af04d2100e15c"
+checksum = "38dd04e3c8279e75b31ef29dbdceebfe5ad89f4d0937213c53f7d49d01b3d5a7"
 dependencies = [
  "itoa",
  "ryu",

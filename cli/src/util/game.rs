@@ -1,7 +1,7 @@
 use anyhow::{bail, Context, Result};
 
 /// Uses the provided token to find the game ID to modify.
-pub async fn infer_game_id(ctx: &rivetctl::ctx::SharedCtx) -> Result<String> {
+pub async fn infer_game_id(ctx: &rivetctl::Ctx) -> Result<String> {
 	let inspect = ctx
 		.http_client
 		.inspect()
