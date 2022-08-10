@@ -1,18 +1,6 @@
-use anyhow::{bail, Context, Result};
+use anyhow::Result;
 use clap::Parser;
 use commands::*;
-use futures_util::stream::{StreamExt, TryStreamExt};
-use rand::{thread_rng, Rng};
-use std::{
-	env,
-	path::{Path, PathBuf},
-	sync::{
-		atomic::{AtomicU64, AtomicUsize, Ordering},
-		Arc,
-	},
-	time::{Duration, Instant},
-};
-use tokio::fs;
 
 mod commands;
 mod util;
