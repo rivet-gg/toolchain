@@ -98,6 +98,7 @@ impl SubCommand {
 			} => {
 				ctx.client()
 					.create_game_namespace()
+					.game_id(&ctx.game_id)
 					.display_name(display_name)
 					.name_id(name_id)
 					.version_id(version)
