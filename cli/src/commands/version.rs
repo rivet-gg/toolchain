@@ -8,7 +8,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &rivetctl::Ctx) -> Result<()> {
+	pub async fn execute(&self, _ctx: &rivetctl::Ctx) -> Result<()> {
 		Ok(())
 	}
 }

@@ -2,7 +2,7 @@ use anyhow::{bail, Context, Result};
 use clap::Parser;
 use std::io::{self, Write};
 
-use crate::util::{paths, secrets};
+use crate::util::{secrets};
 
 #[derive(Parser)]
 pub struct Opts {}
