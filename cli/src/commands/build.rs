@@ -14,7 +14,7 @@ pub enum SubCommand {
 
 #[derive(Parser)]
 pub struct BuildPushOpts {
-	#[clap(index(1))]
+	#[clap(index = 1)]
 	pub tag: String,
 
 	#[clap(long)]
@@ -87,7 +87,7 @@ impl SubCommand {
 					.display_name(&display_name)
 					.image_tag(&image_tag)
 					.image_file(
-						rivetctl::model::upload_prepare_file::Builder::default()
+						rivetctl::rivet_cloud::model::upload_prepare_file::Builder::default()
 							.path("image.tar")
 							.content_type(content_type)
 							.content_length(image_file_meta.len() as i64)

@@ -19,12 +19,12 @@ pub enum SubCommand {
 		name_id: String,
 	},
 	SetVersion {
-		#[clap(long, short, alias("ns"))]
+		#[clap(long, short, alias = "ns")]
 		namespace: String,
 		#[clap(short)]
 		version: String,
 	},
-	#[clap(alias("dash"))]
+	#[clap(alias = "dash")]
 	Dashboard {
 		namespace: String,
 	},

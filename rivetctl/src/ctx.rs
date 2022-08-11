@@ -44,7 +44,7 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 		.send()
 		.await
 		.map_err(|source| Error::InspectFail { source })?;
-	let game_id = if let crate::model::AuthAgent::GameCloud(game_cloud) =
+	let game_id = if let crate::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) =
 		inspect.agent.as_ref().ok_or_else(|| Error::Internal {
 			message: "inspect.agent".into(),
 		})? {

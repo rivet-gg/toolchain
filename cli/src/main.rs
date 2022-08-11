@@ -22,6 +22,8 @@ struct Opts {
 #[derive(Parser)]
 enum SubCommand {
 	Init(init::Opts),
+	// #[clap(alias = "dash")]
+	// Dashboard,
 	#[clap(alias = "ns")]
 	Namespace {
 		#[clap(subcommand)]

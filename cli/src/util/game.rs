@@ -8,12 +8,13 @@ pub async fn infer_game_id(ctx: &rivetctl::Ctx) -> Result<String> {
 		.send()
 		.await
 		.context("client.inspect")?;
-	let game_cloud =
-		if let rivetctl::model::AuthAgent::GameCloud(game_cloud) = inspect.agent().unwrap() {
-			game_cloud
-		} else {
-			bail!("invalid token agent");
-		};
+	let game_cloud = if let rivetctl::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) =
+		inspect.agent().unwrap()
+	{
+		game_cloud
+	} else {
+		bail!("invalid token agent");
+	};
 
 	Ok(game_cloud.game_id().unwrap().to_string())
 }

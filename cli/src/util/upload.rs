@@ -8,7 +8,7 @@ use std::{
 #[derive(Clone)]
 pub struct UploadFile {
 	pub absolute_path: PathBuf,
-	pub prepared: rivetctl::model::UploadPrepareFile,
+	pub prepared: rivetctl::rivet_cloud::model::UploadPrepareFile,
 }
 
 pub fn format_file_size(bytes: u64) -> Result<String> {
@@ -61,7 +61,7 @@ pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 
 			files.push(UploadFile {
 				absolute_path: file_path.to_path_buf(),
-				prepared: rivetctl::model::upload_prepare_file::Builder::default()
+				prepared: rivetctl::rivet_cloud::model::upload_prepare_file::Builder::default()
 					.path(path_str)
 					.set_content_type(content_type)
 					.content_length(file_meta.len() as i64)
@@ -76,7 +76,7 @@ pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 /// Uploads a file to a given URL.
 pub async fn upload_file(
 	reqwest_client: &reqwest::Client,
-	presigned_req: &rivetctl::model::UploadPresignedRequest,
+	presigned_req: &rivetctl::rivet_cloud::model::UploadPresignedRequest,
 	path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
 ) -> Result<()> {

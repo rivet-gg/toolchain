@@ -42,7 +42,7 @@ impl Opts {
 			.context("client.inspect()")?;
 
 		let game_id = match inspect.agent.as_ref().context("inspect.agent")? {
-			rivetctl::model::AuthAgent::GameCloud(game_cloud) => {
+			rivetctl::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) => {
 				game_cloud.game_id.clone().context("game_cloud.game_id")?
 			}
 			_ => bail!("invalid agent kind"),

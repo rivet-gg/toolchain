@@ -2,4 +2,4 @@ pub mod ctx;
 pub mod error;
 
 pub use ctx::Ctx;
-pub use rivet_cloud::{model, types};
+pub use rivet_cloud;
