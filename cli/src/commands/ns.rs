@@ -1,6 +1,8 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use tabled::{Table, Tabled};
+use tabled::Tabled;
+
+use crate::util::term;
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -50,7 +52,7 @@ impl SubCommand {
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
-				println!("{}", Table::new(&ns));
+				term::table(&ns);
 
 				Ok(())
 			}
