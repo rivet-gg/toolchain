@@ -9,7 +9,7 @@ pub struct Opts {}
 
 impl Opts {
 	pub async fn execute(&self, override_api_url: Option<String>) -> Result<()> {
-		// Check if file already exists
+		// Check if token already exists
 		if secrets::read_cloud_token().await?.is_some() {
 			bail!("cloud token already exists")
 		}
