@@ -24,6 +24,7 @@ pub enum SubCommand {
 		#[clap(short)]
 		version: String,
 	},
+	#[clap(alias("dash"))]
 	Dashboard {
 		namespace: String,
 	},

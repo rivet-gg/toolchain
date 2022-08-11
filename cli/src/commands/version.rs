@@ -7,9 +7,14 @@ use crate::util::{fmt, term};
 #[derive(Parser)]
 pub enum SubCommand {
 	List,
-	Get { version: String },
+	Get {
+		version: String,
+	},
 	Create,
-	Dashboard { version: String },
+	#[clap(alias("dash"))]
+	Dashboard {
+		version: String,
+	},
 }
 
 impl SubCommand {
