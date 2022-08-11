@@ -21,6 +21,7 @@ pub mod game_mode {
 
 	#[derive(Debug, Deserialize)]
 	pub struct Region {
+		#[serde(default = "Region::default_tier")]
 		pub tier: String,
 		#[serde(default)]
 		pub idle_lobbies: IdleLobbies,
@@ -83,10 +84,16 @@ pub mod game_mode {
 		}
 	}
 
+	impl Region {
+		fn default_tier() -> String {
+			"basic-1d1".into()
+		}
+	}
+
 	impl Default for Region {
 		fn default() -> Self {
 			Self {
-				tier: "basic-1d1".into(),
+				tier: Self::default_tier(),
 				idle_lobbies: Default::default(),
 			}
 		}

@@ -10,6 +10,7 @@ anyhow = "1.0"
 aws-smithy-types = "*"
 chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }
+config = "0.13.2"
 futures-util = "0.3"
 humansize = "1.1"
 ignore = "0.4"

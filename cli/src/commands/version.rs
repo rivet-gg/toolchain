@@ -11,6 +11,7 @@ pub enum SubCommand {
 		version: String,
 	},
 	Create,
+	ReadConfig,
 	#[clap(alias("dash"))]
 	Dashboard {
 		version: String,
@@ -82,6 +83,12 @@ impl SubCommand {
 			SubCommand::Create => {
 				todo!()
 			}
+			SubCommand::ReadConfig => {
+				let version = read_config().await?;
+				println!("{:#?}", version);
+
+				Ok(())
+			}
 			SubCommand::Dashboard { version } => {
 				// Check the version exists
 				ctx.client()
@@ -118,4 +125,17 @@ async fn print_version(ctx: &rivetctl::Ctx, version_id: &str) -> Result<()> {
 	println!("{version:#?}");
 
 	Ok(())
+}
+
+pub async fn read_config() -> Result<rivetctl::config::version::Version> {
+	let config = config::ConfigBuilder::<config::builder::AsyncState>::default()
+		.add_source(config::File::with_name("rivet.version"))
+		.build()
+		.await
+		.context("find version config")?;
+	let version = config
+		.try_deserialize::<rivetctl::config::version::Version>()
+		.context("deserialize version config")?;
+
+	Ok(version)
 }
