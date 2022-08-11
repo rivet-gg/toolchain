@@ -51,7 +51,7 @@ impl SubCommand {
 					namespace_id: String,
 				}
 
-				let ns = game
+				let mut ns = game
 					.namespaces()
 					.context("game.namespaces")?
 					.iter()
@@ -72,6 +72,7 @@ impl SubCommand {
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
+				ns.reverse();
 				term::table(&ns);
 
 				Ok(())
