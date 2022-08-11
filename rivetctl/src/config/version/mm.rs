@@ -16,6 +16,7 @@ pub mod game_mode {
 	pub struct GameMode {
 		pub regions: HashMap<String, Region>,
 		pub max_players: MaxPlayers,
+		#[serde(flatten)]
 		pub runtime: runtime::Runtime,
 	}
 
@@ -51,6 +52,7 @@ pub mod game_mode {
 		use serde::Deserialize;
 
 		#[derive(Debug, Deserialize)]
+		#[serde(rename_all = "snake_case", tag = "runtime")]
 		pub enum Runtime {
 			Docker(docker::Docker),
 		}
