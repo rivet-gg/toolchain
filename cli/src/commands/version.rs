@@ -7,7 +7,7 @@ use crate::util::{fmt, term};
 #[derive(Parser)]
 pub enum SubCommand {
 	List,
-	Get { version_id: String },
+	Get { version: String },
 	Create,
 	Dashboard,
 }
@@ -69,17 +69,8 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Get { version_id } => {
-				let version_res = ctx
-					.client()
-					.get_game_version_by_id()
-					.game_id(&ctx.game_id)
-					.version_id(version_id)
-					.send()
-					.await
-					.context("client.get_game_version_by_id")?;
-				let version = version_res.version().context("version_res.version")?;
-				println!("{version:#?}");
+			SubCommand::Get { version } => {
+				print_version(ctx, &version).await?;
 
 				Ok(())
 			}
@@ -91,4 +82,20 @@ impl SubCommand {
 			}
 		}
 	}
+}
+
+async fn print_version(ctx: &rivetctl::Ctx, version_id: &str) -> Result<()> {
+	let version_res = ctx
+		.client()
+		.get_game_version_by_id()
+		.game_id(&ctx.game_id)
+		.version_id(version_id)
+		.send()
+		.await
+		.context("client.get_game_version_by_id")?;
+	let version = version_res.version().context("version_res.version")?;
+
+	println!("{version:#?}");
+
+	Ok(())
 }
