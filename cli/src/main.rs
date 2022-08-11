@@ -22,8 +22,8 @@ struct Opts {
 #[derive(Parser)]
 enum SubCommand {
 	Init(init::Opts),
-	// #[clap(alias = "dash")]
-	// Dashboard,
+	#[clap(alias = "dash")]
+	Dashboard,
 	#[clap(alias = "ns")]
 	Namespace {
 		#[clap(subcommand)]
@@ -67,6 +67,12 @@ async fn main() -> Result<()> {
 	// Handle command
 	match opts.command {
 		SubCommand::Init(_) => unreachable!(),
+		SubCommand::Dashboard => {
+			println!(
+				"https://rivet.gg/developer/games/{game_id}",
+				game_id = ctx.game_id
+			);
+		}
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Build { command } => command.execute(&ctx).await?,
