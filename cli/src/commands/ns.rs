@@ -8,8 +8,11 @@ use crate::util::term;
 pub enum SubCommand {
 	List,
 	Create {
+		#[clap(long)]
 		display_name: String,
+		#[clap(long)]
 		version: String,
+		#[clap(long)]
 		name_id: String,
 	},
 	SetVersion,
@@ -69,6 +72,7 @@ impl SubCommand {
 					.send()
 					.await
 					.context("client.create_game_namespace")?;
+
 				Ok(())
 			}
 			SubCommand::SetVersion => todo!(),
