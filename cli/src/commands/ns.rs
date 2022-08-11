@@ -7,6 +7,9 @@ use crate::util::term;
 #[derive(Parser)]
 pub enum SubCommand {
 	List,
+	Get {
+		namespace_id: String,
+	},
 	Create {
 		#[clap(long)]
 		display_name: String,
@@ -56,6 +59,23 @@ impl SubCommand {
 					})
 					.collect::<Result<Vec<_>>>()?;
 				term::table(&ns);
+
+				// TODO: Version
+				// TODO: Created
+
+				Ok(())
+			}
+			SubCommand::Get { namespace_id } => {
+				let ns_res = ctx
+					.client()
+					.get_game_namespace_by_id()
+					.game_id(&ctx.game_id)
+					.namespace_id(namespace_id)
+					.send()
+					.await
+					.context("client.get_game_version_by_id")?;
+				let ns = ns_res.namespace().context("ns_res.namespace")?;
+				println!("{ns:#?}");
 
 				Ok(())
 			}
