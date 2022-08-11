@@ -13,11 +13,11 @@ use crate::util::{game, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
-	Push(SitePushOptions),
+	Push(SitePushOpts),
 }
 
 #[derive(Parser)]
-pub struct SitePushOptions {
+pub struct SitePushOpts {
 	#[clap(index(1))]
 	pub path: String,
 
