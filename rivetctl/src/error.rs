@@ -17,4 +17,12 @@ pub enum Error {
 
 	#[error("internal: {message}")]
 	Internal { message: String },
+
+	#[error("invalid agent kind")]
+	InvalidAgentKind,
+
+	#[error("inspect fail: {source}")]
+	InspectFail {
+		source: aws_smithy_client::SdkError<rivet_cloud::error::InspectError>,
+	},
 }

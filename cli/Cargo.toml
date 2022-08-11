@@ -17,6 +17,7 @@ reqwest = { version = "0.11", features = ["stream"] }
 rivetctl = { path = "../rivetctl", package = "rivetctl-lib" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+tabled = "0.8.0"
 tempfile = "3.2"
 tokio = { version = "1.6", features = ["full"] }
 tokio-util = { version = "0.6", features = ["codec"] }

@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use clap::Parser;
 use commands::*;
-use tokio::fs;
+use util::secrets;
 
 mod commands;
 mod util;
@@ -53,9 +53,9 @@ async fn main() -> Result<()> {
 	let cloud_token = if let Some(cloud_token) = opts.cloud_token {
 		cloud_token
 	} else {
-		fs::read_to_string(".rivet/cloud-token")
-			.await
-			.context("read Rivet cloud token")?
+		secrets::read_cloud_token()
+			.await?
+			.context("no Rivet cloud token found")?
 	};
 
 	// Create context
