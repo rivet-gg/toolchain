@@ -26,8 +26,6 @@ impl SubCommand {
 				let game = game_res.game.context("game_res.game")?;
 				let namespaces = game.namespaces().context("game.namespaces")?;
 
-				println!("fetched");
-
 				#[derive(Tabled)]
 				struct Version {
 					#[tabled(rename = "Name")]
