@@ -2,12 +2,17 @@ use anyhow::{bail, Context, Result};
 use clap::Parser;
 use std::io::{self, Write};
 
+use crate::util::{paths, secrets};
+
 #[derive(Parser)]
 pub struct Opts {}
 
 impl Opts {
 	pub async fn execute(&self, override_api_url: Option<String>) -> Result<()> {
-		// TODO: Check existing token
+		// Check if file already exists
+		if secrets::read_cloud_token().await?.is_some() {
+			bail!("cloud token already exists")
+		}
 
 		print!("Cloud token: ");
 		io::stdout().flush()?;
@@ -26,7 +31,7 @@ impl Opts {
 		let new_ctx = rivetctl::ctx::init(
 			override_api_url,
 			// Exclude overridden access token to check the token
-			token,
+			token.clone(),
 		)
 		.await?;
 		let inspect = new_ctx
@@ -61,11 +66,9 @@ impl Opts {
 		println!("Game ID: {game_id}");
 		println!();
 
-		// TODO: Write to secret
+		// Write the token
+		secrets::write_cloud_token(&token).await?;
 
 		Ok(())
 	}
 }
-
-// TODO: Template
-// TODO: Check .rivetctl.secret is in .gitignore
