@@ -7,6 +7,8 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0"
+aws-smithy-types = "*"
+chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }
 futures-util = "0.3"
 humansize = "1.1"
