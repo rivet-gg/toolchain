@@ -81,7 +81,7 @@ impl SubCommand {
 					size = upload::format_file_size(image_file_meta.len())?,
 				);
 				let build_res = ctx
-					.http_client
+					.client()
 					.create_game_build()
 					.game_id(&game_id)
 					.display_name(&display_name)
@@ -95,7 +95,7 @@ impl SubCommand {
 					)
 					.send()
 					.await
-					.context("http_client.create_game_build")?;
+					.context("client.create_game_build")?;
 
 				println!(
 					"\n\n> Uploading ({size})",
@@ -110,12 +110,12 @@ impl SubCommand {
 				.await?;
 
 				println!("\n\n> Completing");
-				ctx.http_client
+				ctx.client()
 					.complete_upload()
 					.upload_id(build_res.upload_id().unwrap())
 					.send()
 					.await
-					.context("http_client.complete_upload")?;
+					.context("client.complete_upload")?;
 
 				Ok(())
 			}

@@ -1,6 +1,7 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use clap::Parser;
 use commands::*;
+use tokio::fs;
 
 mod commands;
 mod util;
@@ -11,20 +12,16 @@ struct Opts {
 	#[clap(subcommand)]
 	command: SubCommand,
 
-	#[clap(long, env = "RIVETCTL_API_URL")]
+	#[clap(long, env = "RIVET_CLOUD_API_URL")]
 	api_url: Option<String>,
 
-	#[clap(long, env = "RIVETCTL_ACCESS_TOKEN")]
-	access_token: Option<String>,
+	#[clap(long, env = "RIVET_CLOUD_TOKEN")]
+	cloud_token: Option<String>,
 }
 
 #[derive(Parser)]
 enum SubCommand {
-	Create(create::Opts),
-	Auth {
-		#[clap(subcommand)]
-		command: auth::SubCommand,
-	},
+	Init(init::Opts),
 	Namespace {
 		#[clap(subcommand)]
 		command: ns::SubCommand,
@@ -47,16 +44,26 @@ enum SubCommand {
 async fn main() -> Result<()> {
 	let opts = Opts::parse();
 
-	let ctx = rivetctl::ctx::init(
-		rivetctl::config::global::read().await?,
-		opts.api_url.clone(),
-		opts.access_token.clone(),
-	)
-	.await?;
+	// Handle init command without the context
+	if let SubCommand::Init(init_opts) = &opts.command {
+		return init_opts.execute(opts.api_url).await;
+	}
 
+	// Read cloud token
+	let cloud_token = if let Some(cloud_token) = opts.cloud_token {
+		cloud_token
+	} else {
+		fs::read_to_string(".rivet/cloud-token")
+			.await
+			.context("read Rivet cloud token")?
+	};
+
+	// Create context
+	let ctx = rivetctl::ctx::init(opts.api_url.clone(), cloud_token).await?;
+
+	// Handle command
 	match opts.command {
-		SubCommand::Create(opts) => opts.execute(&ctx).await?,
-		SubCommand::Auth { command } => command.execute(&ctx).await?,
+		SubCommand::Init(_) => unreachable!(),
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Build { command } => command.execute(&ctx).await?,

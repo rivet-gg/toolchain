@@ -62,7 +62,7 @@ impl SubCommand {
 
 				// Create site
 				let site_res = ctx
-					.http_client
+					.client()
 					.create_game_cdn_site()
 					.game_id(&game_id)
 					.display_name(&display_name)
@@ -126,7 +126,7 @@ impl SubCommand {
 				}
 
 				println!("\n\n> Completing");
-				ctx.http_client
+				ctx.client()
 					.complete_upload()
 					.upload_id(site_res.upload_id().unwrap())
 					.send()
