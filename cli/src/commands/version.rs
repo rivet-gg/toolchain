@@ -9,7 +9,7 @@ pub enum SubCommand {
 	List,
 	Get { version: String },
 	Create,
-	Dashboard,
+	Dashboard { version: String },
 }
 
 impl SubCommand {
@@ -77,8 +77,23 @@ impl SubCommand {
 			SubCommand::Create => {
 				todo!()
 			}
-			SubCommand::Dashboard => {
-				todo!()
+			SubCommand::Dashboard { version } => {
+				// Check the version exists
+				ctx.client()
+					.get_game_version_by_id()
+					.game_id(&ctx.game_id)
+					.version_id(version)
+					.send()
+					.await
+					.context("client.get_game_version_by_id")?;
+
+				println!(
+					"https://rivet.gg/developer/games/{game_id}/versions/{version_id}",
+					game_id = ctx.game_id,
+					version_id = version
+				);
+
+				Ok(())
 			}
 		}
 	}

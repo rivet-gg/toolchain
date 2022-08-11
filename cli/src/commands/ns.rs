@@ -24,8 +24,9 @@ pub enum SubCommand {
 		#[clap(short)]
 		version: String,
 	},
-	Dashboard,
-	Visit,
+	Dashboard {
+		namespace: String,
+	},
 }
 
 impl SubCommand {
@@ -124,8 +125,24 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Dashboard => todo!(),
-			SubCommand::Visit => todo!(),
+			SubCommand::Dashboard { namespace } => {
+				// Check the namespace exists
+				ctx.client()
+					.get_game_namespace_by_id()
+					.game_id(&ctx.game_id)
+					.namespace_id(namespace)
+					.send()
+					.await
+					.context("client.get_game_version_by_id")?;
+
+				println!(
+					"https://rivet.gg/developer/games/{game_id}/namespaces/{ns_id}",
+					game_id = ctx.game_id,
+					ns_id = namespace
+				);
+
+				Ok(())
+			}
 		}
 	}
 }
