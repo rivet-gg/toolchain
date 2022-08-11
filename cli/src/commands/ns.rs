@@ -8,7 +8,7 @@ use crate::util::{fmt, term};
 pub enum SubCommand {
 	List,
 	Get {
-		namespace_id: String,
+		namespace: String,
 	},
 	Create {
 		#[clap(long)]
@@ -18,7 +18,12 @@ pub enum SubCommand {
 		#[clap(long)]
 		name_id: String,
 	},
-	SetVersion,
+	SetVersion {
+		#[clap(long, short, alias("ns"))]
+		namespace: String,
+		#[clap(short)]
+		version: String,
+	},
 	Dashboard,
 	Visit,
 }
@@ -77,17 +82,8 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Get { namespace_id } => {
-				let ns_res = ctx
-					.client()
-					.get_game_namespace_by_id()
-					.game_id(&ctx.game_id)
-					.namespace_id(namespace_id)
-					.send()
-					.await
-					.context("client.get_game_version_by_id")?;
-				let ns = ns_res.namespace().context("ns_res.namespace")?;
-				println!("{ns:#?}");
+			SubCommand::Get { namespace } => {
+				print_ns(ctx, &namespace).await?;
 
 				Ok(())
 			}
@@ -96,7 +92,8 @@ impl SubCommand {
 				version,
 				name_id,
 			} => {
-				ctx.client()
+				let create_res = ctx
+					.client()
 					.create_game_namespace()
 					.game_id(&ctx.game_id)
 					.display_name(display_name)
@@ -105,12 +102,46 @@ impl SubCommand {
 					.send()
 					.await
 					.context("client.create_game_namespace")?;
+				let ns_id = create_res
+					.namespace_id()
+					.context("create_res.namespace_id")?;
+
+				print_ns(ctx, &ns_id).await?;
 
 				Ok(())
 			}
-			SubCommand::SetVersion => todo!(),
+			SubCommand::SetVersion { namespace, version } => {
+				ctx.client()
+					.update_game_namespace_version()
+					.game_id(&ctx.game_id)
+					.namespace_id(namespace)
+					.version_id(version)
+					.send()
+					.await
+					.context("client.update_game_namespace_version")?;
+
+				print_ns(ctx, &namespace).await?;
+
+				Ok(())
+			}
 			SubCommand::Dashboard => todo!(),
 			SubCommand::Visit => todo!(),
 		}
 	}
+}
+
+async fn print_ns(ctx: &rivetctl::Ctx, namespace_id: &str) -> Result<()> {
+	let ns_res = ctx
+		.client()
+		.get_game_namespace_by_id()
+		.game_id(&ctx.game_id)
+		.namespace_id(namespace_id)
+		.send()
+		.await
+		.context("client.get_game_version_by_id")?;
+	let ns = ns_res.namespace().context("ns_res.namespace")?;
+
+	println!("{ns:#?}");
+
+	Ok(())
 }
