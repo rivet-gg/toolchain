@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{Context, Error, Result};
 use clap::Parser;
 use tabled::Tabled;
 
@@ -11,7 +11,10 @@ pub enum SubCommand {
 		version: String,
 	},
 	Create,
-	ReadConfig,
+	ReadConfig {
+		#[clap(long = "override", short)]
+		overrides: Vec<String>,
+	},
 	#[clap(alias("dash"))]
 	Dashboard {
 		version: String,
@@ -83,8 +86,24 @@ impl SubCommand {
 			SubCommand::Create => {
 				todo!()
 			}
-			SubCommand::ReadConfig => {
-				let version = read_config().await?;
+			SubCommand::ReadConfig { overrides } => {
+				// Parse overrides to JSON
+				let overrides = overrides
+					.into_iter()
+					.map(|value| {
+						value
+							.split_once("=")
+							.context("override needs equal")
+							.and_then(|(key, value)| {
+								let value_json = serde_json::from_str::<serde_json::Value>(value)
+									.context("invalid override value json")?;
+								Ok((key.to_string(), value_json))
+							})
+					})
+					.collect::<Result<Vec<_>, Error>>()?;
+
+				// Read version
+				let version = read_config(overrides).await?;
 				println!("{:#?}", version);
 
 				let game_res = ctx
@@ -139,9 +158,37 @@ async fn print_version(ctx: &rivetctl::Ctx, version_id: &str) -> Result<()> {
 	Ok(())
 }
 
-pub async fn read_config() -> Result<rivetctl::config::version::Version> {
-	let config = config::ConfigBuilder::<config::builder::AsyncState>::default()
-		.add_source(config::File::with_name("rivet.version"))
+pub async fn read_config(
+	overrides: Vec<(String, serde_json::Value)>,
+) -> Result<rivetctl::config::version::Version> {
+	// Build base config
+	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
+		.add_source(config::File::with_name("rivet.version"));
+
+	// Apply overrides
+	for (k, v) in overrides {
+		#[derive(serde::Serialize)]
+		struct Empty {
+			root: serde_json::Value,
+		}
+
+		// Parse the JSON data to a config Value that we can pass as an
+		// override.
+		//
+		// We have to embed the value in `Empty` because the value can't be at
+		// the root of the config.
+		let config_value = config::Config::try_from(&Empty { root: v })
+			.context("read override value to config value")?
+			.get::<config::Value>("root")?;
+
+		// Add the override
+		config_builder = config_builder
+			.set_override(k, config_value)
+			.context("set override")?;
+	}
+
+	// Read config
+	let config = config_builder
 		.build()
 		.await
 		.context("find version config")?;
