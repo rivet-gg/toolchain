@@ -10,7 +10,7 @@ pub struct Cdn {
 impl Cdn {
 	pub fn build_model(
 		self,
-		game: &rivet_cloud::model::GameFull,
+		_game: &rivet_cloud::model::GameFull,
 	) -> Result<rivet_cloud::model::CdnVersionConfig, Error> {
 		use rivet_cloud::model::*;
 

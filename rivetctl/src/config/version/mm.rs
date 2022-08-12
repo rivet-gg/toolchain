@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::{collections::HashMap, convert::TryInto};
+use std::collections::HashMap;
 
 use crate::error::Error;
 
@@ -106,7 +106,7 @@ pub mod game_mode {
 		impl Runtime {
 			pub fn build_model(
 				self,
-				game: &rivet_cloud::model::GameFull,
+				_game: &rivet_cloud::model::GameFull,
 			) -> Result<rivet_cloud::model::LobbyGroupRuntime, Error> {
 				use rivet_cloud::model::*;
 
