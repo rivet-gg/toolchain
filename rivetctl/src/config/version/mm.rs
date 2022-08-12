@@ -1,5 +1,7 @@
 use serde::Deserialize;
-use std::collections::HashMap;
+use std::{collections::HashMap, convert::TryInto};
+
+use crate::error::Error;
 
 #[derive(Debug, Deserialize)]
 pub struct Matchmaker {
@@ -10,23 +12,28 @@ pub struct Matchmaker {
 
 pub mod game_mode {
 	use serde::Deserialize;
-	use std::collections::HashMap;
 
 	#[derive(Debug, Deserialize)]
 	pub struct GameMode {
-		pub regions: HashMap<String, Region>,
+		// pub regions: HashMap<String, Region>,
 		pub max_players: MaxPlayers,
 		#[serde(flatten)]
 		pub runtime: runtime::Runtime,
-	}
 
-	#[derive(Debug, Deserialize)]
-	pub struct Region {
-		#[serde(default = "Region::default_tier")]
+		// Region overrides
+		#[serde(default = "GameMode::default_tier")]
 		pub tier: String,
 		#[serde(default)]
 		pub idle_lobbies: IdleLobbies,
 	}
+
+	// #[derive(Debug, Deserialize)]
+	// pub struct Region {
+	// 	#[serde(default = "Region::default_tier")]
+	// 	pub tier: String,
+	// 	#[serde(default)]
+	// 	pub idle_lobbies: IdleLobbies,
+	// }
 
 	#[derive(Debug, Deserialize)]
 	pub struct IdleLobbies {
@@ -51,8 +58,10 @@ pub mod game_mode {
 	pub mod runtime {
 		use serde::Deserialize;
 
+		use crate::error::Error;
+
 		#[derive(Debug, Deserialize)]
-		#[serde(rename_all = "snake_case", tag = "runtime")]
+		#[serde(rename_all = "snake_case")]
 		pub enum Runtime {
 			Docker(docker::Docker),
 		}
@@ -83,27 +92,110 @@ pub mod game_mode {
 				Http,
 				Https,
 			}
+
+			impl ProxyProtocol {
+				pub fn build_model(self) -> rivet_cloud::model::ProxyProtocol {
+					match self {
+						ProxyProtocol::Http => rivet_cloud::model::ProxyProtocol::Http,
+						ProxyProtocol::Https => rivet_cloud::model::ProxyProtocol::Https,
+					}
+				}
+			}
+		}
+
+		impl Runtime {
+			pub fn build_model(
+				self,
+				game: &rivet_cloud::model::GameFull,
+			) -> Result<rivet_cloud::model::LobbyGroupRuntime, Error> {
+				use rivet_cloud::model::*;
+
+				let runtime = match self {
+					Runtime::Docker(docker) => LobbyGroupRuntime::Docker(
+						LobbyGroupRuntimeDocker::builder()
+							.build_id(&docker.build)
+							.set_args(Some(docker.args))
+							.set_ports(Some(
+								docker
+									.ports
+									.into_iter()
+									.map(|(label, port)| {
+										LobbyGroupRuntimeDockerPort::builder()
+											.label(label)
+											.target_port(port.target as i32)
+											.proxy_protocol(port.proto.build_model())
+											.build()
+									})
+									.collect(),
+							))
+							.set_env_vars(Some(
+								docker
+									.env
+									.into_iter()
+									.map(|(key, value)| {
+										LobbyGroupRuntimeDockerEnvVar::builder()
+											.key(key)
+											.value(value)
+											.build()
+									})
+									.collect(),
+							))
+							.build(),
+					),
+				};
+
+				Ok(runtime)
+			}
 		}
 	}
 
-	impl Region {
+	impl GameMode {
 		fn default_tier() -> String {
 			"basic-1d1".into()
 		}
 	}
 
-	impl Default for Region {
-		fn default() -> Self {
-			Self {
-				tier: Self::default_tier(),
-				idle_lobbies: Default::default(),
-			}
-		}
-	}
+	// impl Region {
+	// 	fn default_tier() -> String {
+	// 		"basic-1d1".into()
+	// 	}
+	// }
+
+	// impl Default for Region {
+	// 	fn default() -> Self {
+	// 		Self {
+	// 			tier: Self::default_tier(),
+	// 			idle_lobbies: Default::default(),
+	// 		}
+	// 	}
+	// }
 
 	impl Default for IdleLobbies {
 		fn default() -> Self {
 			Self { min: 0, max: 1 }
+		}
+	}
+
+	impl MaxPlayers {
+		pub fn normal(&self) -> u32 {
+			match *self {
+				MaxPlayers::Universal(x) => x,
+				MaxPlayers::Split(MaxPlayersSplit { normal, .. }) => normal,
+			}
+		}
+
+		pub fn direct(&self) -> u32 {
+			match *self {
+				MaxPlayers::Universal(x) => x,
+				MaxPlayers::Split(MaxPlayersSplit { direct, .. }) => direct,
+			}
+		}
+
+		pub fn party(&self) -> u32 {
+			match *self {
+				MaxPlayers::Universal(x) => x,
+				MaxPlayers::Split(MaxPlayersSplit { party, .. }) => party,
+			}
 		}
 	}
 }
@@ -129,5 +221,76 @@ pub mod captcha {
 		Moderate,
 		Difficult,
 		AlwaysOn,
+	}
+}
+
+impl Matchmaker {
+	pub fn build_model(
+		self,
+		game: &rivet_cloud::model::GameFull,
+	) -> Result<rivet_cloud::model::MatchmakerVersionConfig, Error> {
+		use rivet_cloud::model::*;
+
+		let available_regions = game
+			.available_regions()
+			.ok_or_else(|| Error::internal("game.available_regions"))?;
+
+		let lobby_groups =
+			self.game_modes
+				.into_iter()
+				.map(|(game_mode_name_id, game_mode)| {
+					// TODO: Add region-specific config
+
+					let regions =
+						available_regions
+							.iter()
+							.map(|region_summary| {
+								Ok(LobbyGroupRegion::builder()
+									.region_id(region_summary.region_id().ok_or_else(|| {
+										Error::internal("region_summary.region_id")
+									})?)
+									.tier_name_id(&game_mode.tier)
+									.idle_lobbies(
+										IdleLobbiesConfig::builder()
+											.min_idle_lobbies(game_mode.idle_lobbies.min as i32)
+											.max_idle_lobbies(game_mode.idle_lobbies.max as i32)
+											.build(),
+									)
+									.build())
+							})
+							.collect::<Result<Vec<_>, Error>>()?;
+
+					Ok(LobbyGroup::builder()
+						.name_id(&game_mode_name_id)
+						.set_regions(Some(regions))
+						.max_players_normal(game_mode.max_players.normal() as i32)
+						.max_players_direct(game_mode.max_players.direct() as i32)
+						.max_players_party(game_mode.max_players.party() as i32)
+						.runtime(game_mode.runtime.build_model(game)?)
+						.build())
+				})
+				.collect::<Result<Vec<_>, Error>>()?;
+
+		let captcha = self.captcha.map(|captcha| {
+			MatchmakerCaptcha::builder()
+				.set_hcaptcha(captcha.hcaptcha.map(|hcaptcha| {
+					MatchmakerCaptchaHcaptcha::builder()
+						.level(match hcaptcha.level {
+							captcha::Level::Easy => CaptchaLevel::Easy,
+							captcha::Level::Moderate => CaptchaLevel::Moderate,
+							captcha::Level::Difficult => CaptchaLevel::Difficult,
+							captcha::Level::AlwaysOn => CaptchaLevel::AlwaysOn,
+						})
+						.build()
+				}))
+				.requests_before_reverify(captcha.requests_before_reverify as i32)
+				.verification_ttl(captcha.verification_ttl as i64)
+				.build()
+		});
+
+		Ok(MatchmakerVersionConfig::builder()
+			.set_lobby_groups(Some(lobby_groups))
+			.set_captcha(captcha)
+			.build())
 	}
 }

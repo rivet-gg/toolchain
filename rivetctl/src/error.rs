@@ -25,4 +25,22 @@ pub enum Error {
 	InspectFail {
 		source: aws_smithy_client::SdkError<rivet_cloud::error::InspectError>,
 	},
+
+	#[error("config {key}: {message}")]
+	Config { key: String, message: String },
+}
+
+impl Error {
+	pub fn internal(message: impl ToString) -> Error {
+		Error::Internal {
+			message: message.to_string(),
+		}
+	}
+
+	pub fn config(key: impl ToString, message: impl ToString) -> Error {
+		Error::Config {
+			key: key.to_string(),
+			message: message.to_string(),
+		}
+	}
 }

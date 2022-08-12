@@ -1,5 +1,7 @@
 use serde::Deserialize;
 
+use crate::error::Error;
+
 pub mod cdn;
 pub mod kv;
 pub mod mm;
@@ -12,4 +14,19 @@ pub struct Version {
 	pub matchmaker: Option<mm::Matchmaker>,
 	#[serde(default)]
 	pub kv: Option<kv::Kv>,
+}
+
+impl Version {
+	pub fn build_model(
+		self,
+		game: &rivet_cloud::model::GameFull,
+	) -> Result<rivet_cloud::model::CloudVersionConfig, Error> {
+		use rivet_cloud::model::*;
+
+		Ok(CloudVersionConfig::builder()
+			.set_cdn(self.cdn.map(|x| x.build_model(game)).transpose()?)
+			.set_matchmaker(self.matchmaker.map(|x| x.build_model(game)).transpose()?)
+			.set_kv(self.kv.map(|x| x.build_model(game)).transpose()?)
+			.build())
+	}
 }

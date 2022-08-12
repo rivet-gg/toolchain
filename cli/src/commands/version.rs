@@ -87,6 +87,18 @@ impl SubCommand {
 				let version = read_config().await?;
 				println!("{:#?}", version);
 
+				let game_res = ctx
+					.client()
+					.get_game_by_id()
+					.game_id(&ctx.game_id)
+					.send()
+					.await
+					.context("client.get_game_by_id")?;
+				let game = game_res.game().context("game_res.game")?;
+
+				let model = version.build_model(game)?;
+				println!("{:#?}", model);
+
 				Ok(())
 			}
 			SubCommand::Dashboard { version } => {
