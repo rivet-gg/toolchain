@@ -8,6 +8,17 @@ pub struct Matchmaker {
 	pub game_modes: HashMap<String, game_mode::GameMode>,
 	#[serde(default)]
 	pub captcha: Option<captcha::Captcha>,
+
+	// Runtime overrides
+	#[serde(default)]
+	docker: Option<DockerOverride>,
+}
+
+// TODO: Remove clone
+#[derive(Debug, Deserialize, Clone)]
+pub struct DockerOverride {
+	#[serde(default)]
+	build: Option<String>,
 }
 
 pub mod game_mode {
@@ -58,7 +69,7 @@ pub mod game_mode {
 	pub mod runtime {
 		use serde::Deserialize;
 
-		use crate::error::Error;
+		use crate::{config::version::mm::DockerOverride, error::Error};
 
 		#[derive(Debug, Deserialize)]
 		#[serde(rename_all = "snake_case")]
@@ -73,7 +84,7 @@ pub mod game_mode {
 
 			#[derive(Debug, Deserialize)]
 			pub struct Docker {
-				pub build: String,
+				pub build: Option<String>,
 				pub ports: HashMap<String, Port>,
 				#[serde(default)]
 				pub args: Vec<String>,
@@ -107,13 +118,27 @@ pub mod game_mode {
 			pub fn build_model(
 				self,
 				_game: &rivet_cloud::model::GameFull,
+				docker_override: &Option<DockerOverride>,
 			) -> Result<rivet_cloud::model::LobbyGroupRuntime, Error> {
 				use rivet_cloud::model::*;
 
 				let runtime = match self {
 					Runtime::Docker(docker) => LobbyGroupRuntime::Docker(
 						LobbyGroupRuntimeDocker::builder()
-							.build_id(&docker.build)
+							.build_id(
+								docker
+									.build
+									.clone()
+									.or_else(|| {
+										docker_override.as_ref().and_then(|x| x.build.clone())
+									})
+									.ok_or_else(|| {
+										Error::config(
+											"matchmaker.game_mode.*.docker.build",
+											"missing build",
+										)
+									})?,
+							)
 							.set_args(Some(docker.args))
 							.set_ports(Some(
 								docker
@@ -224,6 +249,7 @@ pub mod captcha {
 	}
 }
 
+// TODO: Don't consume self
 impl Matchmaker {
 	pub fn build_model(
 		self,
@@ -234,6 +260,8 @@ impl Matchmaker {
 		let available_regions = game
 			.available_regions()
 			.ok_or_else(|| Error::internal("game.available_regions"))?;
+
+		let docker_override = self.docker.clone();
 
 		let lobby_groups =
 			self.game_modes
@@ -260,13 +288,15 @@ impl Matchmaker {
 							})
 							.collect::<Result<Vec<_>, Error>>()?;
 
+					let runtime = game_mode.runtime.build_model(game, &docker_override)?;
+
 					Ok(LobbyGroup::builder()
 						.name_id(&game_mode_name_id)
 						.set_regions(Some(regions))
 						.max_players_normal(game_mode.max_players.normal() as i32)
 						.max_players_direct(game_mode.max_players.direct() as i32)
 						.max_players_party(game_mode.max_players.party() as i32)
-						.runtime(game_mode.runtime.build_model(game)?)
+						.runtime(runtime)
 						.build())
 				})
 				.collect::<Result<Vec<_>, Error>>()?;
