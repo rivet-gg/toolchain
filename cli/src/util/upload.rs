@@ -1,8 +1,11 @@
 use anyhow::{bail, Context, Result};
+use futures_util::stream::StreamExt;
 use std::{
 	path::{Path, PathBuf},
 	time::{Duration, Instant},
 };
+use tokio::fs::File;
+use tokio_util::io::ReaderStream;
 
 /// Prepared file that will be uploaded to S3.
 #[derive(Clone)]
@@ -80,9 +83,6 @@ pub async fn upload_file(
 	path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
 ) -> Result<()> {
-	use tokio::fs::File;
-	use tokio_util::codec::{BytesCodec, FramedRead};
-
 	let content_type = content_type.map(|x| x.to_string());
 
 	// Try the upload multiple times since DigitalOcean spaces is incredibly
@@ -94,17 +94,47 @@ pub async fn upload_file(
 		// Read file
 		let file = File::open(path.as_ref()).await?;
 		let file_meta = file.metadata().await?;
+		let path = presigned_req.path().unwrap().to_owned();
+		let total_size = format_file_size(file_meta.len())?;
 
 		println!(
-			"  * {path}: Uploading {size} [{mime}]",
-			path = presigned_req.path().unwrap(),
-			size = format_file_size(file_meta.len())?,
+			"  * {path}: Uploading {total_size} [{mime}]",
 			mime = content_type.clone().unwrap_or_default(),
 		);
 
-		// Create body
-		let stream = FramedRead::new(file, BytesCodec::new());
-		let body = reqwest::Body::wrap_stream(stream);
+		// Create upload stream with progress
+		let mut reader_stream = ReaderStream::new(file);
+
+		let mut uploaded = 0usize;
+		let file_len = file_meta.len();
+
+		let start = Instant::now();
+		let mut last_log = Instant::now();
+		let log_freq = Duration::from_secs(1);
+
+		let async_stream = async_stream::stream! {
+			while let Some(chunk) = reader_stream.next().await {
+				if let Ok(chunk) = &chunk {
+					uploaded += chunk.len();
+
+					let last_log_duration = last_log.elapsed();
+					if last_log_duration >= log_freq {
+						last_log = Instant::now();
+						let duration = start.elapsed();
+						let rate = (uploaded as f64 / duration.as_secs_f64());
+
+						let uploaded_size = format_file_size(uploaded as u64).unwrap_or_else(|_| "?".to_string());
+						let upload_rate = format_file_size(rate as u64).unwrap_or_else(|_| "?".to_string());
+						let progress = (uploaded as f64 / file_len as f64) * 100.;
+						println!("    {path}: {uploaded_size}/{total_size} [{progress:.1}%] ({upload_rate}/s)");
+					}
+				}
+
+				yield chunk;
+			}
+		};
+
+		let body = reqwest::Body::wrap_stream(async_stream);
 
 		// Upload file
 		let start = Instant::now();
@@ -140,7 +170,7 @@ pub async fn upload_file(
 	};
 
 	println!(
-		"  * {}: Finished in {:.3}s",
+		"    {}: Finished in {:.3}s",
 		presigned_req.path().unwrap(),
 		upload_time.as_secs_f64()
 	);

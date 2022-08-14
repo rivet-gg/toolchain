@@ -7,6 +7,7 @@ license = "MIT"
 
 [dependencies]
 anyhow = "1.0"
+async-stream = "0.3.3"
 aws-smithy-types = "*"
 chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }
