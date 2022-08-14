@@ -120,13 +120,21 @@ pub async fn upload_file(
 					let last_log_duration = last_log.elapsed();
 					if last_log_duration >= log_freq {
 						last_log = Instant::now();
+
+						let progress = (uploaded as f64 / file_len as f64) * 100.;
+
 						let duration = start.elapsed();
 						let rate = (uploaded as f64 / duration.as_secs_f64());
 
+						let time_remaining_total = ((file_len as f64 - uploaded as f64) / rate).ceil() as usize;
+						let time_remaining_secs = time_remaining_total % 60;
+						let time_remaining_min = (time_remaining_total / 60) % 60;
+						let time_remaining_hr = time_remaining_total / 60 / 60;
+
 						let uploaded_size = format_file_size(uploaded as u64).unwrap_or_else(|_| "?".to_string());
 						let upload_rate = format_file_size(rate as u64).unwrap_or_else(|_| "?".to_string());
-						let progress = (uploaded as f64 / file_len as f64) * 100.;
-						println!("    {path}: {uploaded_size}/{total_size} [{progress:.1}%] ({upload_rate}/s)");
+
+						println!("    {path}: {uploaded_size}/{total_size} [{progress:.1}%] ({upload_rate}/s) [{time_remaining_hr:0>2}:{time_remaining_min:0>2}:{time_remaining_secs:0>2}]");
 					}
 				}
 
