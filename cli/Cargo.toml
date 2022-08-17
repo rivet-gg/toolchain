@@ -1,5 +1,5 @@
 [package]
-name = "rivetctl"
+name = "rivet"
 version = "0.0.1"
 authors = ["Nathan Flurry <developer@nathanflurry.com>"]
 edition = "2018"
@@ -18,7 +18,7 @@ ignore = "0.4"
 mime_guess = "2.0"
 rand = "0.8"
 reqwest = { version = "0.11", features = ["stream"] }
-rivetctl = { path = "../rivetctl", package = "rivetctl-lib" }
+rivetctl = { path = "../rivetctl" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tabled = "0.8.0"
