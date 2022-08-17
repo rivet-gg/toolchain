@@ -12,11 +12,11 @@ pub enum SubCommand {
 	},
 	Create {
 		#[clap(long)]
+		name_id: String,
+		#[clap(long)]
 		display_name: String,
 		#[clap(long)]
 		version: String,
-		#[clap(long)]
-		name_id: String,
 	},
 	SetVersion {
 		#[clap(long, short, alias = "ns")]
