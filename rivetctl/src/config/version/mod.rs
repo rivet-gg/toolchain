@@ -18,15 +18,20 @@ pub struct Version {
 
 impl Version {
 	pub fn build_model(
-		self,
+		&self,
 		game: &rivet_cloud::model::GameFull,
 	) -> Result<rivet_cloud::model::CloudVersionConfig, Error> {
 		use rivet_cloud::model::*;
 
 		Ok(CloudVersionConfig::builder()
-			.set_cdn(self.cdn.map(|x| x.build_model(game)).transpose()?)
-			.set_matchmaker(self.matchmaker.map(|x| x.build_model(game)).transpose()?)
-			.set_kv(self.kv.map(|x| x.build_model(game)).transpose()?)
+			.set_cdn(self.cdn.as_ref().map(|x| x.build_model(game)).transpose()?)
+			.set_matchmaker(
+				self.matchmaker
+					.as_ref()
+					.map(|x| x.build_model(game))
+					.transpose()?,
+			)
+			.set_kv(self.kv.as_ref().map(|x| x.build_model(game)).transpose()?)
 			.build())
 	}
 }

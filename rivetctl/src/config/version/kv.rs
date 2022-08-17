@@ -7,7 +7,7 @@ pub struct Kv {}
 
 impl Kv {
 	pub fn build_model(
-		self,
+		&self,
 		_game: &rivet_cloud::model::GameFull,
 	) -> Result<rivet_cloud::model::KvVersionConfig, Error> {
 		use rivet_cloud::model::*;

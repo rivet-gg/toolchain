@@ -92,6 +92,7 @@ impl SubCommand {
 				println!("=== User Config ===");
 				println!("{:#?}", version);
 
+				let model = build_rivet_config(ctx, &version).await?;
 				println!("=== Rivet Config ===");
 				println!("{:#?}", model);
 

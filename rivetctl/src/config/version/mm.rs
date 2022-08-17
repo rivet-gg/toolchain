@@ -105,7 +105,7 @@ pub mod game_mode {
 			}
 
 			impl ProxyProtocol {
-				pub fn build_model(self) -> rivet_cloud::model::ProxyProtocol {
+				pub fn build_model(&self) -> rivet_cloud::model::ProxyProtocol {
 					match self {
 						ProxyProtocol::Http => rivet_cloud::model::ProxyProtocol::Http,
 						ProxyProtocol::Https => rivet_cloud::model::ProxyProtocol::Https,
@@ -116,7 +116,7 @@ pub mod game_mode {
 
 		impl Runtime {
 			pub fn build_model(
-				self,
+				&self,
 				_game: &rivet_cloud::model::GameFull,
 				docker_override: &Option<DockerOverride>,
 			) -> Result<rivet_cloud::model::LobbyGroupRuntime, Error> {
@@ -139,11 +139,11 @@ pub mod game_mode {
 										)
 									})?,
 							)
-							.set_args(Some(docker.args))
+							.set_args(Some(docker.args.clone()))
 							.set_ports(Some(
 								docker
 									.ports
-									.into_iter()
+									.iter()
 									.map(|(label, port)| {
 										LobbyGroupRuntimeDockerPort::builder()
 											.label(label)
@@ -156,7 +156,7 @@ pub mod game_mode {
 							.set_env_vars(Some(
 								docker
 									.env
-									.into_iter()
+									.iter()
 									.map(|(key, value)| {
 										LobbyGroupRuntimeDockerEnvVar::builder()
 											.key(key)
@@ -252,7 +252,7 @@ pub mod captcha {
 // TODO: Don't consume self
 impl Matchmaker {
 	pub fn build_model(
-		self,
+		&self,
 		game: &rivet_cloud::model::GameFull,
 	) -> Result<rivet_cloud::model::MatchmakerVersionConfig, Error> {
 		use rivet_cloud::model::*;
@@ -261,11 +261,9 @@ impl Matchmaker {
 			.available_regions()
 			.ok_or_else(|| Error::internal("game.available_regions"))?;
 
-		let docker_override = self.docker.clone();
-
 		let lobby_groups =
 			self.game_modes
-				.into_iter()
+				.iter()
 				.map(|(game_mode_name_id, game_mode)| {
 					// TODO: Add region-specific config
 
@@ -288,10 +286,10 @@ impl Matchmaker {
 							})
 							.collect::<Result<Vec<_>, Error>>()?;
 
-					let runtime = game_mode.runtime.build_model(game, &docker_override)?;
+					let runtime = game_mode.runtime.build_model(game, &self.docker)?;
 
 					Ok(LobbyGroup::builder()
-						.name_id(&game_mode_name_id)
+						.name_id(game_mode_name_id)
 						.set_regions(Some(regions))
 						.max_players_normal(game_mode.max_players.normal() as i32)
 						.max_players_direct(game_mode.max_players.direct() as i32)
@@ -301,9 +299,9 @@ impl Matchmaker {
 				})
 				.collect::<Result<Vec<_>, Error>>()?;
 
-		let captcha = self.captcha.map(|captcha| {
+		let captcha = self.captcha.as_ref().map(|captcha| {
 			MatchmakerCaptcha::builder()
-				.set_hcaptcha(captcha.hcaptcha.map(|hcaptcha| {
+				.set_hcaptcha(captcha.hcaptcha.as_ref().map(|hcaptcha| {
 					MatchmakerCaptchaHcaptcha::builder()
 						.level(match hcaptcha.level {
 							captcha::Level::Easy => CaptchaLevel::Easy,
