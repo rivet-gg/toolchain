@@ -1,8 +1,9 @@
 use anyhow::{Context, Error, Result};
 use clap::Parser;
+use serde::Serialize;
 use tabled::Tabled;
 
-use crate::util::{fmt, term};
+use crate::util::{fmt, struct_fmt, term};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -10,7 +11,14 @@ pub enum SubCommand {
 	Get {
 		version: String,
 	},
-	Create,
+	Create {
+		#[clap(index = 1)]
+		display_name: String,
+		#[clap(long = "override", short)]
+		overrides: Vec<String>,
+		#[clap(long, value_parser)]
+		format: Option<struct_fmt::Format>,
+	},
 	ReadConfig {
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
@@ -83,18 +91,45 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Create => {
-				todo!()
+			SubCommand::Create {
+				display_name,
+				overrides,
+				format,
+			} => {
+				// Parse config
+				let overrides = parse_config_override_args(overrides)?;
+				let user_config = read_user_config(overrides).await?;
+				let rivet_config = build_rivet_config(ctx, &user_config).await?;
+
+				// Create version
+				let version_res = ctx
+					.client()
+					.create_game_version()
+					.game_id(&ctx.game_id)
+					.display_name(display_name)
+					.config(rivet_config)
+					.send()
+					.await
+					.context("client.create_game_version")?;
+				let version_id = version_res.version_id().context("version_res.version_id")?;
+
+				#[derive(Serialize)]
+				struct Output<'a> {
+					version_id: &'a str,
+				}
+				struct_fmt::print_opt(format, &Output { version_id })?;
+
+				Ok(())
 			}
 			SubCommand::ReadConfig { overrides } => {
-				let overrides = parse_override_args(overrides)?;
-				let version = read_config(overrides).await?;
+				let overrides = parse_config_override_args(overrides)?;
+				let user_config = read_user_config(overrides).await?;
 				println!("=== User Config ===");
-				println!("{:#?}", version);
+				println!("{:#?}", user_config);
 
-				let model = build_rivet_config(ctx, &version).await?;
+				let rivet_config = build_rivet_config(ctx, &user_config).await?;
 				println!("=== Rivet Config ===");
-				println!("{:#?}", model);
+				println!("{:#?}", rivet_config);
 
 				Ok(())
 			}
@@ -136,7 +171,9 @@ async fn print_version(ctx: &rivetctl::Ctx, version_id: &str) -> Result<()> {
 	Ok(())
 }
 
-pub fn parse_override_args(overrides: &[String]) -> Result<Vec<(String, serde_json::Value)>> {
+pub fn parse_config_override_args(
+	overrides: &[String],
+) -> Result<Vec<(String, serde_json::Value)>> {
 	overrides
 		.iter()
 		.map(|value| {
@@ -152,7 +189,7 @@ pub fn parse_override_args(overrides: &[String]) -> Result<Vec<(String, serde_js
 		.collect::<Result<Vec<_>, Error>>()
 }
 
-pub async fn read_config(
+pub async fn read_user_config(
 	overrides: Vec<(String, serde_json::Value)>,
 ) -> Result<rivetctl::config::version::Version> {
 	// Build base config
