@@ -14,6 +14,6 @@ impl Cdn {
 	) -> Result<rivet_cloud::model::CdnVersionConfig, Error> {
 		use rivet_cloud::model::*;
 
-		Ok(CdnVersionConfig::builder().build())
+		Ok(CdnVersionConfig::builder().site_id(&self.site).build())
 	}
 }
