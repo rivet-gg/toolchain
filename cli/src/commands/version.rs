@@ -8,21 +8,27 @@ use crate::util::{fmt, struct_fmt, term};
 #[derive(Parser)]
 pub enum SubCommand {
 	List,
+
 	Get {
 		version: String,
 	},
+
 	Create {
 		#[clap(index = 1)]
 		display_name: String,
+
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
+
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
 	},
+
 	ReadConfig {
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
 	},
+
 	#[clap(alias("dash"))]
 	Dashboard {
 		version: String,

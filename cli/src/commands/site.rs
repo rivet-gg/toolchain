@@ -1,6 +1,7 @@
 use anyhow::{Context, Result};
 use clap::Parser;
 use futures_util::{StreamExt, TryStreamExt};
+use serde::Serialize;
 use std::{
 	env,
 	sync::{
@@ -9,7 +10,7 @@ use std::{
 	},
 };
 
-use crate::util::{game, upload};
+use crate::util::{game, struct_fmt, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -19,10 +20,13 @@ pub enum SubCommand {
 #[derive(Parser)]
 pub struct SitePushOpts {
 	#[clap(index = 1)]
-	pub path: String,
+	path: String,
 
 	#[clap(long)]
-	pub name: Option<String>,
+	name: Option<String>,
+
+	#[clap(long, value_parser)]
+	format: Option<struct_fmt::Format>,
 }
 
 impl SubCommand {
@@ -42,8 +46,8 @@ impl SubCommand {
 						.map(str::to_owned)
 						.unwrap_or_else(|| "Site".to_owned())
 				});
-				println!("\n\n> Creating site \"{}\"", display_name);
-				println!("  * Upload path: {}", upload_path.display());
+				eprintln!("\n\n> Creating site \"{}\"", display_name);
+				eprintln!("  * Upload path: {}", upload_path.display());
 
 				// Index the directory
 				let files = {
@@ -54,7 +58,7 @@ impl SubCommand {
 				let total_len = files
 					.iter()
 					.fold(0, |acc, x| acc + x.prepared.content_length().unwrap());
-				println!(
+				eprintln!(
 					"  * Found {count} files ({size})",
 					count = files.len(),
 					size = upload::format_file_size(total_len as u64)?,
@@ -70,8 +74,9 @@ impl SubCommand {
 					.send()
 					.await
 					.context("http_client.create_game_cdn_site")?;
+				let site_id = site_res.site_id().context("site_res.site_id")?;
 
-				println!("\n\n> Uploading");
+				eprintln!("\n\n> Uploading");
 				{
 					let counter = Arc::new(AtomicUsize::new(0));
 					let counter_bytes = Arc::new(AtomicU64::new(0));
@@ -110,7 +115,7 @@ impl SubCommand {
 										Ordering::SeqCst,
 									) + file.prepared.content_length().unwrap()
 										as u64;
-									println!(
+									eprintln!(
 										"    {}/{} files ({}/{})",
 										progress,
 										total,
@@ -125,13 +130,19 @@ impl SubCommand {
 						.await?;
 				}
 
-				println!("\n\n> Completing");
+				eprintln!("\n\n> Completing");
 				ctx.client()
 					.complete_upload()
 					.upload_id(site_res.upload_id().unwrap())
 					.send()
 					.await
 					.context("http_client.complete_upload")?;
+
+				#[derive(Serialize)]
+				struct Output<'a> {
+					site_id: &'a str,
+				}
+				struct_fmt::print_opt(&push_opts.format, &Output { site_id })?;
 
 				Ok(())
 			}

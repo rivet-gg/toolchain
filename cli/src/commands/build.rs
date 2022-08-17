@@ -3,9 +3,10 @@ use std::sync::Arc;
 use anyhow::{bail, Context, Result};
 use clap::Parser;
 use rand::{thread_rng, Rng};
+use serde::Serialize;
 use tokio::fs;
 
-use crate::util::{game, upload};
+use crate::util::{game, struct_fmt, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -15,10 +16,13 @@ pub enum SubCommand {
 #[derive(Parser)]
 pub struct BuildPushOpts {
 	#[clap(index = 1)]
-	pub tag: String,
+	tag: String,
 
 	#[clap(long)]
-	pub name: Option<String>,
+	name: Option<String>,
+
+	#[clap(long, value_parser)]
+	format: Option<struct_fmt::Format>,
 }
 
 impl SubCommand {
@@ -40,7 +44,7 @@ impl SubCommand {
 					.collect::<String>()
 					.to_lowercase();
 				let image_tag = format!("rivet-game:{}", image_tag_tag);
-				println!("\n\n> Archiving image");
+				eprintln!("\n\n> Archiving image");
 				let tag_cmd = tokio::process::Command::new("docker")
 					.arg("image")
 					.arg("tag")
@@ -75,7 +79,7 @@ impl SubCommand {
 					.clone()
 					.unwrap_or_else(|| push_opts.tag.clone());
 				let content_type = "application/x-tar";
-				println!(
+				eprintln!(
 					"\n\n> Creating build \"{name}\" ({size})",
 					name = display_name,
 					size = upload::format_file_size(image_file_meta.len())?,
@@ -96,8 +100,9 @@ impl SubCommand {
 					.send()
 					.await
 					.context("client.create_game_build")?;
+				let build_id = build_res.build_id().context("build_res.build_id")?;
 
-				println!(
+				eprintln!(
 					"\n\n> Uploading ({size})",
 					size = upload::format_file_size(image_file_meta.len())?,
 				);
@@ -109,13 +114,19 @@ impl SubCommand {
 				)
 				.await?;
 
-				println!("\n\n> Completing");
+				eprintln!("\n\n> Completing");
 				ctx.client()
 					.complete_upload()
 					.upload_id(build_res.upload_id().unwrap())
 					.send()
 					.await
 					.context("client.complete_upload")?;
+
+				#[derive(Serialize)]
+				struct Output<'a> {
+					build_id: &'a str,
+				}
+				struct_fmt::print_opt(&push_opts.format, &Output { build_id })?;
 
 				Ok(())
 			}

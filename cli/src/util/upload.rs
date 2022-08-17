@@ -97,7 +97,7 @@ pub async fn upload_file(
 		let path = presigned_req.path().unwrap().to_owned();
 		let total_size = format_file_size(file_meta.len())?;
 
-		println!(
+		eprintln!(
 			"  * {path}: Uploading {total_size} [{mime}]",
 			mime = content_type.clone().unwrap_or_default(),
 		);
@@ -134,7 +134,7 @@ pub async fn upload_file(
 						let uploaded_size = format_file_size(uploaded as u64).unwrap_or_else(|_| "?".to_string());
 						let upload_rate = format_file_size(rate as u64).unwrap_or_else(|_| "?".to_string());
 
-						println!("    {path}: {uploaded_size}/{total_size} [{progress:.1}%] ({upload_rate}/s) [{time_remaining_hr:0>2}:{time_remaining_min:0>2}:{time_remaining_secs:0>2}]");
+						eprintln!("    {path}: {uploaded_size}/{total_size} [{progress:.1}%] ({upload_rate}/s) [{time_remaining_hr:0>2}:{time_remaining_min:0>2}:{time_remaining_secs:0>2}]");
 					}
 				}
 
@@ -165,7 +165,7 @@ pub async fn upload_file(
 				);
 			} else {
 				attempts += 1;
-				println!(
+				eprintln!(
 					"  ! Upload failed with status {status}, will retry (attempt #{attempt}): {body:?}",
 					attempt = attempts,
 					status = res.status(),
@@ -177,7 +177,7 @@ pub async fn upload_file(
 		}
 	};
 
-	println!(
+	eprintln!(
 		"    {}: Finished in {:.3}s",
 		presigned_req.path().unwrap(),
 		upload_time.as_secs_f64()
