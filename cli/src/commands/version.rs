@@ -87,35 +87,12 @@ impl SubCommand {
 				todo!()
 			}
 			SubCommand::ReadConfig { overrides } => {
-				// Parse overrides to JSON
-				let overrides = overrides
-					.into_iter()
-					.map(|value| {
-						value
-							.split_once("=")
-							.context("override needs equal")
-							.and_then(|(key, value)| {
-								let value_json = serde_json::from_str::<serde_json::Value>(value)
-									.context("invalid override value json")?;
-								Ok((key.to_string(), value_json))
-							})
-					})
-					.collect::<Result<Vec<_>, Error>>()?;
-
-				// Read version
+				let overrides = parse_override_args(overrides)?;
 				let version = read_config(overrides).await?;
+				println!("=== User Config ===");
 				println!("{:#?}", version);
 
-				let game_res = ctx
-					.client()
-					.get_game_by_id()
-					.game_id(&ctx.game_id)
-					.send()
-					.await
-					.context("client.get_game_by_id")?;
-				let game = game_res.game().context("game_res.game")?;
-
-				let model = version.build_model(game)?;
+				println!("=== Rivet Config ===");
 				println!("{:#?}", model);
 
 				Ok(())
@@ -158,6 +135,22 @@ async fn print_version(ctx: &rivetctl::Ctx, version_id: &str) -> Result<()> {
 	Ok(())
 }
 
+pub fn parse_override_args(overrides: &[String]) -> Result<Vec<(String, serde_json::Value)>> {
+	overrides
+		.iter()
+		.map(|value| {
+			value
+				.split_once("=")
+				.context("override needs equal")
+				.and_then(|(key, value)| {
+					let value_json = serde_json::from_str::<serde_json::Value>(value)
+						.context("invalid override value json")?;
+					Ok((key.to_string(), value_json))
+				})
+		})
+		.collect::<Result<Vec<_>, Error>>()
+}
+
 pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 ) -> Result<rivetctl::config::version::Version> {
@@ -197,4 +190,24 @@ pub async fn read_config(
 		.context("deserialize version config")?;
 
 	Ok(version)
+}
+
+pub async fn build_rivet_config(
+	ctx: &rivetctl::Ctx,
+	version: &rivetctl::config::version::Version,
+) -> Result<rivetctl::rivet_cloud::model::CloudVersionConfig> {
+	// Fetch game
+	let game_res = ctx
+		.client()
+		.get_game_by_id()
+		.game_id(&ctx.game_id)
+		.send()
+		.await
+		.context("client.get_game_by_id")?;
+	let game = game_res.game().context("game_res.game")?;
+
+	// Build model
+	let model = version.build_model(game)?;
+
+	Ok(model)
 }
