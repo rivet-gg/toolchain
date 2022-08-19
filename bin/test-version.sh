@@ -1,8 +1,12 @@
 #!/bin/sh
 set -euf
 
-# MARK: Upload build
 ./bin/test-setup.sh
+
+# MARK: Get game info
+GAME_ID="$(./bin/test-cmd.sh game get | jq -r '.id')"
+
+# MARK: Upload build
 # BUILD_ID="$(./bin/test-cmd.sh build push my-image --name "Local" --format json | jq -r '.build_id')"
 BUILD_ID='801aed79-d0b7-4ab8-97cb-ca5d4a7c436c'
 echo "Build ID: $BUILD_ID"
@@ -16,16 +20,17 @@ echo "Site ID: $SITE_ID"
 # MARK: Create version
 VERSION_NAME="$(git rev-parse --abbrev-ref HEAD) $(git rev-parse --short HEAD)"
 VERSION_NAME="$(date -u +"%Y-%m-%dT%H:%M:%S")"
-VERSION_ID="$(./bin/test-cmd.sh version create "$VERSION_NAME" -o "cdn.site=$SITE_ID" -o "matchmaker.docker.build=$BUILD_ID" --format json | jq -r '.version_id')"
+VERSION_ID="$(./bin/test-cmd.sh version create --display-name "$VERSION_NAME" -o "cdn.site=$SITE_ID" -o "matchmaker.docker.build=$BUILD_ID" --format json | jq -r '.version_id')"
 echo "Version ID: $VERSION_ID"
 
 # MARK: Create namespace
 # TODO: Impl ignore-existing or something
 NS_DISPLAY_NAME="$(git rev-parse --abbrev-ref HEAD)"
 NS_NAME_ID="$(sed -E 's/[^[:alnum:]]+/_/g' <<< "$NS_DISPLAY_NAME")"
-NAMESPACE_ID="$(./bin/test-cmd.sh namespace create --display-name "$NS_DISPLAY_NAME" --name-id "$NS_NAME_ID" --version "$VERSION_ID" --format json | jq -r '.namespace_id')"
+NAMESPACE_ID="$(./bin/test-cmd.sh namespace create --name-id "$NS_NAME_ID" --display-name "$NS_DISPLAY_NAME"  --version "$VERSION_ID" --format json | jq -r '.namespace_id')"
 
-# TOOD: Update namespace version
-# TODO: Output preview URL (somehow as a comment?)
-# TODO: Implement these as `ci` subcommand
+# MARK: Publish version
+./bin/test-cmd.sh namespace set-version --id "$NAMESPACE_ID" --version "$VERSION_ID"
+
+echo "Published to https://rivet.gg/developer/games/$GAME_ID/versions/$VERSION_ID"
 
