@@ -10,6 +10,8 @@ pub enum SubCommand {
 		#[clap(long, value_parser)]
 		format: struct_fmt::Format,
 	},
+	#[clap(alias = "dash")]
+	Dashboard,
 }
 
 impl SubCommand {
@@ -31,6 +33,14 @@ impl SubCommand {
 					game_id: &'a str,
 				}
 				struct_fmt::print(format, &Output { game_id })?;
+
+				Ok(())
+			}
+			SubCommand::Dashboard => {
+				println!(
+					"https://rivet.gg/developer/games/{game_id}",
+					game_id = ctx.game_id
+				);
 
 				Ok(())
 			}
