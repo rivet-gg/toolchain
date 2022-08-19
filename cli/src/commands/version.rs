@@ -14,7 +14,7 @@ pub enum SubCommand {
 	},
 
 	Create {
-		#[clap(index = 1)]
+		#[clap(long)]
 		display_name: String,
 
 		#[clap(long = "override", short)]
