@@ -4,7 +4,7 @@ let
     pkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
 in
     pkgs.mkShell {
-        name = "rivetctl";
+        name = "rivet-cli";
         buildInputs = with pkgs; [
             cacert
 
