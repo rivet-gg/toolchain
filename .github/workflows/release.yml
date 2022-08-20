@@ -30,7 +30,7 @@ jobs:
           RUSTTARGET: ${{ matrix.target }}
           ARCHIVE_TYPES: ${{ matrix.archive }}
           SRC_DIR: cli
-          PRE_BUILD: apk add --no-cache pkg-config libssl-dev
+          PRE_BUILD: ./bin/pre-build.sh
           MINIFY: 'true'
           TOOLCHAIN_VERSION: 1.63.0
 
