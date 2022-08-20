@@ -1,73 +1,35 @@
-# Reference: https://eugene-babichenko.github.io/blog/2020/05/09/github-actions-cross-platform-auto-releases/
-
 name: release
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  release:
+    types: [created]
+
 jobs:
-  create_release:
-    name: Create Release
-    runs-on: ubuntu-20.04
-    outputs:
-      upload_url: ${{ steps.release.outputs.upload_url }}
-      tag_name: ${{ env.TAG_NAME }}
-    steps:
-      - name: Read Tag
-        shell: bash
-        run: |
-          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          echo "Tag: ${{ env.TAG_NAME }}"
-      - name: Create GitHub release
-        id: release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.TAG_NAME }}
-          body: ""
-
   build_binary:
-    name: Build Binary
-    needs: [create_release]
-    runs-on: ${{ matrix.os }}
+    name: release ${{ matrix.target }}
+    runs-on: ubuntu-20.04
     strategy:
+      fail-fast: false
       matrix:
-        build: [linux]
         include:
-          - build: linux
-            os: ubuntu-20.04
-
+          - target: x86_64-pc-windows-gnu
+            archive: zip
+          - target: x86_64-unknown-linux-musl
+            archive: tar.gz tar.xz
+          - target: x86_64-apple-darwin
+            archive: zip
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Build binary
-        run: cargo build --release --bin rivet
-      - name: Strip binary
-        run: strip "target/release/rivet"
-      - name: Build archive
-        shell: bash
-        run: |
-          mkdir -p staging
-          cp target/release/rivet staging/rivet
-          cd staging
-          tar vczf ../rivet.tar.gz .
-          echo "ASSET_PATH=rivet.tar.gz" >> $GITHUB_ENV
-      - name: Upload release archive
-        uses: actions/upload-release-asset@v1.0.1
+      - uses: actions/checkout@master
+      - name: Compile and release
+        uses: rust-build/rust-build.action@v1.3.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ needs.create_release.outputs.upload_url }}
-          asset_path: ${{ env.ASSET_PATH }}
-          asset_name: rivet_${{ needs.create_release.outputs.tag_name }}_linux_x86_64.tar.gz
-          asset_content_type: application/octet-stream
+          RUSTTARGET: ${{ matrix.target }}
+          ARCHIVE_TYPES: ${{ matrix.archive }}
 
   build_docker:
     name: Build Docker
-    needs: [create_release]
-    runs-on: [ubuntu-20.04]
+    runs-on: ubuntu-20.04
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -90,5 +52,5 @@ jobs:
         with:
           file: Dockerfile.cli
           push: true
-          tags: 'ghcr.io/rivet-gg/cli:latest,ghcr.io/rivet-gg/cli:${{ needs.create_release.outputs.tag_name }}'
+          tags: 'ghcr.io/rivet-gg/cli:latest,ghcr.io/rivet-gg/cli:${{ github.event.release.tag_name }}'
 

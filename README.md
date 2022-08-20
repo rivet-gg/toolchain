@@ -2,20 +2,6 @@
 
 ## Installing
 
-### Docker
-
-#### macOS & Linux & Windows (PowerShell)
-
-```
-docker run -v "$(pwd):/app" ghcr.io/rivet-gg/cli
-```
-
-#### Windows (Command Line)
-
-```
-docker run -v "%cd%:/app" ghcr.io/rivet-gg/cli
-```
-
 ### Binary (Linux only)
 
 ```
@@ -24,3 +10,18 @@ tar xf rivet.tar.gz
 mv ./rivet /usr/local/bin/rivet
 ```
 
+### Docker
+
+> Commands such as `rivet build push` will not work when running using Docker.
+
+#### macOS & Linux & Windows (PowerShell)
+
+```
+docker run -v "$(pwd):/app" ghcr.io/rivet-gg/cli
+```
+
+#### Windows (cmd)
+
+```
+docker run -v "%cd%:/app" ghcr.io/rivet-gg/cli
+```
