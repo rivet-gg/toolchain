@@ -27,7 +27,9 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           release_name: ${{ env.TAG_NAME }}
           body: |
-            Try: `docker run ghcr.io/rivet-gg/cli:${{ env.TAG_NAME }}`
+            ```
+            docker run -t -v "$(pwd):/app" ghcr.io/rivet-gg/cli init
+            ```
 
   build_binary:
     name: Build Binary
