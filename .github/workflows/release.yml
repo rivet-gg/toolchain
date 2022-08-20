@@ -1,11 +1,12 @@
 name: release
+
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   build_binary:
-    name: release ${{ matrix.target }}
+    name: Release ${{ matrix.target }}
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -28,7 +29,7 @@ jobs:
           ARCHIVE_TYPES: ${{ matrix.archive }}
 
   build_docker:
-    name: Build Docker
+    name: Release Docker
     runs-on: ubuntu-20.04
     steps:
       - name: Set up QEMU
