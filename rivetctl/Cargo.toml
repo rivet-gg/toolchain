@@ -6,11 +6,13 @@ edition = "2018"
 license = "MIT"
 
 [dependencies]
-rivet-cloud = { path = "../lib/rivet-cloud" }
-tokio = { version = "0.2", features = ["full"] }
-thiserror = "1.0"
-serde = { version = "1.0", features = ["derive"] }
 aws-smithy-client = "^0.41.0"
-tower = "0.4.12"
 home = "0.5.3"
+openssl = { version = "*", features = ["vendored"] }  # Required for cross compilation, see https://github.com/sfackler/rust-openssl/issues/603#issuecomment-822619837
+rivet-cloud = { path = "../lib/rivet-cloud" }
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.83"
+thiserror = "1.0"
+tokio = { version = "0.2", features = ["full"] }
+tower = "0.4.12"
+
