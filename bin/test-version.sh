@@ -33,5 +33,7 @@ NAMESPACE_ID="$(./bin/test-cmd.sh namespace create --name-id "$NS_NAME_ID" --dis
 # MARK: Publish version
 ./bin/test-cmd.sh namespace set-version --namespace "$NAMESPACE_ID" --version "$VERSION_ID" --format json
 
-echo "Published to https://rivet.gg/developer/games/$GAME_ID/versions/$VERSION_ID"
+./bin/test-cmd.sh game dashboard
+./bin/test-cmd.sh namespace dashboard "$NAMESPACE_ID"
+./bin/test-cmd.sh version dashboard "$VERSION_ID"
 
