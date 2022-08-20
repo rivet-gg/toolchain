@@ -19,7 +19,7 @@ pub enum SubCommand {
 
 #[derive(Parser)]
 pub struct SitePushOpts {
-	#[clap(index = 1)]
+	#[clap(long)]
 	path: String,
 
 	#[clap(long)]

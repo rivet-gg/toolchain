@@ -15,7 +15,7 @@ pub enum SubCommand {
 
 #[derive(Parser)]
 pub struct BuildPushOpts {
-	#[clap(index = 1)]
+	#[clap(long)]
 	tag: String,
 
 	#[clap(long)]
