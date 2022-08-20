@@ -1,5 +1,5 @@
 #!/bin/sh
-set -euf
+set -euf -o pipefail
 
 ./bin/test-setup.sh
 ./bin/test-cmd.sh "$@"

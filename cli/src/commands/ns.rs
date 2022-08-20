@@ -1,14 +1,17 @@
 use anyhow::{Context, Result};
 use clap::Parser;
+use serde::Serialize;
 use tabled::Tabled;
 
-use crate::util::{fmt, term};
+use crate::util::{fmt, struct_fmt, term};
 
 #[derive(Parser)]
 pub enum SubCommand {
 	List,
 	Get {
 		namespace: String,
+		#[clap(long, value_parser)]
+		format: struct_fmt::Format,
 	},
 	Create {
 		#[clap(long)]
@@ -17,12 +20,16 @@ pub enum SubCommand {
 		display_name: String,
 		#[clap(long)]
 		version: String,
+		#[clap(long, value_parser)]
+		format: Option<struct_fmt::Format>,
 	},
 	SetVersion {
 		#[clap(long, short, alias = "ns")]
 		namespace: String,
-		#[clap(short)]
+		#[clap(long, short)]
 		version: String,
+		#[clap(long, value_parser)]
+		format: Option<struct_fmt::Format>,
 	},
 	#[clap(alias = "dash")]
 	Dashboard {
@@ -84,8 +91,8 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Get { namespace } => {
-				print_ns(ctx, &namespace).await?;
+			SubCommand::Get { namespace, format } => {
+				print_ns(ctx, format, &namespace).await?;
 
 				Ok(())
 			}
@@ -93,26 +100,58 @@ impl SubCommand {
 				display_name,
 				version,
 				name_id,
+				format,
 			} => {
-				let create_res = ctx
+				// Get game
+				let game_res = ctx
 					.client()
-					.create_game_namespace()
+					.get_game_by_id()
 					.game_id(&ctx.game_id)
-					.display_name(display_name)
-					.name_id(name_id)
-					.version_id(version)
 					.send()
 					.await
-					.context("client.create_game_namespace")?;
-				let ns_id = create_res
-					.namespace_id()
-					.context("create_res.namespace_id")?;
+					.context("client.get_game_by_id")?;
+				let game = game_res.game().context("game_res.game")?;
+				let namespaces = game.namespaces().context("game.namespaces")?;
 
-				print_ns(ctx, &ns_id).await?;
+				// Get or create namespace
+				let ns_id =
+					if let Some(ns) = namespaces.iter().find(|ns| ns.name_id() == Some(&name_id)) {
+						eprintln!("Namespace already exists");
+
+						let ns_id = ns.namespace_id().context("ns.namespace_id")?;
+
+						ns_id.to_owned()
+					} else {
+						eprintln!("Creating namespace");
+
+						let create_res = ctx
+							.client()
+							.create_game_namespace()
+							.game_id(&ctx.game_id)
+							.display_name(display_name)
+							.name_id(name_id)
+							.version_id(version)
+							.send()
+							.await
+							.context("client.create_game_namespace")?;
+						let ns_id = create_res
+							.namespace_id()
+							.context("create_res.namespace_id")?;
+
+						ns_id.to_owned()
+					};
+
+				if let Some(format) = format {
+					print_ns(ctx, format, &ns_id).await?;
+				}
 
 				Ok(())
 			}
-			SubCommand::SetVersion { namespace, version } => {
+			SubCommand::SetVersion {
+				namespace,
+				version,
+				format,
+			} => {
 				ctx.client()
 					.update_game_namespace_version()
 					.game_id(&ctx.game_id)
@@ -122,7 +161,9 @@ impl SubCommand {
 					.await
 					.context("client.update_game_namespace_version")?;
 
-				print_ns(ctx, &namespace).await?;
+				if let Some(format) = format {
+					print_ns(ctx, format, &namespace).await?;
+				}
 
 				Ok(())
 			}
@@ -148,7 +189,11 @@ impl SubCommand {
 	}
 }
 
-async fn print_ns(ctx: &rivetctl::Ctx, namespace_id: &str) -> Result<()> {
+async fn print_ns(
+	ctx: &rivetctl::Ctx,
+	format: &struct_fmt::Format,
+	namespace_id: &str,
+) -> Result<()> {
 	let ns_res = ctx
 		.client()
 		.get_game_namespace_by_id()
@@ -159,7 +204,22 @@ async fn print_ns(ctx: &rivetctl::Ctx, namespace_id: &str) -> Result<()> {
 		.context("client.get_game_version_by_id")?;
 	let ns = ns_res.namespace().context("ns_res.namespace")?;
 
-	println!("{ns:#?}");
+	#[derive(Serialize)]
+	struct Output<'a> {
+		namespace_id: &'a str,
+		created: &'a str,
+		display_name: &'a str,
+		version_id: &'a str,
+	}
+	struct_fmt::print(
+		format,
+		&Output {
+			namespace_id: ns.namespace_id().context("ns.namespace_id")?,
+			created: &fmt::date(ns.create_ts().context("ns.create_ts")?),
+			display_name: &ns.display_name().context("ns.display_name")?,
+			version_id: &ns.version_id().context("ns.version_id")?,
+		},
+	)?;
 
 	Ok(())
 }
