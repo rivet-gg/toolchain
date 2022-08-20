@@ -42,17 +42,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Build binary
-        run: cargo build --release --bin rivetctl
+        run: cargo build --release --bin rivet
       - name: Strip binary
-        run: strip "target/release/rivetctl"
+        run: strip "target/release/rivet"
       - name: Build archive
         shell: bash
         run: |
           mkdir -p staging
-          cp target/release/rivetctl staging/rivetctl
+          cp target/release/rivet staging/rivet
           cd staging
-          tar vczf ../rivetctl.tar.gz .
-          echo "ASSET_PATH=rivetctl.tar.gz" >> $GITHUB_ENV
+          tar vczf ../rivet.tar.gz .
+          echo "ASSET_PATH=rivet.tar.gz" >> $GITHUB_ENV
       - name: Upload release archive
         uses: actions/upload-release-asset@v1.0.1
         env:
@@ -60,5 +60,5 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ${{ env.ASSET_PATH }}
-          asset_name: rivetctl_${{ needs.create-release.outputs.tag_name }}_linux_x86_64.tar.gz
+          asset_name: rivet_${{ needs.create-release.outputs.tag_name }}_linux_x86_64.tar.gz
           asset_content_type: application/octet-stream

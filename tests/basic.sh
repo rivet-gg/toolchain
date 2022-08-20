@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-BIN=./target/debug/rivetctl
+BIN=./target/debug/rivet
 
 echo
 echo
