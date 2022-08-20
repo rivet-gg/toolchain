@@ -1436,7 +1436,7 @@ dependencies = [
  "mime_guess",
  "rand",
  "reqwest",
- "rivetctl",
+ "rivet-cli-core",
  "serde",
  "serde_json",
  "tabled",
@@ -1444,6 +1444,21 @@ dependencies = [
  "term_size",
  "tokio 1.20.1",
  "tokio-util 0.6.10",
+]
+
+[[package]]
+name = "rivet-cli-core"
+version = "0.0.1"
+dependencies = [
+ "aws-smithy-client",
+ "home",
+ "openssl",
+ "rivet-cloud",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio 0.2.25",
+ "tower",
 ]
 
 [[package]]
@@ -1456,21 +1471,6 @@ dependencies = [
  "aws-smithy-types",
  "bytes 1.2.1",
  "http",
-]
-
-[[package]]
-name = "rivetctl"
-version = "0.0.1"
-dependencies = [
- "aws-smithy-client",
- "home",
- "openssl",
- "rivet-cloud",
- "serde",
- "serde_json",
- "thiserror",
- "tokio 0.2.25",
- "tower",
 ]
 
 [[package]]

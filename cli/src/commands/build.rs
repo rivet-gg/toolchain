@@ -26,7 +26,7 @@ pub struct BuildPushOpts {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &rivetctl::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::Push(push_opts) => {
 				let reqwest_client = Arc::new(reqwest::Client::new());
@@ -91,7 +91,7 @@ impl SubCommand {
 					.display_name(&display_name)
 					.image_tag(&image_tag)
 					.image_file(
-						rivetctl::rivet_cloud::model::upload_prepare_file::Builder::default()
+						cli_core::rivet_cloud::model::upload_prepare_file::Builder::default()
 							.path("image.tar")
 							.content_type(content_type)
 							.content_length(image_file_meta.len() as i64)

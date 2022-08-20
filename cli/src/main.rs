@@ -66,7 +66,7 @@ async fn main() -> Result<()> {
 	};
 
 	// Create context
-	let ctx = rivetctl::ctx::init(opts.api_url.clone(), cloud_token).await?;
+	let ctx = cli_core::ctx::init(opts.api_url.clone(), cloud_token).await?;
 
 	// Handle command
 	match opts.command {

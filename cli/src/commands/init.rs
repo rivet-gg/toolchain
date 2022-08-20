@@ -28,7 +28,7 @@ impl Opts {
 		.await??;
 
 		// Create new context
-		let new_ctx = rivetctl::ctx::init(
+		let new_ctx = cli_core::ctx::init(
 			override_api_url,
 			// Exclude overridden access token to check the token
 			token.clone(),
@@ -42,7 +42,7 @@ impl Opts {
 			.context("client.inspect()")?;
 
 		let game_id = match inspect.agent.as_ref().context("inspect.agent")? {
-			rivetctl::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) => {
+			cli_core::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) => {
 				game_cloud.game_id.clone().context("game_cloud.game_id")?
 			}
 			_ => bail!("invalid agent kind"),

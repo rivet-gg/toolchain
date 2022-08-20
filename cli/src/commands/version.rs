@@ -36,7 +36,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &rivetctl::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
 				let game_res = ctx
@@ -161,7 +161,7 @@ impl SubCommand {
 	}
 }
 
-async fn print_version(ctx: &rivetctl::Ctx, version_id: &str) -> Result<()> {
+async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
 	let version_res = ctx
 		.client()
 		.get_game_version_by_id()
@@ -197,7 +197,7 @@ pub fn parse_config_override_args(
 
 pub async fn read_user_config(
 	overrides: Vec<(String, serde_json::Value)>,
-) -> Result<rivetctl::config::version::Version> {
+) -> Result<cli_core::config::version::Version> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
 		.add_source(config::File::with_name("rivet.version"));
@@ -230,16 +230,16 @@ pub async fn read_user_config(
 		.await
 		.context("find version config")?;
 	let version = config
-		.try_deserialize::<rivetctl::config::version::Version>()
+		.try_deserialize::<cli_core::config::version::Version>()
 		.context("deserialize version config")?;
 
 	Ok(version)
 }
 
 pub async fn build_rivet_config(
-	ctx: &rivetctl::Ctx,
-	version: &rivetctl::config::version::Version,
-) -> Result<rivetctl::rivet_cloud::model::CloudVersionConfig> {
+	ctx: &cli_core::Ctx,
+	version: &cli_core::config::version::Version,
+) -> Result<cli_core::rivet_cloud::model::CloudVersionConfig> {
 	// Fetch game
 	let game_res = ctx
 		.client()

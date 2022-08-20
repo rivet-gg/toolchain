@@ -38,7 +38,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &rivetctl::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
 				let game_res = ctx
@@ -190,7 +190,7 @@ impl SubCommand {
 }
 
 async fn print_ns(
-	ctx: &rivetctl::Ctx,
+	ctx: &cli_core::Ctx,
 	format: &struct_fmt::Format,
 	namespace_id: &str,
 ) -> Result<()> {
