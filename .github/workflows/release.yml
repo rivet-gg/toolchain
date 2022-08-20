@@ -85,7 +85,5 @@ jobs:
         with:
           file: Dockerfile.cli
           push: true
-          tags:
-            - ghcr.io/rivet-gg/cli:${{ env.TAG_NAME }}
-            - ghcr.io/rivet-gg/cli:latest
+          tags: ['ghcr.io/rivet-gg/cli:${{ env.TAG_NAME }}', 'ghcr.io/rivet-gg/cli:latest']
 
