@@ -1,4 +1,7 @@
+.git
+.dockerfile
+.github/
 /target
 
-Dockerfile*
+Dockerfile.*
 

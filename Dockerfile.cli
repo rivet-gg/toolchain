@@ -12,5 +12,5 @@ RUN cargo build --bin rivet --release --target x86_64-unknown-linux-musl
 FROM scratch
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/rivet .
 USER 1000
-CMD ["./rivet"]
+ENTRYPOINT ["./rivet"]
 

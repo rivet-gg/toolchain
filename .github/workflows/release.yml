@@ -26,10 +26,12 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           release_name: ${{ env.TAG_NAME }}
+          body: |
+            Try: `docker run ghcr.io/rivet-gg/cli:${{ env.TAG_NAME }}`
 
-  build-release:
-    name: Build Release
-    needs: ['create_release']
+  build_binary:
+    name: Build Binary
+    needs: [create_release]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -63,8 +65,9 @@ jobs:
           asset_name: rivet_${{ needs.create_release.outputs.tag_name }}_linux_x86_64.tar.gz
           asset_content_type: application/octet-stream
 
-  build-docker:
+  build_docker:
     name: Build Docker
+    needs: [create_release]
     runs-on: [ubuntu-20.04]
     steps:
       - name: Set up QEMU
@@ -85,5 +88,5 @@ jobs:
         with:
           file: Dockerfile.cli
           push: true
-          tags: ghcr.io/rivet-gg/cli:latest,ghcr.io/rivet-gg/cli:${{ env.TAG_NAME }}
+          tags: 'ghcr.io/rivet-gg/cli:latest,ghcr.io/rivet-gg/cli:${{ needs.create_release.outputs.tag_name }}'
 
