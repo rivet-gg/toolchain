@@ -2,7 +2,7 @@
 
 ## Installing
 
-### Docker
+### Docker (Universal)
 
 ```
 docker run -t -v "$(pwd):/app" ghcr.io/rivet-gg/cli
