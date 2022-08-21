@@ -2,12 +2,10 @@
 
 ## Installing
 
-### Binary (Linux only)
+### macOS & Linux
 
 ```
-curl https://github.com/rivet-gg/cli/releases/download/0.0.13/rivet_0.0.13_linux_x86_64.tar.gz -L -o rivet.tar.gz
-tar xf rivet.tar.gz
-mv ./rivet /usr/local/bin/rivet
+curl --proto '=https' --tlsv1.2 -sSfL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 ```
 
 ### Docker

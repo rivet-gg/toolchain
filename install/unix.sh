@@ -2,7 +2,7 @@
 set -euf -o pipefail
 
 cd /tmp
-curl TODO -o rivet.tar.gz
-tar xf rivet.tar.gz
+curl --proto '=https' --tlsv1.2 -sSfL https://github.com/rivet-gg/cli/releases/download/0.0.16/cli_0.0.16_x86_64-unknown-linux-musl.tar.gz -o rivet.tar.gz
+tar xzf rivet.tar.gz
 mv ./rivet /usr/local/bin/rivet
 
