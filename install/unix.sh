@@ -1,13 +1,14 @@
 #!/bin/sh
 set -eu
 
-VERSION=0.0.16
+VERSION="0.0.16"
+
 echo
 echo "> Installing Rivet CLI @ $VERSION"
 
 cd /tmp
 
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$(uname)" = "Darwin" ]; then
 	echo
 	echo "> Detected macOS"
 
@@ -23,7 +24,7 @@ if [ "$(uname)" == "Darwin" ]; then
 	echo
 	echo "> Installing rivet"
 	mv ./rivet /usr/local/bin/rivet
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	echo
 	echo "> Detected Linux"
 
