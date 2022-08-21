@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-VERSION="0.0.16"
+VERSION="0.0.17"
 
 echo
 echo "> Installing Rivet CLI @ $VERSION"
