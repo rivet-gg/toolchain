@@ -13,6 +13,7 @@ chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }
 cli-core = { path = "../core", package = "rivet-cli-core" }
 config = "0.13.2"
+console = "0.15"
 futures-util = "0.3"
 humansize = "1.1"
 ignore = "0.4"

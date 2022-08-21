@@ -116,13 +116,18 @@ impl SubCommand {
 				// Get or create namespace
 				let ns_id =
 					if let Some(ns) = namespaces.iter().find(|ns| ns.name_id() == Some(&name_id)) {
-						eprintln!("Namespace already exists");
-
 						let ns_id = ns.namespace_id().context("ns.namespace_id")?;
+						let display_name = ns.display_name().context("ns.display_name")?;
+
+						eprintln!(
+							"{} {}",
+							term::success_fmt("Found Existing"),
+							term::info_fmt(display_name),
+						);
 
 						ns_id.to_owned()
 					} else {
-						eprintln!("Creating namespace");
+						term::info("Creating namespace");
 
 						let create_res = ctx
 							.client()
@@ -138,8 +143,19 @@ impl SubCommand {
 							.namespace_id()
 							.context("create_res.namespace_id")?;
 
+						eprintln!(
+							"{} {}",
+							term::success_fmt("Created"),
+							term::info_fmt(display_name)
+						);
+
 						ns_id.to_owned()
 					};
+				eprintln!(
+					"{} {}",
+					term::label_fmt("Dashboard"),
+					term::link_fmt(dashboard_url(&ctx.game_id, ns_id))
+				);
 
 				if let Some(format) = format {
 					print_ns(ctx, format, &ns_id).await?;
@@ -177,11 +193,7 @@ impl SubCommand {
 					.await
 					.context("client.get_game_version_by_id")?;
 
-				println!(
-					"https://rivet.gg/developer/games/{game_id}/namespaces/{ns_id}",
-					game_id = ctx.game_id,
-					ns_id = namespace
-				);
+				term::link(dashboard_url(&ctx.game_id, namespace));
 
 				Ok(())
 			}
@@ -222,4 +234,8 @@ async fn print_ns(
 	)?;
 
 	Ok(())
+}
+
+pub fn dashboard_url(game_id: &str, ns_id: &str) -> String {
+	format!("https://rivet.gg/developer/games/{game_id}/namespaces/{ns_id}",)
 }

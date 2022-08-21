@@ -119,6 +119,17 @@ impl SubCommand {
 					.context("client.create_game_version")?;
 				let version_id = version_res.version_id().context("version_res.version_id")?;
 
+				eprintln!(
+					"{} {}",
+					term::success_fmt("Published"),
+					term::info_fmt(display_name)
+				);
+				eprintln!(
+					"{}: {}",
+					term::label_fmt("Dashboard"),
+					term::link_fmt(dashboard_url(&ctx.game_id, version_id))
+				);
+
 				#[derive(Serialize)]
 				struct Output<'a> {
 					version_id: &'a str,
@@ -149,11 +160,7 @@ impl SubCommand {
 					.await
 					.context("client.get_game_version_by_id")?;
 
-				println!(
-					"https://rivet.gg/developer/games/{game_id}/versions/{version_id}",
-					game_id = ctx.game_id,
-					version_id = version
-				);
+				term::link(dashboard_url(&ctx.game_id, version));
 
 				Ok(())
 			}
@@ -254,4 +261,12 @@ pub async fn build_rivet_config(
 	let model = version.build_model(game)?;
 
 	Ok(model)
+}
+
+pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
+	format!(
+		"https://rivet.gg/developer/games/{game_id}/versions/{version_id}",
+		game_id = game_id,
+		version_id = version_id
+	)
 }

@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use serde::Serialize;
 
-use crate::util::struct_fmt;
+use crate::util::{struct_fmt, term};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -37,13 +37,14 @@ impl SubCommand {
 				Ok(())
 			}
 			SubCommand::Dashboard => {
-				println!(
-					"https://rivet.gg/developer/games/{game_id}",
-					game_id = ctx.game_id
-				);
+				term::link(dashboard_url(&ctx.game_id));
 
 				Ok(())
 			}
 		}
 	}
+}
+
+pub fn dashboard_url(game_id: &str) -> String {
+	format!("https://rivet.gg/developer/games/{game_id}")
 }

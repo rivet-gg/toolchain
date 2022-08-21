@@ -49,11 +49,12 @@ enum SubCommand {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+	let term = console::Term::stderr();
 	let opts = Opts::parse();
 
 	// Handle init command without the context
 	if let SubCommand::Init(init_opts) = &opts.command {
-		return init_opts.execute(opts.api_url).await;
+		return init_opts.execute(&term, opts.api_url).await;
 	}
 
 	// Read cloud token
