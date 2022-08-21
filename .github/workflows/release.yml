@@ -43,7 +43,8 @@ jobs:
           EXTRA_FILES: "README.md LICENSE"
           TOOLCHAIN_VERSION: 1.63.0
           # Breaks macOS builds
-          MINIFY: ${{ matrix.target == "x86_64-unknown-linux-musl" }}
+          # TODO: Re-enable on Linux only
+          MINIFY: 'false'
 
   build_docker:
     name: Release Docker
