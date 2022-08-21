@@ -43,7 +43,7 @@ jobs:
           EXTRA_FILES: "README.md LICENSE"
           TOOLCHAIN_VERSION: 1.63.0
           # Breaks macOS builds
-          MINIFY: 'false'
+          MINIFY: ${{ matrix.target == x86_64-unknown-linux-musl }}
 
   build_docker:
     name: Release Docker
