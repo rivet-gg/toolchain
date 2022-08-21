@@ -1,10 +1,10 @@
 #!/bin/sh
 set -eu
 
-VERSION="$(curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases/latest | jq -r '.name')"
+RIVET_CLI_VERSION="$(curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases/latest | jq -r '.name')"
 
 echo
-echo "> Installing Rivet CLI @ $VERSION"
+echo "> Installing Rivet CLI @ $RIVET_CLI_VERSION"
 
 cd /tmp
 
@@ -13,7 +13,7 @@ if [ "$(uname)" = "Darwin" ]; then
 	echo "> Detected macOS"
 
 	echo
-	URL="https://github.com/rivet-gg/cli/releases/download/${VERSION}/cli_${VERSION}_x86_64-apple-darwin.zip"
+	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/cli_${RIVET_CLI_VERSION}_x86_64-apple-darwin.zip"
 	echo "> Downloading $URL"
 	curl -fsSL "$URL" -o rivet.zip
 
@@ -29,7 +29,7 @@ elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	echo "> Detected Linux"
 
 	echo
-	URL="https://github.com/rivet-gg/cli/releases/download/${VERSION}/cli_${VERSION}_x86_64-unknown-linux-musl.tar.gz"
+	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/cli_${RIVET_CLI_VERSION}_x86_64-unknown-linux-musl.tar.gz"
 	echo "> Downloading $URL"
 	curl -fsSL "$URL" -o rivet.tar.gz
 
