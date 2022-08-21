@@ -164,6 +164,8 @@ impl SubCommand {
 					.await
 					.context("client.update_game_namespace_version")?;
 
+				term::status::success("Version Set", "");
+
 				if let Some(format) = format {
 					print_ns(ctx, format, &namespace).await?;
 				}
