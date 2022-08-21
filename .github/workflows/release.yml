@@ -40,8 +40,10 @@ jobs:
           ARCHIVE_TYPES: ${{ matrix.archive }}
           SRC_DIR: cli
           PRE_BUILD: ./bin/pre-build.sh
-          MINIFY: 'true'
+          EXTRA_FILES: "README.md LICENSE"
           TOOLCHAIN_VERSION: 1.63.0
+          # Breaks macOS builds
+          MINIFY: 'false'
 
   build_docker:
     name: Release Docker
