@@ -8,8 +8,8 @@ GAME_ID="$(./bin/test-cmd.sh game get --format json | jq -r '.game_id')"
 echo "Game ID: $GAME_ID"
 
 # MARK: Upload build
-BUILD_ID="$(./bin/test-cmd.sh build push my-image --name "Local" --format json | jq -r '.build_id')"
-# BUILD_ID='801aed79-d0b7-4ab8-97cb-ca5d4a7c436c'
+# BUILD_ID="$(./bin/test-cmd.sh build push my-image --name "Local" --format json | jq -r '.build_id')"
+BUILD_ID='801aed79-d0b7-4ab8-97cb-ca5d4a7c436c'
 echo "Build ID: $BUILD_ID"
 
 # MARK: Upload site

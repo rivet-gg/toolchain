@@ -119,16 +119,8 @@ impl SubCommand {
 					.context("client.create_game_version")?;
 				let version_id = version_res.version_id().context("version_res.version_id")?;
 
-				eprintln!(
-					"{} {}",
-					term::success_fmt("Published"),
-					term::info_fmt(display_name)
-				);
-				eprintln!(
-					"{}: {}",
-					term::label_fmt("Dashboard"),
-					term::link_fmt(dashboard_url(&ctx.game_id, version_id))
-				);
+				term::status::success("Published", display_name);
+				term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
 
 				#[derive(Serialize)]
 				struct Output<'a> {

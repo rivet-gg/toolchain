@@ -119,16 +119,10 @@ impl SubCommand {
 						let ns_id = ns.namespace_id().context("ns.namespace_id")?;
 						let display_name = ns.display_name().context("ns.display_name")?;
 
-						eprintln!(
-							"{} {}",
-							term::success_fmt("Found Existing"),
-							term::info_fmt(display_name),
-						);
+						term::status::success("Found Existing", display_name);
 
 						ns_id.to_owned()
 					} else {
-						term::info("Creating namespace");
-
 						let create_res = ctx
 							.client()
 							.create_game_namespace()
@@ -143,19 +137,12 @@ impl SubCommand {
 							.namespace_id()
 							.context("create_res.namespace_id")?;
 
-						eprintln!(
-							"{} {}",
-							term::success_fmt("Created"),
-							term::info_fmt(display_name)
-						);
+						term::status::success("Created", display_name);
 
 						ns_id.to_owned()
 					};
-				eprintln!(
-					"{} {}",
-					term::label_fmt("Dashboard"),
-					term::link_fmt(dashboard_url(&ctx.game_id, ns_id))
-				);
+
+				term::status::info("Dashboard", dashboard_url(&ctx.game_id, &ns_id));
 
 				if let Some(format) = format {
 					print_ns(ctx, format, &ns_id).await?;

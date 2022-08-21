@@ -10,17 +10,31 @@ pub struct Opts {}
 impl Opts {
 	pub async fn execute(&self, term: &Term, override_api_url: Option<String>) -> Result<()> {
 		// Check if token already exists
-		if secrets::read_cloud_token().await?.is_none() {
-			read_cloud_token(term, override_api_url.clone()).await?;
+		let ctx = if let Some(cloud_token) = secrets::read_cloud_token().await? {
+			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
+
+			let game_res = ctx
+				.client()
+				.get_game_by_id()
+				.game_id(&ctx.game_id)
+				.send()
+				.await
+				.context("client.get_game_by_id")?;
+			let game = game_res.game().context("game_res.game")?;
+			let display_name = game.display_name().context("game.display_name")?;
+
+			term::status::success("Found Existing Token", display_name);
+
+			ctx
 		} else {
-			term::success("Cloud token already exists");
-		}
+			read_cloud_token(term, override_api_url.clone()).await?
+		};
 
 		Ok(())
 	}
 }
 
-async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<()> {
+async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<cli_core::Ctx> {
 	term.write_line("Cloud token: ")?;
 	let token = tokio::task::block_in_place(|| term.read_secure_line())?;
 
@@ -53,20 +67,12 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 		.await
 		.context("client.get_game_by_id()")?;
 	let game = game_res.game().context("game_res.game")?;
-	let game_id = game.game_id().context("game.game_id")?;
-	let name_id = game.name_id().context("game.name_id")?;
 	let display_name = game.display_name().context("game.display_name")?;
-
-	eprintln!();
-	eprintln!("Display name: {display_name}");
-	eprintln!("Name ID: {name_id}");
-	eprintln!("Game ID: {game_id}");
-	eprintln!();
 
 	// Write the token
 	secrets::write_cloud_token(&token).await?;
 
-	term::success("New cloud token saved");
+	term::status::success("Token Saved", display_name);
 
-	Ok(())
+	Ok(new_ctx)
 }
