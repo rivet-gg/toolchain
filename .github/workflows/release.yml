@@ -23,6 +23,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
+      - name: Rust Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Compile and release
         uses: rust-build/rust-build.action@v1.3.2
         env:
