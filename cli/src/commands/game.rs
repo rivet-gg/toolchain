@@ -37,7 +37,7 @@ impl SubCommand {
 				Ok(())
 			}
 			SubCommand::Dashboard => {
-				term::link(dashboard_url(&ctx.game_id));
+				eprintln!("{}", term::link(dashboard_url(&ctx.game_id)));
 
 				Ok(())
 			}

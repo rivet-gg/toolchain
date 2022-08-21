@@ -152,7 +152,7 @@ impl SubCommand {
 					.await
 					.context("client.get_game_version_by_id")?;
 
-				term::link(dashboard_url(&ctx.game_id, version));
+				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, version)));
 
 				Ok(())
 			}
