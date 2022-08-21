@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-VERSION="0.0.17"
+VERSION="$(curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases/latest | jq -r '.name')"
 
 echo
 echo "> Installing Rivet CLI @ $VERSION"
