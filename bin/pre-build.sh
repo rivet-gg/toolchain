@@ -1,4 +1,6 @@
 #!/bin/sh
+set -euf -o pipefail
 
-apk add --no-cache pkg-config libssl-dev
+apk update
+apk add --no-cache pkgconfig openssl-dev
 
