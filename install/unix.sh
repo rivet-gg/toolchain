@@ -1,5 +1,5 @@
 #!/bin/sh
-set -euf -o pipefail
+set -eu
 
 VERSION=0.0.16
 echo
