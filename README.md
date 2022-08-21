@@ -5,7 +5,7 @@
 ### macOS & Linux
 
 ```
-curl --proto '=https' --tlsv1.2 -sSfL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
+curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 ```
 
 ### Docker

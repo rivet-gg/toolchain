@@ -14,7 +14,7 @@ if [ "$(uname)" == "Darwin" ]; then
 	echo
 	URL="https://github.com/rivet-gg/cli/releases/download/${VERSION}/cli_${VERSION}_x86_64-apple-darwin.zip"
 	echo "> Downloading $URL"
-	curl --proto '=https' --tlsv1.2 -sSfL "$URL" -o rivet.zip
+	curl -fsSL "$URL" -o rivet.zip
 
 	echo
 	echo "> Extracting rivet.zip"
@@ -30,7 +30,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	echo
 	URL="https://github.com/rivet-gg/cli/releases/download/${VERSION}/cli_${VERSION}_x86_64-unknown-linux-musl.tar.gz"
 	echo "> Downloading $URL"
-	curl --proto '=https' --tlsv1.2 -sSfL "$URL" -o rivet.tar.gz
+	curl -fsSL "$URL" -o rivet.tar.gz
 
 	echo
 	echo "> Extracting rivet.tar.gz"
