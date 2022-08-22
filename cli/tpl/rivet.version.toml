@@ -1,0 +1,16 @@
+[cdn]
+
+[matchmaker]
+	[matchmaker.game_modes.default]
+		tier = "basic-1d1"
+		max_players = 16
+
+		[matchmaker.game_modes.default.docker]
+			args = []
+			env = {}
+
+			[matchmaker.game_modes.default.docker.ports]
+				https = { proto = "https", target = 80 }
+
+[kv]
+

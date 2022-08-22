@@ -1,8 +1,14 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use console::Term;
+use std::path::Path;
+use tokio::{fs, io::AsyncWriteExt};
 
-use crate::util::{secrets, term};
+use crate::util::{git, secrets, term};
+
+const GITHUB_WORKFLOW_RIVET_PUBLISH_YAML: &'static str =
+	include_str!("../../tpl/workflows/rivet-publish.yaml");
+const RIVET_VERSION_TOML: &'static str = include_str!("../../tpl/rivet.version.toml");
 
 #[derive(Parser)]
 pub struct Opts {}
@@ -10,7 +16,7 @@ pub struct Opts {}
 impl Opts {
 	pub async fn execute(&self, term: &Term, override_api_url: Option<String>) -> Result<()> {
 		// Check if token already exists
-		let ctx = if let Some(cloud_token) = secrets::read_cloud_token().await? {
+		if let Some(cloud_token) = secrets::read_cloud_token().await? {
 			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
 
 			let game_res = ctx
@@ -23,20 +29,98 @@ impl Opts {
 			let game = game_res.game().context("game_res.game")?;
 			let display_name = game.display_name().context("game.display_name")?;
 
-			term::status::success("Found Existing Token", display_name);
-
-			ctx
+			term::status::success("Found existing token", display_name);
 		} else {
-			read_cloud_token(term, override_api_url.clone()).await?
+			read_cloud_token(term, override_api_url.clone()).await?;
 		};
+
+		// Update .gitignore
+		if !git::check_ignore(Path::new(".rivet/")).await? {
+			if term::input::bool(term, "Add .rivet/ to .gitignore?").await? {
+				let mut file = fs::OpenOptions::new()
+					.write(true)
+					.append(true)
+					.open(".gitignore")
+					.await?;
+				file.write_all(b"\n### Rivet ###\n.rivet/\n").await?;
+
+				ensure!(
+					git::check_ignore(Path::new(".rivet/")).await?,
+					"updated gitignore does not ignore Rivet files"
+				);
+
+				term::status::success("Finished", "Git will now ignore the .rivet/ folder.");
+			}
+		} else {
+			term::status::success(
+				".gitignore already configured",
+				"The .rivet/ folder is already ignored by Git.",
+			);
+		}
+
+		// Create .github/workflows/rivet-push.yaml
+		let workflows_path = std::env::current_dir()?.join(".github").join("workflows");
+		let actions_path = workflows_path.join("rivet-publish.yaml");
+		let actions_needs_update = match fs::read_to_string(&actions_path).await {
+			Ok(old_actions_file) => old_actions_file != GITHUB_WORKFLOW_RIVET_PUBLISH_YAML,
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
+			Err(err) => {
+				return Err(err.into());
+			}
+		};
+		if actions_needs_update {
+			if term::input::bool(
+				term,
+				"Setup GitHub Actions at .github/workflows/rivet-push.yaml?",
+			)
+			.await?
+			{
+				fs::create_dir_all(&workflows_path).await?;
+				fs::write(actions_path, GITHUB_WORKFLOW_RIVET_PUBLISH_YAML).await?;
+
+				term::status::success(
+					"Finished",
+					"Your game will automatically deploy to Rivet next time you push to GitHub.",
+				);
+			}
+		} else {
+			term::status::success(
+				"GitHub Actions already configured",
+				"Your game already deploys to Rivet when you push to GitHub.",
+			);
+		}
+
+		// Create rivet.version.toml
+		let config_path = std::env::current_dir()?.join("rivet.version.toml");
+		let config_needs_creation = match fs::read_to_string(&config_path).await {
+			Ok(_) => false,
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
+			Err(err) => {
+				return Err(err.into());
+			}
+		};
+		if config_needs_creation {
+			if term::input::bool(term, "Create default config at rivet.version.toml?").await? {
+				fs::write(config_path, RIVET_VERSION_TOML).await?;
+
+				term::status::success(
+					"Finished",
+					"Rivet Matchmaker and Rivet CDN will be enabled next time you deploy.",
+				);
+			}
+		} else {
+			term::status::success(
+				"Version already configured",
+				"Your game is already configured with rivet.version.toml.",
+			);
+		}
 
 		Ok(())
 	}
 }
 
 async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<cli_core::Ctx> {
-	term.write_line("Cloud token: ")?;
-	let token = tokio::task::block_in_place(|| term.read_secure_line())?;
+	let token = term::input::secure(term, "Rivet cloud token?").await?;
 
 	// Create new context
 	let new_ctx = cli_core::ctx::init(

@@ -99,6 +99,7 @@ pub mod game_mode {
 			}
 
 			#[derive(Debug, Deserialize)]
+			#[serde(rename_all = "kebab-case")]
 			pub enum ProxyProtocol {
 				Http,
 				Https,
@@ -241,6 +242,7 @@ pub mod captcha {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(rename_all = "kebab-case")]
 	pub enum Level {
 		Easy,
 		Moderate,
