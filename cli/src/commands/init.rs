@@ -42,7 +42,7 @@ impl Opts {
 					.append(true)
 					.open(".gitignore")
 					.await?;
-				file.write_all(b"\n### Rivet ###\n.rivet/\n").await?;
+				file.write_all(b"\n### Rivet ###\n.rivet/\n.env\n").await?;
 
 				ensure!(
 					git::check_ignore(Path::new(".rivet/")).await?,
