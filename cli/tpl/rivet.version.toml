@@ -7,10 +7,12 @@
 
 		[matchmaker.game_modes.default.docker]
 			args = []
-			env = {}
+
+			[matchmaker.game_modes.default.docker.env]
+				PORT = "80"
 
 			[matchmaker.game_modes.default.docker.ports]
-				https = { proto = "https", target = 80 }
+				default = { proto = "https", target = 80 }
 
 [kv]
 
