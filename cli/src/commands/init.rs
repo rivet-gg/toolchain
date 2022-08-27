@@ -37,6 +37,7 @@ impl Opts {
 		};
 
 		// Update .gitignore
+		eprintln!();
 		if !git::check_ignore(Path::new(".rivet/")).await? {
 			if term::input::bool(term, "Add .rivet/ to .gitignore?").await? {
 				let mut file = fs::OpenOptions::new()
@@ -61,15 +62,9 @@ impl Opts {
 		}
 
 		// Create .github/workflows/rivet-push.yaml
+		eprintln!();
 		let workflows_path = std::env::current_dir()?.join(".github").join("workflows");
 		let actions_path = workflows_path.join("rivet-publish.yaml");
-		let actions_needs_update = match fs::read_to_string(&actions_path).await {
-			Ok(old_actions_file) => old_actions_file != GITHUB_WORKFLOW_RIVET_PUBLISH_YAML,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
-			Err(err) => {
-				return Err(err.into());
-			}
-		};
 		if actions_needs_update {
 			if term::input::bool(
 				term,
@@ -90,6 +85,11 @@ impl Opts {
 				fs::create_dir_all(&workflows_path).await?;
 				fs::write(actions_path, publish_yml).await?;
 
+				term::status::warn(
+					"Make sure to set the RIVET_CLOUD_TOKEN GitHub Actions secret",
+					dashboard_api_url(&ctx.game_id),
+				);
+
 				term::status::success(
 					"Finished",
 					"Your game will automatically deploy to Rivet next time you push to GitHub.",
@@ -103,6 +103,7 @@ impl Opts {
 		}
 
 		// Create rivet.version.toml
+		eprintln!();
 		let config_path = std::env::current_dir()?.join("rivet.version.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
@@ -127,9 +128,10 @@ impl Opts {
 			);
 		}
 
-		term::status::info(
-			"Check out our getting started guide:",
-			dashboard_api_url(&ctx.game_id),
+		eprintln!();
+		term::status::success(
+			"What's next?",
+			"https://docs.rivet.gg/docs/guides/getting-started-multiplayer",
 		);
 
 		Ok(())
