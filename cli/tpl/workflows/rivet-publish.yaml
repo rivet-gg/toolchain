@@ -43,7 +43,7 @@ jobs:
           echo "::set-output name=build_tag::${GIT_BRANCH}-${GIT_SHA_SHORT}:latest"
 
       - name: Docker Build
-        run: docker build --tag "${{ steps.consts.outputs.build_tag }}" .
+        run: docker build --file '__DOCKERFILE_PATH__' --tag "${{ steps.consts.outputs.build_tag }}" .
 
       - name: Push Build
         id: push_build
@@ -66,7 +66,7 @@ jobs:
         run: curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 
       - name: Install Yarn
-        run: npm install -g yarn
+        run: __SITE_BUILD_COMMAND__
 
       - uses: actions/checkout@v3
 
@@ -86,7 +86,7 @@ jobs:
       - name: Push Site
         id: push_site
         run: |
-          SITE_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" site push --path ./dist/ --name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" --format json | jq -r '.site_id')"
+          SITE_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" site push --path '__SITE_BUILD_PATH__' --name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" --format json | jq -r '.site_id')"
           echo "::set-output name=site_id::$SITE_ID"
 
   publish_version:

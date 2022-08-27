@@ -16,7 +16,7 @@ pub struct Opts {}
 impl Opts {
 	pub async fn execute(&self, term: &Term, override_api_url: Option<String>) -> Result<()> {
 		// Check if token already exists
-		if let Some(cloud_token) = secrets::read_cloud_token().await? {
+		let ctx = if let Some(cloud_token) = secrets::read_cloud_token().await? {
 			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
 
 			let game_res = ctx
@@ -30,8 +30,10 @@ impl Opts {
 			let display_name = game.display_name().context("game.display_name")?;
 
 			term::status::success("Found existing token", display_name);
+
+			ctx
 		} else {
-			read_cloud_token(term, override_api_url.clone()).await?;
+			read_cloud_token(term, override_api_url.clone()).await?
 		};
 
 		// Update .gitignore
@@ -75,8 +77,18 @@ impl Opts {
 			)
 			.await?
 			{
+				let dockerfile_path = term::input::string(term, "Server Dockerfile path?").await?;
+				let site_build_command = term::input::string(term, "CDN build command?").await?;
+				let site_build_path = term::input::string(term, "CDN build output path?").await?;
+
+				// TODO: Escape values for single quotes
+				let publish_yml = GITHUB_WORKFLOW_RIVET_PUBLISH_YAML
+					.replace("__DOCKERFILE_PATH__", &dockerfile_path)
+					.replace("__SITE_BUILD_COMMAND__", &site_build_command)
+					.replace("__SITE_BUILD_PATH__", &site_build_path);
+
 				fs::create_dir_all(&workflows_path).await?;
-				fs::write(actions_path, GITHUB_WORKFLOW_RIVET_PUBLISH_YAML).await?;
+				fs::write(actions_path, publish_yml).await?;
 
 				term::status::success(
 					"Finished",
@@ -114,6 +126,11 @@ impl Opts {
 				"Your game is already configured with rivet.version.toml.",
 			);
 		}
+
+		term::status::info(
+			"Check out our getting started guide:",
+			dashboard_api_url(&ctx.game_id),
+		);
 
 		Ok(())
 	}
@@ -159,4 +176,8 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 	term::status::success("Token Saved", display_name);
 
 	Ok(new_ctx)
+}
+
+pub fn dashboard_api_url(game_id: &str) -> String {
+	format!("https://rivet.gg/developer/games/{game_id}/api")
 }

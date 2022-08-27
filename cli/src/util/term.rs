@@ -16,10 +16,6 @@ pub fn link(msg: impl ToString) -> StyledObject<String> {
 	style(msg.to_string()).italic().underlined()
 }
 
-pub fn code(msg: impl ToString) -> StyledObject<String> {
-	style(msg.to_string()).italic()
-}
-
 pub mod status {
 	use console::style;
 	use std::fmt::Display;
@@ -50,11 +46,20 @@ pub mod input {
 	use console::{style, Term};
 	use std::fmt::Display;
 
-	pub async fn input(term: &Term, msg: impl Display) -> Result<String> {
-		eprint!("{} ", style(msg).bold().blue());
-		term.flush()?;
-		let input = tokio::task::block_in_place(|| term.read_line())?;
-		Ok(input)
+	pub async fn string(term: &Term, msg: impl Display + Clone) -> Result<String> {
+		loop {
+			eprint!("{} ", style(msg.clone()).bold().blue());
+			term.flush()?;
+			let input = tokio::task::block_in_place(|| term.read_line())?;
+
+			if input.len() > 0 {
+				return Ok(input);
+			} else {
+				super::status::error("Empty entry", "");
+				eprintln!();
+				continue;
+			}
+		}
 	}
 
 	pub async fn secure(term: &Term, msg: impl Display) -> Result<String> {
