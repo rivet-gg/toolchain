@@ -65,40 +65,33 @@ impl Opts {
 		eprintln!();
 		let workflows_path = std::env::current_dir()?.join(".github").join("workflows");
 		let actions_path = workflows_path.join("rivet-publish.yaml");
-		if actions_needs_update {
-			if term::input::bool(
-				term,
-				"Setup GitHub Actions at .github/workflows/rivet-push.yaml?",
-			)
-			.await?
-			{
-				let dockerfile_path = term::input::string(term, "Server Dockerfile path?").await?;
-				let site_build_command = term::input::string(term, "CDN build command?").await?;
-				let site_build_path = term::input::string(term, "CDN build output path?").await?;
+		if term::input::bool(
+			term,
+			"Setup GitHub Actions at .github/workflows/rivet-push.yaml?",
+		)
+		.await?
+		{
+			let dockerfile_path = term::input::string(term, "Server Dockerfile path?").await?;
+			let site_build_command = term::input::string(term, "CDN build command?").await?;
+			let site_build_path = term::input::string(term, "CDN build output path?").await?;
 
-				// TODO: Escape values for single quotes
-				let publish_yml = GITHUB_WORKFLOW_RIVET_PUBLISH_YAML
-					.replace("__DOCKERFILE_PATH__", &dockerfile_path)
-					.replace("__SITE_BUILD_COMMAND__", &site_build_command)
-					.replace("__SITE_BUILD_PATH__", &site_build_path);
+			// TODO: Escape values for single quotes
+			let publish_yml = GITHUB_WORKFLOW_RIVET_PUBLISH_YAML
+				.replace("__DOCKERFILE_PATH__", &dockerfile_path)
+				.replace("__SITE_BUILD_COMMAND__", &site_build_command)
+				.replace("__SITE_BUILD_PATH__", &site_build_path);
 
-				fs::create_dir_all(&workflows_path).await?;
-				fs::write(actions_path, publish_yml).await?;
+			fs::create_dir_all(&workflows_path).await?;
+			fs::write(actions_path, publish_yml).await?;
 
-				term::status::warn(
-					"Make sure to set the RIVET_CLOUD_TOKEN GitHub Actions secret",
-					dashboard_api_url(&ctx.game_id),
-				);
+			term::status::warn(
+				"Make sure to set the RIVET_CLOUD_TOKEN GitHub Actions secret",
+				dashboard_api_url(&ctx.game_id),
+			);
 
-				term::status::success(
-					"Finished",
-					"Your game will automatically deploy to Rivet next time you push to GitHub.",
-				);
-			}
-		} else {
 			term::status::success(
-				"GitHub Actions already configured",
-				"Your game already deploys to Rivet when you push to GitHub.",
+				"Finished",
+				"Your game will automatically deploy to Rivet next time you push to GitHub.",
 			);
 		}
 
