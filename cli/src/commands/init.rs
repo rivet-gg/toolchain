@@ -16,6 +16,7 @@ pub struct Opts {}
 impl Opts {
 	pub async fn execute(&self, term: &Term, override_api_url: Option<String>) -> Result<()> {
 		// Check if token already exists
+		eprintln!();
 		let ctx = if let Some(cloud_token) = secrets::read_cloud_token().await? {
 			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
 
@@ -119,6 +120,14 @@ impl Opts {
 				"Version already configured",
 				"Your game is already configured with rivet.version.toml.",
 			);
+		}
+
+		// Development flow
+		eprintln!();
+		if term::input::bool(term, "Setup development environment?").await? {
+			crate::commands::dev::SubCommand::Init
+				.execute(term, &ctx)
+				.await?
 		}
 
 		eprintln!();

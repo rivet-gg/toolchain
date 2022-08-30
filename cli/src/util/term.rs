@@ -62,6 +62,30 @@ pub mod input {
 		}
 	}
 
+	pub async fn string_with_tip(
+		term: &Term,
+		msg: impl Display + Clone,
+		tip: impl Display + Clone,
+	) -> Result<String> {
+		loop {
+			eprint!(
+				"{} {} ",
+				style(msg.clone()).bold().blue(),
+				style(format!("({tip})")).italic()
+			);
+			term.flush()?;
+			let input = tokio::task::block_in_place(|| term.read_line())?;
+
+			if input.len() > 0 {
+				return Ok(input);
+			} else {
+				super::status::error("Empty entry", "");
+				eprintln!();
+				continue;
+			}
+		}
+	}
+
 	pub async fn secure(term: &Term, msg: impl Display) -> Result<String> {
 		eprint!("{} ", style(msg).bold().blue());
 		term.flush()?;

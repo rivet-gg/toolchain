@@ -24,6 +24,10 @@ enum SubCommand {
 	Init(init::Opts),
 	#[clap(alias = "dash")]
 	Dashboard,
+	Dev {
+		#[clap(subcommand)]
+		command: dev::SubCommand,
+	},
 	Game {
 		#[clap(subcommand)]
 		command: game::SubCommand,
@@ -78,6 +82,7 @@ async fn main() -> Result<()> {
 				game_id = ctx.game_id
 			);
 		}
+		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
