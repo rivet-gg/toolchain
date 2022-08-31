@@ -65,9 +65,6 @@ jobs:
         shell: bash
         run: curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 
-      - name: Install Dependencies
-        run: npm install -g yarn
-
       - uses: actions/checkout@v3
 
       - name: Build Site
@@ -79,12 +76,6 @@ jobs:
         run: |
           echo "::set-output name=git_branch::${GITHUB_REF#refs/heads/}"
           echo "::set-output name=git_sha_short::$(git rev-parse --short HEAD)"
-
-      - name: Install
-        run: yarn install
-
-      - name: Build
-        run: yarn run build
 
       - name: Push Site
         id: push_site
