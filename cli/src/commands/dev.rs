@@ -34,6 +34,7 @@ impl SubCommand {
 					term::input::string_with_tip(term, "Dev hostname?", "example: 127.0.0.1")
 						.await?;
 
+				let mut default_port = Option::<u16>::None;
 				let mut lobby_ports = Vec::new();
 				loop {
 					eprintln!();
@@ -52,6 +53,9 @@ impl SubCommand {
 							eprintln!();
 						}
 					};
+					if default_port.is_none() {
+						default_port = Some(port);
+					}
 
 					let proto = 'proto: loop {
 						let proto = term::input::string_with_tip(
@@ -116,8 +120,10 @@ impl SubCommand {
 
 				eprintln!();
 				if term::input::bool(term, "Write token to .env file?").await? {
-					let env_file =
-						format!("RIVET_CLIENT_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n");
+					let env_file = format!(
+						"PORT={port}\nRIVET_CLIENT_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n",
+						port = default_port.unwrap()
+					);
 					fs::write(".env", env_file).await?;
 					term::status::success(format!("Wrote to .env"), "");
 				} else {
