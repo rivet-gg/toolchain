@@ -65,10 +65,13 @@ jobs:
         shell: bash
         run: curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 
-      - name: Install Yarn
-        run: __SITE_BUILD_COMMAND__
+      - name: Install Dependencies
+        run: npm install -g yarn
 
       - uses: actions/checkout@v3
+
+      - name: Build Site
+        run: __SITE_BUILD_COMMAND__
 
       - name: Constants
         id: consts
