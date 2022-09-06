@@ -29,7 +29,7 @@ if [ "$(uname)" = "Darwin" ]; then
 
 	echo
 	echo "> Installing rivet"
-	mv ./rivet /usr/local/bin/rivet
+	sudo mv ./rivet /usr/local/bin/rivet
 elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	echo
 	echo "> Detected Linux"
@@ -45,7 +45,7 @@ elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 
 	echo
 	echo "> Installing rivet"
-	mv ./rivet /usr/local/bin/rivet
+	sudo mv ./rivet /usr/local/bin/rivet
 else
 	echo "Unable to determine platform" 1>&2
 	exit 1
