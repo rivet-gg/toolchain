@@ -3154,6 +3154,61 @@ impl AnalyticsLobbySummary {
 	}
 }
 
+/// A value denoting what type of authentication to use for a game namespace's CDN.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum CdnAuthType {
+	#[allow(missing_docs)] // documentation missing in model
+	Basic,
+	#[allow(missing_docs)] // documentation missing in model
+	None,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for CdnAuthType {
+	fn from(s: &str) -> Self {
+		match s {
+			"basic" => CdnAuthType::Basic,
+			"none" => CdnAuthType::None,
+			other => CdnAuthType::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for CdnAuthType {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(CdnAuthType::from(s))
+	}
+}
+impl CdnAuthType {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			CdnAuthType::Basic => "basic",
+			CdnAuthType::None => "none",
+			CdnAuthType::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&["basic", "none"]
+	}
+}
+impl AsRef<str> for CdnAuthType {
+	fn as_ref(&self) -> &str {
+		self.as_str()
+	}
+}
+
 /// A docker port.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
@@ -3762,6 +3817,10 @@ pub struct CdnNamespaceConfig {
 	pub enable_domain_public_auth: std::option::Option<bool>,
 	/// A list of CDN domains for a given namespace.
 	pub domains: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceDomain>>,
+	/// A value denoting what type of authentication to use for a game namespace's CDN.
+	pub auth_type: std::option::Option<crate::model::CdnAuthType>,
+	/// A list of CDN authenticated users for a given namespace.
+	pub auth_user_list: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
 }
 impl CdnNamespaceConfig {
 	/// Whether or not to allow users to connect to the given namespace via domain name.
@@ -3772,12 +3831,22 @@ impl CdnNamespaceConfig {
 	pub fn domains(&self) -> std::option::Option<&[crate::model::CdnNamespaceDomain]> {
 		self.domains.as_deref()
 	}
+	/// A value denoting what type of authentication to use for a game namespace's CDN.
+	pub fn auth_type(&self) -> std::option::Option<&crate::model::CdnAuthType> {
+		self.auth_type.as_ref()
+	}
+	/// A list of CDN authenticated users for a given namespace.
+	pub fn auth_user_list(&self) -> std::option::Option<&[crate::model::CdnNamespaceAuthUser]> {
+		self.auth_user_list.as_deref()
+	}
 }
 impl std::fmt::Debug for CdnNamespaceConfig {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CdnNamespaceConfig");
 		formatter.field("enable_domain_public_auth", &self.enable_domain_public_auth);
 		formatter.field("domains", &self.domains);
+		formatter.field("auth_type", &self.auth_type);
+		formatter.field("auth_user_list", &self.auth_user_list);
 		formatter.finish()
 	}
 }
@@ -3789,6 +3858,9 @@ pub mod cdn_namespace_config {
 	pub struct Builder {
 		pub(crate) enable_domain_public_auth: std::option::Option<bool>,
 		pub(crate) domains: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceDomain>>,
+		pub(crate) auth_type: std::option::Option<crate::model::CdnAuthType>,
+		pub(crate) auth_user_list:
+			std::option::Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
 	}
 	impl Builder {
 		/// Whether or not to allow users to connect to the given namespace via domain name.
@@ -3820,11 +3892,45 @@ pub mod cdn_namespace_config {
 			self.domains = input;
 			self
 		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn auth_type(mut self, input: crate::model::CdnAuthType) -> Self {
+			self.auth_type = Some(input);
+			self
+		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn set_auth_type(
+			mut self,
+			input: std::option::Option<crate::model::CdnAuthType>,
+		) -> Self {
+			self.auth_type = input;
+			self
+		}
+		/// Appends an item to `auth_user_list`.
+		///
+		/// To override the contents of this collection use [`set_auth_user_list`](Self::set_auth_user_list).
+		///
+		/// A list of CDN authenticated users for a given namespace.
+		pub fn auth_user_list(mut self, input: crate::model::CdnNamespaceAuthUser) -> Self {
+			let mut v = self.auth_user_list.unwrap_or_default();
+			v.push(input);
+			self.auth_user_list = Some(v);
+			self
+		}
+		/// A list of CDN authenticated users for a given namespace.
+		pub fn set_auth_user_list(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
+		) -> Self {
+			self.auth_user_list = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`CdnNamespaceConfig`](crate::model::CdnNamespaceConfig)
 		pub fn build(self) -> crate::model::CdnNamespaceConfig {
 			crate::model::CdnNamespaceConfig {
 				enable_domain_public_auth: self.enable_domain_public_auth,
 				domains: self.domains,
+				auth_type: self.auth_type,
+				auth_user_list: self.auth_user_list,
 			}
 		}
 	}
@@ -3833,6 +3939,58 @@ impl CdnNamespaceConfig {
 	/// Creates a new builder-style object to manufacture [`CdnNamespaceConfig`](crate::model::CdnNamespaceConfig)
 	pub fn builder() -> crate::model::cdn_namespace_config::Builder {
 		crate::model::cdn_namespace_config::Builder::default()
+	}
+}
+
+/// An authenticated CDN user for a given namespace.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnNamespaceAuthUser {
+	/// A user name.
+	pub user: std::option::Option<std::string::String>,
+}
+impl CdnNamespaceAuthUser {
+	/// A user name.
+	pub fn user(&self) -> std::option::Option<&str> {
+		self.user.as_deref()
+	}
+}
+impl std::fmt::Debug for CdnNamespaceAuthUser {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnNamespaceAuthUser");
+		formatter.field("user", &self.user);
+		formatter.finish()
+	}
+}
+/// See [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+pub mod cdn_namespace_auth_user {
+	/// A builder for [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) user: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A user name.
+		pub fn user(mut self, input: impl Into<std::string::String>) -> Self {
+			self.user = Some(input.into());
+			self
+		}
+		/// A user name.
+		pub fn set_user(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.user = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+		pub fn build(self) -> crate::model::CdnNamespaceAuthUser {
+			crate::model::CdnNamespaceAuthUser { user: self.user }
+		}
+	}
+}
+impl CdnNamespaceAuthUser {
+	/// Creates a new builder-style object to manufacture [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+	pub fn builder() -> crate::model::cdn_namespace_auth_user::Builder {
+		crate::model::cdn_namespace_auth_user::Builder::default()
 	}
 }
 
@@ -4898,17 +5056,24 @@ impl IdleLobbiesConfig {
 pub struct CdnVersionConfig {
 	/// A universally unique identifier.
 	pub site_id: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub custom_headers: std::option::Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
 }
 impl CdnVersionConfig {
 	/// A universally unique identifier.
 	pub fn site_id(&self) -> std::option::Option<&str> {
 		self.site_id.as_deref()
 	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn custom_headers(&self) -> std::option::Option<&[crate::model::CdnVersionCustomHeader]> {
+		self.custom_headers.as_deref()
+	}
 }
 impl std::fmt::Debug for CdnVersionConfig {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CdnVersionConfig");
 		formatter.field("site_id", &self.site_id);
+		formatter.field("custom_headers", &self.custom_headers);
 		formatter.finish()
 	}
 }
@@ -4919,6 +5084,8 @@ pub mod cdn_version_config {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) site_id: std::option::Option<std::string::String>,
+		pub(crate) custom_headers:
+			std::option::Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -4931,10 +5098,29 @@ pub mod cdn_version_config {
 			self.site_id = input;
 			self
 		}
+		/// Appends an item to `custom_headers`.
+		///
+		/// To override the contents of this collection use [`set_custom_headers`](Self::set_custom_headers).
+		///
+		pub fn custom_headers(mut self, input: crate::model::CdnVersionCustomHeader) -> Self {
+			let mut v = self.custom_headers.unwrap_or_default();
+			v.push(input);
+			self.custom_headers = Some(v);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_custom_headers(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
+		) -> Self {
+			self.custom_headers = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`CdnVersionConfig`](crate::model::CdnVersionConfig)
 		pub fn build(self) -> crate::model::CdnVersionConfig {
 			crate::model::CdnVersionConfig {
 				site_id: self.site_id,
+				custom_headers: self.custom_headers,
 			}
 		}
 	}
@@ -4943,6 +5129,117 @@ impl CdnVersionConfig {
 	/// Creates a new builder-style object to manufacture [`CdnVersionConfig`](crate::model::CdnVersionConfig)
 	pub fn builder() -> crate::model::cdn_version_config::Builder {
 		crate::model::cdn_version_config::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnVersionCustomHeader {
+	#[allow(missing_docs)] // documentation missing in model
+	pub glob: std::option::Option<std::string::String>,
+	/// Unsigned 32 bit integer.
+	pub priority: std::option::Option<i32>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub headers:
+		std::option::Option<std::collections::HashMap<std::string::String, std::string::String>>,
+}
+impl CdnVersionCustomHeader {
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn glob(&self) -> std::option::Option<&str> {
+		self.glob.as_deref()
+	}
+	/// Unsigned 32 bit integer.
+	pub fn priority(&self) -> std::option::Option<i32> {
+		self.priority
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn headers(
+		&self,
+	) -> std::option::Option<&std::collections::HashMap<std::string::String, std::string::String>> {
+		self.headers.as_ref()
+	}
+}
+impl std::fmt::Debug for CdnVersionCustomHeader {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnVersionCustomHeader");
+		formatter.field("glob", &self.glob);
+		formatter.field("priority", &self.priority);
+		formatter.field("headers", &self.headers);
+		formatter.finish()
+	}
+}
+/// See [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
+pub mod cdn_version_custom_header {
+	/// A builder for [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) glob: std::option::Option<std::string::String>,
+		pub(crate) priority: std::option::Option<i32>,
+		pub(crate) headers: std::option::Option<
+			std::collections::HashMap<std::string::String, std::string::String>,
+		>,
+	}
+	impl Builder {
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn glob(mut self, input: impl Into<std::string::String>) -> Self {
+			self.glob = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_glob(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.glob = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn priority(mut self, input: i32) -> Self {
+			self.priority = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_priority(mut self, input: std::option::Option<i32>) -> Self {
+			self.priority = input;
+			self
+		}
+		/// Adds a key-value pair to `headers`.
+		///
+		/// To override the contents of this collection use [`set_headers`](Self::set_headers).
+		///
+		pub fn headers(
+			mut self,
+			k: impl Into<std::string::String>,
+			v: impl Into<std::string::String>,
+		) -> Self {
+			let mut hash_map = self.headers.unwrap_or_default();
+			hash_map.insert(k.into(), v.into());
+			self.headers = Some(hash_map);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_headers(
+			mut self,
+			input: std::option::Option<
+				std::collections::HashMap<std::string::String, std::string::String>,
+			>,
+		) -> Self {
+			self.headers = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
+		pub fn build(self) -> crate::model::CdnVersionCustomHeader {
+			crate::model::CdnVersionCustomHeader {
+				glob: self.glob,
+				priority: self.priority,
+				headers: self.headers,
+			}
+		}
+	}
+}
+impl CdnVersionCustomHeader {
+	/// Creates a new builder-style object to manufacture [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
+	pub fn builder() -> crate::model::cdn_version_custom_header::Builder {
+		crate::model::cdn_version_custom_header::Builder::default()
 	}
 }
 

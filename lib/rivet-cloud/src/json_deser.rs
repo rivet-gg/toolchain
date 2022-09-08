@@ -4850,6 +4850,23 @@ where
                                     crate::json_deser::deser_list_rivet_cloud_cdn_namespace_domains(tokens)?
                                 );
 							}
+							"auth_type" => {
+								builder = builder.set_auth_type(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| {
+										s.to_unescaped()
+											.map(|u| crate::model::CdnAuthType::from(u.as_ref()))
+									})
+									.transpose()?,
+								);
+							}
+							"auth_user_list" => {
+								builder = builder.set_auth_user_list(
+                                    crate::json_deser::deser_list_rivet_cloud_cdn_namespace_auth_users(tokens)?
+                                );
+							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 						}
 					}
@@ -5057,6 +5074,11 @@ where
 									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
 									.transpose()?,
 								);
+							}
+							"custom_headers" => {
+								builder = builder.set_custom_headers(
+                                    crate::json_deser::deser_list_rivet_cloud_cdn_version_custom_headers(tokens)?
+                                );
 							}
 							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
 						}
@@ -5422,6 +5444,87 @@ where
 							crate::json_deser::deser_structure_crate_model_cdn_namespace_domain(
 								tokens,
 							)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_cdn_namespace_auth_users<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+							crate::json_deser::deser_structure_crate_model_cdn_namespace_auth_user(
+								tokens,
+							)?;
+						if let Some(value) = value {
+							items.push(value);
+						}
+					}
+				}
+			}
+			Ok(Some(items))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start array or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_list_rivet_cloud_cdn_version_custom_headers<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartArray { .. }) => {
+			let mut items = Vec::new();
+			loop {
+				match tokens.peek() {
+					Some(Ok(aws_smithy_json::deserialize::Token::EndArray { .. })) => {
+						tokens.next().transpose().unwrap();
+						break;
+					}
+					_ => {
+						let value =
+                            crate::json_deser::deser_structure_crate_model_cdn_version_custom_header(tokens)?
+                        ;
 						if let Some(value) = value {
 							items.push(value);
 						}
@@ -5842,6 +5945,113 @@ where
 	}
 }
 
+pub fn deser_structure_crate_model_cdn_namespace_auth_user<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::CdnNamespaceAuthUser>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::CdnNamespaceAuthUser::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"user" => {
+								builder = builder.set_user(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+pub fn deser_structure_crate_model_cdn_version_custom_header<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<Option<crate::model::CdnVersionCustomHeader>, aws_smithy_json::deserialize::Error>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			#[allow(unused_mut)]
+			let mut builder = crate::model::CdnVersionCustomHeader::builder();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						match key.to_unescaped()?.as_ref() {
+							"glob" => {
+								builder = builder.set_glob(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
+							"priority" => {
+								builder = builder.set_priority(
+									aws_smithy_json::deserialize::token::expect_number_or_null(
+										tokens.next(),
+									)?
+									.map(|v| v.to_i32()),
+								);
+							}
+							"headers" => {
+								builder = builder.set_headers(
+									crate::json_deser::deser_map_rivet_cloud_cdn_version_headers(
+										tokens,
+									)?,
+								);
+							}
+							_ => aws_smithy_json::deserialize::token::skip_value(tokens)?,
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
 pub fn deser_structure_crate_model_lobby_group<'a, I>(
 	tokens: &mut std::iter::Peekable<I>,
 ) -> Result<Option<crate::model::LobbyGroup>, aws_smithy_json::deserialize::Error>
@@ -6057,6 +6267,52 @@ where
 				}
 			}
 			Ok(Some(builder.build()))
+		}
+		_ => Err(aws_smithy_json::deserialize::Error::custom(
+			"expected start object or null",
+		)),
+	}
+}
+
+#[allow(clippy::type_complexity, non_snake_case)]
+pub fn deser_map_rivet_cloud_cdn_version_headers<'a, I>(
+	tokens: &mut std::iter::Peekable<I>,
+) -> Result<
+	Option<std::collections::HashMap<std::string::String, std::string::String>>,
+	aws_smithy_json::deserialize::Error,
+>
+where
+	I: Iterator<
+		Item = Result<aws_smithy_json::deserialize::Token<'a>, aws_smithy_json::deserialize::Error>,
+	>,
+{
+	match tokens.next().transpose()? {
+		Some(aws_smithy_json::deserialize::Token::ValueNull { .. }) => Ok(None),
+		Some(aws_smithy_json::deserialize::Token::StartObject { .. }) => {
+			let mut map = std::collections::HashMap::new();
+			loop {
+				match tokens.next().transpose()? {
+					Some(aws_smithy_json::deserialize::Token::EndObject { .. }) => break,
+					Some(aws_smithy_json::deserialize::Token::ObjectKey { key, .. }) => {
+						let key = key.to_unescaped().map(|u| u.into_owned())?;
+						let value = aws_smithy_json::deserialize::token::expect_string_or_null(
+							tokens.next(),
+						)?
+						.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+						.transpose()?;
+						if let Some(value) = value {
+							map.insert(key, value);
+						}
+					}
+					other => {
+						return Err(aws_smithy_json::deserialize::Error::custom(format!(
+							"expected object key or end object, found: {:?}",
+							other
+						)))
+					}
+				}
+			}
+			Ok(Some(map))
 		}
 		_ => Err(aws_smithy_json::deserialize::Error::custom(
 			"expected start object or null",

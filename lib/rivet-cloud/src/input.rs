@@ -4739,6 +4739,180 @@ impl ListNamespaceLobbiesInput {
 	}
 }
 
+/// See [`RemoveNamespaceCdnAuthUserInput`](crate::input::RemoveNamespaceCdnAuthUserInput)
+pub mod remove_namespace_cdn_auth_user_input {
+	/// A builder for [`RemoveNamespaceCdnAuthUserInput`](crate::input::RemoveNamespaceCdnAuthUserInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) namespace_id: std::option::Option<std::string::String>,
+		pub(crate) user: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.namespace_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.namespace_id = input;
+			self
+		}
+		/// A user name.
+		pub fn user(mut self, input: impl Into<std::string::String>) -> Self {
+			self.user = Some(input.into());
+			self
+		}
+		/// A user name.
+		pub fn set_user(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.user = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`RemoveNamespaceCdnAuthUserInput`](crate::input::RemoveNamespaceCdnAuthUserInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::RemoveNamespaceCdnAuthUserInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::RemoveNamespaceCdnAuthUserInput {
+				game_id: self.game_id,
+				namespace_id: self.namespace_id,
+				user: self.user,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type RemoveNamespaceCdnAuthUserInputOperationOutputAlias =
+	crate::operation::RemoveNamespaceCdnAuthUser;
+#[doc(hidden)]
+pub type RemoveNamespaceCdnAuthUserInputOperationRetryAlias = ();
+impl RemoveNamespaceCdnAuthUserInput {
+	/// Consumes the builder and constructs an Operation<[`RemoveNamespaceCdnAuthUser`](crate::operation::RemoveNamespaceCdnAuthUser)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::RemoveNamespaceCdnAuthUser, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::RemoveNamespaceCdnAuthUserInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_50 = &_input.game_id;
+				let input_50 = input_50.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_50, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				let input_51 = &_input.namespace_id;
+				let input_51 = input_51.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "namespace_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let namespace_id = aws_smithy_http::label::fmt_string(input_51, false);
+				if namespace_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "namespace_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				let input_52 = &_input.user;
+				let input_52 = input_52.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "user",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let user = aws_smithy_http::label::fmt_string(input_52, false);
+				if user.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "user",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/namespaces/{namespace_id}/auth-user/{user}",
+					game_id = game_id,
+					namespace_id = namespace_id,
+					user = user
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::RemoveNamespaceCdnAuthUserInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("DELETE").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from("");
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::RemoveNamespaceCdnAuthUser::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"RemoveNamespaceCdnAuthUser",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`RemoveNamespaceCdnAuthUserInput`](crate::input::RemoveNamespaceCdnAuthUserInput)
+	pub fn builder() -> crate::input::remove_namespace_cdn_auth_user_input::Builder {
+		crate::input::remove_namespace_cdn_auth_user_input::Builder::default()
+	}
+}
+
 /// See [`RemoveNamespaceDomainInput`](crate::input::RemoveNamespaceDomainInput)
 pub mod remove_namespace_domain_input {
 	/// A builder for [`RemoveNamespaceDomainInput`](crate::input::RemoveNamespaceDomainInput)
@@ -4816,42 +4990,42 @@ impl RemoveNamespaceDomainInput {
 				_input: &crate::input::RemoveNamespaceDomainInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_50 = &_input.game_id;
-				let input_50 = input_50.as_ref().ok_or(
+				let input_53 = &_input.game_id;
+				let input_53 = input_53.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_50, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_53, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_51 = &_input.namespace_id;
-				let input_51 = input_51.as_ref().ok_or(
+				let input_54 = &_input.namespace_id;
+				let input_54 = input_54.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_51, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_54, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_52 = &_input.domain;
-				let input_52 = input_52.as_ref().ok_or(
+				let input_55 = &_input.domain;
+				let input_55 = input_55.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let domain = aws_smithy_http::label::fmt_string(input_52, false);
+				let domain = aws_smithy_http::label::fmt_string(input_55, false);
 				if domain.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
@@ -4909,6 +5083,184 @@ impl RemoveNamespaceDomainInput {
 	/// Creates a new builder-style object to manufacture [`RemoveNamespaceDomainInput`](crate::input::RemoveNamespaceDomainInput)
 	pub fn builder() -> crate::input::remove_namespace_domain_input::Builder {
 		crate::input::remove_namespace_domain_input::Builder::default()
+	}
+}
+
+/// See [`SetNamespaceCdnAuthTypeInput`](crate::input::SetNamespaceCdnAuthTypeInput)
+pub mod set_namespace_cdn_auth_type_input {
+	/// A builder for [`SetNamespaceCdnAuthTypeInput`](crate::input::SetNamespaceCdnAuthTypeInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) namespace_id: std::option::Option<std::string::String>,
+		pub(crate) auth_type: std::option::Option<crate::model::CdnAuthType>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.namespace_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.namespace_id = input;
+			self
+		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn auth_type(mut self, input: crate::model::CdnAuthType) -> Self {
+			self.auth_type = Some(input);
+			self
+		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn set_auth_type(
+			mut self,
+			input: std::option::Option<crate::model::CdnAuthType>,
+		) -> Self {
+			self.auth_type = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`SetNamespaceCdnAuthTypeInput`](crate::input::SetNamespaceCdnAuthTypeInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::SetNamespaceCdnAuthTypeInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::SetNamespaceCdnAuthTypeInput {
+				game_id: self.game_id,
+				namespace_id: self.namespace_id,
+				auth_type: self.auth_type,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type SetNamespaceCdnAuthTypeInputOperationOutputAlias =
+	crate::operation::SetNamespaceCdnAuthType;
+#[doc(hidden)]
+pub type SetNamespaceCdnAuthTypeInputOperationRetryAlias = ();
+impl SetNamespaceCdnAuthTypeInput {
+	/// Consumes the builder and constructs an Operation<[`SetNamespaceCdnAuthType`](crate::operation::SetNamespaceCdnAuthType)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::SetNamespaceCdnAuthType, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::SetNamespaceCdnAuthTypeInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_56 = &_input.game_id;
+				let input_56 = input_56.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_56, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				let input_57 = &_input.namespace_id;
+				let input_57 = input_57.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "namespace_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let namespace_id = aws_smithy_http::label::fmt_string(input_57, false);
+				if namespace_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "namespace_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/namespaces/{namespace_id}/cdn-auth",
+					game_id = game_id,
+					namespace_id = namespace_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::SetNamespaceCdnAuthTypeInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("PUT").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from(
+			crate::operation_ser::serialize_operation_crate_operation_set_namespace_cdn_auth_type(
+				&self,
+			)?,
+		);
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::SetNamespaceCdnAuthType::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"SetNamespaceCdnAuthType",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`SetNamespaceCdnAuthTypeInput`](crate::input::SetNamespaceCdnAuthTypeInput)
+	pub fn builder() -> crate::input::set_namespace_cdn_auth_type_input::Builder {
+		crate::input::set_namespace_cdn_auth_type_input::Builder::default()
 	}
 }
 
@@ -4993,28 +5345,28 @@ impl ToggleNamespaceDomainPublicAuthInput {
 				_input: &crate::input::ToggleNamespaceDomainPublicAuthInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_53 = &_input.game_id;
-				let input_53 = input_53.as_ref().ok_or(
+				let input_58 = &_input.game_id;
+				let input_58 = input_58.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_53, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_58, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_54 = &_input.namespace_id;
-				let input_54 = input_54.as_ref().ok_or(
+				let input_59 = &_input.namespace_id;
+				let input_59 = input_59.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_54, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_59, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -5180,28 +5532,28 @@ impl UpdateGameNamespaceMatchmakerConfigInput {
 				_input: &crate::input::UpdateGameNamespaceMatchmakerConfigInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_55 = &_input.game_id;
-				let input_55 = input_55.as_ref().ok_or(
+				let input_60 = &_input.game_id;
+				let input_60 = input_60.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_55, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_60, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_56 = &_input.namespace_id;
-				let input_56 = input_56.as_ref().ok_or(
+				let input_61 = &_input.namespace_id;
+				let input_61 = input_61.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_56, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_61, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -5352,28 +5704,28 @@ impl UpdateGameNamespaceVersionInput {
 				_input: &crate::input::UpdateGameNamespaceVersionInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_57 = &_input.game_id;
-				let input_57 = input_57.as_ref().ok_or(
+				let input_62 = &_input.game_id;
+				let input_62 = input_62.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_57, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_62, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_58 = &_input.namespace_id;
-				let input_58 = input_58.as_ref().ok_or(
+				let input_63 = &_input.namespace_id;
+				let input_63 = input_63.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_58, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_63, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -5443,6 +5795,190 @@ impl UpdateGameNamespaceVersionInput {
 	/// Creates a new builder-style object to manufacture [`UpdateGameNamespaceVersionInput`](crate::input::UpdateGameNamespaceVersionInput)
 	pub fn builder() -> crate::input::update_game_namespace_version_input::Builder {
 		crate::input::update_game_namespace_version_input::Builder::default()
+	}
+}
+
+/// See [`UpdateNamespaceCdnAuthUserInput`](crate::input::UpdateNamespaceCdnAuthUserInput)
+pub mod update_namespace_cdn_auth_user_input {
+	/// A builder for [`UpdateNamespaceCdnAuthUserInput`](crate::input::UpdateNamespaceCdnAuthUserInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) game_id: std::option::Option<std::string::String>,
+		pub(crate) namespace_id: std::option::Option<std::string::String>,
+		pub(crate) user: std::option::Option<std::string::String>,
+		pub(crate) password: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.game_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.game_id = input;
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.namespace_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.namespace_id = input;
+			self
+		}
+		/// A user name.
+		pub fn user(mut self, input: impl Into<std::string::String>) -> Self {
+			self.user = Some(input.into());
+			self
+		}
+		/// A user name.
+		pub fn set_user(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.user = input;
+			self
+		}
+		/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+		pub fn password(mut self, input: impl Into<std::string::String>) -> Self {
+			self.password = Some(input.into());
+			self
+		}
+		/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+		pub fn set_password(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.password = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`UpdateNamespaceCdnAuthUserInput`](crate::input::UpdateNamespaceCdnAuthUserInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::UpdateNamespaceCdnAuthUserInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::UpdateNamespaceCdnAuthUserInput {
+				game_id: self.game_id,
+				namespace_id: self.namespace_id,
+				user: self.user,
+				password: self.password,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type UpdateNamespaceCdnAuthUserInputOperationOutputAlias =
+	crate::operation::UpdateNamespaceCdnAuthUser;
+#[doc(hidden)]
+pub type UpdateNamespaceCdnAuthUserInputOperationRetryAlias = ();
+impl UpdateNamespaceCdnAuthUserInput {
+	/// Consumes the builder and constructs an Operation<[`UpdateNamespaceCdnAuthUser`](crate::operation::UpdateNamespaceCdnAuthUser)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::UpdateNamespaceCdnAuthUser, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::UpdateNamespaceCdnAuthUserInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_64 = &_input.game_id;
+				let input_64 = input_64.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let game_id = aws_smithy_http::label::fmt_string(input_64, false);
+				if game_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "game_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				let input_65 = &_input.namespace_id;
+				let input_65 = input_65.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "namespace_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let namespace_id = aws_smithy_http::label::fmt_string(input_65, false);
+				if namespace_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "namespace_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(
+					output,
+					"/games/{game_id}/namespaces/{namespace_id}/auth-user",
+					game_id = game_id,
+					namespace_id = namespace_id
+				)
+				.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::UpdateNamespaceCdnAuthUserInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("POST").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]let body = aws_smithy_http::body::SdkBody::from(
+            crate::operation_ser::serialize_operation_crate_operation_update_namespace_cdn_auth_user(&self)?
+        );
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::UpdateNamespaceCdnAuthUser::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"UpdateNamespaceCdnAuthUser",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`UpdateNamespaceCdnAuthUserInput`](crate::input::UpdateNamespaceCdnAuthUserInput)
+	pub fn builder() -> crate::input::update_namespace_cdn_auth_user_input::Builder {
+		crate::input::update_namespace_cdn_auth_user_input::Builder::default()
 	}
 }
 
@@ -5523,54 +6059,39 @@ impl UpdateNamespaceDomainInput {
 				_input: &crate::input::UpdateNamespaceDomainInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_59 = &_input.game_id;
-				let input_59 = input_59.as_ref().ok_or(
+				let input_66 = &_input.game_id;
+				let input_66 = input_66.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_59, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_66, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_60 = &_input.namespace_id;
-				let input_60 = input_60.as_ref().ok_or(
+				let input_67 = &_input.namespace_id;
+				let input_67 = input_67.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_60, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_67, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_61 = &_input.domain;
-				let input_61 = input_61.as_ref().ok_or(
-					aws_smithy_http::operation::BuildError::MissingField {
-						field: "domain",
-						details: "cannot be empty or unset",
-					},
-				)?;
-				let domain = aws_smithy_http::label::fmt_string(input_61, false);
-				if domain.is_empty() {
-					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "domain",
-						details: "cannot be empty or unset",
-					});
-				}
 				write!(
 					output,
-					"/games/{game_id}/namespaces/{namespace_id}/domains/{domain}",
+					"/games/{game_id}/namespaces/{namespace_id}/domains",
 					game_id = game_id,
-					namespace_id = namespace_id,
-					domain = domain
+					namespace_id = namespace_id
 				)
 				.expect("formatting should succeed");
 				Ok(())
@@ -5593,11 +6114,27 @@ impl UpdateNamespaceDomainInput {
 			} else {
 				builder
 			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
 			builder
 		};
 		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
 		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from("{}");
+		let body = aws_smithy_http::body::SdkBody::from(
+			crate::operation_ser::serialize_operation_crate_operation_update_namespace_domain(
+				&self,
+			)?,
+		);
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
 		let request = request.body(body).expect("should be valid request");
 		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
 		request
@@ -5822,14 +6359,14 @@ impl ValidateGameNamespaceInput {
 				_input: &crate::input::ValidateGameNamespaceInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_62 = &_input.game_id;
-				let input_62 = input_62.as_ref().ok_or(
+				let input_68 = &_input.game_id;
+				let input_68 = input_68.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_62, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_68, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5997,28 +6534,28 @@ impl ValidateGameNamespaceMatchmakerConfigInput {
 				_input: &crate::input::ValidateGameNamespaceMatchmakerConfigInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_63 = &_input.game_id;
-				let input_63 = input_63.as_ref().ok_or(
+				let input_69 = &_input.game_id;
+				let input_69 = input_69.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_63, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_69, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_64 = &_input.namespace_id;
-				let input_64 = input_64.as_ref().ok_or(
+				let input_70 = &_input.namespace_id;
+				let input_70 = input_70.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_64, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_70, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -6194,28 +6731,28 @@ impl ValidateGameNamespaceTokenDevelopmentInput {
 				_input: &crate::input::ValidateGameNamespaceTokenDevelopmentInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_65 = &_input.game_id;
-				let input_65 = input_65.as_ref().ok_or(
+				let input_71 = &_input.game_id;
+				let input_71 = input_71.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_65, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_71, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_66 = &_input.namespace_id;
-				let input_66 = input_66.as_ref().ok_or(
+				let input_72 = &_input.namespace_id;
+				let input_72 = input_72.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_66, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_72, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -6368,14 +6905,14 @@ impl ValidateGameVersionInput {
 				_input: &crate::input::ValidateGameVersionInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_67 = &_input.game_id;
-				let input_67 = input_67.as_ref().ok_or(
+				let input_73 = &_input.game_id;
+				let input_73 = input_73.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_67, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_73, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -7087,6 +7624,118 @@ impl std::fmt::Debug for GetNamespaceAnalyticsMatchmakerLiveInput {
 		let mut formatter = f.debug_struct("GetNamespaceAnalyticsMatchmakerLiveInput");
 		formatter.field("game_id", &self.game_id);
 		formatter.field("namespace_id", &self.namespace_id);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct SetNamespaceCdnAuthTypeInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub namespace_id: std::option::Option<std::string::String>,
+	/// A value denoting what type of authentication to use for a game namespace's CDN.
+	pub auth_type: std::option::Option<crate::model::CdnAuthType>,
+}
+impl SetNamespaceCdnAuthTypeInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// A universally unique identifier.
+	pub fn namespace_id(&self) -> std::option::Option<&str> {
+		self.namespace_id.as_deref()
+	}
+	/// A value denoting what type of authentication to use for a game namespace's CDN.
+	pub fn auth_type(&self) -> std::option::Option<&crate::model::CdnAuthType> {
+		self.auth_type.as_ref()
+	}
+}
+impl std::fmt::Debug for SetNamespaceCdnAuthTypeInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("SetNamespaceCdnAuthTypeInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("namespace_id", &self.namespace_id);
+		formatter.field("auth_type", &self.auth_type);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct RemoveNamespaceCdnAuthUserInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub namespace_id: std::option::Option<std::string::String>,
+	/// A user name.
+	pub user: std::option::Option<std::string::String>,
+}
+impl RemoveNamespaceCdnAuthUserInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// A universally unique identifier.
+	pub fn namespace_id(&self) -> std::option::Option<&str> {
+		self.namespace_id.as_deref()
+	}
+	/// A user name.
+	pub fn user(&self) -> std::option::Option<&str> {
+		self.user.as_deref()
+	}
+}
+impl std::fmt::Debug for RemoveNamespaceCdnAuthUserInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("RemoveNamespaceCdnAuthUserInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("namespace_id", &self.namespace_id);
+		formatter.field("user", &self.user);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct UpdateNamespaceCdnAuthUserInput {
+	/// A universally unique identifier.
+	pub game_id: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub namespace_id: std::option::Option<std::string::String>,
+	/// A user name.
+	pub user: std::option::Option<std::string::String>,
+	/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+	pub password: std::option::Option<std::string::String>,
+}
+impl UpdateNamespaceCdnAuthUserInput {
+	/// A universally unique identifier.
+	pub fn game_id(&self) -> std::option::Option<&str> {
+		self.game_id.as_deref()
+	}
+	/// A universally unique identifier.
+	pub fn namespace_id(&self) -> std::option::Option<&str> {
+		self.namespace_id.as_deref()
+	}
+	/// A user name.
+	pub fn user(&self) -> std::option::Option<&str> {
+		self.user.as_deref()
+	}
+	/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+	pub fn password(&self) -> std::option::Option<&str> {
+		self.password.as_deref()
+	}
+}
+impl std::fmt::Debug for UpdateNamespaceCdnAuthUserInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("UpdateNamespaceCdnAuthUserInput");
+		formatter.field("game_id", &self.game_id);
+		formatter.field("namespace_id", &self.namespace_id);
+		formatter.field("user", &self.user);
+		formatter.field("password", &self.password);
 		formatter.finish()
 	}
 }
