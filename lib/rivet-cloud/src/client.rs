@@ -593,6 +593,20 @@ where
 	pub fn list_namespace_lobbies(&self) -> fluent_builders::ListNamespaceLobbies<C, M, R> {
 		fluent_builders::ListNamespaceLobbies::new(self.handle.clone())
 	}
+	/// Constructs a fluent builder for the [`RemoveNamespaceCdnAuthUser`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser::set_namespace_id): A universally unique identifier.
+	///   - [`user(impl Into<String>)`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser::user) / [`set_user(Option<String>)`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser::set_user): A user name.
+	/// - On success, responds with [`RemoveNamespaceCdnAuthUserOutput`](crate::output::RemoveNamespaceCdnAuthUserOutput)
+
+	/// - On failure, responds with [`SdkError<RemoveNamespaceCdnAuthUserError>`](crate::error::RemoveNamespaceCdnAuthUserError)
+	pub fn remove_namespace_cdn_auth_user(
+		&self,
+	) -> fluent_builders::RemoveNamespaceCdnAuthUser<C, M, R> {
+		fluent_builders::RemoveNamespaceCdnAuthUser::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`RemoveNamespaceDomain`](crate::client::fluent_builders::RemoveNamespaceDomain) operation.
 	///
 	/// - The fluent builder is configurable:
@@ -604,6 +618,18 @@ where
 	/// - On failure, responds with [`SdkError<RemoveNamespaceDomainError>`](crate::error::RemoveNamespaceDomainError)
 	pub fn remove_namespace_domain(&self) -> fluent_builders::RemoveNamespaceDomain<C, M, R> {
 		fluent_builders::RemoveNamespaceDomain::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`SetNamespaceCdnAuthType`](crate::client::fluent_builders::SetNamespaceCdnAuthType) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::SetNamespaceCdnAuthType::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::SetNamespaceCdnAuthType::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::SetNamespaceCdnAuthType::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::SetNamespaceCdnAuthType::set_namespace_id): A universally unique identifier.
+	///   - [`auth_type(CdnAuthType)`](crate::client::fluent_builders::SetNamespaceCdnAuthType::auth_type) / [`set_auth_type(Option<CdnAuthType>)`](crate::client::fluent_builders::SetNamespaceCdnAuthType::set_auth_type): A value denoting what type of authentication to use for a game namespace's CDN.
+	/// - On success, responds with [`SetNamespaceCdnAuthTypeOutput`](crate::output::SetNamespaceCdnAuthTypeOutput)
+
+	/// - On failure, responds with [`SdkError<SetNamespaceCdnAuthTypeError>`](crate::error::SetNamespaceCdnAuthTypeError)
+	pub fn set_namespace_cdn_auth_type(&self) -> fluent_builders::SetNamespaceCdnAuthType<C, M, R> {
+		fluent_builders::SetNamespaceCdnAuthType::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`ToggleNamespaceDomainPublicAuth`](crate::client::fluent_builders::ToggleNamespaceDomainPublicAuth) operation.
 	///
@@ -647,6 +673,21 @@ where
 		&self,
 	) -> fluent_builders::UpdateGameNamespaceVersion<C, M, R> {
 		fluent_builders::UpdateGameNamespaceVersion::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`UpdateNamespaceCdnAuthUser`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::set_namespace_id): A universally unique identifier.
+	///   - [`user(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::user) / [`set_user(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::set_user): A user name.
+	///   - [`password(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::password) / [`set_password(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceCdnAuthUser::set_password): A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+	/// - On success, responds with [`UpdateNamespaceCdnAuthUserOutput`](crate::output::UpdateNamespaceCdnAuthUserOutput)
+
+	/// - On failure, responds with [`SdkError<UpdateNamespaceCdnAuthUserError>`](crate::error::UpdateNamespaceCdnAuthUserError)
+	pub fn update_namespace_cdn_auth_user(
+		&self,
+	) -> fluent_builders::UpdateNamespaceCdnAuthUser<C, M, R> {
+		fluent_builders::UpdateNamespaceCdnAuthUser::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`UpdateNamespaceDomain`](crate::client::fluent_builders::UpdateNamespaceDomain) operation.
 	///
@@ -3358,6 +3399,92 @@ pub mod fluent_builders {
 			self
 		}
 	}
+	/// Fluent builder constructing a request to `RemoveNamespaceCdnAuthUser`.
+	///
+	/// Removes an authenticated user from the given game namespace.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct RemoveNamespaceCdnAuthUser<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::remove_namespace_cdn_auth_user_input::Builder,
+	}
+	impl<C, M, R> RemoveNamespaceCdnAuthUser<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `RemoveNamespaceCdnAuthUser`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::RemoveNamespaceCdnAuthUserOutput,
+			aws_smithy_http::result::SdkError<crate::error::RemoveNamespaceCdnAuthUserError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::RemoveNamespaceCdnAuthUserInputOperationOutputAlias,
+				crate::output::RemoveNamespaceCdnAuthUserOutput,
+				crate::error::RemoveNamespaceCdnAuthUserError,
+				crate::input::RemoveNamespaceCdnAuthUserInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.namespace_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_namespace_id(input);
+			self
+		}
+		/// A user name.
+		pub fn user(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.user(input.into());
+			self
+		}
+		/// A user name.
+		pub fn set_user(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_user(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `RemoveNamespaceDomain`.
 	///
 	/// Removes a domain from the given game namespace.
@@ -3441,6 +3568,95 @@ pub mod fluent_builders {
 		/// A valid domain name (no protocol).
 		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_domain(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `SetNamespaceCdnAuthType`.
+	///
+	/// Updates the CDN authentication type of the given game namesapce.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct SetNamespaceCdnAuthType<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::set_namespace_cdn_auth_type_input::Builder,
+	}
+	impl<C, M, R> SetNamespaceCdnAuthType<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `SetNamespaceCdnAuthType`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::SetNamespaceCdnAuthTypeOutput,
+			aws_smithy_http::result::SdkError<crate::error::SetNamespaceCdnAuthTypeError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::SetNamespaceCdnAuthTypeInputOperationOutputAlias,
+				crate::output::SetNamespaceCdnAuthTypeOutput,
+				crate::error::SetNamespaceCdnAuthTypeError,
+				crate::input::SetNamespaceCdnAuthTypeInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.namespace_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_namespace_id(input);
+			self
+		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn auth_type(mut self, input: crate::model::CdnAuthType) -> Self {
+			self.inner = self.inner.auth_type(input);
+			self
+		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn set_auth_type(
+			mut self,
+			input: std::option::Option<crate::model::CdnAuthType>,
+		) -> Self {
+			self.inner = self.inner.set_auth_type(input);
 			self
 		}
 	}
@@ -3711,6 +3927,102 @@ pub mod fluent_builders {
 		/// A universally unique identifier.
 		pub fn set_version_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_version_id(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `UpdateNamespaceCdnAuthUser`.
+	///
+	/// Adds an authenticated user to the given game namespace.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct UpdateNamespaceCdnAuthUser<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::update_namespace_cdn_auth_user_input::Builder,
+	}
+	impl<C, M, R> UpdateNamespaceCdnAuthUser<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `UpdateNamespaceCdnAuthUser`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::UpdateNamespaceCdnAuthUserOutput,
+			aws_smithy_http::result::SdkError<crate::error::UpdateNamespaceCdnAuthUserError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::UpdateNamespaceCdnAuthUserInputOperationOutputAlias,
+				crate::output::UpdateNamespaceCdnAuthUserOutput,
+				crate::error::UpdateNamespaceCdnAuthUserError,
+				crate::input::UpdateNamespaceCdnAuthUserInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.namespace_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_namespace_id(input);
+			self
+		}
+		/// A user name.
+		pub fn user(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.user(input.into());
+			self
+		}
+		/// A user name.
+		pub fn set_user(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_user(input);
+			self
+		}
+		/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+		pub fn password(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.password(input.into());
+			self
+		}
+		/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
+		pub fn set_password(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_password(input);
 			self
 		}
 	}
@@ -4319,5 +4631,17 @@ pub mod fluent_builders {
 			self.inner = self.inner.set_display_name(input);
 			self
 		}
+	}
+}
+/// A wrapper around [`Client`]. Helps reduce external imports.
+pub struct ClientWrapper {
+	pub(crate) client: Client<aws_smithy_client::erase::DynConnector, tower::layer::util::Identity>,
+}
+
+impl std::ops::Deref for ClientWrapper {
+	type Target = Client<aws_smithy_client::erase::DynConnector, tower::layer::util::Identity>;
+
+	fn deref(&self) -> &Self::Target {
+		&self.client
 	}
 }

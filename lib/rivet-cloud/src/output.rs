@@ -1405,6 +1405,96 @@ impl GetNamespaceAnalyticsMatchmakerLiveOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct SetNamespaceCdnAuthTypeOutput {}
+impl std::fmt::Debug for SetNamespaceCdnAuthTypeOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("SetNamespaceCdnAuthTypeOutput");
+		formatter.finish()
+	}
+}
+/// See [`SetNamespaceCdnAuthTypeOutput`](crate::output::SetNamespaceCdnAuthTypeOutput)
+pub mod set_namespace_cdn_auth_type_output {
+	/// A builder for [`SetNamespaceCdnAuthTypeOutput`](crate::output::SetNamespaceCdnAuthTypeOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`SetNamespaceCdnAuthTypeOutput`](crate::output::SetNamespaceCdnAuthTypeOutput)
+		pub fn build(self) -> crate::output::SetNamespaceCdnAuthTypeOutput {
+			crate::output::SetNamespaceCdnAuthTypeOutput {}
+		}
+	}
+}
+impl SetNamespaceCdnAuthTypeOutput {
+	/// Creates a new builder-style object to manufacture [`SetNamespaceCdnAuthTypeOutput`](crate::output::SetNamespaceCdnAuthTypeOutput)
+	pub fn builder() -> crate::output::set_namespace_cdn_auth_type_output::Builder {
+		crate::output::set_namespace_cdn_auth_type_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct RemoveNamespaceCdnAuthUserOutput {}
+impl std::fmt::Debug for RemoveNamespaceCdnAuthUserOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("RemoveNamespaceCdnAuthUserOutput");
+		formatter.finish()
+	}
+}
+/// See [`RemoveNamespaceCdnAuthUserOutput`](crate::output::RemoveNamespaceCdnAuthUserOutput)
+pub mod remove_namespace_cdn_auth_user_output {
+	/// A builder for [`RemoveNamespaceCdnAuthUserOutput`](crate::output::RemoveNamespaceCdnAuthUserOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`RemoveNamespaceCdnAuthUserOutput`](crate::output::RemoveNamespaceCdnAuthUserOutput)
+		pub fn build(self) -> crate::output::RemoveNamespaceCdnAuthUserOutput {
+			crate::output::RemoveNamespaceCdnAuthUserOutput {}
+		}
+	}
+}
+impl RemoveNamespaceCdnAuthUserOutput {
+	/// Creates a new builder-style object to manufacture [`RemoveNamespaceCdnAuthUserOutput`](crate::output::RemoveNamespaceCdnAuthUserOutput)
+	pub fn builder() -> crate::output::remove_namespace_cdn_auth_user_output::Builder {
+		crate::output::remove_namespace_cdn_auth_user_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct UpdateNamespaceCdnAuthUserOutput {}
+impl std::fmt::Debug for UpdateNamespaceCdnAuthUserOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("UpdateNamespaceCdnAuthUserOutput");
+		formatter.finish()
+	}
+}
+/// See [`UpdateNamespaceCdnAuthUserOutput`](crate::output::UpdateNamespaceCdnAuthUserOutput)
+pub mod update_namespace_cdn_auth_user_output {
+	/// A builder for [`UpdateNamespaceCdnAuthUserOutput`](crate::output::UpdateNamespaceCdnAuthUserOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`UpdateNamespaceCdnAuthUserOutput`](crate::output::UpdateNamespaceCdnAuthUserOutput)
+		pub fn build(self) -> crate::output::UpdateNamespaceCdnAuthUserOutput {
+			crate::output::UpdateNamespaceCdnAuthUserOutput {}
+		}
+	}
+}
+impl UpdateNamespaceCdnAuthUserOutput {
+	/// Creates a new builder-style object to manufacture [`UpdateNamespaceCdnAuthUserOutput`](crate::output::UpdateNamespaceCdnAuthUserOutput)
+	pub fn builder() -> crate::output::update_namespace_cdn_auth_user_output::Builder {
+		crate::output::update_namespace_cdn_auth_user_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ValidateGameNamespaceMatchmakerConfigOutput {
 	/// A list of validation errors.
 	pub errors: std::option::Option<std::vec::Vec<crate::model::ValidationError>>,

@@ -3154,14 +3154,71 @@ impl AnalyticsLobbySummary {
 	}
 }
 
+/// A value denoting what type of authentication to use for a game namespace's CDN.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum CdnAuthType {
+	#[allow(missing_docs)] // documentation missing in model
+	Basic,
+	#[allow(missing_docs)] // documentation missing in model
+	None,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for CdnAuthType {
+	fn from(s: &str) -> Self {
+		match s {
+			"basic" => CdnAuthType::Basic,
+			"none" => CdnAuthType::None,
+			other => CdnAuthType::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for CdnAuthType {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(CdnAuthType::from(s))
+	}
+}
+impl CdnAuthType {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			CdnAuthType::Basic => "basic",
+			CdnAuthType::None => "none",
+			CdnAuthType::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&["basic", "none"]
+	}
+}
+impl AsRef<str> for CdnAuthType {
+	fn as_ref(&self) -> &str {
+		self.as_str()
+	}
+}
+
 /// A docker port.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct LobbyGroupRuntimeDockerPort {
 	/// The label of this docker port.
 	pub label: std::option::Option<std::string::String>,
-	/// The port number of this docker port.
+	/// The port number to connect to.
 	pub target_port: std::option::Option<i32>,
+	/// The port range to connect to for UDP.
+	pub port_range: std::option::Option<crate::model::PortRange>,
 	/// A proxy protocol.
 	pub proxy_protocol: std::option::Option<crate::model::ProxyProtocol>,
 }
@@ -3170,9 +3227,13 @@ impl LobbyGroupRuntimeDockerPort {
 	pub fn label(&self) -> std::option::Option<&str> {
 		self.label.as_deref()
 	}
-	/// The port number of this docker port.
+	/// The port number to connect to.
 	pub fn target_port(&self) -> std::option::Option<i32> {
 		self.target_port
+	}
+	/// The port range to connect to for UDP.
+	pub fn port_range(&self) -> std::option::Option<&crate::model::PortRange> {
+		self.port_range.as_ref()
 	}
 	/// A proxy protocol.
 	pub fn proxy_protocol(&self) -> std::option::Option<&crate::model::ProxyProtocol> {
@@ -3184,6 +3245,7 @@ impl std::fmt::Debug for LobbyGroupRuntimeDockerPort {
 		let mut formatter = f.debug_struct("LobbyGroupRuntimeDockerPort");
 		formatter.field("label", &self.label);
 		formatter.field("target_port", &self.target_port);
+		formatter.field("port_range", &self.port_range);
 		formatter.field("proxy_protocol", &self.proxy_protocol);
 		formatter.finish()
 	}
@@ -3196,6 +3258,7 @@ pub mod lobby_group_runtime_docker_port {
 	pub struct Builder {
 		pub(crate) label: std::option::Option<std::string::String>,
 		pub(crate) target_port: std::option::Option<i32>,
+		pub(crate) port_range: std::option::Option<crate::model::PortRange>,
 		pub(crate) proxy_protocol: std::option::Option<crate::model::ProxyProtocol>,
 	}
 	impl Builder {
@@ -3209,14 +3272,27 @@ pub mod lobby_group_runtime_docker_port {
 			self.label = input;
 			self
 		}
-		/// The port number of this docker port.
+		/// The port number to connect to.
 		pub fn target_port(mut self, input: i32) -> Self {
 			self.target_port = Some(input);
 			self
 		}
-		/// The port number of this docker port.
+		/// The port number to connect to.
 		pub fn set_target_port(mut self, input: std::option::Option<i32>) -> Self {
 			self.target_port = input;
+			self
+		}
+		/// The port range to connect to for UDP.
+		pub fn port_range(mut self, input: crate::model::PortRange) -> Self {
+			self.port_range = Some(input);
+			self
+		}
+		/// The port range to connect to for UDP.
+		pub fn set_port_range(
+			mut self,
+			input: std::option::Option<crate::model::PortRange>,
+		) -> Self {
+			self.port_range = input;
 			self
 		}
 		/// A proxy protocol.
@@ -3237,6 +3313,7 @@ pub mod lobby_group_runtime_docker_port {
 			crate::model::LobbyGroupRuntimeDockerPort {
 				label: self.label,
 				target_port: self.target_port,
+				port_range: self.port_range,
 				proxy_protocol: self.proxy_protocol,
 			}
 		}
@@ -3265,6 +3342,8 @@ pub enum ProxyProtocol {
 	Http,
 	#[allow(missing_docs)] // documentation missing in model
 	Https,
+	#[allow(missing_docs)] // documentation missing in model
+	Udp,
 	/// Unknown contains new variants that have been added since this code was generated.
 	Unknown(String),
 }
@@ -3273,6 +3352,7 @@ impl std::convert::From<&str> for ProxyProtocol {
 		match s {
 			"http" => ProxyProtocol::Http,
 			"https" => ProxyProtocol::Https,
+			"udp" => ProxyProtocol::Udp,
 			other => ProxyProtocol::Unknown(other.to_owned()),
 		}
 	}
@@ -3290,17 +3370,91 @@ impl ProxyProtocol {
 		match self {
 			ProxyProtocol::Http => "http",
 			ProxyProtocol::Https => "https",
+			ProxyProtocol::Udp => "udp",
 			ProxyProtocol::Unknown(s) => s.as_ref(),
 		}
 	}
 	/// Returns all the `&str` values of the enum members.
 	pub fn values() -> &'static [&'static str] {
-		&["http", "https"]
+		&["http", "https", "udp"]
 	}
 }
 impl AsRef<str> for ProxyProtocol {
 	fn as_ref(&self) -> &str {
 		self.as_str()
+	}
+}
+
+/// Range of ports that can be connected to.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct PortRange {
+	/// Unsigned 32 bit integer.
+	pub min: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max: std::option::Option<i32>,
+}
+impl PortRange {
+	/// Unsigned 32 bit integer.
+	pub fn min(&self) -> std::option::Option<i32> {
+		self.min
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max(&self) -> std::option::Option<i32> {
+		self.max
+	}
+}
+impl std::fmt::Debug for PortRange {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("PortRange");
+		formatter.field("min", &self.min);
+		formatter.field("max", &self.max);
+		formatter.finish()
+	}
+}
+/// See [`PortRange`](crate::model::PortRange)
+pub mod port_range {
+	/// A builder for [`PortRange`](crate::model::PortRange)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) min: std::option::Option<i32>,
+		pub(crate) max: std::option::Option<i32>,
+	}
+	impl Builder {
+		/// Unsigned 32 bit integer.
+		pub fn min(mut self, input: i32) -> Self {
+			self.min = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_min(mut self, input: std::option::Option<i32>) -> Self {
+			self.min = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max(mut self, input: i32) -> Self {
+			self.max = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max(mut self, input: std::option::Option<i32>) -> Self {
+			self.max = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`PortRange`](crate::model::PortRange)
+		pub fn build(self) -> crate::model::PortRange {
+			crate::model::PortRange {
+				min: self.min,
+				max: self.max,
+			}
+		}
+	}
+}
+impl PortRange {
+	/// Creates a new builder-style object to manufacture [`PortRange`](crate::model::PortRange)
+	pub fn builder() -> crate::model::port_range::Builder {
+		crate::model::port_range::Builder::default()
 	}
 }
 
@@ -3762,6 +3916,10 @@ pub struct CdnNamespaceConfig {
 	pub enable_domain_public_auth: std::option::Option<bool>,
 	/// A list of CDN domains for a given namespace.
 	pub domains: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceDomain>>,
+	/// A value denoting what type of authentication to use for a game namespace's CDN.
+	pub auth_type: std::option::Option<crate::model::CdnAuthType>,
+	/// A list of CDN authenticated users for a given namespace.
+	pub auth_user_list: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
 }
 impl CdnNamespaceConfig {
 	/// Whether or not to allow users to connect to the given namespace via domain name.
@@ -3772,12 +3930,22 @@ impl CdnNamespaceConfig {
 	pub fn domains(&self) -> std::option::Option<&[crate::model::CdnNamespaceDomain]> {
 		self.domains.as_deref()
 	}
+	/// A value denoting what type of authentication to use for a game namespace's CDN.
+	pub fn auth_type(&self) -> std::option::Option<&crate::model::CdnAuthType> {
+		self.auth_type.as_ref()
+	}
+	/// A list of CDN authenticated users for a given namespace.
+	pub fn auth_user_list(&self) -> std::option::Option<&[crate::model::CdnNamespaceAuthUser]> {
+		self.auth_user_list.as_deref()
+	}
 }
 impl std::fmt::Debug for CdnNamespaceConfig {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CdnNamespaceConfig");
 		formatter.field("enable_domain_public_auth", &self.enable_domain_public_auth);
 		formatter.field("domains", &self.domains);
+		formatter.field("auth_type", &self.auth_type);
+		formatter.field("auth_user_list", &self.auth_user_list);
 		formatter.finish()
 	}
 }
@@ -3789,6 +3957,9 @@ pub mod cdn_namespace_config {
 	pub struct Builder {
 		pub(crate) enable_domain_public_auth: std::option::Option<bool>,
 		pub(crate) domains: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceDomain>>,
+		pub(crate) auth_type: std::option::Option<crate::model::CdnAuthType>,
+		pub(crate) auth_user_list:
+			std::option::Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
 	}
 	impl Builder {
 		/// Whether or not to allow users to connect to the given namespace via domain name.
@@ -3820,11 +3991,45 @@ pub mod cdn_namespace_config {
 			self.domains = input;
 			self
 		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn auth_type(mut self, input: crate::model::CdnAuthType) -> Self {
+			self.auth_type = Some(input);
+			self
+		}
+		/// A value denoting what type of authentication to use for a game namespace's CDN.
+		pub fn set_auth_type(
+			mut self,
+			input: std::option::Option<crate::model::CdnAuthType>,
+		) -> Self {
+			self.auth_type = input;
+			self
+		}
+		/// Appends an item to `auth_user_list`.
+		///
+		/// To override the contents of this collection use [`set_auth_user_list`](Self::set_auth_user_list).
+		///
+		/// A list of CDN authenticated users for a given namespace.
+		pub fn auth_user_list(mut self, input: crate::model::CdnNamespaceAuthUser) -> Self {
+			let mut v = self.auth_user_list.unwrap_or_default();
+			v.push(input);
+			self.auth_user_list = Some(v);
+			self
+		}
+		/// A list of CDN authenticated users for a given namespace.
+		pub fn set_auth_user_list(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::CdnNamespaceAuthUser>>,
+		) -> Self {
+			self.auth_user_list = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`CdnNamespaceConfig`](crate::model::CdnNamespaceConfig)
 		pub fn build(self) -> crate::model::CdnNamespaceConfig {
 			crate::model::CdnNamespaceConfig {
 				enable_domain_public_auth: self.enable_domain_public_auth,
 				domains: self.domains,
+				auth_type: self.auth_type,
+				auth_user_list: self.auth_user_list,
 			}
 		}
 	}
@@ -3833,6 +4038,58 @@ impl CdnNamespaceConfig {
 	/// Creates a new builder-style object to manufacture [`CdnNamespaceConfig`](crate::model::CdnNamespaceConfig)
 	pub fn builder() -> crate::model::cdn_namespace_config::Builder {
 		crate::model::cdn_namespace_config::Builder::default()
+	}
+}
+
+/// An authenticated CDN user for a given namespace.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnNamespaceAuthUser {
+	/// A user name.
+	pub user: std::option::Option<std::string::String>,
+}
+impl CdnNamespaceAuthUser {
+	/// A user name.
+	pub fn user(&self) -> std::option::Option<&str> {
+		self.user.as_deref()
+	}
+}
+impl std::fmt::Debug for CdnNamespaceAuthUser {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnNamespaceAuthUser");
+		formatter.field("user", &self.user);
+		formatter.finish()
+	}
+}
+/// See [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+pub mod cdn_namespace_auth_user {
+	/// A builder for [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) user: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// A user name.
+		pub fn user(mut self, input: impl Into<std::string::String>) -> Self {
+			self.user = Some(input.into());
+			self
+		}
+		/// A user name.
+		pub fn set_user(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.user = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+		pub fn build(self) -> crate::model::CdnNamespaceAuthUser {
+			crate::model::CdnNamespaceAuthUser { user: self.user }
+		}
+	}
+}
+impl CdnNamespaceAuthUser {
+	/// Creates a new builder-style object to manufacture [`CdnNamespaceAuthUser`](crate::model::CdnNamespaceAuthUser)
+	pub fn builder() -> crate::model::cdn_namespace_auth_user::Builder {
+		crate::model::cdn_namespace_auth_user::Builder::default()
 	}
 }
 
@@ -4519,10 +4776,12 @@ pub struct LobbyGroupRuntimeDocker {
 	pub build_id: std::option::Option<std::string::String>,
 	/// A list of docker arguments.
 	pub args: std::option::Option<std::vec::Vec<std::string::String>>,
-	/// A list of docker ports.
-	pub ports: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 	/// A list of docker environment variables.
 	pub env_vars: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerEnvVar>>,
+	/// The network mode the job should run on.
+	pub network_mode: std::option::Option<crate::model::NetworkMode>,
+	/// A list of docker ports.
+	pub ports: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 }
 impl LobbyGroupRuntimeDocker {
 	/// A universally unique identifier.
@@ -4533,13 +4792,17 @@ impl LobbyGroupRuntimeDocker {
 	pub fn args(&self) -> std::option::Option<&[std::string::String]> {
 		self.args.as_deref()
 	}
-	/// A list of docker ports.
-	pub fn ports(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerPort]> {
-		self.ports.as_deref()
-	}
 	/// A list of docker environment variables.
 	pub fn env_vars(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerEnvVar]> {
 		self.env_vars.as_deref()
+	}
+	/// The network mode the job should run on.
+	pub fn network_mode(&self) -> std::option::Option<&crate::model::NetworkMode> {
+		self.network_mode.as_ref()
+	}
+	/// A list of docker ports.
+	pub fn ports(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerPort]> {
+		self.ports.as_deref()
 	}
 }
 impl std::fmt::Debug for LobbyGroupRuntimeDocker {
@@ -4547,8 +4810,9 @@ impl std::fmt::Debug for LobbyGroupRuntimeDocker {
 		let mut formatter = f.debug_struct("LobbyGroupRuntimeDocker");
 		formatter.field("build_id", &self.build_id);
 		formatter.field("args", &self.args);
-		formatter.field("ports", &self.ports);
 		formatter.field("env_vars", &self.env_vars);
+		formatter.field("network_mode", &self.network_mode);
+		formatter.field("ports", &self.ports);
 		formatter.finish()
 	}
 }
@@ -4560,10 +4824,11 @@ pub mod lobby_group_runtime_docker {
 	pub struct Builder {
 		pub(crate) build_id: std::option::Option<std::string::String>,
 		pub(crate) args: std::option::Option<std::vec::Vec<std::string::String>>,
-		pub(crate) ports:
-			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 		pub(crate) env_vars:
 			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerEnvVar>>,
+		pub(crate) network_mode: std::option::Option<crate::model::NetworkMode>,
+		pub(crate) ports:
+			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -4595,25 +4860,6 @@ pub mod lobby_group_runtime_docker {
 			self.args = input;
 			self
 		}
-		/// Appends an item to `ports`.
-		///
-		/// To override the contents of this collection use [`set_ports`](Self::set_ports).
-		///
-		/// A list of docker ports.
-		pub fn ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
-			let mut v = self.ports.unwrap_or_default();
-			v.push(input);
-			self.ports = Some(v);
-			self
-		}
-		/// A list of docker ports.
-		pub fn set_ports(
-			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
-		) -> Self {
-			self.ports = input;
-			self
-		}
 		/// Appends an item to `env_vars`.
 		///
 		/// To override the contents of this collection use [`set_env_vars`](Self::set_env_vars).
@@ -4633,13 +4879,46 @@ pub mod lobby_group_runtime_docker {
 			self.env_vars = input;
 			self
 		}
+		/// The network mode the job should run on.
+		pub fn network_mode(mut self, input: crate::model::NetworkMode) -> Self {
+			self.network_mode = Some(input);
+			self
+		}
+		/// The network mode the job should run on.
+		pub fn set_network_mode(
+			mut self,
+			input: std::option::Option<crate::model::NetworkMode>,
+		) -> Self {
+			self.network_mode = input;
+			self
+		}
+		/// Appends an item to `ports`.
+		///
+		/// To override the contents of this collection use [`set_ports`](Self::set_ports).
+		///
+		/// A list of docker ports.
+		pub fn ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
+			let mut v = self.ports.unwrap_or_default();
+			v.push(input);
+			self.ports = Some(v);
+			self
+		}
+		/// A list of docker ports.
+		pub fn set_ports(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
+		) -> Self {
+			self.ports = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`LobbyGroupRuntimeDocker`](crate::model::LobbyGroupRuntimeDocker)
 		pub fn build(self) -> crate::model::LobbyGroupRuntimeDocker {
 			crate::model::LobbyGroupRuntimeDocker {
 				build_id: self.build_id,
 				args: self.args,
-				ports: self.ports,
 				env_vars: self.env_vars,
+				network_mode: self.network_mode,
+				ports: self.ports,
 			}
 		}
 	}
@@ -4648,6 +4927,61 @@ impl LobbyGroupRuntimeDocker {
 	/// Creates a new builder-style object to manufacture [`LobbyGroupRuntimeDocker`](crate::model::LobbyGroupRuntimeDocker)
 	pub fn builder() -> crate::model::lobby_group_runtime_docker::Builder {
 		crate::model::lobby_group_runtime_docker::Builder::default()
+	}
+}
+
+/// The network mode the job should run on.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum NetworkMode {
+	#[allow(missing_docs)] // documentation missing in model
+	Bridge,
+	#[allow(missing_docs)] // documentation missing in model
+	Host,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for NetworkMode {
+	fn from(s: &str) -> Self {
+		match s {
+			"bridge" => NetworkMode::Bridge,
+			"host" => NetworkMode::Host,
+			other => NetworkMode::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for NetworkMode {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(NetworkMode::from(s))
+	}
+}
+impl NetworkMode {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			NetworkMode::Bridge => "bridge",
+			NetworkMode::Host => "host",
+			NetworkMode::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&["bridge", "host"]
+	}
+}
+impl AsRef<str> for NetworkMode {
+	fn as_ref(&self) -> &str {
+		self.as_str()
 	}
 }
 
