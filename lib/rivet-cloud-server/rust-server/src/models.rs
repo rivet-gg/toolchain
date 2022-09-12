@@ -729,7 +729,7 @@ pub struct LobbyGroupRuntimeDocker {
 	/// A list of docker environment variables.
 	pub env_vars: std::vec::Vec<LobbyGroupRuntimeDockerEnvVar>,
 	/// The network mode the job should run on.
-	pub network_mode: NetworkMode,
+	pub network_mode: std::option::Option<NetworkMode>,
 	/// A list of docker ports.
 	pub ports: std::vec::Vec<LobbyGroupRuntimeDockerPort>,
 }

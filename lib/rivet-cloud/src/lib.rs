@@ -47,7 +47,7 @@ mod operation_deser;
 mod operation_ser;
 /// Output structures for operations.
 pub mod output;
-pub use client::{Builder, Client, ClientWrapper};
+pub use client::{Builder, Client};
 /// Crate version number.
 pub static PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Re-exported types from supporting crates.
