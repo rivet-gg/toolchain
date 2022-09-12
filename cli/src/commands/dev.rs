@@ -39,29 +39,18 @@ impl SubCommand {
 				loop {
 					eprintln!();
 
-					let port = 'port: loop {
-						let port = term::input::string_with_tip(
-							term,
-							"Dev port?",
-							"0-65535, example: 8080",
-						)
-						.await?;
-						if let Ok(port) = port.parse::<u16>() {
-							break 'port port;
-						} else {
-							term::status::error("Invalid port number", "");
-							eprintln!();
-						}
-					};
-					if default_port.is_none() {
-						default_port = Some(port);
-					}
+					let label = term::input::string_with_tip(
+						term,
+						"Development port label?",
+						"example: default",
+					)
+					.await?;
 
 					let proto = 'proto: loop {
 						let proto = term::input::string_with_tip(
 							term,
 							"Dev port protocol?",
-							"http/https, usually: http",
+							"http/https/udp, usually: http",
 						)
 						.await?;
 						match proto.to_lowercase().as_str() {
@@ -71,6 +60,9 @@ impl SubCommand {
 							"https" => {
 								break 'proto cli_core::rivet_cloud::model::ProxyProtocol::Https;
 							}
+							"udp" => {
+								break 'proto cli_core::rivet_cloud::model::ProxyProtocol::Udp;
+							}
 							_ => {
 								term::status::error("Invalid protocol", "");
 								eprintln!();
@@ -78,24 +70,105 @@ impl SubCommand {
 						}
 					};
 
-					let label = term::input::string_with_tip(
-						term,
-						"Development port label?",
-						"example: default",
-					)
-					.await?;
+					let (target_port, port_range) = match proto {
+						cli_core::rivet_cloud::model::ProxyProtocol::Http
+						| cli_core::rivet_cloud::model::ProxyProtocol::Https => {
+							// Create new port
+							let port = 'port: loop {
+								let port = term::input::string_with_tip(
+									term,
+									"Dev port?",
+									"0-65535, example: 8080",
+								)
+								.await?;
+								if let Ok(port) = port.parse::<u16>() {
+									break 'port port;
+								} else {
+									term::status::error("Invalid port number", "");
+									eprintln!();
+								}
+							};
+
+							// Assign default port
+							if default_port.is_none() {
+								default_port = Some(port);
+							}
+
+							(Some(port), None)
+						}
+						cli_core::rivet_cloud::model::ProxyProtocol::Udp => {
+							// Prompt min port
+							let port_min = 'port: loop {
+								let port = term::input::string_with_tip(
+									term,
+									"Dev port range min?",
+									"26000-31999",
+								)
+								.await?;
+								if let Ok(port) = port.parse::<u16>() {
+									break 'port port;
+								} else {
+									term::status::error("Invalid port number", "");
+									eprintln!();
+								}
+							};
+
+							// Prompt max port
+							let port_max = 'port: loop {
+								let port = term::input::string_with_tip(
+									term,
+									"Dev port range max?",
+									"26000-31999",
+								)
+								.await?;
+								if let Ok(port) = port.parse::<u16>() {
+									break 'port port;
+								} else {
+									term::status::error("Invalid port number", "");
+									eprintln!();
+								}
+							};
+
+							(
+								None,
+								Some(
+									cli_core::rivet_cloud::model::PortRange::builder()
+										.min(port_min as i32)
+										.max(port_max as i32)
+										.build(),
+								),
+							)
+						}
+						_ => {
+							unreachable!("unrecognized protocol variant")
+						}
+					};
 
 					lobby_ports.push(
 						cli_core::rivet_cloud::model::LobbyGroupRuntimeDockerPort::builder()
 							.label(&label)
-							.target_port(port as i32)
+							.set_target_port(target_port.map(|x| x as i32))
+							.set_port_range(port_range.clone())
 							.proxy_protocol(proto.clone())
 							.build(),
 					);
 
 					term::status::success(
 						format!("Added {label}"),
-						format!("port={port} proto={proto:?}"),
+						format!(
+							"{port} proto={proto:?}",
+							port = if let Some(x) = target_port {
+								format!("target_port={x}")
+							} else if let Some(port_range) = &port_range {
+								format!(
+									"port_range={}-{}",
+									port_range.min.unwrap(),
+									port_range.max.unwrap()
+								)
+							} else {
+								unreachable!("missing both target_port and port_range")
+							}
+						),
 					);
 
 					if !term::input::bool(term, "Add another port?").await? {
