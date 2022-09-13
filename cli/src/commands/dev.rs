@@ -182,7 +182,7 @@ impl SubCommand {
 					.game_id(&ctx.game_id)
 					.namespace_id(prod_namespace_id)
 					.hostname(hostname)
-					.set_lobby_ports(Some(lobby_ports))
+					.set_lobby_ports(Some(lobby_ports.clone()))
 					.send()
 					.await
 					.context("client.create_game_namespace_token_development")?;
@@ -193,10 +193,27 @@ impl SubCommand {
 
 				eprintln!();
 				if term::input::bool(term, "Write token to .env file?").await? {
-					let env_file = format!(
-						"PORT={port}\nRIVET_CLIENT_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n",
-						port = default_port.unwrap()
-					);
+					let mut env_file =
+						format!("RIVET_CLIENT_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n");
+
+					if let Some(default_port) = default_port {
+						env_file.push_str(&format!("PORT={default_port}\n"));
+					}
+
+					for port in &lobby_ports {
+						let label = port.label.as_ref().unwrap();
+
+						if let Some(port) = port.target_port {
+							env_file.push_str(&format!("PORT_{label}={port}\n"));
+						} else if let Some(port_range) = &port.port_range {
+							env_file.push_str(&format!(
+								"PORT_RANGE_MIN_{label}={min}\nPORT_RANGE_MAX_{label}={max}\n",
+								min = port_range.min.unwrap(),
+								max = port_range.max.unwrap(),
+							));
+						}
+					}
+
 					fs::write(".env", env_file).await?;
 					term::status::success(format!("Wrote to .env"), "");
 				} else {
