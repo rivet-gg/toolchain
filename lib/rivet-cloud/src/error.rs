@@ -4716,6 +4716,162 @@ impl std::error::Error for ListNamespaceLobbiesError {
 	}
 }
 
+/// Error type for the `RemoveNamespaceCdnAuthUser` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct RemoveNamespaceCdnAuthUserError {
+	/// Kind of error that occurred.
+	pub kind: RemoveNamespaceCdnAuthUserErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `RemoveNamespaceCdnAuthUser` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum RemoveNamespaceCdnAuthUserErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for RemoveNamespaceCdnAuthUserError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			RemoveNamespaceCdnAuthUserErrorKind::InternalError(_inner) => _inner.fmt(f),
+			RemoveNamespaceCdnAuthUserErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			RemoveNamespaceCdnAuthUserErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			RemoveNamespaceCdnAuthUserErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			RemoveNamespaceCdnAuthUserErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			RemoveNamespaceCdnAuthUserErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for RemoveNamespaceCdnAuthUserError {
+	fn code(&self) -> Option<&str> {
+		RemoveNamespaceCdnAuthUserError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			RemoveNamespaceCdnAuthUserErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl RemoveNamespaceCdnAuthUserError {
+	/// Creates a new `RemoveNamespaceCdnAuthUserError`.
+	pub fn new(kind: RemoveNamespaceCdnAuthUserErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `RemoveNamespaceCdnAuthUserError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: RemoveNamespaceCdnAuthUserErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `RemoveNamespaceCdnAuthUserError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: RemoveNamespaceCdnAuthUserErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `RemoveNamespaceCdnAuthUserErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			RemoveNamespaceCdnAuthUserErrorKind::InternalError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `RemoveNamespaceCdnAuthUserErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			RemoveNamespaceCdnAuthUserErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `RemoveNamespaceCdnAuthUserErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			RemoveNamespaceCdnAuthUserErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `RemoveNamespaceCdnAuthUserErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			RemoveNamespaceCdnAuthUserErrorKind::NotFoundError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `RemoveNamespaceCdnAuthUserErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			RemoveNamespaceCdnAuthUserErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for RemoveNamespaceCdnAuthUserError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			RemoveNamespaceCdnAuthUserErrorKind::InternalError(_inner) => Some(_inner),
+			RemoveNamespaceCdnAuthUserErrorKind::RateLimitError(_inner) => Some(_inner),
+			RemoveNamespaceCdnAuthUserErrorKind::ForbiddenError(_inner) => Some(_inner),
+			RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			RemoveNamespaceCdnAuthUserErrorKind::NotFoundError(_inner) => Some(_inner),
+			RemoveNamespaceCdnAuthUserErrorKind::BadRequestError(_inner) => Some(_inner),
+			RemoveNamespaceCdnAuthUserErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
 /// Error type for the `RemoveNamespaceDomain` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
@@ -4862,6 +5018,162 @@ impl std::error::Error for RemoveNamespaceDomainError {
 			RemoveNamespaceDomainErrorKind::NotFoundError(_inner) => Some(_inner),
 			RemoveNamespaceDomainErrorKind::BadRequestError(_inner) => Some(_inner),
 			RemoveNamespaceDomainErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `SetNamespaceCdnAuthType` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct SetNamespaceCdnAuthTypeError {
+	/// Kind of error that occurred.
+	pub kind: SetNamespaceCdnAuthTypeErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `SetNamespaceCdnAuthType` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum SetNamespaceCdnAuthTypeErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for SetNamespaceCdnAuthTypeError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			SetNamespaceCdnAuthTypeErrorKind::InternalError(_inner) => _inner.fmt(f),
+			SetNamespaceCdnAuthTypeErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			SetNamespaceCdnAuthTypeErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			SetNamespaceCdnAuthTypeErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			SetNamespaceCdnAuthTypeErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			SetNamespaceCdnAuthTypeErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for SetNamespaceCdnAuthTypeError {
+	fn code(&self) -> Option<&str> {
+		SetNamespaceCdnAuthTypeError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			SetNamespaceCdnAuthTypeErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl SetNamespaceCdnAuthTypeError {
+	/// Creates a new `SetNamespaceCdnAuthTypeError`.
+	pub fn new(kind: SetNamespaceCdnAuthTypeErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `SetNamespaceCdnAuthTypeError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: SetNamespaceCdnAuthTypeErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `SetNamespaceCdnAuthTypeError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: SetNamespaceCdnAuthTypeErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `SetNamespaceCdnAuthTypeErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetNamespaceCdnAuthTypeErrorKind::InternalError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `SetNamespaceCdnAuthTypeErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetNamespaceCdnAuthTypeErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `SetNamespaceCdnAuthTypeErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetNamespaceCdnAuthTypeErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `SetNamespaceCdnAuthTypeErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetNamespaceCdnAuthTypeErrorKind::NotFoundError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `SetNamespaceCdnAuthTypeErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetNamespaceCdnAuthTypeErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for SetNamespaceCdnAuthTypeError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			SetNamespaceCdnAuthTypeErrorKind::InternalError(_inner) => Some(_inner),
+			SetNamespaceCdnAuthTypeErrorKind::RateLimitError(_inner) => Some(_inner),
+			SetNamespaceCdnAuthTypeErrorKind::ForbiddenError(_inner) => Some(_inner),
+			SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			SetNamespaceCdnAuthTypeErrorKind::NotFoundError(_inner) => Some(_inner),
+			SetNamespaceCdnAuthTypeErrorKind::BadRequestError(_inner) => Some(_inner),
+			SetNamespaceCdnAuthTypeErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
 		}
 	}
 }
@@ -5340,6 +5652,162 @@ impl std::error::Error for UpdateGameNamespaceVersionError {
 			UpdateGameNamespaceVersionErrorKind::NotFoundError(_inner) => Some(_inner),
 			UpdateGameNamespaceVersionErrorKind::BadRequestError(_inner) => Some(_inner),
 			UpdateGameNamespaceVersionErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `UpdateNamespaceCdnAuthUser` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct UpdateNamespaceCdnAuthUserError {
+	/// Kind of error that occurred.
+	pub kind: UpdateNamespaceCdnAuthUserErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `UpdateNamespaceCdnAuthUser` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum UpdateNamespaceCdnAuthUserErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for UpdateNamespaceCdnAuthUserError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			UpdateNamespaceCdnAuthUserErrorKind::InternalError(_inner) => _inner.fmt(f),
+			UpdateNamespaceCdnAuthUserErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			UpdateNamespaceCdnAuthUserErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			UpdateNamespaceCdnAuthUserErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			UpdateNamespaceCdnAuthUserErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			UpdateNamespaceCdnAuthUserErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for UpdateNamespaceCdnAuthUserError {
+	fn code(&self) -> Option<&str> {
+		UpdateNamespaceCdnAuthUserError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			UpdateNamespaceCdnAuthUserErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl UpdateNamespaceCdnAuthUserError {
+	/// Creates a new `UpdateNamespaceCdnAuthUserError`.
+	pub fn new(kind: UpdateNamespaceCdnAuthUserErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `UpdateNamespaceCdnAuthUserError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: UpdateNamespaceCdnAuthUserErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `UpdateNamespaceCdnAuthUserError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: UpdateNamespaceCdnAuthUserErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `UpdateNamespaceCdnAuthUserErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			UpdateNamespaceCdnAuthUserErrorKind::InternalError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `UpdateNamespaceCdnAuthUserErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			UpdateNamespaceCdnAuthUserErrorKind::RateLimitError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `UpdateNamespaceCdnAuthUserErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			UpdateNamespaceCdnAuthUserErrorKind::ForbiddenError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `UpdateNamespaceCdnAuthUserErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			UpdateNamespaceCdnAuthUserErrorKind::NotFoundError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `UpdateNamespaceCdnAuthUserErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			UpdateNamespaceCdnAuthUserErrorKind::BadRequestError(_)
+		)
+	}
+}
+impl std::error::Error for UpdateNamespaceCdnAuthUserError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			UpdateNamespaceCdnAuthUserErrorKind::InternalError(_inner) => Some(_inner),
+			UpdateNamespaceCdnAuthUserErrorKind::RateLimitError(_inner) => Some(_inner),
+			UpdateNamespaceCdnAuthUserErrorKind::ForbiddenError(_inner) => Some(_inner),
+			UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			UpdateNamespaceCdnAuthUserErrorKind::NotFoundError(_inner) => Some(_inner),
+			UpdateNamespaceCdnAuthUserErrorKind::BadRequestError(_inner) => Some(_inner),
+			UpdateNamespaceCdnAuthUserErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
 		}
 	}
 }

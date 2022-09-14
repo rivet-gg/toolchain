@@ -1173,6 +1173,42 @@ where
 		}
 	}
 }
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::RemoveNamespaceCdnAuthUserError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::RemoveNamespaceCdnAuthUserError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::RemoveNamespaceCdnAuthUserErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
 impl<R> From<aws_smithy_http::result::SdkError<crate::error::RemoveNamespaceDomainError, R>>
 	for Error
 where
@@ -1202,6 +1238,42 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::RemoveNamespaceDomainErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::SetNamespaceCdnAuthTypeError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::SetNamespaceCdnAuthTypeError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::SetNamespaceCdnAuthTypeErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},
@@ -1322,6 +1394,42 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::UpdateGameNamespaceVersionErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::UpdateNamespaceCdnAuthUserError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::UpdateNamespaceCdnAuthUserError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::UpdateNamespaceCdnAuthUserErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},

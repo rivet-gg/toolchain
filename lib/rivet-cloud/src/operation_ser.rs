@@ -120,6 +120,19 @@ pub fn serialize_operation_crate_operation_group_billing_checkout(
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }
 
+pub fn serialize_operation_crate_operation_set_namespace_cdn_auth_type(
+	input: &crate::input::SetNamespaceCdnAuthTypeInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_set_namespace_cdn_auth_type_input(
+		&mut object,
+		input,
+	)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
 pub fn serialize_operation_crate_operation_toggle_namespace_domain_public_auth(
 	input: &crate::input::ToggleNamespaceDomainPublicAuthInput,
 ) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
@@ -152,6 +165,32 @@ pub fn serialize_operation_crate_operation_update_game_namespace_version(
 	let mut out = String::new();
 	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
 	crate::json_ser::serialize_structure_crate_input_update_game_namespace_version_input(
+		&mut object,
+		input,
+	)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
+pub fn serialize_operation_crate_operation_update_namespace_cdn_auth_user(
+	input: &crate::input::UpdateNamespaceCdnAuthUserInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_update_namespace_cdn_auth_user_input(
+		&mut object,
+		input,
+	)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
+pub fn serialize_operation_crate_operation_update_namespace_domain(
+	input: &crate::input::UpdateNamespaceDomainInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_update_namespace_domain_input(
 		&mut object,
 		input,
 	)?;
