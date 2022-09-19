@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::error::Error;
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Matchmaker {
 	pub game_modes: HashMap<String, game_mode::GameMode>,
 	#[serde(default)]
@@ -16,6 +17,7 @@ pub struct Matchmaker {
 
 // TODO: Remove clone
 #[derive(Debug, Deserialize, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct DockerOverride {
 	#[serde(default)]
 	build: Option<String>,
@@ -26,6 +28,7 @@ pub mod game_mode {
 	use std::collections::HashMap;
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct GameMode {
 		pub regions: HashMap<String, Region>,
 		pub max_players: MaxPlayers,
@@ -40,6 +43,7 @@ pub mod game_mode {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct Region {
 		#[serde(default = "Region::default_tier")]
 		pub tier: String,
@@ -48,12 +52,14 @@ pub mod game_mode {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct IdleLobbies {
 		pub min: u32,
 		pub max: u32,
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	#[serde(untagged)]
 	pub enum MaxPlayers {
 		Universal(u32),
@@ -61,6 +67,7 @@ pub mod game_mode {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct MaxPlayersSplit {
 		pub normal: u32,
 		pub direct: u32,
@@ -73,7 +80,7 @@ pub mod game_mode {
 		use crate::{config::version::mm::DockerOverride, error::Error};
 
 		#[derive(Debug, Deserialize)]
-		#[serde(rename_all = "snake_case")]
+		#[serde(rename_all = "snake_case", deny_unknown_fields)]
 		pub enum Runtime {
 			Docker(docker::Docker),
 		}
@@ -84,6 +91,7 @@ pub mod game_mode {
 			use serde::Deserialize;
 
 			#[derive(Debug, Deserialize)]
+			#[serde(deny_unknown_fields)]
 			pub struct Docker {
 				pub build: Option<String>,
 				pub ports: HashMap<String, Port>,
@@ -94,13 +102,14 @@ pub mod game_mode {
 			}
 
 			#[derive(Debug, Deserialize)]
+			#[serde(deny_unknown_fields)]
 			pub struct Port {
 				pub target: u32,
 				pub proto: ProxyProtocol,
 			}
 
 			#[derive(Debug, Deserialize)]
-			#[serde(rename_all = "kebab-case")]
+			#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 			pub enum ProxyProtocol {
 				Http,
 				Https,
@@ -216,6 +225,7 @@ pub mod captcha {
 	use serde::Deserialize;
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct Captcha {
 		pub hcaptcha: Option<Hcaptcha>,
 		pub requests_before_reverify: u32,
@@ -223,12 +233,13 @@ pub mod captcha {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct Hcaptcha {
 		pub level: Level,
 	}
 
 	#[derive(Debug, Deserialize)]
-	#[serde(rename_all = "kebab-case")]
+	#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 	pub enum Level {
 		Easy,
 		Moderate,

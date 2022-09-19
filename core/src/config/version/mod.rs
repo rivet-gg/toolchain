@@ -7,6 +7,7 @@ pub mod kv;
 pub mod mm;
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Version {
 	#[serde(default)]
 	pub cdn: Option<cdn::Cdn>,

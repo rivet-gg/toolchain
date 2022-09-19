@@ -3,6 +3,7 @@ use serde::Deserialize;
 use crate::error::Error;
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Cdn {
 	pub site: String,
 }
