@@ -61,7 +61,6 @@ pub mod game_mode {
 	}
 
 	#[derive(Debug, Deserialize)]
-	#[serde(deny_unknown_fields)]
 	#[serde(untagged)]
 	pub enum MaxPlayers {
 		Universal(u32),
@@ -82,7 +81,7 @@ pub mod game_mode {
 		use crate::{config::version::mm::DockerOverride, error::Error};
 
 		#[derive(Debug, Deserialize)]
-		#[serde(rename_all = "snake_case", deny_unknown_fields)]
+		#[serde(rename_all = "snake_case")]
 		pub enum Runtime {
 			Docker(docker::Docker),
 		}
@@ -96,25 +95,35 @@ pub mod game_mode {
 			#[serde(deny_unknown_fields)]
 			pub struct Docker {
 				pub build: Option<String>,
-				pub ports: HashMap<String, Port>,
 				#[serde(default)]
 				pub args: Vec<String>,
 				#[serde(default)]
 				pub env: HashMap<String, String>,
+				pub ports: HashMap<String, Port>,
+				pub network_mode: NetworkMode,
 			}
 
 			#[derive(Debug, Deserialize)]
 			#[serde(deny_unknown_fields)]
 			pub struct Port {
-				pub target: u32,
+				pub target: Option<u32>,
+				pub range: Option<PortRange>,
 				pub proto: ProxyProtocol,
 			}
 
 			#[derive(Debug, Deserialize)]
 			#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+			pub struct PortRange {
+				pub min: u16,
+				pub max: u16,
+			}
+
+			#[derive(Debug, Deserialize)]
+			#[serde(rename_all = "kebab-case")]
 			pub enum ProxyProtocol {
 				Http,
 				Https,
+				Udp,
 			}
 
 			impl ProxyProtocol {
@@ -122,6 +131,23 @@ pub mod game_mode {
 					match self {
 						ProxyProtocol::Http => rivet_cloud::model::ProxyProtocol::Http,
 						ProxyProtocol::Https => rivet_cloud::model::ProxyProtocol::Https,
+						ProxyProtocol::Udp => rivet_cloud::model::ProxyProtocol::Udp,
+					}
+				}
+			}
+
+			#[derive(Debug, Deserialize)]
+			#[serde(rename_all = "kebab-case")]
+			pub enum NetworkMode {
+				Bridge,
+				Host,
+			}
+
+			impl NetworkMode {
+				pub fn build_model(&self) -> rivet_cloud::model::NetworkMode {
+					match self {
+						NetworkMode::Bridge => rivet_cloud::model::NetworkMode::Bridge,
+						NetworkMode::Host => rivet_cloud::model::NetworkMode::Host,
 					}
 				}
 			}
@@ -153,19 +179,6 @@ pub mod game_mode {
 									})?,
 							)
 							.set_args(Some(docker.args.clone()))
-							.set_ports(Some(
-								docker
-									.ports
-									.iter()
-									.map(|(label, port)| {
-										LobbyGroupRuntimeDockerPort::builder()
-											.label(label)
-											.target_port(port.target as i32)
-											.proxy_protocol(port.proto.build_model())
-											.build()
-									})
-									.collect(),
-							))
 							.set_env_vars(Some(
 								docker
 									.env
@@ -174,6 +187,26 @@ pub mod game_mode {
 										LobbyGroupRuntimeDockerEnvVar::builder()
 											.key(key)
 											.value(value)
+											.build()
+									})
+									.collect(),
+							))
+							.network_mode(docker.network_mode.build_model())
+							.set_ports(Some(
+								docker
+									.ports
+									.iter()
+									.map(|(label, port)| {
+										LobbyGroupRuntimeDockerPort::builder()
+											.label(label)
+											.set_target_port(port.target.map(|x| x as i32))
+											.set_port_range(port.range.as_ref().map(|range| {
+												PortRange::builder()
+													.min(range.min as i32)
+													.max(range.max as i32)
+													.build()
+											}))
+											.proxy_protocol(port.proto.build_model())
 											.build()
 									})
 									.collect(),
@@ -241,7 +274,7 @@ pub mod captcha {
 	}
 
 	#[derive(Debug, Deserialize)]
-	#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+	#[serde(rename_all = "kebab-case")]
 	pub enum Level {
 		Easy,
 		Moderate,
