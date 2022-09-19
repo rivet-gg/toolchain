@@ -3581,6 +3581,15 @@ where
 									.transpose()?,
 								);
 							}
+							"region_name_id" => {
+								builder = builder.set_region_name_id(
+									aws_smithy_json::deserialize::token::expect_string_or_null(
+										tokens.next(),
+									)?
+									.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+									.transpose()?,
+								);
+							}
 							"provider" => {
 								builder = builder.set_provider(
 									aws_smithy_json::deserialize::token::expect_string_or_null(

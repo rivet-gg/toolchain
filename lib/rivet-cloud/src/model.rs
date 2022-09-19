@@ -890,6 +890,8 @@ impl GroupBillingPayment {
 pub struct RegionSummary {
 	/// A universally unique identifier.
 	pub region_id: std::option::Option<std::string::String>,
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub region_name_id: std::option::Option<std::string::String>,
 	/// The server provider of this region.
 	pub provider: std::option::Option<std::string::String>,
 	/// A universal number given to this region.
@@ -903,6 +905,10 @@ impl RegionSummary {
 	/// A universally unique identifier.
 	pub fn region_id(&self) -> std::option::Option<&str> {
 		self.region_id.as_deref()
+	}
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub fn region_name_id(&self) -> std::option::Option<&str> {
+		self.region_name_id.as_deref()
 	}
 	/// The server provider of this region.
 	pub fn provider(&self) -> std::option::Option<&str> {
@@ -925,6 +931,7 @@ impl std::fmt::Debug for RegionSummary {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("RegionSummary");
 		formatter.field("region_id", &self.region_id);
+		formatter.field("region_name_id", &self.region_name_id);
 		formatter.field("provider", &self.provider);
 		formatter.field("universal_region", &self.universal_region);
 		formatter.field("provider_display_name", &self.provider_display_name);
@@ -939,6 +946,7 @@ pub mod region_summary {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) region_id: std::option::Option<std::string::String>,
+		pub(crate) region_name_id: std::option::Option<std::string::String>,
 		pub(crate) provider: std::option::Option<std::string::String>,
 		pub(crate) universal_region: std::option::Option<i16>,
 		pub(crate) provider_display_name: std::option::Option<std::string::String>,
@@ -953,6 +961,19 @@ pub mod region_summary {
 		/// A universally unique identifier.
 		pub fn set_region_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.region_id = input;
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn region_name_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.region_name_id = Some(input.into());
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn set_region_name_id(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.region_name_id = input;
 			self
 		}
 		/// The server provider of this region.
@@ -1005,6 +1026,7 @@ pub mod region_summary {
 		pub fn build(self) -> crate::model::RegionSummary {
 			crate::model::RegionSummary {
 				region_id: self.region_id,
+				region_name_id: self.region_name_id,
 				provider: self.provider,
 				universal_region: self.universal_region,
 				provider_display_name: self.provider_display_name,

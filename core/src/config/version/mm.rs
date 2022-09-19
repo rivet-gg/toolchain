@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::error::Error;
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Matchmaker {
 	pub game_modes: HashMap<String, game_mode::GameMode>,
 	#[serde(default)]
@@ -14,8 +15,8 @@ pub struct Matchmaker {
 	docker: Option<DockerOverride>,
 }
 
-// TODO: Remove clone
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct DockerOverride {
 	#[serde(default)]
 	build: Option<String>,
@@ -23,30 +24,37 @@ pub struct DockerOverride {
 
 pub mod game_mode {
 	use serde::Deserialize;
+	use std::collections::HashMap;
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct GameMode {
-		// pub regions: HashMap<String, Region>,
 		pub max_players: MaxPlayers,
+
+		#[serde(default)]
+		pub regions: Option<HashMap<String, Region>>,
+
 		#[serde(flatten)]
 		pub runtime: runtime::Runtime,
 
 		// Region overrides
-		#[serde(default = "GameMode::default_tier")]
+		#[serde(default = "Region::default_tier")]
 		pub tier: String,
 		#[serde(default)]
 		pub idle_lobbies: IdleLobbies,
 	}
 
-	// #[derive(Debug, Deserialize)]
-	// pub struct Region {
-	// 	#[serde(default = "Region::default_tier")]
-	// 	pub tier: String,
-	// 	#[serde(default)]
-	// 	pub idle_lobbies: IdleLobbies,
-	// }
+	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
+	pub struct Region {
+		#[serde(default = "Region::default_tier")]
+		pub tier: String,
+		#[serde(default)]
+		pub idle_lobbies: IdleLobbies,
+	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct IdleLobbies {
 		pub min: u32,
 		pub max: u32,
@@ -60,6 +68,7 @@ pub mod game_mode {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct MaxPlayersSplit {
 		pub normal: u32,
 		pub direct: u32,
@@ -83,17 +92,21 @@ pub mod game_mode {
 			use serde::Deserialize;
 
 			#[derive(Debug, Deserialize)]
+			#[serde(deny_unknown_fields)]
 			pub struct Docker {
 				pub build: Option<String>,
 				#[serde(default)]
 				pub args: Vec<String>,
 				#[serde(default)]
 				pub env: HashMap<String, String>,
+				#[serde(default)]
 				pub ports: HashMap<String, Port>,
+				#[serde(default)]
 				pub network_mode: NetworkMode,
 			}
 
 			#[derive(Debug, Deserialize)]
+			#[serde(deny_unknown_fields)]
 			pub struct Port {
 				pub target: Option<u32>,
 				pub range: Option<PortRange>,
@@ -101,6 +114,7 @@ pub mod game_mode {
 			}
 
 			#[derive(Debug, Deserialize)]
+			#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 			pub struct PortRange {
 				pub min: u16,
 				pub max: u16,
@@ -137,6 +151,12 @@ pub mod game_mode {
 						NetworkMode::Bridge => rivet_cloud::model::NetworkMode::Bridge,
 						NetworkMode::Host => rivet_cloud::model::NetworkMode::Host,
 					}
+				}
+			}
+
+			impl Default for NetworkMode {
+				fn default() -> Self {
+					Self::Bridge
 				}
 			}
 		}
@@ -208,26 +228,11 @@ pub mod game_mode {
 		}
 	}
 
-	impl GameMode {
+	impl Region {
 		fn default_tier() -> String {
 			"basic-1d1".into()
 		}
 	}
-
-	// impl Region {
-	// 	fn default_tier() -> String {
-	// 		"basic-1d1".into()
-	// 	}
-	// }
-
-	// impl Default for Region {
-	// 	fn default() -> Self {
-	// 		Self {
-	// 			tier: Self::default_tier(),
-	// 			idle_lobbies: Default::default(),
-	// 		}
-	// 	}
-	// }
 
 	impl Default for IdleLobbies {
 		fn default() -> Self {
@@ -263,6 +268,7 @@ pub mod captcha {
 	use serde::Deserialize;
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct Captcha {
 		pub hcaptcha: Option<Hcaptcha>,
 		pub requests_before_reverify: u32,
@@ -270,6 +276,7 @@ pub mod captcha {
 	}
 
 	#[derive(Debug, Deserialize)]
+	#[serde(deny_unknown_fields)]
 	pub struct Hcaptcha {
 		pub level: Level,
 	}
@@ -284,7 +291,6 @@ pub mod captcha {
 	}
 }
 
-// TODO: Don't consume self
 impl Matchmaker {
 	pub fn build_model(
 		&self,
@@ -296,43 +302,76 @@ impl Matchmaker {
 			.available_regions()
 			.ok_or_else(|| Error::internal("game.available_regions"))?;
 
-		let lobby_groups =
-			self.game_modes
-				.iter()
-				.map(|(game_mode_name_id, game_mode)| {
-					// TODO: Add region-specific config
+		let lobby_groups = self
+			.game_modes
+			.iter()
+			.map(|(game_mode_name_id, game_mode)| {
+				// Map provided regions to region summary
+				let game_mode_regions = if let Some(regions) = &game_mode.regions {
+					// Regions are provided
+					regions
+						.iter()
+						.map(|(k, v)| {
+							if let Some(summary) = available_regions
+								.iter()
+								.find(|x| x.region_name_id().map_or(false, |x| x == k))
+							{
+								Ok((summary, Some(v)))
+							} else {
+								Err(Error::RegionDoesNotExist {
+									region_id: k.clone(),
+								})
+							}
+						})
+						.collect::<Result<Vec<_>, Error>>()?
+				} else {
+					// Use default regions
+					available_regions
+						.iter()
+						.map(|x| (x, None))
+						.collect::<Vec<_>>()
+				};
 
-					let regions =
-						available_regions
-							.iter()
-							.map(|region_summary| {
-								Ok(LobbyGroupRegion::builder()
-									.region_id(region_summary.region_id().ok_or_else(|| {
-										Error::internal("region_summary.region_id")
-									})?)
-									.tier_name_id(&game_mode.tier)
-									.idle_lobbies(
-										IdleLobbiesConfig::builder()
-											.min_idle_lobbies(game_mode.idle_lobbies.min as i32)
-											.max_idle_lobbies(game_mode.idle_lobbies.max as i32)
-											.build(),
-									)
-									.build())
-							})
-							.collect::<Result<Vec<_>, Error>>()?;
+				let regions = game_mode_regions
+					.iter()
+					.map(|(region_summary, region_config)| {
+						let region_id = region_summary
+							.region_id()
+							.ok_or_else(|| Error::internal("region_summary.region_id"))?;
 
-					let runtime = game_mode.runtime.build_model(game, &self.docker)?;
+						// Derive region -> game mode config fallbacks
+						let (tier_name_id, idle_lobbies) =
+							if let Some(region_config) = region_config {
+								(&region_config.tier, &region_config.idle_lobbies)
+							} else {
+								(&game_mode.tier, &game_mode.idle_lobbies)
+							};
 
-					Ok(LobbyGroup::builder()
-						.name_id(game_mode_name_id)
-						.set_regions(Some(regions))
-						.max_players_normal(game_mode.max_players.normal() as i32)
-						.max_players_direct(game_mode.max_players.direct() as i32)
-						.max_players_party(game_mode.max_players.party() as i32)
-						.runtime(runtime)
-						.build())
-				})
-				.collect::<Result<Vec<_>, Error>>()?;
+						Ok(LobbyGroupRegion::builder()
+							.region_id(region_id)
+							.tier_name_id(tier_name_id)
+							.idle_lobbies(
+								IdleLobbiesConfig::builder()
+									.min_idle_lobbies(idle_lobbies.min as i32)
+									.max_idle_lobbies(idle_lobbies.max as i32)
+									.build(),
+							)
+							.build())
+					})
+					.collect::<Result<Vec<_>, Error>>()?;
+
+				let runtime = game_mode.runtime.build_model(game, &self.docker)?;
+
+				Ok(LobbyGroup::builder()
+					.name_id(game_mode_name_id)
+					.set_regions(Some(regions))
+					.max_players_normal(game_mode.max_players.normal() as i32)
+					.max_players_direct(game_mode.max_players.direct() as i32)
+					.max_players_party(game_mode.max_players.party() as i32)
+					.runtime(runtime)
+					.build())
+			})
+			.collect::<Result<Vec<_>, Error>>()?;
 
 		let captcha = self.captcha.as_ref().map(|captcha| {
 			MatchmakerCaptcha::builder()
