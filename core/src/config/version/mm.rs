@@ -99,7 +99,9 @@ pub mod game_mode {
 				pub args: Vec<String>,
 				#[serde(default)]
 				pub env: HashMap<String, String>,
+				#[serde(default)]
 				pub ports: HashMap<String, Port>,
+				#[serde(default)]
 				pub network_mode: NetworkMode,
 			}
 
@@ -149,6 +151,12 @@ pub mod game_mode {
 						NetworkMode::Bridge => rivet_cloud::model::NetworkMode::Bridge,
 						NetworkMode::Host => rivet_cloud::model::NetworkMode::Host,
 					}
+				}
+			}
+
+			impl Default for NetworkMode {
+				fn default() -> Self {
+					Self::Bridge
 				}
 			}
 		}
