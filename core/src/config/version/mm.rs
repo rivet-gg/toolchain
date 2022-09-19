@@ -275,7 +275,7 @@ impl Matchmaker {
 						.map(|(k, v)| {
 							if let Some(summary) = available_regions
 								.iter()
-								.find(|x| x.region_name_id().map_or(false | x | x == k))
+								.find(|x| x.region_name_id().map_or(false, |x| x == k))
 							{
 								Ok((summary, Some(v)))
 							} else {

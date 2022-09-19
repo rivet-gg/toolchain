@@ -1492,6 +1492,7 @@ dependencies = [
  "aws-smithy-types",
  "bytes 1.2.1",
  "http",
+ "tower",
 ]
 
 [[package]]
