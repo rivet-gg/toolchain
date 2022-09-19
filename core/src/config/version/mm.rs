@@ -15,8 +15,7 @@ pub struct Matchmaker {
 	docker: Option<DockerOverride>,
 }
 
-// TODO: Remove clone
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DockerOverride {
 	#[serde(default)]
@@ -251,7 +250,6 @@ pub mod captcha {
 	}
 }
 
-// TODO: Don't consume self
 impl Matchmaker {
 	pub fn build_model(
 		&self,
