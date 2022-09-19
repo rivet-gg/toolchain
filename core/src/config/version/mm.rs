@@ -23,28 +23,29 @@ pub struct DockerOverride {
 
 pub mod game_mode {
 	use serde::Deserialize;
+	use std::collections::HashMap;
 
 	#[derive(Debug, Deserialize)]
 	pub struct GameMode {
-		// pub regions: HashMap<String, Region>,
+		pub regions: HashMap<String, Region>,
 		pub max_players: MaxPlayers,
 		#[serde(flatten)]
 		pub runtime: runtime::Runtime,
 
 		// Region overrides
-		#[serde(default = "GameMode::default_tier")]
+		#[serde(default = "Region::default_tier")]
 		pub tier: String,
 		#[serde(default)]
 		pub idle_lobbies: IdleLobbies,
 	}
 
-	// #[derive(Debug, Deserialize)]
-	// pub struct Region {
-	// 	#[serde(default = "Region::default_tier")]
-	// 	pub tier: String,
-	// 	#[serde(default)]
-	// 	pub idle_lobbies: IdleLobbies,
-	// }
+	#[derive(Debug, Deserialize)]
+	pub struct Region {
+		#[serde(default = "Region::default_tier")]
+		pub tier: String,
+		#[serde(default)]
+		pub idle_lobbies: IdleLobbies,
+	}
 
 	#[derive(Debug, Deserialize)]
 	pub struct IdleLobbies {
@@ -175,26 +176,11 @@ pub mod game_mode {
 		}
 	}
 
-	impl GameMode {
+	impl Region {
 		fn default_tier() -> String {
 			"basic-1d1".into()
 		}
 	}
-
-	// impl Region {
-	// 	fn default_tier() -> String {
-	// 		"basic-1d1".into()
-	// 	}
-	// }
-
-	// impl Default for Region {
-	// 	fn default() -> Self {
-	// 		Self {
-	// 			tier: Self::default_tier(),
-	// 			idle_lobbies: Default::default(),
-	// 		}
-	// 	}
-	// }
 
 	impl Default for IdleLobbies {
 		fn default() -> Self {
