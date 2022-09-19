@@ -5101,6 +5101,162 @@ pub fn parse_list_namespace_lobbies_response(
 }
 
 #[allow(clippy::unnecessary_wraps)]
+pub fn parse_remove_namespace_cdn_auth_user_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::RemoveNamespaceCdnAuthUserOutput,
+	crate::error::RemoveNamespaceCdnAuthUserError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => {
+			return Err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled(
+				generic,
+			))
+		}
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::RemoveNamespaceCdnAuthUserError {
+			meta: generic,
+			kind: crate::error::RemoveNamespaceCdnAuthUserErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::RemoveNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::RemoveNamespaceCdnAuthUserErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::RemoveNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::RemoveNamespaceCdnAuthUserErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::RemoveNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::RemoveNamespaceCdnAuthUserErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::RemoveNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::RemoveNamespaceCdnAuthUserErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::RemoveNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::RemoveNamespaceCdnAuthUserErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::RemoveNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::RemoveNamespaceCdnAuthUserError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_remove_namespace_cdn_auth_user_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::RemoveNamespaceCdnAuthUserOutput,
+	crate::error::RemoveNamespaceCdnAuthUserError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::remove_namespace_cdn_auth_user_output::Builder::default();
+		let _ = response;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
 pub fn parse_remove_namespace_domain_error(
 	response: &http::Response<bytes::Bytes>,
 ) -> std::result::Result<
@@ -5247,6 +5403,162 @@ pub fn parse_remove_namespace_domain_response(
 	Ok({
 		#[allow(unused_mut)]
 		let mut output = crate::output::remove_namespace_domain_output::Builder::default();
+		let _ = response;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_set_namespace_cdn_auth_type_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::SetNamespaceCdnAuthTypeOutput,
+	crate::error::SetNamespaceCdnAuthTypeError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => {
+			return Err(crate::error::SetNamespaceCdnAuthTypeError::unhandled(
+				generic,
+			))
+		}
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::SetNamespaceCdnAuthTypeError {
+			meta: generic,
+			kind: crate::error::SetNamespaceCdnAuthTypeErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::SetNamespaceCdnAuthTypeError {
+				meta: generic,
+				kind: crate::error::SetNamespaceCdnAuthTypeErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::SetNamespaceCdnAuthTypeError {
+				meta: generic,
+				kind: crate::error::SetNamespaceCdnAuthTypeErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::SetNamespaceCdnAuthTypeError {
+				meta: generic,
+				kind: crate::error::SetNamespaceCdnAuthTypeErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::SetNamespaceCdnAuthTypeError {
+				meta: generic,
+				kind: crate::error::SetNamespaceCdnAuthTypeErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::SetNamespaceCdnAuthTypeError {
+				meta: generic,
+				kind: crate::error::SetNamespaceCdnAuthTypeErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetNamespaceCdnAuthTypeError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::SetNamespaceCdnAuthTypeError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_set_namespace_cdn_auth_type_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::SetNamespaceCdnAuthTypeOutput,
+	crate::error::SetNamespaceCdnAuthTypeError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::set_namespace_cdn_auth_type_output::Builder::default();
 		let _ = response;
 		output.build()
 	})
@@ -5715,6 +6027,162 @@ pub fn parse_update_game_namespace_version_response(
 	Ok({
 		#[allow(unused_mut)]
 		let mut output = crate::output::update_game_namespace_version_output::Builder::default();
+		let _ = response;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_update_namespace_cdn_auth_user_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::UpdateNamespaceCdnAuthUserOutput,
+	crate::error::UpdateNamespaceCdnAuthUserError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => {
+			return Err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled(
+				generic,
+			))
+		}
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::UpdateNamespaceCdnAuthUserError {
+			meta: generic,
+			kind: crate::error::UpdateNamespaceCdnAuthUserErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::UpdateNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::UpdateNamespaceCdnAuthUserErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::UpdateNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::UpdateNamespaceCdnAuthUserErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::UpdateNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::UpdateNamespaceCdnAuthUserErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::UpdateNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::UpdateNamespaceCdnAuthUserErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::UpdateNamespaceCdnAuthUserError {
+				meta: generic,
+				kind: crate::error::UpdateNamespaceCdnAuthUserErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::UpdateNamespaceCdnAuthUserError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::UpdateNamespaceCdnAuthUserError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_update_namespace_cdn_auth_user_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::UpdateNamespaceCdnAuthUserOutput,
+	crate::error::UpdateNamespaceCdnAuthUserError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::update_namespace_cdn_auth_user_output::Builder::default();
 		let _ = response;
 		output.build()
 	})

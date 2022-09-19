@@ -1101,6 +1101,40 @@ impl aws_smithy_http::response::ParseStrictResponse for ListNamespaceLobbies {
 	}
 }
 
+/// Operation shape for `RemoveNamespaceCdnAuthUser`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`remove_namespace_cdn_auth_user`](crate::client::Client::remove_namespace_cdn_auth_user).
+///
+/// See [`crate::client::fluent_builders::RemoveNamespaceCdnAuthUser`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct RemoveNamespaceCdnAuthUser {
+	_private: (),
+}
+impl RemoveNamespaceCdnAuthUser {
+	/// Creates a new builder-style object to manufacture [`RemoveNamespaceCdnAuthUserInput`](crate::input::RemoveNamespaceCdnAuthUserInput)
+	pub fn builder() -> crate::input::remove_namespace_cdn_auth_user_input::Builder {
+		crate::input::remove_namespace_cdn_auth_user_input::Builder::default()
+	}
+	/// Creates a new `RemoveNamespaceCdnAuthUser` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for RemoveNamespaceCdnAuthUser {
+	type Output = std::result::Result<
+		crate::output::RemoveNamespaceCdnAuthUserOutput,
+		crate::error::RemoveNamespaceCdnAuthUserError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_remove_namespace_cdn_auth_user_error(response)
+		} else {
+			crate::operation_deser::parse_remove_namespace_cdn_auth_user_response(response)
+		}
+	}
+}
+
 /// Operation shape for `RemoveNamespaceDomain`.
 ///
 /// This is usually constructed for you using the the fluent builder returned by
@@ -1131,6 +1165,40 @@ impl aws_smithy_http::response::ParseStrictResponse for RemoveNamespaceDomain {
 			crate::operation_deser::parse_remove_namespace_domain_error(response)
 		} else {
 			crate::operation_deser::parse_remove_namespace_domain_response(response)
+		}
+	}
+}
+
+/// Operation shape for `SetNamespaceCdnAuthType`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`set_namespace_cdn_auth_type`](crate::client::Client::set_namespace_cdn_auth_type).
+///
+/// See [`crate::client::fluent_builders::SetNamespaceCdnAuthType`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct SetNamespaceCdnAuthType {
+	_private: (),
+}
+impl SetNamespaceCdnAuthType {
+	/// Creates a new builder-style object to manufacture [`SetNamespaceCdnAuthTypeInput`](crate::input::SetNamespaceCdnAuthTypeInput)
+	pub fn builder() -> crate::input::set_namespace_cdn_auth_type_input::Builder {
+		crate::input::set_namespace_cdn_auth_type_input::Builder::default()
+	}
+	/// Creates a new `SetNamespaceCdnAuthType` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for SetNamespaceCdnAuthType {
+	type Output = std::result::Result<
+		crate::output::SetNamespaceCdnAuthTypeOutput,
+		crate::error::SetNamespaceCdnAuthTypeError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_set_namespace_cdn_auth_type_error(response)
+		} else {
+			crate::operation_deser::parse_set_namespace_cdn_auth_type_response(response)
 		}
 	}
 }
@@ -1233,6 +1301,40 @@ impl aws_smithy_http::response::ParseStrictResponse for UpdateGameNamespaceVersi
 			crate::operation_deser::parse_update_game_namespace_version_error(response)
 		} else {
 			crate::operation_deser::parse_update_game_namespace_version_response(response)
+		}
+	}
+}
+
+/// Operation shape for `UpdateNamespaceCdnAuthUser`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`update_namespace_cdn_auth_user`](crate::client::Client::update_namespace_cdn_auth_user).
+///
+/// See [`crate::client::fluent_builders::UpdateNamespaceCdnAuthUser`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct UpdateNamespaceCdnAuthUser {
+	_private: (),
+}
+impl UpdateNamespaceCdnAuthUser {
+	/// Creates a new builder-style object to manufacture [`UpdateNamespaceCdnAuthUserInput`](crate::input::UpdateNamespaceCdnAuthUserInput)
+	pub fn builder() -> crate::input::update_namespace_cdn_auth_user_input::Builder {
+		crate::input::update_namespace_cdn_auth_user_input::Builder::default()
+	}
+	/// Creates a new `UpdateNamespaceCdnAuthUser` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for UpdateNamespaceCdnAuthUser {
+	type Output = std::result::Result<
+		crate::output::UpdateNamespaceCdnAuthUserOutput,
+		crate::error::UpdateNamespaceCdnAuthUserError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_update_namespace_cdn_auth_user_error(response)
+		} else {
+			crate::operation_deser::parse_update_namespace_cdn_auth_user_response(response)
 		}
 	}
 }
