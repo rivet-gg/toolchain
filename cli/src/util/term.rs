@@ -24,9 +24,9 @@ pub mod status {
 		eprintln!("    {} {}", style(msg).bold().blue(), data);
 	}
 
-	pub fn progress(msg: impl Display, data: impl Display) {
-		eprintln!("    {} {}", style(msg).bold().green(), data);
-	}
+	// pub fn progress(msg: impl Display, data: impl Display) {
+	// 	eprintln!("    {} {}", style(msg).bold().green(), data);
+	// }
 
 	pub fn success(msg: impl Display, data: impl Display) {
 		eprintln!("    {} {}", style(msg).bold().green(), data);
