@@ -121,7 +121,7 @@ impl SubCommand {
 				eprintln!();
 				if term::input::bool(term, "Write token to .env file?").await? {
 					let env_file = format!(
-						"PORT={port}\nRIVET_CLIENT_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n",
+						"PORT={port}\nRIVET_TOKEN={token}\n",
 						port = default_port.unwrap()
 					);
 					fs::write(".env", env_file).await?;
