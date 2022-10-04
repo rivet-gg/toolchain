@@ -6,10 +6,20 @@ if [ "$(uname)" = "Darwin" ]; then
 	echo
 	echo "> Detected macOS"
 
+	echo
+	echo "> Installin jq"
+	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64" -o /tmp/jq
+	chmod +x /tmp/jq
+
 	CLI_ASSET_SUFFIX="_x86_64-apple-darwin.zip"
 elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	echo
 	echo "> Detected Linux"
+
+	echo
+	echo "> Installin jq"
+	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux$(getconf LONG_BIT)" -o /tmp/jq
+	chmod +x /tmp/jq
 
 	CLI_ASSET_SUFFIX="_x86_64-unknown-linux-musl.tar.gz"
 else
@@ -24,7 +34,7 @@ if [ -z "$RIVET_CLI_VERSION" ]; then
 	echo "> Fetching latest release version"
 	RIVET_CLI_VERSION="$( \
 		curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases
-		| jq -re \
+		| /tmp/jq -re \
 			--arg cli_asset_suffix "$CLI_ASSET_SUFFIX" \
 			'[.[] | select(.assets[] | select(.name | endswith($cli_asset_suffix)))] | first | .name' \
 	)"
