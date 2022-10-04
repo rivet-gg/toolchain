@@ -47,10 +47,10 @@ pub mod game_mode {
 	#[derive(Debug, Deserialize)]
 	#[serde(deny_unknown_fields)]
 	pub struct Region {
-		#[serde(default = "Region::default_tier")]
-		pub tier: String,
 		#[serde(default)]
-		pub idle_lobbies: IdleLobbies,
+		pub tier: Option<String>,
+		#[serde(default)]
+		pub idle_lobbies: Option<IdleLobbies>,
 	}
 
 	#[derive(Debug, Deserialize)]
@@ -340,12 +340,12 @@ impl Matchmaker {
 							.ok_or_else(|| Error::internal("region_summary.region_id"))?;
 
 						// Derive region -> game mode config fallbacks
-						let (tier_name_id, idle_lobbies) =
-							if let Some(region_config) = region_config {
-								(&region_config.tier, &region_config.idle_lobbies)
-							} else {
-								(&game_mode.tier, &game_mode.idle_lobbies)
-							};
+						let tier_name_id = region_config
+							.and_then(|x| x.tier.as_ref())
+							.unwrap_or(&game_mode.tier);
+						let idle_lobbies = region_config
+							.and_then(|x| x.idle_lobbies.as_ref())
+							.unwrap_or(&game_mode.idle_lobbies);
 
 						Ok(LobbyGroupRegion::builder()
 							.region_id(region_id)
