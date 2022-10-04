@@ -61,7 +61,11 @@ elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 
 	echo
 	echo "> Installing rivet"
-	sudo mv ./rivet /usr/local/bin/rivet
+	if command -v sudo; then
+		sudo mv ./rivet /usr/local/bin/rivet
+	else
+		mv ./rivet /usr/local/bin/rivet
+	fi
 else
 	exit 1
 fi
