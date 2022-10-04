@@ -2546,6 +2546,10 @@ pub struct LogsLobbySummary {
 	pub region_id: std::option::Option<std::string::String>,
 	/// RFC3339 timestamp.
 	pub create_ts: std::option::Option<aws_smithy_types::DateTime>,
+	/// RFC3339 timestamp.
+	pub start_ts: std::option::Option<aws_smithy_types::DateTime>,
+	/// RFC3339 timestamp.
+	pub ready_ts: std::option::Option<aws_smithy_types::DateTime>,
 	/// A union representing the state of a lobby.
 	pub status: std::option::Option<crate::model::LogsLobbyStatus>,
 }
@@ -2570,6 +2574,14 @@ impl LogsLobbySummary {
 	pub fn create_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
 		self.create_ts.as_ref()
 	}
+	/// RFC3339 timestamp.
+	pub fn start_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
+		self.start_ts.as_ref()
+	}
+	/// RFC3339 timestamp.
+	pub fn ready_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
+		self.ready_ts.as_ref()
+	}
 	/// A union representing the state of a lobby.
 	pub fn status(&self) -> std::option::Option<&crate::model::LogsLobbyStatus> {
 		self.status.as_ref()
@@ -2583,6 +2595,8 @@ impl std::fmt::Debug for LogsLobbySummary {
 		formatter.field("lobby_group_name_id", &self.lobby_group_name_id);
 		formatter.field("region_id", &self.region_id);
 		formatter.field("create_ts", &self.create_ts);
+		formatter.field("start_ts", &self.start_ts);
+		formatter.field("ready_ts", &self.ready_ts);
 		formatter.field("status", &self.status);
 		formatter.finish()
 	}
@@ -2598,6 +2612,8 @@ pub mod logs_lobby_summary {
 		pub(crate) lobby_group_name_id: std::option::Option<std::string::String>,
 		pub(crate) region_id: std::option::Option<std::string::String>,
 		pub(crate) create_ts: std::option::Option<aws_smithy_types::DateTime>,
+		pub(crate) start_ts: std::option::Option<aws_smithy_types::DateTime>,
+		pub(crate) ready_ts: std::option::Option<aws_smithy_types::DateTime>,
 		pub(crate) status: std::option::Option<crate::model::LogsLobbyStatus>,
 	}
 	impl Builder {
@@ -2657,6 +2673,32 @@ pub mod logs_lobby_summary {
 			self.create_ts = input;
 			self
 		}
+		/// RFC3339 timestamp.
+		pub fn start_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
+			self.start_ts = Some(input);
+			self
+		}
+		/// RFC3339 timestamp.
+		pub fn set_start_ts(
+			mut self,
+			input: std::option::Option<aws_smithy_types::DateTime>,
+		) -> Self {
+			self.start_ts = input;
+			self
+		}
+		/// RFC3339 timestamp.
+		pub fn ready_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
+			self.ready_ts = Some(input);
+			self
+		}
+		/// RFC3339 timestamp.
+		pub fn set_ready_ts(
+			mut self,
+			input: std::option::Option<aws_smithy_types::DateTime>,
+		) -> Self {
+			self.ready_ts = input;
+			self
+		}
 		/// A union representing the state of a lobby.
 		pub fn status(mut self, input: crate::model::LogsLobbyStatus) -> Self {
 			self.status = Some(input);
@@ -2678,6 +2720,8 @@ pub mod logs_lobby_summary {
 				lobby_group_name_id: self.lobby_group_name_id,
 				region_id: self.region_id,
 				create_ts: self.create_ts,
+				start_ts: self.start_ts,
+				ready_ts: self.ready_ts,
 				status: self.status,
 			}
 		}
@@ -5254,24 +5298,24 @@ impl IdleLobbiesConfig {
 pub struct CdnVersionConfig {
 	/// A universally unique identifier.
 	pub site_id: std::option::Option<std::string::String>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub custom_headers: std::option::Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
+	/// Multiple CDN version routes.
+	pub routes: std::option::Option<std::vec::Vec<crate::model::CdnVersionRoute>>,
 }
 impl CdnVersionConfig {
 	/// A universally unique identifier.
 	pub fn site_id(&self) -> std::option::Option<&str> {
 		self.site_id.as_deref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn custom_headers(&self) -> std::option::Option<&[crate::model::CdnVersionCustomHeader]> {
-		self.custom_headers.as_deref()
+	/// Multiple CDN version routes.
+	pub fn routes(&self) -> std::option::Option<&[crate::model::CdnVersionRoute]> {
+		self.routes.as_deref()
 	}
 }
 impl std::fmt::Debug for CdnVersionConfig {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CdnVersionConfig");
 		formatter.field("site_id", &self.site_id);
-		formatter.field("custom_headers", &self.custom_headers);
+		formatter.field("routes", &self.routes);
 		formatter.finish()
 	}
 }
@@ -5282,8 +5326,7 @@ pub mod cdn_version_config {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) site_id: std::option::Option<std::string::String>,
-		pub(crate) custom_headers:
-			std::option::Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
+		pub(crate) routes: std::option::Option<std::vec::Vec<crate::model::CdnVersionRoute>>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -5296,29 +5339,30 @@ pub mod cdn_version_config {
 			self.site_id = input;
 			self
 		}
-		/// Appends an item to `custom_headers`.
+		/// Appends an item to `routes`.
 		///
-		/// To override the contents of this collection use [`set_custom_headers`](Self::set_custom_headers).
+		/// To override the contents of this collection use [`set_routes`](Self::set_routes).
 		///
-		pub fn custom_headers(mut self, input: crate::model::CdnVersionCustomHeader) -> Self {
-			let mut v = self.custom_headers.unwrap_or_default();
+		/// Multiple CDN version routes.
+		pub fn routes(mut self, input: crate::model::CdnVersionRoute) -> Self {
+			let mut v = self.routes.unwrap_or_default();
 			v.push(input);
-			self.custom_headers = Some(v);
+			self.routes = Some(v);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_custom_headers(
+		/// Multiple CDN version routes.
+		pub fn set_routes(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::CdnVersionCustomHeader>>,
+			input: std::option::Option<std::vec::Vec<crate::model::CdnVersionRoute>>,
 		) -> Self {
-			self.custom_headers = input;
+			self.routes = input;
 			self
 		}
 		/// Consumes the builder and constructs a [`CdnVersionConfig`](crate::model::CdnVersionConfig)
 		pub fn build(self) -> crate::model::CdnVersionConfig {
 			crate::model::CdnVersionConfig {
 				site_id: self.site_id,
-				custom_headers: self.custom_headers,
+				routes: self.routes,
 			}
 		}
 	}
@@ -5333,16 +5377,15 @@ impl CdnVersionConfig {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct CdnVersionCustomHeader {
+pub struct CdnVersionRoute {
 	#[allow(missing_docs)] // documentation missing in model
 	pub glob: std::option::Option<std::string::String>,
 	/// Unsigned 32 bit integer.
 	pub priority: std::option::Option<i32>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub headers:
-		std::option::Option<std::collections::HashMap<std::string::String, std::string::String>>,
+	/// Multiple CDN version middleware.
+	pub middlewares: std::option::Option<std::vec::Vec<crate::model::CdnVersionMiddleware>>,
 }
-impl CdnVersionCustomHeader {
+impl CdnVersionRoute {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn glob(&self) -> std::option::Option<&str> {
 		self.glob.as_deref()
@@ -5351,33 +5394,30 @@ impl CdnVersionCustomHeader {
 	pub fn priority(&self) -> std::option::Option<i32> {
 		self.priority
 	}
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn headers(
-		&self,
-	) -> std::option::Option<&std::collections::HashMap<std::string::String, std::string::String>> {
-		self.headers.as_ref()
+	/// Multiple CDN version middleware.
+	pub fn middlewares(&self) -> std::option::Option<&[crate::model::CdnVersionMiddleware]> {
+		self.middlewares.as_deref()
 	}
 }
-impl std::fmt::Debug for CdnVersionCustomHeader {
+impl std::fmt::Debug for CdnVersionRoute {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("CdnVersionCustomHeader");
+		let mut formatter = f.debug_struct("CdnVersionRoute");
 		formatter.field("glob", &self.glob);
 		formatter.field("priority", &self.priority);
-		formatter.field("headers", &self.headers);
+		formatter.field("middlewares", &self.middlewares);
 		formatter.finish()
 	}
 }
-/// See [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
-pub mod cdn_version_custom_header {
-	/// A builder for [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
+/// See [`CdnVersionRoute`](crate::model::CdnVersionRoute)
+pub mod cdn_version_route {
+	/// A builder for [`CdnVersionRoute`](crate::model::CdnVersionRoute)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) glob: std::option::Option<std::string::String>,
 		pub(crate) priority: std::option::Option<i32>,
-		pub(crate) headers: std::option::Option<
-			std::collections::HashMap<std::string::String, std::string::String>,
-		>,
+		pub(crate) middlewares:
+			std::option::Option<std::vec::Vec<crate::model::CdnVersionMiddleware>>,
 	}
 	impl Builder {
 		#[allow(missing_docs)] // documentation missing in model
@@ -5400,44 +5440,268 @@ pub mod cdn_version_custom_header {
 			self.priority = input;
 			self
 		}
-		/// Adds a key-value pair to `headers`.
+		/// Appends an item to `middlewares`.
+		///
+		/// To override the contents of this collection use [`set_middlewares`](Self::set_middlewares).
+		///
+		/// Multiple CDN version middleware.
+		pub fn middlewares(mut self, input: crate::model::CdnVersionMiddleware) -> Self {
+			let mut v = self.middlewares.unwrap_or_default();
+			v.push(input);
+			self.middlewares = Some(v);
+			self
+		}
+		/// Multiple CDN version middleware.
+		pub fn set_middlewares(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::CdnVersionMiddleware>>,
+		) -> Self {
+			self.middlewares = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnVersionRoute`](crate::model::CdnVersionRoute)
+		pub fn build(self) -> crate::model::CdnVersionRoute {
+			crate::model::CdnVersionRoute {
+				glob: self.glob,
+				priority: self.priority,
+				middlewares: self.middlewares,
+			}
+		}
+	}
+}
+impl CdnVersionRoute {
+	/// Creates a new builder-style object to manufacture [`CdnVersionRoute`](crate::model::CdnVersionRoute)
+	pub fn builder() -> crate::model::cdn_version_route::Builder {
+		crate::model::cdn_version_route::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnVersionMiddleware {
+	#[allow(missing_docs)] // documentation missing in model
+	pub kind: std::option::Option<crate::model::CdnVersionMiddlewareKind>,
+}
+impl CdnVersionMiddleware {
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn kind(&self) -> std::option::Option<&crate::model::CdnVersionMiddlewareKind> {
+		self.kind.as_ref()
+	}
+}
+impl std::fmt::Debug for CdnVersionMiddleware {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnVersionMiddleware");
+		formatter.field("kind", &self.kind);
+		formatter.finish()
+	}
+}
+/// See [`CdnVersionMiddleware`](crate::model::CdnVersionMiddleware)
+pub mod cdn_version_middleware {
+	/// A builder for [`CdnVersionMiddleware`](crate::model::CdnVersionMiddleware)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) kind: std::option::Option<crate::model::CdnVersionMiddlewareKind>,
+	}
+	impl Builder {
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn kind(mut self, input: crate::model::CdnVersionMiddlewareKind) -> Self {
+			self.kind = Some(input);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_kind(
+			mut self,
+			input: std::option::Option<crate::model::CdnVersionMiddlewareKind>,
+		) -> Self {
+			self.kind = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnVersionMiddleware`](crate::model::CdnVersionMiddleware)
+		pub fn build(self) -> crate::model::CdnVersionMiddleware {
+			crate::model::CdnVersionMiddleware { kind: self.kind }
+		}
+	}
+}
+impl CdnVersionMiddleware {
+	/// Creates a new builder-style object to manufacture [`CdnVersionMiddleware`](crate::model::CdnVersionMiddleware)
+	pub fn builder() -> crate::model::cdn_version_middleware::Builder {
+		crate::model::cdn_version_middleware::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+pub enum CdnVersionMiddlewareKind {
+	#[allow(missing_docs)] // documentation missing in model
+	CustomHeaders(crate::model::CdnVersionCustomHeadersMiddleware),
+	/// The `Unknown` variant represents cases where new union variant was received. Consider upgrading the SDK to the latest available version.
+	/// An unknown enum variant
+	///
+	/// _Note: If you encounter this error, consider upgrading your SDK to the latest version._
+	/// The `Unknown` variant represents cases where the server sent a value that wasn't recognized
+	/// by the client. This can happen when the server adds new functionality, but the client has not been updated.
+	/// To investigate this, consider turning on debug logging to print the raw HTTP response.
+	#[non_exhaustive]
+	Unknown,
+}
+impl CdnVersionMiddlewareKind {
+	#[allow(irrefutable_let_patterns)]
+	/// Tries to convert the enum instance into [`CustomHeaders`](crate::model::CdnVersionMiddlewareKind::CustomHeaders), extracting the inner [`CdnVersionCustomHeadersMiddleware`](crate::model::CdnVersionCustomHeadersMiddleware).
+	/// Returns `Err(&Self)` if it can't be converted.
+	pub fn as_custom_headers(
+		&self,
+	) -> std::result::Result<&crate::model::CdnVersionCustomHeadersMiddleware, &Self> {
+		if let CdnVersionMiddlewareKind::CustomHeaders(val) = &self {
+			Ok(val)
+		} else {
+			Err(self)
+		}
+	}
+	/// Returns true if this is a [`CustomHeaders`](crate::model::CdnVersionMiddlewareKind::CustomHeaders).
+	pub fn is_custom_headers(&self) -> bool {
+		self.as_custom_headers().is_ok()
+	}
+	/// Returns true if the enum instance is the `Unknown` variant.
+	pub fn is_unknown(&self) -> bool {
+		matches!(self, Self::Unknown)
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnVersionCustomHeadersMiddleware {
+	#[allow(missing_docs)] // documentation missing in model
+	pub headers: std::option::Option<std::vec::Vec<crate::model::CdnVersionHeader>>,
+}
+impl CdnVersionCustomHeadersMiddleware {
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn headers(&self) -> std::option::Option<&[crate::model::CdnVersionHeader]> {
+		self.headers.as_deref()
+	}
+}
+impl std::fmt::Debug for CdnVersionCustomHeadersMiddleware {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnVersionCustomHeadersMiddleware");
+		formatter.field("headers", &self.headers);
+		formatter.finish()
+	}
+}
+/// See [`CdnVersionCustomHeadersMiddleware`](crate::model::CdnVersionCustomHeadersMiddleware)
+pub mod cdn_version_custom_headers_middleware {
+	/// A builder for [`CdnVersionCustomHeadersMiddleware`](crate::model::CdnVersionCustomHeadersMiddleware)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) headers: std::option::Option<std::vec::Vec<crate::model::CdnVersionHeader>>,
+	}
+	impl Builder {
+		/// Appends an item to `headers`.
 		///
 		/// To override the contents of this collection use [`set_headers`](Self::set_headers).
 		///
-		pub fn headers(
-			mut self,
-			k: impl Into<std::string::String>,
-			v: impl Into<std::string::String>,
-		) -> Self {
-			let mut hash_map = self.headers.unwrap_or_default();
-			hash_map.insert(k.into(), v.into());
-			self.headers = Some(hash_map);
+		pub fn headers(mut self, input: crate::model::CdnVersionHeader) -> Self {
+			let mut v = self.headers.unwrap_or_default();
+			v.push(input);
+			self.headers = Some(v);
 			self
 		}
 		#[allow(missing_docs)] // documentation missing in model
 		pub fn set_headers(
 			mut self,
-			input: std::option::Option<
-				std::collections::HashMap<std::string::String, std::string::String>,
-			>,
+			input: std::option::Option<std::vec::Vec<crate::model::CdnVersionHeader>>,
 		) -> Self {
 			self.headers = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
-		pub fn build(self) -> crate::model::CdnVersionCustomHeader {
-			crate::model::CdnVersionCustomHeader {
-				glob: self.glob,
-				priority: self.priority,
+		/// Consumes the builder and constructs a [`CdnVersionCustomHeadersMiddleware`](crate::model::CdnVersionCustomHeadersMiddleware)
+		pub fn build(self) -> crate::model::CdnVersionCustomHeadersMiddleware {
+			crate::model::CdnVersionCustomHeadersMiddleware {
 				headers: self.headers,
 			}
 		}
 	}
 }
-impl CdnVersionCustomHeader {
-	/// Creates a new builder-style object to manufacture [`CdnVersionCustomHeader`](crate::model::CdnVersionCustomHeader)
-	pub fn builder() -> crate::model::cdn_version_custom_header::Builder {
-		crate::model::cdn_version_custom_header::Builder::default()
+impl CdnVersionCustomHeadersMiddleware {
+	/// Creates a new builder-style object to manufacture [`CdnVersionCustomHeadersMiddleware`](crate::model::CdnVersionCustomHeadersMiddleware)
+	pub fn builder() -> crate::model::cdn_version_custom_headers_middleware::Builder {
+		crate::model::cdn_version_custom_headers_middleware::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnVersionHeader {
+	#[allow(missing_docs)] // documentation missing in model
+	pub name: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub value: std::option::Option<std::string::String>,
+}
+impl CdnVersionHeader {
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn name(&self) -> std::option::Option<&str> {
+		self.name.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn value(&self) -> std::option::Option<&str> {
+		self.value.as_deref()
+	}
+}
+impl std::fmt::Debug for CdnVersionHeader {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnVersionHeader");
+		formatter.field("name", &self.name);
+		formatter.field("value", &self.value);
+		formatter.finish()
+	}
+}
+/// See [`CdnVersionHeader`](crate::model::CdnVersionHeader)
+pub mod cdn_version_header {
+	/// A builder for [`CdnVersionHeader`](crate::model::CdnVersionHeader)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) name: std::option::Option<std::string::String>,
+		pub(crate) value: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn name(mut self, input: impl Into<std::string::String>) -> Self {
+			self.name = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_name(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.name = input;
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn value(mut self, input: impl Into<std::string::String>) -> Self {
+			self.value = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_value(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.value = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnVersionHeader`](crate::model::CdnVersionHeader)
+		pub fn build(self) -> crate::model::CdnVersionHeader {
+			crate::model::CdnVersionHeader {
+				name: self.name,
+				value: self.value,
+			}
+		}
+	}
+}
+impl CdnVersionHeader {
+	/// Creates a new builder-style object to manufacture [`CdnVersionHeader`](crate::model::CdnVersionHeader)
+	pub fn builder() -> crate::model::cdn_version_header::Builder {
+		crate::model::cdn_version_header::Builder::default()
 	}
 }
 

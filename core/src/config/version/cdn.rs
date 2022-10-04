@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use serde::Deserialize;
 
 use crate::error::Error;
@@ -8,23 +6,39 @@ use crate::error::Error;
 #[serde(deny_unknown_fields)]
 pub struct Cdn {
 	pub site: String,
-	pub custom_headers: Vec<custom_header::CustomHeader>,
+	pub routes: Vec<Route>,
 }
 
-pub mod custom_header {
+#[derive(Debug, Deserialize)]
+pub struct Route {
+	pub glob: String,
+	pub priority: u32,
+	pub middlewares: Vec<middleware::Middleware>,
+}
+
+pub mod middleware {
 	use serde::Deserialize;
 
 	#[derive(Debug, Deserialize)]
-	pub struct CustomHeader {
-		pub glob: String,
-		pub priority: u32,
-		pub headers: Vec<Header>,
+	pub struct Middleware {
+		pub kind: MiddlewareKind,
 	}
 
 	#[derive(Debug, Deserialize)]
-	pub struct Header {
-		pub name: String,
-		pub value: String,
+	pub enum MiddlewareKind {
+		CustomHeaders {
+			headers: Vec<custom_headers::Header>,
+		},
+	}
+
+	pub mod custom_headers {
+		use serde::Deserialize;
+
+		#[derive(Debug, Deserialize)]
+		pub struct Header {
+			pub name: String,
+			pub value: String,
+		}
 	}
 }
 
@@ -35,19 +49,41 @@ impl Cdn {
 	) -> Result<rivet_cloud::model::CdnVersionConfig, Error> {
 		use rivet_cloud::model::*;
 
-		let custom_headers = self
-			.custom_headers
+		let routes = self
+			.routes
 			.iter()
-			.map(|custom_header| {
-				Ok(CdnVersionCustomHeader::builder()
-					.glob(custom_header.glob.clone())
-					.priority(custom_header.priority as i32)
-					.set_headers(Some(
-						custom_header
-							.headers
+			.map(|route| {
+				Ok(CdnVersionRoute::builder()
+					.glob(route.glob.clone())
+					.priority(route.priority as i32)
+					.set_middlewares(Some(
+						route
+							.middlewares
 							.iter()
-							.map(|header| (header.name.clone(), header.value.clone()))
-							.collect::<HashMap<_, _>>(),
+							.map(|middleware| {
+								let kind = match &middleware.kind {
+									middleware::MiddlewareKind::CustomHeaders { headers } => {
+										CdnVersionMiddlewareKind::CustomHeaders(
+											CdnVersionCustomHeadersMiddleware::builder()
+												.set_headers(Some(
+													headers
+														.iter()
+														.map(|header| {
+															CdnVersionHeader::builder()
+																.name(&header.name)
+																.value(&header.value)
+																.build()
+														})
+														.collect::<Vec<_>>(),
+												))
+												.build(),
+										)
+									}
+								};
+
+								Ok(CdnVersionMiddleware::builder().kind(kind).build())
+							})
+							.collect::<Result<Vec<_>, Error>>()?,
 					))
 					.build())
 			})
@@ -55,7 +91,7 @@ impl Cdn {
 
 		Ok(CdnVersionConfig::builder()
 			.site_id(&self.site)
-			.set_custom_headers(Some(custom_headers))
+			.set_routes(Some(routes))
 			.build())
 	}
 }
