@@ -18,7 +18,7 @@ if [ "$(uname)" = "Darwin" ]; then
 	CLI_ASSET_SUFFIX="_x86_64-apple-darwin.zip"
 elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	echo
-	echo "> Detected Linux"
+	echo "> Detected Linux ($(getconf LONG_BIT) bit)"
 
 	echo
 	echo "> Installing jq"
