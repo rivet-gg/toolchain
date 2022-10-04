@@ -890,6 +890,8 @@ impl GroupBillingPayment {
 pub struct RegionSummary {
 	/// A universally unique identifier.
 	pub region_id: std::option::Option<std::string::String>,
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub region_name_id: std::option::Option<std::string::String>,
 	/// The server provider of this region.
 	pub provider: std::option::Option<std::string::String>,
 	/// A universal number given to this region.
@@ -903,6 +905,10 @@ impl RegionSummary {
 	/// A universally unique identifier.
 	pub fn region_id(&self) -> std::option::Option<&str> {
 		self.region_id.as_deref()
+	}
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub fn region_name_id(&self) -> std::option::Option<&str> {
+		self.region_name_id.as_deref()
 	}
 	/// The server provider of this region.
 	pub fn provider(&self) -> std::option::Option<&str> {
@@ -925,6 +931,7 @@ impl std::fmt::Debug for RegionSummary {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("RegionSummary");
 		formatter.field("region_id", &self.region_id);
+		formatter.field("region_name_id", &self.region_name_id);
 		formatter.field("provider", &self.provider);
 		formatter.field("universal_region", &self.universal_region);
 		formatter.field("provider_display_name", &self.provider_display_name);
@@ -939,6 +946,7 @@ pub mod region_summary {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) region_id: std::option::Option<std::string::String>,
+		pub(crate) region_name_id: std::option::Option<std::string::String>,
 		pub(crate) provider: std::option::Option<std::string::String>,
 		pub(crate) universal_region: std::option::Option<i16>,
 		pub(crate) provider_display_name: std::option::Option<std::string::String>,
@@ -953,6 +961,19 @@ pub mod region_summary {
 		/// A universally unique identifier.
 		pub fn set_region_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.region_id = input;
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn region_name_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.region_name_id = Some(input.into());
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn set_region_name_id(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.region_name_id = input;
 			self
 		}
 		/// The server provider of this region.
@@ -1005,6 +1026,7 @@ pub mod region_summary {
 		pub fn build(self) -> crate::model::RegionSummary {
 			crate::model::RegionSummary {
 				region_id: self.region_id,
+				region_name_id: self.region_name_id,
 				provider: self.provider,
 				universal_region: self.universal_region,
 				provider_display_name: self.provider_display_name,
@@ -3215,8 +3237,10 @@ impl AsRef<str> for CdnAuthType {
 pub struct LobbyGroupRuntimeDockerPort {
 	/// The label of this docker port.
 	pub label: std::option::Option<std::string::String>,
-	/// The port number of this docker port.
+	/// The port number to connect to.
 	pub target_port: std::option::Option<i32>,
+	/// The port range to connect to for UDP.
+	pub port_range: std::option::Option<crate::model::PortRange>,
 	/// A proxy protocol.
 	pub proxy_protocol: std::option::Option<crate::model::ProxyProtocol>,
 }
@@ -3225,9 +3249,13 @@ impl LobbyGroupRuntimeDockerPort {
 	pub fn label(&self) -> std::option::Option<&str> {
 		self.label.as_deref()
 	}
-	/// The port number of this docker port.
+	/// The port number to connect to.
 	pub fn target_port(&self) -> std::option::Option<i32> {
 		self.target_port
+	}
+	/// The port range to connect to for UDP.
+	pub fn port_range(&self) -> std::option::Option<&crate::model::PortRange> {
+		self.port_range.as_ref()
 	}
 	/// A proxy protocol.
 	pub fn proxy_protocol(&self) -> std::option::Option<&crate::model::ProxyProtocol> {
@@ -3239,6 +3267,7 @@ impl std::fmt::Debug for LobbyGroupRuntimeDockerPort {
 		let mut formatter = f.debug_struct("LobbyGroupRuntimeDockerPort");
 		formatter.field("label", &self.label);
 		formatter.field("target_port", &self.target_port);
+		formatter.field("port_range", &self.port_range);
 		formatter.field("proxy_protocol", &self.proxy_protocol);
 		formatter.finish()
 	}
@@ -3251,6 +3280,7 @@ pub mod lobby_group_runtime_docker_port {
 	pub struct Builder {
 		pub(crate) label: std::option::Option<std::string::String>,
 		pub(crate) target_port: std::option::Option<i32>,
+		pub(crate) port_range: std::option::Option<crate::model::PortRange>,
 		pub(crate) proxy_protocol: std::option::Option<crate::model::ProxyProtocol>,
 	}
 	impl Builder {
@@ -3264,14 +3294,27 @@ pub mod lobby_group_runtime_docker_port {
 			self.label = input;
 			self
 		}
-		/// The port number of this docker port.
+		/// The port number to connect to.
 		pub fn target_port(mut self, input: i32) -> Self {
 			self.target_port = Some(input);
 			self
 		}
-		/// The port number of this docker port.
+		/// The port number to connect to.
 		pub fn set_target_port(mut self, input: std::option::Option<i32>) -> Self {
 			self.target_port = input;
+			self
+		}
+		/// The port range to connect to for UDP.
+		pub fn port_range(mut self, input: crate::model::PortRange) -> Self {
+			self.port_range = Some(input);
+			self
+		}
+		/// The port range to connect to for UDP.
+		pub fn set_port_range(
+			mut self,
+			input: std::option::Option<crate::model::PortRange>,
+		) -> Self {
+			self.port_range = input;
 			self
 		}
 		/// A proxy protocol.
@@ -3292,6 +3335,7 @@ pub mod lobby_group_runtime_docker_port {
 			crate::model::LobbyGroupRuntimeDockerPort {
 				label: self.label,
 				target_port: self.target_port,
+				port_range: self.port_range,
 				proxy_protocol: self.proxy_protocol,
 			}
 		}
@@ -3320,6 +3364,8 @@ pub enum ProxyProtocol {
 	Http,
 	#[allow(missing_docs)] // documentation missing in model
 	Https,
+	#[allow(missing_docs)] // documentation missing in model
+	Udp,
 	/// Unknown contains new variants that have been added since this code was generated.
 	Unknown(String),
 }
@@ -3328,6 +3374,7 @@ impl std::convert::From<&str> for ProxyProtocol {
 		match s {
 			"http" => ProxyProtocol::Http,
 			"https" => ProxyProtocol::Https,
+			"udp" => ProxyProtocol::Udp,
 			other => ProxyProtocol::Unknown(other.to_owned()),
 		}
 	}
@@ -3345,17 +3392,91 @@ impl ProxyProtocol {
 		match self {
 			ProxyProtocol::Http => "http",
 			ProxyProtocol::Https => "https",
+			ProxyProtocol::Udp => "udp",
 			ProxyProtocol::Unknown(s) => s.as_ref(),
 		}
 	}
 	/// Returns all the `&str` values of the enum members.
 	pub fn values() -> &'static [&'static str] {
-		&["http", "https"]
+		&["http", "https", "udp"]
 	}
 }
 impl AsRef<str> for ProxyProtocol {
 	fn as_ref(&self) -> &str {
 		self.as_str()
+	}
+}
+
+/// Range of ports that can be connected to.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct PortRange {
+	/// Unsigned 32 bit integer.
+	pub min: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max: std::option::Option<i32>,
+}
+impl PortRange {
+	/// Unsigned 32 bit integer.
+	pub fn min(&self) -> std::option::Option<i32> {
+		self.min
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max(&self) -> std::option::Option<i32> {
+		self.max
+	}
+}
+impl std::fmt::Debug for PortRange {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("PortRange");
+		formatter.field("min", &self.min);
+		formatter.field("max", &self.max);
+		formatter.finish()
+	}
+}
+/// See [`PortRange`](crate::model::PortRange)
+pub mod port_range {
+	/// A builder for [`PortRange`](crate::model::PortRange)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) min: std::option::Option<i32>,
+		pub(crate) max: std::option::Option<i32>,
+	}
+	impl Builder {
+		/// Unsigned 32 bit integer.
+		pub fn min(mut self, input: i32) -> Self {
+			self.min = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_min(mut self, input: std::option::Option<i32>) -> Self {
+			self.min = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max(mut self, input: i32) -> Self {
+			self.max = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max(mut self, input: std::option::Option<i32>) -> Self {
+			self.max = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`PortRange`](crate::model::PortRange)
+		pub fn build(self) -> crate::model::PortRange {
+			crate::model::PortRange {
+				min: self.min,
+				max: self.max,
+			}
+		}
+	}
+}
+impl PortRange {
+	/// Creates a new builder-style object to manufacture [`PortRange`](crate::model::PortRange)
+	pub fn builder() -> crate::model::port_range::Builder {
+		crate::model::port_range::Builder::default()
 	}
 }
 
@@ -4677,10 +4798,12 @@ pub struct LobbyGroupRuntimeDocker {
 	pub build_id: std::option::Option<std::string::String>,
 	/// A list of docker arguments.
 	pub args: std::option::Option<std::vec::Vec<std::string::String>>,
-	/// A list of docker ports.
-	pub ports: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 	/// A list of docker environment variables.
 	pub env_vars: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerEnvVar>>,
+	/// The network mode the job should run on.
+	pub network_mode: std::option::Option<crate::model::NetworkMode>,
+	/// A list of docker ports.
+	pub ports: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 }
 impl LobbyGroupRuntimeDocker {
 	/// A universally unique identifier.
@@ -4691,13 +4814,17 @@ impl LobbyGroupRuntimeDocker {
 	pub fn args(&self) -> std::option::Option<&[std::string::String]> {
 		self.args.as_deref()
 	}
-	/// A list of docker ports.
-	pub fn ports(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerPort]> {
-		self.ports.as_deref()
-	}
 	/// A list of docker environment variables.
 	pub fn env_vars(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerEnvVar]> {
 		self.env_vars.as_deref()
+	}
+	/// The network mode the job should run on.
+	pub fn network_mode(&self) -> std::option::Option<&crate::model::NetworkMode> {
+		self.network_mode.as_ref()
+	}
+	/// A list of docker ports.
+	pub fn ports(&self) -> std::option::Option<&[crate::model::LobbyGroupRuntimeDockerPort]> {
+		self.ports.as_deref()
 	}
 }
 impl std::fmt::Debug for LobbyGroupRuntimeDocker {
@@ -4705,8 +4832,9 @@ impl std::fmt::Debug for LobbyGroupRuntimeDocker {
 		let mut formatter = f.debug_struct("LobbyGroupRuntimeDocker");
 		formatter.field("build_id", &self.build_id);
 		formatter.field("args", &self.args);
-		formatter.field("ports", &self.ports);
 		formatter.field("env_vars", &self.env_vars);
+		formatter.field("network_mode", &self.network_mode);
+		formatter.field("ports", &self.ports);
 		formatter.finish()
 	}
 }
@@ -4718,10 +4846,11 @@ pub mod lobby_group_runtime_docker {
 	pub struct Builder {
 		pub(crate) build_id: std::option::Option<std::string::String>,
 		pub(crate) args: std::option::Option<std::vec::Vec<std::string::String>>,
-		pub(crate) ports:
-			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 		pub(crate) env_vars:
 			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerEnvVar>>,
+		pub(crate) network_mode: std::option::Option<crate::model::NetworkMode>,
+		pub(crate) ports:
+			std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -4753,25 +4882,6 @@ pub mod lobby_group_runtime_docker {
 			self.args = input;
 			self
 		}
-		/// Appends an item to `ports`.
-		///
-		/// To override the contents of this collection use [`set_ports`](Self::set_ports).
-		///
-		/// A list of docker ports.
-		pub fn ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
-			let mut v = self.ports.unwrap_or_default();
-			v.push(input);
-			self.ports = Some(v);
-			self
-		}
-		/// A list of docker ports.
-		pub fn set_ports(
-			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
-		) -> Self {
-			self.ports = input;
-			self
-		}
 		/// Appends an item to `env_vars`.
 		///
 		/// To override the contents of this collection use [`set_env_vars`](Self::set_env_vars).
@@ -4791,13 +4901,46 @@ pub mod lobby_group_runtime_docker {
 			self.env_vars = input;
 			self
 		}
+		/// The network mode the job should run on.
+		pub fn network_mode(mut self, input: crate::model::NetworkMode) -> Self {
+			self.network_mode = Some(input);
+			self
+		}
+		/// The network mode the job should run on.
+		pub fn set_network_mode(
+			mut self,
+			input: std::option::Option<crate::model::NetworkMode>,
+		) -> Self {
+			self.network_mode = input;
+			self
+		}
+		/// Appends an item to `ports`.
+		///
+		/// To override the contents of this collection use [`set_ports`](Self::set_ports).
+		///
+		/// A list of docker ports.
+		pub fn ports(mut self, input: crate::model::LobbyGroupRuntimeDockerPort) -> Self {
+			let mut v = self.ports.unwrap_or_default();
+			v.push(input);
+			self.ports = Some(v);
+			self
+		}
+		/// A list of docker ports.
+		pub fn set_ports(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::LobbyGroupRuntimeDockerPort>>,
+		) -> Self {
+			self.ports = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`LobbyGroupRuntimeDocker`](crate::model::LobbyGroupRuntimeDocker)
 		pub fn build(self) -> crate::model::LobbyGroupRuntimeDocker {
 			crate::model::LobbyGroupRuntimeDocker {
 				build_id: self.build_id,
 				args: self.args,
-				ports: self.ports,
 				env_vars: self.env_vars,
+				network_mode: self.network_mode,
+				ports: self.ports,
 			}
 		}
 	}
@@ -4806,6 +4949,61 @@ impl LobbyGroupRuntimeDocker {
 	/// Creates a new builder-style object to manufacture [`LobbyGroupRuntimeDocker`](crate::model::LobbyGroupRuntimeDocker)
 	pub fn builder() -> crate::model::lobby_group_runtime_docker::Builder {
 		crate::model::lobby_group_runtime_docker::Builder::default()
+	}
+}
+
+/// The network mode the job should run on.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum NetworkMode {
+	#[allow(missing_docs)] // documentation missing in model
+	Bridge,
+	#[allow(missing_docs)] // documentation missing in model
+	Host,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for NetworkMode {
+	fn from(s: &str) -> Self {
+		match s {
+			"bridge" => NetworkMode::Bridge,
+			"host" => NetworkMode::Host,
+			other => NetworkMode::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for NetworkMode {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(NetworkMode::from(s))
+	}
+}
+impl NetworkMode {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			NetworkMode::Bridge => "bridge",
+			NetworkMode::Host => "host",
+			NetworkMode::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&["bridge", "host"]
+	}
+}
+impl AsRef<str> for NetworkMode {
+	fn as_ref(&self) -> &str {
+		self.as_str()
 	}
 }
 

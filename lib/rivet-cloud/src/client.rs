@@ -4633,3 +4633,15 @@ pub mod fluent_builders {
 		}
 	}
 }
+/// A wrapper around [`Client`]. Helps reduce external imports.
+pub struct ClientWrapper {
+	pub(crate) client: Client<aws_smithy_client::erase::DynConnector, tower::layer::util::Identity>,
+}
+
+impl std::ops::Deref for ClientWrapper {
+	type Target = Client<aws_smithy_client::erase::DynConnector, tower::layer::util::Identity>;
+
+	fn deref(&self) -> &Self::Target {
+		&self.client
+	}
+}

@@ -21,6 +21,9 @@ pub enum Error {
 	#[error("invalid agent kind")]
 	InvalidAgentKind,
 
+	#[error("region does not exist: {region_id}")]
+	RegionDoesNotExist { region_id: String },
+
 	#[error("inspect fail: {source}")]
 	InspectFail {
 		source: aws_smithy_client::SdkError<rivet_cloud::error::InspectError>,

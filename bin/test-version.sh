@@ -26,7 +26,7 @@ echo "Version ID: $VERSION_ID"
 
 # MARK: Create namespace
 # TODO: Impl ignore-existing or something
-NS_DISPLAY_NAME="$(git rev-parse --abbrev-ref HEAD)"
+NS_DISPLAY_NAME="$(cd ../test-game/ && git rev-parse --abbrev-ref HEAD)"
 NS_NAME_ID="$(sed -E 's/[^[:alnum:]]+/_/g' <<< "$NS_DISPLAY_NAME")"
 NAMESPACE_ID="$(./bin/test-cmd.sh namespace create --name-id "$NS_NAME_ID" --display-name "$NS_DISPLAY_NAME"  --version "$VERSION_ID" --format json | jq -r '.namespace_id')"
 
