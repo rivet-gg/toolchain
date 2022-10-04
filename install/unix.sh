@@ -1,15 +1,29 @@
 #!/bin/sh
 set -eu
 
+rm -rf /tmp/rivet-cli-install
+mkdir /tmp/rivet-cli-install
+cd /tmp/rivet-cli-install
+
 # Find asset suffix
 if [ "$(uname)" = "Darwin" ]; then
 	echo
 	echo "> Detected macOS"
 
+	echo
+	echo "> Installing jq"
+	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64" -o ./jq
+	chmod +x ./jq
+
 	CLI_ASSET_SUFFIX="_x86_64-apple-darwin.zip"
 elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	echo
-	echo "> Detected Linux"
+	echo "> Detected Linux ($(getconf LONG_BIT) bit)"
+
+	echo
+	echo "> Installing jq"
+	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux$(getconf LONG_BIT)" -o ./jq
+	chmod +x ./jq
 
 	CLI_ASSET_SUFFIX="_x86_64-unknown-linux-musl.tar.gz"
 else
@@ -23,8 +37,8 @@ if [ -z "$RIVET_CLI_VERSION" ]; then
 	echo
 	echo "> Fetching latest release version"
 	RIVET_CLI_VERSION="$( \
-		curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases
-		| jq -re \
+		curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases \
+		| ./jq -re \
 			--arg cli_asset_suffix "$CLI_ASSET_SUFFIX" \
 			'[.[] | select(.assets[] | select(.name | endswith($cli_asset_suffix)))] | first | .name' \
 	)"
@@ -34,7 +48,6 @@ set -u
 echo
 echo "> Installing Rivet CLI @ $RIVET_CLI_VERSION"
 
-cd /tmp
 
 if [ "$(uname)" = "Darwin" ]; then
 	echo
@@ -69,7 +82,6 @@ elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 else
 	exit 1
 fi
-
 
 echo
 echo "> Checking installation"
