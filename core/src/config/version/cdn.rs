@@ -6,6 +6,7 @@ use crate::error::Error;
 #[serde(deny_unknown_fields)]
 pub struct Cdn {
 	pub site: String,
+	#[serde(default)]
 	pub routes: Vec<Route>,
 }
 
