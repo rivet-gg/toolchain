@@ -11,14 +11,12 @@ pub struct Matchmaker {
 	pub captcha: Option<captcha::Captcha>,
 
 	// Region overrides
-	#[serde(default)]
-	pub tier: Option<String>,
-	#[serde(default)]
-	pub idle_lobbies: Option<game_mode::IdleLobbies>,
+	#[serde(default, flatten)]
+	pub region: game_mode::Region,
 
 	// Runtime overrides
 	#[serde(default)]
-	docker: Option<game_mode::runtime::docker::Docker>,
+	pub docker: game_mode::runtime::docker::Docker,
 }
 
 pub mod game_mode {
@@ -37,13 +35,11 @@ pub mod game_mode {
 		pub runtime: runtime::Runtime,
 
 		// Region overrides
-		#[serde(default)]
-		pub tier: Option<String>,
-		#[serde(default)]
-		pub idle_lobbies: Option<IdleLobbies>,
+		#[serde(default, flatten)]
+		pub region: Region,
 	}
 
-	#[derive(Debug, Deserialize)]
+	#[derive(Debug, Default, Deserialize)]
 	#[serde(deny_unknown_fields)]
 	pub struct Region {
 		#[serde(default)]
@@ -90,7 +86,7 @@ pub mod game_mode {
 
 			use serde::Deserialize;
 
-			#[derive(Debug, Deserialize)]
+			#[derive(Debug, Default, Deserialize)]
 			#[serde(deny_unknown_fields)]
 			pub struct Docker {
 				pub build: Option<String>,
@@ -164,7 +160,7 @@ pub mod game_mode {
 			pub fn build_model(
 				&self,
 				_game: &rivet_cloud::model::GameFull,
-				docker_override: &Option<docker::Docker>,
+				docker_override: &docker::Docker,
 			) -> Result<rivet_cloud::model::LobbyGroupRuntime, Error> {
 				use rivet_cloud::model::*;
 
@@ -175,9 +171,7 @@ pub mod game_mode {
 								docker
 									.build
 									.clone()
-									.or_else(|| {
-										docker_override.as_ref().and_then(|x| x.build.clone())
-									})
+									.or_else(|| docker_override.build.clone())
 									.ok_or_else(|| {
 										Error::config(
 											"matchmaker.game_mode.*.docker.build",
@@ -189,18 +183,14 @@ pub mod game_mode {
 								docker
 									.args
 									.clone()
-									.or_else(|| {
-										docker_override.as_ref().and_then(|x| x.args.clone())
-									})
+									.or_else(|| docker_override.args.clone())
 									.unwrap_or_default(),
 							))
 							.set_env_vars(Some(
 								docker
 									.env
 									.clone()
-									.or_else(|| {
-										docker_override.as_ref().and_then(|x| x.env.clone())
-									})
+									.or_else(|| docker_override.env.clone())
 									.unwrap_or_default()
 									.iter()
 									.map(|(key, value)| {
@@ -215,11 +205,7 @@ pub mod game_mode {
 								docker
 									.network_mode
 									.clone()
-									.or_else(|| {
-										docker_override
-											.as_ref()
-											.and_then(|x| x.network_mode.clone())
-									})
+									.or_else(|| docker_override.network_mode.clone())
 									.unwrap_or_default()
 									.build_model(),
 							)
@@ -227,9 +213,7 @@ pub mod game_mode {
 								docker
 									.ports
 									.clone()
-									.ok_or_else(|| {
-										docker_override.as_ref().and_then(|x| x.ports.clone())
-									})
+									.ok_or_else(|| docker_override.ports.clone())
 									.unwrap_or_default()
 									.iter()
 									.map(|(label, port)| {
@@ -370,13 +354,13 @@ impl Matchmaker {
 						// Derive region -> game mode config fallbacks
 						let tier_name_id = region_config
 							.and_then(|x| x.tier.clone())
-							.or_else(|| game_mode.tier.clone())
-							.or_else(|| self.tier.clone())
+							.or_else(|| game_mode.region.tier.clone())
+							.or_else(|| self.region.tier.clone())
 							.unwrap_or_else(game_mode::Region::default_tier);
 						let idle_lobbies = region_config
 							.and_then(|x| x.idle_lobbies.clone())
-							.or_else(|| game_mode.idle_lobbies.clone())
-							.or_else(|| self.idle_lobbies.clone())
+							.or_else(|| game_mode.region.idle_lobbies.clone())
+							.or_else(|| self.region.idle_lobbies.clone())
 							.unwrap_or_default();
 
 						Ok(LobbyGroupRegion::builder()
