@@ -10,16 +10,15 @@ pub struct Matchmaker {
 	#[serde(default)]
 	pub captcha: Option<captcha::Captcha>,
 
+	// Region overrides
+	#[serde(default)]
+	pub tier: Option<String>,
+	#[serde(default)]
+	pub idle_lobbies: Option<game_mode::IdleLobbies>,
+
 	// Runtime overrides
 	#[serde(default)]
-	docker: Option<DockerOverride>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct DockerOverride {
-	#[serde(default)]
-	build: Option<String>,
+	docker: Option<game_mode::runtime::docker::Docker>,
 }
 
 pub mod game_mode {
@@ -38,10 +37,10 @@ pub mod game_mode {
 		pub runtime: runtime::Runtime,
 
 		// Region overrides
-		#[serde(default = "Region::default_tier")]
-		pub tier: String,
 		#[serde(default)]
-		pub idle_lobbies: IdleLobbies,
+		pub tier: Option<String>,
+		#[serde(default)]
+		pub idle_lobbies: Option<IdleLobbies>,
 	}
 
 	#[derive(Debug, Deserialize)]
@@ -53,7 +52,7 @@ pub mod game_mode {
 		pub idle_lobbies: Option<IdleLobbies>,
 	}
 
-	#[derive(Debug, Deserialize)]
+	#[derive(Clone, Debug, Deserialize)]
 	#[serde(deny_unknown_fields)]
 	pub struct IdleLobbies {
 		pub min: u32,
@@ -78,7 +77,7 @@ pub mod game_mode {
 	pub mod runtime {
 		use serde::Deserialize;
 
-		use crate::{config::version::mm::DockerOverride, error::Error};
+		use crate::error::Error;
 
 		#[derive(Debug, Deserialize)]
 		#[serde(rename_all = "snake_case")]
@@ -96,16 +95,16 @@ pub mod game_mode {
 			pub struct Docker {
 				pub build: Option<String>,
 				#[serde(default)]
-				pub args: Vec<String>,
+				pub args: Option<Vec<String>>,
 				#[serde(default)]
-				pub env: HashMap<String, String>,
+				pub env: Option<HashMap<String, String>>,
 				#[serde(default)]
-				pub ports: HashMap<String, Port>,
+				pub ports: Option<HashMap<String, Port>>,
 				#[serde(default)]
-				pub network_mode: NetworkMode,
+				pub network_mode: Option<NetworkMode>,
 			}
 
-			#[derive(Debug, Deserialize)]
+			#[derive(Clone, Debug, Deserialize)]
 			#[serde(deny_unknown_fields)]
 			pub struct Port {
 				pub target: Option<u32>,
@@ -113,14 +112,14 @@ pub mod game_mode {
 				pub proto: ProxyProtocol,
 			}
 
-			#[derive(Debug, Deserialize)]
+			#[derive(Clone, Debug, Deserialize)]
 			#[serde(rename_all = "kebab-case", deny_unknown_fields)]
 			pub struct PortRange {
 				pub min: u16,
 				pub max: u16,
 			}
 
-			#[derive(Debug, Deserialize)]
+			#[derive(Clone, Debug, Deserialize)]
 			#[serde(rename_all = "kebab-case")]
 			pub enum ProxyProtocol {
 				Http,
@@ -138,7 +137,7 @@ pub mod game_mode {
 				}
 			}
 
-			#[derive(Debug, Deserialize)]
+			#[derive(Clone, Debug, Deserialize)]
 			#[serde(rename_all = "kebab-case")]
 			pub enum NetworkMode {
 				Bridge,
@@ -165,7 +164,7 @@ pub mod game_mode {
 			pub fn build_model(
 				&self,
 				_game: &rivet_cloud::model::GameFull,
-				docker_override: &Option<DockerOverride>,
+				docker_override: &Option<docker::Docker>,
 			) -> Result<rivet_cloud::model::LobbyGroupRuntime, Error> {
 				use rivet_cloud::model::*;
 
@@ -186,10 +185,23 @@ pub mod game_mode {
 										)
 									})?,
 							)
-							.set_args(Some(docker.args.clone()))
+							.set_args(Some(
+								docker
+									.args
+									.clone()
+									.or_else(|| {
+										docker_override.as_ref().and_then(|x| x.args.clone())
+									})
+									.unwrap_or_default(),
+							))
 							.set_env_vars(Some(
 								docker
 									.env
+									.clone()
+									.or_else(|| {
+										docker_override.as_ref().and_then(|x| x.env.clone())
+									})
+									.unwrap_or_default()
 									.iter()
 									.map(|(key, value)| {
 										LobbyGroupRuntimeDockerEnvVar::builder()
@@ -199,10 +211,26 @@ pub mod game_mode {
 									})
 									.collect(),
 							))
-							.network_mode(docker.network_mode.build_model())
+							.network_mode(
+								docker
+									.network_mode
+									.clone()
+									.or_else(|| {
+										docker_override
+											.as_ref()
+											.and_then(|x| x.network_mode.clone())
+									})
+									.unwrap_or_default()
+									.build_model(),
+							)
 							.set_ports(Some(
 								docker
 									.ports
+									.clone()
+									.ok_or_else(|| {
+										docker_override.as_ref().and_then(|x| x.ports.clone())
+									})
+									.unwrap_or_default()
 									.iter()
 									.map(|(label, port)| {
 										LobbyGroupRuntimeDockerPort::builder()
@@ -229,7 +257,7 @@ pub mod game_mode {
 	}
 
 	impl Region {
-		fn default_tier() -> String {
+		pub fn default_tier() -> String {
 			"basic-1d1".into()
 		}
 	}
@@ -341,11 +369,15 @@ impl Matchmaker {
 
 						// Derive region -> game mode config fallbacks
 						let tier_name_id = region_config
-							.and_then(|x| x.tier.as_ref())
-							.unwrap_or(&game_mode.tier);
+							.and_then(|x| x.tier.clone())
+							.or_else(|| game_mode.tier.clone())
+							.or_else(|| self.tier.clone())
+							.unwrap_or_else(game_mode::Region::default_tier);
 						let idle_lobbies = region_config
-							.and_then(|x| x.idle_lobbies.as_ref())
-							.unwrap_or(&game_mode.idle_lobbies);
+							.and_then(|x| x.idle_lobbies.clone())
+							.or_else(|| game_mode.idle_lobbies.clone())
+							.or_else(|| self.idle_lobbies.clone())
+							.unwrap_or_default();
 
 						Ok(LobbyGroupRegion::builder()
 							.region_id(region_id)
