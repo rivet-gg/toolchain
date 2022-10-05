@@ -22,11 +22,17 @@ pub enum SubCommand {
 
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
+
+		#[clap(short = 'n', long)]
+		namespace: Option<String>,
 	},
 
 	ReadConfig {
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
+
+		#[clap(short = 'n', long)]
+		namespace: Option<String>,
 	},
 
 	#[clap(alias("dash"))]
@@ -101,10 +107,12 @@ impl SubCommand {
 				display_name,
 				overrides,
 				format,
+				namespace,
 			} => {
 				// Parse config
 				let overrides = parse_config_override_args(overrides)?;
-				let user_config = read_user_config(overrides).await?;
+				let user_config =
+					read_user_config(overrides, namespace.as_ref().map(String::as_str)).await?;
 				let rivet_config = build_rivet_config(ctx, &user_config).await?;
 
 				// Create version
@@ -130,9 +138,13 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::ReadConfig { overrides } => {
+			SubCommand::ReadConfig {
+				overrides,
+				namespace,
+			} => {
 				let overrides = parse_config_override_args(overrides)?;
-				let user_config = read_user_config(overrides).await?;
+				let user_config =
+					read_user_config(overrides, namespace.as_ref().map(String::as_str)).await?;
 				println!("=== User Config ===");
 				println!("{:#?}", user_config);
 
@@ -196,10 +208,17 @@ pub fn parse_config_override_args(
 
 pub async fn read_user_config(
 	overrides: Vec<(String, serde_json::Value)>,
+	namespace: Option<&str>,
 ) -> Result<cli_core::config::version::Version> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
 		.add_source(config::File::with_name("rivet.version"));
+
+	if let Some(namespace) = namespace {
+		config_builder = config_builder.add_source(
+			config::File::with_name(&format!("rivet.version.{namespace}")).required(false),
+		);
+	}
 
 	// Apply overrides
 	for (k, v) in overrides {
