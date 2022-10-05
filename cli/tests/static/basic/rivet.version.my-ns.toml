@@ -1,0 +1,3 @@
+[matchmaker]
+	idle_lobbies = { min = 3, max = 4 }
+
