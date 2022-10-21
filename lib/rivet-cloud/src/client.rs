@@ -193,6 +193,19 @@ where
 	M: aws_smithy_client::bounds::SmithyMiddleware<C>,
 	R: aws_smithy_client::retry::NewRequestPolicy,
 {
+	/// Constructs a fluent builder for the [`CompleteCustomAvatarUpload`](crate::client::fluent_builders::CompleteCustomAvatarUpload) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::CompleteCustomAvatarUpload::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::CompleteCustomAvatarUpload::set_game_id): A universally unique identifier.
+	///   - [`upload_id(impl Into<String>)`](crate::client::fluent_builders::CompleteCustomAvatarUpload::upload_id) / [`set_upload_id(Option<String>)`](crate::client::fluent_builders::CompleteCustomAvatarUpload::set_upload_id): A universally unique identifier.
+	/// - On success, responds with [`CompleteCustomAvatarUploadOutput`](crate::output::CompleteCustomAvatarUploadOutput)
+
+	/// - On failure, responds with [`SdkError<CompleteCustomAvatarUploadError>`](crate::error::CompleteCustomAvatarUploadError)
+	pub fn complete_custom_avatar_upload(
+		&self,
+	) -> fluent_builders::CompleteCustomAvatarUpload<C, M, R> {
+		fluent_builders::CompleteCustomAvatarUpload::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`CompleteUpload`](crate::client::fluent_builders::CompleteUpload) operation.
 	///
 	/// - The fluent builder is configurable:
@@ -327,6 +340,18 @@ where
 	/// - On failure, responds with [`SdkError<DeleteMatchmakerLobbyError>`](crate::error::DeleteMatchmakerLobbyError)
 	pub fn delete_matchmaker_lobby(&self) -> fluent_builders::DeleteMatchmakerLobby<C, M, R> {
 		fluent_builders::DeleteMatchmakerLobby::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`ExportLobbyLogs`](crate::client::fluent_builders::ExportLobbyLogs) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ExportLobbyLogs::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ExportLobbyLogs::set_game_id): A universally unique identifier.
+	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::ExportLobbyLogs::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::ExportLobbyLogs::set_lobby_id): A universally unique identifier.
+	///   - [`stream(LogStream)`](crate::client::fluent_builders::ExportLobbyLogs::stream) / [`set_stream(Option<LogStream>)`](crate::client::fluent_builders::ExportLobbyLogs::set_stream): (undocumented)
+	/// - On success, responds with [`ExportLobbyLogsOutput`](crate::output::ExportLobbyLogsOutput) with field(s):
+	///   - [`url(Option<String>)`](crate::output::ExportLobbyLogsOutput::url): The URL to a CSV file for the given lobby history.
+	/// - On failure, responds with [`SdkError<ExportLobbyLogsError>`](crate::error::ExportLobbyLogsError)
+	pub fn export_lobby_logs(&self) -> fluent_builders::ExportLobbyLogs<C, M, R> {
+		fluent_builders::ExportLobbyLogs::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`ExportMatchmakerLobbyHistory`](crate::client::fluent_builders::ExportMatchmakerLobbyHistory) operation.
 	///
@@ -491,6 +516,21 @@ where
 	pub fn get_group_transfers_list(&self) -> fluent_builders::GetGroupTransfersList<C, M, R> {
 		fluent_builders::GetGroupTransfersList::new(self.handle.clone())
 	}
+	/// Constructs a fluent builder for the [`GetLobbyLogs`](crate::client::fluent_builders::GetLobbyLogs) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::GetLobbyLogs::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::GetLobbyLogs::set_game_id): A universally unique identifier.
+	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::GetLobbyLogs::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::GetLobbyLogs::set_lobby_id): A universally unique identifier.
+	///   - [`stream(LogStream)`](crate::client::fluent_builders::GetLobbyLogs::stream) / [`set_stream(Option<LogStream>)`](crate::client::fluent_builders::GetLobbyLogs::set_stream): (undocumented)
+	///   - [`watch_index(impl Into<String>)`](crate::client::fluent_builders::GetLobbyLogs::watch_index) / [`set_watch_index(Option<String>)`](crate::client::fluent_builders::GetLobbyLogs::set_watch_index): A query parameter denoting the requests watch index.
+	/// - On success, responds with [`GetLobbyLogsOutput`](crate::output::GetLobbyLogsOutput) with field(s):
+	///   - [`lines(Option<Vec<String>>)`](crate::output::GetLobbyLogsOutput::lines): Sorted old to new.
+	///   - [`timestamps(Option<Vec<DateTime>>)`](crate::output::GetLobbyLogsOutput::timestamps): Sorted old to new.
+	///   - [`watch(Option<WatchResponse>)`](crate::output::GetLobbyLogsOutput::watch): Provided by watchable endpoints used in blocking loops.
+	/// - On failure, responds with [`SdkError<GetLobbyLogsError>`](crate::error::GetLobbyLogsError)
+	pub fn get_lobby_logs(&self) -> fluent_builders::GetLobbyLogs<C, M, R> {
+		fluent_builders::GetLobbyLogs::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`GetNamespaceAnalyticsMatchmakerLive`](crate::client::fluent_builders::GetNamespaceAnalyticsMatchmakerLive) operation.
 	///
 	/// - The fluent builder is configurable:
@@ -512,10 +552,10 @@ where
 	///   - [`lobby_id(impl Into<String>)`](crate::client::fluent_builders::GetNamespaceLobby::lobby_id) / [`set_lobby_id(Option<String>)`](crate::client::fluent_builders::GetNamespaceLobby::set_lobby_id): A universally unique identifier.
 	/// - On success, responds with [`GetNamespaceLobbyOutput`](crate::output::GetNamespaceLobbyOutput) with field(s):
 	///   - [`lobby(Option<LogsLobbySummary>)`](crate::output::GetNamespaceLobbyOutput::lobby): A logs summary for a lobby.
+	///   - [`metrics(Option<SvcMetrics>)`](crate::output::GetNamespaceLobbyOutput::metrics): Metrics relating to a job service.
 	///   - [`stdout_presigned_urls(Option<Vec<String>>)`](crate::output::GetNamespaceLobbyOutput::stdout_presigned_urls): A list of URLs.
 	///   - [`stderr_presigned_urls(Option<Vec<String>>)`](crate::output::GetNamespaceLobbyOutput::stderr_presigned_urls): A list of URLs.
 	///   - [`perf_lists(Option<Vec<SvcPerf>>)`](crate::output::GetNamespaceLobbyOutput::perf_lists): A list of service performance summaries.
-	///   - [`metrics(Option<SvcMetrics>)`](crate::output::GetNamespaceLobbyOutput::metrics): Metrics relating to a job service.
 	/// - On failure, responds with [`SdkError<GetNamespaceLobbyError>`](crate::error::GetNamespaceLobbyError)
 	pub fn get_namespace_lobby(&self) -> fluent_builders::GetNamespaceLobby<C, M, R> {
 		fluent_builders::GetNamespaceLobby::new(self.handle.clone())
@@ -581,6 +621,16 @@ where
 	pub fn list_game_cdn_sites(&self) -> fluent_builders::ListGameCdnSites<C, M, R> {
 		fluent_builders::ListGameCdnSites::new(self.handle.clone())
 	}
+	/// Constructs a fluent builder for the [`ListGameCustomAvatars`](crate::client::fluent_builders::ListGameCustomAvatars) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::ListGameCustomAvatars::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::ListGameCustomAvatars::set_game_id): A universally unique identifier.
+	/// - On success, responds with [`ListGameCustomAvatarsOutput`](crate::output::ListGameCustomAvatarsOutput) with field(s):
+	///   - [`custom_avatars(Option<Vec<CustomAvatarSummary>>)`](crate::output::ListGameCustomAvatarsOutput::custom_avatars): A list of custom avatar summaries.
+	/// - On failure, responds with [`SdkError<ListGameCustomAvatarsError>`](crate::error::ListGameCustomAvatarsError)
+	pub fn list_game_custom_avatars(&self) -> fluent_builders::ListGameCustomAvatars<C, M, R> {
+		fluent_builders::ListGameCustomAvatars::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`ListNamespaceLobbies`](crate::client::fluent_builders::ListNamespaceLobbies) operation.
 	///
 	/// - The fluent builder is configurable:
@@ -592,6 +642,22 @@ where
 	/// - On failure, responds with [`SdkError<ListNamespaceLobbiesError>`](crate::error::ListNamespaceLobbiesError)
 	pub fn list_namespace_lobbies(&self) -> fluent_builders::ListNamespaceLobbies<C, M, R> {
 		fluent_builders::ListNamespaceLobbies::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`PrepareCustomAvatarUpload`](crate::client::fluent_builders::PrepareCustomAvatarUpload) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::set_game_id): A universally unique identifier.
+	///   - [`path(impl Into<String>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::path) / [`set_path(Option<String>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::set_path): The path/filename of the custom avatar.
+	///   - [`mime(impl Into<String>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::mime) / [`set_mime(Option<String>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::set_mime): The MIME type of the custom avatar.
+	///   - [`content_length(i64)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::content_length) / [`set_content_length(Option<i64>)`](crate::client::fluent_builders::PrepareCustomAvatarUpload::set_content_length): Unsigned 64 bit integer.
+	/// - On success, responds with [`PrepareCustomAvatarUploadOutput`](crate::output::PrepareCustomAvatarUploadOutput) with field(s):
+	///   - [`upload_id(Option<String>)`](crate::output::PrepareCustomAvatarUploadOutput::upload_id): A universally unique identifier.
+	///   - [`presigned_request(Option<UploadPresignedRequest>)`](crate::output::PrepareCustomAvatarUploadOutput::presigned_request): A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	/// - On failure, responds with [`SdkError<PrepareCustomAvatarUploadError>`](crate::error::PrepareCustomAvatarUploadError)
+	pub fn prepare_custom_avatar_upload(
+		&self,
+	) -> fluent_builders::PrepareCustomAvatarUpload<C, M, R> {
+		fluent_builders::PrepareCustomAvatarUpload::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`RemoveNamespaceCdnAuthUser`](crate::client::fluent_builders::RemoveNamespaceCdnAuthUser) operation.
 	///
@@ -785,6 +851,82 @@ pub mod fluent_builders {
 	//! one if its operation methods. After parameters are set using the builder methods,
 	//! the `send` method can be called to initiate the request.
 	//!
+	/// Fluent builder constructing a request to `CompleteCustomAvatarUpload`.
+	///
+	/// Completes a custom avatar image upload. Must be called after the file upload process completes.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct CompleteCustomAvatarUpload<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::complete_custom_avatar_upload_input::Builder,
+	}
+	impl<C, M, R> CompleteCustomAvatarUpload<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `CompleteCustomAvatarUpload`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::CompleteCustomAvatarUploadOutput,
+			aws_smithy_http::result::SdkError<crate::error::CompleteCustomAvatarUploadError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::CompleteCustomAvatarUploadInputOperationOutputAlias,
+				crate::output::CompleteCustomAvatarUploadOutput,
+				crate::error::CompleteCustomAvatarUploadError,
+				crate::input::CompleteCustomAvatarUploadInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.upload_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_upload_id(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `CompleteUpload`.
 	///
 	/// Marks an upload as complete.
@@ -1703,6 +1845,92 @@ pub mod fluent_builders {
 		/// A universally unique identifier.
 		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_lobby_id(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `ExportLobbyLogs`.
+	///
+	/// Generates a download URL for logs.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct ExportLobbyLogs<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::export_lobby_logs_input::Builder,
+	}
+	impl<C, M, R> ExportLobbyLogs<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `ExportLobbyLogs`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::ExportLobbyLogsOutput,
+			aws_smithy_http::result::SdkError<crate::error::ExportLobbyLogsError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::ExportLobbyLogsInputOperationOutputAlias,
+				crate::output::ExportLobbyLogsOutput,
+				crate::error::ExportLobbyLogsError,
+				crate::input::ExportLobbyLogsInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn lobby_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.lobby_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_lobby_id(input);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn stream(mut self, input: crate::model::LogStream) -> Self {
+			self.inner = self.inner.stream(input);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_stream(mut self, input: std::option::Option<crate::model::LogStream>) -> Self {
+			self.inner = self.inner.set_stream(input);
 			self
 		}
 	}
@@ -2760,6 +2988,102 @@ pub mod fluent_builders {
 			self
 		}
 	}
+	/// Fluent builder constructing a request to `GetLobbyLogs`.
+	///
+	/// Returns the logs for a given lobby.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct GetLobbyLogs<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::get_lobby_logs_input::Builder,
+	}
+	impl<C, M, R> GetLobbyLogs<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `GetLobbyLogs`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::GetLobbyLogsOutput,
+			aws_smithy_http::result::SdkError<crate::error::GetLobbyLogsError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::GetLobbyLogsInputOperationOutputAlias,
+				crate::output::GetLobbyLogsOutput,
+				crate::error::GetLobbyLogsError,
+				crate::input::GetLobbyLogsInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn lobby_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.lobby_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_lobby_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_lobby_id(input);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn stream(mut self, input: crate::model::LogStream) -> Self {
+			self.inner = self.inner.stream(input);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_stream(mut self, input: std::option::Option<crate::model::LogStream>) -> Self {
+			self.inner = self.inner.set_stream(input);
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.watch_index(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_watch_index(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `GetNamespaceAnalyticsMatchmakerLive`.
 	///
 	/// Returns live information about all active lobies for a given namespace.
@@ -3310,6 +3634,72 @@ pub mod fluent_builders {
 			self
 		}
 	}
+	/// Fluent builder constructing a request to `ListGameCustomAvatars`.
+	///
+	/// Lists custom avatars for the given game.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct ListGameCustomAvatars<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::list_game_custom_avatars_input::Builder,
+	}
+	impl<C, M, R> ListGameCustomAvatars<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `ListGameCustomAvatars`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::ListGameCustomAvatarsOutput,
+			aws_smithy_http::result::SdkError<crate::error::ListGameCustomAvatarsError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::ListGameCustomAvatarsInputOperationOutputAlias,
+				crate::output::ListGameCustomAvatarsOutput,
+				crate::error::ListGameCustomAvatarsError,
+				crate::input::ListGameCustomAvatarsInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `ListNamespaceLobbies`.
 	///
 	/// Returns a list of lobbies for the given game namespace.
@@ -3396,6 +3786,102 @@ pub mod fluent_builders {
 			input: std::option::Option<aws_smithy_types::DateTime>,
 		) -> Self {
 			self.inner = self.inner.set_before_create_ts(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `PrepareCustomAvatarUpload`.
+	///
+	/// Prepares a custom avatar image upload. Complete upload with `rivet.api.cloud#CompleteCustomAvatarUpload`.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct PrepareCustomAvatarUpload<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::prepare_custom_avatar_upload_input::Builder,
+	}
+	impl<C, M, R> PrepareCustomAvatarUpload<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `PrepareCustomAvatarUpload`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::PrepareCustomAvatarUploadOutput,
+			aws_smithy_http::result::SdkError<crate::error::PrepareCustomAvatarUploadError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::PrepareCustomAvatarUploadInputOperationOutputAlias,
+				crate::output::PrepareCustomAvatarUploadOutput,
+				crate::error::PrepareCustomAvatarUploadError,
+				crate::input::PrepareCustomAvatarUploadInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// The path/filename of the custom avatar.
+		pub fn path(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.path(input.into());
+			self
+		}
+		/// The path/filename of the custom avatar.
+		pub fn set_path(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_path(input);
+			self
+		}
+		/// The MIME type of the custom avatar.
+		pub fn mime(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.mime(input.into());
+			self
+		}
+		/// The MIME type of the custom avatar.
+		pub fn set_mime(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_mime(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn content_length(mut self, input: i64) -> Self {
+			self.inner = self.inner.content_length(input);
+			self
+		}
+		/// Unsigned 64 bit integer.
+		pub fn set_content_length(mut self, input: std::option::Option<i64>) -> Self {
+			self.inner = self.inner.set_content_length(input);
 			self
 		}
 	}

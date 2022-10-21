@@ -68,6 +68,16 @@ pub fn serialize_operation_crate_operation_create_game_version(
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }
 
+pub fn serialize_operation_crate_operation_export_lobby_logs(
+	input: &crate::input::ExportLobbyLogsInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_export_lobby_logs_input(&mut object, input)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
 pub fn serialize_operation_crate_operation_export_matchmaker_lobby_history(
 	input: &crate::input::ExportMatchmakerLobbyHistoryInput,
 ) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
@@ -113,6 +123,19 @@ pub fn serialize_operation_crate_operation_group_billing_checkout(
 	let mut out = String::new();
 	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
 	crate::json_ser::serialize_structure_crate_input_group_billing_checkout_input(
+		&mut object,
+		input,
+	)?;
+	object.finish();
+	Ok(aws_smithy_http::body::SdkBody::from(out))
+}
+
+pub fn serialize_operation_crate_operation_prepare_custom_avatar_upload(
+	input: &crate::input::PrepareCustomAvatarUploadInput,
+) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
+	let mut out = String::new();
+	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
+	crate::json_ser::serialize_structure_crate_input_prepare_custom_avatar_upload_input(
 		&mut object,
 		input,
 	)?;
