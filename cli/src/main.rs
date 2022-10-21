@@ -49,6 +49,10 @@ enum SubCommand {
 		#[clap(subcommand)]
 		command: site::SubCommand,
 	},
+	Avatar {
+		#[clap(subcommand)]
+		command: avatar::SubCommand,
+	},
 }
 
 #[tokio::main]
@@ -82,6 +86,7 @@ async fn main() -> Result<()> {
 				game_id = ctx.game_id
 			);
 		}
+		SubCommand::Avatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
