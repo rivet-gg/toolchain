@@ -10,6 +10,9 @@ pub struct Matchmaker {
 	#[serde(default)]
 	pub captcha: Option<captcha::Captcha>,
 
+	// Game mode overrides
+	pub max_players: Option<game_mode::MaxPlayers>,
+
 	// Region overrides
 	#[serde(default, flatten)]
 	pub region: game_mode::Region,
@@ -26,7 +29,7 @@ pub mod game_mode {
 	#[derive(Debug, Deserialize)]
 	#[serde(deny_unknown_fields)]
 	pub struct GameMode {
-		pub max_players: MaxPlayers,
+		pub max_players: Option<MaxPlayers>,
 
 		#[serde(default)]
 		pub regions: Option<HashMap<String, Region>>,
@@ -55,14 +58,24 @@ pub mod game_mode {
 		pub max: u32,
 	}
 
-	#[derive(Debug, Deserialize)]
+	#[derive(Clone, Debug, Deserialize)]
 	#[serde(untagged)]
 	pub enum MaxPlayers {
 		Universal(u32),
 		Split(MaxPlayersSplit),
 	}
 
-	#[derive(Debug, Deserialize)]
+	impl Default for MaxPlayers {
+		fn default() -> Self {
+			MaxPlayers::Split(MaxPlayersSplit {
+				normal: 32,
+				direct: 40,
+				party: 40,
+			})
+		}
+	}
+
+	#[derive(Clone, Debug, Deserialize)]
 	#[serde(deny_unknown_fields)]
 	pub struct MaxPlayersSplit {
 		pub normal: u32,
@@ -103,13 +116,15 @@ pub mod game_mode {
 			#[derive(Clone, Debug, Deserialize)]
 			#[serde(deny_unknown_fields)]
 			pub struct Port {
+				#[serde(default)]
 				pub target: Option<u32>,
+				#[serde(default)]
 				pub range: Option<PortRange>,
 				pub proto: ProxyProtocol,
 			}
 
 			#[derive(Clone, Debug, Deserialize)]
-			#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+			#[serde(deny_unknown_fields)]
 			pub struct PortRange {
 				pub min: u16,
 				pub max: u16,
@@ -213,7 +228,7 @@ pub mod game_mode {
 								docker
 									.ports
 									.clone()
-									.ok_or_else(|| docker_override.ports.clone())
+									.or_else(|| docker_override.ports.clone())
 									.unwrap_or_default()
 									.iter()
 									.map(|(label, port)| {
@@ -318,6 +333,12 @@ impl Matchmaker {
 			.game_modes
 			.iter()
 			.map(|(game_mode_name_id, game_mode)| {
+				let max_players = game_mode
+					.max_players
+					.clone()
+					.or_else(|| game_mode.max_players.clone())
+					.unwrap_or_default();
+
 				// Map provided regions to region summary
 				let game_mode_regions = if let Some(regions) = &game_mode.regions {
 					// Regions are provided
@@ -349,7 +370,8 @@ impl Matchmaker {
 					.map(|(region_summary, region_config)| {
 						let region_id = region_summary
 							.region_id()
-							.ok_or_else(|| Error::internal("region_summary.region_id"))?;
+							.ok_or_else(|| Error::internal("region_summary.region_id"))
+							.unwrap_or_default();
 
 						// Derive region -> game mode config fallbacks
 						let tier_name_id = region_config
@@ -381,9 +403,9 @@ impl Matchmaker {
 				Ok(LobbyGroup::builder()
 					.name_id(game_mode_name_id)
 					.set_regions(Some(regions))
-					.max_players_normal(game_mode.max_players.normal() as i32)
-					.max_players_direct(game_mode.max_players.direct() as i32)
-					.max_players_party(game_mode.max_players.party() as i32)
+					.max_players_normal(max_players.normal() as i32)
+					.max_players_direct(max_players.direct() as i32)
+					.max_players_party(max_players.party() as i32)
 					.runtime(runtime)
 					.build())
 			})
