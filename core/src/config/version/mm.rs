@@ -116,13 +116,15 @@ pub mod game_mode {
 			#[derive(Clone, Debug, Deserialize)]
 			#[serde(deny_unknown_fields)]
 			pub struct Port {
+				#[serde(default)]
 				pub target: Option<u32>,
+				#[serde(default)]
 				pub range: Option<PortRange>,
 				pub proto: ProxyProtocol,
 			}
 
 			#[derive(Clone, Debug, Deserialize)]
-			#[serde(rename_all = "kebab-case", deny_unknown_fields)]
+			#[serde(deny_unknown_fields)]
 			pub struct PortRange {
 				pub min: u16,
 				pub max: u16,
@@ -226,7 +228,7 @@ pub mod game_mode {
 								docker
 									.ports
 									.clone()
-									.ok_or_else(|| docker_override.ports.clone())
+									.or_else(|| docker_override.ports.clone())
 									.unwrap_or_default()
 									.iter()
 									.map(|(label, port)| {
