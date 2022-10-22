@@ -18,7 +18,7 @@ pub fn print(format: &Format, data: &impl Serialize) -> Result<()> {
 	Ok(())
 }
 
-pub fn print_opt(format: &Option<Format>, data: &impl Serialize) -> Result<()> {
+pub fn print_opt(format: Option<&Format>, data: &impl Serialize) -> Result<()> {
 	if let Some(format) = format.as_ref() {
 		print(format, data)?;
 	}
