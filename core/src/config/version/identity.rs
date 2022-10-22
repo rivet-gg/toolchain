@@ -12,14 +12,14 @@ pub struct Identity {
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum CustomDisplayName {
-	Verbose { display_name: String },
+	Full { display_name: String },
 	DisplayName(String),
 }
 
 impl CustomDisplayName {
 	fn display_name(&self) -> &str {
 		match self {
-			Self::Verbose { display_name } => &display_name,
+			Self::Full { display_name } => &display_name,
 			Self::DisplayName(display_name) => &display_name,
 		}
 	}
@@ -28,14 +28,14 @@ impl CustomDisplayName {
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum CustomAvatar {
-	Verbose { upload_id: String },
+	Full { upload_id: String },
 	UploadId(String),
 }
 
 impl CustomAvatar {
 	fn upload_id(&self) -> &str {
 		match self {
-			Self::Verbose { upload_id } => &upload_id,
+			Self::Full { upload_id } => &upload_id,
 			Self::UploadId(upload_id) => &upload_id,
 		}
 	}
