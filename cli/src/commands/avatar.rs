@@ -23,7 +23,9 @@ impl SubCommand {
 
 				#[derive(Tabled)]
 				struct CustomAvatar {
-					#[tabled(rename = "Url")]
+					#[tabled(rename = "Upload ID")]
+					upload_id: String,
+					#[tabled(rename = "URL")]
 					url: String,
 					#[tabled(rename = "Created")]
 					created: String,
@@ -37,9 +39,9 @@ impl SubCommand {
 					.iter()
 					.map(|custom_avatar| {
 						Ok(CustomAvatar {
-							url: custom_avatar
-								.url()
-								.context("custom_avatar.url")?
+							upload_id: custom_avatar
+								.upload_id()
+								.context("custom_avatar.upload_id")?
 								.to_string(),
 							created: fmt::date(
 								custom_avatar
@@ -51,6 +53,10 @@ impl SubCommand {
 									.content_length()
 									.context("custom_avatar.content_length")? as u64,
 							)?,
+							url: custom_avatar
+								.url()
+								.context("custom_avatar.url")?
+								.to_string(),
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
