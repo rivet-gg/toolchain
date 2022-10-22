@@ -3,6 +3,7 @@ use serde::Deserialize;
 use crate::error::Error;
 
 pub mod cdn;
+pub mod identity;
 pub mod kv;
 pub mod mm;
 
@@ -15,6 +16,8 @@ pub struct Version {
 	pub matchmaker: Option<mm::Matchmaker>,
 	#[serde(default)]
 	pub kv: Option<kv::Kv>,
+	#[serde(default)]
+	pub identity: Option<identity::Identity>,
 }
 
 impl Version {
@@ -33,6 +36,12 @@ impl Version {
 					.transpose()?,
 			)
 			.set_kv(self.kv.as_ref().map(|x| x.build_model(game)).transpose()?)
+			.set_identity(
+				self.identity
+					.as_ref()
+					.map(|x| x.build_model(game))
+					.transpose()?,
+			)
 			.build())
 	}
 }

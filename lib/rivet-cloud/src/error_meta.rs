@@ -31,6 +31,42 @@ impl std::fmt::Display for Error {
 		}
 	}
 }
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::CompleteCustomAvatarUploadError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::CompleteCustomAvatarUploadError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::CompleteCustomAvatarUploadErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::CompleteCustomAvatarUploadErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::CompleteCustomAvatarUploadErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::CompleteCustomAvatarUploadErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::CompleteCustomAvatarUploadErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::CompleteCustomAvatarUploadErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::CompleteCustomAvatarUploadErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
 impl<R> From<aws_smithy_http::result::SdkError<crate::error::CompleteUploadError, R>> for Error
 where
 	R: Send + Sync + std::fmt::Debug + 'static,
@@ -410,6 +446,37 @@ where
 				crate::error::DeleteMatchmakerLobbyErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::ExportLobbyLogsError, R>> for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(err: aws_smithy_http::result::SdkError<crate::error::ExportLobbyLogsError, R>) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::ExportLobbyLogsErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::ExportLobbyLogsErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::ExportLobbyLogsErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::ExportLobbyLogsErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::ExportLobbyLogsErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::ExportLobbyLogsErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::ExportLobbyLogsErrorKind::Unhandled(inner) => Error::Unhandled(inner),
 			},
 			_ => Error::Unhandled(err.into()),
 		}
@@ -867,6 +934,37 @@ where
 		}
 	}
 }
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetLobbyLogsError, R>> for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(err: aws_smithy_http::result::SdkError<crate::error::GetLobbyLogsError, R>) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::GetLobbyLogsErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::GetLobbyLogsErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::GetLobbyLogsErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::GetLobbyLogsErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::GetLobbyLogsErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::GetLobbyLogsErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::GetLobbyLogsErrorKind::Unhandled(inner) => Error::Unhandled(inner),
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
 impl<R>
 	From<
 		aws_smithy_http::result::SdkError<
@@ -1137,6 +1235,42 @@ where
 		}
 	}
 }
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::ListGameCustomAvatarsError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::ListGameCustomAvatarsError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::ListGameCustomAvatarsErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::ListGameCustomAvatarsErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::ListGameCustomAvatarsErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::ListGameCustomAvatarsErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::ListGameCustomAvatarsErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::ListGameCustomAvatarsErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::ListGameCustomAvatarsErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
 impl<R> From<aws_smithy_http::result::SdkError<crate::error::ListNamespaceLobbiesError, R>>
 	for Error
 where
@@ -1166,6 +1300,42 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::ListNamespaceLobbiesErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::PrepareCustomAvatarUploadError, R>>
+	for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::PrepareCustomAvatarUploadError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::PrepareCustomAvatarUploadErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::PrepareCustomAvatarUploadErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::PrepareCustomAvatarUploadErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::PrepareCustomAvatarUploadErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::PrepareCustomAvatarUploadErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::PrepareCustomAvatarUploadErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::PrepareCustomAvatarUploadErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},

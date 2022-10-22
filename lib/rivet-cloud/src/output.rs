@@ -2,6 +2,176 @@
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CompleteCustomAvatarUploadOutput {}
+impl std::fmt::Debug for CompleteCustomAvatarUploadOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CompleteCustomAvatarUploadOutput");
+		formatter.finish()
+	}
+}
+/// See [`CompleteCustomAvatarUploadOutput`](crate::output::CompleteCustomAvatarUploadOutput)
+pub mod complete_custom_avatar_upload_output {
+	/// A builder for [`CompleteCustomAvatarUploadOutput`](crate::output::CompleteCustomAvatarUploadOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`CompleteCustomAvatarUploadOutput`](crate::output::CompleteCustomAvatarUploadOutput)
+		pub fn build(self) -> crate::output::CompleteCustomAvatarUploadOutput {
+			crate::output::CompleteCustomAvatarUploadOutput {}
+		}
+	}
+}
+impl CompleteCustomAvatarUploadOutput {
+	/// Creates a new builder-style object to manufacture [`CompleteCustomAvatarUploadOutput`](crate::output::CompleteCustomAvatarUploadOutput)
+	pub fn builder() -> crate::output::complete_custom_avatar_upload_output::Builder {
+		crate::output::complete_custom_avatar_upload_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct PrepareCustomAvatarUploadOutput {
+	/// A universally unique identifier.
+	pub upload_id: std::option::Option<std::string::String>,
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	pub presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
+}
+impl PrepareCustomAvatarUploadOutput {
+	/// A universally unique identifier.
+	pub fn upload_id(&self) -> std::option::Option<&str> {
+		self.upload_id.as_deref()
+	}
+	/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+	pub fn presigned_request(&self) -> std::option::Option<&crate::model::UploadPresignedRequest> {
+		self.presigned_request.as_ref()
+	}
+}
+impl std::fmt::Debug for PrepareCustomAvatarUploadOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("PrepareCustomAvatarUploadOutput");
+		formatter.field("upload_id", &self.upload_id);
+		formatter.field("presigned_request", &self.presigned_request);
+		formatter.finish()
+	}
+}
+/// See [`PrepareCustomAvatarUploadOutput`](crate::output::PrepareCustomAvatarUploadOutput)
+pub mod prepare_custom_avatar_upload_output {
+	/// A builder for [`PrepareCustomAvatarUploadOutput`](crate::output::PrepareCustomAvatarUploadOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) upload_id: std::option::Option<std::string::String>,
+		pub(crate) presigned_request: std::option::Option<crate::model::UploadPresignedRequest>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn upload_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.upload_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_upload_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.upload_id = input;
+			self
+		}
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+		pub fn presigned_request(mut self, input: crate::model::UploadPresignedRequest) -> Self {
+			self.presigned_request = Some(input);
+			self
+		}
+		/// A presigned request used to upload files. Upload your file to the given URL via a PUT request.
+		pub fn set_presigned_request(
+			mut self,
+			input: std::option::Option<crate::model::UploadPresignedRequest>,
+		) -> Self {
+			self.presigned_request = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`PrepareCustomAvatarUploadOutput`](crate::output::PrepareCustomAvatarUploadOutput)
+		pub fn build(self) -> crate::output::PrepareCustomAvatarUploadOutput {
+			crate::output::PrepareCustomAvatarUploadOutput {
+				upload_id: self.upload_id,
+				presigned_request: self.presigned_request,
+			}
+		}
+	}
+}
+impl PrepareCustomAvatarUploadOutput {
+	/// Creates a new builder-style object to manufacture [`PrepareCustomAvatarUploadOutput`](crate::output::PrepareCustomAvatarUploadOutput)
+	pub fn builder() -> crate::output::prepare_custom_avatar_upload_output::Builder {
+		crate::output::prepare_custom_avatar_upload_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct ListGameCustomAvatarsOutput {
+	/// A list of custom avatar summaries.
+	pub custom_avatars: std::option::Option<std::vec::Vec<crate::model::CustomAvatarSummary>>,
+}
+impl ListGameCustomAvatarsOutput {
+	/// A list of custom avatar summaries.
+	pub fn custom_avatars(&self) -> std::option::Option<&[crate::model::CustomAvatarSummary]> {
+		self.custom_avatars.as_deref()
+	}
+}
+impl std::fmt::Debug for ListGameCustomAvatarsOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("ListGameCustomAvatarsOutput");
+		formatter.field("custom_avatars", &self.custom_avatars);
+		formatter.finish()
+	}
+}
+/// See [`ListGameCustomAvatarsOutput`](crate::output::ListGameCustomAvatarsOutput)
+pub mod list_game_custom_avatars_output {
+	/// A builder for [`ListGameCustomAvatarsOutput`](crate::output::ListGameCustomAvatarsOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) custom_avatars:
+			std::option::Option<std::vec::Vec<crate::model::CustomAvatarSummary>>,
+	}
+	impl Builder {
+		/// Appends an item to `custom_avatars`.
+		///
+		/// To override the contents of this collection use [`set_custom_avatars`](Self::set_custom_avatars).
+		///
+		/// A list of custom avatar summaries.
+		pub fn custom_avatars(mut self, input: crate::model::CustomAvatarSummary) -> Self {
+			let mut v = self.custom_avatars.unwrap_or_default();
+			v.push(input);
+			self.custom_avatars = Some(v);
+			self
+		}
+		/// A list of custom avatar summaries.
+		pub fn set_custom_avatars(
+			mut self,
+			input: std::option::Option<std::vec::Vec<crate::model::CustomAvatarSummary>>,
+		) -> Self {
+			self.custom_avatars = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`ListGameCustomAvatarsOutput`](crate::output::ListGameCustomAvatarsOutput)
+		pub fn build(self) -> crate::output::ListGameCustomAvatarsOutput {
+			crate::output::ListGameCustomAvatarsOutput {
+				custom_avatars: self.custom_avatars,
+			}
+		}
+	}
+}
+impl ListGameCustomAvatarsOutput {
+	/// Creates a new builder-style object to manufacture [`ListGameCustomAvatarsOutput`](crate::output::ListGameCustomAvatarsOutput)
+	pub fn builder() -> crate::output::list_game_custom_avatars_output::Builder {
+		crate::output::list_game_custom_avatars_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetRayPerfLogsOutput {
 	/// A list of service performance summaries.
 	pub perf_lists: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
@@ -632,6 +802,171 @@ impl GetRegionTiersOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct ExportLobbyLogsOutput {
+	/// The URL to a CSV file for the given lobby history.
+	pub url: std::option::Option<std::string::String>,
+}
+impl ExportLobbyLogsOutput {
+	/// The URL to a CSV file for the given lobby history.
+	pub fn url(&self) -> std::option::Option<&str> {
+		self.url.as_deref()
+	}
+}
+impl std::fmt::Debug for ExportLobbyLogsOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("ExportLobbyLogsOutput");
+		formatter.field("url", &self.url);
+		formatter.finish()
+	}
+}
+/// See [`ExportLobbyLogsOutput`](crate::output::ExportLobbyLogsOutput)
+pub mod export_lobby_logs_output {
+	/// A builder for [`ExportLobbyLogsOutput`](crate::output::ExportLobbyLogsOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) url: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// The URL to a CSV file for the given lobby history.
+		pub fn url(mut self, input: impl Into<std::string::String>) -> Self {
+			self.url = Some(input.into());
+			self
+		}
+		/// The URL to a CSV file for the given lobby history.
+		pub fn set_url(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.url = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`ExportLobbyLogsOutput`](crate::output::ExportLobbyLogsOutput)
+		pub fn build(self) -> crate::output::ExportLobbyLogsOutput {
+			crate::output::ExportLobbyLogsOutput { url: self.url }
+		}
+	}
+}
+impl ExportLobbyLogsOutput {
+	/// Creates a new builder-style object to manufacture [`ExportLobbyLogsOutput`](crate::output::ExportLobbyLogsOutput)
+	pub fn builder() -> crate::output::export_lobby_logs_output::Builder {
+		crate::output::export_lobby_logs_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GetLobbyLogsOutput {
+	/// Sorted old to new.
+	pub lines: std::option::Option<std::vec::Vec<std::string::String>>,
+	/// Sorted old to new.
+	pub timestamps: std::option::Option<std::vec::Vec<aws_smithy_types::DateTime>>,
+	/// Provided by watchable endpoints used in blocking loops.
+	pub watch: std::option::Option<crate::model::WatchResponse>,
+}
+impl GetLobbyLogsOutput {
+	/// Sorted old to new.
+	pub fn lines(&self) -> std::option::Option<&[std::string::String]> {
+		self.lines.as_deref()
+	}
+	/// Sorted old to new.
+	pub fn timestamps(&self) -> std::option::Option<&[aws_smithy_types::DateTime]> {
+		self.timestamps.as_deref()
+	}
+	/// Provided by watchable endpoints used in blocking loops.
+	pub fn watch(&self) -> std::option::Option<&crate::model::WatchResponse> {
+		self.watch.as_ref()
+	}
+}
+impl std::fmt::Debug for GetLobbyLogsOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GetLobbyLogsOutput");
+		formatter.field("lines", &self.lines);
+		formatter.field("timestamps", &self.timestamps);
+		formatter.field("watch", &self.watch);
+		formatter.finish()
+	}
+}
+/// See [`GetLobbyLogsOutput`](crate::output::GetLobbyLogsOutput)
+pub mod get_lobby_logs_output {
+	/// A builder for [`GetLobbyLogsOutput`](crate::output::GetLobbyLogsOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) lines: std::option::Option<std::vec::Vec<std::string::String>>,
+		pub(crate) timestamps: std::option::Option<std::vec::Vec<aws_smithy_types::DateTime>>,
+		pub(crate) watch: std::option::Option<crate::model::WatchResponse>,
+	}
+	impl Builder {
+		/// Appends an item to `lines`.
+		///
+		/// To override the contents of this collection use [`set_lines`](Self::set_lines).
+		///
+		/// Sorted old to new.
+		pub fn lines(mut self, input: impl Into<std::string::String>) -> Self {
+			let mut v = self.lines.unwrap_or_default();
+			v.push(input.into());
+			self.lines = Some(v);
+			self
+		}
+		/// Sorted old to new.
+		pub fn set_lines(
+			mut self,
+			input: std::option::Option<std::vec::Vec<std::string::String>>,
+		) -> Self {
+			self.lines = input;
+			self
+		}
+		/// Appends an item to `timestamps`.
+		///
+		/// To override the contents of this collection use [`set_timestamps`](Self::set_timestamps).
+		///
+		/// Sorted old to new.
+		pub fn timestamps(mut self, input: aws_smithy_types::DateTime) -> Self {
+			let mut v = self.timestamps.unwrap_or_default();
+			v.push(input);
+			self.timestamps = Some(v);
+			self
+		}
+		/// Sorted old to new.
+		pub fn set_timestamps(
+			mut self,
+			input: std::option::Option<std::vec::Vec<aws_smithy_types::DateTime>>,
+		) -> Self {
+			self.timestamps = input;
+			self
+		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn watch(mut self, input: crate::model::WatchResponse) -> Self {
+			self.watch = Some(input);
+			self
+		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn set_watch(
+			mut self,
+			input: std::option::Option<crate::model::WatchResponse>,
+		) -> Self {
+			self.watch = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GetLobbyLogsOutput`](crate::output::GetLobbyLogsOutput)
+		pub fn build(self) -> crate::output::GetLobbyLogsOutput {
+			crate::output::GetLobbyLogsOutput {
+				lines: self.lines,
+				timestamps: self.timestamps,
+				watch: self.watch,
+			}
+		}
+	}
+}
+impl GetLobbyLogsOutput {
+	/// Creates a new builder-style object to manufacture [`GetLobbyLogsOutput`](crate::output::GetLobbyLogsOutput)
+	pub fn builder() -> crate::output::get_lobby_logs_output::Builder {
+		crate::output::get_lobby_logs_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct ExportMatchmakerLobbyHistoryOutput {
 	/// The URL to a CSV file for the given lobby history.
 	pub url: std::option::Option<std::string::String>,
@@ -1122,19 +1457,23 @@ impl CreateCloudTokenOutput {
 pub struct GetNamespaceLobbyOutput {
 	/// A logs summary for a lobby.
 	pub lobby: std::option::Option<crate::model::LogsLobbySummary>,
+	/// Metrics relating to a job service.
+	pub metrics: std::option::Option<crate::model::SvcMetrics>,
 	/// A list of URLs.
 	pub stdout_presigned_urls: std::option::Option<std::vec::Vec<std::string::String>>,
 	/// A list of URLs.
 	pub stderr_presigned_urls: std::option::Option<std::vec::Vec<std::string::String>>,
 	/// A list of service performance summaries.
 	pub perf_lists: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
-	/// Metrics relating to a job service.
-	pub metrics: std::option::Option<crate::model::SvcMetrics>,
 }
 impl GetNamespaceLobbyOutput {
 	/// A logs summary for a lobby.
 	pub fn lobby(&self) -> std::option::Option<&crate::model::LogsLobbySummary> {
 		self.lobby.as_ref()
+	}
+	/// Metrics relating to a job service.
+	pub fn metrics(&self) -> std::option::Option<&crate::model::SvcMetrics> {
+		self.metrics.as_ref()
 	}
 	/// A list of URLs.
 	pub fn stdout_presigned_urls(&self) -> std::option::Option<&[std::string::String]> {
@@ -1148,19 +1487,15 @@ impl GetNamespaceLobbyOutput {
 	pub fn perf_lists(&self) -> std::option::Option<&[crate::model::SvcPerf]> {
 		self.perf_lists.as_deref()
 	}
-	/// Metrics relating to a job service.
-	pub fn metrics(&self) -> std::option::Option<&crate::model::SvcMetrics> {
-		self.metrics.as_ref()
-	}
 }
 impl std::fmt::Debug for GetNamespaceLobbyOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetNamespaceLobbyOutput");
 		formatter.field("lobby", &self.lobby);
+		formatter.field("metrics", &self.metrics);
 		formatter.field("stdout_presigned_urls", &self.stdout_presigned_urls);
 		formatter.field("stderr_presigned_urls", &self.stderr_presigned_urls);
 		formatter.field("perf_lists", &self.perf_lists);
-		formatter.field("metrics", &self.metrics);
 		formatter.finish()
 	}
 }
@@ -1171,10 +1506,10 @@ pub mod get_namespace_lobby_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) lobby: std::option::Option<crate::model::LogsLobbySummary>,
+		pub(crate) metrics: std::option::Option<crate::model::SvcMetrics>,
 		pub(crate) stdout_presigned_urls: std::option::Option<std::vec::Vec<std::string::String>>,
 		pub(crate) stderr_presigned_urls: std::option::Option<std::vec::Vec<std::string::String>>,
 		pub(crate) perf_lists: std::option::Option<std::vec::Vec<crate::model::SvcPerf>>,
-		pub(crate) metrics: std::option::Option<crate::model::SvcMetrics>,
 	}
 	impl Builder {
 		/// A logs summary for a lobby.
@@ -1188,6 +1523,16 @@ pub mod get_namespace_lobby_output {
 			input: std::option::Option<crate::model::LogsLobbySummary>,
 		) -> Self {
 			self.lobby = input;
+			self
+		}
+		/// Metrics relating to a job service.
+		pub fn metrics(mut self, input: crate::model::SvcMetrics) -> Self {
+			self.metrics = Some(input);
+			self
+		}
+		/// Metrics relating to a job service.
+		pub fn set_metrics(mut self, input: std::option::Option<crate::model::SvcMetrics>) -> Self {
+			self.metrics = input;
 			self
 		}
 		/// Appends an item to `stdout_presigned_urls`.
@@ -1247,24 +1592,14 @@ pub mod get_namespace_lobby_output {
 			self.perf_lists = input;
 			self
 		}
-		/// Metrics relating to a job service.
-		pub fn metrics(mut self, input: crate::model::SvcMetrics) -> Self {
-			self.metrics = Some(input);
-			self
-		}
-		/// Metrics relating to a job service.
-		pub fn set_metrics(mut self, input: std::option::Option<crate::model::SvcMetrics>) -> Self {
-			self.metrics = input;
-			self
-		}
 		/// Consumes the builder and constructs a [`GetNamespaceLobbyOutput`](crate::output::GetNamespaceLobbyOutput)
 		pub fn build(self) -> crate::output::GetNamespaceLobbyOutput {
 			crate::output::GetNamespaceLobbyOutput {
 				lobby: self.lobby,
+				metrics: self.metrics,
 				stdout_presigned_urls: self.stdout_presigned_urls,
 				stderr_presigned_urls: self.stderr_presigned_urls,
 				perf_lists: self.perf_lists,
-				metrics: self.metrics,
 			}
 		}
 	}
