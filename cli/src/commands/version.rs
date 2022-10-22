@@ -1,9 +1,13 @@
 use anyhow::{Context, Error, Result};
 use clap::Parser;
 use serde::Serialize;
+use serde_json::json;
 use tabled::Tabled;
 
-use crate::util::{fmt, struct_fmt, term};
+use crate::{
+	commands::{build, site},
+	util::{fmt, struct_fmt, term},
+};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -25,6 +29,32 @@ pub enum SubCommand {
 
 		#[clap(short = 'n', long)]
 		namespace: Option<String>,
+	},
+
+	PushAndCreate {
+		#[clap(long)]
+		display_name: String,
+
+		#[clap(long = "override", short)]
+		overrides: Vec<String>,
+
+		#[clap(short = 'n', long)]
+		namespace: Option<String>,
+
+		#[clap(long)]
+		build_tag: Option<String>,
+
+		#[clap(long)]
+		build_name: Option<String>,
+
+		#[clap(long)]
+		site_path: Option<String>,
+
+		#[clap(long)]
+		site_name: Option<String>,
+
+		#[clap(long, value_parser)]
+		format: Option<struct_fmt::Format>,
 	},
 
 	ReadConfig {
@@ -106,35 +136,83 @@ impl SubCommand {
 			SubCommand::Create {
 				display_name,
 				overrides,
-				format,
 				namespace,
+				format,
 			} => {
-				// Parse config
 				let overrides = parse_config_override_args(overrides)?;
-				let user_config =
-					read_user_config(overrides, namespace.as_ref().map(String::as_str)).await?;
-				let rivet_config = build_rivet_config(ctx, &user_config).await?;
+				let output = create(
+					ctx,
+					display_name,
+					overrides,
+					namespace.as_ref().map(String::as_str),
+				)
+				.await?;
+				struct_fmt::print_opt(format.as_ref(), &output)?;
 
-				// Create version
-				let version_res = ctx
-					.client()
-					.create_game_version()
-					.game_id(&ctx.game_id)
-					.display_name(display_name)
-					.config(rivet_config)
-					.send()
-					.await
-					.context("client.create_game_version")?;
-				let version_id = version_res.version_id().context("version_res.version_id")?;
+				Ok(())
+			}
+			SubCommand::PushAndCreate {
+				display_name,
+				overrides,
+				namespace,
+				build_tag,
+				build_name,
+				site_path,
+				site_name,
+				format,
+			} => {
+				let site_output = if let Some(site_path) = site_path {
+					Some(
+						site::push(
+							ctx,
+							&site::SitePushOpts {
+								path: site_path.clone(),
+								name: site_name.clone(),
+								format: format.clone(),
+							},
+						)
+						.await?,
+					)
+				} else {
+					None
+				};
 
-				term::status::success("Published", display_name);
-				term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
+				let build_output = if let Some(build_tag) = build_tag {
+					Some(
+						build::push(
+							ctx,
+							&build::BuildPushOpts {
+								tag: build_tag.clone(),
+								name: build_name.clone(),
+								format: format.clone(),
+							},
+						)
+						.await?,
+					)
+				} else {
+					None
+				};
 
-				#[derive(Serialize)]
-				struct Output<'a> {
-					version_id: &'a str,
+				// Parse overrides
+				let mut overrides = parse_config_override_args(overrides)?;
+				if let Some(site_output) = site_output {
+					overrides.push(("cdn.site".into(), json!(site_output.site_id)));
 				}
-				struct_fmt::print_opt(format, &Output { version_id })?;
+				if let Some(build_output) = build_output {
+					overrides.push((
+						"matchmaker.docker.build".into(),
+						json!(build_output.build_id),
+					));
+				}
+
+				let output = create(
+					ctx,
+					display_name,
+					overrides,
+					namespace.as_ref().map(String::as_str),
+				)
+				.await?;
+				struct_fmt::print_opt(format.as_ref(), &output)?;
 
 				Ok(())
 			}
@@ -280,4 +358,39 @@ pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
 		game_id = game_id,
 		version_id = version_id
 	)
+}
+
+#[derive(Serialize)]
+pub struct CreateOutput {
+	pub version_id: String,
+}
+
+pub async fn create(
+	ctx: &cli_core::Ctx,
+	display_name: &str,
+	overrides: Vec<(String, serde_json::Value)>,
+	namespace: Option<&str>,
+) -> Result<CreateOutput> {
+	// Parse config
+	let user_config = read_user_config(overrides, namespace).await?;
+	let rivet_config = build_rivet_config(ctx, &user_config).await?;
+
+	// Create version
+	let version_res = ctx
+		.client()
+		.create_game_version()
+		.game_id(&ctx.game_id)
+		.display_name(display_name)
+		.config(rivet_config)
+		.send()
+		.await
+		.context("client.create_game_version")?;
+	let version_id = version_res.version_id().context("version_res.version_id")?;
+
+	term::status::success("Published", display_name);
+	term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
+
+	Ok(CreateOutput {
+		version_id: version_id.to_string(),
+	})
 }
