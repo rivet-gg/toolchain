@@ -263,7 +263,7 @@ pub mod game_mode {
 
 	impl Default for IdleLobbies {
 		fn default() -> Self {
-			Self { min: 1, max: 1 }
+			Self { min: 0, max: 1 }
 		}
 	}
 
