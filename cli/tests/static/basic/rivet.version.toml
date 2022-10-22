@@ -20,3 +20,12 @@
 
 [kv]
 
+[identity]
+	custom_display_names = ["a", "b"]
+
+	custom_avatars = [
+		"7bbdaa3a-4620-4342-a407-55dfeecdef16",
+		"e4e075b0-f5ae-4b02-b4bd-edf1737cd35d",
+	]
+
+

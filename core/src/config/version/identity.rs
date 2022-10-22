@@ -10,13 +10,35 @@ pub struct Identity {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct CustomDisplayName {
-	display_name: String,
+#[serde(untagged)]
+pub enum CustomDisplayName {
+	Verbose { display_name: String },
+	DisplayName(String),
+}
+
+impl CustomDisplayName {
+	fn display_name(&self) -> &str {
+		match self {
+			Self::Verbose { display_name } => &display_name,
+			Self::DisplayName(display_name) => &display_name,
+		}
+	}
 }
 
 #[derive(Debug, Deserialize)]
-pub struct CustomAvatar {
-	upload_id: String,
+#[serde(untagged)]
+pub enum CustomAvatar {
+	Verbose { upload_id: String },
+	UploadId(String),
+}
+
+impl CustomAvatar {
+	fn upload_id(&self) -> &str {
+		match self {
+			Self::Verbose { upload_id } => &upload_id,
+			Self::UploadId(upload_id) => &upload_id,
+		}
+	}
 }
 
 impl Identity {
@@ -31,7 +53,7 @@ impl Identity {
 			.iter()
 			.map(|custom_display_name| {
 				CustomDisplayName::builder()
-					.display_name(&custom_display_name.display_name)
+					.display_name(custom_display_name.display_name())
 					.build()
 			})
 			.collect::<Vec<_>>();
@@ -40,7 +62,7 @@ impl Identity {
 			.iter()
 			.map(|custom_avatar| {
 				CustomAvatar::builder()
-					.upload_id(&custom_avatar.upload_id)
+					.upload_id(custom_avatar.upload_id())
 					.build()
 			})
 			.collect::<Vec<_>>();
