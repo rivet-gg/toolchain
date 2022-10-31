@@ -59,7 +59,7 @@ pub mod game_mode {
 	}
 
 	#[derive(Clone, Debug, Deserialize)]
-	#[serde(untagged)]
+	#[serde(deny_unknown_fields, untagged)]
 	pub enum MaxPlayers {
 		Universal(u32),
 		Split(MaxPlayersSplit),
@@ -89,7 +89,7 @@ pub mod game_mode {
 		use crate::error::Error;
 
 		#[derive(Debug, Deserialize)]
-		#[serde(rename_all = "snake_case")]
+		#[serde(deny_unknown_fields, rename_all = "snake_case")]
 		pub enum Runtime {
 			Docker(docker::Docker),
 		}
@@ -336,7 +336,7 @@ impl Matchmaker {
 				let max_players = game_mode
 					.max_players
 					.clone()
-					.or_else(|| game_mode.max_players.clone())
+					.or_else(|| self.max_players.clone())
 					.unwrap_or_default();
 
 				// Map provided regions to region summary
