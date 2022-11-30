@@ -1,5 +1,5 @@
 # MARK: Builder
-FROM rust:1.63 AS builder
+FROM rust:1.65 AS builder
 
 WORKDIR /app
 
