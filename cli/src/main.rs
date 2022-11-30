@@ -62,7 +62,13 @@ async fn main() -> Result<()> {
 
 	// Handle init command without the context
 	if let SubCommand::Init(init_opts) = &opts.command {
-		return init_opts.execute(&term, opts.api_url).await;
+		return init_opts
+			.execute(
+				opts.cloud_token.as_ref().map(String::as_str),
+				&term,
+				opts.api_url,
+			)
+			.await;
 	}
 
 	// Read cloud token

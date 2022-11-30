@@ -11,13 +11,42 @@ const GITHUB_WORKFLOW_RIVET_PUBLISH_YAML: &'static str =
 const RIVET_VERSION_TOML: &'static str = include_str!("../../tpl/rivet.version.toml");
 
 #[derive(Parser)]
-pub struct Opts {}
+pub struct Opts {
+	#[clap(long)]
+	recommended: bool,
+	#[clap(long)]
+	gitignore: bool,
+	#[clap(long)]
+	github_actions: bool,
+	#[clap(long)]
+	dockerfile_path: Option<String>,
+	#[clap(long)]
+	cdn_build_command: Option<String>,
+	#[clap(long)]
+	cdn_path: Option<String>,
+	#[clap(long)]
+	rivet_config: bool,
+	#[clap(long)]
+	dev: bool,
+	#[clap(flatten)]
+	dev_opts: crate::commands::dev::InitOpts,
+}
 
 impl Opts {
-	pub async fn execute(&self, term: &Term, override_api_url: Option<String>) -> Result<()> {
+	pub async fn execute(
+		&self,
+		cloud_token: Option<&str>,
+		term: &Term,
+		override_api_url: Option<String>,
+	) -> Result<()> {
 		// Check if token already exists
 		eprintln!();
-		let ctx = if let Some(cloud_token) = secrets::read_cloud_token().await? {
+		let cloud_token = if let Some(cloud_token) = cloud_token.clone() {
+			Some(cloud_token.to_string())
+		} else {
+			secrets::read_cloud_token().await?
+		};
+		let ctx = if let Some(cloud_token) = cloud_token {
 			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
 
 			let game_res = ctx
@@ -40,7 +69,10 @@ impl Opts {
 		// Update .gitignore
 		eprintln!();
 		if !git::check_ignore(Path::new(".rivet/")).await? {
-			if term::input::bool(term, "Add .rivet/ to .gitignore?").await? {
+			if self.recommended
+				|| self.gitignore
+				|| term::input::bool(term, "Add .rivet/ to .gitignore?").await?
+			{
 				let mut file = fs::OpenOptions::new()
 					.write(true)
 					.append(true)
@@ -66,15 +98,29 @@ impl Opts {
 		eprintln!();
 		let workflows_path = std::env::current_dir()?.join(".github").join("workflows");
 		let actions_path = workflows_path.join("rivet-publish.yaml");
-		if term::input::bool(
-			term,
-			"Setup GitHub Actions at .github/workflows/rivet-push.yaml?",
-		)
-		.await?
+		if self.recommended
+			|| self.github_actions
+			|| term::input::bool(
+				term,
+				"Setup GitHub Actions at .github/workflows/rivet-push.yaml?",
+			)
+			.await?
 		{
-			let dockerfile_path = term::input::string(term, "Server Dockerfile path?").await?;
-			let site_build_command = term::input::string(term, "CDN build command?").await?;
-			let site_build_path = term::input::string(term, "CDN build output path?").await?;
+			let dockerfile_path = if let Some(x) = self.dockerfile_path.clone() {
+				x
+			} else {
+				term::input::string(term, "Server Dockerfile path?").await?
+			};
+			let site_build_command = if let Some(x) = self.cdn_build_command.clone() {
+				x
+			} else {
+				term::input::string(term, "CDN build command?").await?
+			};
+			let site_build_path = if let Some(x) = self.cdn_path.clone() {
+				x
+			} else {
+				term::input::string(term, "CDN build output path?").await?
+			};
 
 			// TODO: Escape values for single quotes
 			let publish_yml = GITHUB_WORKFLOW_RIVET_PUBLISH_YAML
@@ -107,7 +153,10 @@ impl Opts {
 			}
 		};
 		if config_needs_creation {
-			if term::input::bool(term, "Create default config at rivet.version.toml?").await? {
+			if self.recommended
+				|| self.rivet_config
+				|| term::input::bool(term, "Create default config at rivet.version.toml?").await?
+			{
 				fs::write(config_path, RIVET_VERSION_TOML).await?;
 
 				term::status::success(
@@ -124,10 +173,10 @@ impl Opts {
 
 		// Development flow
 		eprintln!();
-		if term::input::bool(term, "Setup development environment?").await? {
-			crate::commands::dev::SubCommand::Init
-				.execute(term, &ctx)
-				.await?
+		if self.recommended
+			|| self.dev || term::input::bool(term, "Setup development environment?").await?
+		{
+			self.dev_opts.execute(term, &ctx).await?
 		}
 
 		eprintln!();
