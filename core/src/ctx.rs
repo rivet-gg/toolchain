@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{env, sync::Arc};
 
 use crate::error::Error;
 
@@ -55,9 +55,14 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 		return Err(Error::InvalidAgentKind);
 	};
 
+	let concurrent_uploads = env::var("RIVET_CONCURRENT_UPLOADS")
+		.ok()
+		.and_then(|x| x.parse::<usize>().ok())
+		.unwrap_or(8);
+
 	Ok(Arc::new(CtxInner {
 		http_client,
-		concurrent_uploads: 8,
+		concurrent_uploads,
 		override_api_url,
 		access_token,
 		game_id,
