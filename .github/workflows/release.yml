@@ -22,17 +22,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Rust Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      # TODO: Add back once can figure out why curl is timing out
+      # - name: Rust Cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ~/.cargo/registry
+      #       ~/.cargo/git
+      #       target
+      #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Compile and release
-        uses: rust-build/rust-build.action@v1.3.2
+        uses: rust-build/rust-build.action@v1.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -41,7 +42,7 @@ jobs:
           SRC_DIR: cli
           PRE_BUILD: ./bin/pre-build.sh
           EXTRA_FILES: "README.md LICENSE"
-          TOOLCHAIN_VERSION: 1.63.0
+          TOOLCHAIN_VERSION: 1.66.1
           # Breaks macOS builds
           # TODO: Re-enable on Linux only
           MINIFY: 'false'
