@@ -182,7 +182,7 @@ impl Opts {
 		eprintln!();
 		term::status::success(
 			"What's next?",
-			"https://docs.rivet.gg/docs/guides/getting-started-multiplayer",
+			"https://docs.rivet.gg/general/guides/crash-course",
 		);
 
 		Ok(())
@@ -232,5 +232,5 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 }
 
 pub fn dashboard_api_url(game_id: &str) -> String {
-	format!("https://rivet.gg/developer/games/{game_id}/api")
+	format!("https://hub.rivet.gg/developer/games/{game_id}/api")
 }

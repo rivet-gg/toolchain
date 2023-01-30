@@ -226,5 +226,5 @@ async fn print_ns(
 }
 
 pub fn dashboard_url(game_id: &str, ns_id: &str) -> String {
-	format!("https://rivet.gg/developer/games/{game_id}/namespaces/{ns_id}",)
+	format!("https://hub.rivet.gg/developer/games/{game_id}/namespaces/{ns_id}",)
 }

@@ -354,7 +354,7 @@ pub async fn build_rivet_config(
 
 pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
 	format!(
-		"https://rivet.gg/developer/games/{game_id}/versions/{version_id}",
+		"https://hub.rivet.gg/developer/games/{game_id}/versions/{version_id}",
 		game_id = game_id,
 		version_id = version_id
 	)

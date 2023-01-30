@@ -88,7 +88,7 @@ async fn main() -> Result<()> {
 		SubCommand::Init(_) => unreachable!(),
 		SubCommand::Dashboard => {
 			println!(
-				"https://rivet.gg/developer/games/{game_id}",
+				"https://hub.rivet.gg/developer/games/{game_id}",
 				game_id = ctx.game_id
 			);
 		}

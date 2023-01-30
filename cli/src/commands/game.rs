@@ -46,5 +46,5 @@ impl SubCommand {
 }
 
 pub fn dashboard_url(game_id: &str) -> String {
-	format!("https://rivet.gg/developer/games/{game_id}")
+	format!("https://hub.rivet.gg/developer/games/{game_id}")
 }
