@@ -23,3 +23,4 @@ docker run -v "$(pwd):/app" ghcr.io/rivet-gg/cli
 ```
 docker run -v "%cd%:/app" ghcr.io/rivet-gg/cli
 ```
+
