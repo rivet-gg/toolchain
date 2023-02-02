@@ -12,10 +12,13 @@ pub enum SubCommand {
 
 #[derive(Parser)]
 pub struct InitOpts {
+	/// Local hostname to connect to
 	#[clap(long)]
 	dev_hostname: Option<String>,
+	/// Local port to connect to
 	#[clap(long)]
 	dev_port: Option<Vec<String>>,
+	/// Write token to .env file
 	#[clap(long)]
 	dev_env: bool,
 }

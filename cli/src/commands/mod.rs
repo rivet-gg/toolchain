@@ -1,5 +1,6 @@
 pub mod avatar;
 pub mod build;
+pub mod ci;
 pub mod dev;
 pub mod game;
 pub mod init;

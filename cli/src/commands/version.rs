@@ -11,45 +11,60 @@ use crate::{
 
 #[derive(Parser)]
 pub enum SubCommand {
+	/// List all versions
 	List,
 
+	/// Get details about a version
 	Get {
+		/// The version ID
 		version: String,
 	},
 
+	/// Create a new version
 	Create {
-		#[clap(long)]
+		/// Name to display for the version
+		#[clap(long = "name", alias = "display-name")]
 		display_name: String,
 
+		/// Override specific properties of the config
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
+
+		/// Namespace to deploy to
+		#[clap(short = 'n', long, alias = "ns")]
+		namespace: Option<String>,
 
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
-
-		#[clap(short = 'n', long)]
-		namespace: Option<String>,
 	},
 
+	/// Pushes the build and site and creates a new version
 	PushAndCreate {
-		#[clap(long)]
+		/// Name of the version to create
+		#[clap(long = "name", alias = "display-name")]
 		display_name: String,
 
+		/// Override specific properties of the config
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
 
+		/// Namespace ID to deploy to
 		#[clap(short = 'n', long)]
 		namespace: Option<String>,
 
+		/// The build tag to upload
 		#[clap(long)]
 		build_tag: Option<String>,
 
+		/// The name to assign to the build
 		#[clap(long)]
 		build_name: Option<String>,
 
+		/// The path to the site directory to upload
 		#[clap(long)]
 		site_path: Option<String>,
 
+		/// The name of the site that will be created
 		#[clap(long)]
 		site_name: Option<String>,
 
@@ -57,18 +72,20 @@ pub enum SubCommand {
 		format: Option<struct_fmt::Format>,
 	},
 
+	/// Returns the config for a version
 	ReadConfig {
+		/// Override specific properties of the config
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
 
+		/// The namespace ID to deploy to
 		#[clap(short = 'n', long)]
 		namespace: Option<String>,
 	},
 
+	/// Show the a version's dashboard
 	#[clap(alias("dash"))]
-	Dashboard {
-		version: String,
-	},
+	Dashboard { version: String },
 }
 
 impl SubCommand {
