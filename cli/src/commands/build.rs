@@ -10,14 +10,17 @@ use crate::util::{game, struct_fmt, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
+	/// Pushes a build to Rivet so it can be used in a version
 	Push(BuildPushOpts),
 }
 
 #[derive(Parser)]
 pub struct BuildPushOpts {
+	/// Docker tag to push
 	#[clap(long)]
 	pub tag: String,
 
+	/// Name of the build
 	#[clap(long)]
 	pub name: Option<String>,
 

@@ -19,9 +19,11 @@ pub enum SubCommand {
 
 #[derive(Parser)]
 pub struct SitePushOpts {
+	/// Path of the site to push
 	#[clap(long)]
 	pub path: String,
 
+	/// Name of the build
 	#[clap(long)]
 	pub name: Option<String>,
 

@@ -6,6 +6,7 @@ use crate::util::{fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
+	/// List all available identity avatars
 	List,
 }
 

@@ -72,7 +72,7 @@ enum SubCommand {
 	},
 
 	/// Manages identity avatars
-	Avatar {
+	IdentityAvatar {
 		#[clap(subcommand)]
 		command: avatar::SubCommand,
 	},
@@ -115,7 +115,7 @@ async fn main() -> Result<()> {
 				game_id = ctx.game_id
 			);
 		}
-		SubCommand::Avatar { command } => command.execute(&ctx).await?,
+		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
 		SubCommand::CI { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
