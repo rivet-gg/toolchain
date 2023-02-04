@@ -2109,30 +2109,30 @@ impl RemoveNamespaceDomainOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct UpdateNamespaceDomainOutput {}
-impl std::fmt::Debug for UpdateNamespaceDomainOutput {
+pub struct AddNamespaceDomainOutput {}
+impl std::fmt::Debug for AddNamespaceDomainOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("UpdateNamespaceDomainOutput");
+		let mut formatter = f.debug_struct("AddNamespaceDomainOutput");
 		formatter.finish()
 	}
 }
-/// See [`UpdateNamespaceDomainOutput`](crate::output::UpdateNamespaceDomainOutput)
-pub mod update_namespace_domain_output {
-	/// A builder for [`UpdateNamespaceDomainOutput`](crate::output::UpdateNamespaceDomainOutput)
+/// See [`AddNamespaceDomainOutput`](crate::output::AddNamespaceDomainOutput)
+pub mod add_namespace_domain_output {
+	/// A builder for [`AddNamespaceDomainOutput`](crate::output::AddNamespaceDomainOutput)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {}
 	impl Builder {
-		/// Consumes the builder and constructs a [`UpdateNamespaceDomainOutput`](crate::output::UpdateNamespaceDomainOutput)
-		pub fn build(self) -> crate::output::UpdateNamespaceDomainOutput {
-			crate::output::UpdateNamespaceDomainOutput {}
+		/// Consumes the builder and constructs a [`AddNamespaceDomainOutput`](crate::output::AddNamespaceDomainOutput)
+		pub fn build(self) -> crate::output::AddNamespaceDomainOutput {
+			crate::output::AddNamespaceDomainOutput {}
 		}
 	}
 }
-impl UpdateNamespaceDomainOutput {
-	/// Creates a new builder-style object to manufacture [`UpdateNamespaceDomainOutput`](crate::output::UpdateNamespaceDomainOutput)
-	pub fn builder() -> crate::output::update_namespace_domain_output::Builder {
-		crate::output::update_namespace_domain_output::Builder::default()
+impl AddNamespaceDomainOutput {
+	/// Creates a new builder-style object to manufacture [`AddNamespaceDomainOutput`](crate::output::AddNamespaceDomainOutput)
+	pub fn builder() -> crate::output::add_namespace_domain_output::Builder {
+		crate::output::add_namespace_domain_output::Builder::default()
 	}
 }
 

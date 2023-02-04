@@ -31,6 +31,41 @@ impl std::fmt::Display for Error {
 		}
 	}
 }
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::AddNamespaceDomainError, R>> for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::AddNamespaceDomainError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::AddNamespaceDomainErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::AddNamespaceDomainErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::AddNamespaceDomainErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::AddNamespaceDomainErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::AddNamespaceDomainErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::AddNamespaceDomainErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::AddNamespaceDomainErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
 impl<R> From<aws_smithy_http::result::SdkError<crate::error::CompleteCustomAvatarUploadError, R>>
 	for Error
 where
@@ -1600,42 +1635,6 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::UpdateNamespaceCdnAuthUserErrorKind::Unhandled(inner) => {
-					Error::Unhandled(inner)
-				}
-			},
-			_ => Error::Unhandled(err.into()),
-		}
-	}
-}
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::UpdateNamespaceDomainError, R>>
-	for Error
-where
-	R: Send + Sync + std::fmt::Debug + 'static,
-{
-	fn from(
-		err: aws_smithy_http::result::SdkError<crate::error::UpdateNamespaceDomainError, R>,
-	) -> Self {
-		match err {
-			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::UpdateNamespaceDomainErrorKind::InternalError(inner) => {
-					Error::InternalError(inner)
-				}
-				crate::error::UpdateNamespaceDomainErrorKind::RateLimitError(inner) => {
-					Error::RateLimitError(inner)
-				}
-				crate::error::UpdateNamespaceDomainErrorKind::ForbiddenError(inner) => {
-					Error::ForbiddenError(inner)
-				}
-				crate::error::UpdateNamespaceDomainErrorKind::UnauthorizedError(inner) => {
-					Error::UnauthorizedError(inner)
-				}
-				crate::error::UpdateNamespaceDomainErrorKind::NotFoundError(inner) => {
-					Error::NotFoundError(inner)
-				}
-				crate::error::UpdateNamespaceDomainErrorKind::BadRequestError(inner) => {
-					Error::BadRequestError(inner)
-				}
-				crate::error::UpdateNamespaceDomainErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},
