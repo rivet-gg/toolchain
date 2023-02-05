@@ -13,6 +13,8 @@ pub struct CtxInner {
 	pub override_api_url: Option<String>,
 	pub access_token: String,
 	pub game_id: String,
+
+	pub openapi_config_cloud: rivet_api::apis::configuration::Configuration,
 }
 
 impl CtxInner {
@@ -27,16 +29,23 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 		.sleep_impl(None)
 		.build();
 
+	let uri = override_api_url
+		.clone()
+		.unwrap_or_else(|| "https://cloud.api.rivet.gg/v1".to_string());
+
 	// Create client
 	let rivet_cloud_config = rivet_cloud::Config::builder()
-		.set_uri(
-			override_api_url
-				.clone()
-				.unwrap_or_else(|| "https://cloud.api.rivet.gg/v1".to_string()),
-		)
+		.set_uri(uri.clone())
 		.set_bearer_token(access_token.clone())
 		.build();
 	let http_client = rivet_cloud::Client::with_config(raw_client, rivet_cloud_config);
+
+	// Create OpenAPI config
+	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
+		base_path: uri.clone(),
+		bearer_access_token: Some(access_token.clone()),
+		..Default::default()
+	};
 
 	// Inspect token
 	let inspect = http_client
@@ -66,5 +75,7 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 		override_api_url,
 		access_token,
 		game_id,
+
+		openapi_config_cloud,
 	}))
 }

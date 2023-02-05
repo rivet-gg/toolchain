@@ -1,6 +1,6 @@
 use anyhow::{Context, Error, Result};
 use clap::Parser;
-use cli_core::rivet_api::models::CloudVersionConfig;
+use cli_core::rivet_api::models::CloudConfig as CloudVersionConfig;
 use serde::Serialize;
 use serde_json::json;
 use tabled::Tabled;
@@ -344,11 +344,11 @@ pub async fn read_config(
 	Ok(version)
 }
 
-pub async fn build_rivet_config(
+pub async fn process_rivet_config(
 	ctx: &cli_core::Ctx,
-	version: &CloudVersionConfig,
+	version: CloudVersionConfig,
 ) -> Result<CloudVersionConfig> {
-	todo!()
+	Ok(version)
 
 	// // Fetch game
 	// let game_res = ctx
@@ -387,26 +387,24 @@ pub async fn create(
 ) -> Result<CreateOutput> {
 	// Parse config
 	let user_config = read_config(overrides, namespace).await?;
-	let rivet_config = build_rivet_config(ctx, &user_config).await?;
+	let rivet_config = process_rivet_config(ctx, user_config).await?;
 
-	todo!()
+	// Create game version
+	let version_res =
+		cli_core::rivet_api::apis::cloud_games_versions_api::versions_create_game_version(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			cli_core::rivet_api::models::CloudGamesCreateGameVersionInput {
+				display_name: display_name.into(),
+				config: Box::new(rivet_config),
+			},
+		)
+		.await
+		.context("versions_create_game_version")?;
+	let version_id = version_res.version_id;
 
-	// Create version
-	// let version_res = ctx
-	// 	.client()
-	// 	.create_game_version()
-	// 	.game_id(&ctx.game_id)
-	// 	.display_name(display_name)
-	// 	.config(rivet_config)
-	// 	.send()
-	// 	.await
-	// 	.context("client.create_game_version")?;
-	// let version_id = version_res.version_id().context("version_res.version_id")?;
+	term::status::success("Published", display_name);
+	term::status::info("Dashboard", dashboard_url(&ctx.game_id, &version_id));
 
-	// term::status::success("Published", display_name);
-	// term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
-
-	// Ok(CreateOutput {
-	// 	version_id: version_id.to_string(),
-	// })
+	Ok(CreateOutput { version_id })
 }
