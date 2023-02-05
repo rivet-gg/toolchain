@@ -16,17 +16,42 @@
 pub struct CloudVersionMatchmakerConfig {
     #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
     pub captcha: Option<Box<crate::models::CloudVersionMatchmakerCaptcha>>,
+    #[serde(rename = "docker", skip_serializing_if = "Option::is_none")]
+    pub docker: Option<Box<crate::models::CloudVersionMatchmakerGameModeRuntimeDocker>>,
+    /// A list of game modes.
+    #[serde(rename = "game_modes")]
+    pub game_modes: ::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameMode>,
+    #[serde(rename = "idle_lobbies", skip_serializing_if = "Option::is_none")]
+    pub idle_lobbies: Option<Box<crate::models::CloudVersionMatchmakerGameModeIdleLobbiesConfig>>,
     /// **Deprecated: use `game_modes` instead** A list of game modes.
     #[serde(rename = "lobby_groups")]
     pub lobby_groups: Vec<crate::models::CloudVersionMatchmakerLobbyGroup>,
+    #[serde(rename = "max_players", skip_serializing_if = "Option::is_none")]
+    pub max_players: Option<i32>,
+    #[serde(rename = "max_players_direct", skip_serializing_if = "Option::is_none")]
+    pub max_players_direct: Option<i32>,
+    #[serde(rename = "max_players_party", skip_serializing_if = "Option::is_none")]
+    pub max_players_party: Option<i32>,
+    #[serde(rename = "regions", skip_serializing_if = "Option::is_none")]
+    pub regions: Option<::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameModeRegion>>,
+    #[serde(rename = "tier", skip_serializing_if = "Option::is_none")]
+    pub tier: Option<String>,
 }
 
 impl CloudVersionMatchmakerConfig {
     /// Matchmaker configuration for a given version.
-    pub fn new(lobby_groups: Vec<crate::models::CloudVersionMatchmakerLobbyGroup>) -> CloudVersionMatchmakerConfig {
+    pub fn new(game_modes: ::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameMode>, lobby_groups: Vec<crate::models::CloudVersionMatchmakerLobbyGroup>) -> CloudVersionMatchmakerConfig {
         CloudVersionMatchmakerConfig {
             captcha: None,
+            docker: None,
+            game_modes,
+            idle_lobbies: None,
             lobby_groups,
+            max_players: None,
+            max_players_direct: None,
+            max_players_party: None,
+            regions: None,
+            tier: None,
         }
     }
 }

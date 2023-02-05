@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 Cargo.toml
 README.md
@@ -170,8 +171,14 @@ docs/CloudVersionIdentityCustomAvatar.md
 docs/CloudVersionIdentityCustomDisplayName.md
 docs/CloudVersionMatchmakerCaptcha.md
 docs/CloudVersionMatchmakerCaptchaHcaptcha.md
-docs/CloudVersionMatchmakerCaptchaLevel.md
+docs/CloudVersionMatchmakerCaptchaHcaptchaLevel.md
 docs/CloudVersionMatchmakerConfig.md
+docs/CloudVersionMatchmakerGameMode.md
+docs/CloudVersionMatchmakerGameModeIdleLobbiesConfig.md
+docs/CloudVersionMatchmakerGameModeRegion.md
+docs/CloudVersionMatchmakerGameModeRuntimeDocker.md
+docs/CloudVersionMatchmakerGameModeRuntimeDockerEnvVar.md
+docs/CloudVersionMatchmakerGameModeRuntimeDockerPort.md
 docs/CloudVersionMatchmakerLobbyGroup.md
 docs/CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig.md
 docs/CloudVersionMatchmakerLobbyGroupRegion.md
@@ -546,8 +553,14 @@ src/models/cloud_version_identity_custom_avatar.rs
 src/models/cloud_version_identity_custom_display_name.rs
 src/models/cloud_version_matchmaker_captcha.rs
 src/models/cloud_version_matchmaker_captcha_hcaptcha.rs
-src/models/cloud_version_matchmaker_captcha_level.rs
+src/models/cloud_version_matchmaker_captcha_hcaptcha_level.rs
 src/models/cloud_version_matchmaker_config.rs
+src/models/cloud_version_matchmaker_game_mode.rs
+src/models/cloud_version_matchmaker_game_mode_idle_lobbies_config.rs
+src/models/cloud_version_matchmaker_game_mode_region.rs
+src/models/cloud_version_matchmaker_game_mode_runtime_docker.rs
+src/models/cloud_version_matchmaker_game_mode_runtime_docker_env_var.rs
+src/models/cloud_version_matchmaker_game_mode_runtime_docker_port.rs
 src/models/cloud_version_matchmaker_lobby_group.rs
 src/models/cloud_version_matchmaker_lobby_group_idle_lobbies_config.rs
 src/models/cloud_version_matchmaker_lobby_group_region.rs
