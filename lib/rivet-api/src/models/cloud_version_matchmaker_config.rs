@@ -19,13 +19,13 @@ pub struct CloudVersionMatchmakerConfig {
     #[serde(rename = "docker", skip_serializing_if = "Option::is_none")]
     pub docker: Option<Box<crate::models::CloudVersionMatchmakerGameModeRuntimeDocker>>,
     /// A list of game modes.
-    #[serde(rename = "game_modes")]
-    pub game_modes: ::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameMode>,
+    #[serde(rename = "game_modes", skip_serializing_if = "Option::is_none")]
+    pub game_modes: Option<::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameMode>>,
     #[serde(rename = "idle_lobbies", skip_serializing_if = "Option::is_none")]
     pub idle_lobbies: Option<Box<crate::models::CloudVersionMatchmakerGameModeIdleLobbiesConfig>>,
     /// **Deprecated: use `game_modes` instead** A list of game modes.
-    #[serde(rename = "lobby_groups")]
-    pub lobby_groups: Vec<crate::models::CloudVersionMatchmakerLobbyGroup>,
+    #[serde(rename = "lobby_groups", skip_serializing_if = "Option::is_none")]
+    pub lobby_groups: Option<Vec<crate::models::CloudVersionMatchmakerLobbyGroup>>,
     #[serde(rename = "max_players", skip_serializing_if = "Option::is_none")]
     pub max_players: Option<i32>,
     #[serde(rename = "max_players_direct", skip_serializing_if = "Option::is_none")]
@@ -40,13 +40,13 @@ pub struct CloudVersionMatchmakerConfig {
 
 impl CloudVersionMatchmakerConfig {
     /// Matchmaker configuration for a given version.
-    pub fn new(game_modes: ::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameMode>, lobby_groups: Vec<crate::models::CloudVersionMatchmakerLobbyGroup>) -> CloudVersionMatchmakerConfig {
+    pub fn new() -> CloudVersionMatchmakerConfig {
         CloudVersionMatchmakerConfig {
             captcha: None,
             docker: None,
-            game_modes,
+            game_modes: None,
             idle_lobbies: None,
-            lobby_groups,
+            lobby_groups: None,
             max_players: None,
             max_players_direct: None,
             max_players_party: None,

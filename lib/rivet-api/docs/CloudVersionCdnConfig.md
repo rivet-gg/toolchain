@@ -4,6 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**build_command** | Option<**String**> | Client-side configuration | [optional]
+**build_output** | Option<**String**> | Client-side configuration | [optional]
 **routes** | Option<[**Vec<crate::models::CloudVersionCdnRoute>**](CloudVersionCdnRoute.md)> | Multiple CDN version routes. | [optional]
 **site_id** | Option<**String**> | A universally unique identifier. | [optional]
 

@@ -14,6 +14,12 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionCdnConfig {
+    /// Client-side configuration
+    #[serde(rename = "build_command", skip_serializing_if = "Option::is_none")]
+    pub build_command: Option<String>,
+    /// Client-side configuration
+    #[serde(rename = "build_output", skip_serializing_if = "Option::is_none")]
+    pub build_output: Option<String>,
     /// Multiple CDN version routes.
     #[serde(rename = "routes", skip_serializing_if = "Option::is_none")]
     pub routes: Option<Vec<crate::models::CloudVersionCdnRoute>>,
@@ -26,6 +32,8 @@ impl CloudVersionCdnConfig {
     /// CDN configuration for a given version.
     pub fn new() -> CloudVersionCdnConfig {
         CloudVersionCdnConfig {
+            build_command: None,
+            build_output: None,
             routes: None,
             site_id: None,
         }
