@@ -16,10 +16,10 @@
 pub struct CloudVersionMatchmakerPortRange {
     /// Unsigned 32 bit integer.
     #[serde(rename = "max", skip_serializing_if = "Option::is_none")]
-    pub max: Option<f64>,
+    pub max: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "min", skip_serializing_if = "Option::is_none")]
-    pub min: Option<f64>,
+    pub min: Option<i32>,
 }
 
 impl CloudVersionMatchmakerPortRange {

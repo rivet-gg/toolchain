@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`tokens_refresh_identity_token`]
+/// struct for typed errors of method [`auth_tokens_refresh_identity_token`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TokensRefreshIdentityTokenError {
+pub enum AuthTokensRefreshIdentityTokenError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Refreshes the current identity's token and sets authentication headers.
-pub async fn tokens_refresh_identity_token(configuration: &configuration::Configuration, auth_refresh_identity_token_input: crate::models::AuthRefreshIdentityTokenInput) -> Result<crate::models::AuthRefreshIdentityTokenOutput, Error<TokensRefreshIdentityTokenError>> {
+pub async fn auth_tokens_refresh_identity_token(configuration: &configuration::Configuration, auth_refresh_identity_token_input: crate::models::AuthRefreshIdentityTokenInput) -> Result<crate::models::AuthRefreshIdentityTokenOutput, Error<AuthTokensRefreshIdentityTokenError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -49,7 +49,7 @@ pub async fn tokens_refresh_identity_token(configuration: &configuration::Config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<TokensRefreshIdentityTokenError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<AuthTokensRefreshIdentityTokenError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

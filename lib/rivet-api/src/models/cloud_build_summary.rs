@@ -22,7 +22,7 @@ pub struct CloudBuildSummary {
     pub complete: Option<bool>,
     /// Unsigned 64 bit integer.
     #[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
-    pub content_length: Option<f64>,
+    pub content_length: Option<i64>,
     /// RFC3339 timestamp.
     #[serde(rename = "create_ts")]
     pub create_ts: String,

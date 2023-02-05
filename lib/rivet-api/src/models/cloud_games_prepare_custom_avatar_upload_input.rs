@@ -15,7 +15,7 @@
 pub struct CloudGamesPrepareCustomAvatarUploadInput {
     /// Unsigned 64 bit integer.
     #[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
-    pub content_length: Option<f64>,
+    pub content_length: Option<i64>,
     /// The MIME type of the custom avatar.
     #[serde(rename = "mime", skip_serializing_if = "Option::is_none")]
     pub mime: Option<String>,

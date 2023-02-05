@@ -15,58 +15,58 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`groups_convert_group`]
+/// struct for typed errors of method [`cloud_groups_convert_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsConvertGroupError {
+pub enum CloudGroupsConvertGroupError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_get_group_billing`]
+/// struct for typed errors of method [`cloud_groups_get_group_billing`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsGetGroupBillingError {
+pub enum CloudGroupsGetGroupBillingError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_get_group_invoices_list`]
+/// struct for typed errors of method [`cloud_groups_get_group_invoices_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsGetGroupInvoicesListError {
+pub enum CloudGroupsGetGroupInvoicesListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_get_group_payments_list`]
+/// struct for typed errors of method [`cloud_groups_get_group_payments_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsGetGroupPaymentsListError {
+pub enum CloudGroupsGetGroupPaymentsListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_get_group_transfers_list`]
+/// struct for typed errors of method [`cloud_groups_get_group_transfers_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsGetGroupTransfersListError {
+pub enum CloudGroupsGetGroupTransfersListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_group_billing_checkout`]
+/// struct for typed errors of method [`cloud_groups_group_billing_checkout`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsGroupBillingCheckoutError {
+pub enum CloudGroupsGroupBillingCheckoutError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_validate_group`]
+/// struct for typed errors of method [`cloud_groups_validate_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsValidateGroupError {
+pub enum CloudGroupsValidateGroupError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Converts the given group into a developer group.
-pub async fn groups_convert_group(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<GroupsConvertGroupError>> {
+pub async fn cloud_groups_convert_group(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<CloudGroupsConvertGroupError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -90,14 +90,14 @@ pub async fn groups_convert_group(configuration: &configuration::Configuration, 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsConvertGroupError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsConvertGroupError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns billing information for the given group over the given query time span.
-pub async fn groups_get_group_billing(configuration: &configuration::Configuration, group_id: &str, query_start: Option<f64>, query_end: Option<f64>) -> Result<crate::models::CloudGetGroupBillingOutput, Error<GroupsGetGroupBillingError>> {
+pub async fn cloud_groups_get_group_billing(configuration: &configuration::Configuration, group_id: &str, query_start: Option<f64>, query_end: Option<f64>) -> Result<crate::models::CloudGetGroupBillingOutput, Error<CloudGroupsGetGroupBillingError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -127,14 +127,14 @@ pub async fn groups_get_group_billing(configuration: &configuration::Configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsGetGroupBillingError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsGetGroupBillingError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a list of invoices for the given group.
-pub async fn groups_get_group_invoices_list(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, limit: Option<f64>) -> Result<crate::models::CloudGetGroupInvoicesListOutput, Error<GroupsGetGroupInvoicesListError>> {
+pub async fn cloud_groups_get_group_invoices_list(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, limit: Option<f64>) -> Result<crate::models::CloudGetGroupInvoicesListOutput, Error<CloudGroupsGetGroupInvoicesListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -164,14 +164,14 @@ pub async fn groups_get_group_invoices_list(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsGetGroupInvoicesListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsGetGroupInvoicesListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a list of payments for the given group.
-pub async fn groups_get_group_payments_list(configuration: &configuration::Configuration, group_id: &str, start_payment_id: Option<&str>) -> Result<crate::models::CloudGetGroupPaymentsListOutput, Error<GroupsGetGroupPaymentsListError>> {
+pub async fn cloud_groups_get_group_payments_list(configuration: &configuration::Configuration, group_id: &str, start_payment_id: Option<&str>) -> Result<crate::models::CloudGetGroupPaymentsListOutput, Error<CloudGroupsGetGroupPaymentsListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -198,14 +198,14 @@ pub async fn groups_get_group_payments_list(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsGetGroupPaymentsListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsGetGroupPaymentsListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a list of bank transfers for the given group.
-pub async fn groups_get_group_transfers_list(configuration: &configuration::Configuration, group_id: &str, start_transfer_id: Option<&str>) -> Result<crate::models::CloudGetGroupTransfersListOutput, Error<GroupsGetGroupTransfersListError>> {
+pub async fn cloud_groups_get_group_transfers_list(configuration: &configuration::Configuration, group_id: &str, start_transfer_id: Option<&str>) -> Result<crate::models::CloudGetGroupTransfersListOutput, Error<CloudGroupsGetGroupTransfersListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -232,14 +232,14 @@ pub async fn groups_get_group_transfers_list(configuration: &configuration::Conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsGetGroupTransfersListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsGetGroupTransfersListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a checkout session for the given group.
-pub async fn groups_group_billing_checkout(configuration: &configuration::Configuration, group_id: &str, cloud_group_billing_checkout_input: crate::models::CloudGroupBillingCheckoutInput) -> Result<crate::models::CloudGroupBillingCheckoutOutput, Error<GroupsGroupBillingCheckoutError>> {
+pub async fn cloud_groups_group_billing_checkout(configuration: &configuration::Configuration, group_id: &str, cloud_group_billing_checkout_input: crate::models::CloudGroupBillingCheckoutInput) -> Result<crate::models::CloudGroupBillingCheckoutOutput, Error<CloudGroupsGroupBillingCheckoutError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -264,14 +264,14 @@ pub async fn groups_group_billing_checkout(configuration: &configuration::Config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsGroupBillingCheckoutError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsGroupBillingCheckoutError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validates information used to create a new group.
-pub async fn groups_validate_group(configuration: &configuration::Configuration, cloud_validate_group_input: crate::models::CloudValidateGroupInput) -> Result<crate::models::CloudValidateGroupOutput, Error<GroupsValidateGroupError>> {
+pub async fn cloud_groups_validate_group(configuration: &configuration::Configuration, cloud_validate_group_input: crate::models::CloudValidateGroupInput) -> Result<crate::models::CloudValidateGroupOutput, Error<CloudGroupsValidateGroupError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -296,7 +296,7 @@ pub async fn groups_validate_group(configuration: &configuration::Configuration,
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsValidateGroupError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGroupsValidateGroupError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

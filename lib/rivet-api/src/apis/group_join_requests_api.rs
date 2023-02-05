@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`join_requests_create_join_request`]
+/// struct for typed errors of method [`group_join_requests_create_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum JoinRequestsCreateJoinRequestError {
+pub enum GroupJoinRequestsCreateJoinRequestError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`join_requests_resolve_join_request`]
+/// struct for typed errors of method [`group_join_requests_resolve_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum JoinRequestsResolveJoinRequestError {
+pub enum GroupJoinRequestsResolveJoinRequestError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Requests to join a group.
-pub async fn join_requests_create_join_request(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<JoinRequestsCreateJoinRequestError>> {
+pub async fn group_join_requests_create_join_request(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<GroupJoinRequestsCreateJoinRequestError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -55,14 +55,14 @@ pub async fn join_requests_create_join_request(configuration: &configuration::Co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<JoinRequestsCreateJoinRequestError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupJoinRequestsCreateJoinRequestError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Resolves a join request for a given group.
-pub async fn join_requests_resolve_join_request(configuration: &configuration::Configuration, group_id: &str, identity_id: &str, group_resolve_join_request_input: crate::models::GroupResolveJoinRequestInput) -> Result<(), Error<JoinRequestsResolveJoinRequestError>> {
+pub async fn group_join_requests_resolve_join_request(configuration: &configuration::Configuration, group_id: &str, identity_id: &str, group_resolve_join_request_input: crate::models::GroupResolveJoinRequestInput) -> Result<(), Error<GroupJoinRequestsResolveJoinRequestError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -87,7 +87,7 @@ pub async fn join_requests_resolve_join_request(configuration: &configuration::C
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<JoinRequestsResolveJoinRequestError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupJoinRequestsResolveJoinRequestError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

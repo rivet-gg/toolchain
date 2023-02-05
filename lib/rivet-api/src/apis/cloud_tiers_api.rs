@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`tiers_get_region_tiers`]
+/// struct for typed errors of method [`cloud_tiers_get_region_tiers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TiersGetRegionTiersError {
+pub enum CloudTiersGetRegionTiersError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns all available region tiers.
-pub async fn tiers_get_region_tiers(configuration: &configuration::Configuration, ) -> Result<crate::models::CloudGetRegionTiersOutput, Error<TiersGetRegionTiersError>> {
+pub async fn cloud_tiers_get_region_tiers(configuration: &configuration::Configuration, ) -> Result<crate::models::CloudGetRegionTiersOutput, Error<CloudTiersGetRegionTiersError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn tiers_get_region_tiers(configuration: &configuration::Configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<TiersGetRegionTiersError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudTiersGetRegionTiersError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

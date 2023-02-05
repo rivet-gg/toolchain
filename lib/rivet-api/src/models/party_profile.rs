@@ -31,7 +31,7 @@ pub struct PartyProfile {
     pub party_id: String,
     /// Unsigned 32 bit integer.
     #[serde(rename = "party_size", skip_serializing_if = "Option::is_none")]
-    pub party_size: Option<f64>,
+    pub party_size: Option<i32>,
     #[serde(rename = "publicity")]
     pub publicity: Box<crate::models::PartyPublicity>,
     /// A universally unique identifier.

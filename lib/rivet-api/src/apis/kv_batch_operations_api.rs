@@ -15,30 +15,30 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`batch_operations_delete_batch`]
+/// struct for typed errors of method [`kv_batch_operations_delete_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum BatchOperationsDeleteBatchError {
+pub enum KvBatchOperationsDeleteBatchError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`batch_operations_get_batch`]
+/// struct for typed errors of method [`kv_batch_operations_get_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum BatchOperationsGetBatchError {
+pub enum KvBatchOperationsGetBatchError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`batch_operations_put_batch`]
+/// struct for typed errors of method [`kv_batch_operations_put_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum BatchOperationsPutBatchError {
+pub enum KvBatchOperationsPutBatchError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Deletes multiple key-value entries by key(s).
-pub async fn batch_operations_delete_batch(configuration: &configuration::Configuration, namespace_id: Option<&str>) -> Result<(), Error<BatchOperationsDeleteBatchError>> {
+pub async fn kv_batch_operations_delete_batch(configuration: &configuration::Configuration, namespace_id: Option<&str>) -> Result<(), Error<KvBatchOperationsDeleteBatchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -65,14 +65,14 @@ pub async fn batch_operations_delete_batch(configuration: &configuration::Config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<BatchOperationsDeleteBatchError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<KvBatchOperationsDeleteBatchError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Gets multiple key-value entries by key(s).
-pub async fn batch_operations_get_batch(configuration: &configuration::Configuration, watch_index: Option<&str>, namespace_id: Option<&str>) -> Result<crate::models::KvGetBatchOutput, Error<BatchOperationsGetBatchError>> {
+pub async fn kv_batch_operations_get_batch(configuration: &configuration::Configuration, watch_index: Option<&str>, namespace_id: Option<&str>) -> Result<crate::models::KvGetBatchOutput, Error<KvBatchOperationsGetBatchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -102,14 +102,14 @@ pub async fn batch_operations_get_batch(configuration: &configuration::Configura
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<BatchOperationsGetBatchError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<KvBatchOperationsGetBatchError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Puts (sets or overwrites) multiple key-value entries by key(s).
-pub async fn batch_operations_put_batch(configuration: &configuration::Configuration, kv_put_batch_input: crate::models::KvPutBatchInput) -> Result<(), Error<BatchOperationsPutBatchError>> {
+pub async fn kv_batch_operations_put_batch(configuration: &configuration::Configuration, kv_put_batch_input: crate::models::KvPutBatchInput) -> Result<(), Error<KvBatchOperationsPutBatchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -134,7 +134,7 @@ pub async fn batch_operations_put_batch(configuration: &configuration::Configura
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<BatchOperationsPutBatchError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<KvBatchOperationsPutBatchError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -219,7 +219,7 @@ pub async fn identity_follow(configuration: &configuration::Configuration, ident
 }
 
 /// Fetches a list of identity handles.
-pub async fn identity_get_handles(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::GetHandlesOutput, Error<IdentityGetHandlesError>> {
+pub async fn identity_get_handles(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::IdentityGetHandlesOutput, Error<IdentityGetHandlesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -251,7 +251,7 @@ pub async fn identity_get_handles(configuration: &configuration::Configuration, 
 }
 
 /// Fetches an identity profile.
-pub async fn identity_get_profile(configuration: &configuration::Configuration, identity_id: &str, watch_index: Option<&str>) -> Result<crate::models::GetProfileOutput, Error<IdentityGetProfileError>> {
+pub async fn identity_get_profile(configuration: &configuration::Configuration, identity_id: &str, watch_index: Option<&str>) -> Result<crate::models::IdentityGetProfileOutput, Error<IdentityGetProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -285,7 +285,7 @@ pub async fn identity_get_profile(configuration: &configuration::Configuration, 
 }
 
 /// Fetches the current identity's profile.
-pub async fn identity_get_self_profile(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::GetProfileOutput, Error<IdentityGetSelfProfileError>> {
+pub async fn identity_get_self_profile(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::IdentityGetProfileOutput, Error<IdentityGetSelfProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -319,7 +319,7 @@ pub async fn identity_get_self_profile(configuration: &configuration::Configurat
 }
 
 /// Fetches a list of identity summaries.
-pub async fn identity_get_summaries(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::GetSummariesOutput, Error<IdentityGetSummariesError>> {
+pub async fn identity_get_summaries(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::IdentityGetSummariesOutput, Error<IdentityGetSummariesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -350,7 +350,7 @@ pub async fn identity_get_summaries(configuration: &configuration::Configuration
     }
 }
 
-pub async fn identity_list_followers(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListFollowersOutput, Error<IdentityListFollowersError>> {
+pub async fn identity_list_followers(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::IdentityListFollowersOutput, Error<IdentityListFollowersError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -386,7 +386,7 @@ pub async fn identity_list_followers(configuration: &configuration::Configuratio
     }
 }
 
-pub async fn identity_list_friends(configuration: &configuration::Configuration, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListFriendsOutput, Error<IdentityListFriendsError>> {
+pub async fn identity_list_friends(configuration: &configuration::Configuration, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::IdentityListFriendsOutput, Error<IdentityListFriendsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -422,7 +422,7 @@ pub async fn identity_list_friends(configuration: &configuration::Configuration,
     }
 }
 
-pub async fn identity_list_mutual_friends(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListMutualFriendsOutput, Error<IdentityListMutualFriendsError>> {
+pub async fn identity_list_mutual_friends(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::IdentityListMutualFriendsOutput, Error<IdentityListMutualFriendsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -459,7 +459,7 @@ pub async fn identity_list_mutual_friends(configuration: &configuration::Configu
 }
 
 /// Prepares an avatar image upload. Complete upload with `CompleteIdentityAvatarUpload`.
-pub async fn identity_prepare_avatar_upload(configuration: &configuration::Configuration, identity_prepare_avatar_upload_request: crate::models::IdentityPrepareAvatarUploadRequest) -> Result<crate::models::PrepareAvatarUploadOutput, Error<IdentityPrepareAvatarUploadError>> {
+pub async fn identity_prepare_avatar_upload(configuration: &configuration::Configuration, identity_prepare_avatar_upload_request: crate::models::IdentityPrepareAvatarUploadRequest) -> Result<crate::models::IdentityPrepareAvatarUploadOutput, Error<IdentityPrepareAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -554,7 +554,7 @@ pub async fn identity_report(configuration: &configuration::Configuration, ident
 }
 
 /// Fuzzy search for identities.
-pub async fn identity_search(configuration: &configuration::Configuration, query: &str, anchor: Option<&str>, limit: Option<i32>) -> Result<crate::models::SearchOutput, Error<IdentitySearchError>> {
+pub async fn identity_search(configuration: &configuration::Configuration, query: &str, anchor: Option<&str>, limit: Option<i32>) -> Result<crate::models::IdentitySearchOutput, Error<IdentitySearchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -624,7 +624,7 @@ pub async fn identity_set_game_activity(configuration: &configuration::Configura
 }
 
 /// Gets or creates an identity. Passing an existing identity token in the body refreshes the token. Temporary Accounts Until the identity is linked with the Rivet Hub (see `PrepareGameLink`), this identity will be temporary but still behave like all other identities. This is intended to allow users to play the game without signing up while still having the benefits of having an account. When they are ready to save their account, they should be instructed to link their account (see `PrepareGameLink`). Storing Token `identity_token` should be stored in some form of persistent storage. The token should be read from storage and passed to `Setup` every time the client starts.
-pub async fn identity_setup(configuration: &configuration::Configuration, identity_link_token: &str) -> Result<crate::models::SetupOutput, Error<IdentitySetupError>> {
+pub async fn identity_setup(configuration: &configuration::Configuration, identity_link_token: &str) -> Result<crate::models::IdentitySetupOutput, Error<IdentitySetupError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;

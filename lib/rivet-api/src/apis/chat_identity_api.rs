@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`identity_get_direct_thread`]
+/// struct for typed errors of method [`chat_identity_get_direct_thread`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityGetDirectThreadError {
+pub enum ChatIdentityGetDirectThreadError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns a thread ID with a given identity.
-pub async fn identity_get_direct_thread(configuration: &configuration::Configuration, identity_id: &str) -> Result<crate::models::ChatGetDirectThreadOutput, Error<IdentityGetDirectThreadError>> {
+pub async fn chat_identity_get_direct_thread(configuration: &configuration::Configuration, identity_id: &str) -> Result<crate::models::ChatGetDirectThreadOutput, Error<ChatIdentityGetDirectThreadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn identity_get_direct_thread(configuration: &configuration::Configura
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityGetDirectThreadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatIdentityGetDirectThreadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

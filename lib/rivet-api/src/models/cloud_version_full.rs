@@ -14,27 +14,27 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionFull {
-    /// A universally unique identifier.
-    #[serde(rename = "version_id")]
-    pub version_id: String,
+    #[serde(rename = "config")]
+    pub config: Box<crate::models::CloudVersionConfig>,
     /// RFC3339 timestamp.
     #[serde(rename = "create_ts")]
     pub create_ts: String,
     /// Represent a resource's readable display name.
     #[serde(rename = "display_name")]
     pub display_name: String,
-    #[serde(rename = "config")]
-    pub config: Box<crate::models::CloudVersionConfig>,
+    /// A universally unique identifier.
+    #[serde(rename = "version_id")]
+    pub version_id: String,
 }
 
 impl CloudVersionFull {
     /// A full version.
-    pub fn new(version_id: String, create_ts: String, display_name: String, config: crate::models::CloudVersionConfig) -> CloudVersionFull {
+    pub fn new(config: crate::models::CloudVersionConfig, create_ts: String, display_name: String, version_id: String) -> CloudVersionFull {
         CloudVersionFull {
-            version_id,
+            config: Box::new(config),
             create_ts,
             display_name,
-            config: Box::new(config),
+            version_id,
         }
     }
 }

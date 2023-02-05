@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**events_watch**](IdentityEventsApi.md#events_watch) | **GET** /events/live | 
+[**identity_events_watch**](IdentityEventsApi.md#identity_events_watch) | **GET** /events/live | 
 
 
 
-## events_watch
+## identity_events_watch
 
-> crate::models::IdentityWatchEventsOutput events_watch(watch_index)
+> crate::models::IdentityWatchEventsOutput identity_events_watch(watch_index)
 
 
 Returns all events relative to the current identity.

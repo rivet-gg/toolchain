@@ -15,10 +15,10 @@
 pub struct CloudGamesExportMatchmakerLobbyHistoryInput {
     /// Unsigned 64 bit integer.
     #[serde(rename = "query_end", skip_serializing_if = "Option::is_none")]
-    pub query_end: Option<f64>,
+    pub query_end: Option<i64>,
     /// Unsigned 64 bit integer.
     #[serde(rename = "query_start", skip_serializing_if = "Option::is_none")]
-    pub query_start: Option<f64>,
+    pub query_start: Option<i64>,
 }
 
 impl CloudGamesExportMatchmakerLobbyHistoryInput {

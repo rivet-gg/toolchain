@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`logs_get_ray_perf_logs`]
+/// struct for typed errors of method [`cloud_logs_get_ray_perf_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LogsGetRayPerfLogsError {
+pub enum CloudLogsGetRayPerfLogsError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns performance information about a Rivet Ray.
-pub async fn logs_get_ray_perf_logs(configuration: &configuration::Configuration, ray_id: &str) -> Result<crate::models::CloudGetRayPerfLogsOutput, Error<LogsGetRayPerfLogsError>> {
+pub async fn cloud_logs_get_ray_perf_logs(configuration: &configuration::Configuration, ray_id: &str) -> Result<crate::models::CloudGetRayPerfLogsOutput, Error<CloudLogsGetRayPerfLogsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn logs_get_ray_perf_logs(configuration: &configuration::Configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LogsGetRayPerfLogsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudLogsGetRayPerfLogsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`builds_create_game_build`]
+/// struct for typed errors of method [`cloud_games_builds_create_game_build`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum BuildsCreateGameBuildError {
+pub enum CloudGamesBuildsCreateGameBuildError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`builds_list_game_builds`]
+/// struct for typed errors of method [`cloud_games_builds_list_game_builds`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum BuildsListGameBuildsError {
+pub enum CloudGamesBuildsListGameBuildsError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Creates a new game build for the given game.
-pub async fn builds_create_game_build(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_build_input: crate::models::CloudGamesCreateGameBuildInput) -> Result<crate::models::CloudGamesCreateGameBuildOutput, Error<BuildsCreateGameBuildError>> {
+pub async fn cloud_games_builds_create_game_build(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_build_input: crate::models::CloudGamesCreateGameBuildInput) -> Result<crate::models::CloudGamesCreateGameBuildOutput, Error<CloudGamesBuildsCreateGameBuildError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -56,14 +56,14 @@ pub async fn builds_create_game_build(configuration: &configuration::Configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<BuildsCreateGameBuildError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGamesBuildsCreateGameBuildError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Lists game builds for the given game.
-pub async fn builds_list_game_builds(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::CloudGamesListGameBuildsOutput, Error<BuildsListGameBuildsError>> {
+pub async fn cloud_games_builds_list_game_builds(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::CloudGamesListGameBuildsOutput, Error<CloudGamesBuildsListGameBuildsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -87,7 +87,7 @@ pub async fn builds_list_game_builds(configuration: &configuration::Configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<BuildsListGameBuildsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGamesBuildsListGameBuildsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -25,90 +25,90 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AuthIdentityApi* | [**identity_complete_email_verification**](docs/AuthIdentityApi.md#identity_complete_email_verification) | **POST** /identity/email/complete-verification | 
-*AuthIdentityApi* | [**identity_start_email_verification**](docs/AuthIdentityApi.md#identity_start_email_verification) | **POST** /identity/email/start-verification | 
-*AuthTokensApi* | [**tokens_refresh_identity_token**](docs/AuthTokensApi.md#tokens_refresh_identity_token) | **POST** /tokens/identity | 
+*AuthIdentityApi* | [**auth_identity_complete_email_verification**](docs/AuthIdentityApi.md#auth_identity_complete_email_verification) | **POST** /identity/email/complete-verification | 
+*AuthIdentityApi* | [**auth_identity_start_email_verification**](docs/AuthIdentityApi.md#auth_identity_start_email_verification) | **POST** /identity/email/start-verification | 
+*AuthTokensApi* | [**auth_tokens_refresh_identity_token**](docs/AuthTokensApi.md#auth_tokens_refresh_identity_token) | **POST** /tokens/identity | 
 *ChatApi* | [**chat_get_thread_history**](docs/ChatApi.md#chat_get_thread_history) | **GET** /threads/{thread_id}/history | 
 *ChatApi* | [**chat_get_thread_topic**](docs/ChatApi.md#chat_get_thread_topic) | **GET** /threads/{thread_id}/topic | 
 *ChatApi* | [**chat_send_message**](docs/ChatApi.md#chat_send_message) | **POST** /messages | 
 *ChatApi* | [**chat_set_thread_read**](docs/ChatApi.md#chat_set_thread_read) | **POST** /threads/{thread_id}/read | 
 *ChatApi* | [**chat_set_typing_status**](docs/ChatApi.md#chat_set_typing_status) | **PUT** /threads/{thread_id}/typing-status | 
 *ChatApi* | [**chat_watch_thread**](docs/ChatApi.md#chat_watch_thread) | **GET** /threads/{thread_id}/live | 
-*ChatIdentityApi* | [**identity_get_direct_thread**](docs/ChatIdentityApi.md#identity_get_direct_thread) | **GET** /identities/{identity_id}/thread | 
-*CloudAuthApi* | [**auth_inspect**](docs/CloudAuthApi.md#auth_inspect) | **GET** /auth/inspect | 
-*CloudGamesAvatarsApi* | [**avatars_complete_custom_avatar_upload**](docs/CloudGamesAvatarsApi.md#avatars_complete_custom_avatar_upload) | **POST** /games/{game_id}/avatar-upload/{upload_id}/complete | 
-*CloudGamesAvatarsApi* | [**avatars_list_game_custom_avatars**](docs/CloudGamesAvatarsApi.md#avatars_list_game_custom_avatars) | **GET** /games/{game_id}/avatars | 
-*CloudGamesAvatarsApi* | [**avatars_prepare_custom_avatar_upload**](docs/CloudGamesAvatarsApi.md#avatars_prepare_custom_avatar_upload) | **POST** /games/{game_id}/prepare | 
-*CloudGamesBuildsApi* | [**builds_create_game_build**](docs/CloudGamesBuildsApi.md#builds_create_game_build) | **POST** /games/{game_id}/builds | 
-*CloudGamesBuildsApi* | [**builds_list_game_builds**](docs/CloudGamesBuildsApi.md#builds_list_game_builds) | **GET** /games/{game_id}/builds | 
-*CloudGamesCdnApi* | [**cdn_create_game_cdn_site**](docs/CloudGamesCdnApi.md#cdn_create_game_cdn_site) | **POST** /games/{game_id}/cdn/sites | 
-*CloudGamesCdnApi* | [**cdn_list_game_cdn_sites**](docs/CloudGamesCdnApi.md#cdn_list_game_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
-*CloudGamesGamesApi* | [**games_create_game**](docs/CloudGamesGamesApi.md#games_create_game) | **POST** /games | 
-*CloudGamesGamesApi* | [**games_game_banner_upload_complete**](docs/CloudGamesGamesApi.md#games_game_banner_upload_complete) | **POST** /games/{game_id}/banner-upload/{upload_id}/complete | 
-*CloudGamesGamesApi* | [**games_game_banner_upload_prepare**](docs/CloudGamesGamesApi.md#games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
-*CloudGamesGamesApi* | [**games_game_logo_upload_complete**](docs/CloudGamesGamesApi.md#games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
-*CloudGamesGamesApi* | [**games_game_logo_upload_prepare**](docs/CloudGamesGamesApi.md#games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
-*CloudGamesGamesApi* | [**games_get_game_by_id**](docs/CloudGamesGamesApi.md#games_get_game_by_id) | **GET** /games/{game_id} | 
-*CloudGamesGamesApi* | [**games_get_games**](docs/CloudGamesGamesApi.md#games_get_games) | **GET** /games | 
-*CloudGamesGamesApi* | [**games_validate_game**](docs/CloudGamesGamesApi.md#games_validate_game) | **POST** /games/validate | 
-*CloudGamesMatchmakerApi* | [**matchmaker_delete_matchmaker_lobby**](docs/CloudGamesMatchmakerApi.md#matchmaker_delete_matchmaker_lobby) | **DELETE** /games/{game_id}/matchmaker/lobbies/{lobby_id} | 
-*CloudGamesMatchmakerApi* | [**matchmaker_export_lobby_logs**](docs/CloudGamesMatchmakerApi.md#matchmaker_export_lobby_logs) | **POST** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs/export | 
-*CloudGamesMatchmakerApi* | [**matchmaker_export_matchmaker_lobby_history**](docs/CloudGamesMatchmakerApi.md#matchmaker_export_matchmaker_lobby_history) | **POST** /games/{game_id}/matchmaker/lobbies/export-history | 
-*CloudGamesMatchmakerApi* | [**matchmaker_get_lobby_logs**](docs/CloudGamesMatchmakerApi.md#matchmaker_get_lobby_logs) | **GET** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs | 
-*CloudGamesNamespacesApi* | [**namespaces_add_namespace_domain**](docs/CloudGamesNamespacesApi.md#namespaces_add_namespace_domain) | **POST** /games/{game_id}/namespaces/{namespace_id}/domains | 
-*CloudGamesNamespacesApi* | [**namespaces_create_game_namespace**](docs/CloudGamesNamespacesApi.md#namespaces_create_game_namespace) | **POST** /games/{game_id}/namespaces | 
-*CloudGamesNamespacesApi* | [**namespaces_create_game_namespace_token_development**](docs/CloudGamesNamespacesApi.md#namespaces_create_game_namespace_token_development) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/development | 
-*CloudGamesNamespacesApi* | [**namespaces_create_game_namespace_token_public**](docs/CloudGamesNamespacesApi.md#namespaces_create_game_namespace_token_public) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/public | 
-*CloudGamesNamespacesApi* | [**namespaces_get_game_namespace_by_id**](docs/CloudGamesNamespacesApi.md#namespaces_get_game_namespace_by_id) | **GET** /games/{game_id}/namespaces/{namespace_id} | 
-*CloudGamesNamespacesApi* | [**namespaces_remove_namespace_cdn_auth_user**](docs/CloudGamesNamespacesApi.md#namespaces_remove_namespace_cdn_auth_user) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/auth-user/{user} | 
-*CloudGamesNamespacesApi* | [**namespaces_remove_namespace_domain**](docs/CloudGamesNamespacesApi.md#namespaces_remove_namespace_domain) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
-*CloudGamesNamespacesApi* | [**namespaces_set_namespace_cdn_auth_type**](docs/CloudGamesNamespacesApi.md#namespaces_set_namespace_cdn_auth_type) | **PUT** /games/{game_id}/namespaces/{namespace_id}/cdn-auth | 
-*CloudGamesNamespacesApi* | [**namespaces_toggle_namespace_domain_public_auth**](docs/CloudGamesNamespacesApi.md#namespaces_toggle_namespace_domain_public_auth) | **PUT** /games/{game_id}/namespaces/{namespace_id}/domain-public-auth | 
-*CloudGamesNamespacesApi* | [**namespaces_update_game_namespace_matchmaker_config**](docs/CloudGamesNamespacesApi.md#namespaces_update_game_namespace_matchmaker_config) | **POST** /games/{game_id}/namespaces/{namespace_id}/mm-config | 
-*CloudGamesNamespacesApi* | [**namespaces_update_game_namespace_version**](docs/CloudGamesNamespacesApi.md#namespaces_update_game_namespace_version) | **PUT** /games/{game_id}/namespaces/{namespace_id}/version | 
-*CloudGamesNamespacesApi* | [**namespaces_update_namespace_cdn_auth_user**](docs/CloudGamesNamespacesApi.md#namespaces_update_namespace_cdn_auth_user) | **POST** /games/{game_id}/namespaces/{namespace_id}/auth-user | 
-*CloudGamesNamespacesApi* | [**namespaces_validate_game_namespace**](docs/CloudGamesNamespacesApi.md#namespaces_validate_game_namespace) | **POST** /games/{game_id}/namespaces/validate | 
-*CloudGamesNamespacesApi* | [**namespaces_validate_game_namespace_matchmaker_config**](docs/CloudGamesNamespacesApi.md#namespaces_validate_game_namespace_matchmaker_config) | **POST** /games/{game_id}/namespaces/{namespace_id}/mm-config/validate | 
-*CloudGamesNamespacesApi* | [**namespaces_validate_game_namespace_token_development**](docs/CloudGamesNamespacesApi.md#namespaces_validate_game_namespace_token_development) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/development/validate | 
-*CloudGamesNamespacesAnalyticsApi* | [**analytics_get_namespace_analytics_matchmaker_live**](docs/CloudGamesNamespacesAnalyticsApi.md#analytics_get_namespace_analytics_matchmaker_live) | **GET** /games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live | 
-*CloudGamesNamespacesLogsApi* | [**logs_get_namespace_lobby**](docs/CloudGamesNamespacesLogsApi.md#logs_get_namespace_lobby) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
-*CloudGamesNamespacesLogsApi* | [**logs_list_namespace_lobbies**](docs/CloudGamesNamespacesLogsApi.md#logs_list_namespace_lobbies) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
-*CloudGamesTokensApi* | [**tokens_create_cloud_token**](docs/CloudGamesTokensApi.md#tokens_create_cloud_token) | **POST** /games/{game_id}/tokens/cloud | 
-*CloudGamesVersionsApi* | [**versions_create_game_version**](docs/CloudGamesVersionsApi.md#versions_create_game_version) | **POST** /games/{game_id}/versions | 
-*CloudGamesVersionsApi* | [**versions_get_game_version_by_id**](docs/CloudGamesVersionsApi.md#versions_get_game_version_by_id) | **GET** /games/{game_id}/versions/{version_id} | 
-*CloudGamesVersionsApi* | [**versions_validate_game_version**](docs/CloudGamesVersionsApi.md#versions_validate_game_version) | **POST** /games/{game_id}/versions/validate | 
-*CloudGroupsApi* | [**groups_convert_group**](docs/CloudGroupsApi.md#groups_convert_group) | **POST** /groups/{group_id}/convert | 
-*CloudGroupsApi* | [**groups_get_group_billing**](docs/CloudGroupsApi.md#groups_get_group_billing) | **GET** /groups/{group_id}/billing | 
-*CloudGroupsApi* | [**groups_get_group_invoices_list**](docs/CloudGroupsApi.md#groups_get_group_invoices_list) | **GET** /groups/{group_id}/billing/invoices | 
-*CloudGroupsApi* | [**groups_get_group_payments_list**](docs/CloudGroupsApi.md#groups_get_group_payments_list) | **GET** /groups/{group_id}/billing/payments | 
-*CloudGroupsApi* | [**groups_get_group_transfers_list**](docs/CloudGroupsApi.md#groups_get_group_transfers_list) | **GET** /groups/{group_id}/billing/transfers | 
-*CloudGroupsApi* | [**groups_group_billing_checkout**](docs/CloudGroupsApi.md#groups_group_billing_checkout) | **POST** /groups/{group_id}/checkout | 
-*CloudGroupsApi* | [**groups_validate_group**](docs/CloudGroupsApi.md#groups_validate_group) | **POST** /groups/validate | 
-*CloudLogsApi* | [**logs_get_ray_perf_logs**](docs/CloudLogsApi.md#logs_get_ray_perf_logs) | **GET** /rays/{ray_id}/perf | 
-*CloudTiersApi* | [**tiers_get_region_tiers**](docs/CloudTiersApi.md#tiers_get_region_tiers) | **GET** /region-tiers | 
-*CloudUploadsApi* | [**uploads_complete_upload**](docs/CloudUploadsApi.md#uploads_complete_upload) | **POST** /uploads/{upload_id}/complete | 
-*GroupGroupsApi* | [**groups_ban_identity**](docs/GroupGroupsApi.md#groups_ban_identity) | **POST** /groups/{group_id}/bans/{identity_id} | 
-*GroupGroupsApi* | [**groups_complete_avatar_upload**](docs/GroupGroupsApi.md#groups_complete_avatar_upload) | **POST** /groups/{group_id}/avatar-upload/{upload_id}/complete | 
-*GroupGroupsApi* | [**groups_create**](docs/GroupGroupsApi.md#groups_create) | **POST** /groups | 
-*GroupGroupsApi* | [**groups_get_bans**](docs/GroupGroupsApi.md#groups_get_bans) | **GET** /groups/{group_id}/bans | 
-*GroupGroupsApi* | [**groups_get_join_requests**](docs/GroupGroupsApi.md#groups_get_join_requests) | **GET** /groups/{group_id}/join-requests | 
-*GroupGroupsApi* | [**groups_get_members**](docs/GroupGroupsApi.md#groups_get_members) | **GET** /groups/{group_id}/members | 
-*GroupGroupsApi* | [**groups_get_profile**](docs/GroupGroupsApi.md#groups_get_profile) | **GET** /groups/{group_id}/profile | 
-*GroupGroupsApi* | [**groups_get_summary**](docs/GroupGroupsApi.md#groups_get_summary) | **GET** /groups/{group_id}/summary | 
-*GroupGroupsApi* | [**groups_kick_member**](docs/GroupGroupsApi.md#groups_kick_member) | **POST** /groups/{group_id}/kick/{identity_id} | 
-*GroupGroupsApi* | [**groups_leave**](docs/GroupGroupsApi.md#groups_leave) | **POST** /groups/{group_id}/leave | 
-*GroupGroupsApi* | [**groups_list_suggested**](docs/GroupGroupsApi.md#groups_list_suggested) | **GET** /groups | 
-*GroupGroupsApi* | [**groups_prepare_avatar_upload**](docs/GroupGroupsApi.md#groups_prepare_avatar_upload) | **POST** /groups/avatar-upload/prepare | 
-*GroupGroupsApi* | [**groups_search**](docs/GroupGroupsApi.md#groups_search) | **GET** /groups/search | 
-*GroupGroupsApi* | [**groups_transfer_ownership**](docs/GroupGroupsApi.md#groups_transfer_ownership) | **POST** /groups/{group_id}/transfer-owner | 
-*GroupGroupsApi* | [**groups_unban_identity**](docs/GroupGroupsApi.md#groups_unban_identity) | **DELETE** /groups/{group_id}/bans/{identity_id} | 
-*GroupGroupsApi* | [**groups_update_profile**](docs/GroupGroupsApi.md#groups_update_profile) | **POST** /groups/{group_id}/profile | 
-*GroupGroupsApi* | [**groups_validate_profile**](docs/GroupGroupsApi.md#groups_validate_profile) | **POST** /groups/profile/validate | 
-*GroupInvitesApi* | [**invites_consume_invite**](docs/GroupInvitesApi.md#invites_consume_invite) | **POST** /invites/{group_invite_code}/consume | 
-*GroupInvitesApi* | [**invites_create_invite**](docs/GroupInvitesApi.md#invites_create_invite) | **POST** /groups/{group_id}/invites | 
-*GroupInvitesApi* | [**invites_get_invite**](docs/GroupInvitesApi.md#invites_get_invite) | **GET** /invites/{group_invite_code} | 
-*GroupJoinRequestsApi* | [**join_requests_create_join_request**](docs/GroupJoinRequestsApi.md#join_requests_create_join_request) | **POST** /groups/{group_id}/join-request | 
-*GroupJoinRequestsApi* | [**join_requests_resolve_join_request**](docs/GroupJoinRequestsApi.md#join_requests_resolve_join_request) | **POST** /groups/{group_id}/join-request/{identity_id} | 
+*ChatIdentityApi* | [**chat_identity_get_direct_thread**](docs/ChatIdentityApi.md#chat_identity_get_direct_thread) | **GET** /identities/{identity_id}/thread | 
+*CloudAuthApi* | [**cloud_auth_inspect**](docs/CloudAuthApi.md#cloud_auth_inspect) | **GET** /auth/inspect | 
+*CloudGamesAvatarsApi* | [**cloud_games_avatars_complete_custom_avatar_upload**](docs/CloudGamesAvatarsApi.md#cloud_games_avatars_complete_custom_avatar_upload) | **POST** /games/{game_id}/avatar-upload/{upload_id}/complete | 
+*CloudGamesAvatarsApi* | [**cloud_games_avatars_list_game_custom_avatars**](docs/CloudGamesAvatarsApi.md#cloud_games_avatars_list_game_custom_avatars) | **GET** /games/{game_id}/avatars | 
+*CloudGamesAvatarsApi* | [**cloud_games_avatars_prepare_custom_avatar_upload**](docs/CloudGamesAvatarsApi.md#cloud_games_avatars_prepare_custom_avatar_upload) | **POST** /games/{game_id}/prepare | 
+*CloudGamesBuildsApi* | [**cloud_games_builds_create_game_build**](docs/CloudGamesBuildsApi.md#cloud_games_builds_create_game_build) | **POST** /games/{game_id}/builds | 
+*CloudGamesBuildsApi* | [**cloud_games_builds_list_game_builds**](docs/CloudGamesBuildsApi.md#cloud_games_builds_list_game_builds) | **GET** /games/{game_id}/builds | 
+*CloudGamesCdnApi* | [**cloud_games_cdn_create_game_cdn_site**](docs/CloudGamesCdnApi.md#cloud_games_cdn_create_game_cdn_site) | **POST** /games/{game_id}/cdn/sites | 
+*CloudGamesCdnApi* | [**cloud_games_cdn_list_game_cdn_sites**](docs/CloudGamesCdnApi.md#cloud_games_cdn_list_game_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
+*CloudGamesGamesApi* | [**cloud_games_games_create_game**](docs/CloudGamesGamesApi.md#cloud_games_games_create_game) | **POST** /games | 
+*CloudGamesGamesApi* | [**cloud_games_games_game_banner_upload_complete**](docs/CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_complete) | **POST** /games/{game_id}/banner-upload/{upload_id}/complete | 
+*CloudGamesGamesApi* | [**cloud_games_games_game_banner_upload_prepare**](docs/CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
+*CloudGamesGamesApi* | [**cloud_games_games_game_logo_upload_complete**](docs/CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
+*CloudGamesGamesApi* | [**cloud_games_games_game_logo_upload_prepare**](docs/CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
+*CloudGamesGamesApi* | [**cloud_games_games_get_game_by_id**](docs/CloudGamesGamesApi.md#cloud_games_games_get_game_by_id) | **GET** /games/{game_id} | 
+*CloudGamesGamesApi* | [**cloud_games_games_get_games**](docs/CloudGamesGamesApi.md#cloud_games_games_get_games) | **GET** /games | 
+*CloudGamesGamesApi* | [**cloud_games_games_validate_game**](docs/CloudGamesGamesApi.md#cloud_games_games_validate_game) | **POST** /games/validate | 
+*CloudGamesMatchmakerApi* | [**cloud_games_matchmaker_delete_matchmaker_lobby**](docs/CloudGamesMatchmakerApi.md#cloud_games_matchmaker_delete_matchmaker_lobby) | **DELETE** /games/{game_id}/matchmaker/lobbies/{lobby_id} | 
+*CloudGamesMatchmakerApi* | [**cloud_games_matchmaker_export_lobby_logs**](docs/CloudGamesMatchmakerApi.md#cloud_games_matchmaker_export_lobby_logs) | **POST** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs/export | 
+*CloudGamesMatchmakerApi* | [**cloud_games_matchmaker_export_matchmaker_lobby_history**](docs/CloudGamesMatchmakerApi.md#cloud_games_matchmaker_export_matchmaker_lobby_history) | **POST** /games/{game_id}/matchmaker/lobbies/export-history | 
+*CloudGamesMatchmakerApi* | [**cloud_games_matchmaker_get_lobby_logs**](docs/CloudGamesMatchmakerApi.md#cloud_games_matchmaker_get_lobby_logs) | **GET** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_add_namespace_domain**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_add_namespace_domain) | **POST** /games/{game_id}/namespaces/{namespace_id}/domains | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_create_game_namespace**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_create_game_namespace) | **POST** /games/{game_id}/namespaces | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_create_game_namespace_token_development**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_create_game_namespace_token_development) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/development | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_create_game_namespace_token_public**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_create_game_namespace_token_public) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/public | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_get_game_namespace_by_id**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_get_game_namespace_by_id) | **GET** /games/{game_id}/namespaces/{namespace_id} | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_remove_namespace_cdn_auth_user**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_remove_namespace_cdn_auth_user) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/auth-user/{user} | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_remove_namespace_domain**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_remove_namespace_domain) | **DELETE** /games/{game_id}/namespaces/{namespace_id}/domains/{domain} | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_set_namespace_cdn_auth_type**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_set_namespace_cdn_auth_type) | **PUT** /games/{game_id}/namespaces/{namespace_id}/cdn-auth | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_toggle_namespace_domain_public_auth**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_toggle_namespace_domain_public_auth) | **PUT** /games/{game_id}/namespaces/{namespace_id}/domain-public-auth | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_update_game_namespace_matchmaker_config**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_update_game_namespace_matchmaker_config) | **POST** /games/{game_id}/namespaces/{namespace_id}/mm-config | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_update_game_namespace_version**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_update_game_namespace_version) | **PUT** /games/{game_id}/namespaces/{namespace_id}/version | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_update_namespace_cdn_auth_user**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_update_namespace_cdn_auth_user) | **POST** /games/{game_id}/namespaces/{namespace_id}/auth-user | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_validate_game_namespace**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_validate_game_namespace) | **POST** /games/{game_id}/namespaces/validate | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_validate_game_namespace_matchmaker_config**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_validate_game_namespace_matchmaker_config) | **POST** /games/{game_id}/namespaces/{namespace_id}/mm-config/validate | 
+*CloudGamesNamespacesApi* | [**cloud_games_namespaces_validate_game_namespace_token_development**](docs/CloudGamesNamespacesApi.md#cloud_games_namespaces_validate_game_namespace_token_development) | **POST** /games/{game_id}/namespaces/{namespace_id}/tokens/development/validate | 
+*CloudGamesNamespacesAnalyticsApi* | [**cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live**](docs/CloudGamesNamespacesAnalyticsApi.md#cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live) | **GET** /games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live | 
+*CloudGamesNamespacesLogsApi* | [**cloud_games_namespaces_logs_get_namespace_lobby**](docs/CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_get_namespace_lobby) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
+*CloudGamesNamespacesLogsApi* | [**cloud_games_namespaces_logs_list_namespace_lobbies**](docs/CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_list_namespace_lobbies) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
+*CloudGamesTokensApi* | [**cloud_games_tokens_create_cloud_token**](docs/CloudGamesTokensApi.md#cloud_games_tokens_create_cloud_token) | **POST** /games/{game_id}/tokens/cloud | 
+*CloudGamesVersionsApi* | [**cloud_games_versions_create_game_version**](docs/CloudGamesVersionsApi.md#cloud_games_versions_create_game_version) | **POST** /games/{game_id}/versions | 
+*CloudGamesVersionsApi* | [**cloud_games_versions_get_game_version_by_id**](docs/CloudGamesVersionsApi.md#cloud_games_versions_get_game_version_by_id) | **GET** /games/{game_id}/versions/{version_id} | 
+*CloudGamesVersionsApi* | [**cloud_games_versions_validate_game_version**](docs/CloudGamesVersionsApi.md#cloud_games_versions_validate_game_version) | **POST** /games/{game_id}/versions/validate | 
+*CloudGroupsApi* | [**cloud_groups_convert_group**](docs/CloudGroupsApi.md#cloud_groups_convert_group) | **POST** /groups/{group_id}/convert | 
+*CloudGroupsApi* | [**cloud_groups_get_group_billing**](docs/CloudGroupsApi.md#cloud_groups_get_group_billing) | **GET** /groups/{group_id}/billing | 
+*CloudGroupsApi* | [**cloud_groups_get_group_invoices_list**](docs/CloudGroupsApi.md#cloud_groups_get_group_invoices_list) | **GET** /groups/{group_id}/billing/invoices | 
+*CloudGroupsApi* | [**cloud_groups_get_group_payments_list**](docs/CloudGroupsApi.md#cloud_groups_get_group_payments_list) | **GET** /groups/{group_id}/billing/payments | 
+*CloudGroupsApi* | [**cloud_groups_get_group_transfers_list**](docs/CloudGroupsApi.md#cloud_groups_get_group_transfers_list) | **GET** /groups/{group_id}/billing/transfers | 
+*CloudGroupsApi* | [**cloud_groups_group_billing_checkout**](docs/CloudGroupsApi.md#cloud_groups_group_billing_checkout) | **POST** /groups/{group_id}/checkout | 
+*CloudGroupsApi* | [**cloud_groups_validate_group**](docs/CloudGroupsApi.md#cloud_groups_validate_group) | **POST** /groups/validate | 
+*CloudLogsApi* | [**cloud_logs_get_ray_perf_logs**](docs/CloudLogsApi.md#cloud_logs_get_ray_perf_logs) | **GET** /rays/{ray_id}/perf | 
+*CloudTiersApi* | [**cloud_tiers_get_region_tiers**](docs/CloudTiersApi.md#cloud_tiers_get_region_tiers) | **GET** /region-tiers | 
+*CloudUploadsApi* | [**cloud_uploads_complete_upload**](docs/CloudUploadsApi.md#cloud_uploads_complete_upload) | **POST** /uploads/{upload_id}/complete | 
+*GroupGroupsApi* | [**group_groups_ban_identity**](docs/GroupGroupsApi.md#group_groups_ban_identity) | **POST** /groups/{group_id}/bans/{identity_id} | 
+*GroupGroupsApi* | [**group_groups_complete_avatar_upload**](docs/GroupGroupsApi.md#group_groups_complete_avatar_upload) | **POST** /groups/{group_id}/avatar-upload/{upload_id}/complete | 
+*GroupGroupsApi* | [**group_groups_create**](docs/GroupGroupsApi.md#group_groups_create) | **POST** /groups | 
+*GroupGroupsApi* | [**group_groups_get_bans**](docs/GroupGroupsApi.md#group_groups_get_bans) | **GET** /groups/{group_id}/bans | 
+*GroupGroupsApi* | [**group_groups_get_join_requests**](docs/GroupGroupsApi.md#group_groups_get_join_requests) | **GET** /groups/{group_id}/join-requests | 
+*GroupGroupsApi* | [**group_groups_get_members**](docs/GroupGroupsApi.md#group_groups_get_members) | **GET** /groups/{group_id}/members | 
+*GroupGroupsApi* | [**group_groups_get_profile**](docs/GroupGroupsApi.md#group_groups_get_profile) | **GET** /groups/{group_id}/profile | 
+*GroupGroupsApi* | [**group_groups_get_summary**](docs/GroupGroupsApi.md#group_groups_get_summary) | **GET** /groups/{group_id}/summary | 
+*GroupGroupsApi* | [**group_groups_kick_member**](docs/GroupGroupsApi.md#group_groups_kick_member) | **POST** /groups/{group_id}/kick/{identity_id} | 
+*GroupGroupsApi* | [**group_groups_leave**](docs/GroupGroupsApi.md#group_groups_leave) | **POST** /groups/{group_id}/leave | 
+*GroupGroupsApi* | [**group_groups_list_suggested**](docs/GroupGroupsApi.md#group_groups_list_suggested) | **GET** /groups | 
+*GroupGroupsApi* | [**group_groups_prepare_avatar_upload**](docs/GroupGroupsApi.md#group_groups_prepare_avatar_upload) | **POST** /groups/avatar-upload/prepare | 
+*GroupGroupsApi* | [**group_groups_search**](docs/GroupGroupsApi.md#group_groups_search) | **GET** /groups/search | 
+*GroupGroupsApi* | [**group_groups_transfer_ownership**](docs/GroupGroupsApi.md#group_groups_transfer_ownership) | **POST** /groups/{group_id}/transfer-owner | 
+*GroupGroupsApi* | [**group_groups_unban_identity**](docs/GroupGroupsApi.md#group_groups_unban_identity) | **DELETE** /groups/{group_id}/bans/{identity_id} | 
+*GroupGroupsApi* | [**group_groups_update_profile**](docs/GroupGroupsApi.md#group_groups_update_profile) | **POST** /groups/{group_id}/profile | 
+*GroupGroupsApi* | [**group_groups_validate_profile**](docs/GroupGroupsApi.md#group_groups_validate_profile) | **POST** /groups/profile/validate | 
+*GroupInvitesApi* | [**group_invites_consume_invite**](docs/GroupInvitesApi.md#group_invites_consume_invite) | **POST** /invites/{group_invite_code}/consume | 
+*GroupInvitesApi* | [**group_invites_create_invite**](docs/GroupInvitesApi.md#group_invites_create_invite) | **POST** /groups/{group_id}/invites | 
+*GroupInvitesApi* | [**group_invites_get_invite**](docs/GroupInvitesApi.md#group_invites_get_invite) | **GET** /invites/{group_invite_code} | 
+*GroupJoinRequestsApi* | [**group_join_requests_create_join_request**](docs/GroupJoinRequestsApi.md#group_join_requests_create_join_request) | **POST** /groups/{group_id}/join-request | 
+*GroupJoinRequestsApi* | [**group_join_requests_resolve_join_request**](docs/GroupJoinRequestsApi.md#group_join_requests_resolve_join_request) | **POST** /groups/{group_id}/join-request/{identity_id} | 
 *IdentityApi* | [**identity_complete_avatar_upload**](docs/IdentityApi.md#identity_complete_avatar_upload) | **POST** /identities/avatar-upload/{upload_id}/complete | 
 *IdentityApi* | [**identity_follow**](docs/IdentityApi.md#identity_follow) | **POST** /identities/{identity_id}/follow | 
 *IdentityApi* | [**identity_get_handles**](docs/IdentityApi.md#identity_get_handles) | **GET** /identities/batch/handle | 
@@ -129,49 +129,49 @@ Class | Method | HTTP request | Description
 *IdentityApi* | [**identity_update_profile**](docs/IdentityApi.md#identity_update_profile) | **POST** /identities/self/profile | 
 *IdentityApi* | [**identity_update_status**](docs/IdentityApi.md#identity_update_status) | **POST** /identities/identities/self/status | 
 *IdentityApi* | [**identity_validate_profile**](docs/IdentityApi.md#identity_validate_profile) | **POST** /identities/self/profile/validate | 
-*IdentityActivitiesApi* | [**activities_list**](docs/IdentityActivitiesApi.md#activities_list) | **GET** /activities | 
-*IdentityEventsApi* | [**events_watch**](docs/IdentityEventsApi.md#events_watch) | **GET** /events/live | 
-*IdentityLinksApi* | [**links_cancel**](docs/IdentityLinksApi.md#links_cancel) | **POST** /game-links/cancel | 
-*IdentityLinksApi* | [**links_complete**](docs/IdentityLinksApi.md#links_complete) | **POST** /game-links/complete | 
-*IdentityLinksApi* | [**links_get**](docs/IdentityLinksApi.md#links_get) | **GET** /game-links | 
-*IdentityLinksApi* | [**links_prepare**](docs/IdentityLinksApi.md#links_prepare) | **POST** /game-links | 
-*JobRunApi* | [**run_cleanup**](docs/JobRunApi.md#run_cleanup) | **POST** /runs/cleanup | 
-*KvBatchOperationsApi* | [**batch_operations_delete_batch**](docs/KvBatchOperationsApi.md#batch_operations_delete_batch) | **DELETE** /entries/batch | 
-*KvBatchOperationsApi* | [**batch_operations_get_batch**](docs/KvBatchOperationsApi.md#batch_operations_get_batch) | **GET** /entries/batch | 
-*KvBatchOperationsApi* | [**batch_operations_put_batch**](docs/KvBatchOperationsApi.md#batch_operations_put_batch) | **PUT** /entries/batch | 
-*KvOperationsApi* | [**operations_delete**](docs/KvOperationsApi.md#operations_delete) | **DELETE** /entries | 
-*KvOperationsApi* | [**operations_get**](docs/KvOperationsApi.md#operations_get) | **GET** /entries | 
-*KvOperationsApi* | [**operations_put**](docs/KvOperationsApi.md#operations_put) | **PUT** /entries | 
-*MatchmakerLobbiesApi* | [**lobbies_find**](docs/MatchmakerLobbiesApi.md#lobbies_find) | **POST** /lobbies/find | 
-*MatchmakerLobbiesApi* | [**lobbies_join**](docs/MatchmakerLobbiesApi.md#lobbies_join) | **POST** /lobbies/join | 
-*MatchmakerLobbiesApi* | [**lobbies_list**](docs/MatchmakerLobbiesApi.md#lobbies_list) | **GET** /lobbies/list | 
-*MatchmakerLobbiesApi* | [**lobbies_ready**](docs/MatchmakerLobbiesApi.md#lobbies_ready) | **POST** /lobbies/ready | 
-*MatchmakerLobbiesApi* | [**lobbies_set_closed**](docs/MatchmakerLobbiesApi.md#lobbies_set_closed) | **PUT** /lobbies/closed | 
-*MatchmakerPlayersApi* | [**players_connected**](docs/MatchmakerPlayersApi.md#players_connected) | **POST** /players/connected | 
-*MatchmakerPlayersApi* | [**players_disconnected**](docs/MatchmakerPlayersApi.md#players_disconnected) | **POST** /players/disconnected | 
-*MatchmakerRegionsApi* | [**regions_list**](docs/MatchmakerRegionsApi.md#regions_list) | **GET** /regions | 
-*PartyActivityApi* | [**activity_set_party_to_idle**](docs/PartyActivityApi.md#activity_set_party_to_idle) | **DELETE** /parties/self/activity | 
-*PartyActivityMatchmakerApi* | [**matchmaker_find_lobby_for_party**](docs/PartyActivityMatchmakerApi.md#matchmaker_find_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/find | 
-*PartyActivityMatchmakerApi* | [**matchmaker_join_lobby_for_party**](docs/PartyActivityMatchmakerApi.md#matchmaker_join_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/join | 
-*PartyActivityMatchmakerApi* | [**matchmaker_request_player**](docs/PartyActivityMatchmakerApi.md#matchmaker_request_player) | **POST** /parties/self/members/self/matchmaker/request-player | 
-*PartyPartiesApi* | [**parties_create**](docs/PartyPartiesApi.md#parties_create) | **POST** /parties | 
-*PartyPartiesApi* | [**parties_create_invite**](docs/PartyPartiesApi.md#parties_create_invite) | **POST** /parties/self/invites | 
-*PartyPartiesApi* | [**parties_get_from_invite**](docs/PartyPartiesApi.md#parties_get_from_invite) | **GET** /invites | 
-*PartyPartiesApi* | [**parties_get_profile**](docs/PartyPartiesApi.md#parties_get_profile) | **GET** /parties/{party_id}/profile | 
-*PartyPartiesApi* | [**parties_get_self_profile**](docs/PartyPartiesApi.md#parties_get_self_profile) | **GET** /parties/self/profile | 
-*PartyPartiesApi* | [**parties_get_self_summary**](docs/PartyPartiesApi.md#parties_get_self_summary) | **GET** /parties/self/summary | 
-*PartyPartiesApi* | [**parties_get_summary**](docs/PartyPartiesApi.md#parties_get_summary) | **GET** /parties/{party_id}/summary | 
-*PartyPartiesApi* | [**parties_join**](docs/PartyPartiesApi.md#parties_join) | **POST** /parties/join | 
-*PartyPartiesApi* | [**parties_kick_member**](docs/PartyPartiesApi.md#parties_kick_member) | **POST** /parties/self/members/{identity_id}/kick | 
-*PartyPartiesApi* | [**parties_leave**](docs/PartyPartiesApi.md#parties_leave) | **POST** /parties/self/leave | 
-*PartyPartiesApi* | [**parties_revoke_invite**](docs/PartyPartiesApi.md#parties_revoke_invite) | **DELETE** /parties/self/invites/{invite_id} | 
-*PartyPartiesApi* | [**parties_send_join_request**](docs/PartyPartiesApi.md#parties_send_join_request) | **POST** /parties/{party_id}/join-request/send | 
-*PartyPartiesApi* | [**parties_set_publicity**](docs/PartyPartiesApi.md#parties_set_publicity) | **PUT** /parties/self/publicity | 
-*PartyPartiesApi* | [**parties_transfer_ownership**](docs/PartyPartiesApi.md#parties_transfer_ownership) | **POST** /parties/self/members/{identity_id}/transfer-ownership | 
-*PortalAdminApi* | [**admin_resolve_beta_join_request**](docs/PortalAdminApi.md#admin_resolve_beta_join_request) | **POST** /beta-join-request/{identity_id} | 
-*PortalGamesApi* | [**games_get_game_profile**](docs/PortalGamesApi.md#games_get_game_profile) | **GET** /games/{game_name_id}/profile | 
-*PortalNotificationsApi* | [**notifications_register_notifications**](docs/PortalNotificationsApi.md#notifications_register_notifications) | **POST** /notifications/register | 
-*PortalNotificationsApi* | [**notifications_unregister_notifications**](docs/PortalNotificationsApi.md#notifications_unregister_notifications) | **DELETE** /notifications/register | 
+*IdentityActivitiesApi* | [**identity_activities_list**](docs/IdentityActivitiesApi.md#identity_activities_list) | **GET** /activities | 
+*IdentityEventsApi* | [**identity_events_watch**](docs/IdentityEventsApi.md#identity_events_watch) | **GET** /events/live | 
+*IdentityLinksApi* | [**identity_links_cancel**](docs/IdentityLinksApi.md#identity_links_cancel) | **POST** /game-links/cancel | 
+*IdentityLinksApi* | [**identity_links_complete**](docs/IdentityLinksApi.md#identity_links_complete) | **POST** /game-links/complete | 
+*IdentityLinksApi* | [**identity_links_get**](docs/IdentityLinksApi.md#identity_links_get) | **GET** /game-links | 
+*IdentityLinksApi* | [**identity_links_prepare**](docs/IdentityLinksApi.md#identity_links_prepare) | **POST** /game-links | 
+*JobRunApi* | [**job_run_cleanup**](docs/JobRunApi.md#job_run_cleanup) | **POST** /runs/cleanup | 
+*KvBatchOperationsApi* | [**kv_batch_operations_delete_batch**](docs/KvBatchOperationsApi.md#kv_batch_operations_delete_batch) | **DELETE** /entries/batch | 
+*KvBatchOperationsApi* | [**kv_batch_operations_get_batch**](docs/KvBatchOperationsApi.md#kv_batch_operations_get_batch) | **GET** /entries/batch | 
+*KvBatchOperationsApi* | [**kv_batch_operations_put_batch**](docs/KvBatchOperationsApi.md#kv_batch_operations_put_batch) | **PUT** /entries/batch | 
+*KvOperationsApi* | [**kv_operations_delete**](docs/KvOperationsApi.md#kv_operations_delete) | **DELETE** /entries | 
+*KvOperationsApi* | [**kv_operations_get**](docs/KvOperationsApi.md#kv_operations_get) | **GET** /entries | 
+*KvOperationsApi* | [**kv_operations_put**](docs/KvOperationsApi.md#kv_operations_put) | **PUT** /entries | 
+*MatchmakerLobbiesApi* | [**matchmaker_lobbies_find**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_find) | **POST** /lobbies/find | 
+*MatchmakerLobbiesApi* | [**matchmaker_lobbies_join**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_join) | **POST** /lobbies/join | 
+*MatchmakerLobbiesApi* | [**matchmaker_lobbies_list**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_list) | **GET** /lobbies/list | 
+*MatchmakerLobbiesApi* | [**matchmaker_lobbies_ready**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_ready) | **POST** /lobbies/ready | 
+*MatchmakerLobbiesApi* | [**matchmaker_lobbies_set_closed**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_set_closed) | **PUT** /lobbies/closed | 
+*MatchmakerPlayersApi* | [**matchmaker_players_connected**](docs/MatchmakerPlayersApi.md#matchmaker_players_connected) | **POST** /players/connected | 
+*MatchmakerPlayersApi* | [**matchmaker_players_disconnected**](docs/MatchmakerPlayersApi.md#matchmaker_players_disconnected) | **POST** /players/disconnected | 
+*MatchmakerRegionsApi* | [**matchmaker_regions_list**](docs/MatchmakerRegionsApi.md#matchmaker_regions_list) | **GET** /regions | 
+*PartyActivityApi* | [**party_activity_set_party_to_idle**](docs/PartyActivityApi.md#party_activity_set_party_to_idle) | **DELETE** /parties/self/activity | 
+*PartyActivityMatchmakerApi* | [**party_activity_matchmaker_find_lobby_for_party**](docs/PartyActivityMatchmakerApi.md#party_activity_matchmaker_find_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/find | 
+*PartyActivityMatchmakerApi* | [**party_activity_matchmaker_join_lobby_for_party**](docs/PartyActivityMatchmakerApi.md#party_activity_matchmaker_join_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/join | 
+*PartyActivityMatchmakerApi* | [**party_activity_matchmaker_request_player**](docs/PartyActivityMatchmakerApi.md#party_activity_matchmaker_request_player) | **POST** /parties/self/members/self/matchmaker/request-player | 
+*PartyPartiesApi* | [**party_parties_create**](docs/PartyPartiesApi.md#party_parties_create) | **POST** /parties | 
+*PartyPartiesApi* | [**party_parties_create_invite**](docs/PartyPartiesApi.md#party_parties_create_invite) | **POST** /parties/self/invites | 
+*PartyPartiesApi* | [**party_parties_get_from_invite**](docs/PartyPartiesApi.md#party_parties_get_from_invite) | **GET** /invites | 
+*PartyPartiesApi* | [**party_parties_get_profile**](docs/PartyPartiesApi.md#party_parties_get_profile) | **GET** /parties/{party_id}/profile | 
+*PartyPartiesApi* | [**party_parties_get_self_profile**](docs/PartyPartiesApi.md#party_parties_get_self_profile) | **GET** /parties/self/profile | 
+*PartyPartiesApi* | [**party_parties_get_self_summary**](docs/PartyPartiesApi.md#party_parties_get_self_summary) | **GET** /parties/self/summary | 
+*PartyPartiesApi* | [**party_parties_get_summary**](docs/PartyPartiesApi.md#party_parties_get_summary) | **GET** /parties/{party_id}/summary | 
+*PartyPartiesApi* | [**party_parties_join**](docs/PartyPartiesApi.md#party_parties_join) | **POST** /parties/join | 
+*PartyPartiesApi* | [**party_parties_kick_member**](docs/PartyPartiesApi.md#party_parties_kick_member) | **POST** /parties/self/members/{identity_id}/kick | 
+*PartyPartiesApi* | [**party_parties_leave**](docs/PartyPartiesApi.md#party_parties_leave) | **POST** /parties/self/leave | 
+*PartyPartiesApi* | [**party_parties_revoke_invite**](docs/PartyPartiesApi.md#party_parties_revoke_invite) | **DELETE** /parties/self/invites/{invite_id} | 
+*PartyPartiesApi* | [**party_parties_send_join_request**](docs/PartyPartiesApi.md#party_parties_send_join_request) | **POST** /parties/{party_id}/join-request/send | 
+*PartyPartiesApi* | [**party_parties_set_publicity**](docs/PartyPartiesApi.md#party_parties_set_publicity) | **PUT** /parties/self/publicity | 
+*PartyPartiesApi* | [**party_parties_transfer_ownership**](docs/PartyPartiesApi.md#party_parties_transfer_ownership) | **POST** /parties/self/members/{identity_id}/transfer-ownership | 
+*PortalAdminApi* | [**portal_admin_resolve_beta_join_request**](docs/PortalAdminApi.md#portal_admin_resolve_beta_join_request) | **POST** /beta-join-request/{identity_id} | 
+*PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /games/{game_name_id}/profile | 
+*PortalNotificationsApi* | [**portal_notifications_register_notifications**](docs/PortalNotificationsApi.md#portal_notifications_register_notifications) | **POST** /notifications/register | 
+*PortalNotificationsApi* | [**portal_notifications_unregister_notifications**](docs/PortalNotificationsApi.md#portal_notifications_unregister_notifications) | **DELETE** /notifications/register | 
 
 
 ## Documentation For Models
@@ -186,12 +186,18 @@ Class | Method | HTTP request | Description
  - [CaptchaConfig](docs/CaptchaConfig.md)
  - [CaptchaConfigHcaptcha](docs/CaptchaConfigHcaptcha.md)
  - [ChatGetDirectThreadOutput](docs/ChatGetDirectThreadOutput.md)
+ - [ChatGetThreadHistoryOutput](docs/ChatGetThreadHistoryOutput.md)
+ - [ChatGetThreadTopicOutput](docs/ChatGetThreadTopicOutput.md)
  - [ChatIdentityTypingStatus](docs/ChatIdentityTypingStatus.md)
  - [ChatMessage](docs/ChatMessage.md)
  - [ChatSendMessageBody](docs/ChatSendMessageBody.md)
  - [ChatSendMessageBodyPartyInvite](docs/ChatSendMessageBodyPartyInvite.md)
  - [ChatSendMessageBodyText](docs/ChatSendMessageBodyText.md)
+ - [ChatSendMessageInput](docs/ChatSendMessageInput.md)
+ - [ChatSendMessageOutput](docs/ChatSendMessageOutput.md)
  - [ChatSendTopic](docs/ChatSendTopic.md)
+ - [ChatSetThreadReadInput](docs/ChatSetThreadReadInput.md)
+ - [ChatSetTypingStatusInput](docs/ChatSetTypingStatusInput.md)
  - [ChatSimpleTopic](docs/ChatSimpleTopic.md)
  - [ChatSimpleTopicDirect](docs/ChatSimpleTopicDirect.md)
  - [ChatSimpleTopicGroup](docs/ChatSimpleTopicGroup.md)
@@ -203,6 +209,7 @@ Class | Method | HTTP request | Description
  - [ChatTopicGroup](docs/ChatTopicGroup.md)
  - [ChatTopicParty](docs/ChatTopicParty.md)
  - [ChatTypingStatus](docs/ChatTypingStatus.md)
+ - [ChatWatchThreadOutput](docs/ChatWatchThreadOutput.md)
  - [CloudAnalyticsLobbySummary](docs/CloudAnalyticsLobbySummary.md)
  - [CloudAuthAgent](docs/CloudAuthAgent.md)
  - [CloudAuthAgentGameCloud](docs/CloudAuthAgentGameCloud.md)
@@ -216,23 +223,15 @@ Class | Method | HTTP request | Description
  - [CloudCdnNamespaceDomainVerificationMethodHttp](docs/CloudCdnNamespaceDomainVerificationMethodHttp.md)
  - [CloudCdnNamespaceDomainVerificationStatus](docs/CloudCdnNamespaceDomainVerificationStatus.md)
  - [CloudCdnSiteSummary](docs/CloudCdnSiteSummary.md)
- - [CloudConfig](docs/CloudConfig.md)
  - [CloudCustomAvatarSummary](docs/CloudCustomAvatarSummary.md)
- - [CloudFull](docs/CloudFull.md)
  - [CloudGameFull](docs/CloudGameFull.md)
  - [CloudGameLobbyExpenses](docs/CloudGameLobbyExpenses.md)
- - [CloudGamesAddNamespaceDomainInput](docs/CloudGamesAddNamespaceDomainInput.md)
  - [CloudGamesCreateCloudTokenOutput](docs/CloudGamesCreateCloudTokenOutput.md)
  - [CloudGamesCreateGameBuildInput](docs/CloudGamesCreateGameBuildInput.md)
  - [CloudGamesCreateGameBuildOutput](docs/CloudGamesCreateGameBuildOutput.md)
  - [CloudGamesCreateGameCdnSiteInput](docs/CloudGamesCreateGameCdnSiteInput.md)
  - [CloudGamesCreateGameCdnSiteOutput](docs/CloudGamesCreateGameCdnSiteOutput.md)
  - [CloudGamesCreateGameInput](docs/CloudGamesCreateGameInput.md)
- - [CloudGamesCreateGameNamespaceInput](docs/CloudGamesCreateGameNamespaceInput.md)
- - [CloudGamesCreateGameNamespaceOutput](docs/CloudGamesCreateGameNamespaceOutput.md)
- - [CloudGamesCreateGameNamespaceTokenDevelopmentInput](docs/CloudGamesCreateGameNamespaceTokenDevelopmentInput.md)
- - [CloudGamesCreateGameNamespaceTokenDevelopmentOutput](docs/CloudGamesCreateGameNamespaceTokenDevelopmentOutput.md)
- - [CloudGamesCreateGameNamespaceTokenPublicOutput](docs/CloudGamesCreateGameNamespaceTokenPublicOutput.md)
  - [CloudGamesCreateGameOutput](docs/CloudGamesCreateGameOutput.md)
  - [CloudGamesCreateGameVersionInput](docs/CloudGamesCreateGameVersionInput.md)
  - [CloudGamesCreateGameVersionOutput](docs/CloudGamesCreateGameVersionOutput.md)
@@ -247,31 +246,37 @@ Class | Method | HTTP request | Description
  - [CloudGamesGameLogoUploadPrepareOutput](docs/CloudGamesGameLogoUploadPrepareOutput.md)
  - [CloudGamesGameSummary](docs/CloudGamesGameSummary.md)
  - [CloudGamesGetGameByIdOutput](docs/CloudGamesGetGameByIdOutput.md)
- - [CloudGamesGetGameNamespaceByIdOutput](docs/CloudGamesGetGameNamespaceByIdOutput.md)
  - [CloudGamesGetGameVersionByIdOutput](docs/CloudGamesGetGameVersionByIdOutput.md)
  - [CloudGamesGetGamesOutput](docs/CloudGamesGetGamesOutput.md)
  - [CloudGamesGetLobbyLogsOutput](docs/CloudGamesGetLobbyLogsOutput.md)
- - [CloudGamesInspectOutput](docs/CloudGamesInspectOutput.md)
  - [CloudGamesListGameBuildsOutput](docs/CloudGamesListGameBuildsOutput.md)
  - [CloudGamesListGameCdnSitesOutput](docs/CloudGamesListGameCdnSitesOutput.md)
  - [CloudGamesListGameCustomAvatarsOutput](docs/CloudGamesListGameCustomAvatarsOutput.md)
+ - [CloudGamesNamespacesAddNamespaceDomainInput](docs/CloudGamesNamespacesAddNamespaceDomainInput.md)
+ - [CloudGamesNamespacesCreateGameNamespaceInput](docs/CloudGamesNamespacesCreateGameNamespaceInput.md)
+ - [CloudGamesNamespacesCreateGameNamespaceOutput](docs/CloudGamesNamespacesCreateGameNamespaceOutput.md)
+ - [CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput](docs/CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput.md)
+ - [CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentOutput](docs/CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentOutput.md)
+ - [CloudGamesNamespacesCreateGameNamespaceTokenPublicOutput](docs/CloudGamesNamespacesCreateGameNamespaceTokenPublicOutput.md)
+ - [CloudGamesNamespacesGetGameNamespaceByIdOutput](docs/CloudGamesNamespacesGetGameNamespaceByIdOutput.md)
  - [CloudGamesNamespacesGetNamespaceAnalyticsMatchmakerLiveOutput](docs/CloudGamesNamespacesGetNamespaceAnalyticsMatchmakerLiveOutput.md)
  - [CloudGamesNamespacesGetNamespaceLobbyOutput](docs/CloudGamesNamespacesGetNamespaceLobbyOutput.md)
+ - [CloudGamesNamespacesInspectOutput](docs/CloudGamesNamespacesInspectOutput.md)
  - [CloudGamesNamespacesListNamespaceLobbiesOutput](docs/CloudGamesNamespacesListNamespaceLobbiesOutput.md)
+ - [CloudGamesNamespacesSetNamespaceCdnAuthTypeInput](docs/CloudGamesNamespacesSetNamespaceCdnAuthTypeInput.md)
+ - [CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput](docs/CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput.md)
+ - [CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput](docs/CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput.md)
+ - [CloudGamesNamespacesUpdateGameNamespaceVersionInput](docs/CloudGamesNamespacesUpdateGameNamespaceVersionInput.md)
+ - [CloudGamesNamespacesUpdateNamespaceCdnAuthUserInput](docs/CloudGamesNamespacesUpdateNamespaceCdnAuthUserInput.md)
+ - [CloudGamesNamespacesValidateGameNamespaceInput](docs/CloudGamesNamespacesValidateGameNamespaceInput.md)
+ - [CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigInput](docs/CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigInput.md)
+ - [CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigOutput](docs/CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigOutput.md)
+ - [CloudGamesNamespacesValidateGameNamespaceOutput](docs/CloudGamesNamespacesValidateGameNamespaceOutput.md)
+ - [CloudGamesNamespacesValidateGameNamespaceTokenDevelopmentInput](docs/CloudGamesNamespacesValidateGameNamespaceTokenDevelopmentInput.md)
+ - [CloudGamesNamespacesValidateGameNamespaceTokenDevelopmentOutput](docs/CloudGamesNamespacesValidateGameNamespaceTokenDevelopmentOutput.md)
  - [CloudGamesPrepareCustomAvatarUploadInput](docs/CloudGamesPrepareCustomAvatarUploadInput.md)
  - [CloudGamesPrepareCustomAvatarUploadOutput](docs/CloudGamesPrepareCustomAvatarUploadOutput.md)
- - [CloudGamesSetNamespaceCdnAuthTypeInput](docs/CloudGamesSetNamespaceCdnAuthTypeInput.md)
- - [CloudGamesToggleNamespaceDomainPublicAuthInput](docs/CloudGamesToggleNamespaceDomainPublicAuthInput.md)
- - [CloudGamesUpdateGameNamespaceMatchmakerConfigInput](docs/CloudGamesUpdateGameNamespaceMatchmakerConfigInput.md)
- - [CloudGamesUpdateGameNamespaceVersionInput](docs/CloudGamesUpdateGameNamespaceVersionInput.md)
- - [CloudGamesUpdateNamespaceCdnAuthUserInput](docs/CloudGamesUpdateNamespaceCdnAuthUserInput.md)
  - [CloudGamesValidateGameInput](docs/CloudGamesValidateGameInput.md)
- - [CloudGamesValidateGameNamespaceInput](docs/CloudGamesValidateGameNamespaceInput.md)
- - [CloudGamesValidateGameNamespaceMatchmakerConfigInput](docs/CloudGamesValidateGameNamespaceMatchmakerConfigInput.md)
- - [CloudGamesValidateGameNamespaceMatchmakerConfigOutput](docs/CloudGamesValidateGameNamespaceMatchmakerConfigOutput.md)
- - [CloudGamesValidateGameNamespaceOutput](docs/CloudGamesValidateGameNamespaceOutput.md)
- - [CloudGamesValidateGameNamespaceTokenDevelopmentInput](docs/CloudGamesValidateGameNamespaceTokenDevelopmentInput.md)
- - [CloudGamesValidateGameNamespaceTokenDevelopmentOutput](docs/CloudGamesValidateGameNamespaceTokenDevelopmentOutput.md)
  - [CloudGamesValidateGameOutput](docs/CloudGamesValidateGameOutput.md)
  - [CloudGamesValidateGameVersionInput](docs/CloudGamesValidateGameVersionInput.md)
  - [CloudGamesValidateGameVersionOutput](docs/CloudGamesValidateGameVersionOutput.md)
@@ -302,27 +307,26 @@ Class | Method | HTTP request | Description
  - [CloudRegionSummary](docs/CloudRegionSummary.md)
  - [CloudRegionTier](docs/CloudRegionTier.md)
  - [CloudRegionTierExpenses](docs/CloudRegionTierExpenses.md)
- - [CloudSummary](docs/CloudSummary.md)
  - [CloudSvcMetrics](docs/CloudSvcMetrics.md)
  - [CloudSvcPerf](docs/CloudSvcPerf.md)
  - [CloudUploadPrepareFile](docs/CloudUploadPrepareFile.md)
  - [CloudValidateGroupInput](docs/CloudValidateGroupInput.md)
  - [CloudValidateGroupOutput](docs/CloudValidateGroupOutput.md)
+ - [CloudVersionCdnConfig](docs/CloudVersionCdnConfig.md)
+ - [CloudVersionCdnCustomHeadersMiddleware](docs/CloudVersionCdnCustomHeadersMiddleware.md)
+ - [CloudVersionCdnHeader](docs/CloudVersionCdnHeader.md)
+ - [CloudVersionCdnMiddleware](docs/CloudVersionCdnMiddleware.md)
+ - [CloudVersionCdnMiddlewareKind](docs/CloudVersionCdnMiddlewareKind.md)
+ - [CloudVersionCdnRoute](docs/CloudVersionCdnRoute.md)
  - [CloudVersionConfig](docs/CloudVersionConfig.md)
- - [CloudVersionCustomHeadersMiddleware](docs/CloudVersionCustomHeadersMiddleware.md)
- - [CloudVersionHeader](docs/CloudVersionHeader.md)
+ - [CloudVersionFull](docs/CloudVersionFull.md)
  - [CloudVersionIdentityConfig](docs/CloudVersionIdentityConfig.md)
  - [CloudVersionIdentityCustomAvatar](docs/CloudVersionIdentityCustomAvatar.md)
  - [CloudVersionIdentityCustomDisplayName](docs/CloudVersionIdentityCustomDisplayName.md)
  - [CloudVersionMatchmakerCaptcha](docs/CloudVersionMatchmakerCaptcha.md)
  - [CloudVersionMatchmakerCaptchaHcaptcha](docs/CloudVersionMatchmakerCaptchaHcaptcha.md)
- - [CloudVersionMatchmakerCaptchaHcaptchaLevel](docs/CloudVersionMatchmakerCaptchaHcaptchaLevel.md)
- - [CloudVersionMatchmakerGameMode](docs/CloudVersionMatchmakerGameMode.md)
- - [CloudVersionMatchmakerGameModeIdleLobbiesConfig](docs/CloudVersionMatchmakerGameModeIdleLobbiesConfig.md)
- - [CloudVersionMatchmakerGameModeRegion](docs/CloudVersionMatchmakerGameModeRegion.md)
- - [CloudVersionMatchmakerGameModeRuntimeDocker](docs/CloudVersionMatchmakerGameModeRuntimeDocker.md)
- - [CloudVersionMatchmakerGameModeRuntimeDockerEnvVar](docs/CloudVersionMatchmakerGameModeRuntimeDockerEnvVar.md)
- - [CloudVersionMatchmakerGameModeRuntimeDockerPort](docs/CloudVersionMatchmakerGameModeRuntimeDockerPort.md)
+ - [CloudVersionMatchmakerCaptchaLevel](docs/CloudVersionMatchmakerCaptchaLevel.md)
+ - [CloudVersionMatchmakerConfig](docs/CloudVersionMatchmakerConfig.md)
  - [CloudVersionMatchmakerLobbyGroup](docs/CloudVersionMatchmakerLobbyGroup.md)
  - [CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig](docs/CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig.md)
  - [CloudVersionMatchmakerLobbyGroupRegion](docs/CloudVersionMatchmakerLobbyGroupRegion.md)
@@ -333,9 +337,7 @@ Class | Method | HTTP request | Description
  - [CloudVersionMatchmakerNetworkMode](docs/CloudVersionMatchmakerNetworkMode.md)
  - [CloudVersionMatchmakerPortRange](docs/CloudVersionMatchmakerPortRange.md)
  - [CloudVersionMatchmakerProxyProtocol](docs/CloudVersionMatchmakerProxyProtocol.md)
- - [CloudVersionMiddleware](docs/CloudVersionMiddleware.md)
- - [CloudVersionMiddlewareKind](docs/CloudVersionMiddlewareKind.md)
- - [CloudVersionRoute](docs/CloudVersionRoute.md)
+ - [CloudVersionSummary](docs/CloudVersionSummary.md)
  - [GameHandle](docs/GameHandle.md)
  - [GameLeaderboardCategory](docs/GameLeaderboardCategory.md)
  - [GamePlatformLink](docs/GamePlatformLink.md)
@@ -349,11 +351,6 @@ Class | Method | HTTP request | Description
  - [GameSummary](docs/GameSummary.md)
  - [GeoCoord](docs/GeoCoord.md)
  - [GeoDistance](docs/GeoDistance.md)
- - [GetHandlesOutput](docs/GetHandlesOutput.md)
- - [GetProfileOutput](docs/GetProfileOutput.md)
- - [GetSummariesOutput](docs/GetSummariesOutput.md)
- - [GetThreadHistoryOutput](docs/GetThreadHistoryOutput.md)
- - [GetThreadTopicOutput](docs/GetThreadTopicOutput.md)
  - [GlobalEventChatThreadRemove](docs/GlobalEventChatThreadRemove.md)
  - [GlobalEventNotification](docs/GlobalEventNotification.md)
  - [GroupBannedIdentity](docs/GroupBannedIdentity.md)
@@ -391,6 +388,9 @@ Class | Method | HTTP request | Description
  - [IdentityGameLinkStatus](docs/IdentityGameLinkStatus.md)
  - [IdentityGetGameLinkNewIdentity](docs/IdentityGetGameLinkNewIdentity.md)
  - [IdentityGetGameLinkOutput](docs/IdentityGetGameLinkOutput.md)
+ - [IdentityGetHandlesOutput](docs/IdentityGetHandlesOutput.md)
+ - [IdentityGetProfileOutput](docs/IdentityGetProfileOutput.md)
+ - [IdentityGetSummariesOutput](docs/IdentityGetSummariesOutput.md)
  - [IdentityGlobalEvent](docs/IdentityGlobalEvent.md)
  - [IdentityGlobalEventChatMessage](docs/IdentityGlobalEventChatMessage.md)
  - [IdentityGlobalEventChatRead](docs/IdentityGlobalEventChatRead.md)
@@ -403,19 +403,27 @@ Class | Method | HTTP request | Description
  - [IdentityGroup](docs/IdentityGroup.md)
  - [IdentityHandle](docs/IdentityHandle.md)
  - [IdentityLinkedAccount](docs/IdentityLinkedAccount.md)
+ - [IdentityLinksCancelRequest](docs/IdentityLinksCancelRequest.md)
  - [IdentityListActivitiesOutput](docs/IdentityListActivitiesOutput.md)
+ - [IdentityListFollowersOutput](docs/IdentityListFollowersOutput.md)
+ - [IdentityListFriendsOutput](docs/IdentityListFriendsOutput.md)
+ - [IdentityListMutualFriendsOutput](docs/IdentityListMutualFriendsOutput.md)
+ - [IdentityPrepareAvatarUploadOutput](docs/IdentityPrepareAvatarUploadOutput.md)
  - [IdentityPrepareAvatarUploadRequest](docs/IdentityPrepareAvatarUploadRequest.md)
  - [IdentityPrepareGameLinkOutput](docs/IdentityPrepareGameLinkOutput.md)
  - [IdentityPresence](docs/IdentityPresence.md)
  - [IdentityProfile](docs/IdentityProfile.md)
  - [IdentityReportRequest](docs/IdentityReportRequest.md)
+ - [IdentitySearchOutput](docs/IdentitySearchOutput.md)
  - [IdentitySetGameActivityRequest](docs/IdentitySetGameActivityRequest.md)
+ - [IdentitySetupOutput](docs/IdentitySetupOutput.md)
  - [IdentitySignupForBetaRequest](docs/IdentitySignupForBetaRequest.md)
  - [IdentityStatus](docs/IdentityStatus.md)
  - [IdentitySummary](docs/IdentitySummary.md)
  - [IdentityUpdateGameActivity](docs/IdentityUpdateGameActivity.md)
  - [IdentityUpdateProfileRequest](docs/IdentityUpdateProfileRequest.md)
  - [IdentityUpdateStatusRequest](docs/IdentityUpdateStatusRequest.md)
+ - [IdentityValidateProfileOutput](docs/IdentityValidateProfileOutput.md)
  - [IdentityWatchEventsOutput](docs/IdentityWatchEventsOutput.md)
  - [KvEntry](docs/KvEntry.md)
  - [KvGetBatchOutput](docs/KvGetBatchOutput.md)
@@ -423,24 +431,21 @@ Class | Method | HTTP request | Description
  - [KvPutBatchInput](docs/KvPutBatchInput.md)
  - [KvPutEntry](docs/KvPutEntry.md)
  - [KvPutInput](docs/KvPutInput.md)
- - [LinksCancelRequest](docs/LinksCancelRequest.md)
- - [ListFollowersOutput](docs/ListFollowersOutput.md)
- - [ListFriendsOutput](docs/ListFriendsOutput.md)
- - [ListMutualFriendsOutput](docs/ListMutualFriendsOutput.md)
- - [LobbiesFindRequest](docs/LobbiesFindRequest.md)
- - [LobbiesJoinRequest](docs/LobbiesJoinRequest.md)
- - [LobbiesSetClosedRequest](docs/LobbiesSetClosedRequest.md)
  - [MatchmakerFindLobbyOutput](docs/MatchmakerFindLobbyOutput.md)
  - [MatchmakerGameModeInfo](docs/MatchmakerGameModeInfo.md)
  - [MatchmakerJoinLobbyOutput](docs/MatchmakerJoinLobbyOutput.md)
  - [MatchmakerListLobbiesOutput](docs/MatchmakerListLobbiesOutput.md)
  - [MatchmakerListRegionsOutput](docs/MatchmakerListRegionsOutput.md)
+ - [MatchmakerLobbiesFindRequest](docs/MatchmakerLobbiesFindRequest.md)
+ - [MatchmakerLobbiesJoinRequest](docs/MatchmakerLobbiesJoinRequest.md)
+ - [MatchmakerLobbiesSetClosedRequest](docs/MatchmakerLobbiesSetClosedRequest.md)
  - [MatchmakerLobbyInfo](docs/MatchmakerLobbyInfo.md)
  - [MatchmakerLobbyJoinInfo](docs/MatchmakerLobbyJoinInfo.md)
  - [MatchmakerLobbyJoinInfoPlayer](docs/MatchmakerLobbyJoinInfoPlayer.md)
  - [MatchmakerLobbyJoinInfoPort](docs/MatchmakerLobbyJoinInfoPort.md)
  - [MatchmakerLobbyJoinInfoPortRange](docs/MatchmakerLobbyJoinInfoPortRange.md)
  - [MatchmakerLobbyJoinInfoRegion](docs/MatchmakerLobbyJoinInfoRegion.md)
+ - [MatchmakerPlayersConnectedRequest](docs/MatchmakerPlayersConnectedRequest.md)
  - [MatchmakerRegionInfo](docs/MatchmakerRegionInfo.md)
  - [PartyActivity](docs/PartyActivity.md)
  - [PartyActivityFindMatchmakerLobbyForPartyInput](docs/PartyActivityFindMatchmakerLobbyForPartyInput.md)
@@ -476,26 +481,16 @@ Class | Method | HTTP request | Description
  - [PartyPublicityLevel](docs/PartyPublicityLevel.md)
  - [PartySetPublicityInput](docs/PartySetPublicityInput.md)
  - [PartySummary](docs/PartySummary.md)
- - [PlayersConnectedRequest](docs/PlayersConnectedRequest.md)
  - [PortalGetGameProfileOutput](docs/PortalGetGameProfileOutput.md)
  - [PortalGetSuggestedGamesOutput](docs/PortalGetSuggestedGamesOutput.md)
  - [PortalNotificationRegisterFirebaseService](docs/PortalNotificationRegisterFirebaseService.md)
  - [PortalNotificationRegisterService](docs/PortalNotificationRegisterService.md)
  - [PortalRegisterNotificationsInput](docs/PortalRegisterNotificationsInput.md)
  - [PortalResolveBetaJoinRequestInput](docs/PortalResolveBetaJoinRequestInput.md)
- - [PrepareAvatarUploadOutput](docs/PrepareAvatarUploadOutput.md)
- - [SearchOutput](docs/SearchOutput.md)
- - [SendMessageInput](docs/SendMessageInput.md)
- - [SendMessageOutput](docs/SendMessageOutput.md)
- - [SetThreadReadInput](docs/SetThreadReadInput.md)
- - [SetTypingStatusInput](docs/SetTypingStatusInput.md)
- - [SetupOutput](docs/SetupOutput.md)
  - [UploadPrepareFile](docs/UploadPrepareFile.md)
  - [UploadPresignedRequest](docs/UploadPresignedRequest.md)
- - [ValidateProfileOutput](docs/ValidateProfileOutput.md)
  - [ValidationError](docs/ValidationError.md)
  - [WatchResponse](docs/WatchResponse.md)
- - [WatchThreadOutput](docs/WatchThreadOutput.md)
 
 
 To get access to the crate's generated documentation, use:

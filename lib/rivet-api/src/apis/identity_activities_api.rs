@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`activities_list`]
+/// struct for typed errors of method [`identity_activities_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ActivitiesListError {
+pub enum IdentityActivitiesListError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns an overview of all players currently online or in game.
-pub async fn activities_list(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::IdentityListActivitiesOutput, Error<ActivitiesListError>> {
+pub async fn identity_activities_list(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::IdentityListActivitiesOutput, Error<IdentityActivitiesListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -51,7 +51,7 @@ pub async fn activities_list(configuration: &configuration::Configuration, watch
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ActivitiesListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityActivitiesListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

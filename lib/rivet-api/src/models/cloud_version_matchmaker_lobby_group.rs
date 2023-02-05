@@ -16,13 +16,13 @@
 pub struct CloudVersionMatchmakerLobbyGroup {
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_direct", skip_serializing_if = "Option::is_none")]
-    pub max_players_direct: Option<f64>,
+    pub max_players_direct: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_normal", skip_serializing_if = "Option::is_none")]
-    pub max_players_normal: Option<f64>,
+    pub max_players_normal: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_party", skip_serializing_if = "Option::is_none")]
-    pub max_players_party: Option<f64>,
+    pub max_players_party: Option<i32>,
     /// **Deprecated: use GameMode instead** A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
     #[serde(rename = "name_id")]
     pub name_id: String,

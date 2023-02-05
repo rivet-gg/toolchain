@@ -89,7 +89,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_handles
 
-> crate::models::GetHandlesOutput identity_get_handles(identity_ids)
+> crate::models::IdentityGetHandlesOutput identity_get_handles(identity_ids)
 
 
 Fetches a list of identity handles.
@@ -103,7 +103,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GetHandlesOutput**](GetHandlesOutput.md)
+[**crate::models::IdentityGetHandlesOutput**](IdentityGetHandlesOutput.md)
 
 ### Authorization
 
@@ -119,7 +119,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_profile
 
-> crate::models::GetProfileOutput identity_get_profile(identity_id, watch_index)
+> crate::models::IdentityGetProfileOutput identity_get_profile(identity_id, watch_index)
 
 
 Fetches an identity profile.
@@ -134,7 +134,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GetProfileOutput**](GetProfileOutput.md)
+[**crate::models::IdentityGetProfileOutput**](IdentityGetProfileOutput.md)
 
 ### Authorization
 
@@ -150,7 +150,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_self_profile
 
-> crate::models::GetProfileOutput identity_get_self_profile(watch_index)
+> crate::models::IdentityGetProfileOutput identity_get_self_profile(watch_index)
 
 
 Fetches the current identity's profile.
@@ -164,7 +164,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GetProfileOutput**](GetProfileOutput.md)
+[**crate::models::IdentityGetProfileOutput**](IdentityGetProfileOutput.md)
 
 ### Authorization
 
@@ -180,7 +180,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_summaries
 
-> crate::models::GetSummariesOutput identity_get_summaries(identity_ids)
+> crate::models::IdentityGetSummariesOutput identity_get_summaries(identity_ids)
 
 
 Fetches a list of identity summaries.
@@ -194,7 +194,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GetSummariesOutput**](GetSummariesOutput.md)
+[**crate::models::IdentityGetSummariesOutput**](IdentityGetSummariesOutput.md)
 
 ### Authorization
 
@@ -210,7 +210,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_list_followers
 
-> crate::models::ListFollowersOutput identity_list_followers(identity_id, anchor, limit)
+> crate::models::IdentityListFollowersOutput identity_list_followers(identity_id, anchor, limit)
 
 
 ### Parameters
@@ -224,7 +224,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::ListFollowersOutput**](ListFollowersOutput.md)
+[**crate::models::IdentityListFollowersOutput**](IdentityListFollowersOutput.md)
 
 ### Authorization
 
@@ -240,7 +240,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_list_friends
 
-> crate::models::ListFriendsOutput identity_list_friends(anchor, limit)
+> crate::models::IdentityListFriendsOutput identity_list_friends(anchor, limit)
 
 
 ### Parameters
@@ -253,7 +253,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::ListFriendsOutput**](ListFriendsOutput.md)
+[**crate::models::IdentityListFriendsOutput**](IdentityListFriendsOutput.md)
 
 ### Authorization
 
@@ -269,7 +269,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_list_mutual_friends
 
-> crate::models::ListMutualFriendsOutput identity_list_mutual_friends(identity_id, anchor, limit)
+> crate::models::IdentityListMutualFriendsOutput identity_list_mutual_friends(identity_id, anchor, limit)
 
 
 ### Parameters
@@ -283,7 +283,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::ListMutualFriendsOutput**](ListMutualFriendsOutput.md)
+[**crate::models::IdentityListMutualFriendsOutput**](IdentityListMutualFriendsOutput.md)
 
 ### Authorization
 
@@ -299,7 +299,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_prepare_avatar_upload
 
-> crate::models::PrepareAvatarUploadOutput identity_prepare_avatar_upload(identity_prepare_avatar_upload_request)
+> crate::models::IdentityPrepareAvatarUploadOutput identity_prepare_avatar_upload(identity_prepare_avatar_upload_request)
 
 
 Prepares an avatar image upload. Complete upload with `CompleteIdentityAvatarUpload`.
@@ -313,7 +313,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PrepareAvatarUploadOutput**](PrepareAvatarUploadOutput.md)
+[**crate::models::IdentityPrepareAvatarUploadOutput**](IdentityPrepareAvatarUploadOutput.md)
 
 ### Authorization
 
@@ -387,7 +387,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_search
 
-> crate::models::SearchOutput identity_search(query, anchor, limit)
+> crate::models::IdentitySearchOutput identity_search(query, anchor, limit)
 
 
 Fuzzy search for identities.
@@ -403,7 +403,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::SearchOutput**](SearchOutput.md)
+[**crate::models::IdentitySearchOutput**](IdentitySearchOutput.md)
 
 ### Authorization
 
@@ -449,7 +449,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_setup
 
-> crate::models::SetupOutput identity_setup(identity_link_token)
+> crate::models::IdentitySetupOutput identity_setup(identity_link_token)
 
 
 Gets or creates an identity. Passing an existing identity token in the body refreshes the token. Temporary Accounts Until the identity is linked with the Rivet Hub (see `PrepareGameLink`), this identity will be temporary but still behave like all other identities. This is intended to allow users to play the game without signing up while still having the benefits of having an account. When they are ready to save their account, they should be instructed to link their account (see `PrepareGameLink`). Storing Token `identity_token` should be stored in some form of persistent storage. The token should be read from storage and passed to `Setup` every time the client starts.
@@ -463,7 +463,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::SetupOutput**](SetupOutput.md)
+[**crate::models::IdentitySetupOutput**](IdentitySetupOutput.md)
 
 ### Authorization
 

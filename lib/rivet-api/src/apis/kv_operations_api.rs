@@ -15,30 +15,30 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`operations_delete`]
+/// struct for typed errors of method [`kv_operations_delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum OperationsDeleteError {
+pub enum KvOperationsDeleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`operations_get`]
+/// struct for typed errors of method [`kv_operations_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum OperationsGetError {
+pub enum KvOperationsGetError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`operations_put`]
+/// struct for typed errors of method [`kv_operations_put`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum OperationsPutError {
+pub enum KvOperationsPutError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Deletes a key-value entry by key.
-pub async fn operations_delete(configuration: &configuration::Configuration, key: &str, namespace_id: Option<&str>) -> Result<(), Error<OperationsDeleteError>> {
+pub async fn kv_operations_delete(configuration: &configuration::Configuration, key: &str, namespace_id: Option<&str>) -> Result<(), Error<KvOperationsDeleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -66,14 +66,14 @@ pub async fn operations_delete(configuration: &configuration::Configuration, key
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<OperationsDeleteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<KvOperationsDeleteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a specific key-value entry by key.
-pub async fn operations_get(configuration: &configuration::Configuration, key: &str, watch_index: Option<&str>, namespace_id: Option<&str>) -> Result<crate::models::KvGetOutput, Error<OperationsGetError>> {
+pub async fn kv_operations_get(configuration: &configuration::Configuration, key: &str, watch_index: Option<&str>, namespace_id: Option<&str>) -> Result<crate::models::KvGetOutput, Error<KvOperationsGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -104,14 +104,14 @@ pub async fn operations_get(configuration: &configuration::Configuration, key: &
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<OperationsGetError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<KvOperationsGetError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Puts (sets or overwrites) a key-value entry by key.
-pub async fn operations_put(configuration: &configuration::Configuration, kv_put_input: crate::models::KvPutInput) -> Result<(), Error<OperationsPutError>> {
+pub async fn kv_operations_put(configuration: &configuration::Configuration, kv_put_input: crate::models::KvPutInput) -> Result<(), Error<KvOperationsPutError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -136,7 +136,7 @@ pub async fn operations_put(configuration: &configuration::Configuration, kv_put
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<OperationsPutError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<KvOperationsPutError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

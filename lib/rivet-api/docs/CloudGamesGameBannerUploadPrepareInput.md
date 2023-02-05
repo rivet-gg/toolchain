@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content_length** | Option<**f64**> | Unsigned 64 bit integer. | [optional]
+**content_length** | Option<**i64**> | Unsigned 64 bit integer. | [optional]
 **mime** | Option<**String**> | The MIME type of the game banner. | [optional]
 **path** | **String** | The path/filename of the game banner. | 
 

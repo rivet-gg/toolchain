@@ -14,14 +14,14 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesCreateGameVersionInput {
     #[serde(rename = "config")]
-    pub config: Box<crate::models::CloudConfig>,
+    pub config: Box<crate::models::CloudVersionConfig>,
     /// Represent a resource's readable display name.
     #[serde(rename = "display_name")]
     pub display_name: String,
 }
 
 impl CloudGamesCreateGameVersionInput {
-    pub fn new(config: crate::models::CloudConfig, display_name: String) -> CloudGamesCreateGameVersionInput {
+    pub fn new(config: crate::models::CloudVersionConfig, display_name: String) -> CloudGamesCreateGameVersionInput {
         CloudGamesCreateGameVersionInput {
             config: Box::new(config),
             display_name,

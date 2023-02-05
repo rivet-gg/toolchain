@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**analytics_get_namespace_analytics_matchmaker_live**](CloudGamesNamespacesAnalyticsApi.md#analytics_get_namespace_analytics_matchmaker_live) | **GET** /games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live | 
+[**cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live**](CloudGamesNamespacesAnalyticsApi.md#cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live) | **GET** /games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live | 
 
 
 
-## analytics_get_namespace_analytics_matchmaker_live
+## cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live
 
-> crate::models::CloudGamesNamespacesGetNamespaceAnalyticsMatchmakerLiveOutput analytics_get_namespace_analytics_matchmaker_live(game_id, namespace_id)
+> crate::models::CloudGamesNamespacesGetNamespaceAnalyticsMatchmakerLiveOutput cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live(game_id, namespace_id)
 
 
 Returns live information about all active lobies for a given namespace.

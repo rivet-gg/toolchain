@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tokens_create_cloud_token**](CloudGamesTokensApi.md#tokens_create_cloud_token) | **POST** /games/{game_id}/tokens/cloud | 
+[**cloud_games_tokens_create_cloud_token**](CloudGamesTokensApi.md#cloud_games_tokens_create_cloud_token) | **POST** /games/{game_id}/tokens/cloud | 
 
 
 
-## tokens_create_cloud_token
+## cloud_games_tokens_create_cloud_token
 
-> crate::models::CloudGamesCreateCloudTokenOutput tokens_create_cloud_token(game_id)
+> crate::models::CloudGamesCreateCloudTokenOutput cloud_games_tokens_create_cloud_token(game_id)
 
 
 Creates a new game cloud token.

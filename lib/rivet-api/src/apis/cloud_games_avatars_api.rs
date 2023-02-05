@@ -15,30 +15,30 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`avatars_complete_custom_avatar_upload`]
+/// struct for typed errors of method [`cloud_games_avatars_complete_custom_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AvatarsCompleteCustomAvatarUploadError {
+pub enum CloudGamesAvatarsCompleteCustomAvatarUploadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`avatars_list_game_custom_avatars`]
+/// struct for typed errors of method [`cloud_games_avatars_list_game_custom_avatars`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AvatarsListGameCustomAvatarsError {
+pub enum CloudGamesAvatarsListGameCustomAvatarsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`avatars_prepare_custom_avatar_upload`]
+/// struct for typed errors of method [`cloud_games_avatars_prepare_custom_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AvatarsPrepareCustomAvatarUploadError {
+pub enum CloudGamesAvatarsPrepareCustomAvatarUploadError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Completes a custom avatar image upload. Must be called after the file upload process completes.
-pub async fn avatars_complete_custom_avatar_upload(configuration: &configuration::Configuration, game_id: &str, upload_id: &str) -> Result<(), Error<AvatarsCompleteCustomAvatarUploadError>> {
+pub async fn cloud_games_avatars_complete_custom_avatar_upload(configuration: &configuration::Configuration, game_id: &str, upload_id: &str) -> Result<(), Error<CloudGamesAvatarsCompleteCustomAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -62,14 +62,14 @@ pub async fn avatars_complete_custom_avatar_upload(configuration: &configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<AvatarsCompleteCustomAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGamesAvatarsCompleteCustomAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Lists custom avatars for the given game.
-pub async fn avatars_list_game_custom_avatars(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::CloudGamesListGameCustomAvatarsOutput, Error<AvatarsListGameCustomAvatarsError>> {
+pub async fn cloud_games_avatars_list_game_custom_avatars(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::CloudGamesListGameCustomAvatarsOutput, Error<CloudGamesAvatarsListGameCustomAvatarsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -93,14 +93,14 @@ pub async fn avatars_list_game_custom_avatars(configuration: &configuration::Con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<AvatarsListGameCustomAvatarsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGamesAvatarsListGameCustomAvatarsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Prepares a custom avatar image upload. Complete upload with `rivet.api.cloud#CompleteCustomAvatarUpload`.
-pub async fn avatars_prepare_custom_avatar_upload(configuration: &configuration::Configuration, game_id: &str, cloud_games_prepare_custom_avatar_upload_input: crate::models::CloudGamesPrepareCustomAvatarUploadInput) -> Result<crate::models::CloudGamesPrepareCustomAvatarUploadOutput, Error<AvatarsPrepareCustomAvatarUploadError>> {
+pub async fn cloud_games_avatars_prepare_custom_avatar_upload(configuration: &configuration::Configuration, game_id: &str, cloud_games_prepare_custom_avatar_upload_input: crate::models::CloudGamesPrepareCustomAvatarUploadInput) -> Result<crate::models::CloudGamesPrepareCustomAvatarUploadOutput, Error<CloudGamesAvatarsPrepareCustomAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -125,7 +125,7 @@ pub async fn avatars_prepare_custom_avatar_upload(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<AvatarsPrepareCustomAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGamesAvatarsPrepareCustomAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

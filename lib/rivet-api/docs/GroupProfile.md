@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **is_current_identity_requesting_join** | Option<**bool**> | Whether or not the current identity is currently requesting to join this group. | [optional]
 **is_developer** | Option<**bool**> | Whether or not this group is a developer. | [optional]
 **join_requests** | [**Vec<crate::models::GroupJoinRequest>**](GroupJoinRequest.md) | A list of group join requests. | 
-**member_count** | Option<**f64**> | Unsigned 32 bit integer. | [optional]
+**member_count** | Option<**i32**> | Unsigned 32 bit integer. | [optional]
 **members** | [**Vec<crate::models::GroupMember>**](GroupMember.md) | A list of group members. | 
 **owner_identity_id** | **String** | A universally unique identifier. | 
 **publicity** | [**crate::models::GroupPublicity**](GroupPublicity.md) |  | 

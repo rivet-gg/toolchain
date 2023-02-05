@@ -43,15 +43,15 @@ pub struct CloudGameFull {
     pub namespaces: Vec<crate::models::CloudNamespaceSummary>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "total_player_count", skip_serializing_if = "Option::is_none")]
-    pub total_player_count: Option<f64>,
+    pub total_player_count: Option<i32>,
     /// A list of version summaries.
     #[serde(rename = "versions")]
-    pub versions: Vec<crate::models::CloudSummary>,
+    pub versions: Vec<crate::models::CloudVersionSummary>,
 }
 
 impl CloudGameFull {
     /// A full game.
-    pub fn new(available_regions: Vec<crate::models::CloudRegionSummary>, create_ts: String, developer_group_id: String, display_name: String, game_id: String, name_id: String, namespaces: Vec<crate::models::CloudNamespaceSummary>, versions: Vec<crate::models::CloudSummary>) -> CloudGameFull {
+    pub fn new(available_regions: Vec<crate::models::CloudRegionSummary>, create_ts: String, developer_group_id: String, display_name: String, game_id: String, name_id: String, namespaces: Vec<crate::models::CloudNamespaceSummary>, versions: Vec<crate::models::CloudVersionSummary>) -> CloudGameFull {
         CloudGameFull {
             available_regions,
             banner_url: None,

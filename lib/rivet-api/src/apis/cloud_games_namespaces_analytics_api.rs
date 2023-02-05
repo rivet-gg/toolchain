@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`analytics_get_namespace_analytics_matchmaker_live`]
+/// struct for typed errors of method [`cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AnalyticsGetNamespaceAnalyticsMatchmakerLiveError {
+pub enum CloudGamesNamespacesAnalyticsGetNamespaceAnalyticsMatchmakerLiveError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns live information about all active lobies for a given namespace.
-pub async fn analytics_get_namespace_analytics_matchmaker_live(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::CloudGamesNamespacesGetNamespaceAnalyticsMatchmakerLiveOutput, Error<AnalyticsGetNamespaceAnalyticsMatchmakerLiveError>> {
+pub async fn cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::CloudGamesNamespacesGetNamespaceAnalyticsMatchmakerLiveOutput, Error<CloudGamesNamespacesAnalyticsGetNamespaceAnalyticsMatchmakerLiveError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn analytics_get_namespace_analytics_matchmaker_live(configuration: &c
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<AnalyticsGetNamespaceAnalyticsMatchmakerLiveError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CloudGamesNamespacesAnalyticsGetNamespaceAnalyticsMatchmakerLiveError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

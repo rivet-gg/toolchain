@@ -37,7 +37,7 @@ pub struct CloudGamesGameSummary {
     pub name_id: String,
     /// Unsigned 32 bit integer.
     #[serde(rename = "total_player_count", skip_serializing_if = "Option::is_none")]
-    pub total_player_count: Option<f64>,
+    pub total_player_count: Option<i32>,
 }
 
 impl CloudGamesGameSummary {

@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`admin_resolve_beta_join_request`]
+/// struct for typed errors of method [`portal_admin_resolve_beta_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AdminResolveBetaJoinRequestError {
+pub enum PortalAdminResolveBetaJoinRequestError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Resolves a beta join request for a given identity.
-pub async fn admin_resolve_beta_join_request(configuration: &configuration::Configuration, identity_id: &str, portal_resolve_beta_join_request_input: crate::models::PortalResolveBetaJoinRequestInput) -> Result<(), Error<AdminResolveBetaJoinRequestError>> {
+pub async fn portal_admin_resolve_beta_join_request(configuration: &configuration::Configuration, identity_id: &str, portal_resolve_beta_join_request_input: crate::models::PortalResolveBetaJoinRequestInput) -> Result<(), Error<PortalAdminResolveBetaJoinRequestError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -49,7 +49,7 @@ pub async fn admin_resolve_beta_join_request(configuration: &configuration::Conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<AdminResolveBetaJoinRequestError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PortalAdminResolveBetaJoinRequestError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

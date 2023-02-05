@@ -15,30 +15,30 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`matchmaker_find_lobby_for_party`]
+/// struct for typed errors of method [`party_activity_matchmaker_find_lobby_for_party`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerFindLobbyForPartyError {
+pub enum PartyActivityMatchmakerFindLobbyForPartyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`matchmaker_join_lobby_for_party`]
+/// struct for typed errors of method [`party_activity_matchmaker_join_lobby_for_party`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerJoinLobbyForPartyError {
+pub enum PartyActivityMatchmakerJoinLobbyForPartyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`matchmaker_request_player`]
+/// struct for typed errors of method [`party_activity_matchmaker_request_player`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerRequestPlayerError {
+pub enum PartyActivityMatchmakerRequestPlayerError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Attempts to make the current identity's party find a lobby based on the given criteria. If succeeds, all party members will receive a `GlobalEventMatchmakerLobbyJoin` event with all the information required to join the lobby. This request will use the party player count configured for the lobby group. See `FindLobby`.
-pub async fn matchmaker_find_lobby_for_party(configuration: &configuration::Configuration, party_activity_find_matchmaker_lobby_for_party_input: crate::models::PartyActivityFindMatchmakerLobbyForPartyInput) -> Result<(), Error<MatchmakerFindLobbyForPartyError>> {
+pub async fn party_activity_matchmaker_find_lobby_for_party(configuration: &configuration::Configuration, party_activity_find_matchmaker_lobby_for_party_input: crate::models::PartyActivityFindMatchmakerLobbyForPartyInput) -> Result<(), Error<PartyActivityMatchmakerFindLobbyForPartyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -63,14 +63,14 @@ pub async fn matchmaker_find_lobby_for_party(configuration: &configuration::Conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<MatchmakerFindLobbyForPartyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartyActivityMatchmakerFindLobbyForPartyError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Attempts to make the current identity's party join a specific matchmaker lobby. This request will use the party player count configured for the lobby group. If succeeds, all party members will receive a `GlobalEventMatchmakerLobbyJoin` event with all the information required to join the lobby. Identity must be the party leader. See `JoinLobby`.
-pub async fn matchmaker_join_lobby_for_party(configuration: &configuration::Configuration, party_activity_join_matchmaker_lobby_for_party_input: crate::models::PartyActivityJoinMatchmakerLobbyForPartyInput) -> Result<(), Error<MatchmakerJoinLobbyForPartyError>> {
+pub async fn party_activity_matchmaker_join_lobby_for_party(configuration: &configuration::Configuration, party_activity_join_matchmaker_lobby_for_party_input: crate::models::PartyActivityJoinMatchmakerLobbyForPartyInput) -> Result<(), Error<PartyActivityMatchmakerJoinLobbyForPartyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -95,13 +95,13 @@ pub async fn matchmaker_join_lobby_for_party(configuration: &configuration::Conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<MatchmakerJoinLobbyForPartyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartyActivityMatchmakerJoinLobbyForPartyError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
-pub async fn matchmaker_request_player(configuration: &configuration::Configuration, ) -> Result<(), Error<MatchmakerRequestPlayerError>> {
+pub async fn party_activity_matchmaker_request_player(configuration: &configuration::Configuration, ) -> Result<(), Error<PartyActivityMatchmakerRequestPlayerError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -125,7 +125,7 @@ pub async fn matchmaker_request_player(configuration: &configuration::Configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<MatchmakerRequestPlayerError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartyActivityMatchmakerRequestPlayerError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

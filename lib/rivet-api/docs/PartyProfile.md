@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **invites** | [**Vec<crate::models::PartyInvite>**](PartyInvite.md) | A list of party invites. | 
 **members** | [**Vec<crate::models::PartyMemberSummary>**](PartyMemberSummary.md) | A list of party members. | 
 **party_id** | **String** | A universally unique identifier. | 
-**party_size** | Option<**f64**> | Unsigned 32 bit integer. | [optional]
+**party_size** | Option<**i32**> | Unsigned 32 bit integer. | [optional]
 **publicity** | [**crate::models::PartyPublicity**](PartyPublicity.md) |  | 
 **thread_id** | **String** | A universally unique identifier. | 
 

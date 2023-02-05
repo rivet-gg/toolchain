@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**avatars_complete_custom_avatar_upload**](CloudGamesAvatarsApi.md#avatars_complete_custom_avatar_upload) | **POST** /games/{game_id}/avatar-upload/{upload_id}/complete | 
-[**avatars_list_game_custom_avatars**](CloudGamesAvatarsApi.md#avatars_list_game_custom_avatars) | **GET** /games/{game_id}/avatars | 
-[**avatars_prepare_custom_avatar_upload**](CloudGamesAvatarsApi.md#avatars_prepare_custom_avatar_upload) | **POST** /games/{game_id}/prepare | 
+[**cloud_games_avatars_complete_custom_avatar_upload**](CloudGamesAvatarsApi.md#cloud_games_avatars_complete_custom_avatar_upload) | **POST** /games/{game_id}/avatar-upload/{upload_id}/complete | 
+[**cloud_games_avatars_list_game_custom_avatars**](CloudGamesAvatarsApi.md#cloud_games_avatars_list_game_custom_avatars) | **GET** /games/{game_id}/avatars | 
+[**cloud_games_avatars_prepare_custom_avatar_upload**](CloudGamesAvatarsApi.md#cloud_games_avatars_prepare_custom_avatar_upload) | **POST** /games/{game_id}/prepare | 
 
 
 
-## avatars_complete_custom_avatar_upload
+## cloud_games_avatars_complete_custom_avatar_upload
 
-> avatars_complete_custom_avatar_upload(game_id, upload_id)
+> cloud_games_avatars_complete_custom_avatar_upload(game_id, upload_id)
 
 
 Completes a custom avatar image upload. Must be called after the file upload process completes.
@@ -41,9 +41,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## avatars_list_game_custom_avatars
+## cloud_games_avatars_list_game_custom_avatars
 
-> crate::models::CloudGamesListGameCustomAvatarsOutput avatars_list_game_custom_avatars(game_id)
+> crate::models::CloudGamesListGameCustomAvatarsOutput cloud_games_avatars_list_game_custom_avatars(game_id)
 
 
 Lists custom avatars for the given game.
@@ -71,9 +71,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## avatars_prepare_custom_avatar_upload
+## cloud_games_avatars_prepare_custom_avatar_upload
 
-> crate::models::CloudGamesPrepareCustomAvatarUploadOutput avatars_prepare_custom_avatar_upload(game_id, cloud_games_prepare_custom_avatar_upload_input)
+> crate::models::CloudGamesPrepareCustomAvatarUploadOutput cloud_games_avatars_prepare_custom_avatar_upload(game_id, cloud_games_prepare_custom_avatar_upload_input)
 
 
 Prepares a custom avatar image upload. Complete upload with `rivet.api.cloud#CompleteCustomAvatarUpload`.

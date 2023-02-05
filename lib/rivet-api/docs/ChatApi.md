@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## chat_get_thread_history
 
-> crate::models::GetThreadHistoryOutput chat_get_thread_history(thread_id, count, ts, query_direction)
+> crate::models::ChatGetThreadHistoryOutput chat_get_thread_history(thread_id, count, ts, query_direction)
 
 
 Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
@@ -32,7 +32,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GetThreadHistoryOutput**](GetThreadHistoryOutput.md)
+[**crate::models::ChatGetThreadHistoryOutput**](ChatGetThreadHistoryOutput.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_get_thread_topic
 
-> crate::models::GetThreadTopicOutput chat_get_thread_topic(thread_id)
+> crate::models::ChatGetThreadTopicOutput chat_get_thread_topic(thread_id)
 
 
 Fetches the topic of a thread.
@@ -62,7 +62,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GetThreadTopicOutput**](GetThreadTopicOutput.md)
+[**crate::models::ChatGetThreadTopicOutput**](ChatGetThreadTopicOutput.md)
 
 ### Authorization
 
@@ -78,7 +78,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_send_message
 
-> crate::models::SendMessageOutput chat_send_message(send_message_input)
+> crate::models::ChatSendMessageOutput chat_send_message(chat_send_message_input)
 
 
 Sends a chat message to a given topic.
@@ -88,11 +88,11 @@ Sends a chat message to a given topic.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**send_message_input** | [**SendMessageInput**](SendMessageInput.md) |  | [required] |
+**chat_send_message_input** | [**ChatSendMessageInput**](ChatSendMessageInput.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::SendMessageOutput**](SendMessageOutput.md)
+[**crate::models::ChatSendMessageOutput**](ChatSendMessageOutput.md)
 
 ### Authorization
 
@@ -108,7 +108,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_set_thread_read
 
-> chat_set_thread_read(thread_id, set_thread_read_input)
+> chat_set_thread_read(thread_id, chat_set_thread_read_input)
 
 
 Updates the current identity's last read timestamp in the given thread.
@@ -119,7 +119,7 @@ Updates the current identity's last read timestamp in the given thread.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **thread_id** | **String** | A universally unique identifier. | [required] |
-**set_thread_read_input** | [**SetThreadReadInput**](SetThreadReadInput.md) |  | [required] |
+**chat_set_thread_read_input** | [**ChatSetThreadReadInput**](ChatSetThreadReadInput.md) |  | [required] |
 
 ### Return type
 
@@ -139,7 +139,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_set_typing_status
 
-> chat_set_typing_status(thread_id, set_typing_status_input)
+> chat_set_typing_status(thread_id, chat_set_typing_status_input)
 
 
 Updates the current identity's typing status in the given thread.
@@ -150,7 +150,7 @@ Updates the current identity's typing status in the given thread.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **thread_id** | **String** | A universally unique identifier. | [required] |
-**set_typing_status_input** | [**SetTypingStatusInput**](SetTypingStatusInput.md) |  | [required] |
+**chat_set_typing_status_input** | [**ChatSetTypingStatusInput**](ChatSetTypingStatusInput.md) |  | [required] |
 
 ### Return type
 
@@ -170,7 +170,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_watch_thread
 
-> crate::models::WatchThreadOutput chat_watch_thread(thread_id, watch_index)
+> crate::models::ChatWatchThreadOutput chat_watch_thread(thread_id, watch_index)
 
 
 Fetches all relevant changes from a thread that have happened since the given watch index.
@@ -185,7 +185,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::WatchThreadOutput**](WatchThreadOutput.md)
+[**crate::models::ChatWatchThreadOutput**](ChatWatchThreadOutput.md)
 
 ### Authorization
 

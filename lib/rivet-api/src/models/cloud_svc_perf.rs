@@ -16,7 +16,7 @@
 pub struct CloudSvcPerf {
     /// Unsigned 64 bit integer.
     #[serde(rename = "duration", skip_serializing_if = "Option::is_none")]
-    pub duration: Option<f64>,
+    pub duration: Option<i64>,
     /// A list of performance marks.
     #[serde(rename = "marks")]
     pub marks: Vec<crate::models::CloudLogsPerfMark>,

@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tokens_refresh_identity_token**](AuthTokensApi.md#tokens_refresh_identity_token) | **POST** /tokens/identity | 
+[**auth_tokens_refresh_identity_token**](AuthTokensApi.md#auth_tokens_refresh_identity_token) | **POST** /tokens/identity | 
 
 
 
-## tokens_refresh_identity_token
+## auth_tokens_refresh_identity_token
 
-> crate::models::AuthRefreshIdentityTokenOutput tokens_refresh_identity_token(auth_refresh_identity_token_input)
+> crate::models::AuthRefreshIdentityTokenOutput auth_tokens_refresh_identity_token(auth_refresh_identity_token_input)
 
 
 Refreshes the current identity's token and sets authentication headers.

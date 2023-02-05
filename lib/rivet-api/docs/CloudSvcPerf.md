@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**duration** | Option<**f64**> | Unsigned 64 bit integer. | [optional]
+**duration** | Option<**i64**> | Unsigned 64 bit integer. | [optional]
 **marks** | [**Vec<crate::models::CloudLogsPerfMark>**](CloudLogsPerfMark.md) | A list of performance marks. | 
 **req_id** | Option<**String**> | A universally unique identifier. | [optional]
 **spans** | [**Vec<crate::models::CloudLogsPerfSpan>**](CloudLogsPerfSpan.md) | A list of performance spans. | 

@@ -14,24 +14,24 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionSummary {
-    /// A universally unique identifier.
-    #[serde(rename = "version_id")]
-    pub version_id: String,
     /// RFC3339 timestamp.
     #[serde(rename = "create_ts")]
     pub create_ts: String,
     /// Represent a resource's readable display name.
     #[serde(rename = "display_name")]
     pub display_name: String,
+    /// A universally unique identifier.
+    #[serde(rename = "version_id")]
+    pub version_id: String,
 }
 
 impl CloudVersionSummary {
     /// A version summary.
-    pub fn new(version_id: String, create_ts: String, display_name: String) -> CloudVersionSummary {
+    pub fn new(create_ts: String, display_name: String, version_id: String) -> CloudVersionSummary {
         CloudVersionSummary {
-            version_id,
             create_ts,
             display_name,
+            version_id,
         }
     }
 }

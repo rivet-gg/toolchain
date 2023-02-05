@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**operations_delete**](KvOperationsApi.md#operations_delete) | **DELETE** /entries | 
-[**operations_get**](KvOperationsApi.md#operations_get) | **GET** /entries | 
-[**operations_put**](KvOperationsApi.md#operations_put) | **PUT** /entries | 
+[**kv_operations_delete**](KvOperationsApi.md#kv_operations_delete) | **DELETE** /entries | 
+[**kv_operations_get**](KvOperationsApi.md#kv_operations_get) | **GET** /entries | 
+[**kv_operations_put**](KvOperationsApi.md#kv_operations_put) | **PUT** /entries | 
 
 
 
-## operations_delete
+## kv_operations_delete
 
-> operations_delete(key, namespace_id)
+> kv_operations_delete(key, namespace_id)
 
 
 Deletes a key-value entry by key.
@@ -41,9 +41,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## operations_get
+## kv_operations_get
 
-> crate::models::KvGetOutput operations_get(key, watch_index, namespace_id)
+> crate::models::KvGetOutput kv_operations_get(key, watch_index, namespace_id)
 
 
 Returns a specific key-value entry by key.
@@ -73,9 +73,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## operations_put
+## kv_operations_put
 
-> operations_put(kv_put_input)
+> kv_operations_put(kv_put_input)
 
 
 Puts (sets or overwrites) a key-value entry by key.

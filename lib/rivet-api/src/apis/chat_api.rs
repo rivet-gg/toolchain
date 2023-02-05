@@ -59,7 +59,7 @@ pub enum ChatWatchThreadError {
 
 
 /// Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
-pub async fn chat_get_thread_history(configuration: &configuration::Configuration, thread_id: &str, count: f64, ts: Option<&str>, query_direction: Option<&str>) -> Result<crate::models::GetThreadHistoryOutput, Error<ChatGetThreadHistoryError>> {
+pub async fn chat_get_thread_history(configuration: &configuration::Configuration, thread_id: &str, count: f64, ts: Option<&str>, query_direction: Option<&str>) -> Result<crate::models::ChatGetThreadHistoryOutput, Error<ChatGetThreadHistoryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -97,7 +97,7 @@ pub async fn chat_get_thread_history(configuration: &configuration::Configuratio
 }
 
 /// Fetches the topic of a thread.
-pub async fn chat_get_thread_topic(configuration: &configuration::Configuration, thread_id: &str) -> Result<crate::models::GetThreadTopicOutput, Error<ChatGetThreadTopicError>> {
+pub async fn chat_get_thread_topic(configuration: &configuration::Configuration, thread_id: &str) -> Result<crate::models::ChatGetThreadTopicOutput, Error<ChatGetThreadTopicError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -128,7 +128,7 @@ pub async fn chat_get_thread_topic(configuration: &configuration::Configuration,
 }
 
 /// Sends a chat message to a given topic.
-pub async fn chat_send_message(configuration: &configuration::Configuration, send_message_input: crate::models::SendMessageInput) -> Result<crate::models::SendMessageOutput, Error<ChatSendMessageError>> {
+pub async fn chat_send_message(configuration: &configuration::Configuration, chat_send_message_input: crate::models::ChatSendMessageInput) -> Result<crate::models::ChatSendMessageOutput, Error<ChatSendMessageError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -142,7 +142,7 @@ pub async fn chat_send_message(configuration: &configuration::Configuration, sen
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&send_message_input);
+    local_var_req_builder = local_var_req_builder.json(&chat_send_message_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -160,7 +160,7 @@ pub async fn chat_send_message(configuration: &configuration::Configuration, sen
 }
 
 /// Updates the current identity's last read timestamp in the given thread.
-pub async fn chat_set_thread_read(configuration: &configuration::Configuration, thread_id: &str, set_thread_read_input: crate::models::SetThreadReadInput) -> Result<(), Error<ChatSetThreadReadError>> {
+pub async fn chat_set_thread_read(configuration: &configuration::Configuration, thread_id: &str, chat_set_thread_read_input: crate::models::ChatSetThreadReadInput) -> Result<(), Error<ChatSetThreadReadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -174,7 +174,7 @@ pub async fn chat_set_thread_read(configuration: &configuration::Configuration, 
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&set_thread_read_input);
+    local_var_req_builder = local_var_req_builder.json(&chat_set_thread_read_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -192,7 +192,7 @@ pub async fn chat_set_thread_read(configuration: &configuration::Configuration, 
 }
 
 /// Updates the current identity's typing status in the given thread.
-pub async fn chat_set_typing_status(configuration: &configuration::Configuration, thread_id: &str, set_typing_status_input: crate::models::SetTypingStatusInput) -> Result<(), Error<ChatSetTypingStatusError>> {
+pub async fn chat_set_typing_status(configuration: &configuration::Configuration, thread_id: &str, chat_set_typing_status_input: crate::models::ChatSetTypingStatusInput) -> Result<(), Error<ChatSetTypingStatusError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -206,7 +206,7 @@ pub async fn chat_set_typing_status(configuration: &configuration::Configuration
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&set_typing_status_input);
+    local_var_req_builder = local_var_req_builder.json(&chat_set_typing_status_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -224,7 +224,7 @@ pub async fn chat_set_typing_status(configuration: &configuration::Configuration
 }
 
 /// Fetches all relevant changes from a thread that have happened since the given watch index.
-pub async fn chat_watch_thread(configuration: &configuration::Configuration, thread_id: &str, watch_index: Option<&str>) -> Result<crate::models::WatchThreadOutput, Error<ChatWatchThreadError>> {
+pub async fn chat_watch_thread(configuration: &configuration::Configuration, thread_id: &str, watch_index: Option<&str>) -> Result<crate::models::ChatWatchThreadOutput, Error<ChatWatchThreadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;

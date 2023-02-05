@@ -15,44 +15,44 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`lobbies_find`]
+/// struct for typed errors of method [`matchmaker_lobbies_find`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LobbiesFindError {
+pub enum MatchmakerLobbiesFindError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`lobbies_join`]
+/// struct for typed errors of method [`matchmaker_lobbies_join`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LobbiesJoinError {
+pub enum MatchmakerLobbiesJoinError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`lobbies_list`]
+/// struct for typed errors of method [`matchmaker_lobbies_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LobbiesListError {
+pub enum MatchmakerLobbiesListError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`lobbies_ready`]
+/// struct for typed errors of method [`matchmaker_lobbies_ready`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LobbiesReadyError {
+pub enum MatchmakerLobbiesReadyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`lobbies_set_closed`]
+/// struct for typed errors of method [`matchmaker_lobbies_set_closed`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LobbiesSetClosedError {
+pub enum MatchmakerLobbiesSetClosedError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Finds a lobby based on the given criteria. If a lobby is not found and `prevent_auto_create_lobby` is `true`,  a new lobby will be created. 
-pub async fn lobbies_find(configuration: &configuration::Configuration, lobbies_find_request: crate::models::LobbiesFindRequest, origin: Option<&str>) -> Result<crate::models::MatchmakerFindLobbyOutput, Error<LobbiesFindError>> {
+pub async fn matchmaker_lobbies_find(configuration: &configuration::Configuration, matchmaker_lobbies_find_request: crate::models::MatchmakerLobbiesFindRequest, origin: Option<&str>) -> Result<crate::models::MatchmakerFindLobbyOutput, Error<MatchmakerLobbiesFindError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -69,7 +69,7 @@ pub async fn lobbies_find(configuration: &configuration::Configuration, lobbies_
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&lobbies_find_request);
+    local_var_req_builder = local_var_req_builder.json(&matchmaker_lobbies_find_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -80,14 +80,14 @@ pub async fn lobbies_find(configuration: &configuration::Configuration, lobbies_
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LobbiesFindError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerLobbiesFindError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Joins a specific lobby. This request will use the direct player count configured for the lobby group. 
-pub async fn lobbies_join(configuration: &configuration::Configuration, lobbies_join_request: crate::models::LobbiesJoinRequest) -> Result<crate::models::MatchmakerJoinLobbyOutput, Error<LobbiesJoinError>> {
+pub async fn matchmaker_lobbies_join(configuration: &configuration::Configuration, matchmaker_lobbies_join_request: crate::models::MatchmakerLobbiesJoinRequest) -> Result<crate::models::MatchmakerJoinLobbyOutput, Error<MatchmakerLobbiesJoinError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -101,7 +101,7 @@ pub async fn lobbies_join(configuration: &configuration::Configuration, lobbies_
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&lobbies_join_request);
+    local_var_req_builder = local_var_req_builder.json(&matchmaker_lobbies_join_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -112,14 +112,14 @@ pub async fn lobbies_join(configuration: &configuration::Configuration, lobbies_
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LobbiesJoinError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerLobbiesJoinError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Lists all open lobbies.
-pub async fn lobbies_list(configuration: &configuration::Configuration, ) -> Result<crate::models::MatchmakerListLobbiesOutput, Error<LobbiesListError>> {
+pub async fn matchmaker_lobbies_list(configuration: &configuration::Configuration, ) -> Result<crate::models::MatchmakerListLobbiesOutput, Error<MatchmakerLobbiesListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -143,14 +143,14 @@ pub async fn lobbies_list(configuration: &configuration::Configuration, ) -> Res
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LobbiesListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerLobbiesListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Marks the current lobby as ready to accept connections.  Players will not be able to connect to this lobby until the  lobby is flagged as ready.
-pub async fn lobbies_ready(configuration: &configuration::Configuration, ) -> Result<(), Error<LobbiesReadyError>> {
+pub async fn matchmaker_lobbies_ready(configuration: &configuration::Configuration, ) -> Result<(), Error<MatchmakerLobbiesReadyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -174,14 +174,14 @@ pub async fn lobbies_ready(configuration: &configuration::Configuration, ) -> Re
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<LobbiesReadyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerLobbiesReadyError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// If `is_closed` is `true`, players will be prevented from joining the lobby. Does not shutdown the lobby. 
-pub async fn lobbies_set_closed(configuration: &configuration::Configuration, lobbies_set_closed_request: crate::models::LobbiesSetClosedRequest) -> Result<(), Error<LobbiesSetClosedError>> {
+pub async fn matchmaker_lobbies_set_closed(configuration: &configuration::Configuration, matchmaker_lobbies_set_closed_request: crate::models::MatchmakerLobbiesSetClosedRequest) -> Result<(), Error<MatchmakerLobbiesSetClosedError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -195,7 +195,7 @@ pub async fn lobbies_set_closed(configuration: &configuration::Configuration, lo
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&lobbies_set_closed_request);
+    local_var_req_builder = local_var_req_builder.json(&matchmaker_lobbies_set_closed_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -206,7 +206,7 @@ pub async fn lobbies_set_closed(configuration: &configuration::Configuration, lo
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<LobbiesSetClosedError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerLobbiesSetClosedError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

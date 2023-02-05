@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**logs_get_ray_perf_logs**](CloudLogsApi.md#logs_get_ray_perf_logs) | **GET** /rays/{ray_id}/perf | 
+[**cloud_logs_get_ray_perf_logs**](CloudLogsApi.md#cloud_logs_get_ray_perf_logs) | **GET** /rays/{ray_id}/perf | 
 
 
 
-## logs_get_ray_perf_logs
+## cloud_logs_get_ray_perf_logs
 
-> crate::models::CloudGetRayPerfLogsOutput logs_get_ray_perf_logs(ray_id)
+> crate::models::CloudGetRayPerfLogsOutput cloud_logs_get_ray_perf_logs(ray_id)
 
 
 Returns performance information about a Rivet Ray.

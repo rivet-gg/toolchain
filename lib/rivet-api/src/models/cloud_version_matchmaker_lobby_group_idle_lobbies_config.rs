@@ -16,10 +16,10 @@
 pub struct CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig {
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_idle_lobbies", skip_serializing_if = "Option::is_none")]
-    pub max_idle_lobbies: Option<f64>,
+    pub max_idle_lobbies: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "min_idle_lobbies", skip_serializing_if = "Option::is_none")]
-    pub min_idle_lobbies: Option<f64>,
+    pub min_idle_lobbies: Option<i32>,
 }
 
 impl CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig {

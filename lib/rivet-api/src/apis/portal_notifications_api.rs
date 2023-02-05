@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`notifications_register_notifications`]
+/// struct for typed errors of method [`portal_notifications_register_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NotificationsRegisterNotificationsError {
+pub enum PortalNotificationsRegisterNotificationsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`notifications_unregister_notifications`]
+/// struct for typed errors of method [`portal_notifications_unregister_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NotificationsUnregisterNotificationsError {
+pub enum PortalNotificationsUnregisterNotificationsError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Registers push notifications for the current identity.
-pub async fn notifications_register_notifications(configuration: &configuration::Configuration, portal_register_notifications_input: crate::models::PortalRegisterNotificationsInput) -> Result<(), Error<NotificationsRegisterNotificationsError>> {
+pub async fn portal_notifications_register_notifications(configuration: &configuration::Configuration, portal_register_notifications_input: crate::models::PortalRegisterNotificationsInput) -> Result<(), Error<PortalNotificationsRegisterNotificationsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -56,14 +56,14 @@ pub async fn notifications_register_notifications(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NotificationsRegisterNotificationsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PortalNotificationsRegisterNotificationsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Unregister push notification for the current identity.
-pub async fn notifications_unregister_notifications(configuration: &configuration::Configuration, service: &str) -> Result<(), Error<NotificationsUnregisterNotificationsError>> {
+pub async fn portal_notifications_unregister_notifications(configuration: &configuration::Configuration, service: &str) -> Result<(), Error<PortalNotificationsUnregisterNotificationsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -88,7 +88,7 @@ pub async fn notifications_unregister_notifications(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NotificationsUnregisterNotificationsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PortalNotificationsUnregisterNotificationsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

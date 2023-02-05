@@ -40,22 +40,22 @@ pub struct CloudAnalyticsLobbySummary {
     pub lobby_id: String,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_direct", skip_serializing_if = "Option::is_none")]
-    pub max_players_direct: Option<f64>,
+    pub max_players_direct: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_normal", skip_serializing_if = "Option::is_none")]
-    pub max_players_normal: Option<f64>,
+    pub max_players_normal: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_party", skip_serializing_if = "Option::is_none")]
-    pub max_players_party: Option<f64>,
+    pub max_players_party: Option<i32>,
     /// A universally unique identifier.
     #[serde(rename = "region_id")]
     pub region_id: String,
     /// Unsigned 32 bit integer.
     #[serde(rename = "registered_player_count", skip_serializing_if = "Option::is_none")]
-    pub registered_player_count: Option<f64>,
+    pub registered_player_count: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "total_player_count", skip_serializing_if = "Option::is_none")]
-    pub total_player_count: Option<f64>,
+    pub total_player_count: Option<i32>,
 }
 
 impl CloudAnalyticsLobbySummary {

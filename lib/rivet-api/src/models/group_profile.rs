@@ -42,7 +42,7 @@ pub struct GroupProfile {
     pub join_requests: Vec<crate::models::GroupJoinRequest>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "member_count", skip_serializing_if = "Option::is_none")]
-    pub member_count: Option<f64>,
+    pub member_count: Option<i32>,
     /// A list of group members.
     #[serde(rename = "members")]
     pub members: Vec<crate::models::GroupMember>,

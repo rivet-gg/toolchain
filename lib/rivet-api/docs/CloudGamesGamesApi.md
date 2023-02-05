@@ -4,20 +4,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**games_create_game**](CloudGamesGamesApi.md#games_create_game) | **POST** /games | 
-[**games_game_banner_upload_complete**](CloudGamesGamesApi.md#games_game_banner_upload_complete) | **POST** /games/{game_id}/banner-upload/{upload_id}/complete | 
-[**games_game_banner_upload_prepare**](CloudGamesGamesApi.md#games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
-[**games_game_logo_upload_complete**](CloudGamesGamesApi.md#games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
-[**games_game_logo_upload_prepare**](CloudGamesGamesApi.md#games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
-[**games_get_game_by_id**](CloudGamesGamesApi.md#games_get_game_by_id) | **GET** /games/{game_id} | 
-[**games_get_games**](CloudGamesGamesApi.md#games_get_games) | **GET** /games | 
-[**games_validate_game**](CloudGamesGamesApi.md#games_validate_game) | **POST** /games/validate | 
+[**cloud_games_games_create_game**](CloudGamesGamesApi.md#cloud_games_games_create_game) | **POST** /games | 
+[**cloud_games_games_game_banner_upload_complete**](CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_complete) | **POST** /games/{game_id}/banner-upload/{upload_id}/complete | 
+[**cloud_games_games_game_banner_upload_prepare**](CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
+[**cloud_games_games_game_logo_upload_complete**](CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
+[**cloud_games_games_game_logo_upload_prepare**](CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
+[**cloud_games_games_get_game_by_id**](CloudGamesGamesApi.md#cloud_games_games_get_game_by_id) | **GET** /games/{game_id} | 
+[**cloud_games_games_get_games**](CloudGamesGamesApi.md#cloud_games_games_get_games) | **GET** /games | 
+[**cloud_games_games_validate_game**](CloudGamesGamesApi.md#cloud_games_games_validate_game) | **POST** /games/validate | 
 
 
 
-## games_create_game
+## cloud_games_games_create_game
 
-> crate::models::CloudGamesCreateGameOutput games_create_game(cloud_games_create_game_input)
+> crate::models::CloudGamesCreateGameOutput cloud_games_games_create_game(cloud_games_create_game_input)
 
 
 Creates a new game.
@@ -45,9 +45,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_game_banner_upload_complete
+## cloud_games_games_game_banner_upload_complete
 
-> games_game_banner_upload_complete(game_id, upload_id)
+> cloud_games_games_game_banner_upload_complete(game_id, upload_id)
 
 
 Completes an game banner image upload. Must be called after the file upload process completes.
@@ -76,9 +76,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_game_banner_upload_prepare
+## cloud_games_games_game_banner_upload_prepare
 
-> crate::models::CloudGamesGameBannerUploadPrepareOutput games_game_banner_upload_prepare(game_id, cloud_games_game_banner_upload_prepare_input)
+> crate::models::CloudGamesGameBannerUploadPrepareOutput cloud_games_games_game_banner_upload_prepare(game_id, cloud_games_game_banner_upload_prepare_input)
 
 
 Prepares a game banner image upload.
@@ -107,9 +107,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_game_logo_upload_complete
+## cloud_games_games_game_logo_upload_complete
 
-> games_game_logo_upload_complete(game_id, upload_id)
+> cloud_games_games_game_logo_upload_complete(game_id, upload_id)
 
 
 Completes a game logo image upload. Must be called after the file upload process completes.
@@ -138,9 +138,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_game_logo_upload_prepare
+## cloud_games_games_game_logo_upload_prepare
 
-> crate::models::CloudGamesGameLogoUploadPrepareOutput games_game_logo_upload_prepare(game_id, cloud_games_game_logo_upload_prepare_input)
+> crate::models::CloudGamesGameLogoUploadPrepareOutput cloud_games_games_game_logo_upload_prepare(game_id, cloud_games_game_logo_upload_prepare_input)
 
 
 Prepares a game logo image upload.
@@ -169,9 +169,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_get_game_by_id
+## cloud_games_games_get_game_by_id
 
-> crate::models::CloudGamesGetGameByIdOutput games_get_game_by_id(game_id, watch_index)
+> crate::models::CloudGamesGetGameByIdOutput cloud_games_games_get_game_by_id(game_id, watch_index)
 
 
 Returns a game by its game id.
@@ -200,9 +200,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_get_games
+## cloud_games_games_get_games
 
-> crate::models::CloudGamesGetGamesOutput games_get_games(watch_index)
+> crate::models::CloudGamesGetGamesOutput cloud_games_games_get_games(watch_index)
 
 
 Returns a list of games in which the current identity is a group member of its development team.
@@ -230,9 +230,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## games_validate_game
+## cloud_games_games_validate_game
 
-> crate::models::CloudGamesValidateGameOutput games_validate_game(cloud_games_validate_game_input)
+> crate::models::CloudGamesValidateGameOutput cloud_games_games_validate_game(cloud_games_validate_game_input)
 
 
 Validates information used to create a new game.

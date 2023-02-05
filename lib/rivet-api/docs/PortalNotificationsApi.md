@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**notifications_register_notifications**](PortalNotificationsApi.md#notifications_register_notifications) | **POST** /notifications/register | 
-[**notifications_unregister_notifications**](PortalNotificationsApi.md#notifications_unregister_notifications) | **DELETE** /notifications/register | 
+[**portal_notifications_register_notifications**](PortalNotificationsApi.md#portal_notifications_register_notifications) | **POST** /notifications/register | 
+[**portal_notifications_unregister_notifications**](PortalNotificationsApi.md#portal_notifications_unregister_notifications) | **DELETE** /notifications/register | 
 
 
 
-## notifications_register_notifications
+## portal_notifications_register_notifications
 
-> notifications_register_notifications(portal_register_notifications_input)
+> portal_notifications_register_notifications(portal_register_notifications_input)
 
 
 Registers push notifications for the current identity.
@@ -39,9 +39,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## notifications_unregister_notifications
+## portal_notifications_unregister_notifications
 
-> notifications_unregister_notifications(service)
+> portal_notifications_unregister_notifications(service)
 
 
 Unregister push notification for the current identity.

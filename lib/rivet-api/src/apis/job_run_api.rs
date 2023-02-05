@@ -15,15 +15,15 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`run_cleanup`]
+/// struct for typed errors of method [`job_run_cleanup`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RunCleanupError {
+pub enum JobRunCleanupError {
     UnknownValue(serde_json::Value),
 }
 
 
-pub async fn run_cleanup(configuration: &configuration::Configuration, ) -> Result<(), Error<RunCleanupError>> {
+pub async fn job_run_cleanup(configuration: &configuration::Configuration, ) -> Result<(), Error<JobRunCleanupError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -47,7 +47,7 @@ pub async fn run_cleanup(configuration: &configuration::Configuration, ) -> Resu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<RunCleanupError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<JobRunCleanupError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -16,22 +16,22 @@
 pub struct CloudMatchmakerNamespaceConfig {
     /// Unsigned 32 bit integer.
     #[serde(rename = "lobby_count_max", skip_serializing_if = "Option::is_none")]
-    pub lobby_count_max: Option<f64>,
+    pub lobby_count_max: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_per_client", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client: Option<f64>,
+    pub max_players_per_client: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_per_client_hosting", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_hosting: Option<f64>,
+    pub max_players_per_client_hosting: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_per_client_proxy", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_proxy: Option<f64>,
+    pub max_players_per_client_proxy: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_per_client_tor", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_tor: Option<f64>,
+    pub max_players_per_client_tor: Option<i32>,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_per_client_vpn", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_vpn: Option<f64>,
+    pub max_players_per_client_vpn: Option<i32>,
 }
 
 impl CloudMatchmakerNamespaceConfig {

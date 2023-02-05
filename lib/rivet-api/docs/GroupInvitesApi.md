@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**invites_consume_invite**](GroupInvitesApi.md#invites_consume_invite) | **POST** /invites/{group_invite_code}/consume | 
-[**invites_create_invite**](GroupInvitesApi.md#invites_create_invite) | **POST** /groups/{group_id}/invites | 
-[**invites_get_invite**](GroupInvitesApi.md#invites_get_invite) | **GET** /invites/{group_invite_code} | 
+[**group_invites_consume_invite**](GroupInvitesApi.md#group_invites_consume_invite) | **POST** /invites/{group_invite_code}/consume | 
+[**group_invites_create_invite**](GroupInvitesApi.md#group_invites_create_invite) | **POST** /groups/{group_id}/invites | 
+[**group_invites_get_invite**](GroupInvitesApi.md#group_invites_get_invite) | **GET** /invites/{group_invite_code} | 
 
 
 
-## invites_consume_invite
+## group_invites_consume_invite
 
-> crate::models::GroupConsumeInviteOutput invites_consume_invite(group_invite_code)
+> crate::models::GroupConsumeInviteOutput group_invites_consume_invite(group_invite_code)
 
 
 Consumes a group invite to join a group.
@@ -40,9 +40,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## invites_create_invite
+## group_invites_create_invite
 
-> crate::models::GroupCreateInviteOutput invites_create_invite(group_id, group_create_invite_input)
+> crate::models::GroupCreateInviteOutput group_invites_create_invite(group_id, group_create_invite_input)
 
 
 Creates a group invite. Can be shared with other identities to let them join this group.
@@ -71,9 +71,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## invites_get_invite
+## group_invites_get_invite
 
-> crate::models::GroupGetInviteOutput invites_get_invite(group_invite_code)
+> crate::models::GroupGetInviteOutput group_invites_get_invite(group_invite_code)
 
 
 Inspects a group invite returning information about the team that created it.

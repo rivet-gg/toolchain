@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**logs_get_namespace_lobby**](CloudGamesNamespacesLogsApi.md#logs_get_namespace_lobby) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
-[**logs_list_namespace_lobbies**](CloudGamesNamespacesLogsApi.md#logs_list_namespace_lobbies) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
+[**cloud_games_namespaces_logs_get_namespace_lobby**](CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_get_namespace_lobby) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
+[**cloud_games_namespaces_logs_list_namespace_lobbies**](CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_list_namespace_lobbies) | **GET** /games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
 
 
 
-## logs_get_namespace_lobby
+## cloud_games_namespaces_logs_get_namespace_lobby
 
-> crate::models::CloudGamesNamespacesGetNamespaceLobbyOutput logs_get_namespace_lobby(game_id, namespace_id, lobby_id)
+> crate::models::CloudGamesNamespacesGetNamespaceLobbyOutput cloud_games_namespaces_logs_get_namespace_lobby(game_id, namespace_id, lobby_id)
 
 
 Returns a lobby from the given game namespace.
@@ -41,9 +41,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## logs_list_namespace_lobbies
+## cloud_games_namespaces_logs_list_namespace_lobbies
 
-> crate::models::CloudGamesNamespacesListNamespaceLobbiesOutput logs_list_namespace_lobbies(game_id, namespace_id, before_create_ts)
+> crate::models::CloudGamesNamespacesListNamespaceLobbiesOutput cloud_games_namespaces_logs_list_namespace_lobbies(game_id, namespace_id, before_create_ts)
 
 
 Returns a list of lobbies for the given game namespace.

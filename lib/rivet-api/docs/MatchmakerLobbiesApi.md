@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**lobbies_find**](MatchmakerLobbiesApi.md#lobbies_find) | **POST** /lobbies/find | 
-[**lobbies_join**](MatchmakerLobbiesApi.md#lobbies_join) | **POST** /lobbies/join | 
-[**lobbies_list**](MatchmakerLobbiesApi.md#lobbies_list) | **GET** /lobbies/list | 
-[**lobbies_ready**](MatchmakerLobbiesApi.md#lobbies_ready) | **POST** /lobbies/ready | 
-[**lobbies_set_closed**](MatchmakerLobbiesApi.md#lobbies_set_closed) | **PUT** /lobbies/closed | 
+[**matchmaker_lobbies_find**](MatchmakerLobbiesApi.md#matchmaker_lobbies_find) | **POST** /lobbies/find | 
+[**matchmaker_lobbies_join**](MatchmakerLobbiesApi.md#matchmaker_lobbies_join) | **POST** /lobbies/join | 
+[**matchmaker_lobbies_list**](MatchmakerLobbiesApi.md#matchmaker_lobbies_list) | **GET** /lobbies/list | 
+[**matchmaker_lobbies_ready**](MatchmakerLobbiesApi.md#matchmaker_lobbies_ready) | **POST** /lobbies/ready | 
+[**matchmaker_lobbies_set_closed**](MatchmakerLobbiesApi.md#matchmaker_lobbies_set_closed) | **PUT** /lobbies/closed | 
 
 
 
-## lobbies_find
+## matchmaker_lobbies_find
 
-> crate::models::MatchmakerFindLobbyOutput lobbies_find(lobbies_find_request, origin)
+> crate::models::MatchmakerFindLobbyOutput matchmaker_lobbies_find(matchmaker_lobbies_find_request, origin)
 
 
 Finds a lobby based on the given criteria. If a lobby is not found and `prevent_auto_create_lobby` is `true`,  a new lobby will be created. 
@@ -24,7 +24,7 @@ Finds a lobby based on the given criteria. If a lobby is not found and `prevent_
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**lobbies_find_request** | [**LobbiesFindRequest**](LobbiesFindRequest.md) |  | [required] |
+**matchmaker_lobbies_find_request** | [**MatchmakerLobbiesFindRequest**](MatchmakerLobbiesFindRequest.md) |  | [required] |
 **origin** | Option<**String**> |  |  |
 
 ### Return type
@@ -43,9 +43,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## lobbies_join
+## matchmaker_lobbies_join
 
-> crate::models::MatchmakerJoinLobbyOutput lobbies_join(lobbies_join_request)
+> crate::models::MatchmakerJoinLobbyOutput matchmaker_lobbies_join(matchmaker_lobbies_join_request)
 
 
 Joins a specific lobby. This request will use the direct player count configured for the lobby group. 
@@ -55,7 +55,7 @@ Joins a specific lobby. This request will use the direct player count configured
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**lobbies_join_request** | [**LobbiesJoinRequest**](LobbiesJoinRequest.md) |  | [required] |
+**matchmaker_lobbies_join_request** | [**MatchmakerLobbiesJoinRequest**](MatchmakerLobbiesJoinRequest.md) |  | [required] |
 
 ### Return type
 
@@ -73,9 +73,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## lobbies_list
+## matchmaker_lobbies_list
 
-> crate::models::MatchmakerListLobbiesOutput lobbies_list()
+> crate::models::MatchmakerListLobbiesOutput matchmaker_lobbies_list()
 
 
 Lists all open lobbies.
@@ -100,9 +100,9 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## lobbies_ready
+## matchmaker_lobbies_ready
 
-> lobbies_ready()
+> matchmaker_lobbies_ready()
 
 
 Marks the current lobby as ready to accept connections.  Players will not be able to connect to this lobby until the  lobby is flagged as ready.
@@ -127,9 +127,9 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## lobbies_set_closed
+## matchmaker_lobbies_set_closed
 
-> lobbies_set_closed(lobbies_set_closed_request)
+> matchmaker_lobbies_set_closed(matchmaker_lobbies_set_closed_request)
 
 
 If `is_closed` is `true`, players will be prevented from joining the lobby. Does not shutdown the lobby. 
@@ -139,7 +139,7 @@ If `is_closed` is `true`, players will be prevented from joining the lobby. Does
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**lobbies_set_closed_request** | [**LobbiesSetClosedRequest**](LobbiesSetClosedRequest.md) |  | [required] |
+**matchmaker_lobbies_set_closed_request** | [**MatchmakerLobbiesSetClosedRequest**](MatchmakerLobbiesSetClosedRequest.md) |  | [required] |
 
 ### Return type
 
