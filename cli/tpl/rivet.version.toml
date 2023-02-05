@@ -1,7 +1,7 @@
 [cdn]
 	build_command = "npm run build"
 	build_output = "dist/"
-	site_id = "xxxx"
+	# site_id = "xxxx"
 
 [matchmaker]
 	tier = "basic-1d1"
@@ -9,9 +9,7 @@
 
 	[matchmaker.docker]
 		dockerfile = "Dockerfile"
-		# or
-		image = "test"
-		image_id = "xxxx"
+		# image_id = "xxxx"
 		env = { PORT = "80" }
 		args = []
 

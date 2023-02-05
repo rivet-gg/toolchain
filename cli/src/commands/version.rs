@@ -1,9 +1,11 @@
 use anyhow::{Context, Error, Result};
 use clap::Parser;
-use cli_core::rivet_api::models::CloudConfig as CloudVersionConfig;
+use cli_core::rivet_api::models::CloudVersionConfig;
 use serde::Serialize;
 use serde_json::json;
 use tabled::Tabled;
+use tokio::process::Command;
+use uuid::Uuid;
 
 use crate::{
 	commands::{build, site},
@@ -348,22 +350,49 @@ pub async fn process_rivet_config(
 	ctx: &cli_core::Ctx,
 	version: CloudVersionConfig,
 ) -> Result<CloudVersionConfig> {
+	// TODO: Do this for all possible docker endpoints
+
+	if let Some(docker) = version.matchmaker.as_ref().and_then(|x| x.docker.as_ref()) {
+		// Build Docker
+		if docker.image_id.is_none() {
+			if let Some(dockerfile) = docker.dockerfile.as_ref() {
+				// Build image
+				let tag = format!("rivet-game:{}", Uuid::new_v4());
+				let mut build_cmd = Command::new("docker");
+				build_cmd
+					.arg("build")
+					.arg("--file")
+					.arg(dockerfile)
+					.arg("--tag")
+					.arg(tag)
+					.arg(".");
+				let build_status = build_cmd.status().await?;
+				// TODO: Check status
+
+				// TODO: Upload build
+			}
+		}
+	}
+
+	// Build CDN
+	let build_command: Option<String> = Some("build-cdn.sh".into());
+	let build_output: Option<String> = Some("dist/".into());
+	let site_id: Option<String> = None;
+	if site_id.is_none() {
+		if let Some(build_output) = build_output {
+			if let Some(build_command) = build_command {
+				let mut build_cmd = Command::new("/bin/sh");
+				build_cmd.arg("-c").arg(build_command);
+				build_cmd.status().await?;
+				// TODO: Check Windows support
+				// TODO: Check status
+			}
+
+			// TODO: Upload path
+		}
+	}
+
 	Ok(version)
-
-	// // Fetch game
-	// let game_res = ctx
-	// 	.client()
-	// 	.get_game_by_id()
-	// 	.game_id(&ctx.game_id)
-	// 	.send()
-	// 	.await
-	// 	.context("client.get_game_by_id")?;
-	// let game = game_res.game().context("game_res.game")?;
-
-	// // Build model
-	// let model = version.build_model(game)?;
-
-	// Ok(model)
 }
 
 pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
@@ -391,7 +420,7 @@ pub async fn create(
 
 	// Create game version
 	let version_res =
-		cli_core::rivet_api::apis::cloud_games_versions_api::versions_create_game_version(
+		cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
 			cli_core::rivet_api::models::CloudGamesCreateGameVersionInput {
