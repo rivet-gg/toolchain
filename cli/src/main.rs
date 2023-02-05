@@ -76,6 +76,9 @@ enum SubCommand {
 		#[clap(subcommand)]
 		command: avatar::SubCommand,
 	},
+
+	/// Alias of `rivet version deploy`
+	Publish(version::PublishOpts),
 }
 
 #[tokio::main]
@@ -123,6 +126,7 @@ async fn main() -> Result<()> {
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Build { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
+		SubCommand::Publish(opts) => opts.execute(&ctx).await?,
 	}
 
 	Ok(())

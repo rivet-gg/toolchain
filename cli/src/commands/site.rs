@@ -62,7 +62,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 			.map(str::to_owned)
 			.unwrap_or_else(|| "Site".to_owned())
 	});
-	eprintln!("\n\n> Creating site \"{}\"", display_name);
+	eprintln!("\n\n> Pushing site \"{}\"", display_name);
 	eprintln!("  * Upload path: {}", upload_path.display());
 
 	// Index the directory

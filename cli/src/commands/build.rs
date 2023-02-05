@@ -107,7 +107,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &BuildPushOpts) -> Result<Push
 		.unwrap_or_else(|| push_opts.tag.clone());
 	let content_type = "application/x-tar";
 	eprintln!(
-		"\n\n> Creating build \"{name}\" ({size})",
+		"\n\n> Pushing build \"{name}\" ({size})",
 		name = display_name,
 		size = upload::format_file_size(image_file_meta.len())?,
 	);
