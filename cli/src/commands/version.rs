@@ -1,6 +1,6 @@
 use anyhow::{ensure, Context, Error, Result};
 use clap::Parser;
-use cli_core::rivet_api::models::CloudVersionConfig;
+use cli_core::rivet_api::models;
 use serde::Serialize;
 use serde_json::json;
 use tabled::Tabled;
@@ -252,7 +252,7 @@ pub fn parse_config_override_args(
 pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
-) -> Result<CloudVersionConfig> {
+) -> Result<models::CloudVersionConfig> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
 		.add_source(config::File::with_name("rivet.version"));
@@ -291,7 +291,7 @@ pub async fn read_config(
 		.await
 		.context("find version config")?;
 	let version = config
-		.try_deserialize::<CloudVersionConfig>()
+		.try_deserialize::<models::CloudVersionConfig>()
 		.context("deserialize version config")?;
 
 	Ok(version)
@@ -300,69 +300,100 @@ pub async fn read_config(
 /// Builds the Docker image and CDN site if needed.
 pub async fn build_config_dependencies(
 	ctx: &cli_core::Ctx,
-	version: CloudVersionConfig,
+	version: &mut models::CloudVersionConfig,
 	format: Option<&struct_fmt::Format>,
-) -> Result<CloudVersionConfig> {
+) -> Result<()> {
 	// TODO: Do this for all possible docker endpoints
 
-	if let Some(docker) = version.matchmaker.as_ref().and_then(|x| x.docker.as_ref()) {
-		// Build Docker
-		if docker.image_id.is_none() {
-			if let Some(dockerfile) = docker.dockerfile.as_ref() {
-				// Build image
-				let tag = format!("rivet-game:{}", Uuid::new_v4());
-				let mut build_cmd = Command::new("docker");
-				build_cmd
-					.arg("build")
-					.arg("--file")
-					.arg(dockerfile)
-					.arg("--tag")
-					.arg(&tag)
-					.arg(".");
-				let build_status = build_cmd.status().await?;
-				ensure!(build_status.success(), "Docker image failed to build");
+	if let Some(matchmaker) = version.matchmaker.as_mut() {
+		if let Some(docker) = matchmaker.docker.as_mut() {
+			build_image(ctx, docker, format).await?;
+		}
 
-				// Upload build
-				build::push(
-					ctx,
-					&build::BuildPushOpts {
-						tag,
-						name: Some(gen::display_name_from_date()),
-						format: format.cloned(),
-					},
-				)
-				.await?;
+		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
+			for (_, game_mode) in game_modes.iter_mut() {
+				if let Some(docker) = game_mode.docker.as_mut() {
+					build_image(ctx, docker, format).await?;
+				}
 			}
 		}
 	}
 
 	// Build CDN
-	if let Some(cdn) = version.cdn.as_ref() {
-		if cdn.site_id.is_none() {
-			if let Some(build_output) = cdn.build_output.as_ref() {
-				if let Some(build_command) = cdn.build_command.as_ref() {
-					// TODO: Check Windows support
-					let mut build_cmd = Command::new("/bin/sh");
-					build_cmd.arg("-c").arg(build_command);
-					let build_status = build_cmd.status().await?;
-					ensure!(build_status.success(), "site failed to build");
-				}
+	if let Some(cdn) = version.cdn.as_mut() {
+		build_site(ctx, cdn, format).await?;
+	}
 
-				// Upload site
-				site::push(
-					ctx,
-					&site::SitePushOpts {
-						path: build_output.clone(),
-						name: Some(gen::display_name_from_date()),
-						format: format.cloned(),
-					},
-				)
-				.await?;
-			}
+	Ok(())
+}
+
+pub async fn build_image(
+	ctx: &cli_core::Ctx,
+	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
+	format: Option<&struct_fmt::Format>,
+) -> Result<()> {
+	if docker.image_id.is_none() {
+		if let Some(dockerfile) = docker.dockerfile.as_ref() {
+			// Build image
+			let tag = format!("rivet-game:{}", Uuid::new_v4());
+			let mut build_cmd = Command::new("docker");
+			build_cmd
+				.arg("build")
+				.arg("--file")
+				.arg(dockerfile)
+				.arg("--tag")
+				.arg(&tag)
+				.arg(".");
+			let build_status = build_cmd.status().await?;
+			ensure!(build_status.success(), "Docker image failed to build");
+
+			// Upload build
+			let push_output = build::push(
+				ctx,
+				&build::BuildPushOpts {
+					tag,
+					name: Some(gen::display_name_from_date()),
+					format: format.cloned(),
+				},
+			)
+			.await?;
+			docker.image_id = Some(Uuid::parse_str(&push_output.build_id)?);
 		}
 	}
 
-	Ok(version)
+	Ok(())
+}
+
+pub async fn build_site(
+	ctx: &cli_core::Ctx,
+	cdn: &mut Box<models::CloudVersionCdnConfig>,
+	format: Option<&struct_fmt::Format>,
+) -> Result<()> {
+	if cdn.site_id.is_none() {
+		if let Some(build_output) = cdn.build_output.as_ref() {
+			if let Some(build_command) = cdn.build_command.as_ref() {
+				// TODO: Check Windows support
+				let mut build_cmd = Command::new("/bin/sh");
+				build_cmd.arg("-c").arg(build_command);
+				let build_status = build_cmd.status().await?;
+				ensure!(build_status.success(), "site failed to build");
+			}
+
+			// Upload site
+			let push_output = site::push(
+				ctx,
+				&site::SitePushOpts {
+					path: build_output.clone(),
+					name: Some(gen::display_name_from_date()),
+					format: format.cloned(),
+				},
+			)
+			.await?;
+			cdn.site_id = Some(push_output.site_id);
+		}
+	}
+
+	Ok(())
 }
 
 pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
@@ -388,8 +419,8 @@ pub async fn create(
 ) -> Result<CreateOutput> {
 	let display_name = display_name.map_or_else(gen::display_name_from_date, |x| x.to_string());
 	// Parse config
-	let user_config = read_config(overrides, namespace).await?;
-	let rivet_config = build_config_dependencies(ctx, user_config, format).await?;
+	let mut rivet_config = read_config(overrides, namespace).await?;
+	build_config_dependencies(ctx, &mut rivet_config, format).await?;
 
 	// Create game version
 	let version_res =

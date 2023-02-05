@@ -3,7 +3,7 @@ use clap::Parser;
 use console::Term;
 use tokio::fs;
 
-use crate::util::{struct_fmt, term};
+use crate::util::term;
 
 const GITHUB_WORKFLOW_RIVET_PUBLISH_YAML: &'static str =
 	include_str!("../../tpl/workflows/rivet-publish.yaml");
