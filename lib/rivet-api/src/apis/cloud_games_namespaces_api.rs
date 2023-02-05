@@ -15,114 +15,114 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`namespaces_service_period_add_namespace_domain`]
+/// struct for typed errors of method [`namespaces_add_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodAddNamespaceDomainError {
+pub enum NamespacesAddNamespaceDomainError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_create_game_namespace`]
+/// struct for typed errors of method [`namespaces_create_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodCreateGameNamespaceError {
+pub enum NamespacesCreateGameNamespaceError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_create_game_namespace_token_development`]
+/// struct for typed errors of method [`namespaces_create_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodCreateGameNamespaceTokenDevelopmentError {
+pub enum NamespacesCreateGameNamespaceTokenDevelopmentError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_create_game_namespace_token_public`]
+/// struct for typed errors of method [`namespaces_create_game_namespace_token_public`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodCreateGameNamespaceTokenPublicError {
+pub enum NamespacesCreateGameNamespaceTokenPublicError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_get_game_namespace_by_id`]
+/// struct for typed errors of method [`namespaces_get_game_namespace_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodGetGameNamespaceByIdError {
+pub enum NamespacesGetGameNamespaceByIdError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_remove_namespace_cdn_auth_user`]
+/// struct for typed errors of method [`namespaces_remove_namespace_cdn_auth_user`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodRemoveNamespaceCdnAuthUserError {
+pub enum NamespacesRemoveNamespaceCdnAuthUserError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_remove_namespace_domain`]
+/// struct for typed errors of method [`namespaces_remove_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodRemoveNamespaceDomainError {
+pub enum NamespacesRemoveNamespaceDomainError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_set_namespace_cdn_auth_type`]
+/// struct for typed errors of method [`namespaces_set_namespace_cdn_auth_type`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodSetNamespaceCdnAuthTypeError {
+pub enum NamespacesSetNamespaceCdnAuthTypeError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_toggle_namespace_domain_public_auth`]
+/// struct for typed errors of method [`namespaces_toggle_namespace_domain_public_auth`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodToggleNamespaceDomainPublicAuthError {
+pub enum NamespacesToggleNamespaceDomainPublicAuthError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_update_game_namespace_matchmaker_config`]
+/// struct for typed errors of method [`namespaces_update_game_namespace_matchmaker_config`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodUpdateGameNamespaceMatchmakerConfigError {
+pub enum NamespacesUpdateGameNamespaceMatchmakerConfigError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_update_game_namespace_version`]
+/// struct for typed errors of method [`namespaces_update_game_namespace_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodUpdateGameNamespaceVersionError {
+pub enum NamespacesUpdateGameNamespaceVersionError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_update_namespace_cdn_auth_user`]
+/// struct for typed errors of method [`namespaces_update_namespace_cdn_auth_user`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodUpdateNamespaceCdnAuthUserError {
+pub enum NamespacesUpdateNamespaceCdnAuthUserError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_validate_game_namespace`]
+/// struct for typed errors of method [`namespaces_validate_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodValidateGameNamespaceError {
+pub enum NamespacesValidateGameNamespaceError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_validate_game_namespace_matchmaker_config`]
+/// struct for typed errors of method [`namespaces_validate_game_namespace_matchmaker_config`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodValidateGameNamespaceMatchmakerConfigError {
+pub enum NamespacesValidateGameNamespaceMatchmakerConfigError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`namespaces_service_period_validate_game_namespace_token_development`]
+/// struct for typed errors of method [`namespaces_validate_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum NamespacesServicePeriodValidateGameNamespaceTokenDevelopmentError {
+pub enum NamespacesValidateGameNamespaceTokenDevelopmentError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Adds a domain to the given game namespace.
-pub async fn namespaces_service_period_add_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_add_namespace_domain_input: crate::models::CloudGamesAddNamespaceDomainInput) -> Result<(), Error<NamespacesServicePeriodAddNamespaceDomainError>> {
+pub async fn namespaces_add_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_add_namespace_domain_input: crate::models::CloudGamesAddNamespaceDomainInput) -> Result<(), Error<NamespacesAddNamespaceDomainError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -147,14 +147,14 @@ pub async fn namespaces_service_period_add_namespace_domain(configuration: &conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodAddNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesAddNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a new namespace for the given game.
-pub async fn namespaces_service_period_create_game_namespace(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_namespace_input: crate::models::CloudGamesCreateGameNamespaceInput) -> Result<crate::models::CloudGamesCreateGameNamespaceOutput, Error<NamespacesServicePeriodCreateGameNamespaceError>> {
+pub async fn namespaces_create_game_namespace(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_namespace_input: crate::models::CloudGamesCreateGameNamespaceInput) -> Result<crate::models::CloudGamesCreateGameNamespaceOutput, Error<NamespacesCreateGameNamespaceError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -179,14 +179,14 @@ pub async fn namespaces_service_period_create_game_namespace(configuration: &con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodCreateGameNamespaceError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesCreateGameNamespaceError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a development token for the given namespace.
-pub async fn namespaces_service_period_create_game_namespace_token_development(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_create_game_namespace_token_development_input: crate::models::CloudGamesCreateGameNamespaceTokenDevelopmentInput) -> Result<crate::models::CloudGamesCreateGameNamespaceTokenDevelopmentOutput, Error<NamespacesServicePeriodCreateGameNamespaceTokenDevelopmentError>> {
+pub async fn namespaces_create_game_namespace_token_development(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_create_game_namespace_token_development_input: crate::models::CloudGamesCreateGameNamespaceTokenDevelopmentInput) -> Result<crate::models::CloudGamesCreateGameNamespaceTokenDevelopmentOutput, Error<NamespacesCreateGameNamespaceTokenDevelopmentError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -211,14 +211,14 @@ pub async fn namespaces_service_period_create_game_namespace_token_development(c
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodCreateGameNamespaceTokenDevelopmentError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesCreateGameNamespaceTokenDevelopmentError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a public token for the given namespace.
-pub async fn namespaces_service_period_create_game_namespace_token_public(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::CloudGamesCreateGameNamespaceTokenPublicOutput, Error<NamespacesServicePeriodCreateGameNamespaceTokenPublicError>> {
+pub async fn namespaces_create_game_namespace_token_public(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::CloudGamesCreateGameNamespaceTokenPublicOutput, Error<NamespacesCreateGameNamespaceTokenPublicError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -242,14 +242,14 @@ pub async fn namespaces_service_period_create_game_namespace_token_public(config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodCreateGameNamespaceTokenPublicError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesCreateGameNamespaceTokenPublicError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Gets a game namespace by namespace ID.
-pub async fn namespaces_service_period_get_game_namespace_by_id(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::CloudGamesGetGameNamespaceByIdOutput, Error<NamespacesServicePeriodGetGameNamespaceByIdError>> {
+pub async fn namespaces_get_game_namespace_by_id(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str) -> Result<crate::models::CloudGamesGetGameNamespaceByIdOutput, Error<NamespacesGetGameNamespaceByIdError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -273,14 +273,14 @@ pub async fn namespaces_service_period_get_game_namespace_by_id(configuration: &
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodGetGameNamespaceByIdError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesGetGameNamespaceByIdError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Removes an authenticated user from the given game namespace.
-pub async fn namespaces_service_period_remove_namespace_cdn_auth_user(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, user: &str) -> Result<(), Error<NamespacesServicePeriodRemoveNamespaceCdnAuthUserError>> {
+pub async fn namespaces_remove_namespace_cdn_auth_user(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, user: &str) -> Result<(), Error<NamespacesRemoveNamespaceCdnAuthUserError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -304,14 +304,14 @@ pub async fn namespaces_service_period_remove_namespace_cdn_auth_user(configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodRemoveNamespaceCdnAuthUserError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesRemoveNamespaceCdnAuthUserError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Removes a domain from the given game namespace.
-pub async fn namespaces_service_period_remove_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<(), Error<NamespacesServicePeriodRemoveNamespaceDomainError>> {
+pub async fn namespaces_remove_namespace_domain(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, domain: &str) -> Result<(), Error<NamespacesRemoveNamespaceDomainError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -335,14 +335,14 @@ pub async fn namespaces_service_period_remove_namespace_domain(configuration: &c
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodRemoveNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesRemoveNamespaceDomainError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates the CDN authentication type of the given game namesapce.
-pub async fn namespaces_service_period_set_namespace_cdn_auth_type(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_set_namespace_cdn_auth_type_input: crate::models::CloudGamesSetNamespaceCdnAuthTypeInput) -> Result<(), Error<NamespacesServicePeriodSetNamespaceCdnAuthTypeError>> {
+pub async fn namespaces_set_namespace_cdn_auth_type(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_set_namespace_cdn_auth_type_input: crate::models::CloudGamesSetNamespaceCdnAuthTypeInput) -> Result<(), Error<NamespacesSetNamespaceCdnAuthTypeError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -367,14 +367,14 @@ pub async fn namespaces_service_period_set_namespace_cdn_auth_type(configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodSetNamespaceCdnAuthTypeError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesSetNamespaceCdnAuthTypeError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Toggles whether or not to allow authentication based on domain for the given game namesapce.
-pub async fn namespaces_service_period_toggle_namespace_domain_public_auth(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_toggle_namespace_domain_public_auth_input: crate::models::CloudGamesToggleNamespaceDomainPublicAuthInput) -> Result<(), Error<NamespacesServicePeriodToggleNamespaceDomainPublicAuthError>> {
+pub async fn namespaces_toggle_namespace_domain_public_auth(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_toggle_namespace_domain_public_auth_input: crate::models::CloudGamesToggleNamespaceDomainPublicAuthInput) -> Result<(), Error<NamespacesToggleNamespaceDomainPublicAuthError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -399,14 +399,14 @@ pub async fn namespaces_service_period_toggle_namespace_domain_public_auth(confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodToggleNamespaceDomainPublicAuthError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesToggleNamespaceDomainPublicAuthError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates matchmaker config for the given game namespace.
-pub async fn namespaces_service_period_update_game_namespace_matchmaker_config(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_update_game_namespace_matchmaker_config_input: crate::models::CloudGamesUpdateGameNamespaceMatchmakerConfigInput) -> Result<(), Error<NamespacesServicePeriodUpdateGameNamespaceMatchmakerConfigError>> {
+pub async fn namespaces_update_game_namespace_matchmaker_config(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_update_game_namespace_matchmaker_config_input: crate::models::CloudGamesUpdateGameNamespaceMatchmakerConfigInput) -> Result<(), Error<NamespacesUpdateGameNamespaceMatchmakerConfigError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -431,14 +431,14 @@ pub async fn namespaces_service_period_update_game_namespace_matchmaker_config(c
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodUpdateGameNamespaceMatchmakerConfigError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesUpdateGameNamespaceMatchmakerConfigError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates the version of a game namespace.
-pub async fn namespaces_service_period_update_game_namespace_version(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_update_game_namespace_version_input: crate::models::CloudGamesUpdateGameNamespaceVersionInput) -> Result<(), Error<NamespacesServicePeriodUpdateGameNamespaceVersionError>> {
+pub async fn namespaces_update_game_namespace_version(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_update_game_namespace_version_input: crate::models::CloudGamesUpdateGameNamespaceVersionInput) -> Result<(), Error<NamespacesUpdateGameNamespaceVersionError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -463,14 +463,14 @@ pub async fn namespaces_service_period_update_game_namespace_version(configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodUpdateGameNamespaceVersionError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesUpdateGameNamespaceVersionError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Adds an authenticated user to the given game namespace.
-pub async fn namespaces_service_period_update_namespace_cdn_auth_user(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_update_namespace_cdn_auth_user_input: crate::models::CloudGamesUpdateNamespaceCdnAuthUserInput) -> Result<(), Error<NamespacesServicePeriodUpdateNamespaceCdnAuthUserError>> {
+pub async fn namespaces_update_namespace_cdn_auth_user(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_update_namespace_cdn_auth_user_input: crate::models::CloudGamesUpdateNamespaceCdnAuthUserInput) -> Result<(), Error<NamespacesUpdateNamespaceCdnAuthUserError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -495,14 +495,14 @@ pub async fn namespaces_service_period_update_namespace_cdn_auth_user(configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodUpdateNamespaceCdnAuthUserError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesUpdateNamespaceCdnAuthUserError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validates information used to create a new game namespace.
-pub async fn namespaces_service_period_validate_game_namespace(configuration: &configuration::Configuration, game_id: &str, cloud_games_validate_game_namespace_input: crate::models::CloudGamesValidateGameNamespaceInput) -> Result<crate::models::CloudGamesValidateGameNamespaceOutput, Error<NamespacesServicePeriodValidateGameNamespaceError>> {
+pub async fn namespaces_validate_game_namespace(configuration: &configuration::Configuration, game_id: &str, cloud_games_validate_game_namespace_input: crate::models::CloudGamesValidateGameNamespaceInput) -> Result<crate::models::CloudGamesValidateGameNamespaceOutput, Error<NamespacesValidateGameNamespaceError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -527,14 +527,14 @@ pub async fn namespaces_service_period_validate_game_namespace(configuration: &c
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodValidateGameNamespaceError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesValidateGameNamespaceError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validates information used to update a game namespace's matchmaker config.
-pub async fn namespaces_service_period_validate_game_namespace_matchmaker_config(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_validate_game_namespace_matchmaker_config_input: crate::models::CloudGamesValidateGameNamespaceMatchmakerConfigInput) -> Result<crate::models::CloudGamesValidateGameNamespaceMatchmakerConfigOutput, Error<NamespacesServicePeriodValidateGameNamespaceMatchmakerConfigError>> {
+pub async fn namespaces_validate_game_namespace_matchmaker_config(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_validate_game_namespace_matchmaker_config_input: crate::models::CloudGamesValidateGameNamespaceMatchmakerConfigInput) -> Result<crate::models::CloudGamesValidateGameNamespaceMatchmakerConfigOutput, Error<NamespacesValidateGameNamespaceMatchmakerConfigError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -559,14 +559,14 @@ pub async fn namespaces_service_period_validate_game_namespace_matchmaker_config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodValidateGameNamespaceMatchmakerConfigError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesValidateGameNamespaceMatchmakerConfigError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validates information used to create a new game namespace development token.
-pub async fn namespaces_service_period_validate_game_namespace_token_development(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_validate_game_namespace_token_development_input: crate::models::CloudGamesValidateGameNamespaceTokenDevelopmentInput) -> Result<crate::models::CloudGamesValidateGameNamespaceTokenDevelopmentOutput, Error<NamespacesServicePeriodValidateGameNamespaceTokenDevelopmentError>> {
+pub async fn namespaces_validate_game_namespace_token_development(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, cloud_games_validate_game_namespace_token_development_input: crate::models::CloudGamesValidateGameNamespaceTokenDevelopmentInput) -> Result<crate::models::CloudGamesValidateGameNamespaceTokenDevelopmentOutput, Error<NamespacesValidateGameNamespaceTokenDevelopmentError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -591,7 +591,7 @@ pub async fn namespaces_service_period_validate_game_namespace_token_development
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<NamespacesServicePeriodValidateGameNamespaceTokenDevelopmentError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<NamespacesValidateGameNamespaceTokenDevelopmentError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

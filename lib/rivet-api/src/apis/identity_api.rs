@@ -15,149 +15,149 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`identity_service_period_complete_avatar_upload`]
+/// struct for typed errors of method [`identity_complete_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodCompleteAvatarUploadError {
+pub enum IdentityCompleteAvatarUploadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_follow`]
+/// struct for typed errors of method [`identity_follow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodFollowError {
+pub enum IdentityFollowError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_get_handles`]
+/// struct for typed errors of method [`identity_get_handles`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodGetHandlesError {
+pub enum IdentityGetHandlesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_get_profile`]
+/// struct for typed errors of method [`identity_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodGetProfileError {
+pub enum IdentityGetProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_get_self_profile`]
+/// struct for typed errors of method [`identity_get_self_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodGetSelfProfileError {
+pub enum IdentityGetSelfProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_get_summaries`]
+/// struct for typed errors of method [`identity_get_summaries`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodGetSummariesError {
+pub enum IdentityGetSummariesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_list_followers`]
+/// struct for typed errors of method [`identity_list_followers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodListFollowersError {
+pub enum IdentityListFollowersError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_list_friends`]
+/// struct for typed errors of method [`identity_list_friends`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodListFriendsError {
+pub enum IdentityListFriendsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_list_mutual_friends`]
+/// struct for typed errors of method [`identity_list_mutual_friends`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodListMutualFriendsError {
+pub enum IdentityListMutualFriendsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_prepare_avatar_upload`]
+/// struct for typed errors of method [`identity_prepare_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodPrepareAvatarUploadError {
+pub enum IdentityPrepareAvatarUploadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_remove_game_activity`]
+/// struct for typed errors of method [`identity_remove_game_activity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodRemoveGameActivityError {
+pub enum IdentityRemoveGameActivityError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_report`]
+/// struct for typed errors of method [`identity_report`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodReportError {
+pub enum IdentityReportError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_search`]
+/// struct for typed errors of method [`identity_search`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodSearchError {
+pub enum IdentitySearchError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_set_game_activity`]
+/// struct for typed errors of method [`identity_set_game_activity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodSetGameActivityError {
+pub enum IdentitySetGameActivityError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_setup`]
+/// struct for typed errors of method [`identity_setup`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodSetupError {
+pub enum IdentitySetupError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_signup_for_beta`]
+/// struct for typed errors of method [`identity_signup_for_beta`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodSignupForBetaError {
+pub enum IdentitySignupForBetaError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_unfollow`]
+/// struct for typed errors of method [`identity_unfollow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodUnfollowError {
+pub enum IdentityUnfollowError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_update_profile`]
+/// struct for typed errors of method [`identity_update_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodUpdateProfileError {
+pub enum IdentityUpdateProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_update_status`]
+/// struct for typed errors of method [`identity_update_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodUpdateStatusError {
+pub enum IdentityUpdateStatusError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_validate_profile`]
+/// struct for typed errors of method [`identity_validate_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodValidateProfileError {
+pub enum IdentityValidateProfileError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Completes an avatar image upload. Must be called after the file upload process completes.
-pub async fn identity_service_period_complete_avatar_upload(configuration: &configuration::Configuration, upload_id: &str) -> Result<(), Error<IdentityServicePeriodCompleteAvatarUploadError>> {
+pub async fn identity_complete_avatar_upload(configuration: &configuration::Configuration, upload_id: &str) -> Result<(), Error<IdentityCompleteAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -181,14 +181,14 @@ pub async fn identity_service_period_complete_avatar_upload(configuration: &conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodCompleteAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityCompleteAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Follows the given identity. In order for identities to be \"friends\", the other identity has to also follow this identity.
-pub async fn identity_service_period_follow(configuration: &configuration::Configuration, identity_id: &str) -> Result<(), Error<IdentityServicePeriodFollowError>> {
+pub async fn identity_follow(configuration: &configuration::Configuration, identity_id: &str) -> Result<(), Error<IdentityFollowError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -212,14 +212,14 @@ pub async fn identity_service_period_follow(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodFollowError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityFollowError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches a list of identity handles.
-pub async fn identity_service_period_get_handles(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::GetHandlesOutput, Error<IdentityServicePeriodGetHandlesError>> {
+pub async fn identity_get_handles(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::GetHandlesOutput, Error<IdentityGetHandlesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -244,14 +244,14 @@ pub async fn identity_service_period_get_handles(configuration: &configuration::
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodGetHandlesError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityGetHandlesError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches an identity profile.
-pub async fn identity_service_period_get_profile(configuration: &configuration::Configuration, identity_id: &str, watch_index: Option<&str>) -> Result<crate::models::GetProfileOutput, Error<IdentityServicePeriodGetProfileError>> {
+pub async fn identity_get_profile(configuration: &configuration::Configuration, identity_id: &str, watch_index: Option<&str>) -> Result<crate::models::GetProfileOutput, Error<IdentityGetProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -278,14 +278,14 @@ pub async fn identity_service_period_get_profile(configuration: &configuration::
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodGetProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityGetProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches the current identity's profile.
-pub async fn identity_service_period_get_self_profile(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::GetProfileOutput, Error<IdentityServicePeriodGetSelfProfileError>> {
+pub async fn identity_get_self_profile(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::GetProfileOutput, Error<IdentityGetSelfProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -312,14 +312,14 @@ pub async fn identity_service_period_get_self_profile(configuration: &configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodGetSelfProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityGetSelfProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches a list of identity summaries.
-pub async fn identity_service_period_get_summaries(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::GetSummariesOutput, Error<IdentityServicePeriodGetSummariesError>> {
+pub async fn identity_get_summaries(configuration: &configuration::Configuration, identity_ids: &str) -> Result<crate::models::GetSummariesOutput, Error<IdentityGetSummariesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -344,13 +344,13 @@ pub async fn identity_service_period_get_summaries(configuration: &configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodGetSummariesError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityGetSummariesError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
-pub async fn identity_service_period_list_followers(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListFollowersOutput, Error<IdentityServicePeriodListFollowersError>> {
+pub async fn identity_list_followers(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListFollowersOutput, Error<IdentityListFollowersError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -380,13 +380,13 @@ pub async fn identity_service_period_list_followers(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodListFollowersError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityListFollowersError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
-pub async fn identity_service_period_list_friends(configuration: &configuration::Configuration, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListFriendsOutput, Error<IdentityServicePeriodListFriendsError>> {
+pub async fn identity_list_friends(configuration: &configuration::Configuration, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListFriendsOutput, Error<IdentityListFriendsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -416,13 +416,13 @@ pub async fn identity_service_period_list_friends(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodListFriendsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityListFriendsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
-pub async fn identity_service_period_list_mutual_friends(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListMutualFriendsOutput, Error<IdentityServicePeriodListMutualFriendsError>> {
+pub async fn identity_list_mutual_friends(configuration: &configuration::Configuration, identity_id: &str, anchor: Option<&str>, limit: Option<&str>) -> Result<crate::models::ListMutualFriendsOutput, Error<IdentityListMutualFriendsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -452,14 +452,14 @@ pub async fn identity_service_period_list_mutual_friends(configuration: &configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodListMutualFriendsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityListMutualFriendsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Prepares an avatar image upload. Complete upload with `CompleteIdentityAvatarUpload`.
-pub async fn identity_service_period_prepare_avatar_upload(configuration: &configuration::Configuration, identity_service_prepare_avatar_upload_request: crate::models::IdentityServicePrepareAvatarUploadRequest) -> Result<crate::models::PrepareAvatarUploadOutput, Error<IdentityServicePeriodPrepareAvatarUploadError>> {
+pub async fn identity_prepare_avatar_upload(configuration: &configuration::Configuration, identity_prepare_avatar_upload_request: crate::models::IdentityPrepareAvatarUploadRequest) -> Result<crate::models::PrepareAvatarUploadOutput, Error<IdentityPrepareAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -473,7 +473,7 @@ pub async fn identity_service_period_prepare_avatar_upload(configuration: &confi
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_prepare_avatar_upload_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_prepare_avatar_upload_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -484,14 +484,14 @@ pub async fn identity_service_period_prepare_avatar_upload(configuration: &confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodPrepareAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityPrepareAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Removes the current identity's game activity.
-pub async fn identity_service_period_remove_game_activity(configuration: &configuration::Configuration, ) -> Result<(), Error<IdentityServicePeriodRemoveGameActivityError>> {
+pub async fn identity_remove_game_activity(configuration: &configuration::Configuration, ) -> Result<(), Error<IdentityRemoveGameActivityError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -515,14 +515,14 @@ pub async fn identity_service_period_remove_game_activity(configuration: &config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodRemoveGameActivityError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityRemoveGameActivityError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates an abuse report for an identity.
-pub async fn identity_service_period_report(configuration: &configuration::Configuration, identity_id: &str, identity_service_report_request: crate::models::IdentityServiceReportRequest) -> Result<(), Error<IdentityServicePeriodReportError>> {
+pub async fn identity_report(configuration: &configuration::Configuration, identity_id: &str, identity_report_request: crate::models::IdentityReportRequest) -> Result<(), Error<IdentityReportError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -536,7 +536,7 @@ pub async fn identity_service_period_report(configuration: &configuration::Confi
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_report_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_report_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -547,14 +547,14 @@ pub async fn identity_service_period_report(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodReportError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityReportError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fuzzy search for identities.
-pub async fn identity_service_period_search(configuration: &configuration::Configuration, query: &str, anchor: Option<&str>, limit: Option<i32>) -> Result<crate::models::SearchOutput, Error<IdentityServicePeriodSearchError>> {
+pub async fn identity_search(configuration: &configuration::Configuration, query: &str, anchor: Option<&str>, limit: Option<i32>) -> Result<crate::models::SearchOutput, Error<IdentitySearchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -585,14 +585,14 @@ pub async fn identity_service_period_search(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodSearchError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentitySearchError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Sets the current identity's game activity. This activity will automatically be removed when the identity goes offline.
-pub async fn identity_service_period_set_game_activity(configuration: &configuration::Configuration, identity_service_set_game_activity_request: crate::models::IdentityServiceSetGameActivityRequest) -> Result<(), Error<IdentityServicePeriodSetGameActivityError>> {
+pub async fn identity_set_game_activity(configuration: &configuration::Configuration, identity_set_game_activity_request: crate::models::IdentitySetGameActivityRequest) -> Result<(), Error<IdentitySetGameActivityError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -606,7 +606,7 @@ pub async fn identity_service_period_set_game_activity(configuration: &configura
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_set_game_activity_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_set_game_activity_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -617,14 +617,14 @@ pub async fn identity_service_period_set_game_activity(configuration: &configura
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodSetGameActivityError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentitySetGameActivityError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Gets or creates an identity. Passing an existing identity token in the body refreshes the token. Temporary Accounts Until the identity is linked with the Rivet Hub (see `PrepareGameLink`), this identity will be temporary but still behave like all other identities. This is intended to allow users to play the game without signing up while still having the benefits of having an account. When they are ready to save their account, they should be instructed to link their account (see `PrepareGameLink`). Storing Token `identity_token` should be stored in some form of persistent storage. The token should be read from storage and passed to `Setup` every time the client starts.
-pub async fn identity_service_period_setup(configuration: &configuration::Configuration, identity_link_token: &str) -> Result<crate::models::SetupOutput, Error<IdentityServicePeriodSetupError>> {
+pub async fn identity_setup(configuration: &configuration::Configuration, identity_link_token: &str) -> Result<crate::models::SetupOutput, Error<IdentitySetupError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -649,14 +649,14 @@ pub async fn identity_service_period_setup(configuration: &configuration::Config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodSetupError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentitySetupError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Submits a beta signup form.
-pub async fn identity_service_period_signup_for_beta(configuration: &configuration::Configuration, identity_service_signup_for_beta_request: crate::models::IdentityServiceSignupForBetaRequest) -> Result<(), Error<IdentityServicePeriodSignupForBetaError>> {
+pub async fn identity_signup_for_beta(configuration: &configuration::Configuration, identity_signup_for_beta_request: crate::models::IdentitySignupForBetaRequest) -> Result<(), Error<IdentitySignupForBetaError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -670,7 +670,7 @@ pub async fn identity_service_period_signup_for_beta(configuration: &configurati
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_signup_for_beta_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_signup_for_beta_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -681,14 +681,14 @@ pub async fn identity_service_period_signup_for_beta(configuration: &configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodSignupForBetaError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentitySignupForBetaError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Unfollows the given identity.
-pub async fn identity_service_period_unfollow(configuration: &configuration::Configuration, identity_id: &str) -> Result<(), Error<IdentityServicePeriodUnfollowError>> {
+pub async fn identity_unfollow(configuration: &configuration::Configuration, identity_id: &str) -> Result<(), Error<IdentityUnfollowError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -712,14 +712,14 @@ pub async fn identity_service_period_unfollow(configuration: &configuration::Con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodUnfollowError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityUnfollowError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates profile of the current identity.
-pub async fn identity_service_period_update_profile(configuration: &configuration::Configuration, identity_service_update_profile_request: crate::models::IdentityServiceUpdateProfileRequest) -> Result<(), Error<IdentityServicePeriodUpdateProfileError>> {
+pub async fn identity_update_profile(configuration: &configuration::Configuration, identity_update_profile_request: crate::models::IdentityUpdateProfileRequest) -> Result<(), Error<IdentityUpdateProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -733,7 +733,7 @@ pub async fn identity_service_period_update_profile(configuration: &configuratio
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_update_profile_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_update_profile_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -744,14 +744,14 @@ pub async fn identity_service_period_update_profile(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodUpdateProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityUpdateProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates the current identity's status.
-pub async fn identity_service_period_update_status(configuration: &configuration::Configuration, identity_service_update_status_request: crate::models::IdentityServiceUpdateStatusRequest) -> Result<(), Error<IdentityServicePeriodUpdateStatusError>> {
+pub async fn identity_update_status(configuration: &configuration::Configuration, identity_update_status_request: crate::models::IdentityUpdateStatusRequest) -> Result<(), Error<IdentityUpdateStatusError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -765,7 +765,7 @@ pub async fn identity_service_period_update_status(configuration: &configuration
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_update_status_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_update_status_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -776,14 +776,14 @@ pub async fn identity_service_period_update_status(configuration: &configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodUpdateStatusError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityUpdateStatusError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validate contents of identity profile. Use to provide immediate feedback on profile changes before committing them.
-pub async fn identity_service_period_validate_profile(configuration: &configuration::Configuration, identity_service_update_profile_request: crate::models::IdentityServiceUpdateProfileRequest) -> Result<(), Error<IdentityServicePeriodValidateProfileError>> {
+pub async fn identity_validate_profile(configuration: &configuration::Configuration, identity_update_profile_request: crate::models::IdentityUpdateProfileRequest) -> Result<(), Error<IdentityValidateProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -797,7 +797,7 @@ pub async fn identity_service_period_validate_profile(configuration: &configurat
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&identity_service_update_profile_request);
+    local_var_req_builder = local_var_req_builder.json(&identity_update_profile_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -808,7 +808,7 @@ pub async fn identity_service_period_validate_profile(configuration: &configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<IdentityServicePeriodValidateProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityValidateProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -15,128 +15,128 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`groups_service_period_ban_identity`]
+/// struct for typed errors of method [`groups_ban_identity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodBanIdentityError {
+pub enum GroupsBanIdentityError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_complete_avatar_upload`]
+/// struct for typed errors of method [`groups_complete_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodCompleteAvatarUploadError {
+pub enum GroupsCompleteAvatarUploadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_create`]
+/// struct for typed errors of method [`groups_create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodCreateError {
+pub enum GroupsCreateError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_get_bans`]
+/// struct for typed errors of method [`groups_get_bans`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodGetBansError {
+pub enum GroupsGetBansError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_get_join_requests`]
+/// struct for typed errors of method [`groups_get_join_requests`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodGetJoinRequestsError {
+pub enum GroupsGetJoinRequestsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_get_members`]
+/// struct for typed errors of method [`groups_get_members`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodGetMembersError {
+pub enum GroupsGetMembersError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_get_profile`]
+/// struct for typed errors of method [`groups_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodGetProfileError {
+pub enum GroupsGetProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_get_summary`]
+/// struct for typed errors of method [`groups_get_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodGetSummaryError {
+pub enum GroupsGetSummaryError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_kick_member`]
+/// struct for typed errors of method [`groups_kick_member`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodKickMemberError {
+pub enum GroupsKickMemberError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_leave`]
+/// struct for typed errors of method [`groups_leave`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodLeaveError {
+pub enum GroupsLeaveError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_list_suggested`]
+/// struct for typed errors of method [`groups_list_suggested`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodListSuggestedError {
+pub enum GroupsListSuggestedError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_prepare_avatar_upload`]
+/// struct for typed errors of method [`groups_prepare_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodPrepareAvatarUploadError {
+pub enum GroupsPrepareAvatarUploadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_search`]
+/// struct for typed errors of method [`groups_search`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodSearchError {
+pub enum GroupsSearchError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_transfer_ownership`]
+/// struct for typed errors of method [`groups_transfer_ownership`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodTransferOwnershipError {
+pub enum GroupsTransferOwnershipError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_unban_identity`]
+/// struct for typed errors of method [`groups_unban_identity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodUnbanIdentityError {
+pub enum GroupsUnbanIdentityError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_update_profile`]
+/// struct for typed errors of method [`groups_update_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodUpdateProfileError {
+pub enum GroupsUpdateProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`groups_service_period_validate_profile`]
+/// struct for typed errors of method [`groups_validate_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GroupsServicePeriodValidateProfileError {
+pub enum GroupsValidateProfileError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Bans an identity from a group. Must be the owner of the group to perform this action. The banned identity will no longer be able to create a join request or use a group invite.
-pub async fn groups_service_period_ban_identity(configuration: &configuration::Configuration, group_id: &str, identity_id: &str) -> Result<(), Error<GroupsServicePeriodBanIdentityError>> {
+pub async fn groups_ban_identity(configuration: &configuration::Configuration, group_id: &str, identity_id: &str) -> Result<(), Error<GroupsBanIdentityError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -160,14 +160,14 @@ pub async fn groups_service_period_ban_identity(configuration: &configuration::C
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodBanIdentityError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsBanIdentityError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Completes an avatar image upload. Must be called after the file upload process completes. Call `rivet.api.group#PrepareAvatarUpload` first.
-pub async fn groups_service_period_complete_avatar_upload(configuration: &configuration::Configuration, group_id: &str, upload_id: &str) -> Result<(), Error<GroupsServicePeriodCompleteAvatarUploadError>> {
+pub async fn groups_complete_avatar_upload(configuration: &configuration::Configuration, group_id: &str, upload_id: &str) -> Result<(), Error<GroupsCompleteAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -191,14 +191,14 @@ pub async fn groups_service_period_complete_avatar_upload(configuration: &config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodCompleteAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsCompleteAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a new group.
-pub async fn groups_service_period_create(configuration: &configuration::Configuration, group_create_input: crate::models::GroupCreateInput) -> Result<crate::models::GroupCreateOutput, Error<GroupsServicePeriodCreateError>> {
+pub async fn groups_create(configuration: &configuration::Configuration, group_create_input: crate::models::GroupCreateInput) -> Result<crate::models::GroupCreateOutput, Error<GroupsCreateError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -223,14 +223,14 @@ pub async fn groups_service_period_create(configuration: &configuration::Configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodCreateError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsCreateError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a group's bans. Must have valid permissions to view.
-pub async fn groups_service_period_get_bans(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, count: Option<f64>, watch_index: Option<&str>) -> Result<crate::models::GroupGetBansOutput, Error<GroupsServicePeriodGetBansError>> {
+pub async fn groups_get_bans(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, count: Option<f64>, watch_index: Option<&str>) -> Result<crate::models::GroupGetBansOutput, Error<GroupsGetBansError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -263,14 +263,14 @@ pub async fn groups_service_period_get_bans(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodGetBansError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsGetBansError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a group's join requests. Must have valid permissions to view.
-pub async fn groups_service_period_get_join_requests(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, count: Option<f64>, watch_index: Option<&str>) -> Result<crate::models::GroupGetJoinRequestsOutput, Error<GroupsServicePeriodGetJoinRequestsError>> {
+pub async fn groups_get_join_requests(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, count: Option<f64>, watch_index: Option<&str>) -> Result<crate::models::GroupGetJoinRequestsOutput, Error<GroupsGetJoinRequestsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -303,14 +303,14 @@ pub async fn groups_service_period_get_join_requests(configuration: &configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodGetJoinRequestsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsGetJoinRequestsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a group's members.
-pub async fn groups_service_period_get_members(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, count: Option<f64>, watch_index: Option<&str>) -> Result<crate::models::GroupGetMembersOutput, Error<GroupsServicePeriodGetMembersError>> {
+pub async fn groups_get_members(configuration: &configuration::Configuration, group_id: &str, anchor: Option<&str>, count: Option<f64>, watch_index: Option<&str>) -> Result<crate::models::GroupGetMembersOutput, Error<GroupsGetMembersError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -343,14 +343,14 @@ pub async fn groups_service_period_get_members(configuration: &configuration::Co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodGetMembersError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsGetMembersError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a group profile.
-pub async fn groups_service_period_get_profile(configuration: &configuration::Configuration, group_id: &str, watch_index: Option<&str>) -> Result<crate::models::GroupGetProfileOutput, Error<GroupsServicePeriodGetProfileError>> {
+pub async fn groups_get_profile(configuration: &configuration::Configuration, group_id: &str, watch_index: Option<&str>) -> Result<crate::models::GroupGetProfileOutput, Error<GroupsGetProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -377,13 +377,13 @@ pub async fn groups_service_period_get_profile(configuration: &configuration::Co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodGetProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsGetProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
-pub async fn groups_service_period_get_summary(configuration: &configuration::Configuration, group_id: &str) -> Result<crate::models::GroupGetSummaryOutput, Error<GroupsServicePeriodGetSummaryError>> {
+pub async fn groups_get_summary(configuration: &configuration::Configuration, group_id: &str) -> Result<crate::models::GroupGetSummaryOutput, Error<GroupsGetSummaryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -407,14 +407,14 @@ pub async fn groups_service_period_get_summary(configuration: &configuration::Co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodGetSummaryError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsGetSummaryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Kicks an identity from a group. Must be the owner of the group to perform this action.
-pub async fn groups_service_period_kick_member(configuration: &configuration::Configuration, group_id: &str, identity_id: &str) -> Result<(), Error<GroupsServicePeriodKickMemberError>> {
+pub async fn groups_kick_member(configuration: &configuration::Configuration, group_id: &str, identity_id: &str) -> Result<(), Error<GroupsKickMemberError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -438,14 +438,14 @@ pub async fn groups_service_period_kick_member(configuration: &configuration::Co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodKickMemberError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsKickMemberError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Leaves a group.
-pub async fn groups_service_period_leave(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<GroupsServicePeriodLeaveError>> {
+pub async fn groups_leave(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<GroupsLeaveError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -469,14 +469,14 @@ pub async fn groups_service_period_leave(configuration: &configuration::Configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodLeaveError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsLeaveError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a list of suggested groups.
-pub async fn groups_service_period_list_suggested(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::GroupListSuggestedOutput, Error<GroupsServicePeriodListSuggestedError>> {
+pub async fn groups_list_suggested(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::GroupListSuggestedOutput, Error<GroupsListSuggestedError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -503,14 +503,14 @@ pub async fn groups_service_period_list_suggested(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodListSuggestedError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsListSuggestedError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Prepares an avatar image upload. Complete upload with `rivet.api.group#CompleteAvatarUpload`.
-pub async fn groups_service_period_prepare_avatar_upload(configuration: &configuration::Configuration, group_prepare_avatar_upload_input: crate::models::GroupPrepareAvatarUploadInput) -> Result<crate::models::GroupPrepareAvatarUploadOutput, Error<GroupsServicePeriodPrepareAvatarUploadError>> {
+pub async fn groups_prepare_avatar_upload(configuration: &configuration::Configuration, group_prepare_avatar_upload_input: crate::models::GroupPrepareAvatarUploadInput) -> Result<crate::models::GroupPrepareAvatarUploadOutput, Error<GroupsPrepareAvatarUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -535,14 +535,14 @@ pub async fn groups_service_period_prepare_avatar_upload(configuration: &configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodPrepareAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsPrepareAvatarUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fuzzy search for groups.
-pub async fn groups_service_period_search(configuration: &configuration::Configuration, query: &str, anchor: Option<&str>, limit: Option<f64>) -> Result<crate::models::GroupSearchOutput, Error<GroupsServicePeriodSearchError>> {
+pub async fn groups_search(configuration: &configuration::Configuration, query: &str, anchor: Option<&str>, limit: Option<f64>) -> Result<crate::models::GroupSearchOutput, Error<GroupsSearchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -573,14 +573,14 @@ pub async fn groups_service_period_search(configuration: &configuration::Configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodSearchError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsSearchError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Transfers ownership of a group to another identity.
-pub async fn groups_service_period_transfer_ownership(configuration: &configuration::Configuration, group_id: &str, group_transfer_ownership_input: crate::models::GroupTransferOwnershipInput) -> Result<(), Error<GroupsServicePeriodTransferOwnershipError>> {
+pub async fn groups_transfer_ownership(configuration: &configuration::Configuration, group_id: &str, group_transfer_ownership_input: crate::models::GroupTransferOwnershipInput) -> Result<(), Error<GroupsTransferOwnershipError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -605,14 +605,14 @@ pub async fn groups_service_period_transfer_ownership(configuration: &configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodTransferOwnershipError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsTransferOwnershipError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Unbans an identity from a group. Must be the owner of the group to perform this action.
-pub async fn groups_service_period_unban_identity(configuration: &configuration::Configuration, group_id: &str, identity_id: &str) -> Result<(), Error<GroupsServicePeriodUnbanIdentityError>> {
+pub async fn groups_unban_identity(configuration: &configuration::Configuration, group_id: &str, identity_id: &str) -> Result<(), Error<GroupsUnbanIdentityError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -636,13 +636,13 @@ pub async fn groups_service_period_unban_identity(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodUnbanIdentityError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsUnbanIdentityError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
-pub async fn groups_service_period_update_profile(configuration: &configuration::Configuration, group_id: &str, group_update_profile_input: crate::models::GroupUpdateProfileInput) -> Result<(), Error<GroupsServicePeriodUpdateProfileError>> {
+pub async fn groups_update_profile(configuration: &configuration::Configuration, group_id: &str, group_update_profile_input: crate::models::GroupUpdateProfileInput) -> Result<(), Error<GroupsUpdateProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -667,14 +667,14 @@ pub async fn groups_service_period_update_profile(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GroupsServicePeriodUpdateProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsUpdateProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validate contents of group profile. Use to provide immediate feedback on profile changes before committing them.
-pub async fn groups_service_period_validate_profile(configuration: &configuration::Configuration, group_validate_profile_input: crate::models::GroupValidateProfileInput) -> Result<crate::models::GroupValidateProfileOutput, Error<GroupsServicePeriodValidateProfileError>> {
+pub async fn groups_validate_profile(configuration: &configuration::Configuration, group_validate_profile_input: crate::models::GroupValidateProfileInput) -> Result<crate::models::GroupValidateProfileOutput, Error<GroupsValidateProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -699,7 +699,7 @@ pub async fn groups_service_period_validate_profile(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GroupsServicePeriodValidateProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GroupsValidateProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

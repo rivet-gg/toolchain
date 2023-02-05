@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**join_requests_service_period_create_join_request**](GroupJoinRequestsApi.md#join_requests_service_period_create_join_request) | **POST** /groups/{group_id}/join-request | 
-[**join_requests_service_period_resolve_join_request**](GroupJoinRequestsApi.md#join_requests_service_period_resolve_join_request) | **POST** /groups/{group_id}/join-request/{identity_id} | 
+[**join_requests_create_join_request**](GroupJoinRequestsApi.md#join_requests_create_join_request) | **POST** /groups/{group_id}/join-request | 
+[**join_requests_resolve_join_request**](GroupJoinRequestsApi.md#join_requests_resolve_join_request) | **POST** /groups/{group_id}/join-request/{identity_id} | 
 
 
 
-## join_requests_service_period_create_join_request
+## join_requests_create_join_request
 
-> join_requests_service_period_create_join_request(group_id)
+> join_requests_create_join_request(group_id)
 
 
 Requests to join a group.
@@ -39,9 +39,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## join_requests_service_period_resolve_join_request
+## join_requests_resolve_join_request
 
-> join_requests_service_period_resolve_join_request(group_id, identity_id, group_resolve_join_request_input)
+> join_requests_resolve_join_request(group_id, identity_id, group_resolve_join_request_input)
 
 
 Resolves a join request for a given group.

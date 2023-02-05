@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**run_service_period_cleanup**](JobRunApi.md#run_service_period_cleanup) | **POST** /runs/cleanup | 
+[**run_cleanup**](JobRunApi.md#run_cleanup) | **POST** /runs/cleanup | 
 
 
 
-## run_service_period_cleanup
+## run_cleanup
 
-> run_service_period_cleanup()
+> run_cleanup()
 
 
 ### Parameters

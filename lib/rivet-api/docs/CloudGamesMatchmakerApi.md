@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**matchmaker_service_period_delete_matchmaker_lobby**](CloudGamesMatchmakerApi.md#matchmaker_service_period_delete_matchmaker_lobby) | **DELETE** /games/{game_id}/matchmaker/lobbies/{lobby_id} | 
-[**matchmaker_service_period_export_lobby_logs**](CloudGamesMatchmakerApi.md#matchmaker_service_period_export_lobby_logs) | **POST** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs/export | 
-[**matchmaker_service_period_export_matchmaker_lobby_history**](CloudGamesMatchmakerApi.md#matchmaker_service_period_export_matchmaker_lobby_history) | **POST** /games/{game_id}/matchmaker/lobbies/export-history | 
-[**matchmaker_service_period_get_lobby_logs**](CloudGamesMatchmakerApi.md#matchmaker_service_period_get_lobby_logs) | **GET** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs | 
+[**matchmaker_delete_matchmaker_lobby**](CloudGamesMatchmakerApi.md#matchmaker_delete_matchmaker_lobby) | **DELETE** /games/{game_id}/matchmaker/lobbies/{lobby_id} | 
+[**matchmaker_export_lobby_logs**](CloudGamesMatchmakerApi.md#matchmaker_export_lobby_logs) | **POST** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs/export | 
+[**matchmaker_export_matchmaker_lobby_history**](CloudGamesMatchmakerApi.md#matchmaker_export_matchmaker_lobby_history) | **POST** /games/{game_id}/matchmaker/lobbies/export-history | 
+[**matchmaker_get_lobby_logs**](CloudGamesMatchmakerApi.md#matchmaker_get_lobby_logs) | **GET** /games/{game_id}/matchmaker/lobbies/{lobby_id}/logs | 
 
 
 
-## matchmaker_service_period_delete_matchmaker_lobby
+## matchmaker_delete_matchmaker_lobby
 
-> crate::models::CloudGamesDeleteMatchmakerLobbyOutput matchmaker_service_period_delete_matchmaker_lobby(game_id, lobby_id)
+> crate::models::CloudGamesDeleteMatchmakerLobbyOutput matchmaker_delete_matchmaker_lobby(game_id, lobby_id)
 
 
 Deletes a matchmaker lobby, stopping it immediately.
@@ -42,9 +42,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## matchmaker_service_period_export_lobby_logs
+## matchmaker_export_lobby_logs
 
-> crate::models::CloudGamesExportLobbyLogsOutput matchmaker_service_period_export_lobby_logs(game_id, lobby_id, cloud_games_export_lobby_logs_input)
+> crate::models::CloudGamesExportLobbyLogsOutput matchmaker_export_lobby_logs(game_id, lobby_id, cloud_games_export_lobby_logs_input)
 
 
 Generates a download URL for logs.
@@ -74,9 +74,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## matchmaker_service_period_export_matchmaker_lobby_history
+## matchmaker_export_matchmaker_lobby_history
 
-> crate::models::CloudGamesExportMatchmakerLobbyHistoryOutput matchmaker_service_period_export_matchmaker_lobby_history(game_id, cloud_games_export_matchmaker_lobby_history_input)
+> crate::models::CloudGamesExportMatchmakerLobbyHistoryOutput matchmaker_export_matchmaker_lobby_history(game_id, cloud_games_export_matchmaker_lobby_history_input)
 
 
 Exports lobby history over a given query time span.
@@ -105,9 +105,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## matchmaker_service_period_get_lobby_logs
+## matchmaker_get_lobby_logs
 
-> crate::models::CloudGamesGetLobbyLogsOutput matchmaker_service_period_get_lobby_logs(game_id, lobby_id, stream, watch_index)
+> crate::models::CloudGamesGetLobbyLogsOutput matchmaker_get_lobby_logs(game_id, lobby_id, stream, watch_index)
 
 
 Returns the logs for a given lobby.

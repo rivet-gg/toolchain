@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**activity_service_period_set_party_to_idle**](PartyActivityApi.md#activity_service_period_set_party_to_idle) | **DELETE** /parties/self/activity | 
+[**activity_set_party_to_idle**](PartyActivityApi.md#activity_set_party_to_idle) | **DELETE** /parties/self/activity | 
 
 
 
-## activity_service_period_set_party_to_idle
+## activity_set_party_to_idle
 
-> activity_service_period_set_party_to_idle()
+> activity_set_party_to_idle()
 
 
 Sets the activity of the current identity's party to idle. Identity must be the party leader.

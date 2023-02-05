@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`regions_service_period_list`]
+/// struct for typed errors of method [`regions_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RegionsServicePeriodListError {
+pub enum RegionsListError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns a list of regions available to this namespace. Regions are sorted by most optimal to least optimal. The player's IP address is used to calculate the regions' optimality. 
-pub async fn regions_service_period_list(configuration: &configuration::Configuration, ) -> Result<crate::models::MatchmakerListRegionsOutput, Error<RegionsServicePeriodListError>> {
+pub async fn regions_list(configuration: &configuration::Configuration, ) -> Result<crate::models::MatchmakerListRegionsOutput, Error<RegionsListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn regions_service_period_list(configuration: &configuration::Configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<RegionsServicePeriodListError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<RegionsListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

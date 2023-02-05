@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**identity_service_period_get_direct_thread**](ChatIdentityApi.md#identity_service_period_get_direct_thread) | **GET** /identities/{identity_id}/thread | 
+[**identity_get_direct_thread**](ChatIdentityApi.md#identity_get_direct_thread) | **GET** /identities/{identity_id}/thread | 
 
 
 
-## identity_service_period_get_direct_thread
+## identity_get_direct_thread
 
-> crate::models::ChatGetDirectThreadOutput identity_service_period_get_direct_thread(identity_id)
+> crate::models::ChatGetDirectThreadOutput identity_get_direct_thread(identity_id)
 
 
 Returns a thread ID with a given identity.

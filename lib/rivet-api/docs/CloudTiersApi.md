@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**tiers_service_period_get_region_tiers**](CloudTiersApi.md#tiers_service_period_get_region_tiers) | **GET** /region-tiers | 
+[**tiers_get_region_tiers**](CloudTiersApi.md#tiers_get_region_tiers) | **GET** /region-tiers | 
 
 
 
-## tiers_service_period_get_region_tiers
+## tiers_get_region_tiers
 
-> crate::models::CloudGetRegionTiersOutput tiers_service_period_get_region_tiers()
+> crate::models::CloudGetRegionTiersOutput tiers_get_region_tiers()
 
 
 Returns all available region tiers.

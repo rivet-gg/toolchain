@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**games_service_period_get_game_profile**](PortalGamesApi.md#games_service_period_get_game_profile) | **GET** /games/{game_name_id}/profile | 
+[**games_get_game_profile**](PortalGamesApi.md#games_get_game_profile) | **GET** /games/{game_name_id}/profile | 
 
 
 
-## games_service_period_get_game_profile
+## games_get_game_profile
 
-> crate::models::PortalGetGameProfileOutput games_service_period_get_game_profile(game_name_id, watch_index)
+> crate::models::PortalGetGameProfileOutput games_get_game_profile(game_name_id, watch_index)
 
 
 Returns a game profile.

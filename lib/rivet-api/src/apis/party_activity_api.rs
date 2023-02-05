@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`activity_service_period_set_party_to_idle`]
+/// struct for typed errors of method [`activity_set_party_to_idle`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ActivityServicePeriodSetPartyToIdleError {
+pub enum ActivitySetPartyToIdleError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Sets the activity of the current identity's party to idle. Identity must be the party leader.
-pub async fn activity_service_period_set_party_to_idle(configuration: &configuration::Configuration, ) -> Result<(), Error<ActivityServicePeriodSetPartyToIdleError>> {
+pub async fn activity_set_party_to_idle(configuration: &configuration::Configuration, ) -> Result<(), Error<ActivitySetPartyToIdleError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn activity_service_period_set_party_to_idle(configuration: &configura
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<ActivityServicePeriodSetPartyToIdleError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ActivitySetPartyToIdleError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`logs_service_period_get_namespace_lobby`]
+/// struct for typed errors of method [`logs_get_namespace_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LogsServicePeriodGetNamespaceLobbyError {
+pub enum LogsGetNamespaceLobbyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`logs_service_period_list_namespace_lobbies`]
+/// struct for typed errors of method [`logs_list_namespace_lobbies`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LogsServicePeriodListNamespaceLobbiesError {
+pub enum LogsListNamespaceLobbiesError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns a lobby from the given game namespace.
-pub async fn logs_service_period_get_namespace_lobby(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, lobby_id: &str) -> Result<crate::models::CloudGamesNamespacesGetNamespaceLobbyOutput, Error<LogsServicePeriodGetNamespaceLobbyError>> {
+pub async fn logs_get_namespace_lobby(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, lobby_id: &str) -> Result<crate::models::CloudGamesNamespacesGetNamespaceLobbyOutput, Error<LogsGetNamespaceLobbyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -55,14 +55,14 @@ pub async fn logs_service_period_get_namespace_lobby(configuration: &configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LogsServicePeriodGetNamespaceLobbyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<LogsGetNamespaceLobbyError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a list of lobbies for the given game namespace.
-pub async fn logs_service_period_list_namespace_lobbies(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, before_create_ts: Option<&str>) -> Result<crate::models::CloudGamesNamespacesListNamespaceLobbiesOutput, Error<LogsServicePeriodListNamespaceLobbiesError>> {
+pub async fn logs_list_namespace_lobbies(configuration: &configuration::Configuration, game_id: &str, namespace_id: &str, before_create_ts: Option<&str>) -> Result<crate::models::CloudGamesNamespacesListNamespaceLobbiesOutput, Error<LogsListNamespaceLobbiesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -89,7 +89,7 @@ pub async fn logs_service_period_list_namespace_lobbies(configuration: &configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LogsServicePeriodListNamespaceLobbiesError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<LogsListNamespaceLobbiesError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

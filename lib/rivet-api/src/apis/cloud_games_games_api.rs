@@ -15,65 +15,65 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`games_service_period_create_game`]
+/// struct for typed errors of method [`games_create_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodCreateGameError {
+pub enum GamesCreateGameError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_game_banner_upload_complete`]
+/// struct for typed errors of method [`games_game_banner_upload_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodGameBannerUploadCompleteError {
+pub enum GamesGameBannerUploadCompleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_game_banner_upload_prepare`]
+/// struct for typed errors of method [`games_game_banner_upload_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodGameBannerUploadPrepareError {
+pub enum GamesGameBannerUploadPrepareError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_game_logo_upload_complete`]
+/// struct for typed errors of method [`games_game_logo_upload_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodGameLogoUploadCompleteError {
+pub enum GamesGameLogoUploadCompleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_game_logo_upload_prepare`]
+/// struct for typed errors of method [`games_game_logo_upload_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodGameLogoUploadPrepareError {
+pub enum GamesGameLogoUploadPrepareError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_get_game_by_id`]
+/// struct for typed errors of method [`games_get_game_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodGetGameByIdError {
+pub enum GamesGetGameByIdError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_get_games`]
+/// struct for typed errors of method [`games_get_games`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodGetGamesError {
+pub enum GamesGetGamesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`games_service_period_validate_game`]
+/// struct for typed errors of method [`games_validate_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GamesServicePeriodValidateGameError {
+pub enum GamesValidateGameError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Creates a new game.
-pub async fn games_service_period_create_game(configuration: &configuration::Configuration, cloud_games_create_game_input: crate::models::CloudGamesCreateGameInput) -> Result<crate::models::CloudGamesCreateGameOutput, Error<GamesServicePeriodCreateGameError>> {
+pub async fn games_create_game(configuration: &configuration::Configuration, cloud_games_create_game_input: crate::models::CloudGamesCreateGameInput) -> Result<crate::models::CloudGamesCreateGameOutput, Error<GamesCreateGameError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -98,14 +98,14 @@ pub async fn games_service_period_create_game(configuration: &configuration::Con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GamesServicePeriodCreateGameError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesCreateGameError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Completes an game banner image upload. Must be called after the file upload process completes.
-pub async fn games_service_period_game_banner_upload_complete(configuration: &configuration::Configuration, game_id: &str, upload_id: &str) -> Result<(), Error<GamesServicePeriodGameBannerUploadCompleteError>> {
+pub async fn games_game_banner_upload_complete(configuration: &configuration::Configuration, game_id: &str, upload_id: &str) -> Result<(), Error<GamesGameBannerUploadCompleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -129,14 +129,14 @@ pub async fn games_service_period_game_banner_upload_complete(configuration: &co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GamesServicePeriodGameBannerUploadCompleteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesGameBannerUploadCompleteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Prepares a game banner image upload.
-pub async fn games_service_period_game_banner_upload_prepare(configuration: &configuration::Configuration, game_id: &str, cloud_games_game_banner_upload_prepare_input: crate::models::CloudGamesGameBannerUploadPrepareInput) -> Result<crate::models::CloudGamesGameBannerUploadPrepareOutput, Error<GamesServicePeriodGameBannerUploadPrepareError>> {
+pub async fn games_game_banner_upload_prepare(configuration: &configuration::Configuration, game_id: &str, cloud_games_game_banner_upload_prepare_input: crate::models::CloudGamesGameBannerUploadPrepareInput) -> Result<crate::models::CloudGamesGameBannerUploadPrepareOutput, Error<GamesGameBannerUploadPrepareError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -161,14 +161,14 @@ pub async fn games_service_period_game_banner_upload_prepare(configuration: &con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GamesServicePeriodGameBannerUploadPrepareError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesGameBannerUploadPrepareError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Completes a game logo image upload. Must be called after the file upload process completes.
-pub async fn games_service_period_game_logo_upload_complete(configuration: &configuration::Configuration, game_id: &str, upload_id: &str) -> Result<(), Error<GamesServicePeriodGameLogoUploadCompleteError>> {
+pub async fn games_game_logo_upload_complete(configuration: &configuration::Configuration, game_id: &str, upload_id: &str) -> Result<(), Error<GamesGameLogoUploadCompleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -192,14 +192,14 @@ pub async fn games_service_period_game_logo_upload_complete(configuration: &conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<GamesServicePeriodGameLogoUploadCompleteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesGameLogoUploadCompleteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Prepares a game logo image upload.
-pub async fn games_service_period_game_logo_upload_prepare(configuration: &configuration::Configuration, game_id: &str, cloud_games_game_logo_upload_prepare_input: crate::models::CloudGamesGameLogoUploadPrepareInput) -> Result<crate::models::CloudGamesGameLogoUploadPrepareOutput, Error<GamesServicePeriodGameLogoUploadPrepareError>> {
+pub async fn games_game_logo_upload_prepare(configuration: &configuration::Configuration, game_id: &str, cloud_games_game_logo_upload_prepare_input: crate::models::CloudGamesGameLogoUploadPrepareInput) -> Result<crate::models::CloudGamesGameLogoUploadPrepareOutput, Error<GamesGameLogoUploadPrepareError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -224,14 +224,14 @@ pub async fn games_service_period_game_logo_upload_prepare(configuration: &confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GamesServicePeriodGameLogoUploadPrepareError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesGameLogoUploadPrepareError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a game by its game id.
-pub async fn games_service_period_get_game_by_id(configuration: &configuration::Configuration, game_id: &str, watch_index: Option<&str>) -> Result<crate::models::CloudGamesGetGameByIdOutput, Error<GamesServicePeriodGetGameByIdError>> {
+pub async fn games_get_game_by_id(configuration: &configuration::Configuration, game_id: &str, watch_index: Option<&str>) -> Result<crate::models::CloudGamesGetGameByIdOutput, Error<GamesGetGameByIdError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -258,14 +258,14 @@ pub async fn games_service_period_get_game_by_id(configuration: &configuration::
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GamesServicePeriodGetGameByIdError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesGetGameByIdError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a list of games in which the current identity is a group member of its development team.
-pub async fn games_service_period_get_games(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::CloudGamesGetGamesOutput, Error<GamesServicePeriodGetGamesError>> {
+pub async fn games_get_games(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::CloudGamesGetGamesOutput, Error<GamesGetGamesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -292,14 +292,14 @@ pub async fn games_service_period_get_games(configuration: &configuration::Confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GamesServicePeriodGetGamesError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesGetGamesError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validates information used to create a new game.
-pub async fn games_service_period_validate_game(configuration: &configuration::Configuration, cloud_games_validate_game_input: crate::models::CloudGamesValidateGameInput) -> Result<crate::models::CloudGamesValidateGameOutput, Error<GamesServicePeriodValidateGameError>> {
+pub async fn games_validate_game(configuration: &configuration::Configuration, cloud_games_validate_game_input: crate::models::CloudGamesValidateGameInput) -> Result<crate::models::CloudGamesValidateGameOutput, Error<GamesValidateGameError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -324,7 +324,7 @@ pub async fn games_service_period_validate_game(configuration: &configuration::C
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GamesServicePeriodValidateGameError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<GamesValidateGameError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

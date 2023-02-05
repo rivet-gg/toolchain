@@ -15,51 +15,51 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`chat_service_period_get_thread_history`]
+/// struct for typed errors of method [`chat_get_thread_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ChatServicePeriodGetThreadHistoryError {
+pub enum ChatGetThreadHistoryError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`chat_service_period_get_thread_topic`]
+/// struct for typed errors of method [`chat_get_thread_topic`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ChatServicePeriodGetThreadTopicError {
+pub enum ChatGetThreadTopicError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`chat_service_period_send_message`]
+/// struct for typed errors of method [`chat_send_message`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ChatServicePeriodSendMessageError {
+pub enum ChatSendMessageError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`chat_service_period_set_thread_read`]
+/// struct for typed errors of method [`chat_set_thread_read`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ChatServicePeriodSetThreadReadError {
+pub enum ChatSetThreadReadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`chat_service_period_set_typing_status`]
+/// struct for typed errors of method [`chat_set_typing_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ChatServicePeriodSetTypingStatusError {
+pub enum ChatSetTypingStatusError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`chat_service_period_watch_thread`]
+/// struct for typed errors of method [`chat_watch_thread`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ChatServicePeriodWatchThreadError {
+pub enum ChatWatchThreadError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
-pub async fn chat_service_period_get_thread_history(configuration: &configuration::Configuration, thread_id: &str, count: f64, ts: Option<&str>, query_direction: Option<&str>) -> Result<crate::models::GetThreadHistoryOutput, Error<ChatServicePeriodGetThreadHistoryError>> {
+pub async fn chat_get_thread_history(configuration: &configuration::Configuration, thread_id: &str, count: f64, ts: Option<&str>, query_direction: Option<&str>) -> Result<crate::models::GetThreadHistoryOutput, Error<ChatGetThreadHistoryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -90,14 +90,14 @@ pub async fn chat_service_period_get_thread_history(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ChatServicePeriodGetThreadHistoryError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatGetThreadHistoryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches the topic of a thread.
-pub async fn chat_service_period_get_thread_topic(configuration: &configuration::Configuration, thread_id: &str) -> Result<crate::models::GetThreadTopicOutput, Error<ChatServicePeriodGetThreadTopicError>> {
+pub async fn chat_get_thread_topic(configuration: &configuration::Configuration, thread_id: &str) -> Result<crate::models::GetThreadTopicOutput, Error<ChatGetThreadTopicError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -121,14 +121,14 @@ pub async fn chat_service_period_get_thread_topic(configuration: &configuration:
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ChatServicePeriodGetThreadTopicError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatGetThreadTopicError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Sends a chat message to a given topic.
-pub async fn chat_service_period_send_message(configuration: &configuration::Configuration, send_message_input: crate::models::SendMessageInput) -> Result<crate::models::SendMessageOutput, Error<ChatServicePeriodSendMessageError>> {
+pub async fn chat_send_message(configuration: &configuration::Configuration, send_message_input: crate::models::SendMessageInput) -> Result<crate::models::SendMessageOutput, Error<ChatSendMessageError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -153,14 +153,14 @@ pub async fn chat_service_period_send_message(configuration: &configuration::Con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ChatServicePeriodSendMessageError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatSendMessageError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates the current identity's last read timestamp in the given thread.
-pub async fn chat_service_period_set_thread_read(configuration: &configuration::Configuration, thread_id: &str, set_thread_read_input: crate::models::SetThreadReadInput) -> Result<(), Error<ChatServicePeriodSetThreadReadError>> {
+pub async fn chat_set_thread_read(configuration: &configuration::Configuration, thread_id: &str, set_thread_read_input: crate::models::SetThreadReadInput) -> Result<(), Error<ChatSetThreadReadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -185,14 +185,14 @@ pub async fn chat_service_period_set_thread_read(configuration: &configuration::
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<ChatServicePeriodSetThreadReadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatSetThreadReadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Updates the current identity's typing status in the given thread.
-pub async fn chat_service_period_set_typing_status(configuration: &configuration::Configuration, thread_id: &str, set_typing_status_input: crate::models::SetTypingStatusInput) -> Result<(), Error<ChatServicePeriodSetTypingStatusError>> {
+pub async fn chat_set_typing_status(configuration: &configuration::Configuration, thread_id: &str, set_typing_status_input: crate::models::SetTypingStatusInput) -> Result<(), Error<ChatSetTypingStatusError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -217,14 +217,14 @@ pub async fn chat_service_period_set_typing_status(configuration: &configuration
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<ChatServicePeriodSetTypingStatusError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatSetTypingStatusError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches all relevant changes from a thread that have happened since the given watch index.
-pub async fn chat_service_period_watch_thread(configuration: &configuration::Configuration, thread_id: &str, watch_index: Option<&str>) -> Result<crate::models::WatchThreadOutput, Error<ChatServicePeriodWatchThreadError>> {
+pub async fn chat_watch_thread(configuration: &configuration::Configuration, thread_id: &str, watch_index: Option<&str>) -> Result<crate::models::WatchThreadOutput, Error<ChatWatchThreadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -251,7 +251,7 @@ pub async fn chat_service_period_watch_thread(configuration: &configuration::Con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ChatServicePeriodWatchThreadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ChatWatchThreadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

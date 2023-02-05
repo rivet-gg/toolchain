@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**activities_service_period_list**](IdentityActivitiesApi.md#activities_service_period_list) | **GET** /activities | 
+[**activities_list**](IdentityActivitiesApi.md#activities_list) | **GET** /activities | 
 
 
 
-## activities_service_period_list
+## activities_list
 
-> crate::models::IdentityListActivitiesOutput activities_service_period_list(watch_index)
+> crate::models::IdentityListActivitiesOutput activities_list(watch_index)
 
 
 Returns an overview of all players currently online or in game.

@@ -15,37 +15,37 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`matchmaker_service_period_delete_matchmaker_lobby`]
+/// struct for typed errors of method [`matchmaker_delete_matchmaker_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerServicePeriodDeleteMatchmakerLobbyError {
+pub enum MatchmakerDeleteMatchmakerLobbyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`matchmaker_service_period_export_lobby_logs`]
+/// struct for typed errors of method [`matchmaker_export_lobby_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerServicePeriodExportLobbyLogsError {
+pub enum MatchmakerExportLobbyLogsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`matchmaker_service_period_export_matchmaker_lobby_history`]
+/// struct for typed errors of method [`matchmaker_export_matchmaker_lobby_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerServicePeriodExportMatchmakerLobbyHistoryError {
+pub enum MatchmakerExportMatchmakerLobbyHistoryError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`matchmaker_service_period_get_lobby_logs`]
+/// struct for typed errors of method [`matchmaker_get_lobby_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchmakerServicePeriodGetLobbyLogsError {
+pub enum MatchmakerGetLobbyLogsError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Deletes a matchmaker lobby, stopping it immediately.
-pub async fn matchmaker_service_period_delete_matchmaker_lobby(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str) -> Result<crate::models::CloudGamesDeleteMatchmakerLobbyOutput, Error<MatchmakerServicePeriodDeleteMatchmakerLobbyError>> {
+pub async fn matchmaker_delete_matchmaker_lobby(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str) -> Result<crate::models::CloudGamesDeleteMatchmakerLobbyOutput, Error<MatchmakerDeleteMatchmakerLobbyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -69,14 +69,14 @@ pub async fn matchmaker_service_period_delete_matchmaker_lobby(configuration: &c
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<MatchmakerServicePeriodDeleteMatchmakerLobbyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerDeleteMatchmakerLobbyError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Generates a download URL for logs.
-pub async fn matchmaker_service_period_export_lobby_logs(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str, cloud_games_export_lobby_logs_input: crate::models::CloudGamesExportLobbyLogsInput) -> Result<crate::models::CloudGamesExportLobbyLogsOutput, Error<MatchmakerServicePeriodExportLobbyLogsError>> {
+pub async fn matchmaker_export_lobby_logs(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str, cloud_games_export_lobby_logs_input: crate::models::CloudGamesExportLobbyLogsInput) -> Result<crate::models::CloudGamesExportLobbyLogsOutput, Error<MatchmakerExportLobbyLogsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -101,14 +101,14 @@ pub async fn matchmaker_service_period_export_lobby_logs(configuration: &configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<MatchmakerServicePeriodExportLobbyLogsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerExportLobbyLogsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Exports lobby history over a given query time span.
-pub async fn matchmaker_service_period_export_matchmaker_lobby_history(configuration: &configuration::Configuration, game_id: &str, cloud_games_export_matchmaker_lobby_history_input: crate::models::CloudGamesExportMatchmakerLobbyHistoryInput) -> Result<crate::models::CloudGamesExportMatchmakerLobbyHistoryOutput, Error<MatchmakerServicePeriodExportMatchmakerLobbyHistoryError>> {
+pub async fn matchmaker_export_matchmaker_lobby_history(configuration: &configuration::Configuration, game_id: &str, cloud_games_export_matchmaker_lobby_history_input: crate::models::CloudGamesExportMatchmakerLobbyHistoryInput) -> Result<crate::models::CloudGamesExportMatchmakerLobbyHistoryOutput, Error<MatchmakerExportMatchmakerLobbyHistoryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -133,14 +133,14 @@ pub async fn matchmaker_service_period_export_matchmaker_lobby_history(configura
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<MatchmakerServicePeriodExportMatchmakerLobbyHistoryError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerExportMatchmakerLobbyHistoryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns the logs for a given lobby.
-pub async fn matchmaker_service_period_get_lobby_logs(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str, stream: &str, watch_index: Option<&str>) -> Result<crate::models::CloudGamesGetLobbyLogsOutput, Error<MatchmakerServicePeriodGetLobbyLogsError>> {
+pub async fn matchmaker_get_lobby_logs(configuration: &configuration::Configuration, game_id: &str, lobby_id: &str, stream: &str, watch_index: Option<&str>) -> Result<crate::models::CloudGamesGetLobbyLogsOutput, Error<MatchmakerGetLobbyLogsError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -168,7 +168,7 @@ pub async fn matchmaker_service_period_get_lobby_logs(configuration: &configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<MatchmakerServicePeriodGetLobbyLogsError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<MatchmakerGetLobbyLogsError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

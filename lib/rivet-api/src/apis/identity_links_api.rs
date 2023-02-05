@@ -15,37 +15,37 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`links_service_period_cancel`]
+/// struct for typed errors of method [`links_cancel`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LinksServicePeriodCancelError {
+pub enum LinksCancelError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`links_service_period_complete`]
+/// struct for typed errors of method [`links_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LinksServicePeriodCompleteError {
+pub enum LinksCompleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`links_service_period_get`]
+/// struct for typed errors of method [`links_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LinksServicePeriodGetError {
+pub enum LinksGetError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`links_service_period_prepare`]
+/// struct for typed errors of method [`links_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LinksServicePeriodPrepareError {
+pub enum LinksPrepareError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Cancels a game link. It can no longer be used to link after cancellation.
-pub async fn links_service_period_cancel(configuration: &configuration::Configuration, links_service_cancel_request: crate::models::LinksServiceCancelRequest) -> Result<(), Error<LinksServicePeriodCancelError>> {
+pub async fn links_cancel(configuration: &configuration::Configuration, links_cancel_request: crate::models::LinksCancelRequest) -> Result<(), Error<LinksCancelError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -59,7 +59,7 @@ pub async fn links_service_period_cancel(configuration: &configuration::Configur
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&links_service_cancel_request);
+    local_var_req_builder = local_var_req_builder.json(&links_cancel_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -70,14 +70,14 @@ pub async fn links_service_period_cancel(configuration: &configuration::Configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<LinksServicePeriodCancelError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<LinksCancelError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Completes a game link process and returns whether or not the link is valid.
-pub async fn links_service_period_complete(configuration: &configuration::Configuration, links_service_cancel_request: crate::models::LinksServiceCancelRequest) -> Result<(), Error<LinksServicePeriodCompleteError>> {
+pub async fn links_complete(configuration: &configuration::Configuration, links_cancel_request: crate::models::LinksCancelRequest) -> Result<(), Error<LinksCompleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -91,7 +91,7 @@ pub async fn links_service_period_complete(configuration: &configuration::Config
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&links_service_cancel_request);
+    local_var_req_builder = local_var_req_builder.json(&links_cancel_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -102,14 +102,14 @@ pub async fn links_service_period_complete(configuration: &configuration::Config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<LinksServicePeriodCompleteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<LinksCompleteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns the current status of a linking process. Once `status` is `complete`, the identity's profile should be fetched again since they may have switched accounts.
-pub async fn links_service_period_get(configuration: &configuration::Configuration, identity_link_token: &str, watch_index: &str) -> Result<crate::models::IdentityGetGameLinkOutput, Error<LinksServicePeriodGetError>> {
+pub async fn links_get(configuration: &configuration::Configuration, identity_link_token: &str, watch_index: &str) -> Result<crate::models::IdentityGetGameLinkOutput, Error<LinksGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -135,14 +135,14 @@ pub async fn links_service_period_get(configuration: &configuration::Configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LinksServicePeriodGetError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<LinksGetError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Begins the process for linking an identity with the Rivet Hub. # Importance of Linking Identities When an identity is created via `rivet.api.identity#SetupIdentity`, the identity is temporary and is not shared with other games the user plays. In order to make the identity permanent and synchronize the identity with other games, the identity must be linked with the hub. # Linking Process The linking process works by opening `identity_link_url` in a browser then polling `rivet.api.identity#GetGameLink` to wait for it to complete. This is designed to be as flexible as possible so `identity_link_url` can be opened on any device. For example, when playing a console game, the user can scan a QR code for `identity_link_url` to authenticate on their phone. 
-pub async fn links_service_period_prepare(configuration: &configuration::Configuration, ) -> Result<crate::models::IdentityPrepareGameLinkOutput, Error<LinksServicePeriodPrepareError>> {
+pub async fn links_prepare(configuration: &configuration::Configuration, ) -> Result<crate::models::IdentityPrepareGameLinkOutput, Error<LinksPrepareError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -166,7 +166,7 @@ pub async fn links_service_period_prepare(configuration: &configuration::Configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<LinksServicePeriodPrepareError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<LinksPrepareError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

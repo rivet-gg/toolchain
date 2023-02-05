@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`cdn_service_period_create_game_cdn_site`]
+/// struct for typed errors of method [`cdn_create_game_cdn_site`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CdnServicePeriodCreateGameCdnSiteError {
+pub enum CdnCreateGameCdnSiteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`cdn_service_period_list_game_cdn_sites`]
+/// struct for typed errors of method [`cdn_list_game_cdn_sites`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CdnServicePeriodListGameCdnSitesError {
+pub enum CdnListGameCdnSitesError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Creates a new CDN site for the given game.
-pub async fn cdn_service_period_create_game_cdn_site(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_cdn_site_input: crate::models::CloudGamesCreateGameCdnSiteInput) -> Result<crate::models::CloudGamesCreateGameCdnSiteOutput, Error<CdnServicePeriodCreateGameCdnSiteError>> {
+pub async fn cdn_create_game_cdn_site(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_cdn_site_input: crate::models::CloudGamesCreateGameCdnSiteInput) -> Result<crate::models::CloudGamesCreateGameCdnSiteOutput, Error<CdnCreateGameCdnSiteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -56,14 +56,14 @@ pub async fn cdn_service_period_create_game_cdn_site(configuration: &configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<CdnServicePeriodCreateGameCdnSiteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CdnCreateGameCdnSiteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Lists CDN sites for a game.
-pub async fn cdn_service_period_list_game_cdn_sites(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::CloudGamesListGameCdnSitesOutput, Error<CdnServicePeriodListGameCdnSitesError>> {
+pub async fn cdn_list_game_cdn_sites(configuration: &configuration::Configuration, game_id: &str) -> Result<crate::models::CloudGamesListGameCdnSitesOutput, Error<CdnListGameCdnSitesError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -87,7 +87,7 @@ pub async fn cdn_service_period_list_game_cdn_sites(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<CdnServicePeriodListGameCdnSitesError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<CdnListGameCdnSitesError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

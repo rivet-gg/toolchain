@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`events_service_period_watch`]
+/// struct for typed errors of method [`events_watch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum EventsServicePeriodWatchError {
+pub enum EventsWatchError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns all events relative to the current identity.
-pub async fn events_service_period_watch(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::IdentityWatchEventsOutput, Error<EventsServicePeriodWatchError>> {
+pub async fn events_watch(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::IdentityWatchEventsOutput, Error<EventsWatchError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -51,7 +51,7 @@ pub async fn events_service_period_watch(configuration: &configuration::Configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<EventsServicePeriodWatchError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<EventsWatchError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

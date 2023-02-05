@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**builds_service_period_create_game_build**](CloudGamesBuildsApi.md#builds_service_period_create_game_build) | **POST** /games/{game_id}/builds | 
-[**builds_service_period_list_game_builds**](CloudGamesBuildsApi.md#builds_service_period_list_game_builds) | **GET** /games/{game_id}/builds | 
+[**builds_create_game_build**](CloudGamesBuildsApi.md#builds_create_game_build) | **POST** /games/{game_id}/builds | 
+[**builds_list_game_builds**](CloudGamesBuildsApi.md#builds_list_game_builds) | **GET** /games/{game_id}/builds | 
 
 
 
-## builds_service_period_create_game_build
+## builds_create_game_build
 
-> crate::models::CloudGamesCreateGameBuildOutput builds_service_period_create_game_build(game_id, cloud_games_create_game_build_input)
+> crate::models::CloudGamesCreateGameBuildOutput builds_create_game_build(game_id, cloud_games_create_game_build_input)
 
 
 Creates a new game build for the given game.
@@ -40,9 +40,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## builds_service_period_list_game_builds
+## builds_list_game_builds
 
-> crate::models::CloudGamesListGameBuildsOutput builds_service_period_list_game_builds(game_id)
+> crate::models::CloudGamesListGameBuildsOutput builds_list_game_builds(game_id)
 
 
 Lists game builds for the given game.

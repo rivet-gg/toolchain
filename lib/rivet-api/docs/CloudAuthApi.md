@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**auth_service_period_inspect**](CloudAuthApi.md#auth_service_period_inspect) | **GET** /auth/inspect | 
+[**auth_inspect**](CloudAuthApi.md#auth_inspect) | **GET** /auth/inspect | 
 
 
 
-## auth_service_period_inspect
+## auth_inspect
 
-> crate::models::CloudInspectOutput auth_service_period_inspect()
+> crate::models::CloudInspectOutput auth_inspect()
 
 
 Returns information about the current authenticated agent.

@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`identity_service_period_complete_email_verification`]
+/// struct for typed errors of method [`identity_complete_email_verification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodCompleteEmailVerificationError {
+pub enum IdentityCompleteEmailVerificationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`identity_service_period_start_email_verification`]
+/// struct for typed errors of method [`identity_start_email_verification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IdentityServicePeriodStartEmailVerificationError {
+pub enum IdentityStartEmailVerificationError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Completes the email verification process.
-pub async fn identity_service_period_complete_email_verification(configuration: &configuration::Configuration, auth_complete_email_verification_input: crate::models::AuthCompleteEmailVerificationInput) -> Result<crate::models::AuthCompleteEmailVerificationOutput, Error<IdentityServicePeriodCompleteEmailVerificationError>> {
+pub async fn identity_complete_email_verification(configuration: &configuration::Configuration, auth_complete_email_verification_input: crate::models::AuthCompleteEmailVerificationInput) -> Result<crate::models::AuthCompleteEmailVerificationOutput, Error<IdentityCompleteEmailVerificationError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -56,14 +56,14 @@ pub async fn identity_service_period_complete_email_verification(configuration: 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodCompleteEmailVerificationError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityCompleteEmailVerificationError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Starts the verification process for linking an email to your identity.
-pub async fn identity_service_period_start_email_verification(configuration: &configuration::Configuration, auth_start_email_verification_input: crate::models::AuthStartEmailVerificationInput) -> Result<crate::models::AuthStartEmailVerificationOutput, Error<IdentityServicePeriodStartEmailVerificationError>> {
+pub async fn identity_start_email_verification(configuration: &configuration::Configuration, auth_start_email_verification_input: crate::models::AuthStartEmailVerificationInput) -> Result<crate::models::AuthStartEmailVerificationOutput, Error<IdentityStartEmailVerificationError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -88,7 +88,7 @@ pub async fn identity_service_period_start_email_verification(configuration: &co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<IdentityServicePeriodStartEmailVerificationError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<IdentityStartEmailVerificationError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

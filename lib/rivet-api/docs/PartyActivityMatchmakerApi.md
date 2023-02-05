@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**matchmaker_service_period_find_lobby_for_party**](PartyActivityMatchmakerApi.md#matchmaker_service_period_find_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/find | 
-[**matchmaker_service_period_join_lobby_for_party**](PartyActivityMatchmakerApi.md#matchmaker_service_period_join_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/join | 
-[**matchmaker_service_period_request_player**](PartyActivityMatchmakerApi.md#matchmaker_service_period_request_player) | **POST** /parties/self/members/self/matchmaker/request-player | 
+[**matchmaker_find_lobby_for_party**](PartyActivityMatchmakerApi.md#matchmaker_find_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/find | 
+[**matchmaker_join_lobby_for_party**](PartyActivityMatchmakerApi.md#matchmaker_join_lobby_for_party) | **POST** /parties/self/activity/matchmaker/lobbies/join | 
+[**matchmaker_request_player**](PartyActivityMatchmakerApi.md#matchmaker_request_player) | **POST** /parties/self/members/self/matchmaker/request-player | 
 
 
 
-## matchmaker_service_period_find_lobby_for_party
+## matchmaker_find_lobby_for_party
 
-> matchmaker_service_period_find_lobby_for_party(party_activity_find_matchmaker_lobby_for_party_input)
+> matchmaker_find_lobby_for_party(party_activity_find_matchmaker_lobby_for_party_input)
 
 
 Attempts to make the current identity's party find a lobby based on the given criteria. If succeeds, all party members will receive a `GlobalEventMatchmakerLobbyJoin` event with all the information required to join the lobby. This request will use the party player count configured for the lobby group. See `FindLobby`.
@@ -40,9 +40,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## matchmaker_service_period_join_lobby_for_party
+## matchmaker_join_lobby_for_party
 
-> matchmaker_service_period_join_lobby_for_party(party_activity_join_matchmaker_lobby_for_party_input)
+> matchmaker_join_lobby_for_party(party_activity_join_matchmaker_lobby_for_party_input)
 
 
 Attempts to make the current identity's party join a specific matchmaker lobby. This request will use the party player count configured for the lobby group. If succeeds, all party members will receive a `GlobalEventMatchmakerLobbyJoin` event with all the information required to join the lobby. Identity must be the party leader. See `JoinLobby`.
@@ -70,9 +70,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## matchmaker_service_period_request_player
+## matchmaker_request_player
 
-> matchmaker_service_period_request_player()
+> matchmaker_request_player()
 
 
 ### Parameters

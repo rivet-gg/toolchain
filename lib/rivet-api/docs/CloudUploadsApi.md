@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**uploads_service_period_complete_upload**](CloudUploadsApi.md#uploads_service_period_complete_upload) | **POST** /uploads/{upload_id}/complete | 
+[**uploads_complete_upload**](CloudUploadsApi.md#uploads_complete_upload) | **POST** /uploads/{upload_id}/complete | 
 
 
 
-## uploads_service_period_complete_upload
+## uploads_complete_upload
 
-> uploads_service_period_complete_upload(upload_id)
+> uploads_complete_upload(upload_id)
 
 
 Marks an upload as complete.

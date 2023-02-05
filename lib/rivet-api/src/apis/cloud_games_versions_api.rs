@@ -15,30 +15,30 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`versions_service_period_create_game_version`]
+/// struct for typed errors of method [`versions_create_game_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum VersionsServicePeriodCreateGameVersionError {
+pub enum VersionsCreateGameVersionError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`versions_service_period_get_game_version_by_id`]
+/// struct for typed errors of method [`versions_get_game_version_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum VersionsServicePeriodGetGameVersionByIdError {
+pub enum VersionsGetGameVersionByIdError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`versions_service_period_validate_game_version`]
+/// struct for typed errors of method [`versions_validate_game_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum VersionsServicePeriodValidateGameVersionError {
+pub enum VersionsValidateGameVersionError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Creates a new game version.
-pub async fn versions_service_period_create_game_version(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_version_input: crate::models::CloudGamesCreateGameVersionInput) -> Result<crate::models::CloudGamesCreateGameVersionOutput, Error<VersionsServicePeriodCreateGameVersionError>> {
+pub async fn versions_create_game_version(configuration: &configuration::Configuration, game_id: &str, cloud_games_create_game_version_input: crate::models::CloudGamesCreateGameVersionInput) -> Result<crate::models::CloudGamesCreateGameVersionOutput, Error<VersionsCreateGameVersionError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -63,14 +63,14 @@ pub async fn versions_service_period_create_game_version(configuration: &configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<VersionsServicePeriodCreateGameVersionError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<VersionsCreateGameVersionError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a game version by its version ID.
-pub async fn versions_service_period_get_game_version_by_id(configuration: &configuration::Configuration, game_id: &str, version_id: &str) -> Result<crate::models::CloudGamesGetGameVersionByIdOutput, Error<VersionsServicePeriodGetGameVersionByIdError>> {
+pub async fn versions_get_game_version_by_id(configuration: &configuration::Configuration, game_id: &str, version_id: &str) -> Result<crate::models::CloudGamesGetGameVersionByIdOutput, Error<VersionsGetGameVersionByIdError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -94,14 +94,14 @@ pub async fn versions_service_period_get_game_version_by_id(configuration: &conf
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<VersionsServicePeriodGetGameVersionByIdError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<VersionsGetGameVersionByIdError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Validates information used to create a new game version.
-pub async fn versions_service_period_validate_game_version(configuration: &configuration::Configuration, game_id: &str, cloud_games_validate_game_version_input: crate::models::CloudGamesValidateGameVersionInput) -> Result<crate::models::CloudGamesValidateGameVersionOutput, Error<VersionsServicePeriodValidateGameVersionError>> {
+pub async fn versions_validate_game_version(configuration: &configuration::Configuration, game_id: &str, cloud_games_validate_game_version_input: crate::models::CloudGamesValidateGameVersionInput) -> Result<crate::models::CloudGamesValidateGameVersionOutput, Error<VersionsValidateGameVersionError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -126,7 +126,7 @@ pub async fn versions_service_period_validate_game_version(configuration: &confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<VersionsServicePeriodValidateGameVersionError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<VersionsValidateGameVersionError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

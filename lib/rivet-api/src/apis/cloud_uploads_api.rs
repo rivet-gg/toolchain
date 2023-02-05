@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`uploads_service_period_complete_upload`]
+/// struct for typed errors of method [`uploads_complete_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UploadsServicePeriodCompleteUploadError {
+pub enum UploadsCompleteUploadError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Marks an upload as complete.
-pub async fn uploads_service_period_complete_upload(configuration: &configuration::Configuration, upload_id: &str) -> Result<(), Error<UploadsServicePeriodCompleteUploadError>> {
+pub async fn uploads_complete_upload(configuration: &configuration::Configuration, upload_id: &str) -> Result<(), Error<UploadsCompleteUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn uploads_service_period_complete_upload(configuration: &configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<UploadsServicePeriodCompleteUploadError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<UploadsCompleteUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

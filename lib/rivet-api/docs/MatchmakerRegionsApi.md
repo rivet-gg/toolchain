@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**regions_service_period_list**](MatchmakerRegionsApi.md#regions_service_period_list) | **GET** /regions | 
+[**regions_list**](MatchmakerRegionsApi.md#regions_list) | **GET** /regions | 
 
 
 
-## regions_service_period_list
+## regions_list
 
-> crate::models::MatchmakerListRegionsOutput regions_service_period_list()
+> crate::models::MatchmakerListRegionsOutput regions_list()
 
 
 Returns a list of regions available to this namespace. Regions are sorted by most optimal to least optimal. The player's IP address is used to calculate the regions' optimality. 

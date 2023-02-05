@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`players_service_period_connected`]
+/// struct for typed errors of method [`players_connected`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PlayersServicePeriodConnectedError {
+pub enum PlayersConnectedError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`players_service_period_disconnected`]
+/// struct for typed errors of method [`players_disconnected`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PlayersServicePeriodDisconnectedError {
+pub enum PlayersDisconnectedError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Validates the player token is valid and has not already been consumed then marks the player as connected. # Player Tokens and Reserved Slots Player tokens reserve a spot in the lobby until they expire. This allows for precise matchmaking up to exactly the lobby's player limit, which is important for games with small lobbies and a high influx of players. By calling this endpoint with the player token, the player's spot is marked as connected and will not expire. If this endpoint is never called, the player's token will expire and this spot will be filled by another player. # Anti-Botting Player tokens are only issued by caling `lobbies.join`, calling `lobbies.find`, or from the `GlobalEventMatchmakerLobbyJoin` event. These endpoints have anti-botting measures (i.e. enforcing max player limits, captchas, and detecting bots), so valid player tokens provide some confidence that the player is not a bot. Therefore, it's important to make sure the token is valid by waiting for this endpoint to return OK before allowing the connected socket to do anything else. If this endpoint returns an error, the socket should be disconnected immediately. # How to Transmit the Player Token The client is responsible for acquiring the player token by caling `lobbies.join`, calling `lobbies.find`, or from the `GlobalEventMatchmakerLobbyJoin` event.  Beyond that, it's up to the developer how the player token is transmitted to the lobby. If using WebSockets, the player token can be transmitted as a query parameter. Otherwise, the player token will likely be automatically sent by the client once the socket opens. As mentioned above, nothing else should happen until the player token is validated. 
-pub async fn players_service_period_connected(configuration: &configuration::Configuration, players_service_connected_request: crate::models::PlayersServiceConnectedRequest) -> Result<(), Error<PlayersServicePeriodConnectedError>> {
+pub async fn players_connected(configuration: &configuration::Configuration, players_connected_request: crate::models::PlayersConnectedRequest) -> Result<(), Error<PlayersConnectedError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -45,7 +45,7 @@ pub async fn players_service_period_connected(configuration: &configuration::Con
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&players_service_connected_request);
+    local_var_req_builder = local_var_req_builder.json(&players_connected_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -56,14 +56,14 @@ pub async fn players_service_period_connected(configuration: &configuration::Con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<PlayersServicePeriodConnectedError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PlayersConnectedError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Marks a player as disconnected. # Ghost Players If players are not marked as disconnected, lobbies will result with \"ghost players\" that the matchmaker thinks exist but are no longer connected to the lobby.
-pub async fn players_service_period_disconnected(configuration: &configuration::Configuration, players_service_connected_request: crate::models::PlayersServiceConnectedRequest) -> Result<(), Error<PlayersServicePeriodDisconnectedError>> {
+pub async fn players_disconnected(configuration: &configuration::Configuration, players_connected_request: crate::models::PlayersConnectedRequest) -> Result<(), Error<PlayersDisconnectedError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -77,7 +77,7 @@ pub async fn players_service_period_disconnected(configuration: &configuration::
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&players_service_connected_request);
+    local_var_req_builder = local_var_req_builder.json(&players_connected_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -88,7 +88,7 @@ pub async fn players_service_period_disconnected(configuration: &configuration::
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<PlayersServicePeriodDisconnectedError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PlayersDisconnectedError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

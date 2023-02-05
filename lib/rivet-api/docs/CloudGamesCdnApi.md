@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**cdn_service_period_create_game_cdn_site**](CloudGamesCdnApi.md#cdn_service_period_create_game_cdn_site) | **POST** /games/{game_id}/cdn/sites | 
-[**cdn_service_period_list_game_cdn_sites**](CloudGamesCdnApi.md#cdn_service_period_list_game_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
+[**cdn_create_game_cdn_site**](CloudGamesCdnApi.md#cdn_create_game_cdn_site) | **POST** /games/{game_id}/cdn/sites | 
+[**cdn_list_game_cdn_sites**](CloudGamesCdnApi.md#cdn_list_game_cdn_sites) | **GET** /games/{game_id}/cdn/sites | 
 
 
 
-## cdn_service_period_create_game_cdn_site
+## cdn_create_game_cdn_site
 
-> crate::models::CloudGamesCreateGameCdnSiteOutput cdn_service_period_create_game_cdn_site(game_id, cloud_games_create_game_cdn_site_input)
+> crate::models::CloudGamesCreateGameCdnSiteOutput cdn_create_game_cdn_site(game_id, cloud_games_create_game_cdn_site_input)
 
 
 Creates a new CDN site for the given game.
@@ -40,9 +40,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## cdn_service_period_list_game_cdn_sites
+## cdn_list_game_cdn_sites
 
-> crate::models::CloudGamesListGameCdnSitesOutput cdn_service_period_list_game_cdn_sites(game_id)
+> crate::models::CloudGamesListGameCdnSitesOutput cdn_list_game_cdn_sites(game_id)
 
 
 Lists CDN sites for a game.

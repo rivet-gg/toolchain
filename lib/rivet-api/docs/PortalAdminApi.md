@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**admin_service_period_resolve_beta_join_request**](PortalAdminApi.md#admin_service_period_resolve_beta_join_request) | **POST** /beta-join-request/{identity_id} | 
+[**admin_resolve_beta_join_request**](PortalAdminApi.md#admin_resolve_beta_join_request) | **POST** /beta-join-request/{identity_id} | 
 
 
 
-## admin_service_period_resolve_beta_join_request
+## admin_resolve_beta_join_request
 
-> admin_service_period_resolve_beta_join_request(identity_id, portal_resolve_beta_join_request_input)
+> admin_resolve_beta_join_request(identity_id, portal_resolve_beta_join_request_input)
 
 
 Resolves a beta join request for a given identity.

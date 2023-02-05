@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**chat_service_period_get_thread_history**](ChatApi.md#chat_service_period_get_thread_history) | **GET** /threads/{thread_id}/history | 
-[**chat_service_period_get_thread_topic**](ChatApi.md#chat_service_period_get_thread_topic) | **GET** /threads/{thread_id}/topic | 
-[**chat_service_period_send_message**](ChatApi.md#chat_service_period_send_message) | **POST** /messages | 
-[**chat_service_period_set_thread_read**](ChatApi.md#chat_service_period_set_thread_read) | **POST** /threads/{thread_id}/read | 
-[**chat_service_period_set_typing_status**](ChatApi.md#chat_service_period_set_typing_status) | **PUT** /threads/{thread_id}/typing-status | 
-[**chat_service_period_watch_thread**](ChatApi.md#chat_service_period_watch_thread) | **GET** /threads/{thread_id}/live | 
+[**chat_get_thread_history**](ChatApi.md#chat_get_thread_history) | **GET** /threads/{thread_id}/history | 
+[**chat_get_thread_topic**](ChatApi.md#chat_get_thread_topic) | **GET** /threads/{thread_id}/topic | 
+[**chat_send_message**](ChatApi.md#chat_send_message) | **POST** /messages | 
+[**chat_set_thread_read**](ChatApi.md#chat_set_thread_read) | **POST** /threads/{thread_id}/read | 
+[**chat_set_typing_status**](ChatApi.md#chat_set_typing_status) | **PUT** /threads/{thread_id}/typing-status | 
+[**chat_watch_thread**](ChatApi.md#chat_watch_thread) | **GET** /threads/{thread_id}/live | 
 
 
 
-## chat_service_period_get_thread_history
+## chat_get_thread_history
 
-> crate::models::GetThreadHistoryOutput chat_service_period_get_thread_history(thread_id, count, ts, query_direction)
+> crate::models::GetThreadHistoryOutput chat_get_thread_history(thread_id, count, ts, query_direction)
 
 
 Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
@@ -46,9 +46,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## chat_service_period_get_thread_topic
+## chat_get_thread_topic
 
-> crate::models::GetThreadTopicOutput chat_service_period_get_thread_topic(thread_id)
+> crate::models::GetThreadTopicOutput chat_get_thread_topic(thread_id)
 
 
 Fetches the topic of a thread.
@@ -76,9 +76,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## chat_service_period_send_message
+## chat_send_message
 
-> crate::models::SendMessageOutput chat_service_period_send_message(send_message_input)
+> crate::models::SendMessageOutput chat_send_message(send_message_input)
 
 
 Sends a chat message to a given topic.
@@ -106,9 +106,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## chat_service_period_set_thread_read
+## chat_set_thread_read
 
-> chat_service_period_set_thread_read(thread_id, set_thread_read_input)
+> chat_set_thread_read(thread_id, set_thread_read_input)
 
 
 Updates the current identity's last read timestamp in the given thread.
@@ -137,9 +137,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## chat_service_period_set_typing_status
+## chat_set_typing_status
 
-> chat_service_period_set_typing_status(thread_id, set_typing_status_input)
+> chat_set_typing_status(thread_id, set_typing_status_input)
 
 
 Updates the current identity's typing status in the given thread.
@@ -168,9 +168,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## chat_service_period_watch_thread
+## chat_watch_thread
 
-> crate::models::WatchThreadOutput chat_service_period_watch_thread(thread_id, watch_index)
+> crate::models::WatchThreadOutput chat_watch_thread(thread_id, watch_index)
 
 
 Fetches all relevant changes from a thread that have happened since the given watch index.

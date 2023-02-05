@@ -15,16 +15,16 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`auth_service_period_inspect`]
+/// struct for typed errors of method [`auth_inspect`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AuthServicePeriodInspectError {
+pub enum AuthInspectError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Returns information about the current authenticated agent.
-pub async fn auth_service_period_inspect(configuration: &configuration::Configuration, ) -> Result<crate::models::CloudInspectOutput, Error<AuthServicePeriodInspectError>> {
+pub async fn auth_inspect(configuration: &configuration::Configuration, ) -> Result<crate::models::CloudInspectOutput, Error<AuthInspectError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -48,7 +48,7 @@ pub async fn auth_service_period_inspect(configuration: &configuration::Configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<AuthServicePeriodInspectError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<AuthInspectError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
