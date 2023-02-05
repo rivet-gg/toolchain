@@ -15,12 +15,12 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionMatchmakerCaptchaHcaptcha {
     #[serde(rename = "level")]
-    pub level: crate::models::CloudVersionMatchmakerCaptchaLevel,
+    pub level: crate::models::CloudVersionMatchmakerCaptchaHcaptchaLevel,
 }
 
 impl CloudVersionMatchmakerCaptchaHcaptcha {
     /// hCpatcha configuration.
-    pub fn new(level: crate::models::CloudVersionMatchmakerCaptchaLevel) -> CloudVersionMatchmakerCaptchaHcaptcha {
+    pub fn new(level: crate::models::CloudVersionMatchmakerCaptchaHcaptchaLevel) -> CloudVersionMatchmakerCaptchaHcaptcha {
         CloudVersionMatchmakerCaptchaHcaptcha {
             level,
         }

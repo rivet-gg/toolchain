@@ -1,14 +1,11 @@
-# CloudVersionConfig
+# CloudVersionMatchmakerGameMode
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**captcha** | Option<[**crate::models::CloudVersionMatchmakerCaptcha**](CloudVersionMatchmakerCaptcha.md)> |  | [optional]
 **docker** | Option<[**crate::models::CloudVersionMatchmakerGameModeRuntimeDocker**](CloudVersionMatchmakerGameModeRuntimeDocker.md)> |  | [optional]
-**game_modes** | [**::std::collections::HashMap<String, crate::models::CloudVersionMatchmakerGameMode>**](CloudVersionMatchmakerGameMode.md) | A list of game modes. | 
 **idle_lobbies** | Option<[**crate::models::CloudVersionMatchmakerGameModeIdleLobbiesConfig**](CloudVersionMatchmakerGameModeIdleLobbiesConfig.md)> |  | [optional]
-**lobby_groups** | [**Vec<crate::models::CloudVersionMatchmakerLobbyGroup>**](CloudVersionMatchmakerLobbyGroup.md) | **Deprecated: use `game_modes` instead** A list of game modes. | 
 **max_players** | Option<**i32**> |  | [optional]
 **max_players_direct** | Option<**i32**> |  | [optional]
 **max_players_party** | Option<**i32**> |  | [optional]
