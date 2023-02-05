@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesSetNamespaceCdnAuthTypeInput {
     #[serde(rename = "auth_type")]
-    pub auth_type: crate::models::CommonsCdnAuthType,
+    pub auth_type: crate::models::CloudCdnAuthType,
 }
 
 impl CloudGamesSetNamespaceCdnAuthTypeInput {
-    pub fn new(auth_type: crate::models::CommonsCdnAuthType) -> CloudGamesSetNamespaceCdnAuthTypeInput {
+    pub fn new(auth_type: crate::models::CloudCdnAuthType) -> CloudGamesSetNamespaceCdnAuthTypeInput {
         CloudGamesSetNamespaceCdnAuthTypeInput {
             auth_type,
         }

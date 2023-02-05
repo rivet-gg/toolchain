@@ -15,18 +15,18 @@
 pub struct MatchmakerListLobbiesOutput {
     #[serde(rename = "game_modes")]
     pub game_modes: Vec<crate::models::MatchmakerGameModeInfo>,
-    #[serde(rename = "regions")]
-    pub regions: Vec<crate::models::MatchmakerRegionInfo>,
     #[serde(rename = "lobbies")]
     pub lobbies: Vec<crate::models::MatchmakerLobbyInfo>,
+    #[serde(rename = "regions")]
+    pub regions: Vec<crate::models::MatchmakerRegionInfo>,
 }
 
 impl MatchmakerListLobbiesOutput {
-    pub fn new(game_modes: Vec<crate::models::MatchmakerGameModeInfo>, regions: Vec<crate::models::MatchmakerRegionInfo>, lobbies: Vec<crate::models::MatchmakerLobbyInfo>) -> MatchmakerListLobbiesOutput {
+    pub fn new(game_modes: Vec<crate::models::MatchmakerGameModeInfo>, lobbies: Vec<crate::models::MatchmakerLobbyInfo>, regions: Vec<crate::models::MatchmakerRegionInfo>) -> MatchmakerListLobbiesOutput {
         MatchmakerListLobbiesOutput {
             game_modes,
-            regions,
             lobbies,
+            regions,
         }
     }
 }

@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesCreateGameInput {
-    /// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
-    #[serde(rename = "name_id")]
-    pub name_id: String,
-    /// Represent a resource's readable display name.
-    #[serde(rename = "display_name")]
-    pub display_name: String,
     /// A universally unique identifier.
     #[serde(rename = "developer_group_id")]
     pub developer_group_id: String,
+    /// Represent a resource's readable display name.
+    #[serde(rename = "display_name")]
+    pub display_name: String,
+    /// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+    #[serde(rename = "name_id")]
+    pub name_id: String,
 }
 
 impl CloudGamesCreateGameInput {
-    pub fn new(name_id: String, display_name: String, developer_group_id: String) -> CloudGamesCreateGameInput {
+    pub fn new(developer_group_id: String, display_name: String, name_id: String) -> CloudGamesCreateGameInput {
         CloudGamesCreateGameInput {
-            name_id,
-            display_name,
             developer_group_id,
+            display_name,
+            name_id,
         }
     }
 }

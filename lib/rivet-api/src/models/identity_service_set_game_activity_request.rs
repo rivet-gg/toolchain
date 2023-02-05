@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityServiceSetGameActivityRequest {
     #[serde(rename = "game_activity")]
-    pub game_activity: Box<crate::models::IdentityUpdateIdentityGameActivity>,
+    pub game_activity: Box<crate::models::IdentityUpdateGameActivity>,
 }
 
 impl IdentityServiceSetGameActivityRequest {
-    pub fn new(game_activity: crate::models::IdentityUpdateIdentityGameActivity) -> IdentityServiceSetGameActivityRequest {
+    pub fn new(game_activity: crate::models::IdentityUpdateGameActivity) -> IdentityServiceSetGameActivityRequest {
         IdentityServiceSetGameActivityRequest {
             game_activity: Box::new(game_activity),
         }

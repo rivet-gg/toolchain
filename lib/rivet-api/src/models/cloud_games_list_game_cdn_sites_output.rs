@@ -15,11 +15,11 @@
 pub struct CloudGamesListGameCdnSitesOutput {
     /// A list of CDN site summaries.
     #[serde(rename = "sites")]
-    pub sites: Vec<crate::models::CommonsCdnSiteSummary>,
+    pub sites: Vec<crate::models::CloudCdnSiteSummary>,
 }
 
 impl CloudGamesListGameCdnSitesOutput {
-    pub fn new(sites: Vec<crate::models::CommonsCdnSiteSummary>) -> CloudGamesListGameCdnSitesOutput {
+    pub fn new(sites: Vec<crate::models::CloudCdnSiteSummary>) -> CloudGamesListGameCdnSitesOutput {
         CloudGamesListGameCdnSitesOutput {
             sites,
         }

@@ -14,13 +14,13 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct PortalGetGameProfileOutput {
     #[serde(rename = "game")]
-    pub game: Box<crate::models::CommonsGameProfile>,
+    pub game: Box<crate::models::GameProfile>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl PortalGetGameProfileOutput {
-    pub fn new(game: crate::models::CommonsGameProfile, watch: crate::models::CommonsWatchResponse) -> PortalGetGameProfileOutput {
+    pub fn new(game: crate::models::GameProfile, watch: crate::models::WatchResponse) -> PortalGetGameProfileOutput {
         PortalGetGameProfileOutput {
             game: Box::new(game),
             watch: Box::new(watch),

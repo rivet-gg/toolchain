@@ -17,15 +17,15 @@ pub struct CloudLogsPerfMark {
     /// The label given to this performance mark.
     #[serde(rename = "label")]
     pub label: String,
-    /// RFC3339 timestamp.
-    #[serde(rename = "ts")]
-    pub ts: String,
     /// A universally unique identifier.
     #[serde(rename = "ray_id", skip_serializing_if = "Option::is_none")]
     pub ray_id: Option<String>,
     /// A universally unique identifier.
     #[serde(rename = "req_id", skip_serializing_if = "Option::is_none")]
     pub req_id: Option<String>,
+    /// RFC3339 timestamp.
+    #[serde(rename = "ts")]
+    pub ts: String,
 }
 
 impl CloudLogsPerfMark {
@@ -33,9 +33,9 @@ impl CloudLogsPerfMark {
     pub fn new(label: String, ts: String) -> CloudLogsPerfMark {
         CloudLogsPerfMark {
             label,
-            ts,
             ray_id: None,
             req_id: None,
+            ts,
         }
     }
 }

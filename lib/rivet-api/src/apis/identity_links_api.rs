@@ -45,7 +45,7 @@ pub enum LinksServicePeriodPrepareError {
 
 
 /// Cancels a game link. It can no longer be used to link after cancellation.
-pub async fn links_service_period_cancel(configuration: &configuration::Configuration, links_service_complete_request: crate::models::LinksServiceCompleteRequest) -> Result<(), Error<LinksServicePeriodCancelError>> {
+pub async fn links_service_period_cancel(configuration: &configuration::Configuration, links_service_cancel_request: crate::models::LinksServiceCancelRequest) -> Result<(), Error<LinksServicePeriodCancelError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -59,7 +59,7 @@ pub async fn links_service_period_cancel(configuration: &configuration::Configur
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&links_service_complete_request);
+    local_var_req_builder = local_var_req_builder.json(&links_service_cancel_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -77,7 +77,7 @@ pub async fn links_service_period_cancel(configuration: &configuration::Configur
 }
 
 /// Completes a game link process and returns whether or not the link is valid.
-pub async fn links_service_period_complete(configuration: &configuration::Configuration, links_service_complete_request: crate::models::LinksServiceCompleteRequest) -> Result<(), Error<LinksServicePeriodCompleteError>> {
+pub async fn links_service_period_complete(configuration: &configuration::Configuration, links_service_cancel_request: crate::models::LinksServiceCancelRequest) -> Result<(), Error<LinksServicePeriodCompleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -91,7 +91,7 @@ pub async fn links_service_period_complete(configuration: &configuration::Config
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&links_service_complete_request);
+    local_var_req_builder = local_var_req_builder.json(&links_service_cancel_request);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;

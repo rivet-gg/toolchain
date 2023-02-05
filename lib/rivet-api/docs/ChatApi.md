@@ -4,12 +4,46 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**chat_service_period_get_thread_history**](ChatApi.md#chat_service_period_get_thread_history) | **GET** /threads/{thread_id}/history | 
 [**chat_service_period_get_thread_topic**](ChatApi.md#chat_service_period_get_thread_topic) | **GET** /threads/{thread_id}/topic | 
-[**chat_service_period_send_chat_message**](ChatApi.md#chat_service_period_send_chat_message) | **POST** /messages | 
+[**chat_service_period_send_message**](ChatApi.md#chat_service_period_send_message) | **POST** /messages | 
 [**chat_service_period_set_thread_read**](ChatApi.md#chat_service_period_set_thread_read) | **POST** /threads/{thread_id}/read | 
 [**chat_service_period_set_typing_status**](ChatApi.md#chat_service_period_set_typing_status) | **PUT** /threads/{thread_id}/typing-status | 
 [**chat_service_period_watch_thread**](ChatApi.md#chat_service_period_watch_thread) | **GET** /threads/{thread_id}/live | 
 
+
+
+## chat_service_period_get_thread_history
+
+> crate::models::GetThreadHistoryOutput chat_service_period_get_thread_history(thread_id, count, ts, query_direction)
+
+
+Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**thread_id** | **String** | A universally unique identifier. | [required] |
+**count** | **f64** | How many messages to collect in each direction. If querying `rivet.api.chat.common#QueryDirection$before_and_after`, `rivet.api.chat.common#QueryDirection$chat_messages` will be `count * 2`. | [required] |
+**ts** | Option<**String**> | RFC3339 timestamp. |  |
+**query_direction** | Option<**String**> | Represents which direction to query messages from relative to the given timestamp. |  |
+
+### Return type
+
+[**crate::models::GetThreadHistoryOutput**](GetThreadHistoryOutput.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## chat_service_period_get_thread_topic
@@ -42,9 +76,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## chat_service_period_send_chat_message
+## chat_service_period_send_message
 
-> crate::models::SendChatMessageOutput chat_service_period_send_chat_message(send_chat_message_input)
+> crate::models::SendMessageOutput chat_service_period_send_message(send_message_input)
 
 
 Sends a chat message to a given topic.
@@ -54,11 +88,11 @@ Sends a chat message to a given topic.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**send_chat_message_input** | [**SendChatMessageInput**](SendChatMessageInput.md) |  | [required] |
+**send_message_input** | [**SendMessageInput**](SendMessageInput.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::SendChatMessageOutput**](SendChatMessageOutput.md)
+[**crate::models::SendMessageOutput**](SendMessageOutput.md)
 
 ### Authorization
 

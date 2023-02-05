@@ -17,11 +17,11 @@ pub struct CloudGamesValidateGameNamespaceTokenDevelopmentInput {
     pub hostname: String,
     /// A list of docker ports.
     #[serde(rename = "lobby_ports")]
-    pub lobby_ports: Vec<crate::models::CommonsLobbyGroupRuntimeDockerPort>,
+    pub lobby_ports: Vec<crate::models::CloudVersionMatchmakerLobbyGroupRuntimeDockerPort>,
 }
 
 impl CloudGamesValidateGameNamespaceTokenDevelopmentInput {
-    pub fn new(hostname: String, lobby_ports: Vec<crate::models::CommonsLobbyGroupRuntimeDockerPort>) -> CloudGamesValidateGameNamespaceTokenDevelopmentInput {
+    pub fn new(hostname: String, lobby_ports: Vec<crate::models::CloudVersionMatchmakerLobbyGroupRuntimeDockerPort>) -> CloudGamesValidateGameNamespaceTokenDevelopmentInput {
         CloudGamesValidateGameNamespaceTokenDevelopmentInput {
             hostname,
             lobby_ports,

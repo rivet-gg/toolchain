@@ -18,11 +18,11 @@ pub struct CloudGamesCreateGameCdnSiteInput {
     pub display_name: String,
     /// A list of files preparing to upload.
     #[serde(rename = "files")]
-    pub files: Vec<crate::models::CommonsUploadPrepareFile>,
+    pub files: Vec<crate::models::UploadPrepareFile>,
 }
 
 impl CloudGamesCreateGameCdnSiteInput {
-    pub fn new(display_name: String, files: Vec<crate::models::CommonsUploadPrepareFile>) -> CloudGamesCreateGameCdnSiteInput {
+    pub fn new(display_name: String, files: Vec<crate::models::UploadPrepareFile>) -> CloudGamesCreateGameCdnSiteInput {
         CloudGamesCreateGameCdnSiteInput {
             display_name,
             files,

@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**label** | **String** | The label given to this performance span. | 
-**start_ts** | **String** | RFC3339 timestamp. | 
 **finish_ts** | Option<**String**> | RFC3339 timestamp. | [optional]
+**label** | **String** | The label given to this performance span. | 
 **req_id** | Option<**String**> | A universally unique identifier. | [optional]
+**start_ts** | **String** | RFC3339 timestamp. | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

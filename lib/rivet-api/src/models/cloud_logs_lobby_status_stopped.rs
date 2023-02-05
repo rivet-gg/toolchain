@@ -14,23 +14,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudLogsLobbyStatusStopped {
-    #[serde(rename = "stop_ts")]
-    pub stop_ts: String,
-    /// Whether or not the lobby failed or stopped successfully.
-    #[serde(rename = "failed")]
-    pub failed: bool,
     /// The exit code returned by the lobby's main process when stopped.
     #[serde(rename = "exit_code")]
     pub exit_code: i32,
+    /// Whether or not the lobby failed or stopped successfully.
+    #[serde(rename = "failed")]
+    pub failed: bool,
+    #[serde(rename = "stop_ts")]
+    pub stop_ts: String,
 }
 
 impl CloudLogsLobbyStatusStopped {
     /// The status of a stopped lobby.
-    pub fn new(stop_ts: String, failed: bool, exit_code: i32) -> CloudLogsLobbyStatusStopped {
+    pub fn new(exit_code: i32, failed: bool, stop_ts: String) -> CloudLogsLobbyStatusStopped {
         CloudLogsLobbyStatusStopped {
-            stop_ts,
-            failed,
             exit_code,
+            failed,
+            stop_ts,
         }
     }
 }

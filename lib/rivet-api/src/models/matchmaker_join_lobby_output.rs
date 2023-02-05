@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct MatchmakerJoinLobbyOutput {
     #[serde(rename = "lobby")]
-    pub lobby: Box<crate::models::CommonsMatchmakerLobbyJoinInfo>,
+    pub lobby: Box<crate::models::MatchmakerLobbyJoinInfo>,
 }
 
 impl MatchmakerJoinLobbyOutput {
-    pub fn new(lobby: crate::models::CommonsMatchmakerLobbyJoinInfo) -> MatchmakerJoinLobbyOutput {
+    pub fn new(lobby: crate::models::MatchmakerLobbyJoinInfo) -> MatchmakerJoinLobbyOutput {
         MatchmakerJoinLobbyOutput {
             lobby: Box::new(lobby),
         }

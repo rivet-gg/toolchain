@@ -1,5 +1,6 @@
 use anyhow::{Context, Error, Result};
 use clap::Parser;
+use cli_core::rivet_api::models::CloudVersionConfig;
 use serde::Serialize;
 use serde_json::json;
 use tabled::Tabled;
@@ -238,14 +239,8 @@ impl SubCommand {
 				namespace,
 			} => {
 				let overrides = parse_config_override_args(overrides)?;
-				let user_config =
-					read_user_config(overrides, namespace.as_ref().map(String::as_str)).await?;
-				println!("=== User Config ===");
-				println!("{:#?}", user_config);
-
-				let rivet_config = build_rivet_config(ctx, &user_config).await?;
-				println!("=== Rivet Config ===");
-				println!("{:#?}", rivet_config);
+				let config = read_config(overrides, namespace.as_ref().map(String::as_str)).await?;
+				println!("{:#?}", config);
 
 				Ok(())
 			}
@@ -301,10 +296,10 @@ pub fn parse_config_override_args(
 		.collect::<Result<Vec<_>, Error>>()
 }
 
-pub async fn read_user_config(
+pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
-) -> Result<cli_core::config::version::Version> {
+) -> Result<CloudVersionConfig> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
 		.add_source(config::File::with_name("rivet.version"));
@@ -343,7 +338,7 @@ pub async fn read_user_config(
 		.await
 		.context("find version config")?;
 	let version = config
-		.try_deserialize::<cli_core::config::version::Version>()
+		.try_deserialize::<CloudVersionConfig>()
 		.context("deserialize version config")?;
 
 	Ok(version)
@@ -351,22 +346,24 @@ pub async fn read_user_config(
 
 pub async fn build_rivet_config(
 	ctx: &cli_core::Ctx,
-	version: &cli_core::config::version::Version,
-) -> Result<cli_core::rivet_cloud::model::CloudVersionConfig> {
-	// Fetch game
-	let game_res = ctx
-		.client()
-		.get_game_by_id()
-		.game_id(&ctx.game_id)
-		.send()
-		.await
-		.context("client.get_game_by_id")?;
-	let game = game_res.game().context("game_res.game")?;
+	version: &CloudVersionConfig,
+) -> Result<CloudVersionConfig> {
+	todo!()
 
-	// Build model
-	let model = version.build_model(game)?;
+	// // Fetch game
+	// let game_res = ctx
+	// 	.client()
+	// 	.get_game_by_id()
+	// 	.game_id(&ctx.game_id)
+	// 	.send()
+	// 	.await
+	// 	.context("client.get_game_by_id")?;
+	// let game = game_res.game().context("game_res.game")?;
 
-	Ok(model)
+	// // Build model
+	// let model = version.build_model(game)?;
+
+	// Ok(model)
 }
 
 pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
@@ -389,25 +386,27 @@ pub async fn create(
 	namespace: Option<&str>,
 ) -> Result<CreateOutput> {
 	// Parse config
-	let user_config = read_user_config(overrides, namespace).await?;
+	let user_config = read_config(overrides, namespace).await?;
 	let rivet_config = build_rivet_config(ctx, &user_config).await?;
 
+	todo!()
+
 	// Create version
-	let version_res = ctx
-		.client()
-		.create_game_version()
-		.game_id(&ctx.game_id)
-		.display_name(display_name)
-		.config(rivet_config)
-		.send()
-		.await
-		.context("client.create_game_version")?;
-	let version_id = version_res.version_id().context("version_res.version_id")?;
+	// let version_res = ctx
+	// 	.client()
+	// 	.create_game_version()
+	// 	.game_id(&ctx.game_id)
+	// 	.display_name(display_name)
+	// 	.config(rivet_config)
+	// 	.send()
+	// 	.await
+	// 	.context("client.create_game_version")?;
+	// let version_id = version_res.version_id().context("version_res.version_id")?;
 
-	term::status::success("Published", display_name);
-	term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
+	// term::status::success("Published", display_name);
+	// term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
 
-	Ok(CreateOutput {
-		version_id: version_id.to_string(),
-	})
+	// Ok(CreateOutput {
+	// 	version_id: version_id.to_string(),
+	// })
 }

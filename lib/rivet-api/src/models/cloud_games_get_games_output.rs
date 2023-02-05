@@ -18,13 +18,13 @@ pub struct CloudGamesGetGamesOutput {
     pub games: Vec<crate::models::CloudGamesGameSummary>,
     /// A list of group summaries.
     #[serde(rename = "groups")]
-    pub groups: Vec<crate::models::CommonsGroupHandle>,
+    pub groups: Vec<crate::models::GroupHandle>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl CloudGamesGetGamesOutput {
-    pub fn new(games: Vec<crate::models::CloudGamesGameSummary>, groups: Vec<crate::models::CommonsGroupHandle>, watch: crate::models::CommonsWatchResponse) -> CloudGamesGetGamesOutput {
+    pub fn new(games: Vec<crate::models::CloudGamesGameSummary>, groups: Vec<crate::models::GroupHandle>, watch: crate::models::WatchResponse) -> CloudGamesGetGamesOutput {
         CloudGamesGetGamesOutput {
             games,
             groups,

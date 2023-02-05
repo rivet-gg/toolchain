@@ -20,11 +20,11 @@ pub struct CloudGamesGetLobbyLogsOutput {
     #[serde(rename = "timestamps")]
     pub timestamps: Vec<String>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl CloudGamesGetLobbyLogsOutput {
-    pub fn new(lines: Vec<String>, timestamps: Vec<String>, watch: crate::models::CommonsWatchResponse) -> CloudGamesGetLobbyLogsOutput {
+    pub fn new(lines: Vec<String>, timestamps: Vec<String>, watch: crate::models::WatchResponse) -> CloudGamesGetLobbyLogsOutput {
         CloudGamesGetLobbyLogsOutput {
             lines,
             timestamps,

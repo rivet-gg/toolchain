@@ -14,24 +14,24 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudUploadPrepareFile {
-    /// The path/filename of the file.
-    #[serde(rename = "path")]
-    pub path: String,
-    /// The MIME type of the file.
-    #[serde(rename = "content_type", skip_serializing_if = "Option::is_none")]
-    pub content_type: Option<String>,
     /// Unsigned 64 bit integer.
     #[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
     pub content_length: Option<f64>,
+    /// The MIME type of the file.
+    #[serde(rename = "content_type", skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// The path/filename of the file.
+    #[serde(rename = "path")]
+    pub path: String,
 }
 
 impl CloudUploadPrepareFile {
     /// A file being prepared to upload.
     pub fn new(path: String) -> CloudUploadPrepareFile {
         CloudUploadPrepareFile {
-            path,
-            content_type: None,
             content_length: None,
+            content_type: None,
+            path,
         }
     }
 }

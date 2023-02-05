@@ -13,21 +13,21 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGetGroupBillingOutput {
-    #[serde(rename = "billing")]
-    pub billing: Box<crate::models::CommonsGroupBillingSummary>,
-    #[serde(rename = "bank_source")]
-    pub bank_source: Box<crate::models::CommonsGroupBankSource>,
     /// A list of region summaries.
     #[serde(rename = "available_regions")]
-    pub available_regions: Vec<crate::models::CommonsRegionSummary>,
+    pub available_regions: Vec<crate::models::CloudRegionSummary>,
+    #[serde(rename = "bank_source")]
+    pub bank_source: Box<crate::models::CloudGroupBankSource>,
+    #[serde(rename = "billing")]
+    pub billing: Box<crate::models::CloudGroupBillingSummary>,
 }
 
 impl CloudGetGroupBillingOutput {
-    pub fn new(billing: crate::models::CommonsGroupBillingSummary, bank_source: crate::models::CommonsGroupBankSource, available_regions: Vec<crate::models::CommonsRegionSummary>) -> CloudGetGroupBillingOutput {
+    pub fn new(available_regions: Vec<crate::models::CloudRegionSummary>, bank_source: crate::models::CloudGroupBankSource, billing: crate::models::CloudGroupBillingSummary) -> CloudGetGroupBillingOutput {
         CloudGetGroupBillingOutput {
-            billing: Box::new(billing),
-            bank_source: Box::new(bank_source),
             available_regions,
+            bank_source: Box::new(bank_source),
+            billing: Box::new(billing),
         }
     }
 }

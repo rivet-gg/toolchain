@@ -14,9 +14,21 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudAnalyticsLobbySummary {
-    /// A universally unique identifier.
-    #[serde(rename = "lobby_id")]
-    pub lobby_id: String,
+    /// RFC3339 timestamp.
+    #[serde(rename = "create_ts")]
+    pub create_ts: String,
+    /// Whether or not this lobby is in a closed state.
+    #[serde(rename = "is_closed", skip_serializing_if = "Option::is_none")]
+    pub is_closed: Option<bool>,
+    /// Whether or not this lobby is idle.
+    #[serde(rename = "is_idle", skip_serializing_if = "Option::is_none")]
+    pub is_idle: Option<bool>,
+    /// Whether or not this lobby is outdated.
+    #[serde(rename = "is_outdated", skip_serializing_if = "Option::is_none")]
+    pub is_outdated: Option<bool>,
+    /// Whether or not this lobby is ready.
+    #[serde(rename = "is_ready", skip_serializing_if = "Option::is_none")]
+    pub is_ready: Option<bool>,
     /// A universally unique identifier.
     #[serde(rename = "lobby_group_id")]
     pub lobby_group_id: String,
@@ -24,58 +36,46 @@ pub struct CloudAnalyticsLobbySummary {
     #[serde(rename = "lobby_group_name_id")]
     pub lobby_group_name_id: String,
     /// A universally unique identifier.
-    #[serde(rename = "region_id")]
-    pub region_id: String,
-    /// RFC3339 timestamp.
-    #[serde(rename = "create_ts")]
-    pub create_ts: String,
-    /// Whether or not this lobby is ready.
-    #[serde(rename = "is_ready", skip_serializing_if = "Option::is_none")]
-    pub is_ready: Option<bool>,
-    /// Whether or not this lobby is idle.
-    #[serde(rename = "is_idle", skip_serializing_if = "Option::is_none")]
-    pub is_idle: Option<bool>,
-    /// Whether or not this lobby is in a closed state.
-    #[serde(rename = "is_closed", skip_serializing_if = "Option::is_none")]
-    pub is_closed: Option<bool>,
-    /// Whether or not this lobby is outdated.
-    #[serde(rename = "is_outdated", skip_serializing_if = "Option::is_none")]
-    pub is_outdated: Option<bool>,
-    /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players_normal", skip_serializing_if = "Option::is_none")]
-    pub max_players_normal: Option<f64>,
+    #[serde(rename = "lobby_id")]
+    pub lobby_id: String,
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_direct", skip_serializing_if = "Option::is_none")]
     pub max_players_direct: Option<f64>,
     /// Unsigned 32 bit integer.
+    #[serde(rename = "max_players_normal", skip_serializing_if = "Option::is_none")]
+    pub max_players_normal: Option<f64>,
+    /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_party", skip_serializing_if = "Option::is_none")]
     pub max_players_party: Option<f64>,
-    /// Unsigned 32 bit integer.
-    #[serde(rename = "total_player_count", skip_serializing_if = "Option::is_none")]
-    pub total_player_count: Option<f64>,
+    /// A universally unique identifier.
+    #[serde(rename = "region_id")]
+    pub region_id: String,
     /// Unsigned 32 bit integer.
     #[serde(rename = "registered_player_count", skip_serializing_if = "Option::is_none")]
     pub registered_player_count: Option<f64>,
+    /// Unsigned 32 bit integer.
+    #[serde(rename = "total_player_count", skip_serializing_if = "Option::is_none")]
+    pub total_player_count: Option<f64>,
 }
 
 impl CloudAnalyticsLobbySummary {
     /// Analyical information about a lobby.
-    pub fn new(lobby_id: String, lobby_group_id: String, lobby_group_name_id: String, region_id: String, create_ts: String) -> CloudAnalyticsLobbySummary {
+    pub fn new(create_ts: String, lobby_group_id: String, lobby_group_name_id: String, lobby_id: String, region_id: String) -> CloudAnalyticsLobbySummary {
         CloudAnalyticsLobbySummary {
-            lobby_id,
+            create_ts,
+            is_closed: None,
+            is_idle: None,
+            is_outdated: None,
+            is_ready: None,
             lobby_group_id,
             lobby_group_name_id,
-            region_id,
-            create_ts,
-            is_ready: None,
-            is_idle: None,
-            is_closed: None,
-            is_outdated: None,
-            max_players_normal: None,
+            lobby_id,
             max_players_direct: None,
+            max_players_normal: None,
             max_players_party: None,
-            total_player_count: None,
+            region_id,
             registered_player_count: None,
+            total_player_count: None,
         }
     }
 }

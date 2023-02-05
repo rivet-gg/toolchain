@@ -15,30 +15,30 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`invites_service_period_consume_group_invite`]
+/// struct for typed errors of method [`invites_service_period_consume_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum InvitesServicePeriodConsumeGroupInviteError {
+pub enum InvitesServicePeriodConsumeInviteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`invites_service_period_create_group_invite`]
+/// struct for typed errors of method [`invites_service_period_create_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum InvitesServicePeriodCreateGroupInviteError {
+pub enum InvitesServicePeriodCreateInviteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`invites_service_period_get_group_invite`]
+/// struct for typed errors of method [`invites_service_period_get_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum InvitesServicePeriodGetGroupInviteError {
+pub enum InvitesServicePeriodGetInviteError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Consumes a group invite to join a group.
-pub async fn invites_service_period_consume_group_invite(configuration: &configuration::Configuration, group_invite_code: &str) -> Result<crate::models::GroupConsumeGroupInviteOutput, Error<InvitesServicePeriodConsumeGroupInviteError>> {
+pub async fn invites_service_period_consume_invite(configuration: &configuration::Configuration, group_invite_code: &str) -> Result<crate::models::GroupConsumeInviteOutput, Error<InvitesServicePeriodConsumeInviteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -62,14 +62,14 @@ pub async fn invites_service_period_consume_group_invite(configuration: &configu
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<InvitesServicePeriodConsumeGroupInviteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<InvitesServicePeriodConsumeInviteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a group invite. Can be shared with other identities to let them join this group.
-pub async fn invites_service_period_create_group_invite(configuration: &configuration::Configuration, group_id: &str, group_create_group_invite_input: crate::models::GroupCreateGroupInviteInput) -> Result<crate::models::GroupCreateGroupInviteOutput, Error<InvitesServicePeriodCreateGroupInviteError>> {
+pub async fn invites_service_period_create_invite(configuration: &configuration::Configuration, group_id: &str, group_create_invite_input: crate::models::GroupCreateInviteInput) -> Result<crate::models::GroupCreateInviteOutput, Error<InvitesServicePeriodCreateInviteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -83,7 +83,7 @@ pub async fn invites_service_period_create_group_invite(configuration: &configur
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&group_create_group_invite_input);
+    local_var_req_builder = local_var_req_builder.json(&group_create_invite_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -94,14 +94,14 @@ pub async fn invites_service_period_create_group_invite(configuration: &configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<InvitesServicePeriodCreateGroupInviteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<InvitesServicePeriodCreateInviteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Inspects a group invite returning information about the team that created it.
-pub async fn invites_service_period_get_group_invite(configuration: &configuration::Configuration, group_invite_code: &str) -> Result<crate::models::GroupGetGroupInviteOutput, Error<InvitesServicePeriodGetGroupInviteError>> {
+pub async fn invites_service_period_get_invite(configuration: &configuration::Configuration, group_invite_code: &str) -> Result<crate::models::GroupGetInviteOutput, Error<InvitesServicePeriodGetInviteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -125,7 +125,7 @@ pub async fn invites_service_period_get_group_invite(configuration: &configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<InvitesServicePeriodGetGroupInviteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<InvitesServicePeriodGetInviteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

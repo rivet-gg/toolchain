@@ -13,20 +13,20 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct AuthStartEmailVerificationInput {
+    #[serde(rename = "captcha")]
+    pub captcha: Box<crate::models::CaptchaConfig>,
     #[serde(rename = "email")]
     pub email: String,
-    #[serde(rename = "captcha")]
-    pub captcha: Box<crate::models::CommonsCaptchaConfig>,
     /// A universally unique identifier.
     #[serde(rename = "game_id", skip_serializing_if = "Option::is_none")]
     pub game_id: Option<String>,
 }
 
 impl AuthStartEmailVerificationInput {
-    pub fn new(email: String, captcha: crate::models::CommonsCaptchaConfig) -> AuthStartEmailVerificationInput {
+    pub fn new(captcha: crate::models::CaptchaConfig, email: String) -> AuthStartEmailVerificationInput {
         AuthStartEmailVerificationInput {
-            email,
             captcha: Box::new(captcha),
+            email,
             game_id: None,
         }
     }

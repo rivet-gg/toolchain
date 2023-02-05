@@ -13,19 +13,19 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct AuthCompleteEmailVerificationInput {
-    /// A universally unique identifier.
-    #[serde(rename = "verification_id")]
-    pub verification_id: String,
     /// The code sent to the requestee's email.
     #[serde(rename = "code")]
     pub code: String,
+    /// A universally unique identifier.
+    #[serde(rename = "verification_id")]
+    pub verification_id: String,
 }
 
 impl AuthCompleteEmailVerificationInput {
-    pub fn new(verification_id: String, code: String) -> AuthCompleteEmailVerificationInput {
+    pub fn new(code: String, verification_id: String) -> AuthCompleteEmailVerificationInput {
         AuthCompleteEmailVerificationInput {
-            verification_id,
             code,
+            verification_id,
         }
     }
 }

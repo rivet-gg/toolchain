@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityGlobalEventPartyUpdate {
     #[serde(rename = "party")]
-    pub party: Box<crate::models::CommonsPartySummary>,
+    pub party: Box<crate::models::PartySummary>,
 }
 
 impl IdentityGlobalEventPartyUpdate {
-    pub fn new(party: crate::models::CommonsPartySummary) -> IdentityGlobalEventPartyUpdate {
+    pub fn new(party: crate::models::PartySummary) -> IdentityGlobalEventPartyUpdate {
         IdentityGlobalEventPartyUpdate {
             party: Box::new(party),
         }

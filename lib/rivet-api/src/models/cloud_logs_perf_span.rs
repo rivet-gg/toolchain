@@ -14,28 +14,28 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudLogsPerfSpan {
-    /// The label given to this performance span.
-    #[serde(rename = "label")]
-    pub label: String,
-    /// RFC3339 timestamp.
-    #[serde(rename = "start_ts")]
-    pub start_ts: String,
     /// RFC3339 timestamp.
     #[serde(rename = "finish_ts", skip_serializing_if = "Option::is_none")]
     pub finish_ts: Option<String>,
+    /// The label given to this performance span.
+    #[serde(rename = "label")]
+    pub label: String,
     /// A universally unique identifier.
     #[serde(rename = "req_id", skip_serializing_if = "Option::is_none")]
     pub req_id: Option<String>,
+    /// RFC3339 timestamp.
+    #[serde(rename = "start_ts")]
+    pub start_ts: String,
 }
 
 impl CloudLogsPerfSpan {
     /// A performance span.
     pub fn new(label: String, start_ts: String) -> CloudLogsPerfSpan {
         CloudLogsPerfSpan {
-            label,
-            start_ts,
             finish_ts: None,
+            label,
             req_id: None,
+            start_ts,
         }
     }
 }

@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**notifications_service_period_register_notifications**](PortalNotificationsApi.md#notifications_service_period_register_notifications) | **POST** /notifications/register | 
+[**notifications_service_period_unregister_notifications**](PortalNotificationsApi.md#notifications_service_period_unregister_notifications) | **DELETE** /notifications/register | 
 
 
 
@@ -33,6 +34,36 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## notifications_service_period_unregister_notifications
+
+> notifications_service_period_unregister_notifications(service)
+
+
+Unregister push notification for the current identity.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**service** | **String** | Represents a value for which notification service to unregister. | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

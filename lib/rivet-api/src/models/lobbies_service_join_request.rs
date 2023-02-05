@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct LobbiesServiceJoinRequest {
+    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
+    pub captcha: Option<Box<crate::models::CaptchaConfig>>,
     #[serde(rename = "lobby_id")]
     pub lobby_id: String,
-    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
-    pub captcha: Option<Box<crate::models::CommonsCaptchaConfig>>,
 }
 
 impl LobbiesServiceJoinRequest {
     pub fn new(lobby_id: String) -> LobbiesServiceJoinRequest {
         LobbiesServiceJoinRequest {
-            lobby_id,
             captcha: None,
+            lobby_id,
         }
     }
 }

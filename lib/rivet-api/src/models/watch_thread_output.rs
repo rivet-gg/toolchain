@@ -15,16 +15,16 @@
 pub struct WatchThreadOutput {
     /// All messages new messages posted to this thread. Ordered old to new.
     #[serde(rename = "chat_messages")]
-    pub chat_messages: Vec<crate::models::CommonsChatMessage>,
+    pub chat_messages: Vec<crate::models::ChatMessage>,
     /// All identities that are currently typing in this thread.
     #[serde(rename = "typing_statuses", skip_serializing_if = "Option::is_none")]
-    pub typing_statuses: Option<Vec<crate::models::CommonsChatIdentityTypingStatus>>,
+    pub typing_statuses: Option<Vec<crate::models::ChatIdentityTypingStatus>>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl WatchThreadOutput {
-    pub fn new(chat_messages: Vec<crate::models::CommonsChatMessage>, watch: crate::models::CommonsWatchResponse) -> WatchThreadOutput {
+    pub fn new(chat_messages: Vec<crate::models::ChatMessage>, watch: crate::models::WatchResponse) -> WatchThreadOutput {
         WatchThreadOutput {
             chat_messages,
             typing_statuses: None,

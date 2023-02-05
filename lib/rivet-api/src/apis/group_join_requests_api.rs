@@ -15,23 +15,23 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`join_requests_service_period_create_group_join_request`]
+/// struct for typed errors of method [`join_requests_service_period_create_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum JoinRequestsServicePeriodCreateGroupJoinRequestError {
+pub enum JoinRequestsServicePeriodCreateJoinRequestError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`join_requests_service_period_resolve_group_join_request`]
+/// struct for typed errors of method [`join_requests_service_period_resolve_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum JoinRequestsServicePeriodResolveGroupJoinRequestError {
+pub enum JoinRequestsServicePeriodResolveJoinRequestError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Requests to join a group.
-pub async fn join_requests_service_period_create_group_join_request(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<JoinRequestsServicePeriodCreateGroupJoinRequestError>> {
+pub async fn join_requests_service_period_create_join_request(configuration: &configuration::Configuration, group_id: &str) -> Result<(), Error<JoinRequestsServicePeriodCreateJoinRequestError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -55,14 +55,14 @@ pub async fn join_requests_service_period_create_group_join_request(configuratio
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<JoinRequestsServicePeriodCreateGroupJoinRequestError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<JoinRequestsServicePeriodCreateJoinRequestError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Resolves a join request for a given group.
-pub async fn join_requests_service_period_resolve_group_join_request(configuration: &configuration::Configuration, group_id: &str, identity_id: &str, group_resolve_group_join_request_input: crate::models::GroupResolveGroupJoinRequestInput) -> Result<(), Error<JoinRequestsServicePeriodResolveGroupJoinRequestError>> {
+pub async fn join_requests_service_period_resolve_join_request(configuration: &configuration::Configuration, group_id: &str, identity_id: &str, group_resolve_join_request_input: crate::models::GroupResolveJoinRequestInput) -> Result<(), Error<JoinRequestsServicePeriodResolveJoinRequestError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -76,7 +76,7 @@ pub async fn join_requests_service_period_resolve_group_join_request(configurati
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&group_resolve_group_join_request_input);
+    local_var_req_builder = local_var_req_builder.json(&group_resolve_join_request_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -87,7 +87,7 @@ pub async fn join_requests_service_period_resolve_group_join_request(configurati
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<JoinRequestsServicePeriodResolveGroupJoinRequestError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<JoinRequestsServicePeriodResolveJoinRequestError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

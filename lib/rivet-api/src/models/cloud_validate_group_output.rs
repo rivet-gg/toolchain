@@ -15,11 +15,11 @@
 pub struct CloudValidateGroupOutput {
     /// A list of validation errors.
     #[serde(rename = "errors")]
-    pub errors: Vec<crate::models::CommonsValidationError>,
+    pub errors: Vec<crate::models::ValidationError>,
 }
 
 impl CloudValidateGroupOutput {
-    pub fn new(errors: Vec<crate::models::CommonsValidationError>) -> CloudValidateGroupOutput {
+    pub fn new(errors: Vec<crate::models::ValidationError>) -> CloudValidateGroupOutput {
         CloudValidateGroupOutput {
             errors,
         }

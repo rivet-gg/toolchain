@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesExportLobbyLogsInput {
     #[serde(rename = "stream")]
-    pub stream: crate::models::CloudGamesLogStream,
+    pub stream: String,
 }
 
 impl CloudGamesExportLobbyLogsInput {
-    pub fn new(stream: crate::models::CloudGamesLogStream) -> CloudGamesExportLobbyLogsInput {
+    pub fn new(stream: String) -> CloudGamesExportLobbyLogsInput {
         CloudGamesExportLobbyLogsInput {
             stream,
         }

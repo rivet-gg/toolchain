@@ -13,19 +13,19 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGetGroupInvoicesListOutput {
-    /// A list of a group's billing invoices.
-    #[serde(rename = "invoices")]
-    pub invoices: Vec<crate::models::CommonsGroupBillingInvoice>,
     /// The pagination anchor.
     #[serde(rename = "anchor", skip_serializing_if = "Option::is_none")]
     pub anchor: Option<String>,
+    /// A list of a group's billing invoices.
+    #[serde(rename = "invoices")]
+    pub invoices: Vec<crate::models::CloudGroupBillingInvoice>,
 }
 
 impl CloudGetGroupInvoicesListOutput {
-    pub fn new(invoices: Vec<crate::models::CommonsGroupBillingInvoice>) -> CloudGetGroupInvoicesListOutput {
+    pub fn new(invoices: Vec<crate::models::CloudGroupBillingInvoice>) -> CloudGetGroupInvoicesListOutput {
         CloudGetGroupInvoicesListOutput {
-            invoices,
             anchor: None,
+            invoices,
         }
     }
 }

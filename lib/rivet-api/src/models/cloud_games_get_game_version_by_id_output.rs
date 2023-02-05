@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesGetGameVersionByIdOutput {
     #[serde(rename = "version")]
-    pub version: Box<crate::models::CommonsVersionFull>,
+    pub version: Box<crate::models::CloudFull>,
 }
 
 impl CloudGamesGetGameVersionByIdOutput {
-    pub fn new(version: crate::models::CommonsVersionFull) -> CloudGamesGetGameVersionByIdOutput {
+    pub fn new(version: crate::models::CloudFull) -> CloudGamesGetGameVersionByIdOutput {
         CloudGamesGetGameVersionByIdOutput {
             version: Box::new(version),
         }

@@ -14,13 +14,13 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesGetGameByIdOutput {
     #[serde(rename = "game")]
-    pub game: Box<crate::models::CommonsGameFull>,
+    pub game: Box<crate::models::CloudGameFull>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl CloudGamesGetGameByIdOutput {
-    pub fn new(game: crate::models::CommonsGameFull, watch: crate::models::CommonsWatchResponse) -> CloudGamesGetGameByIdOutput {
+    pub fn new(game: crate::models::CloudGameFull, watch: crate::models::WatchResponse) -> CloudGamesGetGameByIdOutput {
         CloudGamesGetGameByIdOutput {
             game: Box::new(game),
             watch: Box::new(watch),

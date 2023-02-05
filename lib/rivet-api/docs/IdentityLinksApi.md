@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## links_service_period_cancel
 
-> links_service_period_cancel(links_service_complete_request)
+> links_service_period_cancel(links_service_cancel_request)
 
 
 Cancels a game link. It can no longer be used to link after cancellation.
@@ -23,7 +23,7 @@ Cancels a game link. It can no longer be used to link after cancellation.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**links_service_complete_request** | [**LinksServiceCompleteRequest**](LinksServiceCompleteRequest.md) |  | [required] |
+**links_service_cancel_request** | [**LinksServiceCancelRequest**](LinksServiceCancelRequest.md) |  | [required] |
 
 ### Return type
 
@@ -43,7 +43,7 @@ Name | Type | Description  | Required | Notes
 
 ## links_service_period_complete
 
-> links_service_period_complete(links_service_complete_request)
+> links_service_period_complete(links_service_cancel_request)
 
 
 Completes a game link process and returns whether or not the link is valid.
@@ -53,7 +53,7 @@ Completes a game link process and returns whether or not the link is valid.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**links_service_complete_request** | [**LinksServiceCompleteRequest**](LinksServiceCompleteRequest.md) |  | [required] |
+**links_service_cancel_request** | [**LinksServiceCancelRequest**](LinksServiceCancelRequest.md) |  | [required] |
 
 ### Return type
 

@@ -13,18 +13,18 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct PartyActivityJoinMatchmakerLobbyForPartyInput {
+    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
+    pub captcha: Option<Box<crate::models::CaptchaConfig>>,
     /// A universally unique identifier.
     #[serde(rename = "lobby_id")]
     pub lobby_id: String,
-    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
-    pub captcha: Option<Box<crate::models::CommonsCaptchaConfig>>,
 }
 
 impl PartyActivityJoinMatchmakerLobbyForPartyInput {
     pub fn new(lobby_id: String) -> PartyActivityJoinMatchmakerLobbyForPartyInput {
         PartyActivityJoinMatchmakerLobbyForPartyInput {
-            lobby_id,
             captcha: None,
+            lobby_id,
         }
     }
 }

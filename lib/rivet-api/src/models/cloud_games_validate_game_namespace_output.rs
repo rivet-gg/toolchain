@@ -15,11 +15,11 @@
 pub struct CloudGamesValidateGameNamespaceOutput {
     /// A list of validation errors.
     #[serde(rename = "errors")]
-    pub errors: Vec<crate::models::CommonsValidationError>,
+    pub errors: Vec<crate::models::ValidationError>,
 }
 
 impl CloudGamesValidateGameNamespaceOutput {
-    pub fn new(errors: Vec<crate::models::CommonsValidationError>) -> CloudGamesValidateGameNamespaceOutput {
+    pub fn new(errors: Vec<crate::models::ValidationError>) -> CloudGamesValidateGameNamespaceOutput {
         CloudGamesValidateGameNamespaceOutput {
             errors,
         }

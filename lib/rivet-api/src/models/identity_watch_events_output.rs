@@ -16,11 +16,11 @@ pub struct IdentityWatchEventsOutput {
     #[serde(rename = "events")]
     pub events: Vec<crate::models::IdentityGlobalEvent>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl IdentityWatchEventsOutput {
-    pub fn new(events: Vec<crate::models::IdentityGlobalEvent>, watch: crate::models::CommonsWatchResponse) -> IdentityWatchEventsOutput {
+    pub fn new(events: Vec<crate::models::IdentityGlobalEvent>, watch: crate::models::WatchResponse) -> IdentityWatchEventsOutput {
         IdentityWatchEventsOutput {
             events,
             watch: Box::new(watch),

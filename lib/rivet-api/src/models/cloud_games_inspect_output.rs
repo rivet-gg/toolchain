@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesInspectOutput {
     #[serde(rename = "agent")]
-    pub agent: Box<crate::models::CommonsAuthAgent>,
+    pub agent: Box<crate::models::CloudAuthAgent>,
 }
 
 impl CloudGamesInspectOutput {
-    pub fn new(agent: crate::models::CommonsAuthAgent) -> CloudGamesInspectOutput {
+    pub fn new(agent: crate::models::CloudAuthAgent) -> CloudGamesInspectOutput {
         CloudGamesInspectOutput {
             agent: Box::new(agent),
         }

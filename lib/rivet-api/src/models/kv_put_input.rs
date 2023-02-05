@@ -13,19 +13,19 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct KvPutInput {
-    /// A universally unique identifier.
-    #[serde(rename = "namespace_id", skip_serializing_if = "Option::is_none")]
-    pub namespace_id: Option<String>,
     /// Any JSON value to set the key to.
     #[serde(rename = "key")]
     pub key: String,
+    /// A universally unique identifier.
+    #[serde(rename = "namespace_id", skip_serializing_if = "Option::is_none")]
+    pub namespace_id: Option<String>,
 }
 
 impl KvPutInput {
     pub fn new(key: String) -> KvPutInput {
         KvPutInput {
-            namespace_id: None,
             key,
+            namespace_id: None,
         }
     }
 }

@@ -15,13 +15,13 @@
 pub struct KvGetBatchOutput {
     /// A list of key-value entries.
     #[serde(rename = "entries")]
-    pub entries: Vec<crate::models::KvKvEntry>,
+    pub entries: Vec<crate::models::KvEntry>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl KvGetBatchOutput {
-    pub fn new(entries: Vec<crate::models::KvKvEntry>, watch: crate::models::CommonsWatchResponse) -> KvGetBatchOutput {
+    pub fn new(entries: Vec<crate::models::KvEntry>, watch: crate::models::WatchResponse) -> KvGetBatchOutput {
         KvGetBatchOutput {
             entries,
             watch: Box::new(watch),

@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetThreadTopicOutput {
     #[serde(rename = "topic")]
-    pub topic: Box<crate::models::CommonsChatSimpleTopic>,
+    pub topic: Box<crate::models::ChatSimpleTopic>,
 }
 
 impl GetThreadTopicOutput {
-    pub fn new(topic: crate::models::CommonsChatSimpleTopic) -> GetThreadTopicOutput {
+    pub fn new(topic: crate::models::ChatSimpleTopic) -> GetThreadTopicOutput {
         GetThreadTopicOutput {
             topic: Box::new(topic),
         }

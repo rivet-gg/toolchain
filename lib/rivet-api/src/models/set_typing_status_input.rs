@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetTypingStatusInput {
     #[serde(rename = "status")]
-    pub status: Box<crate::models::CommonsChatTypingStatus>,
+    pub status: Box<crate::models::ChatTypingStatus>,
 }
 
 impl SetTypingStatusInput {
-    pub fn new(status: crate::models::CommonsChatTypingStatus) -> SetTypingStatusInput {
+    pub fn new(status: crate::models::ChatTypingStatus) -> SetTypingStatusInput {
         SetTypingStatusInput {
             status: Box::new(status),
         }

@@ -13,25 +13,25 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityListActivitiesOutput {
-    #[serde(rename = "identities")]
-    pub identities: Vec<crate::models::CommonsIdentityHandle>,
     #[serde(rename = "games")]
-    pub games: Vec<crate::models::CommonsGameSummary>,
+    pub games: Vec<crate::models::GameSummary>,
+    #[serde(rename = "identities")]
+    pub identities: Vec<crate::models::IdentityHandle>,
     #[serde(rename = "parties")]
-    pub parties: Vec<crate::models::CommonsPartySummary>,
+    pub parties: Vec<crate::models::PartySummary>,
     #[serde(rename = "suggested_groups")]
-    pub suggested_groups: Vec<crate::models::CommonsGroupSummary>,
+    pub suggested_groups: Vec<crate::models::GroupSummary>,
     #[serde(rename = "suggested_players")]
-    pub suggested_players: Vec<crate::models::CommonsIdentityHandle>,
+    pub suggested_players: Vec<crate::models::IdentityHandle>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl IdentityListActivitiesOutput {
-    pub fn new(identities: Vec<crate::models::CommonsIdentityHandle>, games: Vec<crate::models::CommonsGameSummary>, parties: Vec<crate::models::CommonsPartySummary>, suggested_groups: Vec<crate::models::CommonsGroupSummary>, suggested_players: Vec<crate::models::CommonsIdentityHandle>, watch: crate::models::CommonsWatchResponse) -> IdentityListActivitiesOutput {
+    pub fn new(games: Vec<crate::models::GameSummary>, identities: Vec<crate::models::IdentityHandle>, parties: Vec<crate::models::PartySummary>, suggested_groups: Vec<crate::models::GroupSummary>, suggested_players: Vec<crate::models::IdentityHandle>, watch: crate::models::WatchResponse) -> IdentityListActivitiesOutput {
         IdentityListActivitiesOutput {
-            identities,
             games,
+            identities,
             parties,
             suggested_groups,
             suggested_players,

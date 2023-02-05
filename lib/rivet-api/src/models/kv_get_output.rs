@@ -17,11 +17,11 @@ pub struct KvGetOutput {
     #[serde(rename = "deleted", skip_serializing_if = "Option::is_none")]
     pub deleted: Option<bool>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl KvGetOutput {
-    pub fn new(watch: crate::models::CommonsWatchResponse) -> KvGetOutput {
+    pub fn new(watch: crate::models::WatchResponse) -> KvGetOutput {
         KvGetOutput {
             deleted: None,
             watch: Box::new(watch),

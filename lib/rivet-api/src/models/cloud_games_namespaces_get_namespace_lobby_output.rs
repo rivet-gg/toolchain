@@ -17,25 +17,25 @@ pub struct CloudGamesNamespacesGetNamespaceLobbyOutput {
     pub lobby: Box<crate::models::CloudLogsLobbySummary>,
     #[serde(rename = "metrics", skip_serializing_if = "Option::is_none")]
     pub metrics: Option<Box<crate::models::CloudSvcMetrics>>,
-    /// A list of URLs.
-    #[serde(rename = "stdout_presigned_urls")]
-    pub stdout_presigned_urls: Vec<String>,
-    /// A list of URLs.
-    #[serde(rename = "stderr_presigned_urls")]
-    pub stderr_presigned_urls: Vec<String>,
     /// A list of service performance summaries.
     #[serde(rename = "perf_lists")]
     pub perf_lists: Vec<crate::models::CloudSvcPerf>,
+    /// A list of URLs.
+    #[serde(rename = "stderr_presigned_urls")]
+    pub stderr_presigned_urls: Vec<String>,
+    /// A list of URLs.
+    #[serde(rename = "stdout_presigned_urls")]
+    pub stdout_presigned_urls: Vec<String>,
 }
 
 impl CloudGamesNamespacesGetNamespaceLobbyOutput {
-    pub fn new(lobby: crate::models::CloudLogsLobbySummary, stdout_presigned_urls: Vec<String>, stderr_presigned_urls: Vec<String>, perf_lists: Vec<crate::models::CloudSvcPerf>) -> CloudGamesNamespacesGetNamespaceLobbyOutput {
+    pub fn new(lobby: crate::models::CloudLogsLobbySummary, perf_lists: Vec<crate::models::CloudSvcPerf>, stderr_presigned_urls: Vec<String>, stdout_presigned_urls: Vec<String>) -> CloudGamesNamespacesGetNamespaceLobbyOutput {
         CloudGamesNamespacesGetNamespaceLobbyOutput {
             lobby: Box::new(lobby),
             metrics: None,
-            stdout_presigned_urls,
-            stderr_presigned_urls,
             perf_lists,
+            stderr_presigned_urls,
+            stdout_presigned_urls,
         }
     }
 }

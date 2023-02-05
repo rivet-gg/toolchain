@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesGameBannerUploadPrepareInput {
-    /// The path/filename of the game banner.
-    #[serde(rename = "path")]
-    pub path: String,
-    /// The MIME type of the game banner.
-    #[serde(rename = "mime", skip_serializing_if = "Option::is_none")]
-    pub mime: Option<String>,
     /// Unsigned 64 bit integer.
     #[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
     pub content_length: Option<f64>,
+    /// The MIME type of the game banner.
+    #[serde(rename = "mime", skip_serializing_if = "Option::is_none")]
+    pub mime: Option<String>,
+    /// The path/filename of the game banner.
+    #[serde(rename = "path")]
+    pub path: String,
 }
 
 impl CloudGamesGameBannerUploadPrepareInput {
     pub fn new(path: String) -> CloudGamesGameBannerUploadPrepareInput {
         CloudGamesGameBannerUploadPrepareInput {
-            path,
-            mime: None,
             content_length: None,
+            mime: None,
+            path,
         }
     }
 }

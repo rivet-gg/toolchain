@@ -15,13 +15,13 @@
 pub struct PortalGetSuggestedGamesOutput {
     /// A list of game summaries.
     #[serde(rename = "games")]
-    pub games: Vec<crate::models::CommonsGameSummary>,
+    pub games: Vec<crate::models::GameSummary>,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl PortalGetSuggestedGamesOutput {
-    pub fn new(games: Vec<crate::models::CommonsGameSummary>, watch: crate::models::CommonsWatchResponse) -> PortalGetSuggestedGamesOutput {
+    pub fn new(games: Vec<crate::models::GameSummary>, watch: crate::models::WatchResponse) -> PortalGetSuggestedGamesOutput {
         PortalGetSuggestedGamesOutput {
             games,
             watch: Box::new(watch),

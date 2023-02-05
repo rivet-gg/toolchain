@@ -62,7 +62,7 @@ pub async fn identity_service_period_complete_email_verification(configuration: 
     }
 }
 
-/// Starts the verification process for linking an emal to your identity.
+/// Starts the verification process for linking an email to your identity.
 pub async fn identity_service_period_start_email_verification(configuration: &configuration::Configuration, auth_start_email_verification_input: crate::models::AuthStartEmailVerificationInput) -> Result<crate::models::AuthStartEmailVerificationOutput, Error<IdentityServicePeriodStartEmailVerificationError>> {
     let local_var_configuration = configuration;
 

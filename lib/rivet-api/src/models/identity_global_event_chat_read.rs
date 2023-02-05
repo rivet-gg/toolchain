@@ -13,18 +13,18 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityGlobalEventChatRead {
-    #[serde(rename = "thread_id")]
-    pub thread_id: uuid::Uuid,
     /// RFC3339 timestamp
     #[serde(rename = "read_ts")]
     pub read_ts: String,
+    #[serde(rename = "thread_id")]
+    pub thread_id: uuid::Uuid,
 }
 
 impl IdentityGlobalEventChatRead {
-    pub fn new(thread_id: uuid::Uuid, read_ts: String) -> IdentityGlobalEventChatRead {
+    pub fn new(read_ts: String, thread_id: uuid::Uuid) -> IdentityGlobalEventChatRead {
         IdentityGlobalEventChatRead {
-            thread_id,
             read_ts,
+            thread_id,
         }
     }
 }

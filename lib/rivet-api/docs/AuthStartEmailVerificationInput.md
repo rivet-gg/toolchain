@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**captcha** | [**crate::models::CaptchaConfig**](CaptchaConfig.md) |  | 
 **email** | **String** |  | 
-**captcha** | [**crate::models::CommonsCaptchaConfig**](CommonsCaptchaConfig.md) |  | 
 **game_id** | Option<**String**> | A universally unique identifier. | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

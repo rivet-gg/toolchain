@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesGetGameNamespaceByIdOutput {
     #[serde(rename = "namespace")]
-    pub namespace: Box<crate::models::CommonsNamespaceFull>,
+    pub namespace: Box<crate::models::CloudNamespaceFull>,
 }
 
 impl CloudGamesGetGameNamespaceByIdOutput {
-    pub fn new(namespace: crate::models::CommonsNamespaceFull) -> CloudGamesGetGameNamespaceByIdOutput {
+    pub fn new(namespace: crate::models::CloudNamespaceFull) -> CloudGamesGetGameNamespaceByIdOutput {
         CloudGamesGetGameNamespaceByIdOutput {
             namespace: Box::new(namespace),
         }

@@ -13,19 +13,19 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGetGroupPaymentsListOutput {
-    /// A list of a group's billing payments.
-    #[serde(rename = "payments")]
-    pub payments: Vec<crate::models::CommonsGroupBillingPayment>,
     /// The ID of the last payment listed.
     #[serde(rename = "end_payment_id", skip_serializing_if = "Option::is_none")]
     pub end_payment_id: Option<String>,
+    /// A list of a group's billing payments.
+    #[serde(rename = "payments")]
+    pub payments: Vec<crate::models::CloudGroupBillingPayment>,
 }
 
 impl CloudGetGroupPaymentsListOutput {
-    pub fn new(payments: Vec<crate::models::CommonsGroupBillingPayment>) -> CloudGetGroupPaymentsListOutput {
+    pub fn new(payments: Vec<crate::models::CloudGroupBillingPayment>) -> CloudGetGroupPaymentsListOutput {
         CloudGetGroupPaymentsListOutput {
-            payments,
             end_payment_id: None,
+            payments,
         }
     }
 }

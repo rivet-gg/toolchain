@@ -15,11 +15,11 @@
 pub struct CloudGetRegionTiersOutput {
     /// A list of region server tiers.
     #[serde(rename = "tiers")]
-    pub tiers: Vec<crate::models::CommonsRegionTier>,
+    pub tiers: Vec<crate::models::CloudRegionTier>,
 }
 
 impl CloudGetRegionTiersOutput {
-    pub fn new(tiers: Vec<crate::models::CommonsRegionTier>) -> CloudGetRegionTiersOutput {
+    pub fn new(tiers: Vec<crate::models::CloudRegionTier>) -> CloudGetRegionTiersOutput {
         CloudGetRegionTiersOutput {
             tiers,
         }

@@ -13,22 +13,22 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityPrepareGameLinkOutput {
+    /// RFC3339 timestamp
+    #[serde(rename = "expire_ts")]
+    pub expire_ts: String,
     /// Pass this to `GetGameLink` to get the linking status. Valid for 15 minutes.
     #[serde(rename = "identity_link_token")]
     pub identity_link_token: String,
     #[serde(rename = "identity_link_url")]
     pub identity_link_url: String,
-    /// RFC3339 timestamp
-    #[serde(rename = "expire_ts")]
-    pub expire_ts: String,
 }
 
 impl IdentityPrepareGameLinkOutput {
-    pub fn new(identity_link_token: String, identity_link_url: String, expire_ts: String) -> IdentityPrepareGameLinkOutput {
+    pub fn new(expire_ts: String, identity_link_token: String, identity_link_url: String) -> IdentityPrepareGameLinkOutput {
         IdentityPrepareGameLinkOutput {
+            expire_ts,
             identity_link_token,
             identity_link_url,
-            expire_ts,
         }
     }
 }

@@ -16,19 +16,19 @@ pub struct CloudGamesCreateGameBuildOutput {
     /// A universally unique identifier.
     #[serde(rename = "build_id")]
     pub build_id: String,
+    #[serde(rename = "image_presigned_request")]
+    pub image_presigned_request: Box<crate::models::UploadPresignedRequest>,
     /// A universally unique identifier.
     #[serde(rename = "upload_id")]
     pub upload_id: String,
-    #[serde(rename = "image_presigned_request")]
-    pub image_presigned_request: Box<crate::models::CommonsUploadPresignedRequest>,
 }
 
 impl CloudGamesCreateGameBuildOutput {
-    pub fn new(build_id: String, upload_id: String, image_presigned_request: crate::models::CommonsUploadPresignedRequest) -> CloudGamesCreateGameBuildOutput {
+    pub fn new(build_id: String, image_presigned_request: crate::models::UploadPresignedRequest, upload_id: String) -> CloudGamesCreateGameBuildOutput {
         CloudGamesCreateGameBuildOutput {
             build_id,
-            upload_id,
             image_presigned_request: Box::new(image_presigned_request),
+            upload_id,
         }
     }
 }

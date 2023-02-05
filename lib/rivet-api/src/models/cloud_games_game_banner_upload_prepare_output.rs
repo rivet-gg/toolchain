@@ -13,18 +13,18 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesGameBannerUploadPrepareOutput {
+    #[serde(rename = "presigned_request")]
+    pub presigned_request: Box<crate::models::UploadPresignedRequest>,
     /// A universally unique identifier.
     #[serde(rename = "upload_id")]
     pub upload_id: String,
-    #[serde(rename = "presigned_request")]
-    pub presigned_request: Box<crate::models::CommonsUploadPresignedRequest>,
 }
 
 impl CloudGamesGameBannerUploadPrepareOutput {
-    pub fn new(upload_id: String, presigned_request: crate::models::CommonsUploadPresignedRequest) -> CloudGamesGameBannerUploadPrepareOutput {
+    pub fn new(presigned_request: crate::models::UploadPresignedRequest, upload_id: String) -> CloudGamesGameBannerUploadPrepareOutput {
         CloudGamesGameBannerUploadPrepareOutput {
-            upload_id,
             presigned_request: Box::new(presigned_request),
+            upload_id,
         }
     }
 }

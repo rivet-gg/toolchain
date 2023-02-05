@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityGlobalEventChatMessage {
     #[serde(rename = "thread")]
-    pub thread: Box<crate::models::CommonsChatThread>,
+    pub thread: Box<crate::models::ChatThread>,
 }
 
 impl IdentityGlobalEventChatMessage {
-    pub fn new(thread: crate::models::CommonsChatThread) -> IdentityGlobalEventChatMessage {
+    pub fn new(thread: crate::models::ChatThread) -> IdentityGlobalEventChatMessage {
         IdentityGlobalEventChatMessage {
             thread: Box::new(thread),
         }

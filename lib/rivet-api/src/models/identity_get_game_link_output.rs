@@ -13,25 +13,25 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityGetGameLinkOutput {
-    #[serde(rename = "status")]
-    pub status: crate::models::CommonsGameLinkStatus,
-    #[serde(rename = "game")]
-    pub game: Box<crate::models::CommonsGameHandle>,
     #[serde(rename = "current_identity")]
-    pub current_identity: Box<crate::models::CommonsIdentityHandle>,
+    pub current_identity: Box<crate::models::IdentityHandle>,
+    #[serde(rename = "game")]
+    pub game: Box<crate::models::GameHandle>,
     #[serde(rename = "new_identity")]
     pub new_identity: Box<crate::models::IdentityGetGameLinkNewIdentity>,
+    #[serde(rename = "status")]
+    pub status: crate::models::IdentityGameLinkStatus,
     #[serde(rename = "watch")]
-    pub watch: Box<crate::models::CommonsWatchResponse>,
+    pub watch: Box<crate::models::WatchResponse>,
 }
 
 impl IdentityGetGameLinkOutput {
-    pub fn new(status: crate::models::CommonsGameLinkStatus, game: crate::models::CommonsGameHandle, current_identity: crate::models::CommonsIdentityHandle, new_identity: crate::models::IdentityGetGameLinkNewIdentity, watch: crate::models::CommonsWatchResponse) -> IdentityGetGameLinkOutput {
+    pub fn new(current_identity: crate::models::IdentityHandle, game: crate::models::GameHandle, new_identity: crate::models::IdentityGetGameLinkNewIdentity, status: crate::models::IdentityGameLinkStatus, watch: crate::models::WatchResponse) -> IdentityGetGameLinkOutput {
         IdentityGetGameLinkOutput {
-            status,
-            game: Box::new(game),
             current_identity: Box::new(current_identity),
+            game: Box::new(game),
             new_identity: Box::new(new_identity),
+            status,
             watch: Box::new(watch),
         }
     }

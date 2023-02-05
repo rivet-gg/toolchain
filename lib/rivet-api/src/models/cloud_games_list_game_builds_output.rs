@@ -15,11 +15,11 @@
 pub struct CloudGamesListGameBuildsOutput {
     /// A list of build summaries.
     #[serde(rename = "builds")]
-    pub builds: Vec<crate::models::CommonsBuildSummary>,
+    pub builds: Vec<crate::models::CloudBuildSummary>,
 }
 
 impl CloudGamesListGameBuildsOutput {
-    pub fn new(builds: Vec<crate::models::CommonsBuildSummary>) -> CloudGamesListGameBuildsOutput {
+    pub fn new(builds: Vec<crate::models::CloudBuildSummary>) -> CloudGamesListGameBuildsOutput {
         CloudGamesListGameBuildsOutput {
             builds,
         }

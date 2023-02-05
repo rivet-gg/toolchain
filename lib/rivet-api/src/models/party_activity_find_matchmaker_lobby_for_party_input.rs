@@ -13,26 +13,26 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct PartyActivityFindMatchmakerLobbyForPartyInput {
+    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
+    pub captcha: Option<Box<crate::models::CaptchaConfig>>,
     /// Game modes to match lobbies against.
     #[serde(rename = "game_modes")]
     pub game_modes: Vec<String>,
-    /// Regions to match lobbies against. If not specified, the optimal region will be determined and will attempt to find lobbies in that region.
-    #[serde(rename = "regions", skip_serializing_if = "Option::is_none")]
-    pub regions: Option<Vec<String>>,
     /// Prevents a new lobby from being created when finding a lobby. If no lobby is found, `MATCHMAKER_LOBBY_NOT_FOUND` will be returned.
     #[serde(rename = "prevent_auto_create_lobby", skip_serializing_if = "Option::is_none")]
     pub prevent_auto_create_lobby: Option<bool>,
-    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
-    pub captcha: Option<Box<crate::models::CommonsCaptchaConfig>>,
+    /// Regions to match lobbies against. If not specified, the optimal region will be determined and will attempt to find lobbies in that region.
+    #[serde(rename = "regions", skip_serializing_if = "Option::is_none")]
+    pub regions: Option<Vec<String>>,
 }
 
 impl PartyActivityFindMatchmakerLobbyForPartyInput {
     pub fn new(game_modes: Vec<String>) -> PartyActivityFindMatchmakerLobbyForPartyInput {
         PartyActivityFindMatchmakerLobbyForPartyInput {
-            game_modes,
-            regions: None,
-            prevent_auto_create_lobby: None,
             captcha: None,
+            game_modes,
+            prevent_auto_create_lobby: None,
+            regions: None,
         }
     }
 }

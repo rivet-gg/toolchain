@@ -17,14 +17,14 @@ pub struct IdentityGlobalEventKind {
     pub chat_message: Option<Box<crate::models::IdentityGlobalEventChatMessage>>,
     #[serde(rename = "chat_read", skip_serializing_if = "Option::is_none")]
     pub chat_read: Option<Box<crate::models::IdentityGlobalEventChatRead>>,
-    #[serde(rename = "party_update", skip_serializing_if = "Option::is_none")]
-    pub party_update: Option<Box<crate::models::IdentityGlobalEventPartyUpdate>>,
+    #[serde(rename = "chat_thread_remove", skip_serializing_if = "Option::is_none")]
+    pub chat_thread_remove: Option<Box<crate::models::IdentityGlobalEventChatThreadRemove>>,
     #[serde(rename = "identity_update", skip_serializing_if = "Option::is_none")]
     pub identity_update: Option<Box<crate::models::IdentityGlobalEventIdentityUpdate>>,
     #[serde(rename = "matchmaker_lobby_join", skip_serializing_if = "Option::is_none")]
     pub matchmaker_lobby_join: Option<Box<crate::models::IdentityGlobalEventMatchmakerLobbyJoin>>,
-    #[serde(rename = "chat_thread_remove", skip_serializing_if = "Option::is_none")]
-    pub chat_thread_remove: Option<Box<crate::models::IdentityGlobalEventChatThreadRemove>>,
+    #[serde(rename = "party_update", skip_serializing_if = "Option::is_none")]
+    pub party_update: Option<Box<crate::models::IdentityGlobalEventPartyUpdate>>,
 }
 
 impl IdentityGlobalEventKind {
@@ -32,10 +32,10 @@ impl IdentityGlobalEventKind {
         IdentityGlobalEventKind {
             chat_message: None,
             chat_read: None,
-            party_update: None,
+            chat_thread_remove: None,
             identity_update: None,
             matchmaker_lobby_join: None,
-            chat_thread_remove: None,
+            party_update: None,
         }
     }
 }

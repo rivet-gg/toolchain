@@ -14,22 +14,22 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityGlobalEvent {
-    /// RFC3339 timestamp
-    #[serde(rename = "ts")]
-    pub ts: String,
     #[serde(rename = "kind")]
     pub kind: Box<crate::models::IdentityGlobalEventKind>,
     #[serde(rename = "notification")]
     pub notification: Box<crate::models::IdentityGlobalEventNotification>,
+    /// RFC3339 timestamp
+    #[serde(rename = "ts")]
+    pub ts: String,
 }
 
 impl IdentityGlobalEvent {
     /// An event relevant to the current identity.
-    pub fn new(ts: String, kind: crate::models::IdentityGlobalEventKind, notification: crate::models::IdentityGlobalEventNotification) -> IdentityGlobalEvent {
+    pub fn new(kind: crate::models::IdentityGlobalEventKind, notification: crate::models::IdentityGlobalEventNotification, ts: String) -> IdentityGlobalEvent {
         IdentityGlobalEvent {
-            ts,
             kind: Box::new(kind),
             notification: Box::new(notification),
+            ts,
         }
     }
 }

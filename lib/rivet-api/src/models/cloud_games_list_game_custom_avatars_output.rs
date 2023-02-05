@@ -15,11 +15,11 @@
 pub struct CloudGamesListGameCustomAvatarsOutput {
     /// A list of custom avatar summaries.
     #[serde(rename = "custom_avatars")]
-    pub custom_avatars: Vec<crate::models::CommonsCustomAvatarSummary>,
+    pub custom_avatars: Vec<crate::models::CloudCustomAvatarSummary>,
 }
 
 impl CloudGamesListGameCustomAvatarsOutput {
-    pub fn new(custom_avatars: Vec<crate::models::CommonsCustomAvatarSummary>) -> CloudGamesListGameCustomAvatarsOutput {
+    pub fn new(custom_avatars: Vec<crate::models::CloudCustomAvatarSummary>) -> CloudGamesListGameCustomAvatarsOutput {
         CloudGamesListGameCustomAvatarsOutput {
             custom_avatars,
         }

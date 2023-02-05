@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ListMutualFriendsOutput {
-    #[serde(rename = "identities")]
-    pub identities: Vec<crate::models::CommonsIdentityHandle>,
     #[serde(rename = "anchor", skip_serializing_if = "Option::is_none")]
     pub anchor: Option<String>,
+    #[serde(rename = "identities")]
+    pub identities: Vec<crate::models::IdentityHandle>,
 }
 
 impl ListMutualFriendsOutput {
-    pub fn new(identities: Vec<crate::models::CommonsIdentityHandle>) -> ListMutualFriendsOutput {
+    pub fn new(identities: Vec<crate::models::IdentityHandle>) -> ListMutualFriendsOutput {
         ListMutualFriendsOutput {
-            identities,
             anchor: None,
+            identities,
         }
     }
 }

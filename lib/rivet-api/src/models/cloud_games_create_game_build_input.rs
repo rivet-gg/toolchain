@@ -16,19 +16,19 @@ pub struct CloudGamesCreateGameBuildInput {
     /// Represent a resource's readable display name.
     #[serde(rename = "display_name")]
     pub display_name: String,
+    #[serde(rename = "image_file")]
+    pub image_file: Box<crate::models::UploadPrepareFile>,
     /// A tag given to the game build.
     #[serde(rename = "image_tag")]
     pub image_tag: String,
-    #[serde(rename = "image_file")]
-    pub image_file: Box<crate::models::CommonsUploadPrepareFile>,
 }
 
 impl CloudGamesCreateGameBuildInput {
-    pub fn new(display_name: String, image_tag: String, image_file: crate::models::CommonsUploadPrepareFile) -> CloudGamesCreateGameBuildInput {
+    pub fn new(display_name: String, image_file: crate::models::UploadPrepareFile, image_tag: String) -> CloudGamesCreateGameBuildInput {
         CloudGamesCreateGameBuildInput {
             display_name,
-            image_tag,
             image_file: Box::new(image_file),
+            image_tag,
         }
     }
 }

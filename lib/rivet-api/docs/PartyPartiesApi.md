@@ -4,26 +4,26 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**parties_service_period_create_party**](PartyPartiesApi.md#parties_service_period_create_party) | **POST** /parties | 
-[**parties_service_period_create_party_invite**](PartyPartiesApi.md#parties_service_period_create_party_invite) | **POST** /parties/self/invites | 
-[**parties_service_period_get_party_from_invite**](PartyPartiesApi.md#parties_service_period_get_party_from_invite) | **GET** /invites | 
-[**parties_service_period_get_party_profile**](PartyPartiesApi.md#parties_service_period_get_party_profile) | **GET** /parties/{party_id}/profile | 
-[**parties_service_period_get_party_self_profile**](PartyPartiesApi.md#parties_service_period_get_party_self_profile) | **GET** /parties/self/profile | 
-[**parties_service_period_get_party_self_summary**](PartyPartiesApi.md#parties_service_period_get_party_self_summary) | **GET** /parties/self/summary | 
-[**parties_service_period_get_party_summary**](PartyPartiesApi.md#parties_service_period_get_party_summary) | **GET** /parties/{party_id}/summary | 
-[**parties_service_period_join_party**](PartyPartiesApi.md#parties_service_period_join_party) | **POST** /parties/join | 
+[**parties_service_period_create**](PartyPartiesApi.md#parties_service_period_create) | **POST** /parties | 
+[**parties_service_period_create_invite**](PartyPartiesApi.md#parties_service_period_create_invite) | **POST** /parties/self/invites | 
+[**parties_service_period_get_from_invite**](PartyPartiesApi.md#parties_service_period_get_from_invite) | **GET** /invites | 
+[**parties_service_period_get_profile**](PartyPartiesApi.md#parties_service_period_get_profile) | **GET** /parties/{party_id}/profile | 
+[**parties_service_period_get_self_profile**](PartyPartiesApi.md#parties_service_period_get_self_profile) | **GET** /parties/self/profile | 
+[**parties_service_period_get_self_summary**](PartyPartiesApi.md#parties_service_period_get_self_summary) | **GET** /parties/self/summary | 
+[**parties_service_period_get_summary**](PartyPartiesApi.md#parties_service_period_get_summary) | **GET** /parties/{party_id}/summary | 
+[**parties_service_period_join**](PartyPartiesApi.md#parties_service_period_join) | **POST** /parties/join | 
 [**parties_service_period_kick_member**](PartyPartiesApi.md#parties_service_period_kick_member) | **POST** /parties/self/members/{identity_id}/kick | 
-[**parties_service_period_leave_party**](PartyPartiesApi.md#parties_service_period_leave_party) | **POST** /parties/self/leave | 
-[**parties_service_period_revoke_party_invite**](PartyPartiesApi.md#parties_service_period_revoke_party_invite) | **DELETE** /parties/self/invites/{invite_id} | 
+[**parties_service_period_leave**](PartyPartiesApi.md#parties_service_period_leave) | **POST** /parties/self/leave | 
+[**parties_service_period_revoke_invite**](PartyPartiesApi.md#parties_service_period_revoke_invite) | **DELETE** /parties/self/invites/{invite_id} | 
 [**parties_service_period_send_join_request**](PartyPartiesApi.md#parties_service_period_send_join_request) | **POST** /parties/{party_id}/join-request/send | 
-[**parties_service_period_set_party_publicity**](PartyPartiesApi.md#parties_service_period_set_party_publicity) | **PUT** /parties/self/publicity | 
-[**parties_service_period_transfer_party_ownership**](PartyPartiesApi.md#parties_service_period_transfer_party_ownership) | **POST** /parties/self/members/{identity_id}/transfer-ownership | 
+[**parties_service_period_set_publicity**](PartyPartiesApi.md#parties_service_period_set_publicity) | **PUT** /parties/self/publicity | 
+[**parties_service_period_transfer_ownership**](PartyPartiesApi.md#parties_service_period_transfer_ownership) | **POST** /parties/self/members/{identity_id}/transfer-ownership | 
 
 
 
-## parties_service_period_create_party
+## parties_service_period_create
 
-> crate::models::PartyCreatePartyOutput parties_service_period_create_party(party_create_party_input)
+> crate::models::PartyCreateOutput parties_service_period_create(party_create_input)
 
 
 Creates a new party.
@@ -33,11 +33,11 @@ Creates a new party.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_create_party_input** | [**PartyCreatePartyInput**](PartyCreatePartyInput.md) |  | [required] |
+**party_create_input** | [**PartyCreateInput**](PartyCreateInput.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::PartyCreatePartyOutput**](PartyCreatePartyOutput.md)
+[**crate::models::PartyCreateOutput**](PartyCreateOutput.md)
 
 ### Authorization
 
@@ -51,9 +51,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_create_party_invite
+## parties_service_period_create_invite
 
-> crate::models::PartyCreatePartyInviteOutput parties_service_period_create_party_invite(party_create_party_invite_input)
+> crate::models::PartyCreateInviteOutput parties_service_period_create_invite(party_create_invite_input)
 
 
 Creates a new party invite for the current identity's party. Identity must be the party leader.
@@ -63,11 +63,11 @@ Creates a new party invite for the current identity's party. Identity must be th
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_create_party_invite_input** | [**PartyCreatePartyInviteInput**](PartyCreatePartyInviteInput.md) |  | [required] |
+**party_create_invite_input** | [**PartyCreateInviteInput**](PartyCreateInviteInput.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::PartyCreatePartyInviteOutput**](PartyCreatePartyInviteOutput.md)
+[**crate::models::PartyCreateInviteOutput**](PartyCreateInviteOutput.md)
 
 ### Authorization
 
@@ -81,9 +81,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_get_party_from_invite
+## parties_service_period_get_from_invite
 
-> crate::models::PartyGetPartyFromInviteOutput parties_service_period_get_party_from_invite(token, alias)
+> crate::models::PartyGetInviteOutput parties_service_period_get_from_invite(token, alias)
 
 
 Fetches a party based on a given invite.
@@ -98,7 +98,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetPartyFromInviteOutput**](PartyGetPartyFromInviteOutput.md)
+[**crate::models::PartyGetInviteOutput**](PartyGetInviteOutput.md)
 
 ### Authorization
 
@@ -112,9 +112,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_get_party_profile
+## parties_service_period_get_profile
 
-> crate::models::PartyGetPartyProfileOutput parties_service_period_get_party_profile(party_id, watch_index)
+> crate::models::PartyGetProfileOutput parties_service_period_get_profile(party_id, watch_index)
 
 
 Returns a party profile.
@@ -129,7 +129,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetPartyProfileOutput**](PartyGetPartyProfileOutput.md)
+[**crate::models::PartyGetProfileOutput**](PartyGetProfileOutput.md)
 
 ### Authorization
 
@@ -143,9 +143,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_get_party_self_profile
+## parties_service_period_get_self_profile
 
-> crate::models::PartyGetPartySelfProfileOutput parties_service_period_get_party_self_profile(watch_index)
+> crate::models::PartyGetSelfProfileOutput parties_service_period_get_self_profile(watch_index)
 
 
 Returns a party profile for the party the current identity is a member of.
@@ -159,7 +159,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetPartySelfProfileOutput**](PartyGetPartySelfProfileOutput.md)
+[**crate::models::PartyGetSelfProfileOutput**](PartyGetSelfProfileOutput.md)
 
 ### Authorization
 
@@ -173,9 +173,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_get_party_self_summary
+## parties_service_period_get_self_summary
 
-> crate::models::PartyGetPartySelfSummaryOutput parties_service_period_get_party_self_summary(watch_index)
+> crate::models::PartyGetSelfSummaryOutput parties_service_period_get_self_summary(watch_index)
 
 
 Returns a party summary for the party the current identity is a member of.
@@ -189,7 +189,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetPartySelfSummaryOutput**](PartyGetPartySelfSummaryOutput.md)
+[**crate::models::PartyGetSelfSummaryOutput**](PartyGetSelfSummaryOutput.md)
 
 ### Authorization
 
@@ -203,9 +203,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_get_party_summary
+## parties_service_period_get_summary
 
-> crate::models::PartyGetPartySummaryOutput parties_service_period_get_party_summary(party_id, watch_index)
+> crate::models::PartyGetSummaryOutput parties_service_period_get_summary(party_id, watch_index)
 
 
 Returns a party summary.
@@ -220,7 +220,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetPartySummaryOutput**](PartyGetPartySummaryOutput.md)
+[**crate::models::PartyGetSummaryOutput**](PartyGetSummaryOutput.md)
 
 ### Authorization
 
@@ -234,9 +234,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_join_party
+## parties_service_period_join
 
-> crate::models::PartyJoinPartyOutput parties_service_period_join_party(party_join_party_input)
+> crate::models::PartyJoinOutput parties_service_period_join(party_join_input)
 
 
 Joins a party using a given party invite.
@@ -246,11 +246,11 @@ Joins a party using a given party invite.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_join_party_input** | [**PartyJoinPartyInput**](PartyJoinPartyInput.md) |  | [required] |
+**party_join_input** | [**PartyJoinInput**](PartyJoinInput.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::PartyJoinPartyOutput**](PartyJoinPartyOutput.md)
+[**crate::models::PartyJoinOutput**](PartyJoinOutput.md)
 
 ### Authorization
 
@@ -294,9 +294,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_leave_party
+## parties_service_period_leave
 
-> parties_service_period_leave_party()
+> parties_service_period_leave()
 
 
 Leaves the current identity's party.
@@ -321,9 +321,9 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_revoke_party_invite
+## parties_service_period_revoke_invite
 
-> parties_service_period_revoke_party_invite(invite_id)
+> parties_service_period_revoke_invite(invite_id)
 
 
 Revokes a party invite from the current identity's party. Identity must be the party leader.
@@ -379,9 +379,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_set_party_publicity
+## parties_service_period_set_publicity
 
-> parties_service_period_set_party_publicity(party_set_party_publicity_input)
+> parties_service_period_set_publicity(party_set_publicity_input)
 
 
 Sets the publicity of a party. This configures who can view and join the party. Identity must be the party leader.
@@ -391,7 +391,7 @@ Sets the publicity of a party. This configures who can view and join the party. 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_set_party_publicity_input** | [**PartySetPartyPublicityInput**](PartySetPartyPublicityInput.md) |  | [required] |
+**party_set_publicity_input** | [**PartySetPublicityInput**](PartySetPublicityInput.md) |  | [required] |
 
 ### Return type
 
@@ -409,9 +409,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## parties_service_period_transfer_party_ownership
+## parties_service_period_transfer_ownership
 
-> parties_service_period_transfer_party_ownership(identity_id)
+> parties_service_period_transfer_ownership(identity_id)
 
 
 Transfers ownership of the party to another party member. Identity must be the party leader.

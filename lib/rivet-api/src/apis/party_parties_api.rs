@@ -15,59 +15,59 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`parties_service_period_create_party`]
+/// struct for typed errors of method [`parties_service_period_create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodCreatePartyError {
+pub enum PartiesServicePeriodCreateError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_create_party_invite`]
+/// struct for typed errors of method [`parties_service_period_create_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodCreatePartyInviteError {
+pub enum PartiesServicePeriodCreateInviteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_get_party_from_invite`]
+/// struct for typed errors of method [`parties_service_period_get_from_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodGetPartyFromInviteError {
+pub enum PartiesServicePeriodGetFromInviteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_get_party_profile`]
+/// struct for typed errors of method [`parties_service_period_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodGetPartyProfileError {
+pub enum PartiesServicePeriodGetProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_get_party_self_profile`]
+/// struct for typed errors of method [`parties_service_period_get_self_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodGetPartySelfProfileError {
+pub enum PartiesServicePeriodGetSelfProfileError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_get_party_self_summary`]
+/// struct for typed errors of method [`parties_service_period_get_self_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodGetPartySelfSummaryError {
+pub enum PartiesServicePeriodGetSelfSummaryError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_get_party_summary`]
+/// struct for typed errors of method [`parties_service_period_get_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodGetPartySummaryError {
+pub enum PartiesServicePeriodGetSummaryError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_join_party`]
+/// struct for typed errors of method [`parties_service_period_join`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodJoinPartyError {
+pub enum PartiesServicePeriodJoinError {
     UnknownValue(serde_json::Value),
 }
 
@@ -78,17 +78,17 @@ pub enum PartiesServicePeriodKickMemberError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_leave_party`]
+/// struct for typed errors of method [`parties_service_period_leave`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodLeavePartyError {
+pub enum PartiesServicePeriodLeaveError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_revoke_party_invite`]
+/// struct for typed errors of method [`parties_service_period_revoke_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodRevokePartyInviteError {
+pub enum PartiesServicePeriodRevokeInviteError {
     UnknownValue(serde_json::Value),
 }
 
@@ -99,23 +99,23 @@ pub enum PartiesServicePeriodSendJoinRequestError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_set_party_publicity`]
+/// struct for typed errors of method [`parties_service_period_set_publicity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodSetPartyPublicityError {
+pub enum PartiesServicePeriodSetPublicityError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`parties_service_period_transfer_party_ownership`]
+/// struct for typed errors of method [`parties_service_period_transfer_ownership`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PartiesServicePeriodTransferPartyOwnershipError {
+pub enum PartiesServicePeriodTransferOwnershipError {
     UnknownValue(serde_json::Value),
 }
 
 
 /// Creates a new party.
-pub async fn parties_service_period_create_party(configuration: &configuration::Configuration, party_create_party_input: crate::models::PartyCreatePartyInput) -> Result<crate::models::PartyCreatePartyOutput, Error<PartiesServicePeriodCreatePartyError>> {
+pub async fn parties_service_period_create(configuration: &configuration::Configuration, party_create_input: crate::models::PartyCreateInput) -> Result<crate::models::PartyCreateOutput, Error<PartiesServicePeriodCreateError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -129,7 +129,7 @@ pub async fn parties_service_period_create_party(configuration: &configuration::
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&party_create_party_input);
+    local_var_req_builder = local_var_req_builder.json(&party_create_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -140,14 +140,14 @@ pub async fn parties_service_period_create_party(configuration: &configuration::
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodCreatePartyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodCreateError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Creates a new party invite for the current identity's party. Identity must be the party leader.
-pub async fn parties_service_period_create_party_invite(configuration: &configuration::Configuration, party_create_party_invite_input: crate::models::PartyCreatePartyInviteInput) -> Result<crate::models::PartyCreatePartyInviteOutput, Error<PartiesServicePeriodCreatePartyInviteError>> {
+pub async fn parties_service_period_create_invite(configuration: &configuration::Configuration, party_create_invite_input: crate::models::PartyCreateInviteInput) -> Result<crate::models::PartyCreateInviteOutput, Error<PartiesServicePeriodCreateInviteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -161,7 +161,7 @@ pub async fn parties_service_period_create_party_invite(configuration: &configur
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&party_create_party_invite_input);
+    local_var_req_builder = local_var_req_builder.json(&party_create_invite_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -172,14 +172,14 @@ pub async fn parties_service_period_create_party_invite(configuration: &configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodCreatePartyInviteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodCreateInviteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Fetches a party based on a given invite.
-pub async fn parties_service_period_get_party_from_invite(configuration: &configuration::Configuration, token: Option<&str>, alias: Option<&str>) -> Result<crate::models::PartyGetPartyFromInviteOutput, Error<PartiesServicePeriodGetPartyFromInviteError>> {
+pub async fn parties_service_period_get_from_invite(configuration: &configuration::Configuration, token: Option<&str>, alias: Option<&str>) -> Result<crate::models::PartyGetInviteOutput, Error<PartiesServicePeriodGetFromInviteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -209,14 +209,14 @@ pub async fn parties_service_period_get_party_from_invite(configuration: &config
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodGetPartyFromInviteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodGetFromInviteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a party profile.
-pub async fn parties_service_period_get_party_profile(configuration: &configuration::Configuration, party_id: &str, watch_index: Option<&str>) -> Result<crate::models::PartyGetPartyProfileOutput, Error<PartiesServicePeriodGetPartyProfileError>> {
+pub async fn parties_service_period_get_profile(configuration: &configuration::Configuration, party_id: &str, watch_index: Option<&str>) -> Result<crate::models::PartyGetProfileOutput, Error<PartiesServicePeriodGetProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -243,14 +243,14 @@ pub async fn parties_service_period_get_party_profile(configuration: &configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodGetPartyProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodGetProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a party profile for the party the current identity is a member of.
-pub async fn parties_service_period_get_party_self_profile(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::PartyGetPartySelfProfileOutput, Error<PartiesServicePeriodGetPartySelfProfileError>> {
+pub async fn parties_service_period_get_self_profile(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::PartyGetSelfProfileOutput, Error<PartiesServicePeriodGetSelfProfileError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -277,14 +277,14 @@ pub async fn parties_service_period_get_party_self_profile(configuration: &confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodGetPartySelfProfileError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodGetSelfProfileError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a party summary for the party the current identity is a member of.
-pub async fn parties_service_period_get_party_self_summary(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::PartyGetPartySelfSummaryOutput, Error<PartiesServicePeriodGetPartySelfSummaryError>> {
+pub async fn parties_service_period_get_self_summary(configuration: &configuration::Configuration, watch_index: Option<&str>) -> Result<crate::models::PartyGetSelfSummaryOutput, Error<PartiesServicePeriodGetSelfSummaryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -311,14 +311,14 @@ pub async fn parties_service_period_get_party_self_summary(configuration: &confi
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodGetPartySelfSummaryError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodGetSelfSummaryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Returns a party summary.
-pub async fn parties_service_period_get_party_summary(configuration: &configuration::Configuration, party_id: &str, watch_index: Option<&str>) -> Result<crate::models::PartyGetPartySummaryOutput, Error<PartiesServicePeriodGetPartySummaryError>> {
+pub async fn parties_service_period_get_summary(configuration: &configuration::Configuration, party_id: &str, watch_index: Option<&str>) -> Result<crate::models::PartyGetSummaryOutput, Error<PartiesServicePeriodGetSummaryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -345,14 +345,14 @@ pub async fn parties_service_period_get_party_summary(configuration: &configurat
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodGetPartySummaryError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodGetSummaryError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Joins a party using a given party invite.
-pub async fn parties_service_period_join_party(configuration: &configuration::Configuration, party_join_party_input: crate::models::PartyJoinPartyInput) -> Result<crate::models::PartyJoinPartyOutput, Error<PartiesServicePeriodJoinPartyError>> {
+pub async fn parties_service_period_join(configuration: &configuration::Configuration, party_join_input: crate::models::PartyJoinInput) -> Result<crate::models::PartyJoinOutput, Error<PartiesServicePeriodJoinError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -366,7 +366,7 @@ pub async fn parties_service_period_join_party(configuration: &configuration::Co
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&party_join_party_input);
+    local_var_req_builder = local_var_req_builder.json(&party_join_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -377,7 +377,7 @@ pub async fn parties_service_period_join_party(configuration: &configuration::Co
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<PartiesServicePeriodJoinPartyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodJoinError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
@@ -415,7 +415,7 @@ pub async fn parties_service_period_kick_member(configuration: &configuration::C
 }
 
 /// Leaves the current identity's party.
-pub async fn parties_service_period_leave_party(configuration: &configuration::Configuration, ) -> Result<(), Error<PartiesServicePeriodLeavePartyError>> {
+pub async fn parties_service_period_leave(configuration: &configuration::Configuration, ) -> Result<(), Error<PartiesServicePeriodLeaveError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -439,14 +439,14 @@ pub async fn parties_service_period_leave_party(configuration: &configuration::C
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<PartiesServicePeriodLeavePartyError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodLeaveError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Revokes a party invite from the current identity's party. Identity must be the party leader.
-pub async fn parties_service_period_revoke_party_invite(configuration: &configuration::Configuration, invite_id: &str) -> Result<(), Error<PartiesServicePeriodRevokePartyInviteError>> {
+pub async fn parties_service_period_revoke_invite(configuration: &configuration::Configuration, invite_id: &str) -> Result<(), Error<PartiesServicePeriodRevokeInviteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -470,7 +470,7 @@ pub async fn parties_service_period_revoke_party_invite(configuration: &configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<PartiesServicePeriodRevokePartyInviteError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodRevokeInviteError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
@@ -507,7 +507,7 @@ pub async fn parties_service_period_send_join_request(configuration: &configurat
 }
 
 /// Sets the publicity of a party. This configures who can view and join the party. Identity must be the party leader.
-pub async fn parties_service_period_set_party_publicity(configuration: &configuration::Configuration, party_set_party_publicity_input: crate::models::PartySetPartyPublicityInput) -> Result<(), Error<PartiesServicePeriodSetPartyPublicityError>> {
+pub async fn parties_service_period_set_publicity(configuration: &configuration::Configuration, party_set_publicity_input: crate::models::PartySetPublicityInput) -> Result<(), Error<PartiesServicePeriodSetPublicityError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -521,7 +521,7 @@ pub async fn parties_service_period_set_party_publicity(configuration: &configur
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&party_set_party_publicity_input);
+    local_var_req_builder = local_var_req_builder.json(&party_set_publicity_input);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -532,14 +532,14 @@ pub async fn parties_service_period_set_party_publicity(configuration: &configur
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<PartiesServicePeriodSetPartyPublicityError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodSetPublicityError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }
 }
 
 /// Transfers ownership of the party to another party member. Identity must be the party leader.
-pub async fn parties_service_period_transfer_party_ownership(configuration: &configuration::Configuration, identity_id: &str) -> Result<(), Error<PartiesServicePeriodTransferPartyOwnershipError>> {
+pub async fn parties_service_period_transfer_ownership(configuration: &configuration::Configuration, identity_id: &str) -> Result<(), Error<PartiesServicePeriodTransferOwnershipError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -563,7 +563,7 @@ pub async fn parties_service_period_transfer_party_ownership(configuration: &con
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         Ok(())
     } else {
-        let local_var_entity: Option<PartiesServicePeriodTransferPartyOwnershipError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<PartiesServicePeriodTransferOwnershipError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

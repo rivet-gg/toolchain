@@ -44,7 +44,7 @@ Name | Type | Description  | Required | Notes
 > crate::models::AuthStartEmailVerificationOutput identity_service_period_start_email_verification(auth_start_email_verification_input)
 
 
-Starts the verification process for linking an emal to your identity.
+Starts the verification process for linking an email to your identity.
 
 ### Parameters
 

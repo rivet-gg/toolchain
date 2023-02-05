@@ -14,11 +14,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ListFollowersOutput {
     #[serde(rename = "identities")]
-    pub identities: Vec<crate::models::CommonsIdentityHandle>,
+    pub identities: Vec<crate::models::IdentityHandle>,
 }
 
 impl ListFollowersOutput {
-    pub fn new(identities: Vec<crate::models::CommonsIdentityHandle>) -> ListFollowersOutput {
+    pub fn new(identities: Vec<crate::models::IdentityHandle>) -> ListFollowersOutput {
         ListFollowersOutput {
             identities,
         }

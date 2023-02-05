@@ -13,19 +13,19 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesUpdateNamespaceCdnAuthUserInput {
-    /// A user name.
-    #[serde(rename = "user")]
-    pub user: String,
     /// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
     #[serde(rename = "password")]
     pub password: String,
+    /// A user name.
+    #[serde(rename = "user")]
+    pub user: String,
 }
 
 impl CloudGamesUpdateNamespaceCdnAuthUserInput {
-    pub fn new(user: String, password: String) -> CloudGamesUpdateNamespaceCdnAuthUserInput {
+    pub fn new(password: String, user: String) -> CloudGamesUpdateNamespaceCdnAuthUserInput {
         CloudGamesUpdateNamespaceCdnAuthUserInput {
-            user,
             password,
+            user,
         }
     }
 }

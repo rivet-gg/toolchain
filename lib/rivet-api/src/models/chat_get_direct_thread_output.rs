@@ -13,18 +13,18 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ChatGetDirectThreadOutput {
+    #[serde(rename = "identity", skip_serializing_if = "Option::is_none")]
+    pub identity: Option<Box<crate::models::IdentityHandle>>,
     /// A universally unique identifier.
     #[serde(rename = "thread_id", skip_serializing_if = "Option::is_none")]
     pub thread_id: Option<String>,
-    #[serde(rename = "identity", skip_serializing_if = "Option::is_none")]
-    pub identity: Option<Box<crate::models::CommonsIdentityHandle>>,
 }
 
 impl ChatGetDirectThreadOutput {
     pub fn new() -> ChatGetDirectThreadOutput {
         ChatGetDirectThreadOutput {
-            thread_id: None,
             identity: None,
+            thread_id: None,
         }
     }
 }

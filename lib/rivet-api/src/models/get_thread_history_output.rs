@@ -15,11 +15,11 @@
 pub struct GetThreadHistoryOutput {
     /// Ordered old to new. If querying `rivet.api.chat.common#before_and_after`, this will be `count * 2` long.
     #[serde(rename = "chat_messages")]
-    pub chat_messages: Vec<crate::models::CommonsChatMessage>,
+    pub chat_messages: Vec<crate::models::ChatMessage>,
 }
 
 impl GetThreadHistoryOutput {
-    pub fn new(chat_messages: Vec<crate::models::CommonsChatMessage>) -> GetThreadHistoryOutput {
+    pub fn new(chat_messages: Vec<crate::models::ChatMessage>) -> GetThreadHistoryOutput {
         GetThreadHistoryOutput {
             chat_messages,
         }
