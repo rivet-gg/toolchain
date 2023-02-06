@@ -6,10 +6,12 @@ use crate::util::{struct_fmt, term};
 
 #[derive(Parser)]
 pub enum SubCommand {
+	/// Get the current game
 	Get {
 		#[clap(long, value_parser)]
 		format: struct_fmt::Format,
 	},
+	/// Show the current game dashboard
 	#[clap(alias = "dash")]
 	Dashboard,
 }

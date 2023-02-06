@@ -1,4 +1,5 @@
 use anyhow::{bail, Context, Result};
+use cli_core::rivet_api;
 use futures_util::stream::StreamExt;
 use std::{
 	path::{Path, PathBuf},
@@ -11,7 +12,7 @@ use tokio_util::io::ReaderStream;
 #[derive(Clone)]
 pub struct UploadFile {
 	pub absolute_path: PathBuf,
-	pub prepared: cli_core::rivet_cloud::model::UploadPrepareFile,
+	pub prepared: rivet_api::models::UploadPrepareFile,
 }
 
 pub fn format_file_size(bytes: u64) -> Result<String> {
@@ -64,11 +65,11 @@ pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 
 			files.push(UploadFile {
 				absolute_path: file_path.to_path_buf(),
-				prepared: cli_core::rivet_cloud::model::upload_prepare_file::Builder::default()
-					.path(path_str)
-					.set_content_type(content_type)
-					.content_length(file_meta.len() as i64)
-					.build(),
+				prepared: rivet_api::models::UploadPrepareFile {
+					path: path_str,
+					content_type,
+					content_length: file_meta.len() as i64,
+				},
 			});
 		}
 	}
@@ -79,7 +80,7 @@ pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 /// Uploads a file to a given URL.
 pub async fn upload_file(
 	reqwest_client: &reqwest::Client,
-	presigned_req: &cli_core::rivet_cloud::model::UploadPresignedRequest,
+	presigned_req: &rivet_api::models::UploadPresignedRequest,
 	path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
 ) -> Result<()> {
@@ -94,7 +95,7 @@ pub async fn upload_file(
 		// Read file
 		let file = File::open(path.as_ref()).await?;
 		let file_meta = file.metadata().await?;
-		let path = presigned_req.path().unwrap().to_owned();
+		let path = presigned_req.path.clone();
 		let total_size = format_file_size(file_meta.len())?;
 
 		eprintln!(
@@ -147,7 +148,7 @@ pub async fn upload_file(
 		// Upload file
 		let start = Instant::now();
 		let mut req = reqwest_client
-			.put(presigned_req.url().unwrap())
+			.put(&presigned_req.url)
 			.header("content-length", file_meta.len());
 		if let Some(content_type) = &content_type {
 			req = req.header("content-type", content_type.to_string());
@@ -179,7 +180,7 @@ pub async fn upload_file(
 
 	eprintln!(
 		"    {}: Finished in {:.3}s",
-		presigned_req.path().unwrap(),
+		presigned_req.path,
 		upload_time.as_secs_f64()
 	);
 

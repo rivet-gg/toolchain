@@ -4476,17 +4476,51 @@ impl CdnNamespaceAuthUser {
 pub struct CdnNamespaceDomain {
 	/// A valid domain name (no protocol).
 	pub domain: std::option::Option<std::string::String>,
+	/// RFC3339 timestamp.
+	pub create_ts: std::option::Option<aws_smithy_types::DateTime>,
+	/// A value denoting the status of a CDN domain's verification status.
+	pub verification_status:
+		std::option::Option<crate::model::CdnNamespaceDomainVerificationStatus>,
+	/// A union representing the verification method used for this CDN domain.
+	pub verification_method:
+		std::option::Option<crate::model::CdnNamespaceDomainVerificationMethod>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub verification_errors: std::option::Option<std::vec::Vec<std::string::String>>,
 }
 impl CdnNamespaceDomain {
 	/// A valid domain name (no protocol).
 	pub fn domain(&self) -> std::option::Option<&str> {
 		self.domain.as_deref()
 	}
+	/// RFC3339 timestamp.
+	pub fn create_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
+		self.create_ts.as_ref()
+	}
+	/// A value denoting the status of a CDN domain's verification status.
+	pub fn verification_status(
+		&self,
+	) -> std::option::Option<&crate::model::CdnNamespaceDomainVerificationStatus> {
+		self.verification_status.as_ref()
+	}
+	/// A union representing the verification method used for this CDN domain.
+	pub fn verification_method(
+		&self,
+	) -> std::option::Option<&crate::model::CdnNamespaceDomainVerificationMethod> {
+		self.verification_method.as_ref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn verification_errors(&self) -> std::option::Option<&[std::string::String]> {
+		self.verification_errors.as_deref()
+	}
 }
 impl std::fmt::Debug for CdnNamespaceDomain {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CdnNamespaceDomain");
 		formatter.field("domain", &self.domain);
+		formatter.field("create_ts", &self.create_ts);
+		formatter.field("verification_status", &self.verification_status);
+		formatter.field("verification_method", &self.verification_method);
+		formatter.field("verification_errors", &self.verification_errors);
 		formatter.finish()
 	}
 }
@@ -4497,6 +4531,12 @@ pub mod cdn_namespace_domain {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) domain: std::option::Option<std::string::String>,
+		pub(crate) create_ts: std::option::Option<aws_smithy_types::DateTime>,
+		pub(crate) verification_status:
+			std::option::Option<crate::model::CdnNamespaceDomainVerificationStatus>,
+		pub(crate) verification_method:
+			std::option::Option<crate::model::CdnNamespaceDomainVerificationMethod>,
+		pub(crate) verification_errors: std::option::Option<std::vec::Vec<std::string::String>>,
 	}
 	impl Builder {
 		/// A valid domain name (no protocol).
@@ -4509,10 +4549,77 @@ pub mod cdn_namespace_domain {
 			self.domain = input;
 			self
 		}
+		/// RFC3339 timestamp.
+		pub fn create_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
+			self.create_ts = Some(input);
+			self
+		}
+		/// RFC3339 timestamp.
+		pub fn set_create_ts(
+			mut self,
+			input: std::option::Option<aws_smithy_types::DateTime>,
+		) -> Self {
+			self.create_ts = input;
+			self
+		}
+		/// A value denoting the status of a CDN domain's verification status.
+		pub fn verification_status(
+			mut self,
+			input: crate::model::CdnNamespaceDomainVerificationStatus,
+		) -> Self {
+			self.verification_status = Some(input);
+			self
+		}
+		/// A value denoting the status of a CDN domain's verification status.
+		pub fn set_verification_status(
+			mut self,
+			input: std::option::Option<crate::model::CdnNamespaceDomainVerificationStatus>,
+		) -> Self {
+			self.verification_status = input;
+			self
+		}
+		/// A union representing the verification method used for this CDN domain.
+		pub fn verification_method(
+			mut self,
+			input: crate::model::CdnNamespaceDomainVerificationMethod,
+		) -> Self {
+			self.verification_method = Some(input);
+			self
+		}
+		/// A union representing the verification method used for this CDN domain.
+		pub fn set_verification_method(
+			mut self,
+			input: std::option::Option<crate::model::CdnNamespaceDomainVerificationMethod>,
+		) -> Self {
+			self.verification_method = input;
+			self
+		}
+		/// Appends an item to `verification_errors`.
+		///
+		/// To override the contents of this collection use [`set_verification_errors`](Self::set_verification_errors).
+		///
+		pub fn verification_errors(mut self, input: impl Into<std::string::String>) -> Self {
+			let mut v = self.verification_errors.unwrap_or_default();
+			v.push(input.into());
+			self.verification_errors = Some(v);
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_verification_errors(
+			mut self,
+			input: std::option::Option<std::vec::Vec<std::string::String>>,
+		) -> Self {
+			self.verification_errors = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`CdnNamespaceDomain`](crate::model::CdnNamespaceDomain)
 		pub fn build(self) -> crate::model::CdnNamespaceDomain {
 			crate::model::CdnNamespaceDomain {
 				domain: self.domain,
+				create_ts: self.create_ts,
+				verification_status: self.verification_status,
+				verification_method: self.verification_method,
+				verification_errors: self.verification_errors,
 			}
 		}
 	}
@@ -4521,6 +4628,204 @@ impl CdnNamespaceDomain {
 	/// Creates a new builder-style object to manufacture [`CdnNamespaceDomain`](crate::model::CdnNamespaceDomain)
 	pub fn builder() -> crate::model::cdn_namespace_domain::Builder {
 		crate::model::cdn_namespace_domain::Builder::default()
+	}
+}
+
+/// A union representing the verification method used for this CDN domain.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+pub enum CdnNamespaceDomainVerificationMethod {
+	/// CDN Namespace domain verification method HTTP variant.
+	Http(crate::model::CdnNamespaceDomainVerificationMethodHttp),
+	/// CDN Namespace domain verification method variant denoting that this record is invalid.
+	Invalid(crate::model::CdnNamespaceDomainVerificationMethodInvalid),
+	/// The `Unknown` variant represents cases where new union variant was received. Consider upgrading the SDK to the latest available version.
+	/// An unknown enum variant
+	///
+	/// _Note: If you encounter this error, consider upgrading your SDK to the latest version._
+	/// The `Unknown` variant represents cases where the server sent a value that wasn't recognized
+	/// by the client. This can happen when the server adds new functionality, but the client has not been updated.
+	/// To investigate this, consider turning on debug logging to print the raw HTTP response.
+	#[non_exhaustive]
+	Unknown,
+}
+impl CdnNamespaceDomainVerificationMethod {
+	/// Tries to convert the enum instance into [`Http`](crate::model::CdnNamespaceDomainVerificationMethod::Http), extracting the inner [`CdnNamespaceDomainVerificationMethodHttp`](crate::model::CdnNamespaceDomainVerificationMethodHttp).
+	/// Returns `Err(&Self)` if it can't be converted.
+	pub fn as_http(
+		&self,
+	) -> std::result::Result<&crate::model::CdnNamespaceDomainVerificationMethodHttp, &Self> {
+		if let CdnNamespaceDomainVerificationMethod::Http(val) = &self {
+			Ok(val)
+		} else {
+			Err(self)
+		}
+	}
+	/// Returns true if this is a [`Http`](crate::model::CdnNamespaceDomainVerificationMethod::Http).
+	pub fn is_http(&self) -> bool {
+		self.as_http().is_ok()
+	}
+	/// Tries to convert the enum instance into [`Invalid`](crate::model::CdnNamespaceDomainVerificationMethod::Invalid), extracting the inner [`CdnNamespaceDomainVerificationMethodInvalid`](crate::model::CdnNamespaceDomainVerificationMethodInvalid).
+	/// Returns `Err(&Self)` if it can't be converted.
+	pub fn as_invalid(
+		&self,
+	) -> std::result::Result<&crate::model::CdnNamespaceDomainVerificationMethodInvalid, &Self> {
+		if let CdnNamespaceDomainVerificationMethod::Invalid(val) = &self {
+			Ok(val)
+		} else {
+			Err(self)
+		}
+	}
+	/// Returns true if this is a [`Invalid`](crate::model::CdnNamespaceDomainVerificationMethod::Invalid).
+	pub fn is_invalid(&self) -> bool {
+		self.as_invalid().is_ok()
+	}
+	/// Returns true if the enum instance is the `Unknown` variant.
+	pub fn is_unknown(&self) -> bool {
+		matches!(self, Self::Unknown)
+	}
+}
+
+/// CDN Namespace domain verification method HTTP variant.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnNamespaceDomainVerificationMethodHttp {
+	/// The CNAME record this domain should point to.
+	pub cname_record: std::option::Option<std::string::String>,
+}
+impl CdnNamespaceDomainVerificationMethodHttp {
+	/// The CNAME record this domain should point to.
+	pub fn cname_record(&self) -> std::option::Option<&str> {
+		self.cname_record.as_deref()
+	}
+}
+impl std::fmt::Debug for CdnNamespaceDomainVerificationMethodHttp {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnNamespaceDomainVerificationMethodHttp");
+		formatter.field("cname_record", &self.cname_record);
+		formatter.finish()
+	}
+}
+/// See [`CdnNamespaceDomainVerificationMethodHttp`](crate::model::CdnNamespaceDomainVerificationMethodHttp)
+pub mod cdn_namespace_domain_verification_method_http {
+	/// A builder for [`CdnNamespaceDomainVerificationMethodHttp`](crate::model::CdnNamespaceDomainVerificationMethodHttp)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) cname_record: std::option::Option<std::string::String>,
+	}
+	impl Builder {
+		/// The CNAME record this domain should point to.
+		pub fn cname_record(mut self, input: impl Into<std::string::String>) -> Self {
+			self.cname_record = Some(input.into());
+			self
+		}
+		/// The CNAME record this domain should point to.
+		pub fn set_cname_record(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.cname_record = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`CdnNamespaceDomainVerificationMethodHttp`](crate::model::CdnNamespaceDomainVerificationMethodHttp)
+		pub fn build(self) -> crate::model::CdnNamespaceDomainVerificationMethodHttp {
+			crate::model::CdnNamespaceDomainVerificationMethodHttp {
+				cname_record: self.cname_record,
+			}
+		}
+	}
+}
+impl CdnNamespaceDomainVerificationMethodHttp {
+	/// Creates a new builder-style object to manufacture [`CdnNamespaceDomainVerificationMethodHttp`](crate::model::CdnNamespaceDomainVerificationMethodHttp)
+	pub fn builder() -> crate::model::cdn_namespace_domain_verification_method_http::Builder {
+		crate::model::cdn_namespace_domain_verification_method_http::Builder::default()
+	}
+}
+
+/// CDN Namespace domain verification method variant denoting that this record is invalid.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct CdnNamespaceDomainVerificationMethodInvalid {}
+impl std::fmt::Debug for CdnNamespaceDomainVerificationMethodInvalid {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("CdnNamespaceDomainVerificationMethodInvalid");
+		formatter.finish()
+	}
+}
+/// See [`CdnNamespaceDomainVerificationMethodInvalid`](crate::model::CdnNamespaceDomainVerificationMethodInvalid)
+pub mod cdn_namespace_domain_verification_method_invalid {
+	/// A builder for [`CdnNamespaceDomainVerificationMethodInvalid`](crate::model::CdnNamespaceDomainVerificationMethodInvalid)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`CdnNamespaceDomainVerificationMethodInvalid`](crate::model::CdnNamespaceDomainVerificationMethodInvalid)
+		pub fn build(self) -> crate::model::CdnNamespaceDomainVerificationMethodInvalid {
+			crate::model::CdnNamespaceDomainVerificationMethodInvalid {}
+		}
+	}
+}
+impl CdnNamespaceDomainVerificationMethodInvalid {
+	/// Creates a new builder-style object to manufacture [`CdnNamespaceDomainVerificationMethodInvalid`](crate::model::CdnNamespaceDomainVerificationMethodInvalid)
+	pub fn builder() -> crate::model::cdn_namespace_domain_verification_method_invalid::Builder {
+		crate::model::cdn_namespace_domain_verification_method_invalid::Builder::default()
+	}
+}
+
+/// A value denoting the status of a CDN domain's verification status.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum CdnNamespaceDomainVerificationStatus {
+	#[allow(missing_docs)] // documentation missing in model
+	Active,
+	#[allow(missing_docs)] // documentation missing in model
+	Failed,
+	#[allow(missing_docs)] // documentation missing in model
+	Pending,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for CdnNamespaceDomainVerificationStatus {
+	fn from(s: &str) -> Self {
+		match s {
+			"active" => CdnNamespaceDomainVerificationStatus::Active,
+			"failed" => CdnNamespaceDomainVerificationStatus::Failed,
+			"pending" => CdnNamespaceDomainVerificationStatus::Pending,
+			other => CdnNamespaceDomainVerificationStatus::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for CdnNamespaceDomainVerificationStatus {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(CdnNamespaceDomainVerificationStatus::from(s))
+	}
+}
+impl CdnNamespaceDomainVerificationStatus {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			CdnNamespaceDomainVerificationStatus::Active => "active",
+			CdnNamespaceDomainVerificationStatus::Failed => "failed",
+			CdnNamespaceDomainVerificationStatus::Pending => "pending",
+			CdnNamespaceDomainVerificationStatus::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&["active", "failed", "pending"]
+	}
+}
+impl AsRef<str> for CdnNamespaceDomainVerificationStatus {
+	fn as_ref(&self) -> &str {
+		self.as_str()
 	}
 }
 
@@ -4878,24 +5183,90 @@ impl KvVersionConfig {
 pub struct MatchmakerVersionConfig {
 	/// A list of game modes.
 	pub lobby_groups: std::option::Option<std::vec::Vec<crate::model::LobbyGroup>>,
+	/// A list of game modes.
+	pub game_modes:
+		std::option::Option<std::collections::HashMap<std::string::String, crate::model::GameMode>>,
+	/// A list of game mode regions.
+	pub regions: std::option::Option<
+		std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+	>,
 	/// Matchmaker captcha configuration.
 	pub captcha: std::option::Option<crate::model::MatchmakerCaptcha>,
+	/// Unsigned 32 bit integer.
+	pub max_players: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max_players_direct: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max_players_party: std::option::Option<i32>,
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub tier: std::option::Option<std::string::String>,
+	/// Configuration for how many idle lobbies a game version should have.
+	pub idle_lobbies: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+	/// A game mode runtime running through Docker.
+	pub docker: std::option::Option<crate::model::GameModeRuntimeDocker>,
 }
 impl MatchmakerVersionConfig {
 	/// A list of game modes.
 	pub fn lobby_groups(&self) -> std::option::Option<&[crate::model::LobbyGroup]> {
 		self.lobby_groups.as_deref()
 	}
+	/// A list of game modes.
+	pub fn game_modes(
+		&self,
+	) -> std::option::Option<&std::collections::HashMap<std::string::String, crate::model::GameMode>>
+	{
+		self.game_modes.as_ref()
+	}
+	/// A list of game mode regions.
+	pub fn regions(
+		&self,
+	) -> std::option::Option<
+		&std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+	> {
+		self.regions.as_ref()
+	}
 	/// Matchmaker captcha configuration.
 	pub fn captcha(&self) -> std::option::Option<&crate::model::MatchmakerCaptcha> {
 		self.captcha.as_ref()
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max_players(&self) -> std::option::Option<i32> {
+		self.max_players
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max_players_direct(&self) -> std::option::Option<i32> {
+		self.max_players_direct
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max_players_party(&self) -> std::option::Option<i32> {
+		self.max_players_party
+	}
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub fn tier(&self) -> std::option::Option<&str> {
+		self.tier.as_deref()
+	}
+	/// Configuration for how many idle lobbies a game version should have.
+	pub fn idle_lobbies(&self) -> std::option::Option<&crate::model::GameModeIdleLobbiesConfig> {
+		self.idle_lobbies.as_ref()
+	}
+	/// A game mode runtime running through Docker.
+	pub fn docker(&self) -> std::option::Option<&crate::model::GameModeRuntimeDocker> {
+		self.docker.as_ref()
 	}
 }
 impl std::fmt::Debug for MatchmakerVersionConfig {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("MatchmakerVersionConfig");
 		formatter.field("lobby_groups", &self.lobby_groups);
+		formatter.field("game_modes", &self.game_modes);
+		formatter.field("regions", &self.regions);
 		formatter.field("captcha", &self.captcha);
+		formatter.field("max_players", &self.max_players);
+		formatter.field("max_players_direct", &self.max_players_direct);
+		formatter.field("max_players_party", &self.max_players_party);
+		formatter.field("tier", &self.tier);
+		formatter.field("idle_lobbies", &self.idle_lobbies);
+		formatter.field("docker", &self.docker);
 		formatter.finish()
 	}
 }
@@ -4906,7 +5277,19 @@ pub mod matchmaker_version_config {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) lobby_groups: std::option::Option<std::vec::Vec<crate::model::LobbyGroup>>,
+		pub(crate) game_modes: std::option::Option<
+			std::collections::HashMap<std::string::String, crate::model::GameMode>,
+		>,
+		pub(crate) regions: std::option::Option<
+			std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+		>,
 		pub(crate) captcha: std::option::Option<crate::model::MatchmakerCaptcha>,
+		pub(crate) max_players: std::option::Option<i32>,
+		pub(crate) max_players_direct: std::option::Option<i32>,
+		pub(crate) max_players_party: std::option::Option<i32>,
+		pub(crate) tier: std::option::Option<std::string::String>,
+		pub(crate) idle_lobbies: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+		pub(crate) docker: std::option::Option<crate::model::GameModeRuntimeDocker>,
 	}
 	impl Builder {
 		/// Appends an item to `lobby_groups`.
@@ -4928,6 +5311,56 @@ pub mod matchmaker_version_config {
 			self.lobby_groups = input;
 			self
 		}
+		/// Adds a key-value pair to `game_modes`.
+		///
+		/// To override the contents of this collection use [`set_game_modes`](Self::set_game_modes).
+		///
+		/// A list of game modes.
+		pub fn game_modes(
+			mut self,
+			k: impl Into<std::string::String>,
+			v: crate::model::GameMode,
+		) -> Self {
+			let mut hash_map = self.game_modes.unwrap_or_default();
+			hash_map.insert(k.into(), v);
+			self.game_modes = Some(hash_map);
+			self
+		}
+		/// A list of game modes.
+		pub fn set_game_modes(
+			mut self,
+			input: std::option::Option<
+				std::collections::HashMap<std::string::String, crate::model::GameMode>,
+			>,
+		) -> Self {
+			self.game_modes = input;
+			self
+		}
+		/// Adds a key-value pair to `regions`.
+		///
+		/// To override the contents of this collection use [`set_regions`](Self::set_regions).
+		///
+		/// A list of game mode regions.
+		pub fn regions(
+			mut self,
+			k: impl Into<std::string::String>,
+			v: crate::model::GameModeRegion,
+		) -> Self {
+			let mut hash_map = self.regions.unwrap_or_default();
+			hash_map.insert(k.into(), v);
+			self.regions = Some(hash_map);
+			self
+		}
+		/// A list of game mode regions.
+		pub fn set_regions(
+			mut self,
+			input: std::option::Option<
+				std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+			>,
+		) -> Self {
+			self.regions = input;
+			self
+		}
 		/// Matchmaker captcha configuration.
 		pub fn captcha(mut self, input: crate::model::MatchmakerCaptcha) -> Self {
 			self.captcha = Some(input);
@@ -4941,11 +5374,85 @@ pub mod matchmaker_version_config {
 			self.captcha = input;
 			self
 		}
+		/// Unsigned 32 bit integer.
+		pub fn max_players(mut self, input: i32) -> Self {
+			self.max_players = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max_players(mut self, input: std::option::Option<i32>) -> Self {
+			self.max_players = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max_players_direct(mut self, input: i32) -> Self {
+			self.max_players_direct = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max_players_direct(mut self, input: std::option::Option<i32>) -> Self {
+			self.max_players_direct = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max_players_party(mut self, input: i32) -> Self {
+			self.max_players_party = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max_players_party(mut self, input: std::option::Option<i32>) -> Self {
+			self.max_players_party = input;
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn tier(mut self, input: impl Into<std::string::String>) -> Self {
+			self.tier = Some(input.into());
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn set_tier(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.tier = input;
+			self
+		}
+		/// Configuration for how many idle lobbies a game version should have.
+		pub fn idle_lobbies(mut self, input: crate::model::GameModeIdleLobbiesConfig) -> Self {
+			self.idle_lobbies = Some(input);
+			self
+		}
+		/// Configuration for how many idle lobbies a game version should have.
+		pub fn set_idle_lobbies(
+			mut self,
+			input: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+		) -> Self {
+			self.idle_lobbies = input;
+			self
+		}
+		/// A game mode runtime running through Docker.
+		pub fn docker(mut self, input: crate::model::GameModeRuntimeDocker) -> Self {
+			self.docker = Some(input);
+			self
+		}
+		/// A game mode runtime running through Docker.
+		pub fn set_docker(
+			mut self,
+			input: std::option::Option<crate::model::GameModeRuntimeDocker>,
+		) -> Self {
+			self.docker = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`MatchmakerVersionConfig`](crate::model::MatchmakerVersionConfig)
 		pub fn build(self) -> crate::model::MatchmakerVersionConfig {
 			crate::model::MatchmakerVersionConfig {
 				lobby_groups: self.lobby_groups,
+				game_modes: self.game_modes,
+				regions: self.regions,
 				captcha: self.captcha,
+				max_players: self.max_players,
+				max_players_direct: self.max_players_direct,
+				max_players_party: self.max_players_party,
+				tier: self.tier,
+				idle_lobbies: self.idle_lobbies,
+				docker: self.docker,
 			}
 		}
 	}
@@ -4957,22 +5464,451 @@ impl MatchmakerVersionConfig {
 	}
 }
 
+/// A game mode runtime running through Docker.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameModeRuntimeDocker {
+	/// Client-side configuration
+	pub dockerfile: std::option::Option<std::string::String>,
+	/// A universally unique identifier.
+	pub image_id: std::option::Option<std::string::String>,
+	/// A list of docker arguments.
+	pub args: std::option::Option<std::vec::Vec<std::string::String>>,
+	/// A list of docker environment variables.
+	pub env_vars:
+		std::option::Option<std::collections::HashMap<std::string::String, std::string::String>>,
+	/// The network mode the job should run on.
+	pub network_mode: std::option::Option<crate::model::NetworkMode>,
+	/// A list of docker ports.
+	pub ports: std::option::Option<
+		std::collections::HashMap<std::string::String, crate::model::GameModeRuntimeDockerPort>,
+	>,
+}
+impl GameModeRuntimeDocker {
+	/// Client-side configuration
+	pub fn dockerfile(&self) -> std::option::Option<&str> {
+		self.dockerfile.as_deref()
+	}
+	/// A universally unique identifier.
+	pub fn image_id(&self) -> std::option::Option<&str> {
+		self.image_id.as_deref()
+	}
+	/// A list of docker arguments.
+	pub fn args(&self) -> std::option::Option<&[std::string::String]> {
+		self.args.as_deref()
+	}
+	/// A list of docker environment variables.
+	pub fn env_vars(
+		&self,
+	) -> std::option::Option<&std::collections::HashMap<std::string::String, std::string::String>> {
+		self.env_vars.as_ref()
+	}
+	/// The network mode the job should run on.
+	pub fn network_mode(&self) -> std::option::Option<&crate::model::NetworkMode> {
+		self.network_mode.as_ref()
+	}
+	/// A list of docker ports.
+	pub fn ports(
+		&self,
+	) -> std::option::Option<
+		&std::collections::HashMap<std::string::String, crate::model::GameModeRuntimeDockerPort>,
+	> {
+		self.ports.as_ref()
+	}
+}
+impl std::fmt::Debug for GameModeRuntimeDocker {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameModeRuntimeDocker");
+		formatter.field("dockerfile", &self.dockerfile);
+		formatter.field("image_id", &self.image_id);
+		formatter.field("args", &self.args);
+		formatter.field("env_vars", &self.env_vars);
+		formatter.field("network_mode", &self.network_mode);
+		formatter.field("ports", &self.ports);
+		formatter.finish()
+	}
+}
+/// See [`GameModeRuntimeDocker`](crate::model::GameModeRuntimeDocker)
+pub mod game_mode_runtime_docker {
+	/// A builder for [`GameModeRuntimeDocker`](crate::model::GameModeRuntimeDocker)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) dockerfile: std::option::Option<std::string::String>,
+		pub(crate) image_id: std::option::Option<std::string::String>,
+		pub(crate) args: std::option::Option<std::vec::Vec<std::string::String>>,
+		pub(crate) env_vars: std::option::Option<
+			std::collections::HashMap<std::string::String, std::string::String>,
+		>,
+		pub(crate) network_mode: std::option::Option<crate::model::NetworkMode>,
+		pub(crate) ports: std::option::Option<
+			std::collections::HashMap<std::string::String, crate::model::GameModeRuntimeDockerPort>,
+		>,
+	}
+	impl Builder {
+		/// Client-side configuration
+		pub fn dockerfile(mut self, input: impl Into<std::string::String>) -> Self {
+			self.dockerfile = Some(input.into());
+			self
+		}
+		/// Client-side configuration
+		pub fn set_dockerfile(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.dockerfile = input;
+			self
+		}
+		/// A universally unique identifier.
+		pub fn image_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.image_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_image_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.image_id = input;
+			self
+		}
+		/// Appends an item to `args`.
+		///
+		/// To override the contents of this collection use [`set_args`](Self::set_args).
+		///
+		/// A list of docker arguments.
+		pub fn args(mut self, input: impl Into<std::string::String>) -> Self {
+			let mut v = self.args.unwrap_or_default();
+			v.push(input.into());
+			self.args = Some(v);
+			self
+		}
+		/// A list of docker arguments.
+		pub fn set_args(
+			mut self,
+			input: std::option::Option<std::vec::Vec<std::string::String>>,
+		) -> Self {
+			self.args = input;
+			self
+		}
+		/// Adds a key-value pair to `env_vars`.
+		///
+		/// To override the contents of this collection use [`set_env_vars`](Self::set_env_vars).
+		///
+		/// A list of docker environment variables.
+		pub fn env_vars(
+			mut self,
+			k: impl Into<std::string::String>,
+			v: impl Into<std::string::String>,
+		) -> Self {
+			let mut hash_map = self.env_vars.unwrap_or_default();
+			hash_map.insert(k.into(), v.into());
+			self.env_vars = Some(hash_map);
+			self
+		}
+		/// A list of docker environment variables.
+		pub fn set_env_vars(
+			mut self,
+			input: std::option::Option<
+				std::collections::HashMap<std::string::String, std::string::String>,
+			>,
+		) -> Self {
+			self.env_vars = input;
+			self
+		}
+		/// The network mode the job should run on.
+		pub fn network_mode(mut self, input: crate::model::NetworkMode) -> Self {
+			self.network_mode = Some(input);
+			self
+		}
+		/// The network mode the job should run on.
+		pub fn set_network_mode(
+			mut self,
+			input: std::option::Option<crate::model::NetworkMode>,
+		) -> Self {
+			self.network_mode = input;
+			self
+		}
+		/// Adds a key-value pair to `ports`.
+		///
+		/// To override the contents of this collection use [`set_ports`](Self::set_ports).
+		///
+		/// A list of docker ports.
+		pub fn ports(
+			mut self,
+			k: impl Into<std::string::String>,
+			v: crate::model::GameModeRuntimeDockerPort,
+		) -> Self {
+			let mut hash_map = self.ports.unwrap_or_default();
+			hash_map.insert(k.into(), v);
+			self.ports = Some(hash_map);
+			self
+		}
+		/// A list of docker ports.
+		pub fn set_ports(
+			mut self,
+			input: std::option::Option<
+				std::collections::HashMap<
+					std::string::String,
+					crate::model::GameModeRuntimeDockerPort,
+				>,
+			>,
+		) -> Self {
+			self.ports = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameModeRuntimeDocker`](crate::model::GameModeRuntimeDocker)
+		pub fn build(self) -> crate::model::GameModeRuntimeDocker {
+			crate::model::GameModeRuntimeDocker {
+				dockerfile: self.dockerfile,
+				image_id: self.image_id,
+				args: self.args,
+				env_vars: self.env_vars,
+				network_mode: self.network_mode,
+				ports: self.ports,
+			}
+		}
+	}
+}
+impl GameModeRuntimeDocker {
+	/// Creates a new builder-style object to manufacture [`GameModeRuntimeDocker`](crate::model::GameModeRuntimeDocker)
+	pub fn builder() -> crate::model::game_mode_runtime_docker::Builder {
+		crate::model::game_mode_runtime_docker::Builder::default()
+	}
+}
+
+/// A docker port.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameModeRuntimeDockerPort {
+	/// The port number to connect to
+	pub port: std::option::Option<i32>,
+	/// The port range that can be connected to
+	pub port_range: std::option::Option<crate::model::PortRange>,
+	/// A proxy protocol.
+	pub proxy_protocol: std::option::Option<crate::model::ProxyProtocol>,
+}
+impl GameModeRuntimeDockerPort {
+	/// The port number to connect to
+	pub fn port(&self) -> std::option::Option<i32> {
+		self.port
+	}
+	/// The port range that can be connected to
+	pub fn port_range(&self) -> std::option::Option<&crate::model::PortRange> {
+		self.port_range.as_ref()
+	}
+	/// A proxy protocol.
+	pub fn proxy_protocol(&self) -> std::option::Option<&crate::model::ProxyProtocol> {
+		self.proxy_protocol.as_ref()
+	}
+}
+impl std::fmt::Debug for GameModeRuntimeDockerPort {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameModeRuntimeDockerPort");
+		formatter.field("port", &self.port);
+		formatter.field("port_range", &self.port_range);
+		formatter.field("proxy_protocol", &self.proxy_protocol);
+		formatter.finish()
+	}
+}
+/// See [`GameModeRuntimeDockerPort`](crate::model::GameModeRuntimeDockerPort)
+pub mod game_mode_runtime_docker_port {
+	/// A builder for [`GameModeRuntimeDockerPort`](crate::model::GameModeRuntimeDockerPort)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) port: std::option::Option<i32>,
+		pub(crate) port_range: std::option::Option<crate::model::PortRange>,
+		pub(crate) proxy_protocol: std::option::Option<crate::model::ProxyProtocol>,
+	}
+	impl Builder {
+		/// The port number to connect to
+		pub fn port(mut self, input: i32) -> Self {
+			self.port = Some(input);
+			self
+		}
+		/// The port number to connect to
+		pub fn set_port(mut self, input: std::option::Option<i32>) -> Self {
+			self.port = input;
+			self
+		}
+		/// The port range that can be connected to
+		pub fn port_range(mut self, input: crate::model::PortRange) -> Self {
+			self.port_range = Some(input);
+			self
+		}
+		/// The port range that can be connected to
+		pub fn set_port_range(
+			mut self,
+			input: std::option::Option<crate::model::PortRange>,
+		) -> Self {
+			self.port_range = input;
+			self
+		}
+		/// A proxy protocol.
+		pub fn proxy_protocol(mut self, input: crate::model::ProxyProtocol) -> Self {
+			self.proxy_protocol = Some(input);
+			self
+		}
+		/// A proxy protocol.
+		pub fn set_proxy_protocol(
+			mut self,
+			input: std::option::Option<crate::model::ProxyProtocol>,
+		) -> Self {
+			self.proxy_protocol = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameModeRuntimeDockerPort`](crate::model::GameModeRuntimeDockerPort)
+		pub fn build(self) -> crate::model::GameModeRuntimeDockerPort {
+			crate::model::GameModeRuntimeDockerPort {
+				port: self.port,
+				port_range: self.port_range,
+				proxy_protocol: self.proxy_protocol,
+			}
+		}
+	}
+}
+impl GameModeRuntimeDockerPort {
+	/// Creates a new builder-style object to manufacture [`GameModeRuntimeDockerPort`](crate::model::GameModeRuntimeDockerPort)
+	pub fn builder() -> crate::model::game_mode_runtime_docker_port::Builder {
+		crate::model::game_mode_runtime_docker_port::Builder::default()
+	}
+}
+
+/// The network mode the job should run on.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum NetworkMode {
+	#[allow(missing_docs)] // documentation missing in model
+	Bridge,
+	#[allow(missing_docs)] // documentation missing in model
+	Host,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for NetworkMode {
+	fn from(s: &str) -> Self {
+		match s {
+			"bridge" => NetworkMode::Bridge,
+			"host" => NetworkMode::Host,
+			other => NetworkMode::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for NetworkMode {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(NetworkMode::from(s))
+	}
+}
+impl NetworkMode {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			NetworkMode::Bridge => "bridge",
+			NetworkMode::Host => "host",
+			NetworkMode::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&["bridge", "host"]
+	}
+}
+impl AsRef<str> for NetworkMode {
+	fn as_ref(&self) -> &str {
+		self.as_str()
+	}
+}
+
+/// Configuration for how many idle lobbies a game version should have.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameModeIdleLobbiesConfig {
+	/// Unsigned 32 bit integer.
+	pub min: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max: std::option::Option<i32>,
+}
+impl GameModeIdleLobbiesConfig {
+	/// Unsigned 32 bit integer.
+	pub fn min(&self) -> std::option::Option<i32> {
+		self.min
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max(&self) -> std::option::Option<i32> {
+		self.max
+	}
+}
+impl std::fmt::Debug for GameModeIdleLobbiesConfig {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameModeIdleLobbiesConfig");
+		formatter.field("min", &self.min);
+		formatter.field("max", &self.max);
+		formatter.finish()
+	}
+}
+/// See [`GameModeIdleLobbiesConfig`](crate::model::GameModeIdleLobbiesConfig)
+pub mod game_mode_idle_lobbies_config {
+	/// A builder for [`GameModeIdleLobbiesConfig`](crate::model::GameModeIdleLobbiesConfig)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) min: std::option::Option<i32>,
+		pub(crate) max: std::option::Option<i32>,
+	}
+	impl Builder {
+		/// Unsigned 32 bit integer.
+		pub fn min(mut self, input: i32) -> Self {
+			self.min = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_min(mut self, input: std::option::Option<i32>) -> Self {
+			self.min = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max(mut self, input: i32) -> Self {
+			self.max = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max(mut self, input: std::option::Option<i32>) -> Self {
+			self.max = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameModeIdleLobbiesConfig`](crate::model::GameModeIdleLobbiesConfig)
+		pub fn build(self) -> crate::model::GameModeIdleLobbiesConfig {
+			crate::model::GameModeIdleLobbiesConfig {
+				min: self.min,
+				max: self.max,
+			}
+		}
+	}
+}
+impl GameModeIdleLobbiesConfig {
+	/// Creates a new builder-style object to manufacture [`GameModeIdleLobbiesConfig`](crate::model::GameModeIdleLobbiesConfig)
+	pub fn builder() -> crate::model::game_mode_idle_lobbies_config::Builder {
+		crate::model::game_mode_idle_lobbies_config::Builder::default()
+	}
+}
+
 /// Matchmaker captcha configuration.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct MatchmakerCaptcha {
-	/// hCpatcha configuration.
-	pub hcaptcha: std::option::Option<crate::model::MatchmakerCaptchaHcaptcha>,
 	/// Denotes how many requests a connection can make before it is required to reverify a captcha.
 	pub requests_before_reverify: std::option::Option<i32>,
 	/// Denotes how long a connection can continue to reconnect without having to reverify a captcha (in milliseconds).
 	pub verification_ttl: std::option::Option<i64>,
+	/// hCpatcha configuration.
+	pub hcaptcha: std::option::Option<crate::model::MatchmakerCaptchaHcaptcha>,
 }
 impl MatchmakerCaptcha {
-	/// hCpatcha configuration.
-	pub fn hcaptcha(&self) -> std::option::Option<&crate::model::MatchmakerCaptchaHcaptcha> {
-		self.hcaptcha.as_ref()
-	}
 	/// Denotes how many requests a connection can make before it is required to reverify a captcha.
 	pub fn requests_before_reverify(&self) -> std::option::Option<i32> {
 		self.requests_before_reverify
@@ -4981,13 +5917,17 @@ impl MatchmakerCaptcha {
 	pub fn verification_ttl(&self) -> std::option::Option<i64> {
 		self.verification_ttl
 	}
+	/// hCpatcha configuration.
+	pub fn hcaptcha(&self) -> std::option::Option<&crate::model::MatchmakerCaptchaHcaptcha> {
+		self.hcaptcha.as_ref()
+	}
 }
 impl std::fmt::Debug for MatchmakerCaptcha {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("MatchmakerCaptcha");
-		formatter.field("hcaptcha", &self.hcaptcha);
 		formatter.field("requests_before_reverify", &self.requests_before_reverify);
 		formatter.field("verification_ttl", &self.verification_ttl);
+		formatter.field("hcaptcha", &self.hcaptcha);
 		formatter.finish()
 	}
 }
@@ -4997,24 +5937,11 @@ pub mod matchmaker_captcha {
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) hcaptcha: std::option::Option<crate::model::MatchmakerCaptchaHcaptcha>,
 		pub(crate) requests_before_reverify: std::option::Option<i32>,
 		pub(crate) verification_ttl: std::option::Option<i64>,
+		pub(crate) hcaptcha: std::option::Option<crate::model::MatchmakerCaptchaHcaptcha>,
 	}
 	impl Builder {
-		/// hCpatcha configuration.
-		pub fn hcaptcha(mut self, input: crate::model::MatchmakerCaptchaHcaptcha) -> Self {
-			self.hcaptcha = Some(input);
-			self
-		}
-		/// hCpatcha configuration.
-		pub fn set_hcaptcha(
-			mut self,
-			input: std::option::Option<crate::model::MatchmakerCaptchaHcaptcha>,
-		) -> Self {
-			self.hcaptcha = input;
-			self
-		}
 		/// Denotes how many requests a connection can make before it is required to reverify a captcha.
 		pub fn requests_before_reverify(mut self, input: i32) -> Self {
 			self.requests_before_reverify = Some(input);
@@ -5035,12 +5962,25 @@ pub mod matchmaker_captcha {
 			self.verification_ttl = input;
 			self
 		}
+		/// hCpatcha configuration.
+		pub fn hcaptcha(mut self, input: crate::model::MatchmakerCaptchaHcaptcha) -> Self {
+			self.hcaptcha = Some(input);
+			self
+		}
+		/// hCpatcha configuration.
+		pub fn set_hcaptcha(
+			mut self,
+			input: std::option::Option<crate::model::MatchmakerCaptchaHcaptcha>,
+		) -> Self {
+			self.hcaptcha = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`MatchmakerCaptcha`](crate::model::MatchmakerCaptcha)
 		pub fn build(self) -> crate::model::MatchmakerCaptcha {
 			crate::model::MatchmakerCaptcha {
-				hcaptcha: self.hcaptcha,
 				requests_before_reverify: self.requests_before_reverify,
 				verification_ttl: self.verification_ttl,
+				hcaptcha: self.hcaptcha,
 			}
 		}
 	}
@@ -5164,6 +6104,279 @@ impl CaptchaLevel {
 impl AsRef<str> for CaptchaLevel {
 	fn as_ref(&self) -> &str {
 		self.as_str()
+	}
+}
+
+/// A game mode region.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameModeRegion {
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub tier: std::option::Option<std::string::String>,
+	/// Configuration for how many idle lobbies a game version should have.
+	pub idle_lobbies: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+}
+impl GameModeRegion {
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub fn tier(&self) -> std::option::Option<&str> {
+		self.tier.as_deref()
+	}
+	/// Configuration for how many idle lobbies a game version should have.
+	pub fn idle_lobbies(&self) -> std::option::Option<&crate::model::GameModeIdleLobbiesConfig> {
+		self.idle_lobbies.as_ref()
+	}
+}
+impl std::fmt::Debug for GameModeRegion {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameModeRegion");
+		formatter.field("tier", &self.tier);
+		formatter.field("idle_lobbies", &self.idle_lobbies);
+		formatter.finish()
+	}
+}
+/// See [`GameModeRegion`](crate::model::GameModeRegion)
+pub mod game_mode_region {
+	/// A builder for [`GameModeRegion`](crate::model::GameModeRegion)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) tier: std::option::Option<std::string::String>,
+		pub(crate) idle_lobbies: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+	}
+	impl Builder {
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn tier(mut self, input: impl Into<std::string::String>) -> Self {
+			self.tier = Some(input.into());
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn set_tier(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.tier = input;
+			self
+		}
+		/// Configuration for how many idle lobbies a game version should have.
+		pub fn idle_lobbies(mut self, input: crate::model::GameModeIdleLobbiesConfig) -> Self {
+			self.idle_lobbies = Some(input);
+			self
+		}
+		/// Configuration for how many idle lobbies a game version should have.
+		pub fn set_idle_lobbies(
+			mut self,
+			input: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+		) -> Self {
+			self.idle_lobbies = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameModeRegion`](crate::model::GameModeRegion)
+		pub fn build(self) -> crate::model::GameModeRegion {
+			crate::model::GameModeRegion {
+				tier: self.tier,
+				idle_lobbies: self.idle_lobbies,
+			}
+		}
+	}
+}
+impl GameModeRegion {
+	/// Creates a new builder-style object to manufacture [`GameModeRegion`](crate::model::GameModeRegion)
+	pub fn builder() -> crate::model::game_mode_region::Builder {
+		crate::model::game_mode_region::Builder::default()
+	}
+}
+
+/// A game mode.
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct GameMode {
+	/// A list of game mode regions.
+	pub regions: std::option::Option<
+		std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+	>,
+	/// A game mode runtime running through Docker.
+	pub docker: std::option::Option<crate::model::GameModeRuntimeDocker>,
+	/// Unsigned 32 bit integer.
+	pub max_players: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max_players_direct: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub max_players_party: std::option::Option<i32>,
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub tier: std::option::Option<std::string::String>,
+	/// Configuration for how many idle lobbies a game version should have.
+	pub idle_lobbies: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+}
+impl GameMode {
+	/// A list of game mode regions.
+	pub fn regions(
+		&self,
+	) -> std::option::Option<
+		&std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+	> {
+		self.regions.as_ref()
+	}
+	/// A game mode runtime running through Docker.
+	pub fn docker(&self) -> std::option::Option<&crate::model::GameModeRuntimeDocker> {
+		self.docker.as_ref()
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max_players(&self) -> std::option::Option<i32> {
+		self.max_players
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max_players_direct(&self) -> std::option::Option<i32> {
+		self.max_players_direct
+	}
+	/// Unsigned 32 bit integer.
+	pub fn max_players_party(&self) -> std::option::Option<i32> {
+		self.max_players_party
+	}
+	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+	pub fn tier(&self) -> std::option::Option<&str> {
+		self.tier.as_deref()
+	}
+	/// Configuration for how many idle lobbies a game version should have.
+	pub fn idle_lobbies(&self) -> std::option::Option<&crate::model::GameModeIdleLobbiesConfig> {
+		self.idle_lobbies.as_ref()
+	}
+}
+impl std::fmt::Debug for GameMode {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("GameMode");
+		formatter.field("regions", &self.regions);
+		formatter.field("docker", &self.docker);
+		formatter.field("max_players", &self.max_players);
+		formatter.field("max_players_direct", &self.max_players_direct);
+		formatter.field("max_players_party", &self.max_players_party);
+		formatter.field("tier", &self.tier);
+		formatter.field("idle_lobbies", &self.idle_lobbies);
+		formatter.finish()
+	}
+}
+/// See [`GameMode`](crate::model::GameMode)
+pub mod game_mode {
+	/// A builder for [`GameMode`](crate::model::GameMode)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) regions: std::option::Option<
+			std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+		>,
+		pub(crate) docker: std::option::Option<crate::model::GameModeRuntimeDocker>,
+		pub(crate) max_players: std::option::Option<i32>,
+		pub(crate) max_players_direct: std::option::Option<i32>,
+		pub(crate) max_players_party: std::option::Option<i32>,
+		pub(crate) tier: std::option::Option<std::string::String>,
+		pub(crate) idle_lobbies: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+	}
+	impl Builder {
+		/// Adds a key-value pair to `regions`.
+		///
+		/// To override the contents of this collection use [`set_regions`](Self::set_regions).
+		///
+		/// A list of game mode regions.
+		pub fn regions(
+			mut self,
+			k: impl Into<std::string::String>,
+			v: crate::model::GameModeRegion,
+		) -> Self {
+			let mut hash_map = self.regions.unwrap_or_default();
+			hash_map.insert(k.into(), v);
+			self.regions = Some(hash_map);
+			self
+		}
+		/// A list of game mode regions.
+		pub fn set_regions(
+			mut self,
+			input: std::option::Option<
+				std::collections::HashMap<std::string::String, crate::model::GameModeRegion>,
+			>,
+		) -> Self {
+			self.regions = input;
+			self
+		}
+		/// A game mode runtime running through Docker.
+		pub fn docker(mut self, input: crate::model::GameModeRuntimeDocker) -> Self {
+			self.docker = Some(input);
+			self
+		}
+		/// A game mode runtime running through Docker.
+		pub fn set_docker(
+			mut self,
+			input: std::option::Option<crate::model::GameModeRuntimeDocker>,
+		) -> Self {
+			self.docker = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max_players(mut self, input: i32) -> Self {
+			self.max_players = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max_players(mut self, input: std::option::Option<i32>) -> Self {
+			self.max_players = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max_players_direct(mut self, input: i32) -> Self {
+			self.max_players_direct = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max_players_direct(mut self, input: std::option::Option<i32>) -> Self {
+			self.max_players_direct = input;
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn max_players_party(mut self, input: i32) -> Self {
+			self.max_players_party = Some(input);
+			self
+		}
+		/// Unsigned 32 bit integer.
+		pub fn set_max_players_party(mut self, input: std::option::Option<i32>) -> Self {
+			self.max_players_party = input;
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn tier(mut self, input: impl Into<std::string::String>) -> Self {
+			self.tier = Some(input.into());
+			self
+		}
+		/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
+		pub fn set_tier(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.tier = input;
+			self
+		}
+		/// Configuration for how many idle lobbies a game version should have.
+		pub fn idle_lobbies(mut self, input: crate::model::GameModeIdleLobbiesConfig) -> Self {
+			self.idle_lobbies = Some(input);
+			self
+		}
+		/// Configuration for how many idle lobbies a game version should have.
+		pub fn set_idle_lobbies(
+			mut self,
+			input: std::option::Option<crate::model::GameModeIdleLobbiesConfig>,
+		) -> Self {
+			self.idle_lobbies = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GameMode`](crate::model::GameMode)
+		pub fn build(self) -> crate::model::GameMode {
+			crate::model::GameMode {
+				regions: self.regions,
+				docker: self.docker,
+				max_players: self.max_players,
+				max_players_direct: self.max_players_direct,
+				max_players_party: self.max_players_party,
+				tier: self.tier,
+				idle_lobbies: self.idle_lobbies,
+			}
+		}
+	}
+}
+impl GameMode {
+	/// Creates a new builder-style object to manufacture [`GameMode`](crate::model::GameMode)
+	pub fn builder() -> crate::model::game_mode::Builder {
+		crate::model::game_mode::Builder::default()
 	}
 }
 
@@ -5527,61 +6740,6 @@ impl LobbyGroupRuntimeDocker {
 	}
 }
 
-/// The network mode the job should run on.
-#[non_exhaustive]
-#[derive(
-	std::clone::Clone,
-	std::cmp::Eq,
-	std::cmp::Ord,
-	std::cmp::PartialEq,
-	std::cmp::PartialOrd,
-	std::fmt::Debug,
-	std::hash::Hash,
-)]
-pub enum NetworkMode {
-	#[allow(missing_docs)] // documentation missing in model
-	Bridge,
-	#[allow(missing_docs)] // documentation missing in model
-	Host,
-	/// Unknown contains new variants that have been added since this code was generated.
-	Unknown(String),
-}
-impl std::convert::From<&str> for NetworkMode {
-	fn from(s: &str) -> Self {
-		match s {
-			"bridge" => NetworkMode::Bridge,
-			"host" => NetworkMode::Host,
-			other => NetworkMode::Unknown(other.to_owned()),
-		}
-	}
-}
-impl std::str::FromStr for NetworkMode {
-	type Err = std::convert::Infallible;
-
-	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-		Ok(NetworkMode::from(s))
-	}
-}
-impl NetworkMode {
-	/// Returns the `&str` value of the enum member.
-	pub fn as_str(&self) -> &str {
-		match self {
-			NetworkMode::Bridge => "bridge",
-			NetworkMode::Host => "host",
-			NetworkMode::Unknown(s) => s.as_ref(),
-		}
-	}
-	/// Returns all the `&str` values of the enum members.
-	pub fn values() -> &'static [&'static str] {
-		&["bridge", "host"]
-	}
-}
-impl AsRef<str> for NetworkMode {
-	fn as_ref(&self) -> &str {
-		self.as_str()
-	}
-}
-
 /// A docker environment variable.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
@@ -5829,6 +6987,10 @@ impl IdleLobbiesConfig {
 pub struct CdnVersionConfig {
 	/// A universally unique identifier.
 	pub site_id: std::option::Option<std::string::String>,
+	/// Client-side configuration
+	pub build_command: std::option::Option<std::string::String>,
+	/// Client-side configuration
+	pub build_output: std::option::Option<std::string::String>,
 	/// Multiple CDN version routes.
 	pub routes: std::option::Option<std::vec::Vec<crate::model::CdnVersionRoute>>,
 }
@@ -5836,6 +6998,14 @@ impl CdnVersionConfig {
 	/// A universally unique identifier.
 	pub fn site_id(&self) -> std::option::Option<&str> {
 		self.site_id.as_deref()
+	}
+	/// Client-side configuration
+	pub fn build_command(&self) -> std::option::Option<&str> {
+		self.build_command.as_deref()
+	}
+	/// Client-side configuration
+	pub fn build_output(&self) -> std::option::Option<&str> {
+		self.build_output.as_deref()
 	}
 	/// Multiple CDN version routes.
 	pub fn routes(&self) -> std::option::Option<&[crate::model::CdnVersionRoute]> {
@@ -5846,6 +7016,8 @@ impl std::fmt::Debug for CdnVersionConfig {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("CdnVersionConfig");
 		formatter.field("site_id", &self.site_id);
+		formatter.field("build_command", &self.build_command);
+		formatter.field("build_output", &self.build_output);
 		formatter.field("routes", &self.routes);
 		formatter.finish()
 	}
@@ -5857,6 +7029,8 @@ pub mod cdn_version_config {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) site_id: std::option::Option<std::string::String>,
+		pub(crate) build_command: std::option::Option<std::string::String>,
+		pub(crate) build_output: std::option::Option<std::string::String>,
 		pub(crate) routes: std::option::Option<std::vec::Vec<crate::model::CdnVersionRoute>>,
 	}
 	impl Builder {
@@ -5868,6 +7042,29 @@ pub mod cdn_version_config {
 		/// A universally unique identifier.
 		pub fn set_site_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.site_id = input;
+			self
+		}
+		/// Client-side configuration
+		pub fn build_command(mut self, input: impl Into<std::string::String>) -> Self {
+			self.build_command = Some(input.into());
+			self
+		}
+		/// Client-side configuration
+		pub fn set_build_command(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.build_command = input;
+			self
+		}
+		/// Client-side configuration
+		pub fn build_output(mut self, input: impl Into<std::string::String>) -> Self {
+			self.build_output = Some(input.into());
+			self
+		}
+		/// Client-side configuration
+		pub fn set_build_output(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.build_output = input;
 			self
 		}
 		/// Appends an item to `routes`.
@@ -5893,6 +7090,8 @@ pub mod cdn_version_config {
 		pub fn build(self) -> crate::model::CdnVersionConfig {
 			crate::model::CdnVersionConfig {
 				site_id: self.site_id,
+				build_command: self.build_command,
+				build_output: self.build_output,
 				routes: self.routes,
 			}
 		}

@@ -1,74 +1,47 @@
-use anyhow::{Context, Error, Result};
+use anyhow::{ensure, Context, Error, Result};
 use clap::Parser;
+use cli_core::rivet_api::models;
 use serde::Serialize;
 use serde_json::json;
 use tabled::Tabled;
+use tokio::process::Command;
+use uuid::Uuid;
 
 use crate::{
-	commands::{build, site},
-	util::{fmt, struct_fmt, term},
+	commands::{image, site},
+	util::{fmt, gen, struct_fmt, term},
 };
 
 #[derive(Parser)]
 pub enum SubCommand {
+	/// List all versions
 	List,
 
+	/// Get details about a version
 	Get {
+		/// The version ID
 		version: String,
 	},
 
-	Create {
-		#[clap(long)]
-		display_name: String,
+	/// Pushes the build and site and creates a new version
+	#[clap(alias = "push-and-create", alias = "create")]
+	Publish(PublishOpts),
 
+	/// Returns the config for a version
+	#[clap(alias = "read-config")]
+	ValidateConfig {
+		/// Override specific properties of the config
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
 
-		#[clap(long, value_parser)]
-		format: Option<struct_fmt::Format>,
-
+		/// The namespace ID to deploy to
 		#[clap(short = 'n', long)]
 		namespace: Option<String>,
 	},
 
-	PushAndCreate {
-		#[clap(long)]
-		display_name: String,
-
-		#[clap(long = "override", short)]
-		overrides: Vec<String>,
-
-		#[clap(short = 'n', long)]
-		namespace: Option<String>,
-
-		#[clap(long)]
-		build_tag: Option<String>,
-
-		#[clap(long)]
-		build_name: Option<String>,
-
-		#[clap(long)]
-		site_path: Option<String>,
-
-		#[clap(long)]
-		site_name: Option<String>,
-
-		#[clap(long, value_parser)]
-		format: Option<struct_fmt::Format>,
-	},
-
-	ReadConfig {
-		#[clap(long = "override", short)]
-		overrides: Vec<String>,
-
-		#[clap(short = 'n', long)]
-		namespace: Option<String>,
-	},
-
+	/// Show the a version's dashboard
 	#[clap(alias("dash"))]
-	Dashboard {
-		version: String,
-	},
+	Dashboard { version: String },
 }
 
 impl SubCommand {
@@ -133,102 +106,14 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Create {
-				display_name,
-				overrides,
-				namespace,
-				format,
-			} => {
-				let overrides = parse_config_override_args(overrides)?;
-				let output = create(
-					ctx,
-					display_name,
-					overrides,
-					namespace.as_ref().map(String::as_str),
-				)
-				.await?;
-				struct_fmt::print_opt(format.as_ref(), &output)?;
-
-				Ok(())
-			}
-			SubCommand::PushAndCreate {
-				display_name,
-				overrides,
-				namespace,
-				build_tag,
-				build_name,
-				site_path,
-				site_name,
-				format,
-			} => {
-				let site_output = if let Some(site_path) = site_path {
-					Some(
-						site::push(
-							ctx,
-							&site::SitePushOpts {
-								path: site_path.clone(),
-								name: site_name.clone(),
-								format: format.clone(),
-							},
-						)
-						.await?,
-					)
-				} else {
-					None
-				};
-
-				let build_output = if let Some(build_tag) = build_tag {
-					Some(
-						build::push(
-							ctx,
-							&build::BuildPushOpts {
-								tag: build_tag.clone(),
-								name: build_name.clone(),
-								format: format.clone(),
-							},
-						)
-						.await?,
-					)
-				} else {
-					None
-				};
-
-				// Parse overrides
-				let mut overrides = parse_config_override_args(overrides)?;
-				if let Some(site_output) = site_output {
-					overrides.push(("cdn.site".into(), json!(site_output.site_id)));
-				}
-				if let Some(build_output) = build_output {
-					overrides.push((
-						"matchmaker.docker.build".into(),
-						json!(build_output.build_id),
-					));
-				}
-
-				let output = create(
-					ctx,
-					display_name,
-					overrides,
-					namespace.as_ref().map(String::as_str),
-				)
-				.await?;
-				struct_fmt::print_opt(format.as_ref(), &output)?;
-
-				Ok(())
-			}
-			SubCommand::ReadConfig {
+			SubCommand::Publish(opts) => opts.execute(ctx).await,
+			SubCommand::ValidateConfig {
 				overrides,
 				namespace,
 			} => {
 				let overrides = parse_config_override_args(overrides)?;
-				let user_config =
-					read_user_config(overrides, namespace.as_ref().map(String::as_str)).await?;
-				println!("=== User Config ===");
-				println!("{:#?}", user_config);
-
-				let rivet_config = build_rivet_config(ctx, &user_config).await?;
-				println!("=== Rivet Config ===");
-				println!("{:#?}", rivet_config);
+				let config = read_config(overrides, namespace.as_ref().map(String::as_str)).await?;
+				println!("{:#?}", config);
 
 				Ok(())
 			}
@@ -250,6 +135,79 @@ impl SubCommand {
 	}
 }
 
+#[derive(Parser)]
+pub struct PublishOpts {
+	/// Name of the version to create
+	#[clap(long = "name", alias = "display-name")]
+	display_name: Option<String>,
+
+	/// Override specific properties of the config
+	#[clap(long = "override", short)]
+	overrides: Vec<String>,
+
+	/// Namespace ID to deploy to
+	#[clap(short = 'n', long)]
+	namespace: Option<String>,
+
+	/// Deprecated.
+	///
+	/// The build tag to upload
+	#[clap(long)]
+	build_tag: Option<String>,
+
+	/// Deprecated.
+	///
+	/// The name to assign to the build
+	#[clap(long)]
+	build_name: Option<String>,
+
+	/// Deprecated.
+	///
+	/// The path to the site directory to upload
+	#[clap(long)]
+	site_path: Option<String>,
+
+	/// Deprecated.
+	///
+	/// The name of the site that will be created
+	#[clap(long)]
+	site_name: Option<String>,
+
+	#[clap(long, value_parser)]
+	format: Option<struct_fmt::Format>,
+}
+
+impl PublishOpts {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+		// Parse overrides
+		let mut overrides = parse_config_override_args(&self.overrides)?;
+
+		build_and_push_compat(
+			ctx,
+			&mut overrides,
+			&self.build_tag,
+			&self.build_name,
+			&self.site_path,
+			&self.site_name,
+			&self.format,
+		)
+		.await?;
+
+		let output = create(
+			ctx,
+			self.display_name.as_ref().map(String::as_str),
+			overrides,
+			self.namespace.as_ref().map(String::as_str),
+			self.format.as_ref(),
+		)
+		.await?;
+		struct_fmt::print_opt(self.format.as_ref(), &output)?;
+
+		Ok(())
+	}
+}
+
+/// Prints information about a game version
 async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
 	let version_res = ctx
 		.client()
@@ -266,6 +224,7 @@ async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
 	Ok(())
 }
 
+/// Parses config parameters passed to override version parameters
 pub fn parse_config_override_args(
 	overrides: &[String],
 ) -> Result<Vec<(String, serde_json::Value)>> {
@@ -284,10 +243,16 @@ pub fn parse_config_override_args(
 		.collect::<Result<Vec<_>, Error>>()
 }
 
-pub async fn read_user_config(
+/// Reads the Rivet version configuration file and applies overrides. Uses the
+/// namespace to read override files.
+///
+/// For example, in the namespace `foobar`, Rivet would first read
+/// `rivet.version.toml` then override with properties from
+/// `rivet.version.foobar.toml`.
+pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
-) -> Result<cli_core::config::version::Version> {
+) -> Result<models::CloudVersionConfig> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
 		.add_source(config::File::with_name("rivet.version"));
@@ -326,30 +291,109 @@ pub async fn read_user_config(
 		.await
 		.context("find version config")?;
 	let version = config
-		.try_deserialize::<cli_core::config::version::Version>()
+		.try_deserialize::<models::CloudVersionConfig>()
 		.context("deserialize version config")?;
 
 	Ok(version)
 }
 
-pub async fn build_rivet_config(
+/// Builds the Docker image and CDN site if needed.
+pub async fn build_config_dependencies(
 	ctx: &cli_core::Ctx,
-	version: &cli_core::config::version::Version,
-) -> Result<cli_core::rivet_cloud::model::CloudVersionConfig> {
-	// Fetch game
-	let game_res = ctx
-		.client()
-		.get_game_by_id()
-		.game_id(&ctx.game_id)
-		.send()
-		.await
-		.context("client.get_game_by_id")?;
-	let game = game_res.game().context("game_res.game")?;
+	version: &mut models::CloudVersionConfig,
+	format: Option<&struct_fmt::Format>,
+) -> Result<()> {
+	// TODO: Do this for all possible docker endpoints
 
-	// Build model
-	let model = version.build_model(game)?;
+	if let Some(matchmaker) = version.matchmaker.as_mut() {
+		if let Some(docker) = matchmaker.docker.as_mut() {
+			build_image(ctx, docker, format).await?;
+		}
 
-	Ok(model)
+		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
+			for (_, game_mode) in game_modes.iter_mut() {
+				if let Some(docker) = game_mode.docker.as_mut() {
+					build_image(ctx, docker, format).await?;
+				}
+			}
+		}
+	}
+
+	// Build CDN
+	if let Some(cdn) = version.cdn.as_mut() {
+		build_site(ctx, cdn, format).await?;
+	}
+
+	Ok(())
+}
+
+pub async fn build_image(
+	ctx: &cli_core::Ctx,
+	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
+	format: Option<&struct_fmt::Format>,
+) -> Result<()> {
+	if docker.image.is_none() {
+		if let Some(dockerfile) = docker.dockerfile.as_ref() {
+			// Build image
+			let tag = format!("rivet-game:{}", Uuid::new_v4());
+			let mut build_cmd = Command::new("docker");
+			build_cmd
+				.arg("build")
+				.arg("--file")
+				.arg(dockerfile)
+				.arg("--tag")
+				.arg(&tag)
+				.arg(".");
+			let build_status = build_cmd.status().await?;
+			ensure!(build_status.success(), "Docker image failed to build");
+
+			// Upload build
+			let push_output = image::push(
+				ctx,
+				&image::ImagePushOpts {
+					tag,
+					name: Some(gen::display_name_from_date()),
+					format: format.cloned(),
+				},
+			)
+			.await?;
+			docker.image = Some(Uuid::parse_str(&push_output.image_id)?);
+		}
+	}
+
+	Ok(())
+}
+
+pub async fn build_site(
+	ctx: &cli_core::Ctx,
+	cdn: &mut Box<models::CloudVersionCdnConfig>,
+	format: Option<&struct_fmt::Format>,
+) -> Result<()> {
+	if cdn.site.is_none() {
+		if let Some(build_output) = cdn.build_output.as_ref() {
+			if let Some(build_command) = cdn.build_command.as_ref() {
+				// TODO: Check Windows support
+				let mut build_cmd = Command::new("/bin/sh");
+				build_cmd.arg("-c").arg(build_command);
+				let build_status = build_cmd.status().await?;
+				ensure!(build_status.success(), "site failed to build");
+			}
+
+			// Upload site
+			let push_output = site::push(
+				ctx,
+				&site::SitePushOpts {
+					path: build_output.clone(),
+					name: Some(gen::display_name_from_date()),
+					format: format.cloned(),
+				},
+			)
+			.await?;
+			cdn.site = Some(push_output.site_id);
+		}
+	}
+
+	Ok(())
 }
 
 pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
@@ -365,32 +409,95 @@ pub struct CreateOutput {
 	pub version_id: String,
 }
 
+/// Creates a new Rivet version.
 pub async fn create(
 	ctx: &cli_core::Ctx,
-	display_name: &str,
+	display_name: Option<&str>,
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
+	format: Option<&struct_fmt::Format>,
 ) -> Result<CreateOutput> {
+	let display_name = display_name.map_or_else(gen::display_name_from_date, |x| x.to_string());
 	// Parse config
-	let user_config = read_user_config(overrides, namespace).await?;
-	let rivet_config = build_rivet_config(ctx, &user_config).await?;
+	let mut rivet_config = read_config(overrides, namespace).await?;
+	build_config_dependencies(ctx, &mut rivet_config, format).await?;
 
-	// Create version
-	let version_res = ctx
-		.client()
-		.create_game_version()
-		.game_id(&ctx.game_id)
-		.display_name(display_name)
-		.config(rivet_config)
-		.send()
-		.await
-		.context("client.create_game_version")?;
-	let version_id = version_res.version_id().context("version_res.version_id")?;
+	// Create game version
+	let version_res =
+		cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			cli_core::rivet_api::models::CloudGamesCreateGameVersionInput {
+				display_name: display_name.clone(),
+				config: Box::new(rivet_config),
+			},
+		)
+		.await;
+	if let Err(err) = version_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let version_res = version_res.context("versions_create_game_version")?;
+	let version_id = version_res.version_id;
 
-	term::status::success("Published", display_name);
-	term::status::info("Dashboard", dashboard_url(&ctx.game_id, version_id));
+	term::status::success("Published", &display_name);
+	term::status::info("Dashboard", dashboard_url(&ctx.game_id, &version_id));
 
-	Ok(CreateOutput {
-		version_id: version_id.to_string(),
-	})
+	Ok(CreateOutput { version_id })
+}
+
+/// Backwards compatibility for site & Docker build pushing
+///
+/// Developers should use the parameters inside the config itself instead
+pub async fn build_and_push_compat(
+	ctx: &cli_core::Ctx,
+	overrides: &mut Vec<(String, serde_json::Value)>,
+	build_tag: &Option<String>,
+	build_name: &Option<String>,
+	site_path: &Option<String>,
+	site_name: &Option<String>,
+	format: &Option<struct_fmt::Format>,
+) -> Result<()> {
+	let site_output = if let Some(site_path) = site_path {
+		Some(
+			site::push(
+				ctx,
+				&site::SitePushOpts {
+					path: site_path.clone(),
+					name: site_name.clone(),
+					format: format.clone(),
+				},
+			)
+			.await?,
+		)
+	} else {
+		None
+	};
+
+	let build_output = if let Some(build_tag) = build_tag {
+		Some(
+			image::push(
+				ctx,
+				&image::ImagePushOpts {
+					tag: build_tag.clone(),
+					name: build_name.clone(),
+					format: format.clone(),
+				},
+			)
+			.await?,
+		)
+	} else {
+		None
+	};
+
+	if let Some(site_output) = site_output {
+		overrides.push(("cdn.site".into(), json!(site_output.site_id)));
+	}
+	if let Some(build_output) = build_output {
+		overrides.push((
+			"matchmaker.docker.image".into(),
+			json!(build_output.image_id),
+		));
+	}
+
+	Ok(())
 }

@@ -13,7 +13,7 @@ async fn basic() {
 	let _user_config = rivet::commands::version::read_user_config(
 		vec![
 			("cdn.site".into(), json!("xxxx")),
-			("matchmaker.docker.build".into(), json!("xxxx")),
+			("matchmaker.docker.image".into(), json!("xxxx")),
 		],
 		Some("my-ns"),
 	)

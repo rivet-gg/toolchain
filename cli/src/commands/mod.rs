@@ -1,7 +1,8 @@
 pub mod avatar;
-pub mod build;
+pub mod ci;
 pub mod dev;
 pub mod game;
+pub mod image;
 pub mod init;
 pub mod ns;
 pub mod site;

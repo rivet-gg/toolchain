@@ -6,28 +6,26 @@ use tokio::{fs, io::AsyncWriteExt};
 
 use crate::util::{git, secrets, term};
 
-const GITHUB_WORKFLOW_RIVET_PUBLISH_YAML: &'static str =
-	include_str!("../../tpl/workflows/rivet-publish.yaml");
 const RIVET_VERSION_TOML: &'static str = include_str!("../../tpl/rivet.version.toml");
 
 #[derive(Parser)]
 pub struct Opts {
+	/// Use recommended settings
 	#[clap(long)]
 	recommended: bool,
+
+	/// Update gitignore
 	#[clap(long)]
 	gitignore: bool,
-	#[clap(long)]
-	github_actions: bool,
-	#[clap(long)]
-	dockerfile_path: Option<String>,
-	#[clap(long)]
-	cdn_build_command: Option<String>,
-	#[clap(long)]
-	cdn_path: Option<String>,
+
+	/// Create Rivet config
 	#[clap(long)]
 	rivet_config: bool,
+
+	/// Setup development token
 	#[clap(long)]
 	dev: bool,
+
 	#[clap(flatten)]
 	dev_opts: crate::commands::dev::InitOpts,
 }
@@ -91,54 +89,6 @@ impl Opts {
 			term::status::success(
 				".gitignore already configured",
 				"The .rivet/ folder is already ignored by Git.",
-			);
-		}
-
-		// Create .github/workflows/rivet-push.yaml
-		eprintln!();
-		let workflows_path = std::env::current_dir()?.join(".github").join("workflows");
-		let actions_path = workflows_path.join("rivet-publish.yaml");
-		if self.recommended
-			|| self.github_actions
-			|| term::input::bool(
-				term,
-				"Setup GitHub Actions at .github/workflows/rivet-push.yaml?",
-			)
-			.await?
-		{
-			let dockerfile_path = if let Some(x) = self.dockerfile_path.clone() {
-				x
-			} else {
-				term::input::string(term, "Server Dockerfile path?").await?
-			};
-			let site_build_command = if let Some(x) = self.cdn_build_command.clone() {
-				x
-			} else {
-				term::input::string(term, "CDN build command?").await?
-			};
-			let site_build_path = if let Some(x) = self.cdn_path.clone() {
-				x
-			} else {
-				term::input::string(term, "CDN build output path?").await?
-			};
-
-			// TODO: Escape values for single quotes
-			let publish_yml = GITHUB_WORKFLOW_RIVET_PUBLISH_YAML
-				.replace("__DOCKERFILE_PATH__", &dockerfile_path)
-				.replace("__SITE_BUILD_COMMAND__", &site_build_command)
-				.replace("__SITE_BUILD_PATH__", &site_build_path);
-
-			fs::create_dir_all(&workflows_path).await?;
-			fs::write(actions_path, publish_yml).await?;
-
-			term::status::warn(
-				"Make sure to set the RIVET_CLOUD_TOKEN GitHub Actions secret",
-				dashboard_api_url(&ctx.game_id),
-			);
-
-			term::status::success(
-				"Finished",
-				"Your game will automatically deploy to Rivet next time you push to GitHub.",
 			);
 		}
 

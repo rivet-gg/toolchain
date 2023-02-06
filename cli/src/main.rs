@@ -21,38 +21,65 @@ struct Opts {
 
 #[derive(Parser)]
 enum SubCommand {
+	/// Guided setup for this project
 	Init(init::Opts),
+
+	/// Opens the dashboard for this game
 	#[clap(alias = "dash")]
 	Dashboard,
+
+	/// Initiates the development environment for this project
 	Dev {
 		#[clap(subcommand)]
 		command: dev::SubCommand,
 	},
+
+	/// Helper functions for continuous integration
+	CI {
+		#[clap(subcommand)]
+		command: ci::SubCommand,
+	},
+
+	/// Manages the game
 	Game {
 		#[clap(subcommand)]
 		command: game::SubCommand,
 	},
+
+	/// Manages namespaces
 	#[clap(alias = "ns")]
 	Namespace {
 		#[clap(subcommand)]
 		command: ns::SubCommand,
 	},
+
+	/// Manages versions
 	Version {
 		#[clap(subcommand)]
 		command: version::SubCommand,
 	},
-	Build {
+
+	/// Manages builds for Serverless Lobbies
+	#[clap(alias = "build")]
+	Image {
 		#[clap(subcommand)]
-		command: build::SubCommand,
+		command: image::SubCommand,
 	},
+
+	/// Manages sites for the CDN
 	Site {
 		#[clap(subcommand)]
 		command: site::SubCommand,
 	},
-	Avatar {
+
+	/// Manages identity avatars
+	IdentityAvatar {
 		#[clap(subcommand)]
 		command: avatar::SubCommand,
 	},
+
+	/// Alias of `rivet version deploy`
+	Publish(version::PublishOpts),
 }
 
 #[tokio::main]
@@ -92,13 +119,15 @@ async fn main() -> Result<()> {
 				game_id = ctx.game_id
 			);
 		}
-		SubCommand::Avatar { command } => command.execute(&ctx).await?,
+		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
+		SubCommand::CI { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
-		SubCommand::Build { command } => command.execute(&ctx).await?,
+		SubCommand::Image { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
+		SubCommand::Publish(opts) => opts.execute(&ctx).await?,
 	}
 
 	Ok(())

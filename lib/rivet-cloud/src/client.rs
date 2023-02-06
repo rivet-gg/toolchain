@@ -193,6 +193,18 @@ where
 	M: aws_smithy_client::bounds::SmithyMiddleware<C>,
 	R: aws_smithy_client::retry::NewRequestPolicy,
 {
+	/// Constructs a fluent builder for the [`AddNamespaceDomain`](crate::client::fluent_builders::AddNamespaceDomain) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::AddNamespaceDomain::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::AddNamespaceDomain::set_game_id): A universally unique identifier.
+	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::AddNamespaceDomain::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::AddNamespaceDomain::set_namespace_id): A universally unique identifier.
+	///   - [`domain(impl Into<String>)`](crate::client::fluent_builders::AddNamespaceDomain::domain) / [`set_domain(Option<String>)`](crate::client::fluent_builders::AddNamespaceDomain::set_domain): A valid domain name (no protocol).
+	/// - On success, responds with [`AddNamespaceDomainOutput`](crate::output::AddNamespaceDomainOutput)
+
+	/// - On failure, responds with [`SdkError<AddNamespaceDomainError>`](crate::error::AddNamespaceDomainError)
+	pub fn add_namespace_domain(&self) -> fluent_builders::AddNamespaceDomain<C, M, R> {
+		fluent_builders::AddNamespaceDomain::new(self.handle.clone())
+	}
 	/// Constructs a fluent builder for the [`CompleteCustomAvatarUpload`](crate::client::fluent_builders::CompleteCustomAvatarUpload) operation.
 	///
 	/// - The fluent builder is configurable:
@@ -483,7 +495,7 @@ where
 	///
 	/// - The fluent builder is configurable:
 	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_group_id): A universally unique identifier.
-	///   - [`anchor(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::anchor) / [`set_anchor(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_anchor): How many invoices to offset the search by.
+	///   - [`anchor(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::anchor) / [`set_anchor(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_anchor): The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
 	///   - [`limit(i32)`](crate::client::fluent_builders::GetGroupInvoicesList::limit) / [`set_limit(Option<i32>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_limit): Amount of invoices to return.
 	/// - On success, responds with [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput) with field(s):
 	///   - [`invoices(Option<Vec<GroupBillingInvoice>>)`](crate::output::GetGroupInvoicesListOutput::invoices): A list of a group's billing invoices.
@@ -755,18 +767,6 @@ where
 	) -> fluent_builders::UpdateNamespaceCdnAuthUser<C, M, R> {
 		fluent_builders::UpdateNamespaceCdnAuthUser::new(self.handle.clone())
 	}
-	/// Constructs a fluent builder for the [`UpdateNamespaceDomain`](crate::client::fluent_builders::UpdateNamespaceDomain) operation.
-	///
-	/// - The fluent builder is configurable:
-	///   - [`game_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::game_id) / [`set_game_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_game_id): A universally unique identifier.
-	///   - [`namespace_id(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::namespace_id) / [`set_namespace_id(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_namespace_id): A universally unique identifier.
-	///   - [`domain(impl Into<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::domain) / [`set_domain(Option<String>)`](crate::client::fluent_builders::UpdateNamespaceDomain::set_domain): A valid domain name (no protocol).
-	/// - On success, responds with [`UpdateNamespaceDomainOutput`](crate::output::UpdateNamespaceDomainOutput)
-
-	/// - On failure, responds with [`SdkError<UpdateNamespaceDomainError>`](crate::error::UpdateNamespaceDomainError)
-	pub fn update_namespace_domain(&self) -> fluent_builders::UpdateNamespaceDomain<C, M, R> {
-		fluent_builders::UpdateNamespaceDomain::new(self.handle.clone())
-	}
 	/// Constructs a fluent builder for the [`ValidateGame`](crate::client::fluent_builders::ValidateGame) operation.
 	///
 	/// - The fluent builder is configurable:
@@ -851,6 +851,92 @@ pub mod fluent_builders {
 	//! one if its operation methods. After parameters are set using the builder methods,
 	//! the `send` method can be called to initiate the request.
 	//!
+	/// Fluent builder constructing a request to `AddNamespaceDomain`.
+	///
+	/// Adds a domain to the given game namespace.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct AddNamespaceDomain<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::add_namespace_domain_input::Builder,
+	}
+	impl<C, M, R> AddNamespaceDomain<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `AddNamespaceDomain`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::AddNamespaceDomainOutput,
+			aws_smithy_http::result::SdkError<crate::error::AddNamespaceDomainError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::AddNamespaceDomainInputOperationOutputAlias,
+				crate::output::AddNamespaceDomainOutput,
+				crate::error::AddNamespaceDomainError,
+				crate::input::AddNamespaceDomainInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.game_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_game_id(input);
+			self
+		}
+		/// A universally unique identifier.
+		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.namespace_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_namespace_id(input);
+			self
+		}
+		/// A valid domain name (no protocol).
+		pub fn domain(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.domain(input.into());
+			self
+		}
+		/// A valid domain name (no protocol).
+		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_domain(input);
+			self
+		}
+	}
 	/// Fluent builder constructing a request to `CompleteCustomAvatarUpload`.
 	///
 	/// Completes a custom avatar image upload. Must be called after the file upload process completes.
@@ -2809,12 +2895,12 @@ pub mod fluent_builders {
 			self.inner = self.inner.set_group_id(input);
 			self
 		}
-		/// How many invoices to offset the search by.
+		/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
 		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
 			self.inner = self.inner.anchor(input.into());
 			self
 		}
-		/// How many invoices to offset the search by.
+		/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
 		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_anchor(input);
 			self
@@ -4509,92 +4595,6 @@ pub mod fluent_builders {
 		/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
 		pub fn set_password(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_password(input);
-			self
-		}
-	}
-	/// Fluent builder constructing a request to `UpdateNamespaceDomain`.
-	///
-	/// Adds a domain to the given game namespace.
-	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct UpdateNamespaceDomain<C, M, R = aws_smithy_client::retry::Standard> {
-		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::update_namespace_domain_input::Builder,
-	}
-	impl<C, M, R> UpdateNamespaceDomain<C, M, R>
-	where
-		C: aws_smithy_client::bounds::SmithyConnector,
-		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
-		R: aws_smithy_client::retry::NewRequestPolicy,
-	{
-		/// Creates a new `UpdateNamespaceDomain`.
-		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
-			Self {
-				handle,
-				inner: Default::default(),
-			}
-		}
-
-		/// Sends the request and returns the response.
-		///
-		/// If an error occurs, an `SdkError` will be returned with additional details that
-		/// can be matched against.
-		///
-		/// By default, any retryable failures will be retried twice. Retry behavior
-		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
-		/// set when configuring the client.
-		pub async fn send(
-			self,
-		) -> std::result::Result<
-			crate::output::UpdateNamespaceDomainOutput,
-			aws_smithy_http::result::SdkError<crate::error::UpdateNamespaceDomainError>,
-		>
-		where
-			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::UpdateNamespaceDomainInputOperationOutputAlias,
-				crate::output::UpdateNamespaceDomainOutput,
-				crate::error::UpdateNamespaceDomainError,
-				crate::input::UpdateNamespaceDomainInputOperationRetryAlias,
-			>,
-		{
-			let op = self
-				.inner
-				.build()
-				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
-				.make_operation(&self.handle.conf)
-				.await
-				.map_err(|err| {
-					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
-				})?;
-			self.handle.client.call(op).await
-		}
-		/// A universally unique identifier.
-		pub fn game_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.game_id(input.into());
-			self
-		}
-		/// A universally unique identifier.
-		pub fn set_game_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_game_id(input);
-			self
-		}
-		/// A universally unique identifier.
-		pub fn namespace_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.namespace_id(input.into());
-			self
-		}
-		/// A universally unique identifier.
-		pub fn set_namespace_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_namespace_id(input);
-			self
-		}
-		/// A valid domain name (no protocol).
-		pub fn domain(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.domain(input.into());
-			self
-		}
-		/// A valid domain name (no protocol).
-		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_domain(input);
 			self
 		}
 	}

@@ -1,5 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
+use cli_core::rivet_api;
 use futures_util::{StreamExt, TryStreamExt};
 use serde::Serialize;
 use std::{
@@ -10,7 +11,7 @@ use std::{
 	},
 };
 
-use crate::util::{game, struct_fmt, upload};
+use crate::util::{struct_fmt, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -19,9 +20,11 @@ pub enum SubCommand {
 
 #[derive(Parser)]
 pub struct SitePushOpts {
+	/// Path of the site to push
 	#[clap(long)]
 	pub path: String,
 
+	/// Name of the build
 	#[clap(long)]
 	pub name: Option<String>,
 
@@ -49,8 +52,6 @@ pub struct PushOutput {
 pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushOutput> {
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
-	let game_id = game::infer_game_id(&ctx).await?;
-
 	let upload_path = env::current_dir()?.join(&push_opts.path);
 
 	let display_name = push_opts.name.clone().unwrap_or_else(|| {
@@ -60,7 +61,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 			.map(str::to_owned)
 			.unwrap_or_else(|| "Site".to_owned())
 	});
-	eprintln!("\n\n> Creating site \"{}\"", display_name);
+	eprintln!("\n\n> Pushing site \"{}\"", display_name);
 	eprintln!("  * Upload path: {}", upload_path.display());
 
 	// Index the directory
@@ -71,7 +72,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	.await??;
 	let total_len = files
 		.iter()
-		.fold(0, |acc, x| acc + x.prepared.content_length().unwrap());
+		.fold(0, |acc, x| acc + x.prepared.content_length);
 	eprintln!(
 		"  * Found {count} files ({size})",
 		count = files.len(),
@@ -79,22 +80,26 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	);
 
 	// Create site
-	let site_res = ctx
-		.client()
-		.create_game_cdn_site()
-		.game_id(&game_id)
-		.display_name(&display_name)
-		.set_files(Some(files.iter().map(|f| f.prepared.clone()).collect()))
-		.send()
-		.await
-		.context("http_client.create_game_cdn_site")?;
-	let site_id = site_res.site_id().context("site_res.site_id")?;
+	let site_res = rivet_api::apis::cloud_games_cdn_api::cloud_games_cdn_create_game_cdn_site(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		rivet_api::models::CloudGamesCreateGameCdnSiteInput {
+			display_name: display_name.clone(),
+			files: files.iter().map(|f| f.prepared.clone()).collect(),
+		},
+	)
+	.await;
+	if let Err(err) = site_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let site_res = site_res.context("cloud_games_cdn_create_game_cdn_site")?;
+	let site_id = site_res.site_id;
 
 	eprintln!("\n\n> Uploading");
 	{
 		let counter = Arc::new(AtomicUsize::new(0));
 		let counter_bytes = Arc::new(AtomicU64::new(0));
-		let presigned_requests = site_res.presigned_requests().unwrap();
+		let presigned_requests = site_res.presigned_requests;
 		let total = presigned_requests.len();
 		let total_bytes = total_len as u64;
 
@@ -124,10 +129,9 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 						.await?;
 
 						let progress = counter.fetch_add(1, Ordering::SeqCst) + 1;
-						let progress_bytes = counter_bytes.fetch_add(
-							file.prepared.content_length().unwrap() as u64,
-							Ordering::SeqCst,
-						) + file.prepared.content_length().unwrap() as u64;
+						let progress_bytes = counter_bytes
+							.fetch_add(file.prepared.content_length as u64, Ordering::SeqCst)
+							+ file.prepared.content_length as u64;
 						eprintln!(
 							"    {}/{} files ({}/{})",
 							progress,
@@ -144,12 +148,16 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	}
 
 	eprintln!("\n\n> Completing");
-	ctx.client()
-		.complete_upload()
-		.upload_id(site_res.upload_id().unwrap())
-		.send()
-		.await
-		.context("http_client.complete_upload")?;
+	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
+		&ctx.openapi_config_cloud,
+		&site_res.upload_id,
+		serde_json::json!({}),
+	)
+	.await;
+	if let Err(err) = complete_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	complete_res.context("cloud_uploads_complete_upload")?;
 
 	Ok(PushOutput {
 		site_id: site_id.to_string(),

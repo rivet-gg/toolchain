@@ -1,18 +1,23 @@
 [cdn]
+	build_command = "npm run build"
+	build_output = "dist/"
+	# site_id = "xxxx"
 
 [matchmaker]
-	[matchmaker.game_modes.default]
-		tier = "basic-1d1"
-		max_players = 16
+	tier = "basic-1d1"
+	max_players = 16
 
-		[matchmaker.game_modes.default.docker]
-			args = []
+	[matchmaker.docker]
+		dockerfile = "Dockerfile"
+		# image_id = "xxxx"
+		env = { PORT = "80" }
+		args = []
 
-			[matchmaker.game_modes.default.docker.env]
-				PORT = "80"
+	[matchmaker.ports]
+		default = { proto = "https", target = 80 }
 
-			[matchmaker.game_modes.default.docker.ports]
-				default = { proto = "https", target = 80 }
+	[matchmaker.game_modes]
+		default = {}
 
 [kv]
 

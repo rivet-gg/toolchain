@@ -1,5 +1,5 @@
 pub mod fmt;
-pub mod game;
+pub mod gen;
 pub mod git;
 pub mod paths;
 pub mod secrets;
