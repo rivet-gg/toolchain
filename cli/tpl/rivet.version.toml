@@ -12,6 +12,7 @@
 
 [matchmaker.docker]
 	dockerfile = "Dockerfile"
+	ports.default = { port = 8080 }
 
 [matchmaker.game_modes]
 	default = {}

@@ -69,7 +69,13 @@ impl Opts {
 		if !git::check_ignore(Path::new(".rivet/")).await? {
 			if self.recommended
 				|| self.gitignore
-				|| term::input::bool(term, "Add .rivet/ to .gitignore?").await?
+				|| term::input::bool_with_docs(
+					term,
+					"Add .rivet/ to .gitignore?",
+					".rivet/ holds secrets and local configuration files. This should not be version controlled",
+					"https://docs.rivet.gg/general/concepts/dot-rivet-directory",
+				)
+				.await?
 			{
 				let mut file = fs::OpenOptions::new()
 					.write(true)
@@ -83,12 +89,12 @@ impl Opts {
 					"updated gitignore does not ignore Rivet files"
 				);
 
-				term::status::success("Finished", "Git will now ignore the .rivet/ folder.");
+				term::status::success("Finished", "Git will now ignore the .rivet/ folder");
 			}
 		} else {
 			term::status::success(
 				".gitignore already configured",
-				"The .rivet/ folder is already ignored by Git.",
+				"The .rivet/ folder is already ignored by Git",
 			);
 		}
 
@@ -105,26 +111,38 @@ impl Opts {
 		if config_needs_creation {
 			if self.recommended
 				|| self.rivet_config
-				|| term::input::bool(term, "Create default config at rivet.version.toml?").await?
+				|| term::input::bool_with_docs(
+					term,
+					"Create rivet.version.toml?",
+					"This is the configuration file used to manage your game",
+					"https://docs.rivet.gg/general/concepts/rivet-version-config",
+				)
+				.await?
 			{
 				fs::write(config_path, RIVET_VERSION_TOML).await?;
 
 				term::status::success(
 					"Finished",
-					"Rivet Matchmaker and Rivet CDN will be enabled next time you deploy.",
+					"Rivet Matchmaker and Rivet CDN will be enabled next time you deploy",
 				);
 			}
 		} else {
 			term::status::success(
 				"Version already configured",
-				"Your game is already configured with rivet.version.toml.",
+				"Your game is already configured with rivet.version.toml",
 			);
 		}
 
 		// Development flow
 		eprintln!();
 		if self.recommended
-			|| self.dev || term::input::bool(term, "Setup development environment?").await?
+			|| self.dev || term::input::bool_with_docs(
+			term,
+			"Setup development environment?",
+			"Create development tokens that enable you to develop your game locally",
+			"http://docs.rivet.gg/general/concepts/dev-tokens",
+		)
+		.await?
 		{
 			self.dev_opts.execute(term, &ctx).await?
 		}
@@ -140,7 +158,13 @@ impl Opts {
 }
 
 async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<cli_core::Ctx> {
-	let token = term::input::secure(term, "Rivet cloud token?").await?;
+	let token = term::input::secure_with_docs(
+		term,
+		"Rivet cloud token?",
+		"Create this token under Developer > My Game > API > Create Cloud Token",
+		"https://docs.rivet.gg/general/concepts/tokens#cloud",
+	)
+	.await?;
 
 	// Create new context
 	let new_ctx = cli_core::ctx::init(
