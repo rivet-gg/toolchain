@@ -60,9 +60,10 @@ enum SubCommand {
 	},
 
 	/// Manages builds for Serverless Lobbies
-	Build {
+	#[clap(alias = "build")]
+	Image {
 		#[clap(subcommand)]
-		command: build::SubCommand,
+		command: image::SubCommand,
 	},
 
 	/// Manages sites for the CDN
@@ -124,7 +125,7 @@ async fn main() -> Result<()> {
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
-		SubCommand::Build { command } => command.execute(&ctx).await?,
+		SubCommand::Image { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
 		SubCommand::Publish(opts) => opts.execute(&ctx).await?,
 	}

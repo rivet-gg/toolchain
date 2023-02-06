@@ -8,7 +8,7 @@ use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
-	commands::{build, site},
+	commands::{image, site},
 	util::{fmt, gen, struct_fmt, term},
 };
 
@@ -332,7 +332,7 @@ pub async fn build_image(
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
-	if docker.image_id.is_none() {
+	if docker.image.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
 			// Build image
 			let tag = format!("rivet-game:{}", Uuid::new_v4());
@@ -348,16 +348,16 @@ pub async fn build_image(
 			ensure!(build_status.success(), "Docker image failed to build");
 
 			// Upload build
-			let push_output = build::push(
+			let push_output = image::push(
 				ctx,
-				&build::BuildPushOpts {
+				&image::ImagePushOpts {
 					tag,
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
 				},
 			)
 			.await?;
-			docker.image_id = Some(Uuid::parse_str(&push_output.build_id)?);
+			docker.image = Some(Uuid::parse_str(&push_output.image_id)?);
 		}
 	}
 
@@ -369,7 +369,7 @@ pub async fn build_site(
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
-	if cdn.site_id.is_none() {
+	if cdn.site.is_none() {
 		if let Some(build_output) = cdn.build_output.as_ref() {
 			if let Some(build_command) = cdn.build_command.as_ref() {
 				// TODO: Check Windows support
@@ -389,7 +389,7 @@ pub async fn build_site(
 				},
 			)
 			.await?;
-			cdn.site_id = Some(push_output.site_id);
+			cdn.site = Some(push_output.site_id);
 		}
 	}
 
@@ -475,9 +475,9 @@ pub async fn build_and_push_compat(
 
 	let build_output = if let Some(build_tag) = build_tag {
 		Some(
-			build::push(
+			image::push(
 				ctx,
-				&build::BuildPushOpts {
+				&image::ImagePushOpts {
 					tag: build_tag.clone(),
 					name: build_name.clone(),
 					format: format.clone(),
@@ -494,8 +494,8 @@ pub async fn build_and_push_compat(
 	}
 	if let Some(build_output) = build_output {
 		overrides.push((
-			"matchmaker.docker.build".into(),
-			json!(build_output.build_id),
+			"matchmaker.docker.image".into(),
+			json!(build_output.image_id),
 		));
 	}
 
