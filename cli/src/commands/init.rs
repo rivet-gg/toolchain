@@ -72,7 +72,7 @@ impl Opts {
 				|| term::input::bool_with_docs(
 					term,
 					"Add .rivet/ to .gitignore?",
-					".rivet/ holds secrets and local configuration files. This should not be version controlled",
+					".rivet/ holds secrets and local configuration files that should not be version controlled",
 					"https://docs.rivet.gg/general/concepts/dot-rivet-directory",
 				)
 				.await?

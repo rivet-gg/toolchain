@@ -100,10 +100,11 @@ pub mod input {
 		url: impl Display + Clone,
 	) -> Result<String> {
 		eprint!(
-			"{} (secure input)\n  {}\n  {}\n  ",
+			"{}\n  {}\n  {}\n  {} ",
 			style(msg).bold().blue(),
 			style(docs).italic(),
-			style(url).underlined().cyan()
+			style(url).italic().underlined().cyan(),
+			style("[secure input]").bold()
 		);
 		term.flush()?;
 		let input = tokio::task::block_in_place(|| term.read_secure_line())?;
@@ -115,7 +116,7 @@ pub mod input {
 			eprint!(
 				"{} {} ",
 				style(msg.clone()).bold().blue(),
-				style("(y/n)").italic()
+				style("[y/n]").italic()
 			);
 			term.flush()?;
 			let input = tokio::task::block_in_place(|| term.read_char())?;
@@ -145,7 +146,7 @@ pub mod input {
 				style(msg.clone()).bold().blue(),
 				style(docs.clone()).italic(),
 				style(url.clone()).italic().underlined().cyan(),
-				style("(y/n)").bold()
+				style("[y/n]").bold()
 			);
 			term.flush()?;
 			let input = tokio::task::block_in_place(|| term.read_char())?;
