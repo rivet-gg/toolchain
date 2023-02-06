@@ -7,7 +7,20 @@ mod commands;
 mod util;
 
 #[derive(Parser)]
-#[clap()]
+#[clap(
+	author = "Rivet Gaming, Inc. <developer@rivet.gg>",
+	about = "https://rivet.gg/",
+	version = env!("VERGEN_GIT_SHA"),
+	long_version = concat!(
+		"\n",
+		"git sha: ", env!("VERGEN_GIT_SHA"), "\n",
+		"git branch: ", env!("VERGEN_GIT_BRANCH"), "\n",
+		"build timestamp: ", env!("VERGEN_BUILD_TIMESTAMP"), "\n",
+		"build target: ", env!("VERGEN_CARGO_TARGET_TRIPLE"), "\n",
+		"build profile: ", env!("VERGEN_CARGO_PROFILE"), "\n",
+		"rustc version: ", env!("VERGEN_RUSTC_SEMVER"),
+	)
+)]
 struct Opts {
 	#[clap(subcommand)]
 	command: SubCommand,
