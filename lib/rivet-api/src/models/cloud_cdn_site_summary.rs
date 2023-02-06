@@ -15,11 +15,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudCdnSiteSummary {
     /// Whether or not this site has completely been uploaded.
-    #[serde(rename = "complete", skip_serializing_if = "Option::is_none")]
-    pub complete: Option<bool>,
+    #[serde(rename = "complete")]
+    pub complete: bool,
     /// Unsigned 64 bit integer.
-    #[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
-    pub content_length: Option<i64>,
+    #[serde(rename = "content_length")]
+    pub content_length: i64,
     /// RFC3339 timestamp.
     #[serde(rename = "create_ts")]
     pub create_ts: String,
@@ -36,10 +36,10 @@ pub struct CloudCdnSiteSummary {
 
 impl CloudCdnSiteSummary {
     /// A CDN site summary.
-    pub fn new(create_ts: String, display_name: String, site_id: String, upload_id: String) -> CloudCdnSiteSummary {
+    pub fn new(complete: bool, content_length: i64, create_ts: String, display_name: String, site_id: String, upload_id: String) -> CloudCdnSiteSummary {
         CloudCdnSiteSummary {
-            complete: None,
-            content_length: None,
+            complete,
+            content_length,
             create_ts,
             display_name,
             site_id,

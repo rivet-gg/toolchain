@@ -14,14 +14,14 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput {
     /// Whether or not to enable authentication based on domain.
-    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
+    #[serde(rename = "enabled")]
+    pub enabled: bool,
 }
 
 impl CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput {
-    pub fn new() -> CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput {
+    pub fn new(enabled: bool) -> CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput {
         CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput {
-            enabled: None,
+            enabled,
         }
     }
 }

@@ -30,20 +30,20 @@ pub struct CloudRegionSummary {
     #[serde(rename = "region_name_id")]
     pub region_name_id: String,
     /// A universal number given to this region.
-    #[serde(rename = "universal_region", skip_serializing_if = "Option::is_none")]
-    pub universal_region: Option<f64>,
+    #[serde(rename = "universal_region")]
+    pub universal_region: f64,
 }
 
 impl CloudRegionSummary {
     /// A region summary.
-    pub fn new(provider: String, provider_display_name: String, region_display_name: String, region_id: String, region_name_id: String) -> CloudRegionSummary {
+    pub fn new(provider: String, provider_display_name: String, region_display_name: String, region_id: String, region_name_id: String, universal_region: f64) -> CloudRegionSummary {
         CloudRegionSummary {
             provider,
             provider_display_name,
             region_display_name,
             region_id,
             region_name_id,
-            universal_region: None,
+            universal_region,
         }
     }
 }

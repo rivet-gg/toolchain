@@ -59,7 +59,7 @@ pub enum ChatWatchThreadError {
 
 
 /// Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
-pub async fn chat_get_thread_history(configuration: &configuration::Configuration, thread_id: &str, count: f64, ts: Option<&str>, query_direction: Option<&str>) -> Result<crate::models::ChatGetThreadHistoryOutput, Error<ChatGetThreadHistoryError>> {
+pub async fn chat_get_thread_history(configuration: &configuration::Configuration, thread_id: &str, count: f64, ts: Option<String>, query_direction: Option<&str>) -> Result<crate::models::ChatGetThreadHistoryOutput, Error<ChatGetThreadHistoryError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;

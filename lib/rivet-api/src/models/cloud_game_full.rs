@@ -42,8 +42,8 @@ pub struct CloudGameFull {
     #[serde(rename = "namespaces")]
     pub namespaces: Vec<crate::models::CloudNamespaceSummary>,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "total_player_count", skip_serializing_if = "Option::is_none")]
-    pub total_player_count: Option<i32>,
+    #[serde(rename = "total_player_count")]
+    pub total_player_count: i32,
     /// A list of version summaries.
     #[serde(rename = "versions")]
     pub versions: Vec<crate::models::CloudVersionSummary>,
@@ -51,7 +51,7 @@ pub struct CloudGameFull {
 
 impl CloudGameFull {
     /// A full game.
-    pub fn new(available_regions: Vec<crate::models::CloudRegionSummary>, create_ts: String, developer_group_id: String, display_name: String, game_id: String, name_id: String, namespaces: Vec<crate::models::CloudNamespaceSummary>, versions: Vec<crate::models::CloudVersionSummary>) -> CloudGameFull {
+    pub fn new(available_regions: Vec<crate::models::CloudRegionSummary>, create_ts: String, developer_group_id: String, display_name: String, game_id: String, name_id: String, namespaces: Vec<crate::models::CloudNamespaceSummary>, total_player_count: i32, versions: Vec<crate::models::CloudVersionSummary>) -> CloudGameFull {
         CloudGameFull {
             available_regions,
             banner_url: None,
@@ -62,7 +62,7 @@ impl CloudGameFull {
             logo_url: None,
             name_id,
             namespaces,
-            total_player_count: None,
+            total_player_count,
             versions,
         }
     }

@@ -15,8 +15,8 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudSvcPerf {
     /// Unsigned 64 bit integer.
-    #[serde(rename = "duration", skip_serializing_if = "Option::is_none")]
-    pub duration: Option<i64>,
+    #[serde(rename = "duration")]
+    pub duration: i64,
     /// A list of performance marks.
     #[serde(rename = "marks")]
     pub marks: Vec<crate::models::CloudLogsPerfMark>,
@@ -36,9 +36,9 @@ pub struct CloudSvcPerf {
 
 impl CloudSvcPerf {
     /// A service performance summary.
-    pub fn new(marks: Vec<crate::models::CloudLogsPerfMark>, spans: Vec<crate::models::CloudLogsPerfSpan>, svc_name: String, ts: String) -> CloudSvcPerf {
+    pub fn new(duration: i64, marks: Vec<crate::models::CloudLogsPerfMark>, spans: Vec<crate::models::CloudLogsPerfSpan>, svc_name: String, ts: String) -> CloudSvcPerf {
         CloudSvcPerf {
-            duration: None,
+            duration,
             marks,
             req_id: None,
             spans,

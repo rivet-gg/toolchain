@@ -15,35 +15,35 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudMatchmakerNamespaceConfig {
     /// Unsigned 32 bit integer.
-    #[serde(rename = "lobby_count_max", skip_serializing_if = "Option::is_none")]
-    pub lobby_count_max: Option<i32>,
+    #[serde(rename = "lobby_count_max")]
+    pub lobby_count_max: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players_per_client", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client: Option<i32>,
+    #[serde(rename = "max_players_per_client")]
+    pub max_players_per_client: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players_per_client_hosting", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_hosting: Option<i32>,
+    #[serde(rename = "max_players_per_client_hosting")]
+    pub max_players_per_client_hosting: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players_per_client_proxy", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_proxy: Option<i32>,
+    #[serde(rename = "max_players_per_client_proxy")]
+    pub max_players_per_client_proxy: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players_per_client_tor", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_tor: Option<i32>,
+    #[serde(rename = "max_players_per_client_tor")]
+    pub max_players_per_client_tor: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players_per_client_vpn", skip_serializing_if = "Option::is_none")]
-    pub max_players_per_client_vpn: Option<i32>,
+    #[serde(rename = "max_players_per_client_vpn")]
+    pub max_players_per_client_vpn: i32,
 }
 
 impl CloudMatchmakerNamespaceConfig {
     /// Matchmaker configuration for a given namespace.
-    pub fn new() -> CloudMatchmakerNamespaceConfig {
+    pub fn new(lobby_count_max: i32, max_players_per_client: i32, max_players_per_client_hosting: i32, max_players_per_client_proxy: i32, max_players_per_client_tor: i32, max_players_per_client_vpn: i32) -> CloudMatchmakerNamespaceConfig {
         CloudMatchmakerNamespaceConfig {
-            lobby_count_max: None,
-            max_players_per_client: None,
-            max_players_per_client_hosting: None,
-            max_players_per_client_proxy: None,
-            max_players_per_client_tor: None,
-            max_players_per_client_vpn: None,
+            lobby_count_max,
+            max_players_per_client,
+            max_players_per_client_hosting,
+            max_players_per_client_proxy,
+            max_players_per_client_tor,
+            max_players_per_client_vpn,
         }
     }
 }

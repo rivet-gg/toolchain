@@ -23,7 +23,7 @@ pub struct CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
     pub proxy_protocol: crate::models::CloudVersionMatchmakerProxyProtocol,
     /// The port number to connect to.
     #[serde(rename = "target_port", skip_serializing_if = "Option::is_none")]
-    pub target_port: Option<f64>,
+    pub target_port: Option<i32>,
 }
 
 impl CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {

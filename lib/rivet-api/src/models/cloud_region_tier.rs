@@ -15,26 +15,26 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudRegionTier {
     /// Internet bandwidth (MB).
-    #[serde(rename = "bandwidth", skip_serializing_if = "Option::is_none")]
-    pub bandwidth: Option<f64>,
+    #[serde(rename = "bandwidth")]
+    pub bandwidth: i32,
     /// CPU frequency (MHz).
-    #[serde(rename = "cpu", skip_serializing_if = "Option::is_none")]
-    pub cpu: Option<f64>,
+    #[serde(rename = "cpu")]
+    pub cpu: i32,
     /// Allocated disk space (MB).
-    #[serde(rename = "disk", skip_serializing_if = "Option::is_none")]
-    pub disk: Option<f64>,
+    #[serde(rename = "disk")]
+    pub disk: i32,
     /// Allocated memory (MB).
-    #[serde(rename = "memory", skip_serializing_if = "Option::is_none")]
-    pub memory: Option<f64>,
+    #[serde(rename = "memory")]
+    pub memory: i32,
     /// Price billed for every second this server is running (in quadrillionth USD, 1,000,000,000,000 = $1.00).
-    #[serde(rename = "price_per_second", skip_serializing_if = "Option::is_none")]
-    pub price_per_second: Option<f64>,
+    #[serde(rename = "price_per_second")]
+    pub price_per_second: i32,
     /// Together with the numerator, denotes the portion of the CPU a given server uses.
-    #[serde(rename = "rivet_cores_denominator", skip_serializing_if = "Option::is_none")]
-    pub rivet_cores_denominator: Option<f64>,
+    #[serde(rename = "rivet_cores_denominator")]
+    pub rivet_cores_denominator: i32,
     /// Together with the denominator, denotes the portion of the CPU a given server uses.
-    #[serde(rename = "rivet_cores_numerator", skip_serializing_if = "Option::is_none")]
-    pub rivet_cores_numerator: Option<f64>,
+    #[serde(rename = "rivet_cores_numerator")]
+    pub rivet_cores_numerator: i32,
     /// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
     #[serde(rename = "tier_name_id")]
     pub tier_name_id: String,
@@ -42,15 +42,15 @@ pub struct CloudRegionTier {
 
 impl CloudRegionTier {
     /// A region server tier.
-    pub fn new(tier_name_id: String) -> CloudRegionTier {
+    pub fn new(bandwidth: i32, cpu: i32, disk: i32, memory: i32, price_per_second: i32, rivet_cores_denominator: i32, rivet_cores_numerator: i32, tier_name_id: String) -> CloudRegionTier {
         CloudRegionTier {
-            bandwidth: None,
-            cpu: None,
-            disk: None,
-            memory: None,
-            price_per_second: None,
-            rivet_cores_denominator: None,
-            rivet_cores_numerator: None,
+            bandwidth,
+            cpu,
+            disk,
+            memory,
+            price_per_second,
+            rivet_cores_denominator,
+            rivet_cores_numerator,
             tier_name_id,
         }
     }

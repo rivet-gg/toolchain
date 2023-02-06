@@ -15,8 +15,8 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudRegionTierExpenses {
     /// Amount of expenses for this region tier (in hundred-thousandths USD, 100,000 = $1.00).
-    #[serde(rename = "expenses", skip_serializing_if = "Option::is_none")]
-    pub expenses: Option<f64>,
+    #[serde(rename = "expenses")]
+    pub expenses: f64,
     /// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
     #[serde(rename = "lobby_group_name_id")]
     pub lobby_group_name_id: String,
@@ -30,20 +30,20 @@ pub struct CloudRegionTierExpenses {
     #[serde(rename = "tier_name_id")]
     pub tier_name_id: String,
     /// How long a region tier has been active (in milliseconds).
-    #[serde(rename = "uptime", skip_serializing_if = "Option::is_none")]
-    pub uptime: Option<f64>,
+    #[serde(rename = "uptime")]
+    pub uptime: f64,
 }
 
 impl CloudRegionTierExpenses {
     /// Region tier expenses.
-    pub fn new(lobby_group_name_id: String, namespace_id: String, region_id: String, tier_name_id: String) -> CloudRegionTierExpenses {
+    pub fn new(expenses: f64, lobby_group_name_id: String, namespace_id: String, region_id: String, tier_name_id: String, uptime: f64) -> CloudRegionTierExpenses {
         CloudRegionTierExpenses {
-            expenses: None,
+            expenses,
             lobby_group_name_id,
             namespace_id,
             region_id,
             tier_name_id,
-            uptime: None,
+            uptime,
         }
     }
 }

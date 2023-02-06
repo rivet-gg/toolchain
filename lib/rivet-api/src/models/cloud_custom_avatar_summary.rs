@@ -15,11 +15,11 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudCustomAvatarSummary {
     /// Whether or not this custom avatar has completely been uploaded.
-    #[serde(rename = "complete", skip_serializing_if = "Option::is_none")]
-    pub complete: Option<bool>,
+    #[serde(rename = "complete")]
+    pub complete: bool,
     /// Unsigned 64 bit integer.
-    #[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
-    pub content_length: Option<i64>,
+    #[serde(rename = "content_length")]
+    pub content_length: i64,
     /// RFC3339 timestamp.
     #[serde(rename = "create_ts")]
     pub create_ts: String,
@@ -36,10 +36,10 @@ pub struct CloudCustomAvatarSummary {
 
 impl CloudCustomAvatarSummary {
     /// A custom avatar summary.
-    pub fn new(create_ts: String, display_name: String, upload_id: String) -> CloudCustomAvatarSummary {
+    pub fn new(complete: bool, content_length: i64, create_ts: String, display_name: String, upload_id: String) -> CloudCustomAvatarSummary {
         CloudCustomAvatarSummary {
-            complete: None,
-            content_length: None,
+            complete,
+            content_length,
             create_ts,
             display_name,
             upload_id,

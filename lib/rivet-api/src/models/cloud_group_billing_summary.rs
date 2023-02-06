@@ -15,8 +15,8 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGroupBillingSummary {
     /// A group's available balance.
-    #[serde(rename = "balance", skip_serializing_if = "Option::is_none")]
-    pub balance: Option<f64>,
+    #[serde(rename = "balance")]
+    pub balance: f64,
     /// A list of multiple game lobby expenses.
     #[serde(rename = "games")]
     pub games: Vec<crate::models::CloudGameLobbyExpenses>,
@@ -24,9 +24,9 @@ pub struct CloudGroupBillingSummary {
 
 impl CloudGroupBillingSummary {
     /// A group billing summary.
-    pub fn new(games: Vec<crate::models::CloudGameLobbyExpenses>) -> CloudGroupBillingSummary {
+    pub fn new(balance: f64, games: Vec<crate::models::CloudGameLobbyExpenses>) -> CloudGroupBillingSummary {
         CloudGroupBillingSummary {
-            balance: None,
+            balance,
             games,
         }
     }

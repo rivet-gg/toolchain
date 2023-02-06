@@ -15,19 +15,19 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionMatchmakerPortRange {
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max", skip_serializing_if = "Option::is_none")]
-    pub max: Option<i32>,
+    #[serde(rename = "max")]
+    pub max: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "min", skip_serializing_if = "Option::is_none")]
-    pub min: Option<i32>,
+    #[serde(rename = "min")]
+    pub min: i32,
 }
 
 impl CloudVersionMatchmakerPortRange {
     /// Range of ports that can be connected to.
-    pub fn new() -> CloudVersionMatchmakerPortRange {
+    pub fn new(max: i32, min: i32) -> CloudVersionMatchmakerPortRange {
         CloudVersionMatchmakerPortRange {
-            max: None,
-            min: None,
+            max,
+            min,
         }
     }
 }

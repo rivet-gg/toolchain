@@ -24,8 +24,8 @@ pub struct CloudVersionCdnConfig {
     #[serde(rename = "routes", skip_serializing_if = "Option::is_none")]
     pub routes: Option<Vec<crate::models::CloudVersionCdnRoute>>,
     /// A universally unique identifier.
-    #[serde(rename = "site_id", skip_serializing_if = "Option::is_none")]
-    pub site_id: Option<String>,
+    #[serde(rename = "site", skip_serializing_if = "Option::is_none")]
+    pub site: Option<String>,
 }
 
 impl CloudVersionCdnConfig {
@@ -35,7 +35,7 @@ impl CloudVersionCdnConfig {
             build_command: None,
             build_output: None,
             routes: None,
-            site_id: None,
+            site: None,
         }
     }
 }

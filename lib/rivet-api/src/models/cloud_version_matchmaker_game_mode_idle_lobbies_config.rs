@@ -14,18 +14,18 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionMatchmakerGameModeIdleLobbiesConfig {
-    #[serde(rename = "max", skip_serializing_if = "Option::is_none")]
-    pub max: Option<i32>,
-    #[serde(rename = "min", skip_serializing_if = "Option::is_none")]
-    pub min: Option<i32>,
+    #[serde(rename = "max")]
+    pub max: i32,
+    #[serde(rename = "min")]
+    pub min: i32,
 }
 
 impl CloudVersionMatchmakerGameModeIdleLobbiesConfig {
     /// Configuration for how many idle lobbies a game version should have.
-    pub fn new() -> CloudVersionMatchmakerGameModeIdleLobbiesConfig {
+    pub fn new(max: i32, min: i32) -> CloudVersionMatchmakerGameModeIdleLobbiesConfig {
         CloudVersionMatchmakerGameModeIdleLobbiesConfig {
-            max: None,
-            min: None,
+            max,
+            min,
         }
     }
 }

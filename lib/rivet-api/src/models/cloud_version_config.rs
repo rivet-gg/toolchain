@@ -20,7 +20,7 @@ pub struct CloudVersionConfig {
     pub identity: Option<Box<crate::models::CloudVersionIdentityConfig>>,
     /// KV configuration for a given version.
     #[serde(rename = "kv", skip_serializing_if = "Option::is_none")]
-    pub kv: Option<::std::collections::HashMap<String, serde_json::Value>>,
+    pub kv: Option<serde_json::Value>,
     #[serde(rename = "matchmaker", skip_serializing_if = "Option::is_none")]
     pub matchmaker: Option<Box<crate::models::CloudVersionMatchmakerConfig>>,
 }

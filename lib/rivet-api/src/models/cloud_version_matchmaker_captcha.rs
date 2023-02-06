@@ -17,20 +17,20 @@ pub struct CloudVersionMatchmakerCaptcha {
     #[serde(rename = "hcaptcha", skip_serializing_if = "Option::is_none")]
     pub hcaptcha: Option<Box<crate::models::CloudVersionMatchmakerCaptchaHcaptcha>>,
     /// Denotes how many requests a connection can make before it is required to reverify a captcha.
-    #[serde(rename = "requests_before_reverify", skip_serializing_if = "Option::is_none")]
-    pub requests_before_reverify: Option<f64>,
+    #[serde(rename = "requests_before_reverify")]
+    pub requests_before_reverify: i32,
     /// Denotes how long a connection can continue to reconnect without having to reverify a captcha (in milliseconds).
-    #[serde(rename = "verification_ttl", skip_serializing_if = "Option::is_none")]
-    pub verification_ttl: Option<f64>,
+    #[serde(rename = "verification_ttl")]
+    pub verification_ttl: i64,
 }
 
 impl CloudVersionMatchmakerCaptcha {
     /// Matchmaker captcha configuration.
-    pub fn new() -> CloudVersionMatchmakerCaptcha {
+    pub fn new(requests_before_reverify: i32, verification_ttl: i64) -> CloudVersionMatchmakerCaptcha {
         CloudVersionMatchmakerCaptcha {
             hcaptcha: None,
-            requests_before_reverify: None,
-            verification_ttl: None,
+            requests_before_reverify,
+            verification_ttl,
         }
     }
 }

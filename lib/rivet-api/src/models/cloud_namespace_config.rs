@@ -18,17 +18,17 @@ pub struct CloudNamespaceConfig {
     pub cdn: Box<crate::models::CloudCdnNamespaceConfig>,
     /// Identity configuration for a given namespace.
     #[serde(rename = "identity")]
-    pub identity: ::std::collections::HashMap<String, serde_json::Value>,
+    pub identity: serde_json::Value,
     /// KV configuration for a given namespace.
     #[serde(rename = "kv")]
-    pub kv: ::std::collections::HashMap<String, serde_json::Value>,
+    pub kv: serde_json::Value,
     #[serde(rename = "matchmaker")]
     pub matchmaker: Box<crate::models::CloudMatchmakerNamespaceConfig>,
 }
 
 impl CloudNamespaceConfig {
     /// Cloud configuration for a given namespace.
-    pub fn new(cdn: crate::models::CloudCdnNamespaceConfig, identity: ::std::collections::HashMap<String, serde_json::Value>, kv: ::std::collections::HashMap<String, serde_json::Value>, matchmaker: crate::models::CloudMatchmakerNamespaceConfig) -> CloudNamespaceConfig {
+    pub fn new(cdn: crate::models::CloudCdnNamespaceConfig, identity: serde_json::Value, kv: serde_json::Value, matchmaker: crate::models::CloudMatchmakerNamespaceConfig) -> CloudNamespaceConfig {
         CloudNamespaceConfig {
             cdn: Box::new(cdn),
             identity,

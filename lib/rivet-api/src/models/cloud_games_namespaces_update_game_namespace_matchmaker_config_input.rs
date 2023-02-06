@@ -14,18 +14,18 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput {
     /// Unsigned 32 bit integer.
-    #[serde(rename = "lobby_count_max", skip_serializing_if = "Option::is_none")]
-    pub lobby_count_max: Option<i32>,
+    #[serde(rename = "lobby_count_max")]
+    pub lobby_count_max: i32,
     /// Unsigned 32 bit integer.
-    #[serde(rename = "max_players", skip_serializing_if = "Option::is_none")]
-    pub max_players: Option<i32>,
+    #[serde(rename = "max_players")]
+    pub max_players: i32,
 }
 
 impl CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput {
-    pub fn new() -> CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput {
+    pub fn new(lobby_count_max: i32, max_players: i32) -> CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput {
         CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigInput {
-            lobby_count_max: None,
-            max_players: None,
+            lobby_count_max,
+            max_players,
         }
     }
 }

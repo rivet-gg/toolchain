@@ -23,18 +23,18 @@ pub struct CloudCdnNamespaceConfig {
     #[serde(rename = "domains")]
     pub domains: Vec<crate::models::CloudCdnNamespaceDomain>,
     /// Whether or not to allow users to connect to the given namespace via domain name.
-    #[serde(rename = "enable_domain_public_auth", skip_serializing_if = "Option::is_none")]
-    pub enable_domain_public_auth: Option<bool>,
+    #[serde(rename = "enable_domain_public_auth")]
+    pub enable_domain_public_auth: bool,
 }
 
 impl CloudCdnNamespaceConfig {
     /// CDN configuration for a given namespace.
-    pub fn new(auth_type: crate::models::CloudCdnAuthType, auth_user_list: Vec<crate::models::CloudCdnNamespaceAuthUser>, domains: Vec<crate::models::CloudCdnNamespaceDomain>) -> CloudCdnNamespaceConfig {
+    pub fn new(auth_type: crate::models::CloudCdnAuthType, auth_user_list: Vec<crate::models::CloudCdnNamespaceAuthUser>, domains: Vec<crate::models::CloudCdnNamespaceDomain>, enable_domain_public_auth: bool) -> CloudCdnNamespaceConfig {
         CloudCdnNamespaceConfig {
             auth_type,
             auth_user_list,
             domains,
-            enable_domain_public_auth: None,
+            enable_domain_public_auth,
         }
     }
 }

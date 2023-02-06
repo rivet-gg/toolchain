@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**max** | Option<**i32**> | Unsigned 32 bit integer. | [optional]
-**min** | Option<**i32**> | Unsigned 32 bit integer. | [optional]
+**max** | **i32** | Unsigned 32 bit integer. | 
+**min** | **i32** | Unsigned 32 bit integer. | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

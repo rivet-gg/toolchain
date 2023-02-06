@@ -15,8 +15,8 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudGroupBillingTransfer {
     /// Payment amount (in hundreths USD, 100 = $1.00).
-    #[serde(rename = "amount", skip_serializing_if = "Option::is_none")]
-    pub amount: Option<f64>,
+    #[serde(rename = "amount")]
+    pub amount: i64,
     /// RFC3339 timestamp.
     #[serde(rename = "created_ts")]
     pub created_ts: String,
@@ -29,9 +29,9 @@ pub struct CloudGroupBillingTransfer {
 
 impl CloudGroupBillingTransfer {
     /// A group's billing transfer.
-    pub fn new(created_ts: String, status: crate::models::CloudGroupBillingStatus) -> CloudGroupBillingTransfer {
+    pub fn new(amount: i64, created_ts: String, status: crate::models::CloudGroupBillingStatus) -> CloudGroupBillingTransfer {
         CloudGroupBillingTransfer {
-            amount: None,
+            amount,
             created_ts,
             description: None,
             status,
