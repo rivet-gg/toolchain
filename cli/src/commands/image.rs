@@ -150,7 +150,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	if let Err(err) = complete_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	complete_res.context("cloud_games_builds_create_game_build")?;
+	complete_res.context("cloud_uploads_complete_upload")?;
 
 	Ok(PushOutput {
 		image_id: image_id.to_owned(),
