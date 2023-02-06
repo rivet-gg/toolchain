@@ -52,13 +52,13 @@ pub mod input {
 			term.flush()?;
 			let input = tokio::task::block_in_place(|| term.read_line())?;
 
-			if input.len() > 0 {
-				return Ok(input);
-			} else {
-				super::status::error("Empty entry", "");
-				eprintln!();
-				continue;
-			}
+			// if input.len() > 0 {
+			return Ok(input);
+			// } else {
+			// 	super::status::error("Empty entry", "");
+			// 	eprintln!();
+			// 	continue;
+			// }
 		}
 	}
 
@@ -76,13 +76,13 @@ pub mod input {
 			term.flush()?;
 			let input = tokio::task::block_in_place(|| term.read_line())?;
 
-			if input.len() > 0 {
-				return Ok(input);
-			} else {
-				super::status::error("Empty entry", "");
-				eprintln!();
-				continue;
-			}
+			// if input.len() > 0 {
+			return Ok(input);
+			// } else {
+			// 	super::status::error("Empty entry", "");
+			// 	eprintln!();
+			// 	continue;
+			// }
 		}
 	}
 

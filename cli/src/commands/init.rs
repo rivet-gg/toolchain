@@ -6,26 +6,13 @@ use tokio::{fs, io::AsyncWriteExt};
 
 use crate::util::{git, secrets, term};
 
-const RIVET_VERSION_TOML: &'static str = include_str!("../../tpl/rivet.version.toml");
+const VERSION_HEAD: &'static str = include_str!("../../tpl/default_config/head.toml");
+const VERSION_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
+const VERSION_MATCHMAKER: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
+const VERSION_FOOT: &'static str = include_str!("../../tpl/default_config/foot.toml");
 
 #[derive(Parser)]
 pub struct Opts {
-	/// Use recommended settings
-	#[clap(long)]
-	recommended: bool,
-
-	/// Update gitignore
-	#[clap(long)]
-	gitignore: bool,
-
-	/// Create Rivet config
-	#[clap(long)]
-	rivet_config: bool,
-
-	/// Setup development token
-	#[clap(long)]
-	dev: bool,
-
 	#[clap(flatten)]
 	dev_opts: crate::commands::dev::InitOpts,
 }
@@ -67,9 +54,8 @@ impl Opts {
 		// Update .gitignore
 		eprintln!();
 		if !git::check_ignore(Path::new(".rivet/")).await? {
-			if self.recommended
-				|| self.gitignore
-				|| term::input::bool_with_docs(
+			if 
+				term::input::bool_with_docs(
 					term,
 					"Add .rivet/ to .gitignore?",
 					".rivet/ holds secrets and local configuration files that should not be version controlled",
@@ -109,9 +95,7 @@ impl Opts {
 			}
 		};
 		if config_needs_creation {
-			if self.recommended
-				|| self.rivet_config
-				|| term::input::bool_with_docs(
+			if term::input::bool_with_docs(
 					term,
 					"Create rivet.version.toml?",
 					"This is the configuration file used to manage your game",
@@ -119,12 +103,93 @@ impl Opts {
 				)
 				.await?
 			{
-				fs::write(config_path, RIVET_VERSION_TOML).await?;
+				let mut version_config = VERSION_HEAD.to_string();
 
-				term::status::success(
-					"Finished",
-					"Rivet Matchmaker and Rivet CDN will be enabled next time you deploy",
-				);
+				eprintln!();
+				if term::input::bool_with_docs(
+						term,
+						"rivet.version.toml > Enable Rivet Matchmaker?",
+						"Setup your matchmaker configuration, this can be changed later",
+						"https://docs.rivet.gg/matchmaker/introduction",
+					)
+					.await?
+				{
+					let port = 'port: loop {
+						let mut port = term::input::string_with_tip(
+							term,
+							"rivet.version.toml > Matchmaker > What port does your game socket listen on?",
+							"default: 8080",
+						)
+						.await?;
+						if port.is_empty() {
+							port = "8080".to_string();
+						}
+						if let Ok(port) = port.parse::<u16>() {
+							break 'port port;
+						} else {
+							term::status::error("Invalid port number", "");
+							eprintln!();
+						}
+					};
+
+					let mut dockerfile_path = term::input::string_with_tip(
+						term,
+						"rivet.version.toml > Matchmaker > Path to the server's Dockerfile?",
+						"default: Dockerfile",
+					)
+					.await?;
+					if dockerfile_path.is_empty() {
+						dockerfile_path = "Dockerfile".to_string();
+					}
+
+					version_config.push_str(
+						&VERSION_MATCHMAKER
+							.replace("__DOCKERFILE__", &dockerfile_path)
+							.replace("__PORT__", &port.to_string()),
+					);
+				}
+
+				eprintln!();
+				if term::input::bool_with_docs(
+						term,
+						"rivet.version.toml > Enable Rivet CDN?",
+						"Setup service a website or static assets, this can be changed later",
+						"https://docs.rivet.gg/cdn/introduction",
+					)
+					.await?
+				{
+					let mut build_command = term::input::string_with_tip(
+						term,
+						"rivet.version.toml > CDN > What command will run before uploading your site?",
+						"default: echo 'Nothing to do'",
+					)
+					.await?;
+					if build_command.is_empty() {
+						build_command = "echo 'Nothing to do'".to_string();
+					}
+
+					let mut build_output = term::input::string_with_tip(
+						term,
+						"rivet.version.toml > CDN > What directory should be uploaded to Rivet CDN?",
+						"default: dist/",
+					)
+					.await?;
+					if build_output.is_empty() {
+						build_output = "dist/".to_string();
+					}
+
+					version_config.push_str(&
+						VERSION_CDN
+							.replace("__BUILD_COMMAND__", &build_command.replace("\"", "\\\""))
+							.replace("__BUILD_OUTPUT__", &build_output)
+					);
+				}
+
+				version_config.push_str(&VERSION_FOOT);
+
+				fs::write(config_path, version_config).await?;
+
+				term::status::success("Created rivet.version.toml", "");
 			}
 		} else {
 			term::status::success(
@@ -135,8 +200,7 @@ impl Opts {
 
 		// Development flow
 		eprintln!();
-		if self.recommended
-			|| self.dev || term::input::bool_with_docs(
+		if term::input::bool_with_docs(
 			term,
 			"Setup development environment?",
 			"Create development tokens that enable you to develop your game locally",
