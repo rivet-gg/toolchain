@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## cloud_uploads_complete_upload
 
-> cloud_uploads_complete_upload(upload_id)
+> serde_json::Value cloud_uploads_complete_upload(upload_id, body)
 
 
 Marks an upload as complete.
@@ -21,10 +21,11 @@ Marks an upload as complete.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **upload_id** | **String** | A universally unique identifier. | [required] |
+**body** | **serde_json::Value** |  | [required] |
 
 ### Return type
 
- (empty response body)
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -32,8 +33,8 @@ Name | Type | Description  | Required | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
