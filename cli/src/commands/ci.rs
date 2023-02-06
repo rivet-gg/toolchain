@@ -72,7 +72,7 @@ impl InitOpts {
 
 		term::status::success(
 			"Finished",
-			"Your game will automatically deploy to Rivet next time you push to GitHub.",
+			"Your game will automatically publish to Rivet next time you push to GitHub.",
 		);
 
 		Ok(())

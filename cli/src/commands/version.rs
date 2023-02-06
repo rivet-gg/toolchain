@@ -34,7 +34,7 @@ pub enum SubCommand {
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
 
-		/// The namespace ID to deploy to
+		/// The namespace ID to publish to
 		#[clap(short = 'n', long)]
 		namespace: Option<String>,
 	},
@@ -145,7 +145,7 @@ pub struct PublishOpts {
 	#[clap(long = "override", short)]
 	overrides: Vec<String>,
 
-	/// Namespace ID to deploy to
+	/// Namespace ID to publish to
 	#[clap(short = 'n', long)]
 	namespace: Option<String>,
 

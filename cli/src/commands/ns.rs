@@ -24,18 +24,18 @@ pub enum SubCommand {
 		/// Name to display for the namespace
 		#[clap(long = "name", alias = "display-name")]
 		display_name: String,
-		/// Initial version to deploy to the namespace
+		/// Initial version to publish to the namespace
 		#[clap(long)]
 		version: String,
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
 	},
-	/// Deploy a version to a namespace
+	/// Publish a version to a namespace
 	SetVersion {
 		/// The namespace ID to update
 		#[clap(long, short, alias = "ns")]
 		namespace: String,
-		/// The version ID to deploy
+		/// The version ID to publish
 		#[clap(long, short)]
 		version: String,
 		#[clap(long, value_parser)]

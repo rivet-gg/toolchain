@@ -2,6 +2,6 @@
 # 
 # - More info: https://docs.rivet.gg/general/concepts/rivet-version-config
 # - Reference: https://docs.rivet.gg/cloud/api/post-games-versions#body
-# - Deploy with `rivet deploy`
+# - Publish a new version with `rivet publish`
 #
 
