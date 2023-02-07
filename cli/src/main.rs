@@ -135,7 +135,6 @@ async fn main() -> Result<()> {
 		}
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
-		SubCommand::CI { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
