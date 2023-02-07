@@ -47,12 +47,6 @@ enum SubCommand {
 		command: dev::SubCommand,
 	},
 
-	/// Helper functions for continuous integration
-	CI {
-		#[clap(subcommand)]
-		command: ci::SubCommand,
-	},
-
 	/// Manages the game
 	Game {
 		#[clap(subcommand)]
