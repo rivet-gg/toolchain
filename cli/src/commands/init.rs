@@ -14,7 +14,7 @@ const VERSION_FOOT: &'static str = include_str!("../../tpl/default_config/foot.t
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(flatten)]
-	dev_opts: crate::commands::dev::InitOpts,
+	dev_opts: crate::commands::dev::CreateDevTokenOpts,
 }
 
 impl Opts {
@@ -94,7 +94,7 @@ impl Opts {
 				return Err(err.into());
 			}
 		};
-		if config_needs_creation {
+		let has_version_config = if config_needs_creation {
 			if term::input::bool_with_docs(
 					term,
 					"Create rivet.version.toml?",
@@ -190,17 +190,22 @@ impl Opts {
 				fs::write(config_path, version_config).await?;
 
 				term::status::success("Created rivet.version.toml", "");
+
+				true
+			} else {
+				false
 			}
 		} else {
 			term::status::success(
 				"Version already configured",
 				"Your game is already configured with rivet.version.toml",
 			);
-		}
+			true
+		};
 
 		// Development flow
 		eprintln!();
-		if term::input::bool_with_docs(
+		if has_version_config && term::input::bool_with_docs(
 			term,
 			"Setup development environment?",
 			"Create development tokens that enable you to develop your game locally",
