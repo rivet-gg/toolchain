@@ -14,6 +14,9 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionMatchmakerGameModeRuntimeDockerPort {
+    /// Client-side configuration
+    #[serde(rename = "dev_port", skip_serializing_if = "Option::is_none")]
+    pub dev_port: Option<i32>,
     /// The port number to connect to.
     #[serde(rename = "port", skip_serializing_if = "Option::is_none")]
     pub port: Option<i32>,
@@ -27,6 +30,7 @@ impl CloudVersionMatchmakerGameModeRuntimeDockerPort {
     /// A docker port.
     pub fn new() -> CloudVersionMatchmakerGameModeRuntimeDockerPort {
         CloudVersionMatchmakerGameModeRuntimeDockerPort {
+            dev_port: None,
             port: None,
             port_range: None,
             proxy_protocol: None,
