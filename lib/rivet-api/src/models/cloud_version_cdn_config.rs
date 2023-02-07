@@ -26,6 +26,9 @@ pub struct CloudVersionCdnConfig {
     /// A universally unique identifier.
     #[serde(rename = "site", skip_serializing_if = "Option::is_none")]
     pub site: Option<String>,
+    /// **Deprecated**
+    #[serde(rename = "site_id", skip_serializing_if = "Option::is_none")]
+    pub site_id: Option<String>,
 }
 
 impl CloudVersionCdnConfig {
@@ -36,6 +39,7 @@ impl CloudVersionCdnConfig {
             build_output: None,
             routes: None,
             site: None,
+            site_id: None,
         }
     }
 }
