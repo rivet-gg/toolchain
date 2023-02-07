@@ -14,18 +14,18 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudVersionIdentityConfig {
-    #[serde(rename = "custom_avatars")]
-    pub custom_avatars: Vec<crate::models::CloudVersionIdentityCustomAvatar>,
-    #[serde(rename = "custom_display_names")]
-    pub custom_display_names: Vec<crate::models::CloudVersionIdentityCustomDisplayName>,
+    #[serde(rename = "custom_avatars", skip_serializing_if = "Option::is_none")]
+    pub custom_avatars: Option<Vec<crate::models::CloudVersionIdentityCustomAvatar>>,
+    #[serde(rename = "custom_display_names", skip_serializing_if = "Option::is_none")]
+    pub custom_display_names: Option<Vec<crate::models::CloudVersionIdentityCustomDisplayName>>,
 }
 
 impl CloudVersionIdentityConfig {
     /// Identity configuration for a given version.
-    pub fn new(custom_avatars: Vec<crate::models::CloudVersionIdentityCustomAvatar>, custom_display_names: Vec<crate::models::CloudVersionIdentityCustomDisplayName>) -> CloudVersionIdentityConfig {
+    pub fn new() -> CloudVersionIdentityConfig {
         CloudVersionIdentityConfig {
-            custom_avatars,
-            custom_display_names,
+            custom_avatars: None,
+            custom_display_names: None,
         }
     }
 }

@@ -91,7 +91,8 @@ enum SubCommand {
 		command: avatar::SubCommand,
 	},
 
-	/// Alias of `rivet version deploy`
+	/// Alias of `rivet version publish`
+	#[clap(alias = "deploy")]
 	Publish(version::PublishOpts),
 }
 
