@@ -246,6 +246,8 @@ pub mod cloud_logs_perf_mark;
 pub use self::cloud_logs_perf_mark::CloudLogsPerfMark;
 pub mod cloud_logs_perf_span;
 pub use self::cloud_logs_perf_span::CloudLogsPerfSpan;
+pub mod cloud_matchmaker_development_port;
+pub use self::cloud_matchmaker_development_port::CloudMatchmakerDevelopmentPort;
 pub mod cloud_matchmaker_namespace_config;
 pub use self::cloud_matchmaker_namespace_config::CloudMatchmakerNamespaceConfig;
 pub mod cloud_namespace_config;

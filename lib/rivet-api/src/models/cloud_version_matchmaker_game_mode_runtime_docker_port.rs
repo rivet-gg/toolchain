@@ -17,13 +17,15 @@ pub struct CloudVersionMatchmakerGameModeRuntimeDockerPort {
     /// Client-side configuration
     #[serde(rename = "dev_port", skip_serializing_if = "Option::is_none")]
     pub dev_port: Option<i32>,
+    #[serde(rename = "dev_protocol", skip_serializing_if = "Option::is_none")]
+    pub dev_protocol: Option<crate::models::CloudVersionMatchmakerProxyProtocol>,
     /// The port number to connect to.
     #[serde(rename = "port", skip_serializing_if = "Option::is_none")]
     pub port: Option<i32>,
     #[serde(rename = "port_range", skip_serializing_if = "Option::is_none")]
     pub port_range: Option<Box<crate::models::CloudVersionMatchmakerPortRange>>,
-    #[serde(rename = "proxy_protocol", skip_serializing_if = "Option::is_none")]
-    pub proxy_protocol: Option<crate::models::CloudVersionMatchmakerProxyProtocol>,
+    #[serde(rename = "protocol", skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<crate::models::CloudVersionMatchmakerProxyProtocol>,
 }
 
 impl CloudVersionMatchmakerGameModeRuntimeDockerPort {
@@ -31,9 +33,10 @@ impl CloudVersionMatchmakerGameModeRuntimeDockerPort {
     pub fn new() -> CloudVersionMatchmakerGameModeRuntimeDockerPort {
         CloudVersionMatchmakerGameModeRuntimeDockerPort {
             dev_port: None,
+            dev_protocol: None,
             port: None,
             port_range: None,
-            proxy_protocol: None,
+            protocol: None,
         }
     }
 }
