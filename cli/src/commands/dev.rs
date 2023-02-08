@@ -155,7 +155,13 @@ pub async fn create_dev_token(
 	term::status::success(format!("Token created"), "");
 
 	eprintln!();
-	if opts.dev_env || term::input::bool(term, "Write token to .env file?").await? {
+	if opts.dev_env
+		|| term::Prompt::new("Write development token to .env file?")
+			.docs("We recommend storing your token in a .env file to keep it secure")
+			.docs_url("https://github.com/motdotla/dotenv#dotenv")
+			.bool(term)
+			.await?
+	{
 		let env_file = format!(
 			"PORT={port}\nRIVET_TOKEN={token}\n",
 			port = default_port.unwrap()
