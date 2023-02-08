@@ -56,6 +56,10 @@ docs/CloudCdnNamespaceDomainVerificationMethodHttp.md
 docs/CloudCdnNamespaceDomainVerificationStatus.md
 docs/CloudCdnSiteSummary.md
 docs/CloudCustomAvatarSummary.md
+docs/CloudDevicesCompleteDeviceLinkInput.md
+docs/CloudDevicesGetDeviceLinkOutput.md
+docs/CloudDevicesLinksApi.md
+docs/CloudDevicesPrepareDeviceLinkOutput.md
 docs/CloudGameFull.md
 docs/CloudGameLobbyExpenses.md
 docs/CloudGamesAvatarsApi.md
@@ -144,7 +148,6 @@ docs/CloudLogsLobbyStatusStopped.md
 docs/CloudLogsLobbySummary.md
 docs/CloudLogsPerfMark.md
 docs/CloudLogsPerfSpan.md
-docs/CloudMatchmakerDevelopmentPort.md
 docs/CloudMatchmakerNamespaceConfig.md
 docs/CloudNamespaceConfig.md
 docs/CloudNamespaceFull.md
@@ -369,6 +372,7 @@ src/apis/auth_tokens_api.rs
 src/apis/chat_api.rs
 src/apis/chat_identity_api.rs
 src/apis/cloud_auth_api.rs
+src/apis/cloud_devices_links_api.rs
 src/apis/cloud_games_avatars_api.rs
 src/apis/cloud_games_builds_api.rs
 src/apis/cloud_games_cdn_api.rs
@@ -453,6 +457,9 @@ src/models/cloud_cdn_namespace_domain_verification_method_http.rs
 src/models/cloud_cdn_namespace_domain_verification_status.rs
 src/models/cloud_cdn_site_summary.rs
 src/models/cloud_custom_avatar_summary.rs
+src/models/cloud_devices_complete_device_link_input.rs
+src/models/cloud_devices_get_device_link_output.rs
+src/models/cloud_devices_prepare_device_link_output.rs
 src/models/cloud_game_full.rs
 src/models/cloud_game_lobby_expenses.rs
 src/models/cloud_games_create_cloud_token_output.rs
@@ -529,7 +536,6 @@ src/models/cloud_logs_lobby_status_stopped.rs
 src/models/cloud_logs_lobby_summary.rs
 src/models/cloud_logs_perf_mark.rs
 src/models/cloud_logs_perf_span.rs
-src/models/cloud_matchmaker_development_port.rs
 src/models/cloud_matchmaker_namespace_config.rs
 src/models/cloud_namespace_config.rs
 src/models/cloud_namespace_full.rs

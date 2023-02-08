@@ -36,6 +36,9 @@ Class | Method | HTTP request | Description
 *ChatApi* | [**chat_watch_thread**](docs/ChatApi.md#chat_watch_thread) | **GET** /threads/{thread_id}/live | 
 *ChatIdentityApi* | [**chat_identity_get_direct_thread**](docs/ChatIdentityApi.md#chat_identity_get_direct_thread) | **GET** /identities/{identity_id}/thread | 
 *CloudAuthApi* | [**cloud_auth_inspect**](docs/CloudAuthApi.md#cloud_auth_inspect) | **GET** /auth/inspect | 
+*CloudDevicesLinksApi* | [**cloud_devices_links_complete**](docs/CloudDevicesLinksApi.md#cloud_devices_links_complete) | **POST** /devices/links/complete | 
+*CloudDevicesLinksApi* | [**cloud_devices_links_get**](docs/CloudDevicesLinksApi.md#cloud_devices_links_get) | **GET** /devices/links | 
+*CloudDevicesLinksApi* | [**cloud_devices_links_prepare**](docs/CloudDevicesLinksApi.md#cloud_devices_links_prepare) | **POST** /devices/links | 
 *CloudGamesAvatarsApi* | [**cloud_games_avatars_complete_custom_avatar_upload**](docs/CloudGamesAvatarsApi.md#cloud_games_avatars_complete_custom_avatar_upload) | **POST** /games/{game_id}/avatar-upload/{upload_id}/complete | 
 *CloudGamesAvatarsApi* | [**cloud_games_avatars_list_game_custom_avatars**](docs/CloudGamesAvatarsApi.md#cloud_games_avatars_list_game_custom_avatars) | **GET** /games/{game_id}/avatars | 
 *CloudGamesAvatarsApi* | [**cloud_games_avatars_prepare_custom_avatar_upload**](docs/CloudGamesAvatarsApi.md#cloud_games_avatars_prepare_custom_avatar_upload) | **POST** /games/{game_id}/prepare | 
@@ -224,6 +227,9 @@ Class | Method | HTTP request | Description
  - [CloudCdnNamespaceDomainVerificationStatus](docs/CloudCdnNamespaceDomainVerificationStatus.md)
  - [CloudCdnSiteSummary](docs/CloudCdnSiteSummary.md)
  - [CloudCustomAvatarSummary](docs/CloudCustomAvatarSummary.md)
+ - [CloudDevicesCompleteDeviceLinkInput](docs/CloudDevicesCompleteDeviceLinkInput.md)
+ - [CloudDevicesGetDeviceLinkOutput](docs/CloudDevicesGetDeviceLinkOutput.md)
+ - [CloudDevicesPrepareDeviceLinkOutput](docs/CloudDevicesPrepareDeviceLinkOutput.md)
  - [CloudGameFull](docs/CloudGameFull.md)
  - [CloudGameLobbyExpenses](docs/CloudGameLobbyExpenses.md)
  - [CloudGamesCreateCloudTokenOutput](docs/CloudGamesCreateCloudTokenOutput.md)
@@ -300,7 +306,6 @@ Class | Method | HTTP request | Description
  - [CloudLogsLobbySummary](docs/CloudLogsLobbySummary.md)
  - [CloudLogsPerfMark](docs/CloudLogsPerfMark.md)
  - [CloudLogsPerfSpan](docs/CloudLogsPerfSpan.md)
- - [CloudMatchmakerDevelopmentPort](docs/CloudMatchmakerDevelopmentPort.md)
  - [CloudMatchmakerNamespaceConfig](docs/CloudMatchmakerNamespaceConfig.md)
  - [CloudNamespaceConfig](docs/CloudNamespaceConfig.md)
  - [CloudNamespaceFull](docs/CloudNamespaceFull.md)

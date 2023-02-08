@@ -16,9 +16,6 @@
 pub struct CloudVersionMatchmakerConfig {
     #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
     pub captcha: Option<Box<crate::models::CloudVersionMatchmakerCaptcha>>,
-    /// Client-side configuration
-    #[serde(rename = "dev_hostname", skip_serializing_if = "Option::is_none")]
-    pub dev_hostname: Option<String>,
     #[serde(rename = "docker", skip_serializing_if = "Option::is_none")]
     pub docker: Option<Box<crate::models::CloudVersionMatchmakerGameModeRuntimeDocker>>,
     /// A list of game modes.
@@ -46,7 +43,6 @@ impl CloudVersionMatchmakerConfig {
     pub fn new() -> CloudVersionMatchmakerConfig {
         CloudVersionMatchmakerConfig {
             captcha: None,
-            dev_hostname: None,
             docker: None,
             game_modes: None,
             idle_lobbies: None,

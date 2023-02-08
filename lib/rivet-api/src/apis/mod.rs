@@ -95,6 +95,7 @@ pub mod auth_tokens_api;
 pub mod chat_api;
 pub mod chat_identity_api;
 pub mod cloud_auth_api;
+pub mod cloud_devices_links_api;
 pub mod cloud_games_avatars_api;
 pub mod cloud_games_builds_api;
 pub mod cloud_games_cdn_api;
