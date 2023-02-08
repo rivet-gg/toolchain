@@ -4,7 +4,10 @@ use console::Term;
 use std::path::Path;
 use tokio::{fs, io::AsyncWriteExt};
 
-use crate::util::{git, secrets, term};
+use crate::{
+	commands,
+	util::{git, secrets, term},
+};
 
 const VERSION_HEAD: &'static str = include_str!("../../tpl/default_config/head.toml");
 const VERSION_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
@@ -52,7 +55,7 @@ impl Opts {
 
 		// Update .gitignore
 		if !git::check_ignore(Path::new(".rivet/")).await? {
-			if 
+			if
 				term::Prompt::new("Add .rivet/ to .gitignore?")
 					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
 					.docs_url("https://docs.rivet.gg/general/concepts/dot-rivet-directory")
@@ -90,29 +93,30 @@ impl Opts {
 			}
 		};
 		let has_version_config = if config_needs_creation {
-			if 
-				term::Prompt::new( "Create rivet.version.toml?")
-					.docs("This is the configuration file used to manage your game")
-					.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
-					.default_value("yes")
-					.bool(term).await?
+			if term::Prompt::new("Create rivet.version.toml?")
+				.docs("This is the configuration file used to manage your game")
+				.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
+				.default_value("yes")
+				.bool(term)
+				.await?
 			{
 				let mut version_config = VERSION_HEAD.to_string();
 
-				if 
-					term::Prompt::new("Enable Rivet Matchmaker?")
-						.indent(1)
-						.context("rivet.version.toml")
-						.docs("Setup your matchmaker configuration, this can be changed later")
-						.docs_url("https://docs.rivet.gg/matchmaker/introduction")
-						.default_value("yes")
-						.bool(term).await?
+				if term::Prompt::new("Enable Rivet Matchmaker?")
+					.indent(1)
+					.context("rivet.version.toml")
+					.docs("Setup your matchmaker configuration, this can be changed later")
+					.docs_url("https://docs.rivet.gg/matchmaker/introduction")
+					.default_value("yes")
+					.bool(term)
+					.await?
 				{
 					let port = term::Prompt::new("What port does your game server listen on?")
 						.indent(2)
 						.context("Matchmaker")
 						.default_value("8080")
-						.parsed::<u16>(term).await?;
+						.parsed::<u16>(term)
+						.await?;
 
 					let mut dockerfile_path = term::Prompt::new("Path to the server's Dockerfile?")
 						.indent(2)
@@ -132,35 +136,40 @@ impl Opts {
 				}
 
 				if term::Prompt::new("Enable Rivet CDN?")
-						.indent(1)
-						.context("rivet.version.toml")
-						.docs("Setup service a website or static assets, this can be changed later")
-						.docs_url("https://docs.rivet.gg/cdn/introduction")
-						.default_value("yes")
-						.bool(term).await?
+					.indent(1)
+					.context("rivet.version.toml")
+					.docs("Setup service a website or static assets, this can be changed later")
+					.docs_url("https://docs.rivet.gg/cdn/introduction")
+					.default_value("yes")
+					.bool(term)
+					.await?
 				{
-					let mut build_command = term::Prompt::new("What command will run before uploading your site?")
-						.indent(2)
-						.context("CDN")
-						.default_value("echo 'Nothing to do'")
-						.string(term)
-						.await?;
+					let mut build_command =
+						term::Prompt::new("What command will run before uploading your site?")
+							.indent(2)
+							.context("CDN")
+							.default_value("echo 'Nothing to do'")
+							.string(term)
+							.await?;
 					if build_command.is_empty() {
 						build_command = "echo 'Nothing to do'".to_string();
 					}
 
-					let mut build_output = term::Prompt::new("What directory should be uploaded to Rivet CDN?")
-						.indent(2)
-						.context("CDN")
-						.default_value("dist/").string(term).await?;
+					let mut build_output =
+						term::Prompt::new("What directory should be uploaded to Rivet CDN?")
+							.indent(2)
+							.context("CDN")
+							.default_value("dist/")
+							.string(term)
+							.await?;
 					if build_output.is_empty() {
 						build_output = "dist/".to_string();
 					}
 
-					version_config.push_str(&
-						VERSION_CDN
+					version_config.push_str(
+						&VERSION_CDN
 							.replace("__BUILD_COMMAND__", &build_command.replace("\"", "\\\""))
-							.replace("__BUILD_OUTPUT__", &build_output)
+							.replace("__BUILD_OUTPUT__", &build_output),
 					);
 				}
 
@@ -183,9 +192,15 @@ impl Opts {
 		};
 
 		// Development flow
-		if has_version_config && term::Prompt::new("Setup development environment?")
+		if has_version_config
+			&& commands::version::read_config(Vec::new(), None)
+				.await?
+				.matchmaker
+				.is_some() && term::Prompt::new("Setup development environment?")
 			.docs("Create development tokens that enable you to develop your game locally")
-			.docs_url("http://docs.rivet.gg/general/concepts/dev-tokens").bool(term).await?
+			.docs_url("http://docs.rivet.gg/general/concepts/dev-tokens")
+			.bool(term)
+			.await?
 		{
 			self.dev_opts.execute(term, &ctx).await?
 		}
@@ -201,11 +216,11 @@ impl Opts {
 }
 
 async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<cli_core::Ctx> {
-	let token = term::Prompt::new(
-		"Rivet cloud token?")
+	let token = term::Prompt::new("Rivet cloud token?")
 		.docs("Create this token under Developer > My Game > API > Create Cloud Token")
 		.docs_url("https://docs.rivet.gg/general/concepts/tokens#cloud")
-		.string_secure(term).await?;
+		.string_secure(term)
+		.await?;
 
 	// Create new context
 	let new_ctx = cli_core::ctx::init(

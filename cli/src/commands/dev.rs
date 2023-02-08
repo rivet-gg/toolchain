@@ -52,7 +52,7 @@ pub async fn create_dev_token(
 	ctx: &cli_core::Ctx,
 	opts: &CreateDevTokenOpts,
 ) -> Result<CreateDevTokenOutput> {
-	let ns_name_id = "prod";
+	let ns_name_id = "staging";
 
 	let game_res = ctx
 		.client()
@@ -63,13 +63,14 @@ pub async fn create_dev_token(
 		.context("client.get_game_by_id")?;
 	let game = game_res.game.context("game_res.game")?;
 	let game_ns = game.namespaces().context("game.namespaces")?;
-	let prod_namespace_id = game_ns
+	let staging_namespace_id = game_ns
 		.iter()
 		.find(|x| x.name_id().map_or(false, |x| x == ns_name_id))
 		.and_then(|x| x.namespace_id())
-		.context("game.namespaces.find(\"prod\").namespace_id")?;
+		.context("game.namespaces.find(\"staging\").namespace_id")?;
 
 	let config = commands::version::read_config(Vec::new(), Some(ns_name_id)).await?;
+
 	let Some(matchmaker) = &config.matchmaker else {
 			bail!("matchmaker not enabled")
 		};
@@ -136,7 +137,7 @@ pub async fn create_dev_token(
 	let token_res = cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace_token_development(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
-			&prod_namespace_id,
+			&staging_namespace_id,
 			cli_core::rivet_api::models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
 				hostname: dev_hostname,
 				ports: Some(dev_ports),
@@ -159,7 +160,7 @@ pub async fn create_dev_token(
 		|| term::Prompt::new("Write development token to .env file?")
 			.docs("We recommend storing your token in a .env file to keep it secure")
 			.docs_url("https://github.com/motdotla/dotenv#dotenv")
-			.default_value("y")
+			.default_value("yes")
 			.bool(term)
 			.await?
 	{
