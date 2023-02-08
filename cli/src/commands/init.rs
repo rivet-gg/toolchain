@@ -25,7 +25,6 @@ impl Opts {
 		override_api_url: Option<String>,
 	) -> Result<()> {
 		// Check if token already exists
-		eprintln!();
 		let cloud_token = if let Some(cloud_token) = cloud_token.clone() {
 			Some(cloud_token.to_string())
 		} else {
@@ -52,7 +51,6 @@ impl Opts {
 		};
 
 		// Update .gitignore
-		eprintln!();
 		if !git::check_ignore(Path::new(".rivet/")).await? {
 			if 
 				term::Prompt::new("Add .rivet/ to .gitignore?")
@@ -82,7 +80,6 @@ impl Opts {
 		}
 
 		// Create rivet.version.toml
-		eprintln!();
 		let config_path = std::env::current_dir()?.join("rivet.version.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
@@ -100,19 +97,23 @@ impl Opts {
 			{
 				let mut version_config = VERSION_HEAD.to_string();
 
-				eprintln!();
 				if 
-					term::Prompt::new( "rivet.version.toml > Enable Rivet Matchmaker?")
+					term::Prompt::new( "[rivet.version.toml] Enable Rivet Matchmaker?")
+						.indent(1)
 						.docs("Setup your matchmaker configuration, this can be changed later")
 						.docs_url("https://docs.rivet.gg/matchmaker/introduction")
 						.bool(term).await?
 				{
-					let port = term::Prompt::new(
-						"Matchmaker: What port does your game socket listen on?")
-						.docs("default: 8080")
+					let port = term::Prompt::new("[Matchmaker] What port does your game server listen on?")
+						.indent(2)
+						.default_value("8080")
 						.parsed::<u16>(term).await?;
 
-					let mut dockerfile_path = term::Prompt::new("Matchmaker: Path to the server's Dockerfile?").default_value("Dockerfile").string(term).await?;
+					let mut dockerfile_path = term::Prompt::new("[Matchmaker] Path to the server's Dockerfile?")
+						.indent(2)
+						.default_value("Dockerfile")
+						.string(term)
+						.await?;
 					if dockerfile_path.is_empty() {
 						dockerfile_path = "Dockerfile".to_string();
 					}
@@ -124,18 +125,22 @@ impl Opts {
 					);
 				}
 
-				eprintln!();
-				if term::Prompt::new("Enable Rivet CDN?")
+				if term::Prompt::new("[rivet.version.toml] Enable Rivet CDN?")
+						.indent(1)
 						.docs("Setup service a website or static assets, this can be changed later")
 						.docs_url("https://docs.rivet.gg/cdn/introduction").bool(term).await?
 				{
-					let mut build_command = term::Prompt::new("rivet.version.toml > CDN > What command will run before uploading your site?")
-						.default_value("echo 'Nothing to do'").string(term).await?;
+					let mut build_command = term::Prompt::new("[CDN] What command will run before uploading your site?")
+						.indent(2)
+						.default_value("echo 'Nothing to do'")
+						.string(term)
+						.await?;
 					if build_command.is_empty() {
 						build_command = "echo 'Nothing to do'".to_string();
 					}
 
-					let mut build_output = term::Prompt::new("rivet.version.toml > CDN > What directory should be uploaded to Rivet CDN?")
+					let mut build_output = term::Prompt::new("[CDN] What directory should be uploaded to Rivet CDN?")
+						.indent(2)
 						.default_value("dist/").string(term).await?;
 					if build_output.is_empty() {
 						build_output = "dist/".to_string();
@@ -167,7 +172,6 @@ impl Opts {
 		};
 
 		// Development flow
-		eprintln!();
 		if has_version_config && term::Prompt::new("Setup development environment?")
 			.docs("Create development tokens that enable you to develop your game locally")
 			.docs_url("http://docs.rivet.gg/general/concepts/dev-tokens").bool(term).await?

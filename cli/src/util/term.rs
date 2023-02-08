@@ -215,6 +215,7 @@ impl Prompt {
 	fn print_header(&self) {
 		let i = self.gen_indent();
 
+		eprintln!();
 		eprintln!("{i}{}", style(&self.message).bold().blue());
 		if let Some(docs) = &self.docs {
 			eprintln!("{i}  {}", style(&docs).italic());
@@ -223,7 +224,7 @@ impl Prompt {
 			eprintln!("{i}  {}", style(&docs_url).italic().underlined().cyan());
 		}
 		if let Some(default_value) = &self.default_value {
-			eprintln!("{i}  Defaults to {}", style(&default_value).italic());
+			eprintln!("{i}  Defaults to {}", style(&default_value).bold());
 		}
 	}
 
