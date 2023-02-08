@@ -56,6 +56,7 @@ impl Opts {
 				term::Prompt::new("Add .rivet/ to .gitignore?")
 					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
 					.docs_url("https://docs.rivet.gg/general/concepts/dot-rivet-directory")
+					.default_value("yes")
 					.bool(term).await?
 			{
 				let mut file = fs::OpenOptions::new()
@@ -93,24 +94,29 @@ impl Opts {
 				term::Prompt::new( "Create rivet.version.toml?")
 					.docs("This is the configuration file used to manage your game")
 					.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
+					.default_value("yes")
 					.bool(term).await?
 			{
 				let mut version_config = VERSION_HEAD.to_string();
 
 				if 
-					term::Prompt::new( "[rivet.version.toml] Enable Rivet Matchmaker?")
+					term::Prompt::new("Enable Rivet Matchmaker?")
 						.indent(1)
+						.context("rivet.version.toml")
 						.docs("Setup your matchmaker configuration, this can be changed later")
 						.docs_url("https://docs.rivet.gg/matchmaker/introduction")
+						.default_value("yes")
 						.bool(term).await?
 				{
-					let port = term::Prompt::new("[Matchmaker] What port does your game server listen on?")
+					let port = term::Prompt::new("What port does your game server listen on?")
 						.indent(2)
+						.context("Matchmaker")
 						.default_value("8080")
 						.parsed::<u16>(term).await?;
 
-					let mut dockerfile_path = term::Prompt::new("[Matchmaker] Path to the server's Dockerfile?")
+					let mut dockerfile_path = term::Prompt::new("Path to the server's Dockerfile?")
 						.indent(2)
+						.context("Matchmaker")
 						.default_value("Dockerfile")
 						.string(term)
 						.await?;
@@ -125,13 +131,17 @@ impl Opts {
 					);
 				}
 
-				if term::Prompt::new("[rivet.version.toml] Enable Rivet CDN?")
+				if term::Prompt::new("Enable Rivet CDN?")
 						.indent(1)
+						.context("rivet.version.toml")
 						.docs("Setup service a website or static assets, this can be changed later")
-						.docs_url("https://docs.rivet.gg/cdn/introduction").bool(term).await?
+						.docs_url("https://docs.rivet.gg/cdn/introduction")
+						.default_value("yes")
+						.bool(term).await?
 				{
-					let mut build_command = term::Prompt::new("[CDN] What command will run before uploading your site?")
+					let mut build_command = term::Prompt::new("What command will run before uploading your site?")
 						.indent(2)
+						.context("CDN")
 						.default_value("echo 'Nothing to do'")
 						.string(term)
 						.await?;
@@ -139,8 +149,9 @@ impl Opts {
 						build_command = "echo 'Nothing to do'".to_string();
 					}
 
-					let mut build_output = term::Prompt::new("[CDN] What directory should be uploaded to Rivet CDN?")
+					let mut build_output = term::Prompt::new("What directory should be uploaded to Rivet CDN?")
 						.indent(2)
+						.context("CDN")
 						.default_value("dist/").string(term).await?;
 					if build_output.is_empty() {
 						build_output = "dist/".to_string();

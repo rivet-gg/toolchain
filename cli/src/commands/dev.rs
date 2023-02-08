@@ -159,6 +159,7 @@ pub async fn create_dev_token(
 		|| term::Prompt::new("Write development token to .env file?")
 			.docs("We recommend storing your token in a .env file to keep it secure")
 			.docs_url("https://github.com/motdotla/dotenv#dotenv")
+			.default_value("y")
 			.bool(term)
 			.await?
 	{

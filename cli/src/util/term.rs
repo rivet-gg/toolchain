@@ -169,6 +169,7 @@ pub mod input {
 
 pub struct Prompt {
 	message: String,
+	context: Option<String>,
 	docs: Option<String>,
 	docs_url: Option<String>,
 	default_value: Option<String>,
@@ -179,11 +180,17 @@ impl Prompt {
 	pub fn new(message: impl ToString) -> Prompt {
 		Prompt {
 			message: message.to_string(),
+			context: None,
 			docs: None,
 			docs_url: None,
 			default_value: None,
 			indent: 0,
 		}
+	}
+
+	pub fn context(mut self, context: impl ToString) -> Self {
+		self.context = Some(context.to_string());
+		self
 	}
 
 	pub fn docs(mut self, docs: impl ToString) -> Self {
@@ -216,7 +223,11 @@ impl Prompt {
 		let i = self.gen_indent();
 
 		eprintln!();
-		eprintln!("{i}{}", style(&self.message).bold().blue());
+		eprint!("{i}");
+		if let Some(context) = &self.context {
+			eprint!("{} ", style(format!("[{context}]")).bold());
+		}
+		eprintln!("{}", style(&self.message).bold().blue());
 		if let Some(docs) = &self.docs {
 			eprintln!("{i}  {}", style(&docs).italic());
 		}
@@ -224,7 +235,11 @@ impl Prompt {
 			eprintln!("{i}  {}", style(&docs_url).italic().underlined().cyan());
 		}
 		if let Some(default_value) = &self.default_value {
-			eprintln!("{i}  Defaults to {}", style(&default_value).bold());
+			eprintln!(
+				"{i}  {} {}",
+				style("Defaults to").italic(),
+				style(&default_value).italic().bold()
+			);
 		}
 	}
 
@@ -318,7 +333,7 @@ impl Prompt {
 		self.print_header();
 
 		loop {
-			eprint!("{i}  {} ", style("[secure input]").bold());
+			eprint!("{i}  {} ", style("[input hidden]").bold());
 			let input = self.read_line_secure(term).await?;
 
 			if !input.is_empty() {
