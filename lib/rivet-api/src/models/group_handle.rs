@@ -15,8 +15,8 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GroupHandle {
     /// The URL of this group's avatar image
-    #[serde(rename = "avatar_url")]
-    pub avatar_url: String,
+    #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
+    pub avatar_url: Option<String>,
     #[serde(rename = "display_name")]
     pub display_name: String,
     #[serde(rename = "external")]
@@ -30,9 +30,9 @@ pub struct GroupHandle {
 
 impl GroupHandle {
     /// A group handle.
-    pub fn new(avatar_url: String, display_name: String, external: crate::models::GroupExternalLinks, group_id: uuid::Uuid) -> GroupHandle {
+    pub fn new(display_name: String, external: crate::models::GroupExternalLinks, group_id: uuid::Uuid) -> GroupHandle {
         GroupHandle {
-            avatar_url,
+            avatar_url: None,
             display_name,
             external: Box::new(external),
             group_id,

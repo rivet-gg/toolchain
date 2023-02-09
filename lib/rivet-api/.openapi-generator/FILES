@@ -148,6 +148,7 @@ docs/CloudLogsLobbyStatusStopped.md
 docs/CloudLogsLobbySummary.md
 docs/CloudLogsPerfMark.md
 docs/CloudLogsPerfSpan.md
+docs/CloudMatchmakerDevelopmentPort.md
 docs/CloudMatchmakerNamespaceConfig.md
 docs/CloudNamespaceConfig.md
 docs/CloudNamespaceFull.md
@@ -536,6 +537,7 @@ src/models/cloud_logs_lobby_status_stopped.rs
 src/models/cloud_logs_lobby_summary.rs
 src/models/cloud_logs_perf_mark.rs
 src/models/cloud_logs_perf_span.rs
+src/models/cloud_matchmaker_development_port.rs
 src/models/cloud_matchmaker_namespace_config.rs
 src/models/cloud_namespace_config.rs
 src/models/cloud_namespace_full.rs

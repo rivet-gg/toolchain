@@ -65,7 +65,7 @@ pub async fn cloud_devices_links_complete(configuration: &configuration::Configu
     }
 }
 
-pub async fn cloud_devices_links_get(configuration: &configuration::Configuration, device_link_token: &str, watch_index: &str) -> Result<crate::models::CloudDevicesGetDeviceLinkOutput, Error<CloudDevicesLinksGetError>> {
+pub async fn cloud_devices_links_get(configuration: &configuration::Configuration, device_link_token: &str, watch_index: Option<&str>) -> Result<crate::models::CloudDevicesGetDeviceLinkOutput, Error<CloudDevicesLinksGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -74,7 +74,9 @@ pub async fn cloud_devices_links_get(configuration: &configuration::Configuratio
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     local_var_req_builder = local_var_req_builder.query(&[("device_link_token", &device_link_token.to_string())]);
-    local_var_req_builder = local_var_req_builder.query(&[("watch_index", &watch_index.to_string())]);
+    if let Some(ref local_var_str) = watch_index {
+        local_var_req_builder = local_var_req_builder.query(&[("watch_index", &local_var_str.to_string())]);
+    }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }

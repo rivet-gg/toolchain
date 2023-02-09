@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**avatar_url** | **String** | The URL of this group's avatar image | 
+**avatar_url** | Option<**String**> | The URL of this group's avatar image | [optional]
 **display_name** | **String** |  | 
 **external** | [**crate::models::GroupExternalLinks**](GroupExternalLinks.md) |  | 
 **group_id** | [**uuid::Uuid**](uuid::Uuid.md) |  | 

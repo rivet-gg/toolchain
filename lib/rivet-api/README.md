@@ -306,6 +306,7 @@ Class | Method | HTTP request | Description
  - [CloudLogsLobbySummary](docs/CloudLogsLobbySummary.md)
  - [CloudLogsPerfMark](docs/CloudLogsPerfMark.md)
  - [CloudLogsPerfSpan](docs/CloudLogsPerfSpan.md)
+ - [CloudMatchmakerDevelopmentPort](docs/CloudMatchmakerDevelopmentPort.md)
  - [CloudMatchmakerNamespaceConfig](docs/CloudMatchmakerNamespaceConfig.md)
  - [CloudNamespaceConfig](docs/CloudNamespaceConfig.md)
  - [CloudNamespaceFull](docs/CloudNamespaceFull.md)

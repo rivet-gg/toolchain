@@ -16,16 +16,19 @@ pub struct CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
     /// The hostname used for the token.
     #[serde(rename = "hostname")]
     pub hostname: String,
-    /// A list of docker ports.
-    #[serde(rename = "lobby_ports")]
-    pub lobby_ports: Vec<crate::models::CloudVersionMatchmakerLobbyGroupRuntimeDockerPort>,
+    /// **Deprecated** A list of docker ports.
+    #[serde(rename = "lobby_ports", skip_serializing_if = "Option::is_none")]
+    pub lobby_ports: Option<Vec<crate::models::CloudVersionMatchmakerLobbyGroupRuntimeDockerPort>>,
+    #[serde(rename = "ports", skip_serializing_if = "Option::is_none")]
+    pub ports: Option<::std::collections::HashMap<String, crate::models::CloudMatchmakerDevelopmentPort>>,
 }
 
 impl CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
-    pub fn new(hostname: String, lobby_ports: Vec<crate::models::CloudVersionMatchmakerLobbyGroupRuntimeDockerPort>) -> CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
+    pub fn new(hostname: String) -> CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
         CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
             hostname,
-            lobby_ports,
+            lobby_ports: None,
+            ports: None,
         }
     }
 }
