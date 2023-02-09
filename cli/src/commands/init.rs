@@ -1,6 +1,7 @@
 use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
-use console::Term;
+use cli_core::{ctx, rivet_api};
+use console::{style, Term};
 use std::path::Path;
 use tokio::{fs, io::AsyncWriteExt};
 
@@ -216,45 +217,110 @@ impl Opts {
 }
 
 async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<cli_core::Ctx> {
-	let token = term::Prompt::new("Rivet cloud token?")
-		.docs("Create this token under Developer > My Game > API > Create Cloud Token")
-		.docs_url("https://docs.rivet.gg/general/concepts/tokens#cloud")
-		.string_secure(term)
-		.await?;
+	// Create OpenAPI configuration without bearer token to send link request
+	let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
+		base_path: override_api_url
+			.clone()
+			.unwrap_or_else(|| ctx::DEFAULT_API_CLOUD_URL.to_string()),
+		..Default::default()
+	};
+
+	// Prepare the link
+	let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_prepare(
+		&openapi_config_cloud_unauthed,
+		serde_json::json!({}),
+	)
+	.await;
+	if let Err(err) = prepare_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let prepare_res = prepare_res.context("cloud_devices_links_prepare")?;
+
+	// Prompt user to press enter to open browser
+	term::status::info("Link your game", "Press Enter to open your browser");
+	tokio::task::block_in_place(|| term.read_char())?;
+
+	// Open link in browser
+	if webbrowser::open_browser_with_options(
+		webbrowser::Browser::Default,
+		&prepare_res.device_link_url,
+		webbrowser::BrowserOptions::new().with_suppress_output(true),
+	)
+	.is_ok()
+	{
+		term::status::info(
+			"Waiting for link",
+			"Select the game to link in your browser",
+		);
+	} else {
+		eprintln!(
+			"{}\n  {}",
+			style("Visit the link below").bold().blue(),
+			style(&prepare_res.device_link_url)
+				.italic()
+				.underlined()
+				.cyan()
+		);
+	}
+
+	// Wait for link to complete
+	let mut watch_index = None;
+	let cloud_token = loop {
+		let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_get(
+			&openapi_config_cloud_unauthed,
+			&prepare_res.device_link_token,
+			watch_index.as_ref().map(String::as_str),
+		)
+		.await;
+		if let Err(err) = prepare_res.as_ref() {
+			println!("Error: {err:?}");
+		}
+		let prepare_res = prepare_res.context("cloud_devices_links_get")?;
+
+		watch_index = Some(prepare_res.watch.index);
+
+		if let Some(cloud_token) = prepare_res.cloud_token {
+			break cloud_token;
+		}
+	};
 
 	// Create new context
 	let new_ctx = cli_core::ctx::init(
 		override_api_url,
 		// Exclude overridden access token to check the token
-		token.clone(),
+		cloud_token.clone(),
 	)
 	.await?;
-	let inspect = new_ctx
-		.client()
-		.inspect()
-		.send()
-		.await
-		.context("client.inspect()")?;
 
-	let game_id = match inspect.agent.as_ref().context("inspect.agent")? {
-		cli_core::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) => {
-			game_cloud.game_id.clone().context("game_cloud.game_id")?
-		}
-		_ => bail!("invalid agent kind"),
+	// Inspect the token
+	let inspect_res =
+		rivet_api::apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await;
+	if let Err(err) = inspect_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let inspect_res = inspect_res.context("cloud_auth_inspect")?;
+
+	// Find the game ID
+	let Some(game_cloud) = inspect_res.agent.game_cloud.as_ref() else {
+		bail!("token is not a GameCloud token")
 	};
+	let game_id = game_cloud.game_id;
 
-	let game_res = new_ctx
-		.client()
-		.get_game_by_id()
-		.game_id(game_id)
-		.send()
-		.await
-		.context("client.get_game_by_id()")?;
-	let game = game_res.game().context("game_res.game")?;
-	let display_name = game.display_name().context("game.display_name")?;
+	// Extract game data
+	let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+		&new_ctx.openapi_config_cloud,
+		&game_id.to_string(),
+		None,
+	)
+	.await;
+	if let Err(err) = game_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let game_res = game_res.context("cloud_games_games_get_game_by_id")?;
+	let display_name = game_res.game.display_name;
 
 	// Write the token
-	secrets::write_cloud_token(&token).await?;
+	secrets::write_cloud_token(&cloud_token).await?;
 
 	term::status::success("Token Saved", display_name);
 
