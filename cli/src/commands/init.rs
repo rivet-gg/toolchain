@@ -236,14 +236,32 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 	}
 	let prepare_res = prepare_res.context("cloud_devices_links_prepare")?;
 
-	eprintln!(
-		"{}\n  {}",
-		style("Link your CLI to Rivet").bold().blue(),
-		style(&prepare_res.device_link_url)
-			.italic()
-			.underlined()
-			.cyan()
-	);
+	// Prompt user to press enter to open browser
+	term::status::info("Link your game", "Press Enter to open your browser");
+	tokio::task::block_in_place(|| term.read_char())?;
+
+	// Open link in browser
+	if webbrowser::open_browser_with_options(
+		webbrowser::Browser::Default,
+		&prepare_res.device_link_url,
+		webbrowser::BrowserOptions::new().with_suppress_output(true),
+	)
+	.is_ok()
+	{
+		term::status::info(
+			"Waiting for link",
+			"Select the game to link in your browser",
+		);
+	} else {
+		eprintln!(
+			"{}\n  {}",
+			style("Visit the link below").bold().blue(),
+			style(&prepare_res.device_link_url)
+				.italic()
+				.underlined()
+				.cyan()
+		);
+	}
 
 	// Wait for link to complete
 	let mut watch_index = None;
