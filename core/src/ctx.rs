@@ -2,6 +2,8 @@ use std::{env, sync::Arc};
 
 use crate::error::Error;
 
+pub const DEFAULT_API_CLOUD_URL: &'static str = "https://cloud.api.rivet.gg/v1";
+
 pub type Ctx = Arc<CtxInner>;
 
 type HttpClient =
@@ -31,7 +33,7 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 
 	let uri = override_api_url
 		.clone()
-		.unwrap_or_else(|| "https://cloud.api.rivet.gg/v1".to_string());
+		.unwrap_or_else(|| DEFAULT_API_CLOUD_URL.to_string());
 
 	// Create client
 	let rivet_cloud_config = rivet_cloud::Config::builder()
