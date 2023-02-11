@@ -460,7 +460,7 @@ where
 	///   - [`watch_index(impl Into<String>)`](crate::client::fluent_builders::GetGames::watch_index) / [`set_watch_index(Option<String>)`](crate::client::fluent_builders::GetGames::set_watch_index): A query parameter denoting the requests watch index.
 	/// - On success, responds with [`GetGamesOutput`](crate::output::GetGamesOutput) with field(s):
 	///   - [`games(Option<Vec<GameSummary>>)`](crate::output::GetGamesOutput::games): A list of game summaries.
-	///   - [`groups(Option<Vec<GroupSummary>>)`](crate::output::GetGamesOutput::groups): A list of group summaries.
+	///   - [`groups(Option<Vec<GroupHandle>>)`](crate::output::GetGamesOutput::groups): A list of group handles.
 	///   - [`watch(Option<WatchResponse>)`](crate::output::GetGamesOutput::watch): Provided by watchable endpoints used in blocking loops.
 	/// - On failure, responds with [`SdkError<GetGamesError>`](crate::error::GetGamesError)
 	pub fn get_games(&self) -> fluent_builders::GetGames<C, M, R> {
@@ -483,10 +483,13 @@ where
 	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupBilling::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupBilling::set_group_id): A universally unique identifier.
 	///   - [`query_start(i64)`](crate::client::fluent_builders::GetGroupBilling::query_start) / [`set_query_start(Option<i64>)`](crate::client::fluent_builders::GetGroupBilling::set_query_start): Unsigned 64 bit integer.
 	///   - [`query_end(i64)`](crate::client::fluent_builders::GetGroupBilling::query_end) / [`set_query_end(Option<i64>)`](crate::client::fluent_builders::GetGroupBilling::set_query_end): Unsigned 64 bit integer.
+	///   - [`watch_index(impl Into<String>)`](crate::client::fluent_builders::GetGroupBilling::watch_index) / [`set_watch_index(Option<String>)`](crate::client::fluent_builders::GetGroupBilling::set_watch_index): A query parameter denoting the requests watch index.
 	/// - On success, responds with [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput) with field(s):
 	///   - [`billing(Option<GroupBillingSummary>)`](crate::output::GetGroupBillingOutput::billing): A group billing summary.
-	///   - [`bank_source(Option<GroupBankSource>)`](crate::output::GetGroupBillingOutput::bank_source): (undocumented)
+	///   - [`status(Option<GroupStatus>)`](crate::output::GetGroupBillingOutput::status): The status of a developer group.
+	///   - [`plan(Option<GroupBillingPlan>)`](crate::output::GetGroupBillingOutput::plan): A value denoting a game's billing plan.
 	///   - [`available_regions(Option<Vec<RegionSummary>>)`](crate::output::GetGroupBillingOutput::available_regions): A list of region summaries.
+	///   - [`watch(Option<WatchResponse>)`](crate::output::GetGroupBillingOutput::watch): Provided by watchable endpoints used in blocking loops.
 	/// - On failure, responds with [`SdkError<GetGroupBillingError>`](crate::error::GetGroupBillingError)
 	pub fn get_group_billing(&self) -> fluent_builders::GetGroupBilling<C, M, R> {
 		fluent_builders::GetGroupBilling::new(self.handle.clone())
@@ -495,38 +498,13 @@ where
 	///
 	/// - The fluent builder is configurable:
 	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_group_id): A universally unique identifier.
-	///   - [`anchor(impl Into<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::anchor) / [`set_anchor(Option<String>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_anchor): The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-	///   - [`limit(i32)`](crate::client::fluent_builders::GetGroupInvoicesList::limit) / [`set_limit(Option<i32>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_limit): Amount of invoices to return.
+	///   - [`page(i32)`](crate::client::fluent_builders::GetGroupInvoicesList::page) / [`set_page(Option<i32>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_page): Unsigned 32 bit integer.
+	///   - [`per_page(i32)`](crate::client::fluent_builders::GetGroupInvoicesList::per_page) / [`set_per_page(Option<i32>)`](crate::client::fluent_builders::GetGroupInvoicesList::set_per_page): Unsigned 32 bit integer.
 	/// - On success, responds with [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput) with field(s):
 	///   - [`invoices(Option<Vec<GroupBillingInvoice>>)`](crate::output::GetGroupInvoicesListOutput::invoices): A list of a group's billing invoices.
-	///   - [`anchor(Option<String>)`](crate::output::GetGroupInvoicesListOutput::anchor): The pagination anchor.
 	/// - On failure, responds with [`SdkError<GetGroupInvoicesListError>`](crate::error::GetGroupInvoicesListError)
 	pub fn get_group_invoices_list(&self) -> fluent_builders::GetGroupInvoicesList<C, M, R> {
 		fluent_builders::GetGroupInvoicesList::new(self.handle.clone())
-	}
-	/// Constructs a fluent builder for the [`GetGroupPaymentsList`](crate::client::fluent_builders::GetGroupPaymentsList) operation.
-	///
-	/// - The fluent builder is configurable:
-	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::set_group_id): A universally unique identifier.
-	///   - [`start_payment_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::start_payment_id) / [`set_start_payment_id(Option<String>)`](crate::client::fluent_builders::GetGroupPaymentsList::set_start_payment_id): The payment ID of the payment after which to start listing.
-	/// - On success, responds with [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput) with field(s):
-	///   - [`payments(Option<Vec<GroupBillingPayment>>)`](crate::output::GetGroupPaymentsListOutput::payments): A list of a group's billing payments.
-	///   - [`end_payment_id(Option<String>)`](crate::output::GetGroupPaymentsListOutput::end_payment_id): The ID of the last payment listed.
-	/// - On failure, responds with [`SdkError<GetGroupPaymentsListError>`](crate::error::GetGroupPaymentsListError)
-	pub fn get_group_payments_list(&self) -> fluent_builders::GetGroupPaymentsList<C, M, R> {
-		fluent_builders::GetGroupPaymentsList::new(self.handle.clone())
-	}
-	/// Constructs a fluent builder for the [`GetGroupTransfersList`](crate::client::fluent_builders::GetGroupTransfersList) operation.
-	///
-	/// - The fluent builder is configurable:
-	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupTransfersList::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GetGroupTransfersList::set_group_id): A universally unique identifier.
-	///   - [`start_transfer_id(impl Into<String>)`](crate::client::fluent_builders::GetGroupTransfersList::start_transfer_id) / [`set_start_transfer_id(Option<String>)`](crate::client::fluent_builders::GetGroupTransfersList::set_start_transfer_id): The transfer ID of the transfer after which to start listing.
-	/// - On success, responds with [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput) with field(s):
-	///   - [`transfers(Option<Vec<GroupBillingTransfer>>)`](crate::output::GetGroupTransfersListOutput::transfers): A list of a group's billing transfers.
-	///   - [`end_transfer_id(Option<String>)`](crate::output::GetGroupTransfersListOutput::end_transfer_id): The ID of the last transfer listed.
-	/// - On failure, responds with [`SdkError<GetGroupTransfersListError>`](crate::error::GetGroupTransfersListError)
-	pub fn get_group_transfers_list(&self) -> fluent_builders::GetGroupTransfersList<C, M, R> {
-		fluent_builders::GetGroupTransfersList::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`GetLobbyLogs`](crate::client::fluent_builders::GetLobbyLogs) operation.
 	///
@@ -596,7 +574,6 @@ where
 	///
 	/// - The fluent builder is configurable:
 	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::GroupBillingCheckout::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::GroupBillingCheckout::set_group_id): A universally unique identifier.
-	///   - [`amount(i64)`](crate::client::fluent_builders::GroupBillingCheckout::amount) / [`set_amount(Option<i64>)`](crate::client::fluent_builders::GroupBillingCheckout::set_amount): How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
 	/// - On success, responds with [`GroupBillingCheckoutOutput`](crate::output::GroupBillingCheckoutOutput) with field(s):
 	///   - [`url(Option<String>)`](crate::output::GroupBillingCheckoutOutput::url): The URL of the checkout session.
 	/// - On failure, responds with [`SdkError<GroupBillingCheckoutError>`](crate::error::GroupBillingCheckoutError)
@@ -696,6 +673,17 @@ where
 	/// - On failure, responds with [`SdkError<RemoveNamespaceDomainError>`](crate::error::RemoveNamespaceDomainError)
 	pub fn remove_namespace_domain(&self) -> fluent_builders::RemoveNamespaceDomain<C, M, R> {
 		fluent_builders::RemoveNamespaceDomain::new(self.handle.clone())
+	}
+	/// Constructs a fluent builder for the [`SetGroupBillingPlan`](crate::client::fluent_builders::SetGroupBillingPlan) operation.
+	///
+	/// - The fluent builder is configurable:
+	///   - [`group_id(impl Into<String>)`](crate::client::fluent_builders::SetGroupBillingPlan::group_id) / [`set_group_id(Option<String>)`](crate::client::fluent_builders::SetGroupBillingPlan::set_group_id): A universally unique identifier.
+	///   - [`plan(GroupBillingPlan)`](crate::client::fluent_builders::SetGroupBillingPlan::plan) / [`set_plan(Option<GroupBillingPlan>)`](crate::client::fluent_builders::SetGroupBillingPlan::set_plan): A value denoting a game's billing plan.
+	/// - On success, responds with [`SetGroupBillingPlanOutput`](crate::output::SetGroupBillingPlanOutput)
+
+	/// - On failure, responds with [`SdkError<SetGroupBillingPlanError>`](crate::error::SetGroupBillingPlanError)
+	pub fn set_group_billing_plan(&self) -> fluent_builders::SetGroupBillingPlan<C, M, R> {
+		fluent_builders::SetGroupBillingPlan::new(self.handle.clone())
 	}
 	/// Constructs a fluent builder for the [`SetNamespaceCdnAuthType`](crate::client::fluent_builders::SetNamespaceCdnAuthType) operation.
 	///
@@ -2829,6 +2817,16 @@ pub mod fluent_builders {
 			self.inner = self.inner.set_query_end(input);
 			self
 		}
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.watch_index(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_watch_index(input);
+			self
+		}
 	}
 	/// Fluent builder constructing a request to `GetGroupInvoicesList`.
 	///
@@ -2895,182 +2893,24 @@ pub mod fluent_builders {
 			self.inner = self.inner.set_group_id(input);
 			self
 		}
-		/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.anchor(input.into());
+		/// Unsigned 32 bit integer.
+		pub fn page(mut self, input: i32) -> Self {
+			self.inner = self.inner.page(input);
 			self
 		}
-		/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_anchor(input);
+		/// Unsigned 32 bit integer.
+		pub fn set_page(mut self, input: std::option::Option<i32>) -> Self {
+			self.inner = self.inner.set_page(input);
 			self
 		}
-		/// Amount of invoices to return.
-		pub fn limit(mut self, input: i32) -> Self {
-			self.inner = self.inner.limit(input);
+		/// Unsigned 32 bit integer.
+		pub fn per_page(mut self, input: i32) -> Self {
+			self.inner = self.inner.per_page(input);
 			self
 		}
-		/// Amount of invoices to return.
-		pub fn set_limit(mut self, input: std::option::Option<i32>) -> Self {
-			self.inner = self.inner.set_limit(input);
-			self
-		}
-	}
-	/// Fluent builder constructing a request to `GetGroupPaymentsList`.
-	///
-	/// Returns a list of payments for the given group.
-	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct GetGroupPaymentsList<C, M, R = aws_smithy_client::retry::Standard> {
-		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::get_group_payments_list_input::Builder,
-	}
-	impl<C, M, R> GetGroupPaymentsList<C, M, R>
-	where
-		C: aws_smithy_client::bounds::SmithyConnector,
-		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
-		R: aws_smithy_client::retry::NewRequestPolicy,
-	{
-		/// Creates a new `GetGroupPaymentsList`.
-		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
-			Self {
-				handle,
-				inner: Default::default(),
-			}
-		}
-
-		/// Sends the request and returns the response.
-		///
-		/// If an error occurs, an `SdkError` will be returned with additional details that
-		/// can be matched against.
-		///
-		/// By default, any retryable failures will be retried twice. Retry behavior
-		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
-		/// set when configuring the client.
-		pub async fn send(
-			self,
-		) -> std::result::Result<
-			crate::output::GetGroupPaymentsListOutput,
-			aws_smithy_http::result::SdkError<crate::error::GetGroupPaymentsListError>,
-		>
-		where
-			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::GetGroupPaymentsListInputOperationOutputAlias,
-				crate::output::GetGroupPaymentsListOutput,
-				crate::error::GetGroupPaymentsListError,
-				crate::input::GetGroupPaymentsListInputOperationRetryAlias,
-			>,
-		{
-			let op = self
-				.inner
-				.build()
-				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
-				.make_operation(&self.handle.conf)
-				.await
-				.map_err(|err| {
-					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
-				})?;
-			self.handle.client.call(op).await
-		}
-		/// A universally unique identifier.
-		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.group_id(input.into());
-			self
-		}
-		/// A universally unique identifier.
-		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_group_id(input);
-			self
-		}
-		/// The payment ID of the payment after which to start listing.
-		pub fn start_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.start_payment_id(input.into());
-			self
-		}
-		/// The payment ID of the payment after which to start listing.
-		pub fn set_start_payment_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.inner = self.inner.set_start_payment_id(input);
-			self
-		}
-	}
-	/// Fluent builder constructing a request to `GetGroupTransfersList`.
-	///
-	/// Returns a list of bank transfers for the given group.
-	#[derive(std::clone::Clone, std::fmt::Debug)]
-	pub struct GetGroupTransfersList<C, M, R = aws_smithy_client::retry::Standard> {
-		handle: std::sync::Arc<super::Handle<C, M, R>>,
-		inner: crate::input::get_group_transfers_list_input::Builder,
-	}
-	impl<C, M, R> GetGroupTransfersList<C, M, R>
-	where
-		C: aws_smithy_client::bounds::SmithyConnector,
-		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
-		R: aws_smithy_client::retry::NewRequestPolicy,
-	{
-		/// Creates a new `GetGroupTransfersList`.
-		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
-			Self {
-				handle,
-				inner: Default::default(),
-			}
-		}
-
-		/// Sends the request and returns the response.
-		///
-		/// If an error occurs, an `SdkError` will be returned with additional details that
-		/// can be matched against.
-		///
-		/// By default, any retryable failures will be retried twice. Retry behavior
-		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
-		/// set when configuring the client.
-		pub async fn send(
-			self,
-		) -> std::result::Result<
-			crate::output::GetGroupTransfersListOutput,
-			aws_smithy_http::result::SdkError<crate::error::GetGroupTransfersListError>,
-		>
-		where
-			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
-				crate::input::GetGroupTransfersListInputOperationOutputAlias,
-				crate::output::GetGroupTransfersListOutput,
-				crate::error::GetGroupTransfersListError,
-				crate::input::GetGroupTransfersListInputOperationRetryAlias,
-			>,
-		{
-			let op = self
-				.inner
-				.build()
-				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
-				.make_operation(&self.handle.conf)
-				.await
-				.map_err(|err| {
-					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
-				})?;
-			self.handle.client.call(op).await
-		}
-		/// A universally unique identifier.
-		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.group_id(input.into());
-			self
-		}
-		/// A universally unique identifier.
-		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.inner = self.inner.set_group_id(input);
-			self
-		}
-		/// The transfer ID of the transfer after which to start listing.
-		pub fn start_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.inner = self.inner.start_transfer_id(input.into());
-			self
-		}
-		/// The transfer ID of the transfer after which to start listing.
-		pub fn set_start_transfer_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.inner = self.inner.set_start_transfer_id(input);
+		/// Unsigned 32 bit integer.
+		pub fn set_per_page(mut self, input: std::option::Option<i32>) -> Self {
+			self.inner = self.inner.set_per_page(input);
 			self
 		}
 	}
@@ -3519,16 +3359,6 @@ pub mod fluent_builders {
 		/// A universally unique identifier.
 		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_group_id(input);
-			self
-		}
-		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
-		pub fn amount(mut self, input: i64) -> Self {
-			self.inner = self.inner.amount(input);
-			self
-		}
-		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
-		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
-			self.inner = self.inner.set_amount(input);
 			self
 		}
 	}
@@ -4140,6 +3970,85 @@ pub mod fluent_builders {
 		/// A valid domain name (no protocol).
 		pub fn set_domain(mut self, input: std::option::Option<std::string::String>) -> Self {
 			self.inner = self.inner.set_domain(input);
+			self
+		}
+	}
+	/// Fluent builder constructing a request to `SetGroupBillingPlan`.
+	///
+	/// Sets the current billing plan of the given developer group.
+	#[derive(std::clone::Clone, std::fmt::Debug)]
+	pub struct SetGroupBillingPlan<C, M, R = aws_smithy_client::retry::Standard> {
+		handle: std::sync::Arc<super::Handle<C, M, R>>,
+		inner: crate::input::set_group_billing_plan_input::Builder,
+	}
+	impl<C, M, R> SetGroupBillingPlan<C, M, R>
+	where
+		C: aws_smithy_client::bounds::SmithyConnector,
+		M: aws_smithy_client::bounds::SmithyMiddleware<C>,
+		R: aws_smithy_client::retry::NewRequestPolicy,
+	{
+		/// Creates a new `SetGroupBillingPlan`.
+		pub(crate) fn new(handle: std::sync::Arc<super::Handle<C, M, R>>) -> Self {
+			Self {
+				handle,
+				inner: Default::default(),
+			}
+		}
+
+		/// Sends the request and returns the response.
+		///
+		/// If an error occurs, an `SdkError` will be returned with additional details that
+		/// can be matched against.
+		///
+		/// By default, any retryable failures will be retried twice. Retry behavior
+		/// is configurable with the [RetryConfig](aws_smithy_types::retry::RetryConfig), which can be
+		/// set when configuring the client.
+		pub async fn send(
+			self,
+		) -> std::result::Result<
+			crate::output::SetGroupBillingPlanOutput,
+			aws_smithy_http::result::SdkError<crate::error::SetGroupBillingPlanError>,
+		>
+		where
+			R::Policy: aws_smithy_client::bounds::SmithyRetryPolicy<
+				crate::input::SetGroupBillingPlanInputOperationOutputAlias,
+				crate::output::SetGroupBillingPlanOutput,
+				crate::error::SetGroupBillingPlanError,
+				crate::input::SetGroupBillingPlanInputOperationRetryAlias,
+			>,
+		{
+			let op = self
+				.inner
+				.build()
+				.map_err(|err| aws_smithy_http::result::SdkError::ConstructionFailure(err.into()))?
+				.make_operation(&self.handle.conf)
+				.await
+				.map_err(|err| {
+					aws_smithy_http::result::SdkError::ConstructionFailure(err.into())
+				})?;
+			self.handle.client.call(op).await
+		}
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.inner = self.inner.group_id(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.inner = self.inner.set_group_id(input);
+			self
+		}
+		/// A value denoting a game's billing plan.
+		pub fn plan(mut self, input: crate::model::GroupBillingPlan) -> Self {
+			self.inner = self.inner.plan(input);
+			self
+		}
+		/// A value denoting a game's billing plan.
+		pub fn set_plan(
+			mut self,
+			input: std::option::Option<crate::model::GroupBillingPlan>,
+		) -> Self {
+			self.inner = self.inner.set_plan(input);
 			self
 		}
 	}

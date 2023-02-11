@@ -3467,6 +3467,7 @@ pub mod get_group_billing_input {
 		pub(crate) group_id: std::option::Option<std::string::String>,
 		pub(crate) query_start: std::option::Option<i64>,
 		pub(crate) query_end: std::option::Option<i64>,
+		pub(crate) watch_index: std::option::Option<std::string::String>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -3499,6 +3500,16 @@ pub mod get_group_billing_input {
 			self.query_end = input;
 			self
 		}
+		/// A query parameter denoting the requests watch index.
+		pub fn watch_index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.watch_index = Some(input.into());
+			self
+		}
+		/// A query parameter denoting the requests watch index.
+		pub fn set_watch_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.watch_index = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`GetGroupBillingInput`](crate::input::GetGroupBillingInput)
 		pub fn build(
 			self,
@@ -3510,6 +3521,7 @@ pub mod get_group_billing_input {
 				group_id: self.group_id,
 				query_start: self.query_start,
 				query_end: self.query_end,
+				watch_index: self.watch_index,
 			})
 		}
 	}
@@ -3570,6 +3582,12 @@ impl GetGroupBillingInput {
 						aws_smithy_types::primitive::Encoder::from(*inner_36).encode(),
 					);
 				}
+				if let Some(inner_37) = &_input.watch_index {
+					query.push_kv(
+						"watch_index",
+						&aws_smithy_http::query::fmt_string(&inner_37),
+					);
+				}
 				Ok(())
 			}
 			#[allow(clippy::unnecessary_wraps)]
@@ -3624,8 +3642,8 @@ pub mod get_group_invoices_list_input {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) group_id: std::option::Option<std::string::String>,
-		pub(crate) anchor: std::option::Option<std::string::String>,
-		pub(crate) limit: std::option::Option<i32>,
+		pub(crate) page: std::option::Option<i32>,
+		pub(crate) per_page: std::option::Option<i32>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -3638,24 +3656,24 @@ pub mod get_group_invoices_list_input {
 			self.group_id = input;
 			self
 		}
-		/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
-			self.anchor = Some(input.into());
+		/// Unsigned 32 bit integer.
+		pub fn page(mut self, input: i32) -> Self {
+			self.page = Some(input);
 			self
 		}
-		/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.anchor = input;
+		/// Unsigned 32 bit integer.
+		pub fn set_page(mut self, input: std::option::Option<i32>) -> Self {
+			self.page = input;
 			self
 		}
-		/// Amount of invoices to return.
-		pub fn limit(mut self, input: i32) -> Self {
-			self.limit = Some(input);
+		/// Unsigned 32 bit integer.
+		pub fn per_page(mut self, input: i32) -> Self {
+			self.per_page = Some(input);
 			self
 		}
-		/// Amount of invoices to return.
-		pub fn set_limit(mut self, input: std::option::Option<i32>) -> Self {
-			self.limit = input;
+		/// Unsigned 32 bit integer.
+		pub fn set_per_page(mut self, input: std::option::Option<i32>) -> Self {
+			self.per_page = input;
 			self
 		}
 		/// Consumes the builder and constructs a [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
@@ -3667,8 +3685,8 @@ pub mod get_group_invoices_list_input {
 		> {
 			Ok(crate::input::GetGroupInvoicesListInput {
 				group_id: self.group_id,
-				anchor: self.anchor,
-				limit: self.limit,
+				page: self.page,
+				per_page: self.per_page,
 			})
 		}
 	}
@@ -3694,14 +3712,14 @@ impl GetGroupInvoicesListInput {
 				_input: &crate::input::GetGroupInvoicesListInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_37 = &_input.group_id;
-				let input_37 = input_37.as_ref().ok_or(
+				let input_38 = &_input.group_id;
+				let input_38 = input_38.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "group_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let group_id = aws_smithy_http::label::fmt_string(input_37, false);
+				let group_id = aws_smithy_http::label::fmt_string(input_38, false);
 				if group_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "group_id",
@@ -3721,13 +3739,16 @@ impl GetGroupInvoicesListInput {
 				mut output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
 				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_38) = &_input.anchor {
-					query.push_kv("anchor", &aws_smithy_http::query::fmt_string(&inner_38));
-				}
-				if let Some(inner_39) = &_input.limit {
+				if let Some(inner_39) = &_input.page {
 					query.push_kv(
-						"limit",
+						"page",
 						aws_smithy_types::primitive::Encoder::from(*inner_39).encode(),
+					);
+				}
+				if let Some(inner_40) = &_input.per_page {
+					query.push_kv(
+						"per_page",
+						aws_smithy_types::primitive::Encoder::from(*inner_40).encode(),
 					);
 				}
 				Ok(())
@@ -3774,302 +3795,6 @@ impl GetGroupInvoicesListInput {
 	/// Creates a new builder-style object to manufacture [`GetGroupInvoicesListInput`](crate::input::GetGroupInvoicesListInput)
 	pub fn builder() -> crate::input::get_group_invoices_list_input::Builder {
 		crate::input::get_group_invoices_list_input::Builder::default()
-	}
-}
-
-/// See [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
-pub mod get_group_payments_list_input {
-	/// A builder for [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) group_id: std::option::Option<std::string::String>,
-		pub(crate) start_payment_id: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		/// A universally unique identifier.
-		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.group_id = Some(input.into());
-			self
-		}
-		/// A universally unique identifier.
-		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.group_id = input;
-			self
-		}
-		/// The payment ID of the payment after which to start listing.
-		pub fn start_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.start_payment_id = Some(input.into());
-			self
-		}
-		/// The payment ID of the payment after which to start listing.
-		pub fn set_start_payment_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.start_payment_id = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
-		pub fn build(
-			self,
-		) -> std::result::Result<
-			crate::input::GetGroupPaymentsListInput,
-			aws_smithy_http::operation::BuildError,
-		> {
-			Ok(crate::input::GetGroupPaymentsListInput {
-				group_id: self.group_id,
-				start_payment_id: self.start_payment_id,
-			})
-		}
-	}
-}
-#[doc(hidden)]
-pub type GetGroupPaymentsListInputOperationOutputAlias = crate::operation::GetGroupPaymentsList;
-#[doc(hidden)]
-pub type GetGroupPaymentsListInputOperationRetryAlias = ();
-impl GetGroupPaymentsListInput {
-	/// Consumes the builder and constructs an Operation<[`GetGroupPaymentsList`](crate::operation::GetGroupPaymentsList)>
-	#[allow(unused_mut)]
-	#[allow(clippy::let_and_return)]
-	#[allow(clippy::needless_borrow)]
-	pub async fn make_operation(
-		&self,
-		_config: &crate::config::Config,
-	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::GetGroupPaymentsList, ()>,
-		aws_smithy_http::operation::BuildError,
-	> {
-		let mut request = {
-			fn uri_base(
-				_input: &crate::input::GetGroupPaymentsListInput,
-				output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_40 = &_input.group_id;
-				let input_40 = input_40.as_ref().ok_or(
-					aws_smithy_http::operation::BuildError::MissingField {
-						field: "group_id",
-						details: "cannot be empty or unset",
-					},
-				)?;
-				let group_id = aws_smithy_http::label::fmt_string(input_40, false);
-				if group_id.is_empty() {
-					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "group_id",
-						details: "cannot be empty or unset",
-					});
-				}
-				write!(
-					output,
-					"/groups/{group_id}/billing/payments",
-					group_id = group_id
-				)
-				.expect("formatting should succeed");
-				Ok(())
-			}
-			fn uri_query(
-				_input: &crate::input::GetGroupPaymentsListInput,
-				mut output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_41) = &_input.start_payment_id {
-					query.push_kv(
-						"start_payment_id",
-						&aws_smithy_http::query::fmt_string(&inner_41),
-					);
-				}
-				Ok(())
-			}
-			#[allow(clippy::unnecessary_wraps)]
-			fn update_http_builder(
-				input: &crate::input::GetGroupPaymentsListInput,
-				_config: &crate::config::Config,
-				builder: http::request::Builder,
-			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
-			{
-				let mut _uri = String::new();
-				_uri = format!("{}{}", _config.uri.clone(), _uri);
-				uri_base(input, &mut _uri)?;
-				uri_query(input, &mut _uri)?;
-				Ok(builder.method("GET").uri(_uri))
-			}
-			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
-			let mut builder = if let Some(auth) = &_config.auth {
-				builder.header(http::header::AUTHORIZATION, auth.clone())
-			} else {
-				builder
-			};
-			builder
-		};
-		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
-		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from("");
-		let request = request.body(body).expect("should be valid request");
-		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
-		request
-			.properties_mut()
-			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
-		let op = aws_smithy_http::operation::Operation::new(
-			request,
-			crate::operation::GetGroupPaymentsList::new(),
-		)
-		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"GetGroupPaymentsList",
-			"CloudService",
-		));
-		Ok(op)
-	}
-	/// Creates a new builder-style object to manufacture [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
-	pub fn builder() -> crate::input::get_group_payments_list_input::Builder {
-		crate::input::get_group_payments_list_input::Builder::default()
-	}
-}
-
-/// See [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
-pub mod get_group_transfers_list_input {
-	/// A builder for [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) group_id: std::option::Option<std::string::String>,
-		pub(crate) start_transfer_id: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		/// A universally unique identifier.
-		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.group_id = Some(input.into());
-			self
-		}
-		/// A universally unique identifier.
-		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.group_id = input;
-			self
-		}
-		/// The transfer ID of the transfer after which to start listing.
-		pub fn start_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.start_transfer_id = Some(input.into());
-			self
-		}
-		/// The transfer ID of the transfer after which to start listing.
-		pub fn set_start_transfer_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.start_transfer_id = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
-		pub fn build(
-			self,
-		) -> std::result::Result<
-			crate::input::GetGroupTransfersListInput,
-			aws_smithy_http::operation::BuildError,
-		> {
-			Ok(crate::input::GetGroupTransfersListInput {
-				group_id: self.group_id,
-				start_transfer_id: self.start_transfer_id,
-			})
-		}
-	}
-}
-#[doc(hidden)]
-pub type GetGroupTransfersListInputOperationOutputAlias = crate::operation::GetGroupTransfersList;
-#[doc(hidden)]
-pub type GetGroupTransfersListInputOperationRetryAlias = ();
-impl GetGroupTransfersListInput {
-	/// Consumes the builder and constructs an Operation<[`GetGroupTransfersList`](crate::operation::GetGroupTransfersList)>
-	#[allow(unused_mut)]
-	#[allow(clippy::let_and_return)]
-	#[allow(clippy::needless_borrow)]
-	pub async fn make_operation(
-		&self,
-		_config: &crate::config::Config,
-	) -> std::result::Result<
-		aws_smithy_http::operation::Operation<crate::operation::GetGroupTransfersList, ()>,
-		aws_smithy_http::operation::BuildError,
-	> {
-		let mut request = {
-			fn uri_base(
-				_input: &crate::input::GetGroupTransfersListInput,
-				output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_42 = &_input.group_id;
-				let input_42 = input_42.as_ref().ok_or(
-					aws_smithy_http::operation::BuildError::MissingField {
-						field: "group_id",
-						details: "cannot be empty or unset",
-					},
-				)?;
-				let group_id = aws_smithy_http::label::fmt_string(input_42, false);
-				if group_id.is_empty() {
-					return Err(aws_smithy_http::operation::BuildError::MissingField {
-						field: "group_id",
-						details: "cannot be empty or unset",
-					});
-				}
-				write!(
-					output,
-					"/groups/{group_id}/billing/transfers",
-					group_id = group_id
-				)
-				.expect("formatting should succeed");
-				Ok(())
-			}
-			fn uri_query(
-				_input: &crate::input::GetGroupTransfersListInput,
-				mut output: &mut String,
-			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_43) = &_input.start_transfer_id {
-					query.push_kv(
-						"start_transfer_id",
-						&aws_smithy_http::query::fmt_string(&inner_43),
-					);
-				}
-				Ok(())
-			}
-			#[allow(clippy::unnecessary_wraps)]
-			fn update_http_builder(
-				input: &crate::input::GetGroupTransfersListInput,
-				_config: &crate::config::Config,
-				builder: http::request::Builder,
-			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
-			{
-				let mut _uri = String::new();
-				_uri = format!("{}{}", _config.uri.clone(), _uri);
-				uri_base(input, &mut _uri)?;
-				uri_query(input, &mut _uri)?;
-				Ok(builder.method("GET").uri(_uri))
-			}
-			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
-			let mut builder = if let Some(auth) = &_config.auth {
-				builder.header(http::header::AUTHORIZATION, auth.clone())
-			} else {
-				builder
-			};
-			builder
-		};
-		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
-		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from("");
-		let request = request.body(body).expect("should be valid request");
-		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
-		request
-			.properties_mut()
-			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
-		let op = aws_smithy_http::operation::Operation::new(
-			request,
-			crate::operation::GetGroupTransfersList::new(),
-		)
-		.with_metadata(aws_smithy_http::operation::Metadata::new(
-			"GetGroupTransfersList",
-			"CloudService",
-		));
-		Ok(op)
-	}
-	/// Creates a new builder-style object to manufacture [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
-	pub fn builder() -> crate::input::get_group_transfers_list_input::Builder {
-		crate::input::get_group_transfers_list_input::Builder::default()
 	}
 }
 
@@ -4162,28 +3887,28 @@ impl GetLobbyLogsInput {
 				_input: &crate::input::GetLobbyLogsInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_44 = &_input.game_id;
-				let input_44 = input_44.as_ref().ok_or(
+				let input_41 = &_input.game_id;
+				let input_41 = input_41.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_44, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_41, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_45 = &_input.lobby_id;
-				let input_45 = input_45.as_ref().ok_or(
+				let input_42 = &_input.lobby_id;
+				let input_42 = input_42.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "lobby_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let lobby_id = aws_smithy_http::label::fmt_string(input_45, false);
+				let lobby_id = aws_smithy_http::label::fmt_string(input_42, false);
 				if lobby_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "lobby_id",
@@ -4204,13 +3929,13 @@ impl GetLobbyLogsInput {
 				mut output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
 				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_46) = &_input.stream {
-					query.push_kv("stream", &aws_smithy_http::query::fmt_string(&inner_46));
+				if let Some(inner_43) = &_input.stream {
+					query.push_kv("stream", &aws_smithy_http::query::fmt_string(&inner_43));
 				}
-				if let Some(inner_47) = &_input.watch_index {
+				if let Some(inner_44) = &_input.watch_index {
 					query.push_kv(
 						"watch_index",
-						&aws_smithy_http::query::fmt_string(&inner_47),
+						&aws_smithy_http::query::fmt_string(&inner_44),
 					);
 				}
 				Ok(())
@@ -4329,28 +4054,28 @@ impl GetNamespaceAnalyticsMatchmakerLiveInput {
 				_input: &crate::input::GetNamespaceAnalyticsMatchmakerLiveInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_48 = &_input.game_id;
-				let input_48 = input_48.as_ref().ok_or(
+				let input_45 = &_input.game_id;
+				let input_45 = input_45.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_48, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_45, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_49 = &_input.namespace_id;
-				let input_49 = input_49.as_ref().ok_or(
+				let input_46 = &_input.namespace_id;
+				let input_46 = input_46.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_49, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_46, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -4487,42 +4212,42 @@ impl GetNamespaceLobbyInput {
 				_input: &crate::input::GetNamespaceLobbyInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_50 = &_input.game_id;
-				let input_50 = input_50.as_ref().ok_or(
+				let input_47 = &_input.game_id;
+				let input_47 = input_47.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_50, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_47, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_51 = &_input.namespace_id;
-				let input_51 = input_51.as_ref().ok_or(
+				let input_48 = &_input.namespace_id;
+				let input_48 = input_48.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_51, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_48, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_52 = &_input.lobby_id;
-				let input_52 = input_52.as_ref().ok_or(
+				let input_49 = &_input.lobby_id;
+				let input_49 = input_49.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "lobby_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let lobby_id = aws_smithy_http::label::fmt_string(input_52, false);
+				let lobby_id = aws_smithy_http::label::fmt_string(input_49, false);
 				if lobby_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "lobby_id",
@@ -4636,14 +4361,14 @@ impl GetRayPerfLogsInput {
 				_input: &crate::input::GetRayPerfLogsInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_53 = &_input.ray_id;
-				let input_53 = input_53.as_ref().ok_or(
+				let input_50 = &_input.ray_id;
+				let input_50 = input_50.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "ray_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let ray_id = aws_smithy_http::label::fmt_string(input_53, false);
+				let ray_id = aws_smithy_http::label::fmt_string(input_50, false);
 				if ray_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "ray_id",
@@ -4791,7 +4516,6 @@ pub mod group_billing_checkout_input {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) group_id: std::option::Option<std::string::String>,
-		pub(crate) amount: std::option::Option<i64>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -4804,16 +4528,6 @@ pub mod group_billing_checkout_input {
 			self.group_id = input;
 			self
 		}
-		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
-		pub fn amount(mut self, input: i64) -> Self {
-			self.amount = Some(input);
-			self
-		}
-		/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
-		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
-			self.amount = input;
-			self
-		}
 		/// Consumes the builder and constructs a [`GroupBillingCheckoutInput`](crate::input::GroupBillingCheckoutInput)
 		pub fn build(
 			self,
@@ -4823,7 +4537,6 @@ pub mod group_billing_checkout_input {
 		> {
 			Ok(crate::input::GroupBillingCheckoutInput {
 				group_id: self.group_id,
-				amount: self.amount,
 			})
 		}
 	}
@@ -4849,14 +4562,14 @@ impl GroupBillingCheckoutInput {
 				_input: &crate::input::GroupBillingCheckoutInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_54 = &_input.group_id;
-				let input_54 = input_54.as_ref().ok_or(
+				let input_51 = &_input.group_id;
+				let input_51 = input_51.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "group_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let group_id = aws_smithy_http::label::fmt_string(input_54, false);
+				let group_id = aws_smithy_http::label::fmt_string(input_51, false);
 				if group_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "group_id",
@@ -4885,27 +4598,11 @@ impl GroupBillingCheckoutInput {
 			} else {
 				builder
 			};
-			builder = aws_smithy_http::header::set_request_header_if_absent(
-				builder,
-				http::header::CONTENT_TYPE,
-				"application/json",
-			);
 			builder
 		};
 		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
 		#[allow(clippy::useless_conversion)]
-		let body = aws_smithy_http::body::SdkBody::from(
-			crate::operation_ser::serialize_operation_crate_operation_group_billing_checkout(
-				&self,
-			)?,
-		);
-		if let Some(content_length) = body.content_length() {
-			request = aws_smithy_http::header::set_request_header_if_absent(
-				request,
-				http::header::CONTENT_LENGTH,
-				content_length,
-			);
-		}
+		let body = aws_smithy_http::body::SdkBody::from("{}");
 		let request = request.body(body).expect("should be valid request");
 		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
 		request
@@ -5062,14 +4759,14 @@ impl ListGameBuildsInput {
 				_input: &crate::input::ListGameBuildsInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_55 = &_input.game_id;
-				let input_55 = input_55.as_ref().ok_or(
+				let input_52 = &_input.game_id;
+				let input_52 = input_52.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_55, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_52, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5177,14 +4874,14 @@ impl ListGameCdnSitesInput {
 				_input: &crate::input::ListGameCdnSitesInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_56 = &_input.game_id;
-				let input_56 = input_56.as_ref().ok_or(
+				let input_53 = &_input.game_id;
+				let input_53 = input_53.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_56, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_53, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5292,14 +4989,14 @@ impl ListGameCustomAvatarsInput {
 				_input: &crate::input::ListGameCustomAvatarsInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_57 = &_input.game_id;
-				let input_57 = input_57.as_ref().ok_or(
+				let input_54 = &_input.game_id;
+				let input_54 = input_54.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_57, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_54, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5434,28 +5131,28 @@ impl ListNamespaceLobbiesInput {
 				_input: &crate::input::ListNamespaceLobbiesInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_58 = &_input.game_id;
-				let input_58 = input_58.as_ref().ok_or(
+				let input_55 = &_input.game_id;
+				let input_55 = input_55.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_58, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_55, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_59 = &_input.namespace_id;
-				let input_59 = input_59.as_ref().ok_or(
+				let input_56 = &_input.namespace_id;
+				let input_56 = input_56.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_59, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_56, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -5476,11 +5173,11 @@ impl ListNamespaceLobbiesInput {
 				mut output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
 				let mut query = aws_smithy_http::query::Writer::new(&mut output);
-				if let Some(inner_60) = &_input.before_create_ts {
+				if let Some(inner_57) = &_input.before_create_ts {
 					query.push_kv(
 						"before_create_ts",
 						&aws_smithy_http::query::fmt_timestamp(
-							inner_60,
+							inner_57,
 							aws_smithy_types::date_time::Format::DateTime,
 						)?,
 					);
@@ -5622,14 +5319,14 @@ impl PrepareCustomAvatarUploadInput {
 				_input: &crate::input::PrepareCustomAvatarUploadInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_61 = &_input.game_id;
-				let input_61 = input_61.as_ref().ok_or(
+				let input_58 = &_input.game_id;
+				let input_58 = input_58.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_61, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_58, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -5782,42 +5479,42 @@ impl RemoveNamespaceCdnAuthUserInput {
 				_input: &crate::input::RemoveNamespaceCdnAuthUserInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_62 = &_input.game_id;
-				let input_62 = input_62.as_ref().ok_or(
+				let input_59 = &_input.game_id;
+				let input_59 = input_59.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_62, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_59, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_63 = &_input.namespace_id;
-				let input_63 = input_63.as_ref().ok_or(
+				let input_60 = &_input.namespace_id;
+				let input_60 = input_60.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_63, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_60, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_64 = &_input.user;
-				let input_64 = input_64.as_ref().ok_or(
+				let input_61 = &_input.user;
+				let input_61 = input_61.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "user",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let user = aws_smithy_http::label::fmt_string(input_64, false);
+				let user = aws_smithy_http::label::fmt_string(input_61, false);
 				if user.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "user",
@@ -5955,42 +5652,42 @@ impl RemoveNamespaceDomainInput {
 				_input: &crate::input::RemoveNamespaceDomainInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_65 = &_input.game_id;
-				let input_65 = input_65.as_ref().ok_or(
+				let input_62 = &_input.game_id;
+				let input_62 = input_62.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_65, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_62, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_66 = &_input.namespace_id;
-				let input_66 = input_66.as_ref().ok_or(
+				let input_63 = &_input.namespace_id;
+				let input_63 = input_63.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_66, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_63, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_67 = &_input.domain;
-				let input_67 = input_67.as_ref().ok_or(
+				let input_64 = &_input.domain;
+				let input_64 = input_64.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let domain = aws_smithy_http::label::fmt_string(input_67, false);
+				let domain = aws_smithy_http::label::fmt_string(input_64, false);
 				if domain.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "domain",
@@ -6048,6 +5745,152 @@ impl RemoveNamespaceDomainInput {
 	/// Creates a new builder-style object to manufacture [`RemoveNamespaceDomainInput`](crate::input::RemoveNamespaceDomainInput)
 	pub fn builder() -> crate::input::remove_namespace_domain_input::Builder {
 		crate::input::remove_namespace_domain_input::Builder::default()
+	}
+}
+
+/// See [`SetGroupBillingPlanInput`](crate::input::SetGroupBillingPlanInput)
+pub mod set_group_billing_plan_input {
+	/// A builder for [`SetGroupBillingPlanInput`](crate::input::SetGroupBillingPlanInput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {
+		pub(crate) group_id: std::option::Option<std::string::String>,
+		pub(crate) plan: std::option::Option<crate::model::GroupBillingPlan>,
+	}
+	impl Builder {
+		/// A universally unique identifier.
+		pub fn group_id(mut self, input: impl Into<std::string::String>) -> Self {
+			self.group_id = Some(input.into());
+			self
+		}
+		/// A universally unique identifier.
+		pub fn set_group_id(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.group_id = input;
+			self
+		}
+		/// A value denoting a game's billing plan.
+		pub fn plan(mut self, input: crate::model::GroupBillingPlan) -> Self {
+			self.plan = Some(input);
+			self
+		}
+		/// A value denoting a game's billing plan.
+		pub fn set_plan(
+			mut self,
+			input: std::option::Option<crate::model::GroupBillingPlan>,
+		) -> Self {
+			self.plan = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`SetGroupBillingPlanInput`](crate::input::SetGroupBillingPlanInput)
+		pub fn build(
+			self,
+		) -> std::result::Result<
+			crate::input::SetGroupBillingPlanInput,
+			aws_smithy_http::operation::BuildError,
+		> {
+			Ok(crate::input::SetGroupBillingPlanInput {
+				group_id: self.group_id,
+				plan: self.plan,
+			})
+		}
+	}
+}
+#[doc(hidden)]
+pub type SetGroupBillingPlanInputOperationOutputAlias = crate::operation::SetGroupBillingPlan;
+#[doc(hidden)]
+pub type SetGroupBillingPlanInputOperationRetryAlias = ();
+impl SetGroupBillingPlanInput {
+	/// Consumes the builder and constructs an Operation<[`SetGroupBillingPlan`](crate::operation::SetGroupBillingPlan)>
+	#[allow(unused_mut)]
+	#[allow(clippy::let_and_return)]
+	#[allow(clippy::needless_borrow)]
+	pub async fn make_operation(
+		&self,
+		_config: &crate::config::Config,
+	) -> std::result::Result<
+		aws_smithy_http::operation::Operation<crate::operation::SetGroupBillingPlan, ()>,
+		aws_smithy_http::operation::BuildError,
+	> {
+		let mut request = {
+			fn uri_base(
+				_input: &crate::input::SetGroupBillingPlanInput,
+				output: &mut String,
+			) -> Result<(), aws_smithy_http::operation::BuildError> {
+				let input_65 = &_input.group_id;
+				let input_65 = input_65.as_ref().ok_or(
+					aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					},
+				)?;
+				let group_id = aws_smithy_http::label::fmt_string(input_65, false);
+				if group_id.is_empty() {
+					return Err(aws_smithy_http::operation::BuildError::MissingField {
+						field: "group_id",
+						details: "cannot be empty or unset",
+					});
+				}
+				write!(output, "/groups/{group_id}/plan", group_id = group_id)
+					.expect("formatting should succeed");
+				Ok(())
+			}
+			#[allow(clippy::unnecessary_wraps)]
+			fn update_http_builder(
+				input: &crate::input::SetGroupBillingPlanInput,
+				_config: &crate::config::Config,
+				builder: http::request::Builder,
+			) -> std::result::Result<http::request::Builder, aws_smithy_http::operation::BuildError>
+			{
+				let mut _uri = String::new();
+				_uri = format!("{}{}", _config.uri.clone(), _uri);
+				uri_base(input, &mut _uri)?;
+				Ok(builder.method("POST").uri(_uri))
+			}
+			let mut builder = update_http_builder(&self, _config, http::request::Builder::new())?;
+			let mut builder = if let Some(auth) = &_config.auth {
+				builder.header(http::header::AUTHORIZATION, auth.clone())
+			} else {
+				builder
+			};
+			builder = aws_smithy_http::header::set_request_header_if_absent(
+				builder,
+				http::header::CONTENT_TYPE,
+				"application/json",
+			);
+			builder
+		};
+		let mut properties = aws_smithy_http::property_bag::SharedPropertyBag::new();
+		#[allow(clippy::useless_conversion)]
+		let body = aws_smithy_http::body::SdkBody::from(
+			crate::operation_ser::serialize_operation_crate_operation_set_group_billing_plan(
+				&self,
+			)?,
+		);
+		if let Some(content_length) = body.content_length() {
+			request = aws_smithy_http::header::set_request_header_if_absent(
+				request,
+				http::header::CONTENT_LENGTH,
+				content_length,
+			);
+		}
+		let request = request.body(body).expect("should be valid request");
+		let mut request = aws_smithy_http::operation::Request::from_parts(request, properties);
+		request
+			.properties_mut()
+			.insert(aws_smithy_http::http_versions::DEFAULT_HTTP_VERSION_LIST.clone());
+		let op = aws_smithy_http::operation::Operation::new(
+			request,
+			crate::operation::SetGroupBillingPlan::new(),
+		)
+		.with_metadata(aws_smithy_http::operation::Metadata::new(
+			"SetGroupBillingPlan",
+			"CloudService",
+		));
+		Ok(op)
+	}
+	/// Creates a new builder-style object to manufacture [`SetGroupBillingPlanInput`](crate::input::SetGroupBillingPlanInput)
+	pub fn builder() -> crate::input::set_group_billing_plan_input::Builder {
+		crate::input::set_group_billing_plan_input::Builder::default()
 	}
 }
 
@@ -6132,28 +5975,28 @@ impl SetNamespaceCdnAuthTypeInput {
 				_input: &crate::input::SetNamespaceCdnAuthTypeInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_68 = &_input.game_id;
-				let input_68 = input_68.as_ref().ok_or(
+				let input_66 = &_input.game_id;
+				let input_66 = input_66.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_68, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_66, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_69 = &_input.namespace_id;
-				let input_69 = input_69.as_ref().ok_or(
+				let input_67 = &_input.namespace_id;
+				let input_67 = input_67.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_69, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_67, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -6310,28 +6153,28 @@ impl ToggleNamespaceDomainPublicAuthInput {
 				_input: &crate::input::ToggleNamespaceDomainPublicAuthInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_70 = &_input.game_id;
-				let input_70 = input_70.as_ref().ok_or(
+				let input_68 = &_input.game_id;
+				let input_68 = input_68.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_70, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_68, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_71 = &_input.namespace_id;
-				let input_71 = input_71.as_ref().ok_or(
+				let input_69 = &_input.namespace_id;
+				let input_69 = input_69.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_71, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_69, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -6497,28 +6340,28 @@ impl UpdateGameNamespaceMatchmakerConfigInput {
 				_input: &crate::input::UpdateGameNamespaceMatchmakerConfigInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_72 = &_input.game_id;
-				let input_72 = input_72.as_ref().ok_or(
+				let input_70 = &_input.game_id;
+				let input_70 = input_70.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_72, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_70, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_73 = &_input.namespace_id;
-				let input_73 = input_73.as_ref().ok_or(
+				let input_71 = &_input.namespace_id;
+				let input_71 = input_71.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_73, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_71, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -6669,28 +6512,28 @@ impl UpdateGameNamespaceVersionInput {
 				_input: &crate::input::UpdateGameNamespaceVersionInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_74 = &_input.game_id;
-				let input_74 = input_74.as_ref().ok_or(
+				let input_72 = &_input.game_id;
+				let input_72 = input_72.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_74, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_72, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_75 = &_input.namespace_id;
-				let input_75 = input_75.as_ref().ok_or(
+				let input_73 = &_input.namespace_id;
+				let input_73 = input_73.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_75, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_73, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -6853,28 +6696,28 @@ impl UpdateNamespaceCdnAuthUserInput {
 				_input: &crate::input::UpdateNamespaceCdnAuthUserInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_76 = &_input.game_id;
-				let input_76 = input_76.as_ref().ok_or(
+				let input_74 = &_input.game_id;
+				let input_74 = input_74.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_76, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_74, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_77 = &_input.namespace_id;
-				let input_77 = input_77.as_ref().ok_or(
+				let input_75 = &_input.namespace_id;
+				let input_75 = input_75.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_77, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_75, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -7150,14 +6993,14 @@ impl ValidateGameNamespaceInput {
 				_input: &crate::input::ValidateGameNamespaceInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_78 = &_input.game_id;
-				let input_78 = input_78.as_ref().ok_or(
+				let input_76 = &_input.game_id;
+				let input_76 = input_76.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_78, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_76, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -7325,28 +7168,28 @@ impl ValidateGameNamespaceMatchmakerConfigInput {
 				_input: &crate::input::ValidateGameNamespaceMatchmakerConfigInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_79 = &_input.game_id;
-				let input_79 = input_79.as_ref().ok_or(
+				let input_77 = &_input.game_id;
+				let input_77 = input_77.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_79, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_77, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_80 = &_input.namespace_id;
-				let input_80 = input_80.as_ref().ok_or(
+				let input_78 = &_input.namespace_id;
+				let input_78 = input_78.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_80, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_78, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -7522,28 +7365,28 @@ impl ValidateGameNamespaceTokenDevelopmentInput {
 				_input: &crate::input::ValidateGameNamespaceTokenDevelopmentInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_81 = &_input.game_id;
-				let input_81 = input_81.as_ref().ok_or(
+				let input_79 = &_input.game_id;
+				let input_79 = input_79.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_81, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_79, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					});
 				}
-				let input_82 = &_input.namespace_id;
-				let input_82 = input_82.as_ref().ok_or(
+				let input_80 = &_input.namespace_id;
+				let input_80 = input_80.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let namespace_id = aws_smithy_http::label::fmt_string(input_82, false);
+				let namespace_id = aws_smithy_http::label::fmt_string(input_80, false);
 				if namespace_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "namespace_id",
@@ -7696,14 +7539,14 @@ impl ValidateGameVersionInput {
 				_input: &crate::input::ValidateGameVersionInput,
 				output: &mut String,
 			) -> Result<(), aws_smithy_http::operation::BuildError> {
-				let input_83 = &_input.game_id;
-				let input_83 = input_83.as_ref().ok_or(
+				let input_81 = &_input.game_id;
+				let input_81 = input_81.as_ref().ok_or(
 					aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
 						details: "cannot be empty or unset",
 					},
 				)?;
-				let game_id = aws_smithy_http::label::fmt_string(input_83, false);
+				let game_id = aws_smithy_http::label::fmt_string(input_81, false);
 				if game_id.is_empty() {
 					return Err(aws_smithy_http::operation::BuildError::MissingField {
 						field: "game_id",
@@ -8026,27 +7869,48 @@ impl std::fmt::Debug for ValidateGroupInput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct SetGroupBillingPlanInput {
+	/// A universally unique identifier.
+	pub group_id: std::option::Option<std::string::String>,
+	/// A value denoting a game's billing plan.
+	pub plan: std::option::Option<crate::model::GroupBillingPlan>,
+}
+impl SetGroupBillingPlanInput {
+	/// A universally unique identifier.
+	pub fn group_id(&self) -> std::option::Option<&str> {
+		self.group_id.as_deref()
+	}
+	/// A value denoting a game's billing plan.
+	pub fn plan(&self) -> std::option::Option<&crate::model::GroupBillingPlan> {
+		self.plan.as_ref()
+	}
+}
+impl std::fmt::Debug for SetGroupBillingPlanInput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("SetGroupBillingPlanInput");
+		formatter.field("group_id", &self.group_id);
+		formatter.field("plan", &self.plan);
+		formatter.finish()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GroupBillingCheckoutInput {
 	/// A universally unique identifier.
 	pub group_id: std::option::Option<std::string::String>,
-	/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
-	pub amount: std::option::Option<i64>,
 }
 impl GroupBillingCheckoutInput {
 	/// A universally unique identifier.
 	pub fn group_id(&self) -> std::option::Option<&str> {
 		self.group_id.as_deref()
 	}
-	/// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
-	pub fn amount(&self) -> std::option::Option<i64> {
-		self.amount
-	}
 }
 impl std::fmt::Debug for GroupBillingCheckoutInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GroupBillingCheckoutInput");
 		formatter.field("group_id", &self.group_id);
-		formatter.field("amount", &self.amount);
 		formatter.finish()
 	}
 }
@@ -8078,87 +7942,31 @@ impl std::fmt::Debug for ConvertGroupInput {
 pub struct GetGroupInvoicesListInput {
 	/// A universally unique identifier.
 	pub group_id: std::option::Option<std::string::String>,
-	/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-	pub anchor: std::option::Option<std::string::String>,
-	/// Amount of invoices to return.
-	pub limit: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub page: std::option::Option<i32>,
+	/// Unsigned 32 bit integer.
+	pub per_page: std::option::Option<i32>,
 }
 impl GetGroupInvoicesListInput {
 	/// A universally unique identifier.
 	pub fn group_id(&self) -> std::option::Option<&str> {
 		self.group_id.as_deref()
 	}
-	/// The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items.
-	pub fn anchor(&self) -> std::option::Option<&str> {
-		self.anchor.as_deref()
+	/// Unsigned 32 bit integer.
+	pub fn page(&self) -> std::option::Option<i32> {
+		self.page
 	}
-	/// Amount of invoices to return.
-	pub fn limit(&self) -> std::option::Option<i32> {
-		self.limit
+	/// Unsigned 32 bit integer.
+	pub fn per_page(&self) -> std::option::Option<i32> {
+		self.per_page
 	}
 }
 impl std::fmt::Debug for GetGroupInvoicesListInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGroupInvoicesListInput");
 		formatter.field("group_id", &self.group_id);
-		formatter.field("anchor", &self.anchor);
-		formatter.field("limit", &self.limit);
-		formatter.finish()
-	}
-}
-
-#[allow(missing_docs)] // documentation missing in model
-#[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetGroupTransfersListInput {
-	/// A universally unique identifier.
-	pub group_id: std::option::Option<std::string::String>,
-	/// The transfer ID of the transfer after which to start listing.
-	pub start_transfer_id: std::option::Option<std::string::String>,
-}
-impl GetGroupTransfersListInput {
-	/// A universally unique identifier.
-	pub fn group_id(&self) -> std::option::Option<&str> {
-		self.group_id.as_deref()
-	}
-	/// The transfer ID of the transfer after which to start listing.
-	pub fn start_transfer_id(&self) -> std::option::Option<&str> {
-		self.start_transfer_id.as_deref()
-	}
-}
-impl std::fmt::Debug for GetGroupTransfersListInput {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetGroupTransfersListInput");
-		formatter.field("group_id", &self.group_id);
-		formatter.field("start_transfer_id", &self.start_transfer_id);
-		formatter.finish()
-	}
-}
-
-#[allow(missing_docs)] // documentation missing in model
-#[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetGroupPaymentsListInput {
-	/// A universally unique identifier.
-	pub group_id: std::option::Option<std::string::String>,
-	/// The payment ID of the payment after which to start listing.
-	pub start_payment_id: std::option::Option<std::string::String>,
-}
-impl GetGroupPaymentsListInput {
-	/// A universally unique identifier.
-	pub fn group_id(&self) -> std::option::Option<&str> {
-		self.group_id.as_deref()
-	}
-	/// The payment ID of the payment after which to start listing.
-	pub fn start_payment_id(&self) -> std::option::Option<&str> {
-		self.start_payment_id.as_deref()
-	}
-}
-impl std::fmt::Debug for GetGroupPaymentsListInput {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetGroupPaymentsListInput");
-		formatter.field("group_id", &self.group_id);
-		formatter.field("start_payment_id", &self.start_payment_id);
+		formatter.field("page", &self.page);
+		formatter.field("per_page", &self.per_page);
 		formatter.finish()
 	}
 }
@@ -8173,6 +7981,8 @@ pub struct GetGroupBillingInput {
 	pub query_start: std::option::Option<i64>,
 	/// Unsigned 64 bit integer.
 	pub query_end: std::option::Option<i64>,
+	/// A query parameter denoting the requests watch index.
+	pub watch_index: std::option::Option<std::string::String>,
 }
 impl GetGroupBillingInput {
 	/// A universally unique identifier.
@@ -8187,6 +7997,10 @@ impl GetGroupBillingInput {
 	pub fn query_end(&self) -> std::option::Option<i64> {
 		self.query_end
 	}
+	/// A query parameter denoting the requests watch index.
+	pub fn watch_index(&self) -> std::option::Option<&str> {
+		self.watch_index.as_deref()
+	}
 }
 impl std::fmt::Debug for GetGroupBillingInput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -8194,6 +8008,7 @@ impl std::fmt::Debug for GetGroupBillingInput {
 		formatter.field("group_id", &self.group_id);
 		formatter.field("query_start", &self.query_start);
 		formatter.field("query_end", &self.query_end);
+		formatter.field("watch_index", &self.watch_index);
 		formatter.finish()
 	}
 }

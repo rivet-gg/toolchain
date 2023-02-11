@@ -3594,300 +3594,6 @@ impl std::error::Error for GetGroupInvoicesListError {
 	}
 }
 
-/// Error type for the `GetGroupPaymentsList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub struct GetGroupPaymentsListError {
-	/// Kind of error that occurred.
-	pub kind: GetGroupPaymentsListErrorKind,
-	/// Additional metadata about the error, including error code, message, and request ID.
-	pub(crate) meta: aws_smithy_types::Error,
-}
-/// Types of errors that can occur for the `GetGroupPaymentsList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub enum GetGroupPaymentsListErrorKind {
-	/// An error caused by internal server problems.
-	InternalError(crate::error::InternalError),
-	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
-	RateLimitError(crate::error::RateLimitError),
-	/// An error thrown when the requestee requests a resource they do not have access to.
-	ForbiddenError(crate::error::ForbiddenError),
-	/// An error thrown when the requestee is not authenticated.
-	UnauthorizedError(crate::error::UnauthorizedError),
-	/// An error thrown when the requestee requests a non existant resource.
-	NotFoundError(crate::error::NotFoundError),
-	/// An error thrown when the requestee has sent an invalid or malformed request.
-	BadRequestError(crate::error::BadRequestError),
-	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
-	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
-}
-impl std::fmt::Display for GetGroupPaymentsListError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match &self.kind {
-			GetGroupPaymentsListErrorKind::InternalError(_inner) => _inner.fmt(f),
-			GetGroupPaymentsListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			GetGroupPaymentsListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			GetGroupPaymentsListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			GetGroupPaymentsListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			GetGroupPaymentsListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			GetGroupPaymentsListErrorKind::Unhandled(_inner) => _inner.fmt(f),
-		}
-	}
-}
-impl aws_smithy_types::retry::ProvideErrorKind for GetGroupPaymentsListError {
-	fn code(&self) -> Option<&str> {
-		GetGroupPaymentsListError::code(self)
-	}
-	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
-		match &self.kind {
-			GetGroupPaymentsListErrorKind::InternalError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			GetGroupPaymentsListErrorKind::UnauthorizedError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			_ => None,
-		}
-	}
-}
-impl GetGroupPaymentsListError {
-	/// Creates a new `GetGroupPaymentsListError`.
-	pub fn new(kind: GetGroupPaymentsListErrorKind, meta: aws_smithy_types::Error) -> Self {
-		Self { kind, meta }
-	}
-
-	/// Creates the `GetGroupPaymentsListError::Unhandled` variant from any error type.
-	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
-		Self {
-			kind: GetGroupPaymentsListErrorKind::Unhandled(err.into()),
-			meta: Default::default(),
-		}
-	}
-
-	/// Creates the `GetGroupPaymentsListError::Unhandled` variant from a `aws_smithy_types::Error`.
-	pub fn generic(err: aws_smithy_types::Error) -> Self {
-		Self {
-			meta: err.clone(),
-			kind: GetGroupPaymentsListErrorKind::Unhandled(err.into()),
-		}
-	}
-
-	/// Returns the error message if one is available.
-	pub fn message(&self) -> Option<&str> {
-		self.meta.message()
-	}
-
-	/// Returns error metadata, which includes the error code, message,
-	/// request ID, and potentially additional information.
-	pub fn meta(&self) -> &aws_smithy_types::Error {
-		&self.meta
-	}
-
-	/// Returns the request ID if it's available.
-	pub fn request_id(&self) -> Option<&str> {
-		self.meta.request_id()
-	}
-
-	/// Returns the error code if it's available.
-	pub fn code(&self) -> Option<&str> {
-		self.meta.code()
-	}
-	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::InternalError`.
-	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, GetGroupPaymentsListErrorKind::InternalError(_))
-	}
-	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::RateLimitError`.
-	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(&self.kind, GetGroupPaymentsListErrorKind::RateLimitError(_))
-	}
-	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::ForbiddenError`.
-	pub fn is_forbidden_error(&self) -> bool {
-		matches!(&self.kind, GetGroupPaymentsListErrorKind::ForbiddenError(_))
-	}
-	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::UnauthorizedError`.
-	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetGroupPaymentsListErrorKind::UnauthorizedError(_)
-		)
-	}
-	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::NotFoundError`.
-	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, GetGroupPaymentsListErrorKind::NotFoundError(_))
-	}
-	/// Returns `true` if the error kind is `GetGroupPaymentsListErrorKind::BadRequestError`.
-	pub fn is_bad_request_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetGroupPaymentsListErrorKind::BadRequestError(_)
-		)
-	}
-}
-impl std::error::Error for GetGroupPaymentsListError {
-	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-		match &self.kind {
-			GetGroupPaymentsListErrorKind::InternalError(_inner) => Some(_inner),
-			GetGroupPaymentsListErrorKind::RateLimitError(_inner) => Some(_inner),
-			GetGroupPaymentsListErrorKind::ForbiddenError(_inner) => Some(_inner),
-			GetGroupPaymentsListErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			GetGroupPaymentsListErrorKind::NotFoundError(_inner) => Some(_inner),
-			GetGroupPaymentsListErrorKind::BadRequestError(_inner) => Some(_inner),
-			GetGroupPaymentsListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
-		}
-	}
-}
-
-/// Error type for the `GetGroupTransfersList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub struct GetGroupTransfersListError {
-	/// Kind of error that occurred.
-	pub kind: GetGroupTransfersListErrorKind,
-	/// Additional metadata about the error, including error code, message, and request ID.
-	pub(crate) meta: aws_smithy_types::Error,
-}
-/// Types of errors that can occur for the `GetGroupTransfersList` operation.
-#[non_exhaustive]
-#[derive(std::fmt::Debug)]
-pub enum GetGroupTransfersListErrorKind {
-	/// An error caused by internal server problems.
-	InternalError(crate::error::InternalError),
-	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
-	RateLimitError(crate::error::RateLimitError),
-	/// An error thrown when the requestee requests a resource they do not have access to.
-	ForbiddenError(crate::error::ForbiddenError),
-	/// An error thrown when the requestee is not authenticated.
-	UnauthorizedError(crate::error::UnauthorizedError),
-	/// An error thrown when the requestee requests a non existant resource.
-	NotFoundError(crate::error::NotFoundError),
-	/// An error thrown when the requestee has sent an invalid or malformed request.
-	BadRequestError(crate::error::BadRequestError),
-	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
-	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
-}
-impl std::fmt::Display for GetGroupTransfersListError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match &self.kind {
-			GetGroupTransfersListErrorKind::InternalError(_inner) => _inner.fmt(f),
-			GetGroupTransfersListErrorKind::RateLimitError(_inner) => _inner.fmt(f),
-			GetGroupTransfersListErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
-			GetGroupTransfersListErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
-			GetGroupTransfersListErrorKind::NotFoundError(_inner) => _inner.fmt(f),
-			GetGroupTransfersListErrorKind::BadRequestError(_inner) => _inner.fmt(f),
-			GetGroupTransfersListErrorKind::Unhandled(_inner) => _inner.fmt(f),
-		}
-	}
-}
-impl aws_smithy_types::retry::ProvideErrorKind for GetGroupTransfersListError {
-	fn code(&self) -> Option<&str> {
-		GetGroupTransfersListError::code(self)
-	}
-	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
-		match &self.kind {
-			GetGroupTransfersListErrorKind::InternalError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			GetGroupTransfersListErrorKind::UnauthorizedError(inner) => {
-				Some(inner.retryable_error_kind())
-			}
-			_ => None,
-		}
-	}
-}
-impl GetGroupTransfersListError {
-	/// Creates a new `GetGroupTransfersListError`.
-	pub fn new(kind: GetGroupTransfersListErrorKind, meta: aws_smithy_types::Error) -> Self {
-		Self { kind, meta }
-	}
-
-	/// Creates the `GetGroupTransfersListError::Unhandled` variant from any error type.
-	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
-		Self {
-			kind: GetGroupTransfersListErrorKind::Unhandled(err.into()),
-			meta: Default::default(),
-		}
-	}
-
-	/// Creates the `GetGroupTransfersListError::Unhandled` variant from a `aws_smithy_types::Error`.
-	pub fn generic(err: aws_smithy_types::Error) -> Self {
-		Self {
-			meta: err.clone(),
-			kind: GetGroupTransfersListErrorKind::Unhandled(err.into()),
-		}
-	}
-
-	/// Returns the error message if one is available.
-	pub fn message(&self) -> Option<&str> {
-		self.meta.message()
-	}
-
-	/// Returns error metadata, which includes the error code, message,
-	/// request ID, and potentially additional information.
-	pub fn meta(&self) -> &aws_smithy_types::Error {
-		&self.meta
-	}
-
-	/// Returns the request ID if it's available.
-	pub fn request_id(&self) -> Option<&str> {
-		self.meta.request_id()
-	}
-
-	/// Returns the error code if it's available.
-	pub fn code(&self) -> Option<&str> {
-		self.meta.code()
-	}
-	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::InternalError`.
-	pub fn is_internal_error(&self) -> bool {
-		matches!(&self.kind, GetGroupTransfersListErrorKind::InternalError(_))
-	}
-	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::RateLimitError`.
-	pub fn is_rate_limit_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetGroupTransfersListErrorKind::RateLimitError(_)
-		)
-	}
-	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::ForbiddenError`.
-	pub fn is_forbidden_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetGroupTransfersListErrorKind::ForbiddenError(_)
-		)
-	}
-	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::UnauthorizedError`.
-	pub fn is_unauthorized_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetGroupTransfersListErrorKind::UnauthorizedError(_)
-		)
-	}
-	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::NotFoundError`.
-	pub fn is_not_found_error(&self) -> bool {
-		matches!(&self.kind, GetGroupTransfersListErrorKind::NotFoundError(_))
-	}
-	/// Returns `true` if the error kind is `GetGroupTransfersListErrorKind::BadRequestError`.
-	pub fn is_bad_request_error(&self) -> bool {
-		matches!(
-			&self.kind,
-			GetGroupTransfersListErrorKind::BadRequestError(_)
-		)
-	}
-}
-impl std::error::Error for GetGroupTransfersListError {
-	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-		match &self.kind {
-			GetGroupTransfersListErrorKind::InternalError(_inner) => Some(_inner),
-			GetGroupTransfersListErrorKind::RateLimitError(_inner) => Some(_inner),
-			GetGroupTransfersListErrorKind::ForbiddenError(_inner) => Some(_inner),
-			GetGroupTransfersListErrorKind::UnauthorizedError(_inner) => Some(_inner),
-			GetGroupTransfersListErrorKind::NotFoundError(_inner) => Some(_inner),
-			GetGroupTransfersListErrorKind::BadRequestError(_inner) => Some(_inner),
-			GetGroupTransfersListErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
-		}
-	}
-}
-
 /// Error type for the `GetLobbyLogs` operation.
 #[non_exhaustive]
 #[derive(std::fmt::Debug)]
@@ -5889,6 +5595,147 @@ impl std::error::Error for RemoveNamespaceDomainError {
 			RemoveNamespaceDomainErrorKind::NotFoundError(_inner) => Some(_inner),
 			RemoveNamespaceDomainErrorKind::BadRequestError(_inner) => Some(_inner),
 			RemoveNamespaceDomainErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
+		}
+	}
+}
+
+/// Error type for the `SetGroupBillingPlan` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub struct SetGroupBillingPlanError {
+	/// Kind of error that occurred.
+	pub kind: SetGroupBillingPlanErrorKind,
+	/// Additional metadata about the error, including error code, message, and request ID.
+	pub(crate) meta: aws_smithy_types::Error,
+}
+/// Types of errors that can occur for the `SetGroupBillingPlan` operation.
+#[non_exhaustive]
+#[derive(std::fmt::Debug)]
+pub enum SetGroupBillingPlanErrorKind {
+	/// An error caused by internal server problems.
+	InternalError(crate::error::InternalError),
+	/// An error thrown when the requestee has hit a rate limit. You are sending too many requests too quickly.
+	RateLimitError(crate::error::RateLimitError),
+	/// An error thrown when the requestee requests a resource they do not have access to.
+	ForbiddenError(crate::error::ForbiddenError),
+	/// An error thrown when the requestee is not authenticated.
+	UnauthorizedError(crate::error::UnauthorizedError),
+	/// An error thrown when the requestee requests a non existant resource.
+	NotFoundError(crate::error::NotFoundError),
+	/// An error thrown when the requestee has sent an invalid or malformed request.
+	BadRequestError(crate::error::BadRequestError),
+	/// An unexpected error, e.g. invalid JSON returned by the service or an unknown error code
+	Unhandled(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+impl std::fmt::Display for SetGroupBillingPlanError {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self.kind {
+			SetGroupBillingPlanErrorKind::InternalError(_inner) => _inner.fmt(f),
+			SetGroupBillingPlanErrorKind::RateLimitError(_inner) => _inner.fmt(f),
+			SetGroupBillingPlanErrorKind::ForbiddenError(_inner) => _inner.fmt(f),
+			SetGroupBillingPlanErrorKind::UnauthorizedError(_inner) => _inner.fmt(f),
+			SetGroupBillingPlanErrorKind::NotFoundError(_inner) => _inner.fmt(f),
+			SetGroupBillingPlanErrorKind::BadRequestError(_inner) => _inner.fmt(f),
+			SetGroupBillingPlanErrorKind::Unhandled(_inner) => _inner.fmt(f),
+		}
+	}
+}
+impl aws_smithy_types::retry::ProvideErrorKind for SetGroupBillingPlanError {
+	fn code(&self) -> Option<&str> {
+		SetGroupBillingPlanError::code(self)
+	}
+	fn retryable_error_kind(&self) -> Option<aws_smithy_types::retry::ErrorKind> {
+		match &self.kind {
+			SetGroupBillingPlanErrorKind::InternalError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			SetGroupBillingPlanErrorKind::UnauthorizedError(inner) => {
+				Some(inner.retryable_error_kind())
+			}
+			_ => None,
+		}
+	}
+}
+impl SetGroupBillingPlanError {
+	/// Creates a new `SetGroupBillingPlanError`.
+	pub fn new(kind: SetGroupBillingPlanErrorKind, meta: aws_smithy_types::Error) -> Self {
+		Self { kind, meta }
+	}
+
+	/// Creates the `SetGroupBillingPlanError::Unhandled` variant from any error type.
+	pub fn unhandled(err: impl Into<Box<dyn std::error::Error + Send + Sync + 'static>>) -> Self {
+		Self {
+			kind: SetGroupBillingPlanErrorKind::Unhandled(err.into()),
+			meta: Default::default(),
+		}
+	}
+
+	/// Creates the `SetGroupBillingPlanError::Unhandled` variant from a `aws_smithy_types::Error`.
+	pub fn generic(err: aws_smithy_types::Error) -> Self {
+		Self {
+			meta: err.clone(),
+			kind: SetGroupBillingPlanErrorKind::Unhandled(err.into()),
+		}
+	}
+
+	/// Returns the error message if one is available.
+	pub fn message(&self) -> Option<&str> {
+		self.meta.message()
+	}
+
+	/// Returns error metadata, which includes the error code, message,
+	/// request ID, and potentially additional information.
+	pub fn meta(&self) -> &aws_smithy_types::Error {
+		&self.meta
+	}
+
+	/// Returns the request ID if it's available.
+	pub fn request_id(&self) -> Option<&str> {
+		self.meta.request_id()
+	}
+
+	/// Returns the error code if it's available.
+	pub fn code(&self) -> Option<&str> {
+		self.meta.code()
+	}
+	/// Returns `true` if the error kind is `SetGroupBillingPlanErrorKind::InternalError`.
+	pub fn is_internal_error(&self) -> bool {
+		matches!(&self.kind, SetGroupBillingPlanErrorKind::InternalError(_))
+	}
+	/// Returns `true` if the error kind is `SetGroupBillingPlanErrorKind::RateLimitError`.
+	pub fn is_rate_limit_error(&self) -> bool {
+		matches!(&self.kind, SetGroupBillingPlanErrorKind::RateLimitError(_))
+	}
+	/// Returns `true` if the error kind is `SetGroupBillingPlanErrorKind::ForbiddenError`.
+	pub fn is_forbidden_error(&self) -> bool {
+		matches!(&self.kind, SetGroupBillingPlanErrorKind::ForbiddenError(_))
+	}
+	/// Returns `true` if the error kind is `SetGroupBillingPlanErrorKind::UnauthorizedError`.
+	pub fn is_unauthorized_error(&self) -> bool {
+		matches!(
+			&self.kind,
+			SetGroupBillingPlanErrorKind::UnauthorizedError(_)
+		)
+	}
+	/// Returns `true` if the error kind is `SetGroupBillingPlanErrorKind::NotFoundError`.
+	pub fn is_not_found_error(&self) -> bool {
+		matches!(&self.kind, SetGroupBillingPlanErrorKind::NotFoundError(_))
+	}
+	/// Returns `true` if the error kind is `SetGroupBillingPlanErrorKind::BadRequestError`.
+	pub fn is_bad_request_error(&self) -> bool {
+		matches!(&self.kind, SetGroupBillingPlanErrorKind::BadRequestError(_))
+	}
+}
+impl std::error::Error for SetGroupBillingPlanError {
+	fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+		match &self.kind {
+			SetGroupBillingPlanErrorKind::InternalError(_inner) => Some(_inner),
+			SetGroupBillingPlanErrorKind::RateLimitError(_inner) => Some(_inner),
+			SetGroupBillingPlanErrorKind::ForbiddenError(_inner) => Some(_inner),
+			SetGroupBillingPlanErrorKind::UnauthorizedError(_inner) => Some(_inner),
+			SetGroupBillingPlanErrorKind::NotFoundError(_inner) => Some(_inner),
+			SetGroupBillingPlanErrorKind::BadRequestError(_inner) => Some(_inner),
+			SetGroupBillingPlanErrorKind::Unhandled(_inner) => Some(_inner.as_ref()),
 		}
 	}
 }

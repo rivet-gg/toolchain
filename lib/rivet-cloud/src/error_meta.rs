@@ -897,78 +897,6 @@ where
 		}
 	}
 }
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGroupPaymentsListError, R>>
-	for Error
-where
-	R: Send + Sync + std::fmt::Debug + 'static,
-{
-	fn from(
-		err: aws_smithy_http::result::SdkError<crate::error::GetGroupPaymentsListError, R>,
-	) -> Self {
-		match err {
-			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::GetGroupPaymentsListErrorKind::InternalError(inner) => {
-					Error::InternalError(inner)
-				}
-				crate::error::GetGroupPaymentsListErrorKind::RateLimitError(inner) => {
-					Error::RateLimitError(inner)
-				}
-				crate::error::GetGroupPaymentsListErrorKind::ForbiddenError(inner) => {
-					Error::ForbiddenError(inner)
-				}
-				crate::error::GetGroupPaymentsListErrorKind::UnauthorizedError(inner) => {
-					Error::UnauthorizedError(inner)
-				}
-				crate::error::GetGroupPaymentsListErrorKind::NotFoundError(inner) => {
-					Error::NotFoundError(inner)
-				}
-				crate::error::GetGroupPaymentsListErrorKind::BadRequestError(inner) => {
-					Error::BadRequestError(inner)
-				}
-				crate::error::GetGroupPaymentsListErrorKind::Unhandled(inner) => {
-					Error::Unhandled(inner)
-				}
-			},
-			_ => Error::Unhandled(err.into()),
-		}
-	}
-}
-impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetGroupTransfersListError, R>>
-	for Error
-where
-	R: Send + Sync + std::fmt::Debug + 'static,
-{
-	fn from(
-		err: aws_smithy_http::result::SdkError<crate::error::GetGroupTransfersListError, R>,
-	) -> Self {
-		match err {
-			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
-				crate::error::GetGroupTransfersListErrorKind::InternalError(inner) => {
-					Error::InternalError(inner)
-				}
-				crate::error::GetGroupTransfersListErrorKind::RateLimitError(inner) => {
-					Error::RateLimitError(inner)
-				}
-				crate::error::GetGroupTransfersListErrorKind::ForbiddenError(inner) => {
-					Error::ForbiddenError(inner)
-				}
-				crate::error::GetGroupTransfersListErrorKind::UnauthorizedError(inner) => {
-					Error::UnauthorizedError(inner)
-				}
-				crate::error::GetGroupTransfersListErrorKind::NotFoundError(inner) => {
-					Error::NotFoundError(inner)
-				}
-				crate::error::GetGroupTransfersListErrorKind::BadRequestError(inner) => {
-					Error::BadRequestError(inner)
-				}
-				crate::error::GetGroupTransfersListErrorKind::Unhandled(inner) => {
-					Error::Unhandled(inner)
-				}
-			},
-			_ => Error::Unhandled(err.into()),
-		}
-	}
-}
 impl<R> From<aws_smithy_http::result::SdkError<crate::error::GetLobbyLogsError, R>> for Error
 where
 	R: Send + Sync + std::fmt::Debug + 'static,
@@ -1443,6 +1371,41 @@ where
 					Error::BadRequestError(inner)
 				}
 				crate::error::RemoveNamespaceDomainErrorKind::Unhandled(inner) => {
+					Error::Unhandled(inner)
+				}
+			},
+			_ => Error::Unhandled(err.into()),
+		}
+	}
+}
+impl<R> From<aws_smithy_http::result::SdkError<crate::error::SetGroupBillingPlanError, R>> for Error
+where
+	R: Send + Sync + std::fmt::Debug + 'static,
+{
+	fn from(
+		err: aws_smithy_http::result::SdkError<crate::error::SetGroupBillingPlanError, R>,
+	) -> Self {
+		match err {
+			aws_smithy_http::result::SdkError::ServiceError { err, .. } => match err.kind {
+				crate::error::SetGroupBillingPlanErrorKind::InternalError(inner) => {
+					Error::InternalError(inner)
+				}
+				crate::error::SetGroupBillingPlanErrorKind::RateLimitError(inner) => {
+					Error::RateLimitError(inner)
+				}
+				crate::error::SetGroupBillingPlanErrorKind::ForbiddenError(inner) => {
+					Error::ForbiddenError(inner)
+				}
+				crate::error::SetGroupBillingPlanErrorKind::UnauthorizedError(inner) => {
+					Error::UnauthorizedError(inner)
+				}
+				crate::error::SetGroupBillingPlanErrorKind::NotFoundError(inner) => {
+					Error::NotFoundError(inner)
+				}
+				crate::error::SetGroupBillingPlanErrorKind::BadRequestError(inner) => {
+					Error::BadRequestError(inner)
+				}
+				crate::error::SetGroupBillingPlanErrorKind::Unhandled(inner) => {
 					Error::Unhandled(inner)
 				}
 			},

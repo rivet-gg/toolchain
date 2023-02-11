@@ -192,34 +192,31 @@ pub fn serialize_structure_crate_input_game_logo_upload_prepare_input(
 	Ok(())
 }
 
-pub fn serialize_structure_crate_input_group_billing_checkout_input(
-	object: &mut aws_smithy_json::serialize::JsonObjectWriter,
-	input: &crate::input::GroupBillingCheckoutInput,
-) -> Result<(), aws_smithy_http::operation::SerializationError> {
-	if let Some(var_34) = &input.amount {
-		object.key("amount").number(
-			#[allow(clippy::useless_conversion)]
-			aws_smithy_types::Number::NegInt((*var_34).into()),
-		);
-	}
-	Ok(())
-}
-
 pub fn serialize_structure_crate_input_prepare_custom_avatar_upload_input(
 	object: &mut aws_smithy_json::serialize::JsonObjectWriter,
 	input: &crate::input::PrepareCustomAvatarUploadInput,
 ) -> Result<(), aws_smithy_http::operation::SerializationError> {
-	if let Some(var_35) = &input.content_length {
+	if let Some(var_34) = &input.content_length {
 		object.key("content_length").number(
 			#[allow(clippy::useless_conversion)]
-			aws_smithy_types::Number::NegInt((*var_35).into()),
+			aws_smithy_types::Number::NegInt((*var_34).into()),
 		);
 	}
-	if let Some(var_36) = &input.mime {
-		object.key("mime").string(var_36.as_str());
+	if let Some(var_35) = &input.mime {
+		object.key("mime").string(var_35.as_str());
 	}
-	if let Some(var_37) = &input.path {
-		object.key("path").string(var_37.as_str());
+	if let Some(var_36) = &input.path {
+		object.key("path").string(var_36.as_str());
+	}
+	Ok(())
+}
+
+pub fn serialize_structure_crate_input_set_group_billing_plan_input(
+	object: &mut aws_smithy_json::serialize::JsonObjectWriter,
+	input: &crate::input::SetGroupBillingPlanInput,
+) -> Result<(), aws_smithy_http::operation::SerializationError> {
+	if let Some(var_37) = &input.plan {
+		object.key("plan").string(var_37.as_str());
 	}
 	Ok(())
 }

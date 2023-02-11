@@ -680,44 +680,103 @@ impl ValidationError {
 	}
 }
 
+/// A value denoting a game's billing plan.
+#[non_exhaustive]
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum GroupBillingPlan {
+	#[allow(missing_docs)] // documentation missing in model
+	Free,
+	#[allow(missing_docs)] // documentation missing in model
+	GameHobbyMonthly,
+	#[allow(missing_docs)] // documentation missing in model
+	GameHobbyYearly,
+	#[allow(missing_docs)] // documentation missing in model
+	GameStudioMonthly,
+	#[allow(missing_docs)] // documentation missing in model
+	GameStudioYearly,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
+}
+impl std::convert::From<&str> for GroupBillingPlan {
+	fn from(s: &str) -> Self {
+		match s {
+			"free" => GroupBillingPlan::Free,
+			"game_hobby_monthly" => GroupBillingPlan::GameHobbyMonthly,
+			"game_hobby_yearly" => GroupBillingPlan::GameHobbyYearly,
+			"game_studio_monthly" => GroupBillingPlan::GameStudioMonthly,
+			"game_studio_yearly" => GroupBillingPlan::GameStudioYearly,
+			other => GroupBillingPlan::Unknown(other.to_owned()),
+		}
+	}
+}
+impl std::str::FromStr for GroupBillingPlan {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(GroupBillingPlan::from(s))
+	}
+}
+impl GroupBillingPlan {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			GroupBillingPlan::Free => "free",
+			GroupBillingPlan::GameHobbyMonthly => "game_hobby_monthly",
+			GroupBillingPlan::GameHobbyYearly => "game_hobby_yearly",
+			GroupBillingPlan::GameStudioMonthly => "game_studio_monthly",
+			GroupBillingPlan::GameStudioYearly => "game_studio_yearly",
+			GroupBillingPlan::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&[
+			"free",
+			"game_hobby_monthly",
+			"game_hobby_yearly",
+			"game_studio_monthly",
+			"game_studio_yearly",
+		]
+	}
+}
+impl AsRef<str> for GroupBillingPlan {
+	fn as_ref(&self) -> &str {
+		self.as_str()
+	}
+}
+
 /// A group's billing invoice.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GroupBillingInvoice {
-	/// A URL to this invoice's CSV breakdown.
-	pub csv_url: std::option::Option<std::string::String>,
+	/// RFC3339 timestamp.
+	pub issuing_ts: std::option::Option<aws_smithy_types::DateTime>,
 	/// A URL to this invoice's PDF document.
-	pub pdf_url: std::option::Option<std::string::String>,
-	/// RFC3339 timestamp.
-	pub period_start_ts: std::option::Option<aws_smithy_types::DateTime>,
-	/// RFC3339 timestamp.
-	pub period_end_ts: std::option::Option<aws_smithy_types::DateTime>,
+	pub file_url: std::option::Option<std::string::String>,
 }
 impl GroupBillingInvoice {
-	/// A URL to this invoice's CSV breakdown.
-	pub fn csv_url(&self) -> std::option::Option<&str> {
-		self.csv_url.as_deref()
+	/// RFC3339 timestamp.
+	pub fn issuing_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
+		self.issuing_ts.as_ref()
 	}
 	/// A URL to this invoice's PDF document.
-	pub fn pdf_url(&self) -> std::option::Option<&str> {
-		self.pdf_url.as_deref()
-	}
-	/// RFC3339 timestamp.
-	pub fn period_start_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
-		self.period_start_ts.as_ref()
-	}
-	/// RFC3339 timestamp.
-	pub fn period_end_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
-		self.period_end_ts.as_ref()
+	pub fn file_url(&self) -> std::option::Option<&str> {
+		self.file_url.as_deref()
 	}
 }
 impl std::fmt::Debug for GroupBillingInvoice {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GroupBillingInvoice");
-		formatter.field("csv_url", &self.csv_url);
-		formatter.field("pdf_url", &self.pdf_url);
-		formatter.field("period_start_ts", &self.period_start_ts);
-		formatter.field("period_end_ts", &self.period_end_ts);
+		formatter.field("issuing_ts", &self.issuing_ts);
+		formatter.field("file_url", &self.file_url);
 		formatter.finish()
 	}
 }
@@ -727,65 +786,38 @@ pub mod group_billing_invoice {
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) csv_url: std::option::Option<std::string::String>,
-		pub(crate) pdf_url: std::option::Option<std::string::String>,
-		pub(crate) period_start_ts: std::option::Option<aws_smithy_types::DateTime>,
-		pub(crate) period_end_ts: std::option::Option<aws_smithy_types::DateTime>,
+		pub(crate) issuing_ts: std::option::Option<aws_smithy_types::DateTime>,
+		pub(crate) file_url: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		/// A URL to this invoice's CSV breakdown.
-		pub fn csv_url(mut self, input: impl Into<std::string::String>) -> Self {
-			self.csv_url = Some(input.into());
-			self
-		}
-		/// A URL to this invoice's CSV breakdown.
-		pub fn set_csv_url(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.csv_url = input;
-			self
-		}
-		/// A URL to this invoice's PDF document.
-		pub fn pdf_url(mut self, input: impl Into<std::string::String>) -> Self {
-			self.pdf_url = Some(input.into());
-			self
-		}
-		/// A URL to this invoice's PDF document.
-		pub fn set_pdf_url(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.pdf_url = input;
+		/// RFC3339 timestamp.
+		pub fn issuing_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
+			self.issuing_ts = Some(input);
 			self
 		}
 		/// RFC3339 timestamp.
-		pub fn period_start_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
-			self.period_start_ts = Some(input);
-			self
-		}
-		/// RFC3339 timestamp.
-		pub fn set_period_start_ts(
+		pub fn set_issuing_ts(
 			mut self,
 			input: std::option::Option<aws_smithy_types::DateTime>,
 		) -> Self {
-			self.period_start_ts = input;
+			self.issuing_ts = input;
 			self
 		}
-		/// RFC3339 timestamp.
-		pub fn period_end_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
-			self.period_end_ts = Some(input);
+		/// A URL to this invoice's PDF document.
+		pub fn file_url(mut self, input: impl Into<std::string::String>) -> Self {
+			self.file_url = Some(input.into());
 			self
 		}
-		/// RFC3339 timestamp.
-		pub fn set_period_end_ts(
-			mut self,
-			input: std::option::Option<aws_smithy_types::DateTime>,
-		) -> Self {
-			self.period_end_ts = input;
+		/// A URL to this invoice's PDF document.
+		pub fn set_file_url(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.file_url = input;
 			self
 		}
 		/// Consumes the builder and constructs a [`GroupBillingInvoice`](crate::model::GroupBillingInvoice)
 		pub fn build(self) -> crate::model::GroupBillingInvoice {
 			crate::model::GroupBillingInvoice {
-				csv_url: self.csv_url,
-				pdf_url: self.pdf_url,
-				period_start_ts: self.period_start_ts,
-				period_end_ts: self.period_end_ts,
+				issuing_ts: self.issuing_ts,
+				file_url: self.file_url,
 			}
 		}
 	}
@@ -797,315 +829,55 @@ impl GroupBillingInvoice {
 	}
 }
 
-/// A group's billing transfer.
+/// Provided by watchable endpoints used in blocking loops.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GroupBillingTransfer {
-	/// Payment amount (in hundreths USD, 100 = $1.00).
-	pub amount: std::option::Option<i64>,
-	/// A description of this transfer.
-	pub description: std::option::Option<std::string::String>,
-	/// RFC3339 timestamp.
-	pub created_ts: std::option::Option<aws_smithy_types::DateTime>,
-	/// A value denoting the status of a billing transfer.
-	pub status: std::option::Option<crate::model::GroupBillingStatus>,
+pub struct WatchResponse {
+	/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
+	pub index: std::option::Option<std::string::String>,
 }
-impl GroupBillingTransfer {
-	/// Payment amount (in hundreths USD, 100 = $1.00).
-	pub fn amount(&self) -> std::option::Option<i64> {
-		self.amount
-	}
-	/// A description of this transfer.
-	pub fn description(&self) -> std::option::Option<&str> {
-		self.description.as_deref()
-	}
-	/// RFC3339 timestamp.
-	pub fn created_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
-		self.created_ts.as_ref()
-	}
-	/// A value denoting the status of a billing transfer.
-	pub fn status(&self) -> std::option::Option<&crate::model::GroupBillingStatus> {
-		self.status.as_ref()
+impl WatchResponse {
+	/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
+	pub fn index(&self) -> std::option::Option<&str> {
+		self.index.as_deref()
 	}
 }
-impl std::fmt::Debug for GroupBillingTransfer {
+impl std::fmt::Debug for WatchResponse {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GroupBillingTransfer");
-		formatter.field("amount", &self.amount);
-		formatter.field("description", &self.description);
-		formatter.field("created_ts", &self.created_ts);
-		formatter.field("status", &self.status);
+		let mut formatter = f.debug_struct("WatchResponse");
+		formatter.field("index", &self.index);
 		formatter.finish()
 	}
 }
-/// See [`GroupBillingTransfer`](crate::model::GroupBillingTransfer)
-pub mod group_billing_transfer {
-	/// A builder for [`GroupBillingTransfer`](crate::model::GroupBillingTransfer)
+/// See [`WatchResponse`](crate::model::WatchResponse)
+pub mod watch_response {
+	/// A builder for [`WatchResponse`](crate::model::WatchResponse)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) amount: std::option::Option<i64>,
-		pub(crate) description: std::option::Option<std::string::String>,
-		pub(crate) created_ts: std::option::Option<aws_smithy_types::DateTime>,
-		pub(crate) status: std::option::Option<crate::model::GroupBillingStatus>,
+		pub(crate) index: std::option::Option<std::string::String>,
 	}
 	impl Builder {
-		/// Payment amount (in hundreths USD, 100 = $1.00).
-		pub fn amount(mut self, input: i64) -> Self {
-			self.amount = Some(input);
+		/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
+		pub fn index(mut self, input: impl Into<std::string::String>) -> Self {
+			self.index = Some(input.into());
 			self
 		}
-		/// Payment amount (in hundreths USD, 100 = $1.00).
-		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
-			self.amount = input;
+		/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
+		pub fn set_index(mut self, input: std::option::Option<std::string::String>) -> Self {
+			self.index = input;
 			self
 		}
-		/// A description of this transfer.
-		pub fn description(mut self, input: impl Into<std::string::String>) -> Self {
-			self.description = Some(input.into());
-			self
-		}
-		/// A description of this transfer.
-		pub fn set_description(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.description = input;
-			self
-		}
-		/// RFC3339 timestamp.
-		pub fn created_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
-			self.created_ts = Some(input);
-			self
-		}
-		/// RFC3339 timestamp.
-		pub fn set_created_ts(
-			mut self,
-			input: std::option::Option<aws_smithy_types::DateTime>,
-		) -> Self {
-			self.created_ts = input;
-			self
-		}
-		/// A value denoting the status of a billing transfer.
-		pub fn status(mut self, input: crate::model::GroupBillingStatus) -> Self {
-			self.status = Some(input);
-			self
-		}
-		/// A value denoting the status of a billing transfer.
-		pub fn set_status(
-			mut self,
-			input: std::option::Option<crate::model::GroupBillingStatus>,
-		) -> Self {
-			self.status = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GroupBillingTransfer`](crate::model::GroupBillingTransfer)
-		pub fn build(self) -> crate::model::GroupBillingTransfer {
-			crate::model::GroupBillingTransfer {
-				amount: self.amount,
-				description: self.description,
-				created_ts: self.created_ts,
-				status: self.status,
-			}
+		/// Consumes the builder and constructs a [`WatchResponse`](crate::model::WatchResponse)
+		pub fn build(self) -> crate::model::WatchResponse {
+			crate::model::WatchResponse { index: self.index }
 		}
 	}
 }
-impl GroupBillingTransfer {
-	/// Creates a new builder-style object to manufacture [`GroupBillingTransfer`](crate::model::GroupBillingTransfer)
-	pub fn builder() -> crate::model::group_billing_transfer::Builder {
-		crate::model::group_billing_transfer::Builder::default()
-	}
-}
-
-/// A value denoting the status of a billing transfer.
-#[non_exhaustive]
-#[derive(
-	std::clone::Clone,
-	std::cmp::Eq,
-	std::cmp::Ord,
-	std::cmp::PartialEq,
-	std::cmp::PartialOrd,
-	std::fmt::Debug,
-	std::hash::Hash,
-)]
-pub enum GroupBillingStatus {
-	#[allow(missing_docs)] // documentation missing in model
-	Processing,
-	#[allow(missing_docs)] // documentation missing in model
-	Refunded,
-	#[allow(missing_docs)] // documentation missing in model
-	Succeeded,
-	/// Unknown contains new variants that have been added since this code was generated.
-	Unknown(String),
-}
-impl std::convert::From<&str> for GroupBillingStatus {
-	fn from(s: &str) -> Self {
-		match s {
-			"processing" => GroupBillingStatus::Processing,
-			"refunded" => GroupBillingStatus::Refunded,
-			"succeeded" => GroupBillingStatus::Succeeded,
-			other => GroupBillingStatus::Unknown(other.to_owned()),
-		}
-	}
-}
-impl std::str::FromStr for GroupBillingStatus {
-	type Err = std::convert::Infallible;
-
-	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-		Ok(GroupBillingStatus::from(s))
-	}
-}
-impl GroupBillingStatus {
-	/// Returns the `&str` value of the enum member.
-	pub fn as_str(&self) -> &str {
-		match self {
-			GroupBillingStatus::Processing => "processing",
-			GroupBillingStatus::Refunded => "refunded",
-			GroupBillingStatus::Succeeded => "succeeded",
-			GroupBillingStatus::Unknown(s) => s.as_ref(),
-		}
-	}
-	/// Returns all the `&str` values of the enum members.
-	pub fn values() -> &'static [&'static str] {
-		&["processing", "refunded", "succeeded"]
-	}
-}
-impl AsRef<str> for GroupBillingStatus {
-	fn as_ref(&self) -> &str {
-		self.as_str()
-	}
-}
-
-/// A group's billing payment.
-#[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GroupBillingPayment {
-	/// Payment amount (in hundreths USD, 100 = $1.00).
-	pub amount: std::option::Option<i64>,
-	/// A description of this payment.
-	pub description: std::option::Option<std::string::String>,
-	/// Whether or not this payment is from an invoice.
-	pub from_invoice: std::option::Option<bool>,
-	/// RFC3339 timestamp.
-	pub created_ts: std::option::Option<aws_smithy_types::DateTime>,
-	/// A value denoting the status of a billing transfer.
-	pub status: std::option::Option<crate::model::GroupBillingStatus>,
-}
-impl GroupBillingPayment {
-	/// Payment amount (in hundreths USD, 100 = $1.00).
-	pub fn amount(&self) -> std::option::Option<i64> {
-		self.amount
-	}
-	/// A description of this payment.
-	pub fn description(&self) -> std::option::Option<&str> {
-		self.description.as_deref()
-	}
-	/// Whether or not this payment is from an invoice.
-	pub fn from_invoice(&self) -> std::option::Option<bool> {
-		self.from_invoice
-	}
-	/// RFC3339 timestamp.
-	pub fn created_ts(&self) -> std::option::Option<&aws_smithy_types::DateTime> {
-		self.created_ts.as_ref()
-	}
-	/// A value denoting the status of a billing transfer.
-	pub fn status(&self) -> std::option::Option<&crate::model::GroupBillingStatus> {
-		self.status.as_ref()
-	}
-}
-impl std::fmt::Debug for GroupBillingPayment {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GroupBillingPayment");
-		formatter.field("amount", &self.amount);
-		formatter.field("description", &self.description);
-		formatter.field("from_invoice", &self.from_invoice);
-		formatter.field("created_ts", &self.created_ts);
-		formatter.field("status", &self.status);
-		formatter.finish()
-	}
-}
-/// See [`GroupBillingPayment`](crate::model::GroupBillingPayment)
-pub mod group_billing_payment {
-	/// A builder for [`GroupBillingPayment`](crate::model::GroupBillingPayment)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) amount: std::option::Option<i64>,
-		pub(crate) description: std::option::Option<std::string::String>,
-		pub(crate) from_invoice: std::option::Option<bool>,
-		pub(crate) created_ts: std::option::Option<aws_smithy_types::DateTime>,
-		pub(crate) status: std::option::Option<crate::model::GroupBillingStatus>,
-	}
-	impl Builder {
-		/// Payment amount (in hundreths USD, 100 = $1.00).
-		pub fn amount(mut self, input: i64) -> Self {
-			self.amount = Some(input);
-			self
-		}
-		/// Payment amount (in hundreths USD, 100 = $1.00).
-		pub fn set_amount(mut self, input: std::option::Option<i64>) -> Self {
-			self.amount = input;
-			self
-		}
-		/// A description of this payment.
-		pub fn description(mut self, input: impl Into<std::string::String>) -> Self {
-			self.description = Some(input.into());
-			self
-		}
-		/// A description of this payment.
-		pub fn set_description(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.description = input;
-			self
-		}
-		/// Whether or not this payment is from an invoice.
-		pub fn from_invoice(mut self, input: bool) -> Self {
-			self.from_invoice = Some(input);
-			self
-		}
-		/// Whether or not this payment is from an invoice.
-		pub fn set_from_invoice(mut self, input: std::option::Option<bool>) -> Self {
-			self.from_invoice = input;
-			self
-		}
-		/// RFC3339 timestamp.
-		pub fn created_ts(mut self, input: aws_smithy_types::DateTime) -> Self {
-			self.created_ts = Some(input);
-			self
-		}
-		/// RFC3339 timestamp.
-		pub fn set_created_ts(
-			mut self,
-			input: std::option::Option<aws_smithy_types::DateTime>,
-		) -> Self {
-			self.created_ts = input;
-			self
-		}
-		/// A value denoting the status of a billing transfer.
-		pub fn status(mut self, input: crate::model::GroupBillingStatus) -> Self {
-			self.status = Some(input);
-			self
-		}
-		/// A value denoting the status of a billing transfer.
-		pub fn set_status(
-			mut self,
-			input: std::option::Option<crate::model::GroupBillingStatus>,
-		) -> Self {
-			self.status = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GroupBillingPayment`](crate::model::GroupBillingPayment)
-		pub fn build(self) -> crate::model::GroupBillingPayment {
-			crate::model::GroupBillingPayment {
-				amount: self.amount,
-				description: self.description,
-				from_invoice: self.from_invoice,
-				created_ts: self.created_ts,
-				status: self.status,
-			}
-		}
-	}
-}
-impl GroupBillingPayment {
-	/// Creates a new builder-style object to manufacture [`GroupBillingPayment`](crate::model::GroupBillingPayment)
-	pub fn builder() -> crate::model::group_billing_payment::Builder {
-		crate::model::group_billing_payment::Builder::default()
+impl WatchResponse {
+	/// Creates a new builder-style object to manufacture [`WatchResponse`](crate::model::WatchResponse)
+	pub fn builder() -> crate::model::watch_response::Builder {
+		crate::model::watch_response::Builder::default()
 	}
 }
 
@@ -1267,82 +1039,71 @@ impl RegionSummary {
 	}
 }
 
-#[allow(missing_docs)] // documentation missing in model
+/// The status of a developer group.
 #[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GroupBankSource {
-	/// The bank account number of this group's bank source.
-	pub account_number: std::option::Option<std::string::String>,
-	/// The bank routing number of this group's bank source.
-	pub routing_number: std::option::Option<std::string::String>,
+#[derive(
+	std::clone::Clone,
+	std::cmp::Eq,
+	std::cmp::Ord,
+	std::cmp::PartialEq,
+	std::cmp::PartialOrd,
+	std::fmt::Debug,
+	std::hash::Hash,
+)]
+pub enum GroupStatus {
+	#[allow(missing_docs)] // documentation missing in model
+	Active,
+	#[allow(missing_docs)] // documentation missing in model
+	PaymentFailed,
+	#[allow(missing_docs)] // documentation missing in model
+	SetupIncomplete,
+	#[allow(missing_docs)] // documentation missing in model
+	SpendingLimitReached,
+	/// Unknown contains new variants that have been added since this code was generated.
+	Unknown(String),
 }
-impl GroupBankSource {
-	/// The bank account number of this group's bank source.
-	pub fn account_number(&self) -> std::option::Option<&str> {
-		self.account_number.as_deref()
-	}
-	/// The bank routing number of this group's bank source.
-	pub fn routing_number(&self) -> std::option::Option<&str> {
-		self.routing_number.as_deref()
-	}
-}
-impl std::fmt::Debug for GroupBankSource {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GroupBankSource");
-		formatter.field("account_number", &self.account_number);
-		formatter.field("routing_number", &self.routing_number);
-		formatter.finish()
-	}
-}
-/// See [`GroupBankSource`](crate::model::GroupBankSource)
-pub mod group_bank_source {
-	/// A builder for [`GroupBankSource`](crate::model::GroupBankSource)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) account_number: std::option::Option<std::string::String>,
-		pub(crate) routing_number: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		/// The bank account number of this group's bank source.
-		pub fn account_number(mut self, input: impl Into<std::string::String>) -> Self {
-			self.account_number = Some(input.into());
-			self
-		}
-		/// The bank account number of this group's bank source.
-		pub fn set_account_number(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.account_number = input;
-			self
-		}
-		/// The bank routing number of this group's bank source.
-		pub fn routing_number(mut self, input: impl Into<std::string::String>) -> Self {
-			self.routing_number = Some(input.into());
-			self
-		}
-		/// The bank routing number of this group's bank source.
-		pub fn set_routing_number(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.routing_number = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GroupBankSource`](crate::model::GroupBankSource)
-		pub fn build(self) -> crate::model::GroupBankSource {
-			crate::model::GroupBankSource {
-				account_number: self.account_number,
-				routing_number: self.routing_number,
-			}
+impl std::convert::From<&str> for GroupStatus {
+	fn from(s: &str) -> Self {
+		match s {
+			"active" => GroupStatus::Active,
+			"payment_failed" => GroupStatus::PaymentFailed,
+			"setup_incomplete" => GroupStatus::SetupIncomplete,
+			"spending_limit_reached" => GroupStatus::SpendingLimitReached,
+			other => GroupStatus::Unknown(other.to_owned()),
 		}
 	}
 }
-impl GroupBankSource {
-	/// Creates a new builder-style object to manufacture [`GroupBankSource`](crate::model::GroupBankSource)
-	pub fn builder() -> crate::model::group_bank_source::Builder {
-		crate::model::group_bank_source::Builder::default()
+impl std::str::FromStr for GroupStatus {
+	type Err = std::convert::Infallible;
+
+	fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+		Ok(GroupStatus::from(s))
+	}
+}
+impl GroupStatus {
+	/// Returns the `&str` value of the enum member.
+	pub fn as_str(&self) -> &str {
+		match self {
+			GroupStatus::Active => "active",
+			GroupStatus::PaymentFailed => "payment_failed",
+			GroupStatus::SetupIncomplete => "setup_incomplete",
+			GroupStatus::SpendingLimitReached => "spending_limit_reached",
+			GroupStatus::Unknown(s) => s.as_ref(),
+		}
+	}
+	/// Returns all the `&str` values of the enum members.
+	pub fn values() -> &'static [&'static str] {
+		&[
+			"active",
+			"payment_failed",
+			"setup_incomplete",
+			"spending_limit_reached",
+		]
+	}
+}
+impl AsRef<str> for GroupStatus {
+	fn as_ref(&self) -> &str {
+		self.as_str()
 	}
 }
 
@@ -1350,26 +1111,19 @@ impl GroupBankSource {
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GroupBillingSummary {
-	/// A list of multiple game lobby expenses.
-	pub games: std::option::Option<std::vec::Vec<crate::model::GameLobbyExpenses>>,
-	/// A group's available balance.
-	pub balance: std::option::Option<i64>,
+	/// A list of multiple game billing metrics.
+	pub games: std::option::Option<std::vec::Vec<crate::model::GameBillingMetrics>>,
 }
 impl GroupBillingSummary {
-	/// A list of multiple game lobby expenses.
-	pub fn games(&self) -> std::option::Option<&[crate::model::GameLobbyExpenses]> {
+	/// A list of multiple game billing metrics.
+	pub fn games(&self) -> std::option::Option<&[crate::model::GameBillingMetrics]> {
 		self.games.as_deref()
-	}
-	/// A group's available balance.
-	pub fn balance(&self) -> std::option::Option<i64> {
-		self.balance
 	}
 }
 impl std::fmt::Debug for GroupBillingSummary {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GroupBillingSummary");
 		formatter.field("games", &self.games);
-		formatter.field("balance", &self.balance);
 		formatter.finish()
 	}
 }
@@ -1379,45 +1133,31 @@ pub mod group_billing_summary {
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
-		pub(crate) games: std::option::Option<std::vec::Vec<crate::model::GameLobbyExpenses>>,
-		pub(crate) balance: std::option::Option<i64>,
+		pub(crate) games: std::option::Option<std::vec::Vec<crate::model::GameBillingMetrics>>,
 	}
 	impl Builder {
 		/// Appends an item to `games`.
 		///
 		/// To override the contents of this collection use [`set_games`](Self::set_games).
 		///
-		/// A list of multiple game lobby expenses.
-		pub fn games(mut self, input: crate::model::GameLobbyExpenses) -> Self {
+		/// A list of multiple game billing metrics.
+		pub fn games(mut self, input: crate::model::GameBillingMetrics) -> Self {
 			let mut v = self.games.unwrap_or_default();
 			v.push(input);
 			self.games = Some(v);
 			self
 		}
-		/// A list of multiple game lobby expenses.
+		/// A list of multiple game billing metrics.
 		pub fn set_games(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::GameLobbyExpenses>>,
+			input: std::option::Option<std::vec::Vec<crate::model::GameBillingMetrics>>,
 		) -> Self {
 			self.games = input;
 			self
 		}
-		/// A group's available balance.
-		pub fn balance(mut self, input: i64) -> Self {
-			self.balance = Some(input);
-			self
-		}
-		/// A group's available balance.
-		pub fn set_balance(mut self, input: std::option::Option<i64>) -> Self {
-			self.balance = input;
-			self
-		}
 		/// Consumes the builder and constructs a [`GroupBillingSummary`](crate::model::GroupBillingSummary)
 		pub fn build(self) -> crate::model::GroupBillingSummary {
-			crate::model::GroupBillingSummary {
-				games: self.games,
-				balance: self.balance,
-			}
+			crate::model::GroupBillingSummary { games: self.games }
 		}
 	}
 }
@@ -1428,18 +1168,18 @@ impl GroupBillingSummary {
 	}
 }
 
-/// Game lobby expenses.
+/// Game billing metrics.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GameLobbyExpenses {
+pub struct GameBillingMetrics {
 	/// A game handle.
 	pub game: std::option::Option<crate::model::GameHandle>,
 	/// A list of namespace summaries.
 	pub namespaces: std::option::Option<std::vec::Vec<crate::model::NamespaceSummary>>,
-	/// A list of multiple region tier expenses.
-	pub expenses: std::option::Option<std::vec::Vec<crate::model::RegionTierExpenses>>,
+	/// A list of multiple region tier metrics.
+	pub metrics: std::option::Option<std::vec::Vec<crate::model::RegionTierMetrics>>,
 }
-impl GameLobbyExpenses {
+impl GameBillingMetrics {
 	/// A game handle.
 	pub fn game(&self) -> std::option::Option<&crate::model::GameHandle> {
 		self.game.as_ref()
@@ -1448,29 +1188,29 @@ impl GameLobbyExpenses {
 	pub fn namespaces(&self) -> std::option::Option<&[crate::model::NamespaceSummary]> {
 		self.namespaces.as_deref()
 	}
-	/// A list of multiple region tier expenses.
-	pub fn expenses(&self) -> std::option::Option<&[crate::model::RegionTierExpenses]> {
-		self.expenses.as_deref()
+	/// A list of multiple region tier metrics.
+	pub fn metrics(&self) -> std::option::Option<&[crate::model::RegionTierMetrics]> {
+		self.metrics.as_deref()
 	}
 }
-impl std::fmt::Debug for GameLobbyExpenses {
+impl std::fmt::Debug for GameBillingMetrics {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GameLobbyExpenses");
+		let mut formatter = f.debug_struct("GameBillingMetrics");
 		formatter.field("game", &self.game);
 		formatter.field("namespaces", &self.namespaces);
-		formatter.field("expenses", &self.expenses);
+		formatter.field("metrics", &self.metrics);
 		formatter.finish()
 	}
 }
-/// See [`GameLobbyExpenses`](crate::model::GameLobbyExpenses)
-pub mod game_lobby_expenses {
-	/// A builder for [`GameLobbyExpenses`](crate::model::GameLobbyExpenses)
+/// See [`GameBillingMetrics`](crate::model::GameBillingMetrics)
+pub mod game_billing_metrics {
+	/// A builder for [`GameBillingMetrics`](crate::model::GameBillingMetrics)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) game: std::option::Option<crate::model::GameHandle>,
 		pub(crate) namespaces: std::option::Option<std::vec::Vec<crate::model::NamespaceSummary>>,
-		pub(crate) expenses: std::option::Option<std::vec::Vec<crate::model::RegionTierExpenses>>,
+		pub(crate) metrics: std::option::Option<std::vec::Vec<crate::model::RegionTierMetrics>>,
 	}
 	impl Builder {
 		/// A game handle.
@@ -1502,46 +1242,46 @@ pub mod game_lobby_expenses {
 			self.namespaces = input;
 			self
 		}
-		/// Appends an item to `expenses`.
+		/// Appends an item to `metrics`.
 		///
-		/// To override the contents of this collection use [`set_expenses`](Self::set_expenses).
+		/// To override the contents of this collection use [`set_metrics`](Self::set_metrics).
 		///
-		/// A list of multiple region tier expenses.
-		pub fn expenses(mut self, input: crate::model::RegionTierExpenses) -> Self {
-			let mut v = self.expenses.unwrap_or_default();
+		/// A list of multiple region tier metrics.
+		pub fn metrics(mut self, input: crate::model::RegionTierMetrics) -> Self {
+			let mut v = self.metrics.unwrap_or_default();
 			v.push(input);
-			self.expenses = Some(v);
+			self.metrics = Some(v);
 			self
 		}
-		/// A list of multiple region tier expenses.
-		pub fn set_expenses(
+		/// A list of multiple region tier metrics.
+		pub fn set_metrics(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::RegionTierExpenses>>,
+			input: std::option::Option<std::vec::Vec<crate::model::RegionTierMetrics>>,
 		) -> Self {
-			self.expenses = input;
+			self.metrics = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`GameLobbyExpenses`](crate::model::GameLobbyExpenses)
-		pub fn build(self) -> crate::model::GameLobbyExpenses {
-			crate::model::GameLobbyExpenses {
+		/// Consumes the builder and constructs a [`GameBillingMetrics`](crate::model::GameBillingMetrics)
+		pub fn build(self) -> crate::model::GameBillingMetrics {
+			crate::model::GameBillingMetrics {
 				game: self.game,
 				namespaces: self.namespaces,
-				expenses: self.expenses,
+				metrics: self.metrics,
 			}
 		}
 	}
 }
-impl GameLobbyExpenses {
-	/// Creates a new builder-style object to manufacture [`GameLobbyExpenses`](crate::model::GameLobbyExpenses)
-	pub fn builder() -> crate::model::game_lobby_expenses::Builder {
-		crate::model::game_lobby_expenses::Builder::default()
+impl GameBillingMetrics {
+	/// Creates a new builder-style object to manufacture [`GameBillingMetrics`](crate::model::GameBillingMetrics)
+	pub fn builder() -> crate::model::game_billing_metrics::Builder {
+		crate::model::game_billing_metrics::Builder::default()
 	}
 }
 
-/// Region tier expenses.
+/// Region tier metrics.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct RegionTierExpenses {
+pub struct RegionTierMetrics {
 	/// A universally unique identifier.
 	pub namespace_id: std::option::Option<std::string::String>,
 	/// A universally unique identifier.
@@ -1550,12 +1290,12 @@ pub struct RegionTierExpenses {
 	pub tier_name_id: std::option::Option<std::string::String>,
 	/// A human readable short identifier used to references resources. Different than a `rivet.common#Uuid` because this is intended to be human readable. Different than `rivet.common#DisplayName` because this should not include special characters and be short.
 	pub lobby_group_name_id: std::option::Option<std::string::String>,
-	/// How long a region tier has been active (in milliseconds).
+	/// How long a region tier has been active (in seconds).
 	pub uptime: std::option::Option<i64>,
 	/// Amount of expenses for this region tier (in hundred-thousandths USD, 100,000 = $1.00).
 	pub expenses: std::option::Option<i64>,
 }
-impl RegionTierExpenses {
+impl RegionTierMetrics {
 	/// A universally unique identifier.
 	pub fn namespace_id(&self) -> std::option::Option<&str> {
 		self.namespace_id.as_deref()
@@ -1572,7 +1312,7 @@ impl RegionTierExpenses {
 	pub fn lobby_group_name_id(&self) -> std::option::Option<&str> {
 		self.lobby_group_name_id.as_deref()
 	}
-	/// How long a region tier has been active (in milliseconds).
+	/// How long a region tier has been active (in seconds).
 	pub fn uptime(&self) -> std::option::Option<i64> {
 		self.uptime
 	}
@@ -1581,9 +1321,9 @@ impl RegionTierExpenses {
 		self.expenses
 	}
 }
-impl std::fmt::Debug for RegionTierExpenses {
+impl std::fmt::Debug for RegionTierMetrics {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("RegionTierExpenses");
+		let mut formatter = f.debug_struct("RegionTierMetrics");
 		formatter.field("namespace_id", &self.namespace_id);
 		formatter.field("region_id", &self.region_id);
 		formatter.field("tier_name_id", &self.tier_name_id);
@@ -1593,9 +1333,9 @@ impl std::fmt::Debug for RegionTierExpenses {
 		formatter.finish()
 	}
 }
-/// See [`RegionTierExpenses`](crate::model::RegionTierExpenses)
-pub mod region_tier_expenses {
-	/// A builder for [`RegionTierExpenses`](crate::model::RegionTierExpenses)
+/// See [`RegionTierMetrics`](crate::model::RegionTierMetrics)
+pub mod region_tier_metrics {
+	/// A builder for [`RegionTierMetrics`](crate::model::RegionTierMetrics)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
@@ -1650,12 +1390,12 @@ pub mod region_tier_expenses {
 			self.lobby_group_name_id = input;
 			self
 		}
-		/// How long a region tier has been active (in milliseconds).
+		/// How long a region tier has been active (in seconds).
 		pub fn uptime(mut self, input: i64) -> Self {
 			self.uptime = Some(input);
 			self
 		}
-		/// How long a region tier has been active (in milliseconds).
+		/// How long a region tier has been active (in seconds).
 		pub fn set_uptime(mut self, input: std::option::Option<i64>) -> Self {
 			self.uptime = input;
 			self
@@ -1670,9 +1410,9 @@ pub mod region_tier_expenses {
 			self.expenses = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`RegionTierExpenses`](crate::model::RegionTierExpenses)
-		pub fn build(self) -> crate::model::RegionTierExpenses {
-			crate::model::RegionTierExpenses {
+		/// Consumes the builder and constructs a [`RegionTierMetrics`](crate::model::RegionTierMetrics)
+		pub fn build(self) -> crate::model::RegionTierMetrics {
+			crate::model::RegionTierMetrics {
 				namespace_id: self.namespace_id,
 				region_id: self.region_id,
 				tier_name_id: self.tier_name_id,
@@ -1683,10 +1423,10 @@ pub mod region_tier_expenses {
 		}
 	}
 }
-impl RegionTierExpenses {
-	/// Creates a new builder-style object to manufacture [`RegionTierExpenses`](crate::model::RegionTierExpenses)
-	pub fn builder() -> crate::model::region_tier_expenses::Builder {
-		crate::model::region_tier_expenses::Builder::default()
+impl RegionTierMetrics {
+	/// Creates a new builder-style object to manufacture [`RegionTierMetrics`](crate::model::RegionTierMetrics)
+	pub fn builder() -> crate::model::region_tier_metrics::Builder {
+		crate::model::region_tier_metrics::Builder::default()
 	}
 }
 
@@ -2192,58 +1932,6 @@ impl LogStream {
 impl AsRef<str> for LogStream {
 	fn as_ref(&self) -> &str {
 		self.as_str()
-	}
-}
-
-/// Provided by watchable endpoints used in blocking loops.
-#[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct WatchResponse {
-	/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
-	pub index: std::option::Option<std::string::String>,
-}
-impl WatchResponse {
-	/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
-	pub fn index(&self) -> std::option::Option<&str> {
-		self.index.as_deref()
-	}
-}
-impl std::fmt::Debug for WatchResponse {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("WatchResponse");
-		formatter.field("index", &self.index);
-		formatter.finish()
-	}
-}
-/// See [`WatchResponse`](crate::model::WatchResponse)
-pub mod watch_response {
-	/// A builder for [`WatchResponse`](crate::model::WatchResponse)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) index: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
-		pub fn index(mut self, input: impl Into<std::string::String>) -> Self {
-			self.index = Some(input.into());
-			self
-		}
-		/// Index indicating the version of the data responded. Pas this to `rivet.common#WatchQuery` to block and wait for the next response.
-		pub fn set_index(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.index = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`WatchResponse`](crate::model::WatchResponse)
-		pub fn build(self) -> crate::model::WatchResponse {
-			crate::model::WatchResponse { index: self.index }
-		}
-	}
-}
-impl WatchResponse {
-	/// Creates a new builder-style object to manufacture [`WatchResponse`](crate::model::WatchResponse)
-	pub fn builder() -> crate::model::watch_response::Builder {
-		crate::model::watch_response::Builder::default()
 	}
 }
 
@@ -7925,22 +7613,22 @@ impl VersionSummary {
 	}
 }
 
-/// A group summary.
+/// A group handle.
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GroupSummary {
+pub struct GroupHandle {
 	/// A universally unique identifier.
 	pub group_id: std::option::Option<std::string::String>,
 	/// Represent a resource's readable display name.
 	pub display_name: std::option::Option<std::string::String>,
 	/// The URL of this group's avatar image.
 	pub avatar_url: std::option::Option<std::string::String>,
-	/// Whether or not this group is a developer.
-	pub is_developer: std::option::Option<bool>,
 	/// External links for this group.
 	pub external: std::option::Option<crate::model::GroupExternalLinks>,
+	/// Whether or not this group is a developer group.
+	pub is_developer: std::option::Option<bool>,
 }
-impl GroupSummary {
+impl GroupHandle {
 	/// A universally unique identifier.
 	pub fn group_id(&self) -> std::option::Option<&str> {
 		self.group_id.as_deref()
@@ -7953,37 +7641,37 @@ impl GroupSummary {
 	pub fn avatar_url(&self) -> std::option::Option<&str> {
 		self.avatar_url.as_deref()
 	}
-	/// Whether or not this group is a developer.
-	pub fn is_developer(&self) -> std::option::Option<bool> {
-		self.is_developer
-	}
 	/// External links for this group.
 	pub fn external(&self) -> std::option::Option<&crate::model::GroupExternalLinks> {
 		self.external.as_ref()
 	}
+	/// Whether or not this group is a developer group.
+	pub fn is_developer(&self) -> std::option::Option<bool> {
+		self.is_developer
+	}
 }
-impl std::fmt::Debug for GroupSummary {
+impl std::fmt::Debug for GroupHandle {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GroupSummary");
+		let mut formatter = f.debug_struct("GroupHandle");
 		formatter.field("group_id", &self.group_id);
 		formatter.field("display_name", &self.display_name);
 		formatter.field("avatar_url", &self.avatar_url);
-		formatter.field("is_developer", &self.is_developer);
 		formatter.field("external", &self.external);
+		formatter.field("is_developer", &self.is_developer);
 		formatter.finish()
 	}
 }
-/// See [`GroupSummary`](crate::model::GroupSummary)
-pub mod group_summary {
-	/// A builder for [`GroupSummary`](crate::model::GroupSummary)
+/// See [`GroupHandle`](crate::model::GroupHandle)
+pub mod group_handle {
+	/// A builder for [`GroupHandle`](crate::model::GroupHandle)
 	#[non_exhaustive]
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) group_id: std::option::Option<std::string::String>,
 		pub(crate) display_name: std::option::Option<std::string::String>,
 		pub(crate) avatar_url: std::option::Option<std::string::String>,
-		pub(crate) is_developer: std::option::Option<bool>,
 		pub(crate) external: std::option::Option<crate::model::GroupExternalLinks>,
+		pub(crate) is_developer: std::option::Option<bool>,
 	}
 	impl Builder {
 		/// A universally unique identifier.
@@ -8016,16 +7704,6 @@ pub mod group_summary {
 			self.avatar_url = input;
 			self
 		}
-		/// Whether or not this group is a developer.
-		pub fn is_developer(mut self, input: bool) -> Self {
-			self.is_developer = Some(input);
-			self
-		}
-		/// Whether or not this group is a developer.
-		pub fn set_is_developer(mut self, input: std::option::Option<bool>) -> Self {
-			self.is_developer = input;
-			self
-		}
 		/// External links for this group.
 		pub fn external(mut self, input: crate::model::GroupExternalLinks) -> Self {
 			self.external = Some(input);
@@ -8039,22 +7717,32 @@ pub mod group_summary {
 			self.external = input;
 			self
 		}
-		/// Consumes the builder and constructs a [`GroupSummary`](crate::model::GroupSummary)
-		pub fn build(self) -> crate::model::GroupSummary {
-			crate::model::GroupSummary {
+		/// Whether or not this group is a developer group.
+		pub fn is_developer(mut self, input: bool) -> Self {
+			self.is_developer = Some(input);
+			self
+		}
+		/// Whether or not this group is a developer group.
+		pub fn set_is_developer(mut self, input: std::option::Option<bool>) -> Self {
+			self.is_developer = input;
+			self
+		}
+		/// Consumes the builder and constructs a [`GroupHandle`](crate::model::GroupHandle)
+		pub fn build(self) -> crate::model::GroupHandle {
+			crate::model::GroupHandle {
 				group_id: self.group_id,
 				display_name: self.display_name,
 				avatar_url: self.avatar_url,
-				is_developer: self.is_developer,
 				external: self.external,
+				is_developer: self.is_developer,
 			}
 		}
 	}
 }
-impl GroupSummary {
-	/// Creates a new builder-style object to manufacture [`GroupSummary`](crate::model::GroupSummary)
-	pub fn builder() -> crate::model::group_summary::Builder {
-		crate::model::group_summary::Builder::default()
+impl GroupHandle {
+	/// Creates a new builder-style object to manufacture [`GroupHandle`](crate::model::GroupHandle)
+	pub fn builder() -> crate::model::group_handle::Builder {
+		crate::model::group_handle::Builder::default()
 	}
 }
 

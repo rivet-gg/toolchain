@@ -298,6 +298,36 @@ impl ValidateGroupOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
+pub struct SetGroupBillingPlanOutput {}
+impl std::fmt::Debug for SetGroupBillingPlanOutput {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut formatter = f.debug_struct("SetGroupBillingPlanOutput");
+		formatter.finish()
+	}
+}
+/// See [`SetGroupBillingPlanOutput`](crate::output::SetGroupBillingPlanOutput)
+pub mod set_group_billing_plan_output {
+	/// A builder for [`SetGroupBillingPlanOutput`](crate::output::SetGroupBillingPlanOutput)
+	#[non_exhaustive]
+	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
+	pub struct Builder {}
+	impl Builder {
+		/// Consumes the builder and constructs a [`SetGroupBillingPlanOutput`](crate::output::SetGroupBillingPlanOutput)
+		pub fn build(self) -> crate::output::SetGroupBillingPlanOutput {
+			crate::output::SetGroupBillingPlanOutput {}
+		}
+	}
+}
+impl SetGroupBillingPlanOutput {
+	/// Creates a new builder-style object to manufacture [`SetGroupBillingPlanOutput`](crate::output::SetGroupBillingPlanOutput)
+	pub fn builder() -> crate::output::set_group_billing_plan_output::Builder {
+		crate::output::set_group_billing_plan_output::Builder::default()
+	}
+}
+
+#[allow(missing_docs)] // documentation missing in model
+#[non_exhaustive]
+#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GroupBillingCheckoutOutput {
 	/// The URL of the checkout session.
 	pub url: std::option::Option<std::string::String>,
@@ -383,24 +413,17 @@ impl ConvertGroupOutput {
 pub struct GetGroupInvoicesListOutput {
 	/// A list of a group's billing invoices.
 	pub invoices: std::option::Option<std::vec::Vec<crate::model::GroupBillingInvoice>>,
-	/// The pagination anchor.
-	pub anchor: std::option::Option<std::string::String>,
 }
 impl GetGroupInvoicesListOutput {
 	/// A list of a group's billing invoices.
 	pub fn invoices(&self) -> std::option::Option<&[crate::model::GroupBillingInvoice]> {
 		self.invoices.as_deref()
 	}
-	/// The pagination anchor.
-	pub fn anchor(&self) -> std::option::Option<&str> {
-		self.anchor.as_deref()
-	}
 }
 impl std::fmt::Debug for GetGroupInvoicesListOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGroupInvoicesListOutput");
 		formatter.field("invoices", &self.invoices);
-		formatter.field("anchor", &self.anchor);
 		formatter.finish()
 	}
 }
@@ -411,7 +434,6 @@ pub mod get_group_invoices_list_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) invoices: std::option::Option<std::vec::Vec<crate::model::GroupBillingInvoice>>,
-		pub(crate) anchor: std::option::Option<std::string::String>,
 	}
 	impl Builder {
 		/// Appends an item to `invoices`.
@@ -433,21 +455,10 @@ pub mod get_group_invoices_list_output {
 			self.invoices = input;
 			self
 		}
-		/// The pagination anchor.
-		pub fn anchor(mut self, input: impl Into<std::string::String>) -> Self {
-			self.anchor = Some(input.into());
-			self
-		}
-		/// The pagination anchor.
-		pub fn set_anchor(mut self, input: std::option::Option<std::string::String>) -> Self {
-			self.anchor = input;
-			self
-		}
 		/// Consumes the builder and constructs a [`GetGroupInvoicesListOutput`](crate::output::GetGroupInvoicesListOutput)
 		pub fn build(self) -> crate::output::GetGroupInvoicesListOutput {
 			crate::output::GetGroupInvoicesListOutput {
 				invoices: self.invoices,
-				anchor: self.anchor,
 			}
 		}
 	}
@@ -462,205 +473,48 @@ impl GetGroupInvoicesListOutput {
 #[allow(missing_docs)] // documentation missing in model
 #[non_exhaustive]
 #[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetGroupTransfersListOutput {
-	/// A list of a group's billing transfers.
-	pub transfers: std::option::Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
-	/// The ID of the last transfer listed.
-	pub end_transfer_id: std::option::Option<std::string::String>,
-}
-impl GetGroupTransfersListOutput {
-	/// A list of a group's billing transfers.
-	pub fn transfers(&self) -> std::option::Option<&[crate::model::GroupBillingTransfer]> {
-		self.transfers.as_deref()
-	}
-	/// The ID of the last transfer listed.
-	pub fn end_transfer_id(&self) -> std::option::Option<&str> {
-		self.end_transfer_id.as_deref()
-	}
-}
-impl std::fmt::Debug for GetGroupTransfersListOutput {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetGroupTransfersListOutput");
-		formatter.field("transfers", &self.transfers);
-		formatter.field("end_transfer_id", &self.end_transfer_id);
-		formatter.finish()
-	}
-}
-/// See [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
-pub mod get_group_transfers_list_output {
-	/// A builder for [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) transfers:
-			std::option::Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
-		pub(crate) end_transfer_id: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		/// Appends an item to `transfers`.
-		///
-		/// To override the contents of this collection use [`set_transfers`](Self::set_transfers).
-		///
-		/// A list of a group's billing transfers.
-		pub fn transfers(mut self, input: crate::model::GroupBillingTransfer) -> Self {
-			let mut v = self.transfers.unwrap_or_default();
-			v.push(input);
-			self.transfers = Some(v);
-			self
-		}
-		/// A list of a group's billing transfers.
-		pub fn set_transfers(
-			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::GroupBillingTransfer>>,
-		) -> Self {
-			self.transfers = input;
-			self
-		}
-		/// The ID of the last transfer listed.
-		pub fn end_transfer_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.end_transfer_id = Some(input.into());
-			self
-		}
-		/// The ID of the last transfer listed.
-		pub fn set_end_transfer_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.end_transfer_id = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
-		pub fn build(self) -> crate::output::GetGroupTransfersListOutput {
-			crate::output::GetGroupTransfersListOutput {
-				transfers: self.transfers,
-				end_transfer_id: self.end_transfer_id,
-			}
-		}
-	}
-}
-impl GetGroupTransfersListOutput {
-	/// Creates a new builder-style object to manufacture [`GetGroupTransfersListOutput`](crate::output::GetGroupTransfersListOutput)
-	pub fn builder() -> crate::output::get_group_transfers_list_output::Builder {
-		crate::output::get_group_transfers_list_output::Builder::default()
-	}
-}
-
-#[allow(missing_docs)] // documentation missing in model
-#[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
-pub struct GetGroupPaymentsListOutput {
-	/// A list of a group's billing payments.
-	pub payments: std::option::Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
-	/// The ID of the last payment listed.
-	pub end_payment_id: std::option::Option<std::string::String>,
-}
-impl GetGroupPaymentsListOutput {
-	/// A list of a group's billing payments.
-	pub fn payments(&self) -> std::option::Option<&[crate::model::GroupBillingPayment]> {
-		self.payments.as_deref()
-	}
-	/// The ID of the last payment listed.
-	pub fn end_payment_id(&self) -> std::option::Option<&str> {
-		self.end_payment_id.as_deref()
-	}
-}
-impl std::fmt::Debug for GetGroupPaymentsListOutput {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let mut formatter = f.debug_struct("GetGroupPaymentsListOutput");
-		formatter.field("payments", &self.payments);
-		formatter.field("end_payment_id", &self.end_payment_id);
-		formatter.finish()
-	}
-}
-/// See [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
-pub mod get_group_payments_list_output {
-	/// A builder for [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
-	#[non_exhaustive]
-	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
-	pub struct Builder {
-		pub(crate) payments: std::option::Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
-		pub(crate) end_payment_id: std::option::Option<std::string::String>,
-	}
-	impl Builder {
-		/// Appends an item to `payments`.
-		///
-		/// To override the contents of this collection use [`set_payments`](Self::set_payments).
-		///
-		/// A list of a group's billing payments.
-		pub fn payments(mut self, input: crate::model::GroupBillingPayment) -> Self {
-			let mut v = self.payments.unwrap_or_default();
-			v.push(input);
-			self.payments = Some(v);
-			self
-		}
-		/// A list of a group's billing payments.
-		pub fn set_payments(
-			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::GroupBillingPayment>>,
-		) -> Self {
-			self.payments = input;
-			self
-		}
-		/// The ID of the last payment listed.
-		pub fn end_payment_id(mut self, input: impl Into<std::string::String>) -> Self {
-			self.end_payment_id = Some(input.into());
-			self
-		}
-		/// The ID of the last payment listed.
-		pub fn set_end_payment_id(
-			mut self,
-			input: std::option::Option<std::string::String>,
-		) -> Self {
-			self.end_payment_id = input;
-			self
-		}
-		/// Consumes the builder and constructs a [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
-		pub fn build(self) -> crate::output::GetGroupPaymentsListOutput {
-			crate::output::GetGroupPaymentsListOutput {
-				payments: self.payments,
-				end_payment_id: self.end_payment_id,
-			}
-		}
-	}
-}
-impl GetGroupPaymentsListOutput {
-	/// Creates a new builder-style object to manufacture [`GetGroupPaymentsListOutput`](crate::output::GetGroupPaymentsListOutput)
-	pub fn builder() -> crate::output::get_group_payments_list_output::Builder {
-		crate::output::get_group_payments_list_output::Builder::default()
-	}
-}
-
-#[allow(missing_docs)] // documentation missing in model
-#[non_exhaustive]
-#[derive(std::clone::Clone, std::cmp::PartialEq)]
 pub struct GetGroupBillingOutput {
 	/// A group billing summary.
 	pub billing: std::option::Option<crate::model::GroupBillingSummary>,
-	#[allow(missing_docs)] // documentation missing in model
-	pub bank_source: std::option::Option<crate::model::GroupBankSource>,
+	/// The status of a developer group.
+	pub status: std::option::Option<crate::model::GroupStatus>,
+	/// A value denoting a game's billing plan.
+	pub plan: std::option::Option<crate::model::GroupBillingPlan>,
 	/// A list of region summaries.
 	pub available_regions: std::option::Option<std::vec::Vec<crate::model::RegionSummary>>,
+	/// Provided by watchable endpoints used in blocking loops.
+	pub watch: std::option::Option<crate::model::WatchResponse>,
 }
 impl GetGroupBillingOutput {
 	/// A group billing summary.
 	pub fn billing(&self) -> std::option::Option<&crate::model::GroupBillingSummary> {
 		self.billing.as_ref()
 	}
-	#[allow(missing_docs)] // documentation missing in model
-	pub fn bank_source(&self) -> std::option::Option<&crate::model::GroupBankSource> {
-		self.bank_source.as_ref()
+	/// The status of a developer group.
+	pub fn status(&self) -> std::option::Option<&crate::model::GroupStatus> {
+		self.status.as_ref()
+	}
+	/// A value denoting a game's billing plan.
+	pub fn plan(&self) -> std::option::Option<&crate::model::GroupBillingPlan> {
+		self.plan.as_ref()
 	}
 	/// A list of region summaries.
 	pub fn available_regions(&self) -> std::option::Option<&[crate::model::RegionSummary]> {
 		self.available_regions.as_deref()
+	}
+	/// Provided by watchable endpoints used in blocking loops.
+	pub fn watch(&self) -> std::option::Option<&crate::model::WatchResponse> {
+		self.watch.as_ref()
 	}
 }
 impl std::fmt::Debug for GetGroupBillingOutput {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let mut formatter = f.debug_struct("GetGroupBillingOutput");
 		formatter.field("billing", &self.billing);
-		formatter.field("bank_source", &"*** Sensitive Data Redacted ***");
+		formatter.field("status", &self.status);
+		formatter.field("plan", &self.plan);
 		formatter.field("available_regions", &self.available_regions);
+		formatter.field("watch", &self.watch);
 		formatter.finish()
 	}
 }
@@ -671,9 +525,11 @@ pub mod get_group_billing_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) billing: std::option::Option<crate::model::GroupBillingSummary>,
-		pub(crate) bank_source: std::option::Option<crate::model::GroupBankSource>,
+		pub(crate) status: std::option::Option<crate::model::GroupStatus>,
+		pub(crate) plan: std::option::Option<crate::model::GroupBillingPlan>,
 		pub(crate) available_regions:
 			std::option::Option<std::vec::Vec<crate::model::RegionSummary>>,
+		pub(crate) watch: std::option::Option<crate::model::WatchResponse>,
 	}
 	impl Builder {
 		/// A group billing summary.
@@ -689,17 +545,27 @@ pub mod get_group_billing_output {
 			self.billing = input;
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn bank_source(mut self, input: crate::model::GroupBankSource) -> Self {
-			self.bank_source = Some(input);
+		/// The status of a developer group.
+		pub fn status(mut self, input: crate::model::GroupStatus) -> Self {
+			self.status = Some(input);
 			self
 		}
-		#[allow(missing_docs)] // documentation missing in model
-		pub fn set_bank_source(
+		/// The status of a developer group.
+		pub fn set_status(mut self, input: std::option::Option<crate::model::GroupStatus>) -> Self {
+			self.status = input;
+			self
+		}
+		/// A value denoting a game's billing plan.
+		pub fn plan(mut self, input: crate::model::GroupBillingPlan) -> Self {
+			self.plan = Some(input);
+			self
+		}
+		/// A value denoting a game's billing plan.
+		pub fn set_plan(
 			mut self,
-			input: std::option::Option<crate::model::GroupBankSource>,
+			input: std::option::Option<crate::model::GroupBillingPlan>,
 		) -> Self {
-			self.bank_source = input;
+			self.plan = input;
 			self
 		}
 		/// Appends an item to `available_regions`.
@@ -721,12 +587,27 @@ pub mod get_group_billing_output {
 			self.available_regions = input;
 			self
 		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn watch(mut self, input: crate::model::WatchResponse) -> Self {
+			self.watch = Some(input);
+			self
+		}
+		/// Provided by watchable endpoints used in blocking loops.
+		pub fn set_watch(
+			mut self,
+			input: std::option::Option<crate::model::WatchResponse>,
+		) -> Self {
+			self.watch = input;
+			self
+		}
 		/// Consumes the builder and constructs a [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput)
 		pub fn build(self) -> crate::output::GetGroupBillingOutput {
 			crate::output::GetGroupBillingOutput {
 				billing: self.billing,
-				bank_source: self.bank_source,
+				status: self.status,
+				plan: self.plan,
 				available_regions: self.available_regions,
+				watch: self.watch,
 			}
 		}
 	}
@@ -2966,8 +2847,8 @@ impl CreateGameOutput {
 pub struct GetGamesOutput {
 	/// A list of game summaries.
 	pub games: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
-	/// A list of group summaries.
-	pub groups: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
+	/// A list of group handles.
+	pub groups: std::option::Option<std::vec::Vec<crate::model::GroupHandle>>,
 	/// Provided by watchable endpoints used in blocking loops.
 	pub watch: std::option::Option<crate::model::WatchResponse>,
 }
@@ -2976,8 +2857,8 @@ impl GetGamesOutput {
 	pub fn games(&self) -> std::option::Option<&[crate::model::GameSummary]> {
 		self.games.as_deref()
 	}
-	/// A list of group summaries.
-	pub fn groups(&self) -> std::option::Option<&[crate::model::GroupSummary]> {
+	/// A list of group handles.
+	pub fn groups(&self) -> std::option::Option<&[crate::model::GroupHandle]> {
 		self.groups.as_deref()
 	}
 	/// Provided by watchable endpoints used in blocking loops.
@@ -3001,7 +2882,7 @@ pub mod get_games_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) games: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
-		pub(crate) groups: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
+		pub(crate) groups: std::option::Option<std::vec::Vec<crate::model::GroupHandle>>,
 		pub(crate) watch: std::option::Option<crate::model::WatchResponse>,
 	}
 	impl Builder {
@@ -3028,17 +2909,17 @@ pub mod get_games_output {
 		///
 		/// To override the contents of this collection use [`set_groups`](Self::set_groups).
 		///
-		/// A list of group summaries.
-		pub fn groups(mut self, input: crate::model::GroupSummary) -> Self {
+		/// A list of group handles.
+		pub fn groups(mut self, input: crate::model::GroupHandle) -> Self {
 			let mut v = self.groups.unwrap_or_default();
 			v.push(input);
 			self.groups = Some(v);
 			self
 		}
-		/// A list of group summaries.
+		/// A list of group handles.
 		pub fn set_groups(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
+			input: std::option::Option<std::vec::Vec<crate::model::GroupHandle>>,
 		) -> Self {
 			self.groups = input;
 			self

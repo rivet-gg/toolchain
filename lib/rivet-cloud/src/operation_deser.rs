@@ -3861,320 +3861,6 @@ pub fn parse_get_group_invoices_list_response(
 }
 
 #[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_group_payments_list_error(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetGroupPaymentsListOutput,
-	crate::error::GetGroupPaymentsListError,
-> {
-	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-	let error_code = match generic.code() {
-		Some(code) => code,
-		None => return Err(crate::error::GetGroupPaymentsListError::unhandled(generic)),
-	};
-
-	let _error_message = generic.message().map(|msg| msg.to_owned());
-	Err(match error_code {
-		"InternalError" => crate::error::GetGroupPaymentsListError {
-			meta: generic,
-			kind: crate::error::GetGroupPaymentsListErrorKind::InternalError({
-				#[allow(unused_mut)]
-				let mut tmp = {
-					#[allow(unused_mut)]
-					let mut output = crate::error::internal_error::Builder::default();
-					let _ = response;
-					output =
-						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
-							response.body().as_ref(),
-							output,
-						)
-						.map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-					output.build()
-				};
-				if (&tmp.message).is_none() {
-					tmp.message = _error_message;
-				}
-				tmp
-			}),
-		},
-		"RateLimitError" => {
-			crate::error::GetGroupPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetGroupPaymentsListErrorKind::RateLimitError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::rate_limit_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"ForbiddenError" => {
-			crate::error::GetGroupPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetGroupPaymentsListErrorKind::ForbiddenError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::forbidden_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"UnauthorizedError" => {
-			crate::error::GetGroupPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetGroupPaymentsListErrorKind::UnauthorizedError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::unauthorized_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"NotFoundError" => {
-			crate::error::GetGroupPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetGroupPaymentsListErrorKind::NotFoundError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::not_found_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"BadRequestError" => {
-			crate::error::GetGroupPaymentsListError {
-				meta: generic,
-				kind: crate::error::GetGroupPaymentsListErrorKind::BadRequestError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::bad_request_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		_ => crate::error::GetGroupPaymentsListError::generic(generic),
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_group_payments_list_response(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetGroupPaymentsListOutput,
-	crate::error::GetGroupPaymentsListError,
-> {
-	Ok({
-		#[allow(unused_mut)]
-		let mut output = crate::output::get_group_payments_list_output::Builder::default();
-		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_get_group_payments_list(
-			response.body().as_ref(),
-			output,
-		)
-		.map_err(crate::error::GetGroupPaymentsListError::unhandled)?;
-		output.build()
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_group_transfers_list_error(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetGroupTransfersListOutput,
-	crate::error::GetGroupTransfersListError,
-> {
-	let generic = crate::json_deser::parse_http_generic_error(response)
-		.map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-	let error_code = match generic.code() {
-		Some(code) => code,
-		None => return Err(crate::error::GetGroupTransfersListError::unhandled(generic)),
-	};
-
-	let _error_message = generic.message().map(|msg| msg.to_owned());
-	Err(match error_code {
-		"InternalError" => crate::error::GetGroupTransfersListError {
-			meta: generic,
-			kind: crate::error::GetGroupTransfersListErrorKind::InternalError({
-				#[allow(unused_mut)]
-				let mut tmp = {
-					#[allow(unused_mut)]
-					let mut output = crate::error::internal_error::Builder::default();
-					let _ = response;
-					output =
-						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
-							response.body().as_ref(),
-							output,
-						)
-						.map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-					output.build()
-				};
-				if (&tmp.message).is_none() {
-					tmp.message = _error_message;
-				}
-				tmp
-			}),
-		},
-		"RateLimitError" => {
-			crate::error::GetGroupTransfersListError {
-				meta: generic,
-				kind: crate::error::GetGroupTransfersListErrorKind::RateLimitError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::rate_limit_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"ForbiddenError" => {
-			crate::error::GetGroupTransfersListError {
-				meta: generic,
-				kind: crate::error::GetGroupTransfersListErrorKind::ForbiddenError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::forbidden_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"UnauthorizedError" => {
-			crate::error::GetGroupTransfersListError {
-				meta: generic,
-				kind: crate::error::GetGroupTransfersListErrorKind::UnauthorizedError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::unauthorized_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"NotFoundError" => {
-			crate::error::GetGroupTransfersListError {
-				meta: generic,
-				kind: crate::error::GetGroupTransfersListErrorKind::NotFoundError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::not_found_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		"BadRequestError" => {
-			crate::error::GetGroupTransfersListError {
-				meta: generic,
-				kind: crate::error::GetGroupTransfersListErrorKind::BadRequestError({
-					#[allow(unused_mut)]
-					let mut tmp = {
-						#[allow(unused_mut)]
-						let mut output = crate::error::bad_request_error::Builder::default();
-						let _ = response;
-						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-						output.build()
-					};
-					if (&tmp.message).is_none() {
-						tmp.message = _error_message;
-					}
-					tmp
-				}),
-			}
-		}
-		_ => crate::error::GetGroupTransfersListError::generic(generic),
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
-pub fn parse_get_group_transfers_list_response(
-	response: &http::Response<bytes::Bytes>,
-) -> std::result::Result<
-	crate::output::GetGroupTransfersListOutput,
-	crate::error::GetGroupTransfersListError,
-> {
-	Ok({
-		#[allow(unused_mut)]
-		let mut output = crate::output::get_group_transfers_list_output::Builder::default();
-		let _ = response;
-		output = crate::json_deser::deser_operation_crate_operation_get_group_transfers_list(
-			response.body().as_ref(),
-			output,
-		)
-		.map_err(crate::error::GetGroupTransfersListError::unhandled)?;
-		output.build()
-	})
-}
-
-#[allow(clippy::unnecessary_wraps)]
 pub fn parse_get_lobby_logs_error(
 	response: &http::Response<bytes::Bytes>,
 ) -> std::result::Result<crate::output::GetLobbyLogsOutput, crate::error::GetLobbyLogsError> {
@@ -6331,6 +6017,158 @@ pub fn parse_remove_namespace_domain_response(
 	Ok({
 		#[allow(unused_mut)]
 		let mut output = crate::output::remove_namespace_domain_output::Builder::default();
+		let _ = response;
+		output.build()
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_set_group_billing_plan_error(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::SetGroupBillingPlanOutput,
+	crate::error::SetGroupBillingPlanError,
+> {
+	let generic = crate::json_deser::parse_http_generic_error(response)
+		.map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+	let error_code = match generic.code() {
+		Some(code) => code,
+		None => return Err(crate::error::SetGroupBillingPlanError::unhandled(generic)),
+	};
+
+	let _error_message = generic.message().map(|msg| msg.to_owned());
+	Err(match error_code {
+		"InternalError" => crate::error::SetGroupBillingPlanError {
+			meta: generic,
+			kind: crate::error::SetGroupBillingPlanErrorKind::InternalError({
+				#[allow(unused_mut)]
+				let mut tmp = {
+					#[allow(unused_mut)]
+					let mut output = crate::error::internal_error::Builder::default();
+					let _ = response;
+					output =
+						crate::json_deser::deser_structure_crate_error_internal_error_json_err(
+							response.body().as_ref(),
+							output,
+						)
+						.map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+					output.build()
+				};
+				if (&tmp.message).is_none() {
+					tmp.message = _error_message;
+				}
+				tmp
+			}),
+		},
+		"RateLimitError" => {
+			crate::error::SetGroupBillingPlanError {
+				meta: generic,
+				kind: crate::error::SetGroupBillingPlanErrorKind::RateLimitError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::rate_limit_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_rate_limit_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"ForbiddenError" => {
+			crate::error::SetGroupBillingPlanError {
+				meta: generic,
+				kind: crate::error::SetGroupBillingPlanErrorKind::ForbiddenError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::forbidden_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_forbidden_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"UnauthorizedError" => {
+			crate::error::SetGroupBillingPlanError {
+				meta: generic,
+				kind: crate::error::SetGroupBillingPlanErrorKind::UnauthorizedError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::unauthorized_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_unauthorized_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"NotFoundError" => {
+			crate::error::SetGroupBillingPlanError {
+				meta: generic,
+				kind: crate::error::SetGroupBillingPlanErrorKind::NotFoundError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::not_found_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_not_found_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		"BadRequestError" => {
+			crate::error::SetGroupBillingPlanError {
+				meta: generic,
+				kind: crate::error::SetGroupBillingPlanErrorKind::BadRequestError({
+					#[allow(unused_mut)]
+					let mut tmp = {
+						#[allow(unused_mut)]
+						let mut output = crate::error::bad_request_error::Builder::default();
+						let _ = response;
+						output = crate::json_deser::deser_structure_crate_error_bad_request_error_json_err(response.body().as_ref(), output).map_err(crate::error::SetGroupBillingPlanError::unhandled)?;
+						output.build()
+					};
+					if (&tmp.message).is_none() {
+						tmp.message = _error_message;
+					}
+					tmp
+				}),
+			}
+		}
+		_ => crate::error::SetGroupBillingPlanError::generic(generic),
+	})
+}
+
+#[allow(clippy::unnecessary_wraps)]
+pub fn parse_set_group_billing_plan_response(
+	response: &http::Response<bytes::Bytes>,
+) -> std::result::Result<
+	crate::output::SetGroupBillingPlanOutput,
+	crate::error::SetGroupBillingPlanError,
+> {
+	Ok({
+		#[allow(unused_mut)]
+		let mut output = crate::output::set_group_billing_plan_output::Builder::default();
 		let _ = response;
 		output.build()
 	})

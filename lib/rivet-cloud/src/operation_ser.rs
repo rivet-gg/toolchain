@@ -130,12 +130,12 @@ pub fn serialize_operation_crate_operation_game_logo_upload_prepare(
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }
 
-pub fn serialize_operation_crate_operation_group_billing_checkout(
-	input: &crate::input::GroupBillingCheckoutInput,
+pub fn serialize_operation_crate_operation_prepare_custom_avatar_upload(
+	input: &crate::input::PrepareCustomAvatarUploadInput,
 ) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
 	let mut out = String::new();
 	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
-	crate::json_ser::serialize_structure_crate_input_group_billing_checkout_input(
+	crate::json_ser::serialize_structure_crate_input_prepare_custom_avatar_upload_input(
 		&mut object,
 		input,
 	)?;
@@ -143,12 +143,12 @@ pub fn serialize_operation_crate_operation_group_billing_checkout(
 	Ok(aws_smithy_http::body::SdkBody::from(out))
 }
 
-pub fn serialize_operation_crate_operation_prepare_custom_avatar_upload(
-	input: &crate::input::PrepareCustomAvatarUploadInput,
+pub fn serialize_operation_crate_operation_set_group_billing_plan(
+	input: &crate::input::SetGroupBillingPlanInput,
 ) -> Result<aws_smithy_http::body::SdkBody, aws_smithy_http::operation::SerializationError> {
 	let mut out = String::new();
 	let mut object = aws_smithy_json::serialize::JsonObjectWriter::new(&mut out);
-	crate::json_ser::serialize_structure_crate_input_prepare_custom_avatar_upload_input(
+	crate::json_ser::serialize_structure_crate_input_set_group_billing_plan_input(
 		&mut object,
 		input,
 	)?;

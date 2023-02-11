@@ -838,74 +838,6 @@ impl aws_smithy_http::response::ParseStrictResponse for GetGroupInvoicesList {
 	}
 }
 
-/// Operation shape for `GetGroupPaymentsList`.
-///
-/// This is usually constructed for you using the the fluent builder returned by
-/// [`get_group_payments_list`](crate::client::Client::get_group_payments_list).
-///
-/// See [`crate::client::fluent_builders::GetGroupPaymentsList`] for more details about the operation.
-#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct GetGroupPaymentsList {
-	_private: (),
-}
-impl GetGroupPaymentsList {
-	/// Creates a new builder-style object to manufacture [`GetGroupPaymentsListInput`](crate::input::GetGroupPaymentsListInput)
-	pub fn builder() -> crate::input::get_group_payments_list_input::Builder {
-		crate::input::get_group_payments_list_input::Builder::default()
-	}
-	/// Creates a new `GetGroupPaymentsList` operation.
-	pub fn new() -> Self {
-		Self { _private: () }
-	}
-}
-impl aws_smithy_http::response::ParseStrictResponse for GetGroupPaymentsList {
-	type Output = std::result::Result<
-		crate::output::GetGroupPaymentsListOutput,
-		crate::error::GetGroupPaymentsListError,
-	>;
-	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
-		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_get_group_payments_list_error(response)
-		} else {
-			crate::operation_deser::parse_get_group_payments_list_response(response)
-		}
-	}
-}
-
-/// Operation shape for `GetGroupTransfersList`.
-///
-/// This is usually constructed for you using the the fluent builder returned by
-/// [`get_group_transfers_list`](crate::client::Client::get_group_transfers_list).
-///
-/// See [`crate::client::fluent_builders::GetGroupTransfersList`] for more details about the operation.
-#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
-pub struct GetGroupTransfersList {
-	_private: (),
-}
-impl GetGroupTransfersList {
-	/// Creates a new builder-style object to manufacture [`GetGroupTransfersListInput`](crate::input::GetGroupTransfersListInput)
-	pub fn builder() -> crate::input::get_group_transfers_list_input::Builder {
-		crate::input::get_group_transfers_list_input::Builder::default()
-	}
-	/// Creates a new `GetGroupTransfersList` operation.
-	pub fn new() -> Self {
-		Self { _private: () }
-	}
-}
-impl aws_smithy_http::response::ParseStrictResponse for GetGroupTransfersList {
-	type Output = std::result::Result<
-		crate::output::GetGroupTransfersListOutput,
-		crate::error::GetGroupTransfersListError,
-	>;
-	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
-		if !response.status().is_success() && response.status().as_u16() != 200 {
-			crate::operation_deser::parse_get_group_transfers_list_error(response)
-		} else {
-			crate::operation_deser::parse_get_group_transfers_list_response(response)
-		}
-	}
-}
-
 /// Operation shape for `GetLobbyLogs`.
 ///
 /// This is usually constructed for you using the the fluent builder returned by
@@ -1367,6 +1299,40 @@ impl aws_smithy_http::response::ParseStrictResponse for RemoveNamespaceDomain {
 			crate::operation_deser::parse_remove_namespace_domain_error(response)
 		} else {
 			crate::operation_deser::parse_remove_namespace_domain_response(response)
+		}
+	}
+}
+
+/// Operation shape for `SetGroupBillingPlan`.
+///
+/// This is usually constructed for you using the the fluent builder returned by
+/// [`set_group_billing_plan`](crate::client::Client::set_group_billing_plan).
+///
+/// See [`crate::client::fluent_builders::SetGroupBillingPlan`] for more details about the operation.
+#[derive(std::default::Default, std::clone::Clone, std::fmt::Debug)]
+pub struct SetGroupBillingPlan {
+	_private: (),
+}
+impl SetGroupBillingPlan {
+	/// Creates a new builder-style object to manufacture [`SetGroupBillingPlanInput`](crate::input::SetGroupBillingPlanInput)
+	pub fn builder() -> crate::input::set_group_billing_plan_input::Builder {
+		crate::input::set_group_billing_plan_input::Builder::default()
+	}
+	/// Creates a new `SetGroupBillingPlan` operation.
+	pub fn new() -> Self {
+		Self { _private: () }
+	}
+}
+impl aws_smithy_http::response::ParseStrictResponse for SetGroupBillingPlan {
+	type Output = std::result::Result<
+		crate::output::SetGroupBillingPlanOutput,
+		crate::error::SetGroupBillingPlanError,
+	>;
+	fn parse(&self, response: &http::Response<bytes::Bytes>) -> Self::Output {
+		if !response.status().is_success() && response.status().as_u16() != 200 {
+			crate::operation_deser::parse_set_group_billing_plan_error(response)
+		} else {
+			crate::operation_deser::parse_set_group_billing_plan_response(response)
 		}
 	}
 }

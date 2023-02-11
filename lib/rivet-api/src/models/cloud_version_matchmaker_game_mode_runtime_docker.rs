@@ -19,8 +19,8 @@ pub struct CloudVersionMatchmakerGameModeRuntimeDocker {
     /// Client-side configuration
     #[serde(rename = "dockerfile", skip_serializing_if = "Option::is_none")]
     pub dockerfile: Option<String>,
-    #[serde(rename = "env_vars", skip_serializing_if = "Option::is_none")]
-    pub env_vars: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename = "env", skip_serializing_if = "Option::is_none")]
+    pub env: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "image", skip_serializing_if = "Option::is_none")]
     pub image: Option<uuid::Uuid>,
     #[serde(rename = "network_mode", skip_serializing_if = "Option::is_none")]
@@ -35,7 +35,7 @@ impl CloudVersionMatchmakerGameModeRuntimeDocker {
         CloudVersionMatchmakerGameModeRuntimeDocker {
             args: None,
             dockerfile: None,
-            env_vars: None,
+            env: None,
             image: None,
             network_mode: None,
             ports: None,
