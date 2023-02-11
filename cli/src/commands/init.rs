@@ -228,7 +228,6 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 	// Prepare the link
 	let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_prepare(
 		&openapi_config_cloud_unauthed,
-		serde_json::json!({}),
 	)
 	.await;
 	if let Err(err) = prepare_res.as_ref() {
