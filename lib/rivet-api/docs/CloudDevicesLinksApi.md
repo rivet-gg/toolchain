@@ -49,7 +49,7 @@ No authorization required
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **device_link_token** | **String** |  | [required] |
-**watch_index** | Option<**String**> |  |  |
+**watch_index** | **String** |  | [required] |
 
 ### Return type
 
