@@ -14,13 +14,19 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct MatchmakerJoinLobbyOutput {
     #[serde(rename = "lobby")]
-    pub lobby: Box<crate::models::MatchmakerLobbyJoinInfo>,
+    pub lobby: Box<crate::models::MatchmakerJoinLobby>,
+    #[serde(rename = "player")]
+    pub player: Box<crate::models::MatchmakerJoinPlayer>,
+    #[serde(rename = "ports")]
+    pub ports: ::std::collections::HashMap<String, crate::models::MatchmakerJoinPort>,
 }
 
 impl MatchmakerJoinLobbyOutput {
-    pub fn new(lobby: crate::models::MatchmakerLobbyJoinInfo) -> MatchmakerJoinLobbyOutput {
+    pub fn new(lobby: crate::models::MatchmakerJoinLobby, player: crate::models::MatchmakerJoinPlayer, ports: ::std::collections::HashMap<String, crate::models::MatchmakerJoinPort>) -> MatchmakerJoinLobbyOutput {
         MatchmakerJoinLobbyOutput {
             lobby: Box::new(lobby),
+            player: Box::new(player),
+            ports,
         }
     }
 }

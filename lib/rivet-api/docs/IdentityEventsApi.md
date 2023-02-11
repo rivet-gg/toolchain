@@ -20,7 +20,7 @@ Returns all events relative to the current identity.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**watch_index** | Option<**String**> |  |  |
+**watch_index** | **String** |  | [required] |
 
 ### Return type
 

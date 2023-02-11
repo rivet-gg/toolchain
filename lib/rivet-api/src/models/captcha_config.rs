@@ -16,6 +16,8 @@
 pub struct CaptchaConfig {
     #[serde(rename = "hcaptcha", skip_serializing_if = "Option::is_none")]
     pub hcaptcha: Option<Box<crate::models::CaptchaConfigHcaptcha>>,
+    #[serde(rename = "turnstile", skip_serializing_if = "Option::is_none")]
+    pub turnstile: Option<Box<crate::models::CaptchaConfigTurnstile>>,
 }
 
 impl CaptchaConfig {
@@ -23,6 +25,7 @@ impl CaptchaConfig {
     pub fn new() -> CaptchaConfig {
         CaptchaConfig {
             hcaptcha: None,
+            turnstile: None,
         }
     }
 }

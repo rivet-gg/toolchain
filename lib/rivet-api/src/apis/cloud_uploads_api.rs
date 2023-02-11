@@ -24,7 +24,7 @@ pub enum CloudUploadsCompleteUploadError {
 
 
 /// Marks an upload as complete.
-pub async fn cloud_uploads_complete_upload(configuration: &configuration::Configuration, upload_id: &str, body: serde_json::Value) -> Result<serde_json::Value, Error<CloudUploadsCompleteUploadError>> {
+pub async fn cloud_uploads_complete_upload(configuration: &configuration::Configuration, upload_id: &str) -> Result<(), Error<CloudUploadsCompleteUploadError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -38,7 +38,6 @@ pub async fn cloud_uploads_complete_upload(configuration: &configuration::Config
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&body);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -47,7 +46,7 @@ pub async fn cloud_uploads_complete_upload(configuration: &configuration::Config
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        Ok(())
     } else {
         let local_var_entity: Option<CloudUploadsCompleteUploadError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };

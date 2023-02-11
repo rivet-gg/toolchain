@@ -12,7 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct MatchmakerLobbyJoinInfoPort {
+pub struct MatchmakerJoinPort {
     /// The host for the given port. Will be null if using a port range. 
     #[serde(rename = "host", skip_serializing_if = "Option::is_none")]
     pub host: Option<String>,
@@ -23,18 +23,18 @@ pub struct MatchmakerLobbyJoinInfoPort {
     /// The port number for this lobby. Will be null if using a port range. 
     #[serde(rename = "port", skip_serializing_if = "Option::is_none")]
     pub port: Option<i32>,
-    #[serde(rename = "port_range")]
-    pub port_range: Box<crate::models::MatchmakerLobbyJoinInfoPortRange>,
+    #[serde(rename = "port_range", skip_serializing_if = "Option::is_none")]
+    pub port_range: Option<Box<crate::models::MatchmakerJoinPortRange>>,
 }
 
-impl MatchmakerLobbyJoinInfoPort {
-    pub fn new(hostname: String, is_tls: bool, port_range: crate::models::MatchmakerLobbyJoinInfoPortRange) -> MatchmakerLobbyJoinInfoPort {
-        MatchmakerLobbyJoinInfoPort {
+impl MatchmakerJoinPort {
+    pub fn new(hostname: String, is_tls: bool) -> MatchmakerJoinPort {
+        MatchmakerJoinPort {
             host: None,
             hostname,
             is_tls,
             port: None,
-            port_range: Box::new(port_range),
+            port_range: None,
         }
     }
 }
