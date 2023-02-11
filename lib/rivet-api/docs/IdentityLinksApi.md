@@ -84,7 +84,7 @@ Returns the current status of a linking process. Once `status` is `complete`, th
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **identity_link_token** | **String** |  | [required] |
-**watch_index** | **String** |  | [required] |
+**watch_index** | Option<**String**> |  |  |
 
 ### Return type
 

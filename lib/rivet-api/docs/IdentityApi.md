@@ -130,7 +130,7 @@ Fetches an identity profile.
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **identity_id** | **uuid::Uuid** |  | [required] |
-**watch_index** | **String** |  | [required] |
+**watch_index** | Option<**String**> |  |  |
 
 ### Return type
 
@@ -160,7 +160,7 @@ Fetches the current identity's profile.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**watch_index** | **String** |  | [required] |
+**watch_index** | Option<**String**> |  |  |
 
 ### Return type
 

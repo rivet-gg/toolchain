@@ -109,7 +109,7 @@ pub async fn identity_links_complete(configuration: &configuration::Configuratio
 }
 
 /// Returns the current status of a linking process. Once `status` is `complete`, the identity's profile should be fetched again since they may have switched accounts.
-pub async fn identity_links_get(configuration: &configuration::Configuration, identity_link_token: &str, watch_index: &str) -> Result<crate::models::IdentityGetGameLinkOutput, Error<IdentityLinksGetError>> {
+pub async fn identity_links_get(configuration: &configuration::Configuration, identity_link_token: &str, watch_index: Option<&str>) -> Result<crate::models::IdentityGetGameLinkOutput, Error<IdentityLinksGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -118,7 +118,9 @@ pub async fn identity_links_get(configuration: &configuration::Configuration, id
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     local_var_req_builder = local_var_req_builder.query(&[("identity_link_token", &identity_link_token.to_string())]);
-    local_var_req_builder = local_var_req_builder.query(&[("watch_index", &watch_index.to_string())]);
+    if let Some(ref local_var_str) = watch_index {
+        local_var_req_builder = local_var_req_builder.query(&[("watch_index", &local_var_str.to_string())]);
+    }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
