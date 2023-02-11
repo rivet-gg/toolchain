@@ -222,6 +222,7 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 		base_path: override_api_url
 			.clone()
 			.unwrap_or_else(|| ctx::DEFAULT_API_CLOUD_URL.to_string()),
+		user_agent: Some(ctx::user_agent()),
 		..Default::default()
 	};
 

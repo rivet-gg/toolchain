@@ -1674,6 +1674,7 @@ dependencies = [
 name = "rivet-cli-core"
 version = "0.0.1"
 dependencies = [
+ "anyhow",
  "aws-smithy-client",
  "home",
  "openssl",
@@ -1684,6 +1685,7 @@ dependencies = [
  "thiserror",
  "tokio 0.2.25",
  "tower",
+ "vergen",
 ]
 
 [[package]]

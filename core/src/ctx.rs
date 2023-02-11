@@ -2,6 +2,10 @@ use std::{env, sync::Arc};
 
 use crate::error::Error;
 
+pub fn user_agent() -> String {
+	format!("CLI/{}", env!("VERGEN_GIT_SHA"))
+}
+
 pub const DEFAULT_API_CLOUD_URL: &'static str = "https://cloud.api.rivet.gg/v1";
 
 pub type Ctx = Arc<CtxInner>;
@@ -46,6 +50,7 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
 		base_path: uri.clone(),
 		bearer_access_token: Some(access_token.clone()),
+		user_agent: Some(user_agent()),
 		..Default::default()
 	};
 
