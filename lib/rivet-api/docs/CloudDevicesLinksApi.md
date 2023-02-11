@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## cloud_devices_links_complete
 
-> serde_json::Value cloud_devices_links_complete(cloud_devices_complete_device_link_input)
+> cloud_devices_links_complete(cloud_devices_complete_device_link_input)
 
 
 ### Parameters
@@ -24,7 +24,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+ (empty response body)
 
 ### Authorization
 
@@ -33,7 +33,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -69,15 +69,12 @@ No authorization required
 
 ## cloud_devices_links_prepare
 
-> crate::models::CloudDevicesPrepareDeviceLinkOutput cloud_devices_links_prepare(body)
+> crate::models::CloudDevicesPrepareDeviceLinkOutput cloud_devices_links_prepare()
 
 
 ### Parameters
 
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**body** | **serde_json::Value** |  | [required] |
+This endpoint does not need any parameter.
 
 ### Return type
 
@@ -89,7 +86,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

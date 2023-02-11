@@ -1,4 +1,4 @@
-# MatchmakerLobbyJoinInfoRegion
+# MatchmakerJoinRegion
 
 ## Properties
 

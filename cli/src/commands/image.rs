@@ -145,7 +145,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&build_res.upload_id,
-		serde_json::json!({}),
 	)
 	.await;
 	if let Err(err) = complete_res.as_ref() {

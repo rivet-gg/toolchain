@@ -19,9 +19,9 @@ pub struct MatchmakerRegionInfo {
     #[serde(rename = "datacenter_distance_from_client")]
     pub datacenter_distance_from_client: Box<crate::models::GeoDistance>,
     #[serde(rename = "provider_display_name")]
-    pub provider_display_name: uuid::Uuid,
+    pub provider_display_name: String,
     #[serde(rename = "region_display_name")]
-    pub region_display_name: uuid::Uuid,
+    pub region_display_name: String,
     /// A human readable short identifier used to references resources. Different than a `uuid` because this is intended to be human readable. Different than `DisplayName` because this should not include special characters and be short.
     #[serde(rename = "region_id")]
     pub region_id: String,
@@ -29,7 +29,7 @@ pub struct MatchmakerRegionInfo {
 
 impl MatchmakerRegionInfo {
     /// A region that the player can connect to.
-    pub fn new(datacenter_coord: crate::models::GeoCoord, datacenter_distance_from_client: crate::models::GeoDistance, provider_display_name: uuid::Uuid, region_display_name: uuid::Uuid, region_id: String) -> MatchmakerRegionInfo {
+    pub fn new(datacenter_coord: crate::models::GeoCoord, datacenter_distance_from_client: crate::models::GeoDistance, provider_display_name: String, region_display_name: String, region_id: String) -> MatchmakerRegionInfo {
         MatchmakerRegionInfo {
             datacenter_coord: Box::new(datacenter_coord),
             datacenter_distance_from_client: Box::new(datacenter_distance_from_client),

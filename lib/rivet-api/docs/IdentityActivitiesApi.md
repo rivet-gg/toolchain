@@ -20,7 +20,7 @@ Returns an overview of all players currently online or in game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**watch_index** | Option<**String**> |  |  |
+**watch_index** | **String** |  | [required] |
 
 ### Return type
 
