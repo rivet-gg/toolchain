@@ -28,9 +28,9 @@ impl SubCommand {
 pub struct CreateDevTokenOpts {
 	/// Write token to .env file
 	#[clap(long)]
-	dev_env: bool,
+	pub dev_env: bool,
 	#[clap(long, value_parser)]
-	format: Option<struct_fmt::Format>,
+	pub format: Option<struct_fmt::Format>,
 }
 
 impl CreateDevTokenOpts {
