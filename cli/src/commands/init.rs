@@ -17,8 +17,34 @@ const VERSION_FOOT: &'static str = include_str!("../../tpl/default_config/foot.t
 
 #[derive(Parser)]
 pub struct Opts {
-	#[clap(flatten)]
-	dev_opts: crate::commands::dev::CreateDevTokenOpts,
+	#[clap(long)]
+	recommend: bool,
+	#[clap(long)]
+	update_gitignore: bool,
+	#[clap(long)]
+	create_version_config: bool,
+
+	// Matchmaker
+	#[clap(long)]
+	matchmaker: bool,
+	#[clap(long)]
+	matchmaker_port: Option<u16>,
+	#[clap(long)]
+	matchmaker_dockerfile: Option<String>,
+
+	// CDN
+	#[clap(long)]
+	cdn: bool,
+	#[clap(long)]
+	cdn_build_command: Option<String>,
+	#[clap(long)]
+	cdn_build_output: Option<String>,
+
+	// Dev
+	#[clap(long)]
+	dev: bool,
+	#[clap(long)]
+	dev_env: bool,
 }
 
 impl Opts {
@@ -56,8 +82,9 @@ impl Opts {
 
 		// Update .gitignore
 		if !git::check_ignore(Path::new(".rivet/")).await? {
-			if
-				term::Prompt::new("Add .rivet/ to .gitignore?")
+			if self.recommend
+				|| self.update_gitignore
+				|| term::Prompt::new("Add .rivet/ to .gitignore?")
 					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
 					.docs_url("https://docs.rivet.gg/general/concepts/dot-rivet-directory")
 					.default_value("yes")
@@ -94,37 +121,49 @@ impl Opts {
 			}
 		};
 		let has_version_config = if config_needs_creation {
-			if term::Prompt::new("Create rivet.version.toml?")
-				.docs("This is the configuration file used to manage your game")
-				.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
-				.default_value("yes")
-				.bool(term)
-				.await?
-			{
-				let mut version_config = VERSION_HEAD.to_string();
-
-				if term::Prompt::new("Enable Rivet Matchmaker?")
-					.indent(1)
-					.context("rivet.version.toml")
-					.docs("Setup your matchmaker configuration, this can be changed later")
-					.docs_url("https://docs.rivet.gg/matchmaker/introduction")
+			if self.recommend
+				|| self.create_version_config
+				|| term::Prompt::new("Create rivet.version.toml?")
+					.docs("This is the configuration file used to manage your game")
+					.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
 					.default_value("yes")
 					.bool(term)
 					.await?
-				{
-					let port = term::Prompt::new("What port does your game server listen on?")
-						.indent(2)
-						.context("Matchmaker")
-						.default_value("8080")
-						.parsed::<u16>(term)
-						.await?;
+			{
+				let mut version_config = VERSION_HEAD.to_string();
 
-					let mut dockerfile_path = term::Prompt::new("Path to the server's Dockerfile?")
-						.indent(2)
-						.context("Matchmaker")
-						.default_value("Dockerfile")
-						.string(term)
-						.await?;
+				if self.matchmaker
+					|| term::Prompt::new("Enable Rivet Matchmaker?")
+						.indent(1)
+						.context("rivet.version.toml")
+						.docs("Setup your matchmaker configuration, this can be changed later")
+						.docs_url("https://docs.rivet.gg/matchmaker/introduction")
+						.default_value("yes")
+						.bool(term)
+						.await?
+				{
+					let port = if let Some(port) = &self.matchmaker_port {
+						*port
+					} else {
+						term::Prompt::new("What port does your game server listen on?")
+							.indent(2)
+							.context("Matchmaker")
+							.default_value("8080")
+							.parsed::<u16>(term)
+							.await?
+					};
+
+					let mut dockerfile_path = if let Some(dockerfile) = &self.matchmaker_dockerfile
+					{
+						dockerfile.clone()
+					} else {
+						term::Prompt::new("Path to the server's Dockerfile?")
+							.indent(2)
+							.context("Matchmaker")
+							.default_value("Dockerfile")
+							.string(term)
+							.await?
+					};
 					if dockerfile_path.is_empty() {
 						dockerfile_path = "Dockerfile".to_string();
 					}
@@ -136,33 +175,40 @@ impl Opts {
 					);
 				}
 
-				if term::Prompt::new("Enable Rivet CDN?")
-					.indent(1)
-					.context("rivet.version.toml")
-					.docs("Setup service a website or static assets, this can be changed later")
-					.docs_url("https://docs.rivet.gg/cdn/introduction")
-					.default_value("yes")
-					.bool(term)
-					.await?
+				if self.cdn
+					|| term::Prompt::new("Enable Rivet CDN?")
+						.indent(1)
+						.context("rivet.version.toml")
+						.docs("Setup service a website or static assets, this can be changed later")
+						.docs_url("https://docs.rivet.gg/cdn/introduction")
+						.default_value("yes")
+						.bool(term)
+						.await?
 				{
-					let mut build_command =
+					let mut build_command = if let Some(build_command) = &self.cdn_build_command {
+						build_command.clone()
+					} else {
 						term::Prompt::new("What command will run before uploading your site?")
 							.indent(2)
 							.context("CDN")
 							.default_value("echo 'Nothing to do'")
 							.string(term)
-							.await?;
+							.await?
+					};
 					if build_command.is_empty() {
 						build_command = "echo 'Nothing to do'".to_string();
 					}
 
-					let mut build_output =
+					let mut build_output = if let Some(build_output) = &self.cdn_build_output {
+						build_output.clone()
+					} else {
 						term::Prompt::new("What directory should be uploaded to Rivet CDN?")
 							.indent(2)
 							.context("CDN")
 							.default_value("dist/")
 							.string(term)
-							.await?;
+							.await?
+					};
 					if build_output.is_empty() {
 						build_output = "dist/".to_string();
 					}
@@ -197,13 +243,19 @@ impl Opts {
 			&& commands::version::read_config(Vec::new(), None)
 				.await?
 				.matchmaker
-				.is_some() && term::Prompt::new("Setup development environment?")
+				.is_some() && (self.recommend
+			|| self.dev || term::Prompt::new("Setup development environment?")
 			.docs("Create development tokens that enable you to develop your game locally")
 			.docs_url("http://docs.rivet.gg/general/concepts/dev-tokens")
 			.bool(term)
-			.await?
+			.await?)
 		{
-			self.dev_opts.execute(term, &ctx).await?
+			commands::dev::CreateDevTokenOpts {
+				dev_env: self.recommend || self.dev_env,
+				format: None,
+			}
+			.execute(term, &ctx)
+			.await?
 		}
 
 		eprintln!();
