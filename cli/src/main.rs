@@ -112,7 +112,7 @@ async fn main() -> Result<()> {
 	} else {
 		secrets::read_cloud_token()
 			.await?
-			.context("no Rivet cloud token found")?
+			.context("no Rivet token found, please run `rivet init`")?
 	};
 
 	// Create context
