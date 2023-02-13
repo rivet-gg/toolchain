@@ -11,7 +11,7 @@ use std::{
 	},
 };
 
-use crate::util::{struct_fmt, upload};
+use crate::util::{struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -61,7 +61,8 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 			.map(str::to_owned)
 			.unwrap_or_else(|| "Site".to_owned())
 	});
-	eprintln!("\n\n> Pushing site \"{}\"", display_name);
+	eprintln!();
+	term::status::info("Pushing Site", &display_name);
 	eprintln!("  * Upload path: {}", upload_path.display());
 
 	// Index the directory
@@ -95,7 +96,8 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	let site_res = site_res.context("cloud_games_cdn_create_game_cdn_site")?;
 	let site_id = site_res.site_id;
 
-	eprintln!("\n\n> Uploading");
+	eprintln!();
+	term::status::info("Uploading", "");
 	{
 		let counter = Arc::new(AtomicUsize::new(0));
 		let counter_bytes = Arc::new(AtomicU64::new(0));
@@ -147,7 +149,8 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 			.await?;
 	}
 
-	eprintln!("\n\n> Completing");
+	eprintln!();
+	term::status::info("Completing", "");
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&site_res.upload_id,
