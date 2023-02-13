@@ -414,12 +414,37 @@ pub async fn create(
 	ctx: &cli_core::Ctx,
 	display_name: Option<&str>,
 	overrides: Vec<(String, serde_json::Value)>,
-	namespace: Option<&str>,
+	namespace_name_id: Option<&str>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<CreateOutput> {
 	let display_name = display_name.map_or_else(gen::display_name_from_date, |x| x.to_string());
+	// Fetch game data
+	let game_res =
+		cli_core::rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			None,
+		)
+		.await;
+	if let Err(err) = game_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let game_res = game_res.context("cloud_games_games_get_game_by_id")?;
+	let namespace = if let Some(namespace) = namespace_name_id {
+		Some(
+			game_res
+				.game
+				.namespaces
+				.iter()
+				.find(|x| x.name_id == namespace)
+				.context("namespace not found")?,
+		)
+	} else {
+		None
+	};
+
 	// Parse config
-	let mut rivet_config = read_config(overrides, namespace).await?;
+	let mut rivet_config = read_config(overrides, namespace_name_id).await?;
 	build_config_dependencies(ctx, &mut rivet_config, format).await?;
 
 	// Create game version
@@ -439,8 +464,35 @@ pub async fn create(
 	let version_res = version_res.context("versions_create_game_version")?;
 	let version_id = version_res.version_id;
 
-	term::status::success("Published", &display_name);
-	term::status::info("Dashboard", dashboard_url(&ctx.game_id, &version_id));
+	term::status::success("Published Version", &display_name);
+	term::status::info(
+		"Version Dashboard",
+		dashboard_url(&ctx.game_id, &version_id),
+	);
+
+	// Deploy to namespace
+	if let Some(namespace) = namespace {
+		term::status::info(
+			"Deploying to Namespace",
+			format!("{} -> {}", display_name, namespace.display_name),
+		);
+		let update_version_res =
+		cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			&namespace.namespace_id,
+			cli_core::rivet_api::models::CloudGamesNamespacesUpdateGameNamespaceVersionInput {
+				version_id: version_id.clone()
+			},
+		)
+		.await;
+		if let Err(err) = update_version_res.as_ref() {
+			println!("Error: {err:?}");
+		}
+		let update_version_res =
+			update_version_res.context("cloud_games_namespaces_update_game_namespace_version")?;
+		term::status::success("Deploy Succeeded", "");
+	}
 
 	Ok(CreateOutput { version_id })
 }

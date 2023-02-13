@@ -6,7 +6,7 @@ use serde::Serialize;
 use std::sync::Arc;
 use tokio::fs;
 
-use crate::util::{struct_fmt, upload};
+use crate::util::{struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -59,7 +59,8 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.collect::<String>()
 		.to_lowercase();
 	let image_tag = format!("rivet-game:{}", image_tag_tag);
-	eprintln!("\n\n> Archiving image");
+	eprintln!();
+	term::status::info("Archiving Image", "");
 	let tag_cmd = tokio::process::Command::new("docker")
 		.arg("image")
 		.arg("tag")
@@ -104,10 +105,14 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.clone()
 		.unwrap_or_else(|| push_opts.tag.clone());
 	let content_type = "application/x-tar";
-	eprintln!(
-		"\n\n> Pushing image \"{name}\" ({size})",
-		name = display_name,
-		size = upload::format_file_size(image_file_meta.len())?,
+	eprintln!();
+	term::status::info(
+		"Pushing Image",
+		format!(
+			"\"{name}\" ({size})",
+			name = display_name,
+			size = upload::format_file_size(image_file_meta.len())?
+		),
 	);
 	let build_res = rivet_api::apis::cloud_games_builds_api::cloud_games_builds_create_game_build(
 		&ctx.openapi_config_cloud,
@@ -129,9 +134,10 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	let build_res = build_res.context("cloud_games_builds_create_game_build")?;
 	let image_id = build_res.build_id;
 
-	eprintln!(
-		"\n\n> Uploading ({size})",
-		size = upload::format_file_size(image_file_meta.len())?,
+	eprintln!();
+	term::status::info(
+		"Uploading",
+		&upload::format_file_size(image_file_meta.len())?,
 	);
 	upload::upload_file(
 		&reqwest_client,
@@ -141,7 +147,8 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	)
 	.await?;
 
-	eprintln!("\n\n> Completing");
+	eprintln!();
+	term::status::info("Completing", "");
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&build_res.upload_id,
