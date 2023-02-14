@@ -6,7 +6,7 @@ use serde::Serialize;
 use std::sync::Arc;
 use tokio::fs;
 
-use crate::util::{struct_fmt, term, upload};
+use crate::util::{cmd, struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -61,40 +61,21 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	let image_tag = format!("rivet-game:{}", image_tag_tag);
 	eprintln!();
 	term::status::info("Archiving Image", "");
-	let tag_cmd = tokio::process::Command::new("docker")
+	let mut tag_cmd = tokio::process::Command::new("docker");
+	tag_cmd
 		.arg("image")
 		.arg("tag")
 		.arg(&push_opts.tag)
-		.arg(&image_tag)
-		.output()
-		.await?;
-	if !tag_cmd.status.success() {
-		eprintln!(
-			"  ! Failed to archive Docker image:\n\nStatus: {}\n\nStdout:\n{}\n\nStderr:\n{}",
-			tag_cmd.status,
-			String::from_utf8_lossy(&tag_cmd.stdout),
-			String::from_utf8_lossy(&tag_cmd.stderr)
-		);
-		bail!("failed to tag docker image");
-	}
+		.arg(&image_tag);
+	cmd::execute_docker_cmd(tag_cmd, "failed to tag Docker image").await?;
 
-	let save_cmd = tokio::process::Command::new("docker")
-		.arg("image")
+	let mut save_cmd = tokio::process::Command::new("docker");
+		save_cmd.arg("image")
 		.arg("save")
 		.arg("--output")
 		.arg(&tmp_path)
-		.arg(&image_tag)
-		.output()
-		.await?;
-	if !save_cmd.status.success() {
-		eprintln!(
-			"  ! Failed to archive Docker image:\n\nStatus: {}\n\nStdout:\n{}\n\nStderr:\n{}",
-			save_cmd.status,
-			String::from_utf8_lossy(&save_cmd.stdout),
-			String::from_utf8_lossy(&save_cmd.stderr)
-		);
-		bail!("failed to save docker image");
-	}
+		.arg(&image_tag);
+	cmd::execute_docker_cmd(save_cmd, "failed to archive Docker image").await?;
 
 	// Inspect the image
 	let image_file_meta = fs::metadata(&tmp_path).await?;
