@@ -2,8 +2,15 @@ use std::{env, sync::Arc};
 
 use crate::error::Error;
 
+pub const VERSION: &str = concat!(
+	env!("VERGEN_BUILD_SEMVER"),
+	" (",
+	env!("VERGEN_GIT_SHA_SHORT"),
+	")"
+);
+
 pub fn user_agent() -> String {
-	format!("CLI/{}", env!("VERGEN_GIT_SHA"))
+	format!("CLI/{VERSION}")
 }
 
 pub const DEFAULT_API_CLOUD_URL: &'static str = "https://cloud.api.rivet.gg/v1";
