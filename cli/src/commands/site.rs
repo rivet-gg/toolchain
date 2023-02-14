@@ -61,9 +61,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 			.map(str::to_owned)
 			.unwrap_or_else(|| "Site".to_owned())
 	});
-	eprintln!();
-	term::status::info("Pushing Site", &display_name);
-	eprintln!("  * Upload path: {}", upload_path.display());
 
 	// Index the directory
 	let files = {
@@ -74,12 +71,19 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	let total_len = files
 		.iter()
 		.fold(0, |acc, x| acc + x.prepared.content_length);
-	eprintln!(
-		"  * Found {count} files ({size})",
-		count = files.len(),
-		size = upload::format_file_size(total_len as u64)?,
+
+	eprintln!();
+	term::status::info(
+		"Uploading Site",
+		format!(
+			"{name} ({count} files, {size} total)",
+			name = display_name,
+			count = files.len(),
+			size = upload::format_file_size(total_len as u64)?,
+		),
 	);
 
+	eprintln!("  * Upload path: {}", upload_path.display());
 	// Create site
 	let site_res = rivet_api::apis::cloud_games_cdn_api::cloud_games_cdn_create_game_cdn_site(
 		&ctx.openapi_config_cloud,
@@ -96,8 +100,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	let site_res = site_res.context("cloud_games_cdn_create_game_cdn_site")?;
 	let site_id = site_res.site_id;
 
-	eprintln!();
-	term::status::info("Uploading", "");
 	{
 		let counter = Arc::new(AtomicUsize::new(0));
 		let counter_bytes = Arc::new(AtomicU64::new(0));
@@ -150,7 +152,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	}
 
 	eprintln!();
-	term::status::info("Completing", "");
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&site_res.upload_id,
@@ -160,6 +161,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 		println!("Error: {err:?}");
 	}
 	complete_res.context("cloud_uploads_complete_upload")?;
+	term::status::success("Site Upload Complete", "");
 
 	Ok(PushOutput {
 		site_id: site_id.to_string(),

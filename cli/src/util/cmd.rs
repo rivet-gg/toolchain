@@ -4,6 +4,27 @@ pub async fn execute_docker_cmd(
 	mut command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
 ) -> Result<()> {
+	match command.status().await {
+		Ok(status) => {
+			if !status.success() {
+				bail!("{error_message} ({})", status);
+			}
+			Ok(())
+		}
+		Err(err) => {
+			if let std::io::ErrorKind::NotFound = err.kind() {
+				bail!("Docker not installed, install at https://docs.docker.com/get-docker/")
+			} else {
+				Err(err.into())
+			}
+		}
+	}
+}
+
+pub async fn execute_docker_cmd_silent(
+	mut command: tokio::process::Command,
+	error_message: impl std::fmt::Display,
+) -> Result<()> {
 	match command.output().await {
 		Ok(output) => {
 			if !output.status.success() {
