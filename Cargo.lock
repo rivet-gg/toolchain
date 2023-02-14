@@ -1630,7 +1630,7 @@ dependencies = [
 
 [[package]]
 name = "rivet"
-version = "0.0.1"
+version = "0.0.39"
 dependencies = [
  "anyhow",
  "async-stream",
