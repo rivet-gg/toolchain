@@ -52,6 +52,9 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	let tmp_path = tmp_image_file.into_temp_path();
 
 	// Re-tag and archive the image
+	eprintln!();
+	term::status::info("Archiving Image", "");
+
 	let image_tag_tag = thread_rng()
 		.sample_iter(rand::distributions::Alphanumeric)
 		.map(char::from)
@@ -59,15 +62,14 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.collect::<String>()
 		.to_lowercase();
 	let image_tag = format!("rivet-game:{}", image_tag_tag);
-	eprintln!();
-	term::status::info("Archiving Image", "");
+
 	let mut tag_cmd = tokio::process::Command::new("docker");
 	tag_cmd
 		.arg("image")
 		.arg("tag")
 		.arg(&push_opts.tag)
 		.arg(&image_tag);
-	cmd::execute_docker_cmd(tag_cmd, "failed to tag Docker image").await?;
+	cmd::execute_docker_cmd_silent(tag_cmd, "failed to tag Docker image").await?;
 
 	let mut save_cmd = tokio::process::Command::new("docker");
 		save_cmd.arg("image")
@@ -75,7 +77,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.arg("--output")
 		.arg(&tmp_path)
 		.arg(&image_tag);
-	cmd::execute_docker_cmd(save_cmd, "failed to archive Docker image").await?;
+	cmd::execute_docker_cmd_silent(save_cmd, "failed to archive Docker image").await?;
 
 	// Inspect the image
 	let image_file_meta = fs::metadata(&tmp_path).await?;
@@ -86,11 +88,11 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.clone()
 		.unwrap_or_else(|| push_opts.tag.clone());
 	let content_type = "application/x-tar";
-	eprintln!();
+	eprintln!();	
 	term::status::info(
-		"Pushing Image",
+		"Uploading Image",
 		format!(
-			"\"{name}\" ({size})",
+			"{name} ({size})",
 			name = display_name,
 			size = upload::format_file_size(image_file_meta.len())?
 		),
@@ -115,11 +117,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	let build_res = build_res.context("cloud_games_builds_create_game_build")?;
 	let image_id = build_res.build_id;
 
-	eprintln!();
-	term::status::info(
-		"Uploading",
-		&upload::format_file_size(image_file_meta.len())?,
-	);
 	upload::upload_file(
 		&reqwest_client,
 		&build_res.image_presigned_request,
@@ -128,8 +125,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	)
 	.await?;
 
-	eprintln!();
-	term::status::info("Completing", "");
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&build_res.upload_id,
@@ -139,6 +134,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		println!("Error: {err:?}");
 	}
 	complete_res.context("cloud_uploads_complete_upload")?;
+	term::status::success("Image Upload Complete", "");
 
 	Ok(PushOutput {
 		image_id: image_id.to_owned(),

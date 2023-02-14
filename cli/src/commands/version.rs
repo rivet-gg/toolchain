@@ -1,4 +1,4 @@
-use anyhow::{ensure, Context, Error, Result, bail};
+use anyhow::{bail, ensure, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::models;
 use serde::Serialize;
@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{fmt, gen, struct_fmt, term, cmd},
+	util::{cmd, fmt, gen, struct_fmt, term},
 };
 
 #[derive(Parser)]
@@ -335,6 +335,8 @@ pub async fn build_image(
 	if docker.image.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
 			// Build image
+			eprintln!();
+			term::status::info("Building Image", dockerfile);
 			let tag = format!("rivet-game:{}", Uuid::new_v4());
 			let mut build_cmd = Command::new("docker");
 			build_cmd
@@ -371,6 +373,9 @@ pub async fn build_site(
 	if cdn.site.is_none() {
 		if let Some(build_output) = cdn.build_output.as_ref() {
 			if let Some(build_command) = cdn.build_command.as_ref() {
+				eprintln!();
+				term::status::info("Building Site", build_command);
+
 				// TODO: Check Windows support
 				let mut build_cmd = Command::new("/bin/sh");
 				build_cmd.arg("-c").arg(build_command);
@@ -401,6 +406,14 @@ pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
 		game_id = game_id,
 		version_id = version_id
 	)
+}
+
+pub fn rivet_game_url(game_name_id: &str, namespace_name_id: &str) -> String {
+	if namespace_name_id == "prod" {
+		format!("https://{game_name_id}.rivet.game/")
+	} else {
+		format!("https://{game_name_id}--{namespace_name_id}.rivet.game/")
+	}
 }
 
 #[derive(Serialize)]
@@ -463,6 +476,7 @@ pub async fn create(
 	let version_res = version_res.context("versions_create_game_version")?;
 	let version_id = version_res.version_id;
 
+	eprintln!();
 	term::status::success("Published Version", &display_name);
 	term::status::info(
 		"Version Dashboard",
@@ -471,6 +485,7 @@ pub async fn create(
 
 	// Deploy to namespace
 	if let Some(namespace) = namespace {
+		eprintln!();
 		term::status::info(
 			"Deploying to Namespace",
 			format!("{} -> {}", display_name, namespace.display_name),
@@ -488,10 +503,11 @@ pub async fn create(
 		if let Err(err) = update_version_res.as_ref() {
 			println!("Error: {err:?}");
 		}
-		let update_version_res =
-			update_version_res.context("cloud_games_namespaces_update_game_namespace_version")?;
-		term::status::success("Deploy Succeeded", "");
+		update_version_res.context("cloud_games_namespaces_update_game_namespace_version")?;
+		term::status::success("Deploy Succeeded", rivet_game_url(&game_res.game.name_id, &namespace.name_id));
 	}
+
+	eprintln!();
 
 	Ok(CreateOutput { version_id })
 }
