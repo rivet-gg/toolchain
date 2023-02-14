@@ -62,10 +62,6 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 			.unwrap_or_else(|| "Site".to_owned())
 	});
 
-	eprintln!();
-	term::status::info("Uploading Site", &display_name);
-	eprintln!("  * Upload path: {}", upload_path.display());
-
 	// Index the directory
 	let files = {
 		let upload_path = upload_path.clone();
@@ -75,12 +71,19 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	let total_len = files
 		.iter()
 		.fold(0, |acc, x| acc + x.prepared.content_length);
-	eprintln!(
-		"  * Found {count} files ({size})",
-		count = files.len(),
-		size = upload::format_file_size(total_len as u64)?,
+
+	eprintln!();
+	term::status::info(
+		"Uploading Site",
+		format!(
+			"{name} ({count} files, {size} total)",
+			name = display_name,
+			count = files.len(),
+			size = upload::format_file_size(total_len as u64)?,
+		),
 	);
 
+	eprintln!("  * Upload path: {}", upload_path.display());
 	// Create site
 	let site_res = rivet_api::apis::cloud_games_cdn_api::cloud_games_cdn_create_game_cdn_site(
 		&ctx.openapi_config_cloud,
