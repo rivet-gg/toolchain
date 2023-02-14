@@ -1,4 +1,4 @@
-use anyhow::{ensure, Context, Error, Result};
+use anyhow::{ensure, Context, Error, Result, bail};
 use clap::Parser;
 use cli_core::rivet_api::models;
 use serde::Serialize;
@@ -9,7 +9,7 @@ use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{fmt, gen, struct_fmt, term},
+	util::{fmt, gen, struct_fmt, term, cmd},
 };
 
 #[derive(Parser)]
@@ -344,8 +344,7 @@ pub async fn build_image(
 				.arg("--tag")
 				.arg(&tag)
 				.arg(".");
-			let build_status = build_cmd.status().await?;
-			ensure!(build_status.success(), "Docker image failed to build");
+			cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 
 			// Upload build
 			let push_output = image::push(
