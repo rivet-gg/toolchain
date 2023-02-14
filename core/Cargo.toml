@@ -1,6 +1,6 @@
 [package]
 name = "rivet-cli-core"
-version = "0.0.1"
+version = "0.0.39"
 authors = ["Rivet Gaming, LLC <developer@rivet.gg>"]
 edition = "2018"
 license = "MIT"
@@ -20,5 +20,5 @@ tower = "0.4.12"
 
 [build-dependencies]
 anyhow = "1.0"
-vergen = { version = "7.5", default_features = false, features = ["build", "git", "rustc", "cargo"] }
+vergen = { version = "7.5", default_features = false, features = ["build", "git"] }
 

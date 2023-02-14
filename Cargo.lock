@@ -1672,7 +1672,7 @@ dependencies = [
 
 [[package]]
 name = "rivet-cli-core"
-version = "0.0.1"
+version = "0.0.39"
 dependencies = [
  "anyhow",
  "aws-smithy-client",
