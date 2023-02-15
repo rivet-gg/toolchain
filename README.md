@@ -6,7 +6,6 @@
 
 ```
 curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
-curl -fsSL https://github.com/rivet-gg/cli/raw/dc673a469ddfad222dbd60a96648312f05701e8b/install/unix.sh | sh
 ```
 
 ### Docker
