@@ -1,12 +1,20 @@
 #!/bin/sh
+# shellcheck enable=add-default-case
+# shellcheck enable=avoid-nullary-conditions
+# shellcheck enable=check-unassigned-uppercase
+# shellcheck enable=deprecate-which
+# shellcheck enable=quote-safe-variables
+# shellcheck enable=require-variable-braces
 set -eu
 
 rm -rf /tmp/rivet-cli-install
 mkdir /tmp/rivet-cli-install
 cd /tmp/rivet-cli-install
 
+UNAME="$(uname -s)"
+
 # Find asset suffix
-if [ "$(uname)" = "Darwin" ]; then
+if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 	echo
 	echo "> Detected macOS"
 
@@ -15,8 +23,8 @@ if [ "$(uname)" = "Darwin" ]; then
 	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64" -o ./jq
 	chmod +x ./jq
 
-	CLI_ASSET_SUFFIX="_x86_64-apple-darwin.zip"
-elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
+	CLI_ASSET_SUFFIX="-x86_64-apple-darwin.tar.xz"
+elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
 	echo "> Detected Linux ($(getconf LONG_BIT) bit)"
 
@@ -25,7 +33,7 @@ elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
 	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux$(getconf LONG_BIT)" -o ./jq
 	chmod +x ./jq
 
-	CLI_ASSET_SUFFIX="_x86_64-unknown-linux-musl.tar.gz"
+	CLI_ASSET_SUFFIX="-x86_64-unknown-linux-gnu.tar.xz"
 else
 	echo "Unable to determine platform" 1>&2
 	exit 1
@@ -49,35 +57,37 @@ echo
 echo "> Installing Rivet CLI @ $RIVET_CLI_VERSION"
 
 
-if [ "$(uname)" = "Darwin" ]; then
+if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 	echo
-	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/cli_${RIVET_CLI_VERSION}_x86_64-apple-darwin.zip"
+	ASSET_NAME="rivet-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
+	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/${ASSET_NAME}"
 	echo "> Downloading $URL"
-	curl -fsSL "$URL" -o rivet.zip
+	curl -fsSL "$URL" -o rivet_cli.tar.xz
 
 	echo
 	echo "> Extracting rivet.zip"
-	unzip rivet.zip
+	tar xJf rivet_cli.tar.xz
 
 	echo
 	echo "> Installing rivet"
-	sudo mv ./rivet /usr/local/bin/rivet
-elif [ "$(expr substr "$(uname -s)" 1 5)" = "Linux" ]; then
+	sudo mv "./${ASSET_NAME}/rivet" "/usr/local/bin/rivet"
+elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
-	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/cli_${RIVET_CLI_VERSION}_x86_64-unknown-linux-musl.tar.gz"
+	ASSET_NAME="rivet-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
+	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/${ASSET_NAME}"
 	echo "> Downloading $URL"
-	curl -fsSL "$URL" -o rivet.tar.gz
+	curl -fsSL "$URL" -o rivet_cli.tar.xz
 
 	echo
 	echo "> Extracting rivet.tar.gz"
-	tar xzf rivet.tar.gz
+	tar xJf rivet_cli.tar.xz
 
 	echo
 	echo "> Installing rivet"
 	if command -v sudo; then
-		sudo mv ./rivet /usr/local/bin/rivet
+		sudo mv "./${ASSET_NAME}/rivet" "/usr/local/bin/rivet"
 	else
-		mv ./rivet /usr/local/bin/rivet
+		mv "./${ASSET_NAME}/rivet" "/usr/local/bin/rivet"
 	fi
 else
 	exit 1
