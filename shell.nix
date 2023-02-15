@@ -11,6 +11,8 @@ in
 			pkg-config
 			openssl
 			libiconv
+
+			shellcheck
 		] ++ (
 			pkgs.lib.optionals stdenv.isDarwin [
 				darwin.apple_sdk.frameworks.Security
