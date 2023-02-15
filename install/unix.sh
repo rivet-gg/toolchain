@@ -7,9 +7,9 @@
 # shellcheck enable=require-variable-braces
 set -eu
 
-rm -rf /tmp/rivet-cli-install
-mkdir /tmp/rivet-cli-install
-cd /tmp/rivet-cli-install
+rm -rf /tmp/rivet_cli_install
+mkdir /tmp/rivet_cli_install
+cd /tmp/rivet_cli_install
 
 UNAME="$(uname -s)"
 
@@ -70,7 +70,7 @@ if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 
 	echo
 	echo "> Installing rivet"
-	sudo mv "./${ASSET_NAME}/rivet" "/usr/local/bin/rivet"
+	sudo mv "./rivet-${RIVET_CLI_VERSION}-x86_64-apple-darwin/rivet" "/usr/local/bin/rivet"
 elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
 	ASSET_NAME="rivet-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
@@ -85,9 +85,9 @@ elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
 	echo "> Installing rivet"
 	if command -v sudo; then
-		sudo mv "./${ASSET_NAME}/rivet" "/usr/local/bin/rivet"
+		sudo mv "./rivet-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet" "/usr/local/bin/rivet"
 	else
-		mv "./${ASSET_NAME}/rivet" "/usr/local/bin/rivet"
+		mv "./rivet-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet" "/usr/local/bin/rivet"
 	fi
 else
 	exit 1
