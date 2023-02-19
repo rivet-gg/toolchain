@@ -2,25 +2,14 @@
 
 ## Installing
 
-### macOS & Linux
+### macOS & Linux & WSL
 
 ```
 curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 ```
 
-### Docker
-
-> Commands such as `rivet build push` will not work when running using Docker.
-
-#### macOS & Linux & Windows (PowerShell)
+### Windows (cmd & PowerShell)
 
 ```
-docker run -v "$(pwd):/app" ghcr.io/rivet-gg/cli
+powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex"
 ```
-
-#### Windows (cmd)
-
-```
-docker run -v "%cd%:/app" ghcr.io/rivet-gg/cli
-```
-
