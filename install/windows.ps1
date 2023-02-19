@@ -73,10 +73,6 @@ if (!(";${Path};".ToLower() -like "*;${BinDir};*".ToLower())) {
 	$Env:Path += ";${BinDir}"
 }
 
-if (!(Test-Path $RivetExe)) {
-  Start-Process -FilePath "$env:comspec" -ArgumentList "/c", "mklink", $RivetExe -Verb runAs
-}
-
 Write-Host
 Write-Host "> Checking installation"
 rivet.exe --version
