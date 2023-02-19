@@ -95,5 +95,8 @@ fi
 
 echo
 echo "> Checking installation"
-rivet --help
+rivet --version
 
+echo
+echo "Rivet was installed successfully."
+echo "Run 'rivet --help' to get started."
