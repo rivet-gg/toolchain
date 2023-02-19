@@ -4,10 +4,6 @@ $ErrorActionPreference = 'Stop'
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$RivetZip = "$BinDir\rivet.zip"
-$RivetExe = "$BinDir\rivet.exe"
-$Target = 'x86_64-pc-windows-msvc'
-
 # Create bin directory for Rivet
 $RivetInstall = $env:RIVET_INSTALL
 $BinDir = if ($RivetInstall) {
@@ -19,6 +15,10 @@ $BinDir = if ($RivetInstall) {
 if (!(Test-Path $BinDir)) {
 	New-Item $BinDir -ItemType Directory | Out-Null
 }
+
+$RivetZip = "$BinDir\rivet.zip"
+$RivetExe = "$BinDir\rivet.exe"
+$Target = 'x86_64-pc-windows-msvc'
 
 # Determine version
 $Version = $env:RIVET_CLI_VERSION
