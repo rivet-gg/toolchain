@@ -4,10 +4,6 @@ $ErrorActionPreference = 'Stop'
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$RivetZip = "$BinDir\rivet.zip"
-$RivetExe = "$BinDir\rivet.exe"
-$Target = 'x86_64-pc-windows-msvc'
-
 # Create bin directory for Rivet
 $RivetInstall = $env:RIVET_INSTALL
 $BinDir = if ($RivetInstall) {
@@ -20,11 +16,32 @@ if (!(Test-Path $BinDir)) {
 	New-Item $BinDir -ItemType Directory | Out-Null
 }
 
-# Determine version
+$RivetZip = "$BinDir\rivet.zip"
+$RivetExe = "$BinDir\rivet.exe"
+$Target = 'x86_64-pc-windows-msvc'
+$CliAssetSuffix = "-${Target}.zip"
+
+# Auto-select version to install
+#
+# We have to find last version with an asset so we don't break the installer
+# when the assets for a new version are still generating
 $Version = $env:RIVET_CLI_VERSION
 if (!$Version) {
-	$Version = "v0.0.40"
+	$Releases = Invoke-RestMethod -Uri "https://api.github.com/repos/rivet-gg/cli/releases"
+
+	foreach ($Release in $Releases) {
+		$SelectedAssets = $Release.assets | Select-Object -ExpandProperty name | Where-Object { $_ -like "*$CliAssetSuffix" }
+		if ($SelectedAssets) {
+			$Version = $Release.name
+			Break
+		}
+	}
+
+	if (!$Version) {
+		throw 'Failed to determine version to install'
+	}
 }
+
 Write-Host
 Write-Host "> Installing Rivet CLI @ ${Version}"
 
