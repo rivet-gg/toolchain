@@ -73,14 +73,13 @@ if (!(";${Path};".ToLower() -like "*;${BinDir};*".ToLower())) {
 	$Env:Path += ";${BinDir}"
 }
 
-if (!(Test-Path $RivetExe)) {
-  Start-Process -FilePath "$env:comspec" -ArgumentList "/c", "mklink", $RivetExe -Verb runAs
-}
-
 Write-Host
 Write-Host "> Checking installation"
 rivet.exe --version
 
 Write-Host
-Write-Output "Rivet was installed successfully to ${RivetExe}."
-Write-Output "Run 'rivet --help' to get started."
+Write-Host "Rivet was installed successfully to ${RivetExe}."
+Write-Host "Run 'rivet --help' to get started."
+Write-Host
+Write-Host "If the 'rivet' command is not found, open a new shell."
+Write-Host
