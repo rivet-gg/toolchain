@@ -165,7 +165,7 @@ pub async fn create_dev_token(
 			.await?
 	{
 		let env_file = format!(
-			"PORT={port}\nRIVET_TOKEN={token}\n",
+			"PORT={port}\n\n# Provide a development token for the lobby and client\n# Read more: https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}\nRIVET_PUBLIC_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n",
 			port = default_port.unwrap()
 		);
 		fs::write(".env", env_file).await?;
