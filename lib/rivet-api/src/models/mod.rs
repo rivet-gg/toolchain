@@ -484,6 +484,8 @@ pub mod identity_list_friends_output;
 pub use self::identity_list_friends_output::IdentityListFriendsOutput;
 pub mod identity_list_mutual_friends_output;
 pub use self::identity_list_mutual_friends_output::IdentityListMutualFriendsOutput;
+pub mod identity_list_recent_followers_output;
+pub use self::identity_list_recent_followers_output::IdentityListRecentFollowersOutput;
 pub mod identity_prepare_avatar_upload_output;
 pub use self::identity_prepare_avatar_upload_output::IdentityPrepareAvatarUploadOutput;
 pub mod identity_prepare_avatar_upload_request;

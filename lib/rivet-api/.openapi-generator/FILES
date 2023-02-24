@@ -273,6 +273,7 @@ docs/IdentityListActivitiesOutput.md
 docs/IdentityListFollowersOutput.md
 docs/IdentityListFriendsOutput.md
 docs/IdentityListMutualFriendsOutput.md
+docs/IdentityListRecentFollowersOutput.md
 docs/IdentityPrepareAvatarUploadOutput.md
 docs/IdentityPrepareAvatarUploadRequest.md
 docs/IdentityPrepareGameLinkOutput.md
@@ -653,6 +654,7 @@ src/models/identity_list_activities_output.rs
 src/models/identity_list_followers_output.rs
 src/models/identity_list_friends_output.rs
 src/models/identity_list_mutual_friends_output.rs
+src/models/identity_list_recent_followers_output.rs
 src/models/identity_prepare_avatar_upload_output.rs
 src/models/identity_prepare_avatar_upload_request.rs
 src/models/identity_prepare_game_link_output.rs

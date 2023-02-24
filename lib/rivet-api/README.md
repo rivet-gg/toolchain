@@ -118,9 +118,11 @@ Class | Method | HTTP request | Description
 *IdentityApi* | [**identity_get_profile**](docs/IdentityApi.md#identity_get_profile) | **GET** /identities/{identity_id}/profile | 
 *IdentityApi* | [**identity_get_self_profile**](docs/IdentityApi.md#identity_get_self_profile) | **GET** /identities/self/profile | 
 *IdentityApi* | [**identity_get_summaries**](docs/IdentityApi.md#identity_get_summaries) | **GET** /identities/batch/summary | 
+*IdentityApi* | [**identity_ignore_recent_follower**](docs/IdentityApi.md#identity_ignore_recent_follower) | **POST** /identities/self/recent-followers/{identity_id}/ignore | 
 *IdentityApi* | [**identity_list_followers**](docs/IdentityApi.md#identity_list_followers) | **GET** /identities/{identity_id}/followers | 
 *IdentityApi* | [**identity_list_friends**](docs/IdentityApi.md#identity_list_friends) | **GET** /identities/self/friends | 
 *IdentityApi* | [**identity_list_mutual_friends**](docs/IdentityApi.md#identity_list_mutual_friends) | **GET** /identities/{identity_id}/mutual-friends | 
+*IdentityApi* | [**identity_list_recent_followers**](docs/IdentityApi.md#identity_list_recent_followers) | **GET** /identities/self/recent-followers | 
 *IdentityApi* | [**identity_prepare_avatar_upload**](docs/IdentityApi.md#identity_prepare_avatar_upload) | **POST** /identities/avatar-upload/prepare | 
 *IdentityApi* | [**identity_remove_game_activity**](docs/IdentityApi.md#identity_remove_game_activity) | **DELETE** /identities/self/activity | 
 *IdentityApi* | [**identity_report**](docs/IdentityApi.md#identity_report) | **POST** /identities/{identity_id}/report | 
@@ -421,6 +423,7 @@ Class | Method | HTTP request | Description
  - [IdentityListFollowersOutput](docs/IdentityListFollowersOutput.md)
  - [IdentityListFriendsOutput](docs/IdentityListFriendsOutput.md)
  - [IdentityListMutualFriendsOutput](docs/IdentityListMutualFriendsOutput.md)
+ - [IdentityListRecentFollowersOutput](docs/IdentityListRecentFollowersOutput.md)
  - [IdentityPrepareAvatarUploadOutput](docs/IdentityPrepareAvatarUploadOutput.md)
  - [IdentityPrepareAvatarUploadRequest](docs/IdentityPrepareAvatarUploadRequest.md)
  - [IdentityPrepareGameLinkOutput](docs/IdentityPrepareGameLinkOutput.md)
