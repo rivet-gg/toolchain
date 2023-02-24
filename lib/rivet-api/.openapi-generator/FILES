@@ -211,6 +211,7 @@ docs/GeoCoord.md
 docs/GeoDistance.md
 docs/GlobalEventChatThreadRemove.md
 docs/GlobalEventNotification.md
+docs/GroupApi.md
 docs/GroupBannedIdentity.md
 docs/GroupConsumeInviteOutput.md
 docs/GroupCreateInput.md
@@ -224,7 +225,6 @@ docs/GroupGetJoinRequestsOutput.md
 docs/GroupGetMembersOutput.md
 docs/GroupGetProfileOutput.md
 docs/GroupGetSummaryOutput.md
-docs/GroupGroupsApi.md
 docs/GroupHandle.md
 docs/GroupInvitesApi.md
 docs/GroupJoinRequest.md
@@ -273,6 +273,7 @@ docs/IdentityListActivitiesOutput.md
 docs/IdentityListFollowersOutput.md
 docs/IdentityListFriendsOutput.md
 docs/IdentityListMutualFriendsOutput.md
+docs/IdentityListRecentFollowersOutput.md
 docs/IdentityPrepareAvatarUploadOutput.md
 docs/IdentityPrepareAvatarUploadRequest.md
 docs/IdentityPrepareGameLinkOutput.md
@@ -282,7 +283,6 @@ docs/IdentityReportRequest.md
 docs/IdentitySearchOutput.md
 docs/IdentitySetGameActivityRequest.md
 docs/IdentitySetupOutput.md
-docs/IdentitySignupForBetaRequest.md
 docs/IdentityStatus.md
 docs/IdentitySummary.md
 docs/IdentityUpdateGameActivity.md
@@ -291,11 +291,11 @@ docs/IdentityUpdateStatusRequest.md
 docs/IdentityValidateProfileOutput.md
 docs/IdentityWatchEventsOutput.md
 docs/JobRunApi.md
-docs/KvBatchOperationsApi.md
+docs/KvApi.md
+docs/KvBatchApi.md
 docs/KvEntry.md
 docs/KvGetBatchOutput.md
 docs/KvGetOutput.md
-docs/KvOperationsApi.md
 docs/KvPutBatchInput.md
 docs/KvPutEntry.md
 docs/KvPutInput.md
@@ -390,7 +390,7 @@ src/apis/cloud_logs_api.rs
 src/apis/cloud_tiers_api.rs
 src/apis/cloud_uploads_api.rs
 src/apis/configuration.rs
-src/apis/group_groups_api.rs
+src/apis/group_api.rs
 src/apis/group_invites_api.rs
 src/apis/group_join_requests_api.rs
 src/apis/identity_activities_api.rs
@@ -398,8 +398,8 @@ src/apis/identity_api.rs
 src/apis/identity_events_api.rs
 src/apis/identity_links_api.rs
 src/apis/job_run_api.rs
-src/apis/kv_batch_operations_api.rs
-src/apis/kv_operations_api.rs
+src/apis/kv_api.rs
+src/apis/kv_batch_api.rs
 src/apis/matchmaker_lobbies_api.rs
 src/apis/matchmaker_players_api.rs
 src/apis/matchmaker_regions_api.rs
@@ -654,6 +654,7 @@ src/models/identity_list_activities_output.rs
 src/models/identity_list_followers_output.rs
 src/models/identity_list_friends_output.rs
 src/models/identity_list_mutual_friends_output.rs
+src/models/identity_list_recent_followers_output.rs
 src/models/identity_prepare_avatar_upload_output.rs
 src/models/identity_prepare_avatar_upload_request.rs
 src/models/identity_prepare_game_link_output.rs
@@ -663,7 +664,6 @@ src/models/identity_report_request.rs
 src/models/identity_search_output.rs
 src/models/identity_set_game_activity_request.rs
 src/models/identity_setup_output.rs
-src/models/identity_signup_for_beta_request.rs
 src/models/identity_status.rs
 src/models/identity_summary.rs
 src/models/identity_update_game_activity.rs

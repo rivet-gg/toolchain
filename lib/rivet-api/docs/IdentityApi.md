@@ -10,16 +10,17 @@ Method | HTTP request | Description
 [**identity_get_profile**](IdentityApi.md#identity_get_profile) | **GET** /identities/{identity_id}/profile | 
 [**identity_get_self_profile**](IdentityApi.md#identity_get_self_profile) | **GET** /identities/self/profile | 
 [**identity_get_summaries**](IdentityApi.md#identity_get_summaries) | **GET** /identities/batch/summary | 
+[**identity_ignore_recent_follower**](IdentityApi.md#identity_ignore_recent_follower) | **POST** /identities/self/recent-followers/{identity_id}/ignore | 
 [**identity_list_followers**](IdentityApi.md#identity_list_followers) | **GET** /identities/{identity_id}/followers | 
 [**identity_list_friends**](IdentityApi.md#identity_list_friends) | **GET** /identities/self/friends | 
 [**identity_list_mutual_friends**](IdentityApi.md#identity_list_mutual_friends) | **GET** /identities/{identity_id}/mutual-friends | 
+[**identity_list_recent_followers**](IdentityApi.md#identity_list_recent_followers) | **GET** /identities/self/recent-followers | 
 [**identity_prepare_avatar_upload**](IdentityApi.md#identity_prepare_avatar_upload) | **POST** /identities/avatar-upload/prepare | 
 [**identity_remove_game_activity**](IdentityApi.md#identity_remove_game_activity) | **DELETE** /identities/self/activity | 
 [**identity_report**](IdentityApi.md#identity_report) | **POST** /identities/{identity_id}/report | 
 [**identity_search**](IdentityApi.md#identity_search) | **GET** /identities/search | 
 [**identity_set_game_activity**](IdentityApi.md#identity_set_game_activity) | **POST** /identities/self/activity | 
 [**identity_setup**](IdentityApi.md#identity_setup) | **POST** /identities | 
-[**identity_signup_for_beta**](IdentityApi.md#identity_signup_for_beta) | **POST** /identities/self/beta-signup | 
 [**identity_unfollow**](IdentityApi.md#identity_unfollow) | **DELETE** /identities/{identity_id}/follow | 
 [**identity_update_profile**](IdentityApi.md#identity_update_profile) | **POST** /identities/self/profile | 
 [**identity_update_status**](IdentityApi.md#identity_update_status) | **POST** /identities/identities/self/status | 
@@ -208,6 +209,34 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## identity_ignore_recent_follower
+
+> identity_ignore_recent_follower(identity_id)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**identity_id** | **uuid::Uuid** |  | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## identity_list_followers
 
 > crate::models::IdentityListFollowersOutput identity_list_followers(identity_id, anchor, limit)
@@ -284,6 +313,35 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**crate::models::IdentityListMutualFriendsOutput**](IdentityListMutualFriendsOutput.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## identity_list_recent_followers
+
+> crate::models::IdentityListRecentFollowersOutput identity_list_recent_followers(count, watch_index)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**count** | Option<**i32**> |  |  |
+**watch_index** | Option<**String**> |  |  |
+
+### Return type
+
+[**crate::models::IdentityListRecentFollowersOutput**](IdentityListRecentFollowersOutput.md)
 
 ### Authorization
 
@@ -473,36 +531,6 @@ Name | Type | Description  | Required | Notes
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## identity_signup_for_beta
-
-> identity_signup_for_beta(identity_signup_for_beta_request)
-
-
-Submits a beta signup form.
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**identity_signup_for_beta_request** | [**IdentitySignupForBetaRequest**](IdentitySignupForBetaRequest.md) |  | [required] |
-
-### Return type
-
- (empty response body)
-
-### Authorization
-
-[BearerAuth](../README.md#BearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -1,4 +1,4 @@
-use anyhow::{bail, ensure, Result};
+use anyhow::{bail, Result};
 
 pub async fn execute_docker_cmd(
 	mut command: tokio::process::Command,

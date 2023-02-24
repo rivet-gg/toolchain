@@ -1,32 +1,32 @@
-# \GroupGroupsApi
+# \GroupApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**group_groups_ban_identity**](GroupGroupsApi.md#group_groups_ban_identity) | **POST** /groups/{group_id}/bans/{identity_id} | 
-[**group_groups_complete_avatar_upload**](GroupGroupsApi.md#group_groups_complete_avatar_upload) | **POST** /groups/{group_id}/avatar-upload/{upload_id}/complete | 
-[**group_groups_create**](GroupGroupsApi.md#group_groups_create) | **POST** /groups | 
-[**group_groups_get_bans**](GroupGroupsApi.md#group_groups_get_bans) | **GET** /groups/{group_id}/bans | 
-[**group_groups_get_join_requests**](GroupGroupsApi.md#group_groups_get_join_requests) | **GET** /groups/{group_id}/join-requests | 
-[**group_groups_get_members**](GroupGroupsApi.md#group_groups_get_members) | **GET** /groups/{group_id}/members | 
-[**group_groups_get_profile**](GroupGroupsApi.md#group_groups_get_profile) | **GET** /groups/{group_id}/profile | 
-[**group_groups_get_summary**](GroupGroupsApi.md#group_groups_get_summary) | **GET** /groups/{group_id}/summary | 
-[**group_groups_kick_member**](GroupGroupsApi.md#group_groups_kick_member) | **POST** /groups/{group_id}/kick/{identity_id} | 
-[**group_groups_leave**](GroupGroupsApi.md#group_groups_leave) | **POST** /groups/{group_id}/leave | 
-[**group_groups_list_suggested**](GroupGroupsApi.md#group_groups_list_suggested) | **GET** /groups | 
-[**group_groups_prepare_avatar_upload**](GroupGroupsApi.md#group_groups_prepare_avatar_upload) | **POST** /groups/avatar-upload/prepare | 
-[**group_groups_search**](GroupGroupsApi.md#group_groups_search) | **GET** /groups/search | 
-[**group_groups_transfer_ownership**](GroupGroupsApi.md#group_groups_transfer_ownership) | **POST** /groups/{group_id}/transfer-owner | 
-[**group_groups_unban_identity**](GroupGroupsApi.md#group_groups_unban_identity) | **DELETE** /groups/{group_id}/bans/{identity_id} | 
-[**group_groups_update_profile**](GroupGroupsApi.md#group_groups_update_profile) | **POST** /groups/{group_id}/profile | 
-[**group_groups_validate_profile**](GroupGroupsApi.md#group_groups_validate_profile) | **POST** /groups/profile/validate | 
+[**group_ban_identity**](GroupApi.md#group_ban_identity) | **POST** /groups/{group_id}/bans/{identity_id} | 
+[**group_complete_avatar_upload**](GroupApi.md#group_complete_avatar_upload) | **POST** /groups/{group_id}/avatar-upload/{upload_id}/complete | 
+[**group_create**](GroupApi.md#group_create) | **POST** /groups | 
+[**group_get_bans**](GroupApi.md#group_get_bans) | **GET** /groups/{group_id}/bans | 
+[**group_get_join_requests**](GroupApi.md#group_get_join_requests) | **GET** /groups/{group_id}/join-requests | 
+[**group_get_members**](GroupApi.md#group_get_members) | **GET** /groups/{group_id}/members | 
+[**group_get_profile**](GroupApi.md#group_get_profile) | **GET** /groups/{group_id}/profile | 
+[**group_get_summary**](GroupApi.md#group_get_summary) | **GET** /groups/{group_id}/summary | 
+[**group_kick_member**](GroupApi.md#group_kick_member) | **POST** /groups/{group_id}/kick/{identity_id} | 
+[**group_leave**](GroupApi.md#group_leave) | **POST** /groups/{group_id}/leave | 
+[**group_list_suggested**](GroupApi.md#group_list_suggested) | **GET** /groups | 
+[**group_prepare_avatar_upload**](GroupApi.md#group_prepare_avatar_upload) | **POST** /groups/avatar-upload/prepare | 
+[**group_search**](GroupApi.md#group_search) | **GET** /groups/search | 
+[**group_transfer_ownership**](GroupApi.md#group_transfer_ownership) | **POST** /groups/{group_id}/transfer-owner | 
+[**group_unban_identity**](GroupApi.md#group_unban_identity) | **DELETE** /groups/{group_id}/bans/{identity_id} | 
+[**group_update_profile**](GroupApi.md#group_update_profile) | **POST** /groups/{group_id}/profile | 
+[**group_validate_profile**](GroupApi.md#group_validate_profile) | **POST** /groups/profile/validate | 
 
 
 
-## group_groups_ban_identity
+## group_ban_identity
 
-> group_groups_ban_identity(group_id, identity_id)
+> group_ban_identity(group_id, identity_id)
 
 
 Bans an identity from a group. Must be the owner of the group to perform this action. The banned identity will no longer be able to create a join request or use a group invite.
@@ -55,9 +55,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_complete_avatar_upload
+## group_complete_avatar_upload
 
-> group_groups_complete_avatar_upload(group_id, upload_id)
+> group_complete_avatar_upload(group_id, upload_id)
 
 
 Completes an avatar image upload. Must be called after the file upload process completes. Call `rivet.api.group#PrepareAvatarUpload` first.
@@ -86,9 +86,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_create
+## group_create
 
-> crate::models::GroupCreateOutput group_groups_create(group_create_input)
+> crate::models::GroupCreateOutput group_create(group_create_input)
 
 
 Creates a new group.
@@ -116,9 +116,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_get_bans
+## group_get_bans
 
-> crate::models::GroupGetBansOutput group_groups_get_bans(group_id, anchor, count, watch_index)
+> crate::models::GroupGetBansOutput group_get_bans(group_id, anchor, count, watch_index)
 
 
 Returns a group's bans. Must have valid permissions to view.
@@ -149,9 +149,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_get_join_requests
+## group_get_join_requests
 
-> crate::models::GroupGetJoinRequestsOutput group_groups_get_join_requests(group_id, anchor, count, watch_index)
+> crate::models::GroupGetJoinRequestsOutput group_get_join_requests(group_id, anchor, count, watch_index)
 
 
 Returns a group's join requests. Must have valid permissions to view.
@@ -182,9 +182,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_get_members
+## group_get_members
 
-> crate::models::GroupGetMembersOutput group_groups_get_members(group_id, anchor, count, watch_index)
+> crate::models::GroupGetMembersOutput group_get_members(group_id, anchor, count, watch_index)
 
 
 Returns a group's members.
@@ -215,9 +215,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_get_profile
+## group_get_profile
 
-> crate::models::GroupGetProfileOutput group_groups_get_profile(group_id, watch_index)
+> crate::models::GroupGetProfileOutput group_get_profile(group_id, watch_index)
 
 
 Returns a group profile.
@@ -246,9 +246,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_get_summary
+## group_get_summary
 
-> crate::models::GroupGetSummaryOutput group_groups_get_summary(group_id)
+> crate::models::GroupGetSummaryOutput group_get_summary(group_id)
 
 
 ### Parameters
@@ -274,9 +274,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_kick_member
+## group_kick_member
 
-> group_groups_kick_member(group_id, identity_id)
+> group_kick_member(group_id, identity_id)
 
 
 Kicks an identity from a group. Must be the owner of the group to perform this action.
@@ -305,9 +305,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_leave
+## group_leave
 
-> group_groups_leave(group_id)
+> group_leave(group_id)
 
 
 Leaves a group.
@@ -335,9 +335,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_list_suggested
+## group_list_suggested
 
-> crate::models::GroupListSuggestedOutput group_groups_list_suggested(watch_index)
+> crate::models::GroupListSuggestedOutput group_list_suggested(watch_index)
 
 
 Returns a list of suggested groups.
@@ -365,9 +365,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_prepare_avatar_upload
+## group_prepare_avatar_upload
 
-> crate::models::GroupPrepareAvatarUploadOutput group_groups_prepare_avatar_upload(group_prepare_avatar_upload_input)
+> crate::models::GroupPrepareAvatarUploadOutput group_prepare_avatar_upload(group_prepare_avatar_upload_input)
 
 
 Prepares an avatar image upload. Complete upload with `rivet.api.group#CompleteAvatarUpload`.
@@ -395,9 +395,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_search
+## group_search
 
-> crate::models::GroupSearchOutput group_groups_search(query, anchor, limit)
+> crate::models::GroupSearchOutput group_search(query, anchor, limit)
 
 
 Fuzzy search for groups.
@@ -427,9 +427,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_transfer_ownership
+## group_transfer_ownership
 
-> group_groups_transfer_ownership(group_id, group_transfer_ownership_input)
+> group_transfer_ownership(group_id, group_transfer_ownership_input)
 
 
 Transfers ownership of a group to another identity.
@@ -458,9 +458,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_unban_identity
+## group_unban_identity
 
-> group_groups_unban_identity(group_id, identity_id)
+> group_unban_identity(group_id, identity_id)
 
 
 Unbans an identity from a group. Must be the owner of the group to perform this action.
@@ -489,9 +489,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_update_profile
+## group_update_profile
 
-> group_groups_update_profile(group_id, group_update_profile_input)
+> group_update_profile(group_id, group_update_profile_input)
 
 
 ### Parameters
@@ -518,9 +518,9 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## group_groups_validate_profile
+## group_validate_profile
 
-> crate::models::GroupValidateProfileOutput group_groups_validate_profile(group_validate_profile_input)
+> crate::models::GroupValidateProfileOutput group_validate_profile(group_validate_profile_input)
 
 
 Validate contents of group profile. Use to provide immediate feedback on profile changes before committing them.

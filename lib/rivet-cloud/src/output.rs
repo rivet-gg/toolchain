@@ -478,6 +478,8 @@ pub struct GetGroupBillingOutput {
 	pub billing: std::option::Option<crate::model::GroupBillingSummary>,
 	/// The status of a developer group.
 	pub status: std::option::Option<crate::model::GroupStatus>,
+	/// Whether or not the given group can actively host games.
+	pub active: std::option::Option<bool>,
 	/// A value denoting a game's billing plan.
 	pub plan: std::option::Option<crate::model::GroupBillingPlan>,
 	/// A list of region summaries.
@@ -493,6 +495,10 @@ impl GetGroupBillingOutput {
 	/// The status of a developer group.
 	pub fn status(&self) -> std::option::Option<&crate::model::GroupStatus> {
 		self.status.as_ref()
+	}
+	/// Whether or not the given group can actively host games.
+	pub fn active(&self) -> std::option::Option<bool> {
+		self.active
 	}
 	/// A value denoting a game's billing plan.
 	pub fn plan(&self) -> std::option::Option<&crate::model::GroupBillingPlan> {
@@ -512,6 +518,7 @@ impl std::fmt::Debug for GetGroupBillingOutput {
 		let mut formatter = f.debug_struct("GetGroupBillingOutput");
 		formatter.field("billing", &self.billing);
 		formatter.field("status", &self.status);
+		formatter.field("active", &self.active);
 		formatter.field("plan", &self.plan);
 		formatter.field("available_regions", &self.available_regions);
 		formatter.field("watch", &self.watch);
@@ -526,6 +533,7 @@ pub mod get_group_billing_output {
 	pub struct Builder {
 		pub(crate) billing: std::option::Option<crate::model::GroupBillingSummary>,
 		pub(crate) status: std::option::Option<crate::model::GroupStatus>,
+		pub(crate) active: std::option::Option<bool>,
 		pub(crate) plan: std::option::Option<crate::model::GroupBillingPlan>,
 		pub(crate) available_regions:
 			std::option::Option<std::vec::Vec<crate::model::RegionSummary>>,
@@ -553,6 +561,16 @@ pub mod get_group_billing_output {
 		/// The status of a developer group.
 		pub fn set_status(mut self, input: std::option::Option<crate::model::GroupStatus>) -> Self {
 			self.status = input;
+			self
+		}
+		/// Whether or not the given group can actively host games.
+		pub fn active(mut self, input: bool) -> Self {
+			self.active = Some(input);
+			self
+		}
+		/// Whether or not the given group can actively host games.
+		pub fn set_active(mut self, input: std::option::Option<bool>) -> Self {
+			self.active = input;
 			self
 		}
 		/// A value denoting a game's billing plan.
@@ -605,6 +623,7 @@ pub mod get_group_billing_output {
 			crate::output::GetGroupBillingOutput {
 				billing: self.billing,
 				status: self.status,
+				active: self.active,
 				plan: self.plan,
 				available_regions: self.available_regions,
 				watch: self.watch,
@@ -2847,8 +2866,8 @@ impl CreateGameOutput {
 pub struct GetGamesOutput {
 	/// A list of game summaries.
 	pub games: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
-	/// A list of group handles.
-	pub groups: std::option::Option<std::vec::Vec<crate::model::GroupHandle>>,
+	/// A list of group summaries.
+	pub groups: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
 	/// Provided by watchable endpoints used in blocking loops.
 	pub watch: std::option::Option<crate::model::WatchResponse>,
 }
@@ -2857,8 +2876,8 @@ impl GetGamesOutput {
 	pub fn games(&self) -> std::option::Option<&[crate::model::GameSummary]> {
 		self.games.as_deref()
 	}
-	/// A list of group handles.
-	pub fn groups(&self) -> std::option::Option<&[crate::model::GroupHandle]> {
+	/// A list of group summaries.
+	pub fn groups(&self) -> std::option::Option<&[crate::model::GroupSummary]> {
 		self.groups.as_deref()
 	}
 	/// Provided by watchable endpoints used in blocking loops.
@@ -2882,7 +2901,7 @@ pub mod get_games_output {
 	#[derive(std::default::Default, std::clone::Clone, std::cmp::PartialEq, std::fmt::Debug)]
 	pub struct Builder {
 		pub(crate) games: std::option::Option<std::vec::Vec<crate::model::GameSummary>>,
-		pub(crate) groups: std::option::Option<std::vec::Vec<crate::model::GroupHandle>>,
+		pub(crate) groups: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
 		pub(crate) watch: std::option::Option<crate::model::WatchResponse>,
 	}
 	impl Builder {
@@ -2909,17 +2928,17 @@ pub mod get_games_output {
 		///
 		/// To override the contents of this collection use [`set_groups`](Self::set_groups).
 		///
-		/// A list of group handles.
-		pub fn groups(mut self, input: crate::model::GroupHandle) -> Self {
+		/// A list of group summaries.
+		pub fn groups(mut self, input: crate::model::GroupSummary) -> Self {
 			let mut v = self.groups.unwrap_or_default();
 			v.push(input);
 			self.groups = Some(v);
 			self
 		}
-		/// A list of group handles.
+		/// A list of group summaries.
 		pub fn set_groups(
 			mut self,
-			input: std::option::Option<std::vec::Vec<crate::model::GroupHandle>>,
+			input: std::option::Option<std::vec::Vec<crate::model::GroupSummary>>,
 		) -> Self {
 			self.groups = input;
 			self
