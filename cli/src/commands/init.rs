@@ -378,7 +378,3 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 
 	Ok(new_ctx)
 }
-
-pub fn dashboard_api_url(game_id: &str) -> String {
-	format!("https://hub.rivet.gg/developer/games/{game_id}/api")
-}

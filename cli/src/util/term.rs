@@ -34,9 +34,9 @@ pub mod status {
 		eprintln!("{} {}", style(msg).bold().green(), data);
 	}
 
-	pub fn warn(msg: impl Display, data: impl Display) {
-		eprintln!("{} {}", style(msg).bold().yellow(), data);
-	}
+	// pub fn warn(msg: impl Display, data: impl Display) {
+	// 	eprintln!("{} {}", style(msg).bold().yellow(), data);
+	// }
 
 	pub fn error(msg: impl Display, data: impl Display) {
 		eprintln!("{} {}", style(msg).bold().red(), data);
@@ -123,9 +123,9 @@ impl Prompt {
 		self.read_line_inner(term, false).await
 	}
 
-	async fn read_line_secure(&self, term: &Term) -> Result<String> {
-		self.read_line_inner(term, true).await
-	}
+	// async fn read_line_secure(&self, term: &Term) -> Result<String> {
+	// 	self.read_line_inner(term, true).await
+	// }
 
 	async fn read_line_inner(&self, term: &Term, secure: bool) -> Result<String> {
 		term.flush()?;
@@ -203,20 +203,20 @@ impl Prompt {
 		}
 	}
 
-	pub async fn string_secure(&self, term: &Term) -> Result<String> {
-		let i = self.gen_indent();
+	// pub async fn string_secure(&self, term: &Term) -> Result<String> {
+	// 	let i = self.gen_indent();
 
-		self.print_header();
+	// 	self.print_header();
 
-		loop {
-			eprint!("{i}  {} ", style("[input hidden]").bold());
-			let input = self.read_line_secure(term).await?;
+	// 	loop {
+	// 		eprint!("{i}  {} ", style("[input hidden]").bold());
+	// 		let input = self.read_line_secure(term).await?;
 
-			if !input.is_empty() {
-				return Ok(input);
-			} else {
-				status::error(format!("{i}  Empty input"), "");
-			}
-		}
-	}
+	// 		if !input.is_empty() {
+	// 			return Ok(input);
+	// 		} else {
+	// 			status::error(format!("{i}  Empty input"), "");
+	// 		}
+	// 	}
+	// }
 }

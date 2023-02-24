@@ -1,4 +1,4 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result};
 use clap::Parser;
 use cli_core::rivet_api;
 use rand::{thread_rng, Rng};
