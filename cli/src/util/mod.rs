@@ -1,5 +1,5 @@
-pub mod fmt;
 pub mod cmd;
+pub mod fmt;
 pub mod gen;
 pub mod git;
 pub mod paths;

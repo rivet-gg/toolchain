@@ -72,7 +72,8 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	cmd::execute_docker_cmd_silent(tag_cmd, "failed to tag Docker image").await?;
 
 	let mut save_cmd = tokio::process::Command::new("docker");
-		save_cmd.arg("image")
+	save_cmd
+		.arg("image")
 		.arg("save")
 		.arg("--output")
 		.arg(&tmp_path)
@@ -88,7 +89,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.clone()
 		.unwrap_or_else(|| push_opts.tag.clone());
 	let content_type = "application/x-tar";
-	eprintln!();	
+	eprintln!();
 	term::status::info(
 		"Uploading Image",
 		format!(

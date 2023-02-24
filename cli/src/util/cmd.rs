@@ -7,7 +7,7 @@ pub async fn execute_docker_cmd(
 	match command.status().await {
 		Ok(status) => {
 			if !status.success() {
-				bail!("{error_message} ({})", status);
+				bail!("{error_message} ({})\n\nValidate that Docker is installed and running.", status);
 			}
 			Ok(())
 		}

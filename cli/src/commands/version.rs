@@ -1,4 +1,4 @@
-use anyhow::{ensure, Context, Error, Result};
+use anyhow::{bail, ensure, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::models;
 use serde::Serialize;
@@ -434,11 +434,19 @@ pub async fn build_site(
 				eprintln!();
 				term::status::info("Building Site", build_command);
 
-				// TODO: Check Windows support
-				let mut build_cmd = Command::new("/bin/sh");
-				build_cmd.arg("-c").arg(build_command);
-				let build_status = build_cmd.status().await?;
-				ensure!(build_status.success(), "site failed to build");
+				if cfg!(unix) {
+					let mut build_cmd = Command::new("/bin/sh");
+					build_cmd.arg("-c").arg(build_command);
+					let build_status = build_cmd.status().await?;
+					ensure!(build_status.success(), "site failed to build");
+				} else if cfg!(windows) {
+					let mut build_cmd = Command::new("cmd.exe");
+					build_cmd.arg("/C").arg(build_command);
+					let build_status = build_cmd.status().await?;
+					ensure!(build_status.success(), "site failed to build");
+				} else {
+					bail!("unknown machine type, expected unix or windows")
+				};
 			}
 
 			// Upload site
