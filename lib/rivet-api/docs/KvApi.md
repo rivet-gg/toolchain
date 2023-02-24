@@ -1,27 +1,28 @@
-# \KvBatchOperationsApi
+# \KvApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**kv_batch_operations_delete_batch**](KvBatchOperationsApi.md#kv_batch_operations_delete_batch) | **DELETE** /entries/batch | 
-[**kv_batch_operations_get_batch**](KvBatchOperationsApi.md#kv_batch_operations_get_batch) | **GET** /entries/batch | 
-[**kv_batch_operations_put_batch**](KvBatchOperationsApi.md#kv_batch_operations_put_batch) | **PUT** /entries/batch | 
+[**kv_delete**](KvApi.md#kv_delete) | **DELETE** /entries | 
+[**kv_get**](KvApi.md#kv_get) | **GET** /entries | 
+[**kv_put**](KvApi.md#kv_put) | **PUT** /entries | 
 
 
 
-## kv_batch_operations_delete_batch
+## kv_delete
 
-> kv_batch_operations_delete_batch(namespace_id)
+> kv_delete(key, namespace_id)
 
 
-Deletes multiple key-value entries by key(s).
+Deletes a key-value entry by key.
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
+**key** | **String** | A string representing a key in the key-value database. Key path components are split by a slash (e.g. `a/b/c` has the path components `[\"a\", \"b\", \"c\"]`). Slashes can be escaped by using a forward slash (e.g. `a/b/c/d` has the path components `[\"a\", \"b/c\", \"d\"]`). See `rivet.api.kv.common#KeyComponents` for the structure of a `rivet.api.kv.common#Key` split by `/`. | [required] |
 **namespace_id** | Option<**String**> | A universally unique identifier. |  |
 
 ### Return type
@@ -40,24 +41,25 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## kv_batch_operations_get_batch
+## kv_get
 
-> crate::models::KvGetBatchOutput kv_batch_operations_get_batch(watch_index, namespace_id)
+> crate::models::KvGetOutput kv_get(key, watch_index, namespace_id)
 
 
-Gets multiple key-value entries by key(s).
+Returns a specific key-value entry by key.
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
+**key** | **String** | A string representing a key in the key-value database. Key path components are split by a slash (e.g. `a/b/c` has the path components `[\"a\", \"b\", \"c\"]`). Slashes can be escaped by using a forward slash (e.g. `a/b/c/d` has the path components `[\"a\", \"b/c\", \"d\"]`). See `rivet.api.kv.common#KeyComponents` for the structure of a `rivet.api.kv.common#Key` split by `/`. | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 **namespace_id** | Option<**String**> | A universally unique identifier. |  |
 
 ### Return type
 
-[**crate::models::KvGetBatchOutput**](KvGetBatchOutput.md)
+[**crate::models::KvGetOutput**](KvGetOutput.md)
 
 ### Authorization
 
@@ -71,19 +73,19 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## kv_batch_operations_put_batch
+## kv_put
 
-> kv_batch_operations_put_batch(kv_put_batch_input)
+> kv_put(kv_put_input)
 
 
-Puts (sets or overwrites) multiple key-value entries by key(s).
+Puts (sets or overwrites) a key-value entry by key.
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**kv_put_batch_input** | [**KvPutBatchInput**](KvPutBatchInput.md) |  | [required] |
+**kv_put_input** | [**KvPutInput**](KvPutInput.md) |  | [required] |
 
 ### Return type
 

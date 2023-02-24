@@ -502,8 +502,6 @@ pub mod identity_set_game_activity_request;
 pub use self::identity_set_game_activity_request::IdentitySetGameActivityRequest;
 pub mod identity_setup_output;
 pub use self::identity_setup_output::IdentitySetupOutput;
-pub mod identity_signup_for_beta_request;
-pub use self::identity_signup_for_beta_request::IdentitySignupForBetaRequest;
 pub mod identity_status;
 pub use self::identity_status::IdentityStatus;
 pub mod identity_summary;

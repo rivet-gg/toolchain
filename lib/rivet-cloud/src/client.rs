@@ -460,7 +460,7 @@ where
 	///   - [`watch_index(impl Into<String>)`](crate::client::fluent_builders::GetGames::watch_index) / [`set_watch_index(Option<String>)`](crate::client::fluent_builders::GetGames::set_watch_index): A query parameter denoting the requests watch index.
 	/// - On success, responds with [`GetGamesOutput`](crate::output::GetGamesOutput) with field(s):
 	///   - [`games(Option<Vec<GameSummary>>)`](crate::output::GetGamesOutput::games): A list of game summaries.
-	///   - [`groups(Option<Vec<GroupHandle>>)`](crate::output::GetGamesOutput::groups): A list of group handles.
+	///   - [`groups(Option<Vec<GroupSummary>>)`](crate::output::GetGamesOutput::groups): A list of group summaries.
 	///   - [`watch(Option<WatchResponse>)`](crate::output::GetGamesOutput::watch): Provided by watchable endpoints used in blocking loops.
 	/// - On failure, responds with [`SdkError<GetGamesError>`](crate::error::GetGamesError)
 	pub fn get_games(&self) -> fluent_builders::GetGames<C, M, R> {
@@ -487,6 +487,7 @@ where
 	/// - On success, responds with [`GetGroupBillingOutput`](crate::output::GetGroupBillingOutput) with field(s):
 	///   - [`billing(Option<GroupBillingSummary>)`](crate::output::GetGroupBillingOutput::billing): A group billing summary.
 	///   - [`status(Option<GroupStatus>)`](crate::output::GetGroupBillingOutput::status): The status of a developer group.
+	///   - [`active(Option<bool>)`](crate::output::GetGroupBillingOutput::active): Whether or not the given group can actively host games.
 	///   - [`plan(Option<GroupBillingPlan>)`](crate::output::GetGroupBillingOutput::plan): A value denoting a game's billing plan.
 	///   - [`available_regions(Option<Vec<RegionSummary>>)`](crate::output::GetGroupBillingOutput::available_regions): A list of region summaries.
 	///   - [`watch(Option<WatchResponse>)`](crate::output::GetGroupBillingOutput::watch): Provided by watchable endpoints used in blocking loops.

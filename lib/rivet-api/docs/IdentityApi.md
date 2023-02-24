@@ -19,7 +19,6 @@ Method | HTTP request | Description
 [**identity_search**](IdentityApi.md#identity_search) | **GET** /identities/search | 
 [**identity_set_game_activity**](IdentityApi.md#identity_set_game_activity) | **POST** /identities/self/activity | 
 [**identity_setup**](IdentityApi.md#identity_setup) | **POST** /identities | 
-[**identity_signup_for_beta**](IdentityApi.md#identity_signup_for_beta) | **POST** /identities/self/beta-signup | 
 [**identity_unfollow**](IdentityApi.md#identity_unfollow) | **DELETE** /identities/{identity_id}/follow | 
 [**identity_update_profile**](IdentityApi.md#identity_update_profile) | **POST** /identities/self/profile | 
 [**identity_update_status**](IdentityApi.md#identity_update_status) | **POST** /identities/identities/self/status | 
@@ -473,36 +472,6 @@ Name | Type | Description  | Required | Notes
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## identity_signup_for_beta
-
-> identity_signup_for_beta(identity_signup_for_beta_request)
-
-
-Submits a beta signup form.
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**identity_signup_for_beta_request** | [**IdentitySignupForBetaRequest**](IdentitySignupForBetaRequest.md) |  | [required] |
-
-### Return type
-
- (empty response body)
-
-### Authorization
-
-[BearerAuth](../README.md#BearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
