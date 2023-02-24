@@ -1,4 +1,4 @@
-use anyhow::{bail, ensure, Context, Error, Result};
+use anyhow::{ensure, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::models;
 use serde::Serialize;
@@ -112,8 +112,36 @@ impl SubCommand {
 				namespace,
 			} => {
 				let overrides = parse_config_override_args(overrides)?;
-				let config = read_config(overrides, namespace.as_ref().map(String::as_str)).await?;
-				println!("{:#?}", config);
+				let mut rivet_config =
+					read_config(overrides, namespace.as_ref().map(String::as_str)).await?;
+				eprintln!("{:#?}", rivet_config);
+				build_mock_config_dependencies(ctx, &mut rivet_config)?;
+
+				// Validate game version
+				let validate_res =
+				cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_validate_game_version(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					cli_core::rivet_api::models::CloudGamesValidateGameVersionInput {
+						display_name: "Mock Dispaly Name".into(),
+						config: Box::new(rivet_config),
+					},
+				)
+				.await;
+				eprintln!();
+				if let Err(err) = validate_res.as_ref() {
+					eprintln!("Error: {err:?}");
+				}
+				let validate_res =
+					validate_res.context("cloud_games_versions_validate_game_version")?;
+				if !validate_res.errors.is_empty() {
+					eprintln!("Found errors:");
+					for error in validate_res.errors {
+						println!("- {error:?}");
+					}
+				} else {
+					eprintln!("Config is valid.");
+				}
 
 				Ok(())
 			}
@@ -297,6 +325,36 @@ pub async fn read_config(
 	Ok(version)
 }
 
+/// Fill in dummy information for fields that will be eventually filled in by the
+/// build config dependencies.
+///
+/// Used to build a config file that wil pass validation.
+pub fn build_mock_config_dependencies(
+	ctx: &cli_core::Ctx,
+	version: &mut models::CloudVersionConfig,
+) -> Result<()> {
+	if let Some(matchmaker) = version.matchmaker.as_mut() {
+		if let Some(docker) = matchmaker.docker.as_mut() {
+			docker.image = Some(Uuid::nil());
+		}
+
+		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
+			for (_, game_mode) in game_modes.iter_mut() {
+				if let Some(docker) = game_mode.docker.as_mut() {
+					docker.image = Some(Uuid::nil());
+				}
+			}
+		}
+	}
+
+	// Build CDN
+	if let Some(cdn) = version.cdn.as_mut() {
+		cdn.site = Some(Uuid::nil());
+	}
+
+	Ok(())
+}
+
 /// Builds the Docker image and CDN site if needed.
 pub async fn build_config_dependencies(
 	ctx: &cli_core::Ctx,
@@ -393,7 +451,7 @@ pub async fn build_site(
 				},
 			)
 			.await?;
-			cdn.site = Some(push_output.site_id);
+			cdn.site = Some(Uuid::parse_str(&push_output.site_id)?);
 		}
 	}
 
@@ -504,7 +562,10 @@ pub async fn create(
 			println!("Error: {err:?}");
 		}
 		update_version_res.context("cloud_games_namespaces_update_game_namespace_version")?;
-		term::status::success("Deploy Succeeded", rivet_game_url(&game_res.game.name_id, &namespace.name_id));
+		term::status::success(
+			"Deploy Succeeded",
+			rivet_game_url(&game_res.game.name_id, &namespace.name_id),
+		);
 	}
 
 	eprintln!();

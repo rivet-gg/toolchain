@@ -90,23 +90,23 @@ Class | Method | HTTP request | Description
 *CloudLogsApi* | [**cloud_logs_get_ray_perf_logs**](docs/CloudLogsApi.md#cloud_logs_get_ray_perf_logs) | **GET** /rays/{ray_id}/perf | 
 *CloudTiersApi* | [**cloud_tiers_get_region_tiers**](docs/CloudTiersApi.md#cloud_tiers_get_region_tiers) | **GET** /region-tiers | 
 *CloudUploadsApi* | [**cloud_uploads_complete_upload**](docs/CloudUploadsApi.md#cloud_uploads_complete_upload) | **POST** /uploads/{upload_id}/complete | 
-*GroupGroupsApi* | [**group_groups_ban_identity**](docs/GroupGroupsApi.md#group_groups_ban_identity) | **POST** /groups/{group_id}/bans/{identity_id} | 
-*GroupGroupsApi* | [**group_groups_complete_avatar_upload**](docs/GroupGroupsApi.md#group_groups_complete_avatar_upload) | **POST** /groups/{group_id}/avatar-upload/{upload_id}/complete | 
-*GroupGroupsApi* | [**group_groups_create**](docs/GroupGroupsApi.md#group_groups_create) | **POST** /groups | 
-*GroupGroupsApi* | [**group_groups_get_bans**](docs/GroupGroupsApi.md#group_groups_get_bans) | **GET** /groups/{group_id}/bans | 
-*GroupGroupsApi* | [**group_groups_get_join_requests**](docs/GroupGroupsApi.md#group_groups_get_join_requests) | **GET** /groups/{group_id}/join-requests | 
-*GroupGroupsApi* | [**group_groups_get_members**](docs/GroupGroupsApi.md#group_groups_get_members) | **GET** /groups/{group_id}/members | 
-*GroupGroupsApi* | [**group_groups_get_profile**](docs/GroupGroupsApi.md#group_groups_get_profile) | **GET** /groups/{group_id}/profile | 
-*GroupGroupsApi* | [**group_groups_get_summary**](docs/GroupGroupsApi.md#group_groups_get_summary) | **GET** /groups/{group_id}/summary | 
-*GroupGroupsApi* | [**group_groups_kick_member**](docs/GroupGroupsApi.md#group_groups_kick_member) | **POST** /groups/{group_id}/kick/{identity_id} | 
-*GroupGroupsApi* | [**group_groups_leave**](docs/GroupGroupsApi.md#group_groups_leave) | **POST** /groups/{group_id}/leave | 
-*GroupGroupsApi* | [**group_groups_list_suggested**](docs/GroupGroupsApi.md#group_groups_list_suggested) | **GET** /groups | 
-*GroupGroupsApi* | [**group_groups_prepare_avatar_upload**](docs/GroupGroupsApi.md#group_groups_prepare_avatar_upload) | **POST** /groups/avatar-upload/prepare | 
-*GroupGroupsApi* | [**group_groups_search**](docs/GroupGroupsApi.md#group_groups_search) | **GET** /groups/search | 
-*GroupGroupsApi* | [**group_groups_transfer_ownership**](docs/GroupGroupsApi.md#group_groups_transfer_ownership) | **POST** /groups/{group_id}/transfer-owner | 
-*GroupGroupsApi* | [**group_groups_unban_identity**](docs/GroupGroupsApi.md#group_groups_unban_identity) | **DELETE** /groups/{group_id}/bans/{identity_id} | 
-*GroupGroupsApi* | [**group_groups_update_profile**](docs/GroupGroupsApi.md#group_groups_update_profile) | **POST** /groups/{group_id}/profile | 
-*GroupGroupsApi* | [**group_groups_validate_profile**](docs/GroupGroupsApi.md#group_groups_validate_profile) | **POST** /groups/profile/validate | 
+*GroupApi* | [**group_ban_identity**](docs/GroupApi.md#group_ban_identity) | **POST** /groups/{group_id}/bans/{identity_id} | 
+*GroupApi* | [**group_complete_avatar_upload**](docs/GroupApi.md#group_complete_avatar_upload) | **POST** /groups/{group_id}/avatar-upload/{upload_id}/complete | 
+*GroupApi* | [**group_create**](docs/GroupApi.md#group_create) | **POST** /groups | 
+*GroupApi* | [**group_get_bans**](docs/GroupApi.md#group_get_bans) | **GET** /groups/{group_id}/bans | 
+*GroupApi* | [**group_get_join_requests**](docs/GroupApi.md#group_get_join_requests) | **GET** /groups/{group_id}/join-requests | 
+*GroupApi* | [**group_get_members**](docs/GroupApi.md#group_get_members) | **GET** /groups/{group_id}/members | 
+*GroupApi* | [**group_get_profile**](docs/GroupApi.md#group_get_profile) | **GET** /groups/{group_id}/profile | 
+*GroupApi* | [**group_get_summary**](docs/GroupApi.md#group_get_summary) | **GET** /groups/{group_id}/summary | 
+*GroupApi* | [**group_kick_member**](docs/GroupApi.md#group_kick_member) | **POST** /groups/{group_id}/kick/{identity_id} | 
+*GroupApi* | [**group_leave**](docs/GroupApi.md#group_leave) | **POST** /groups/{group_id}/leave | 
+*GroupApi* | [**group_list_suggested**](docs/GroupApi.md#group_list_suggested) | **GET** /groups | 
+*GroupApi* | [**group_prepare_avatar_upload**](docs/GroupApi.md#group_prepare_avatar_upload) | **POST** /groups/avatar-upload/prepare | 
+*GroupApi* | [**group_search**](docs/GroupApi.md#group_search) | **GET** /groups/search | 
+*GroupApi* | [**group_transfer_ownership**](docs/GroupApi.md#group_transfer_ownership) | **POST** /groups/{group_id}/transfer-owner | 
+*GroupApi* | [**group_unban_identity**](docs/GroupApi.md#group_unban_identity) | **DELETE** /groups/{group_id}/bans/{identity_id} | 
+*GroupApi* | [**group_update_profile**](docs/GroupApi.md#group_update_profile) | **POST** /groups/{group_id}/profile | 
+*GroupApi* | [**group_validate_profile**](docs/GroupApi.md#group_validate_profile) | **POST** /groups/profile/validate | 
 *GroupInvitesApi* | [**group_invites_consume_invite**](docs/GroupInvitesApi.md#group_invites_consume_invite) | **POST** /invites/{group_invite_code}/consume | 
 *GroupInvitesApi* | [**group_invites_create_invite**](docs/GroupInvitesApi.md#group_invites_create_invite) | **POST** /groups/{group_id}/invites | 
 *GroupInvitesApi* | [**group_invites_get_invite**](docs/GroupInvitesApi.md#group_invites_get_invite) | **GET** /invites/{group_invite_code} | 
@@ -118,16 +118,17 @@ Class | Method | HTTP request | Description
 *IdentityApi* | [**identity_get_profile**](docs/IdentityApi.md#identity_get_profile) | **GET** /identities/{identity_id}/profile | 
 *IdentityApi* | [**identity_get_self_profile**](docs/IdentityApi.md#identity_get_self_profile) | **GET** /identities/self/profile | 
 *IdentityApi* | [**identity_get_summaries**](docs/IdentityApi.md#identity_get_summaries) | **GET** /identities/batch/summary | 
+*IdentityApi* | [**identity_ignore_recent_follower**](docs/IdentityApi.md#identity_ignore_recent_follower) | **POST** /identities/self/recent-followers/{identity_id}/ignore | 
 *IdentityApi* | [**identity_list_followers**](docs/IdentityApi.md#identity_list_followers) | **GET** /identities/{identity_id}/followers | 
 *IdentityApi* | [**identity_list_friends**](docs/IdentityApi.md#identity_list_friends) | **GET** /identities/self/friends | 
 *IdentityApi* | [**identity_list_mutual_friends**](docs/IdentityApi.md#identity_list_mutual_friends) | **GET** /identities/{identity_id}/mutual-friends | 
+*IdentityApi* | [**identity_list_recent_followers**](docs/IdentityApi.md#identity_list_recent_followers) | **GET** /identities/self/recent-followers | 
 *IdentityApi* | [**identity_prepare_avatar_upload**](docs/IdentityApi.md#identity_prepare_avatar_upload) | **POST** /identities/avatar-upload/prepare | 
 *IdentityApi* | [**identity_remove_game_activity**](docs/IdentityApi.md#identity_remove_game_activity) | **DELETE** /identities/self/activity | 
 *IdentityApi* | [**identity_report**](docs/IdentityApi.md#identity_report) | **POST** /identities/{identity_id}/report | 
 *IdentityApi* | [**identity_search**](docs/IdentityApi.md#identity_search) | **GET** /identities/search | 
 *IdentityApi* | [**identity_set_game_activity**](docs/IdentityApi.md#identity_set_game_activity) | **POST** /identities/self/activity | 
 *IdentityApi* | [**identity_setup**](docs/IdentityApi.md#identity_setup) | **POST** /identities | 
-*IdentityApi* | [**identity_signup_for_beta**](docs/IdentityApi.md#identity_signup_for_beta) | **POST** /identities/self/beta-signup | 
 *IdentityApi* | [**identity_unfollow**](docs/IdentityApi.md#identity_unfollow) | **DELETE** /identities/{identity_id}/follow | 
 *IdentityApi* | [**identity_update_profile**](docs/IdentityApi.md#identity_update_profile) | **POST** /identities/self/profile | 
 *IdentityApi* | [**identity_update_status**](docs/IdentityApi.md#identity_update_status) | **POST** /identities/identities/self/status | 
@@ -139,12 +140,12 @@ Class | Method | HTTP request | Description
 *IdentityLinksApi* | [**identity_links_get**](docs/IdentityLinksApi.md#identity_links_get) | **GET** /game-links | 
 *IdentityLinksApi* | [**identity_links_prepare**](docs/IdentityLinksApi.md#identity_links_prepare) | **POST** /game-links | 
 *JobRunApi* | [**job_run_cleanup**](docs/JobRunApi.md#job_run_cleanup) | **POST** /runs/cleanup | 
-*KvBatchOperationsApi* | [**kv_batch_operations_delete_batch**](docs/KvBatchOperationsApi.md#kv_batch_operations_delete_batch) | **DELETE** /entries/batch | 
-*KvBatchOperationsApi* | [**kv_batch_operations_get_batch**](docs/KvBatchOperationsApi.md#kv_batch_operations_get_batch) | **GET** /entries/batch | 
-*KvBatchOperationsApi* | [**kv_batch_operations_put_batch**](docs/KvBatchOperationsApi.md#kv_batch_operations_put_batch) | **PUT** /entries/batch | 
-*KvOperationsApi* | [**kv_operations_delete**](docs/KvOperationsApi.md#kv_operations_delete) | **DELETE** /entries | 
-*KvOperationsApi* | [**kv_operations_get**](docs/KvOperationsApi.md#kv_operations_get) | **GET** /entries | 
-*KvOperationsApi* | [**kv_operations_put**](docs/KvOperationsApi.md#kv_operations_put) | **PUT** /entries | 
+*KvApi* | [**kv_delete**](docs/KvApi.md#kv_delete) | **DELETE** /entries | 
+*KvApi* | [**kv_get**](docs/KvApi.md#kv_get) | **GET** /entries | 
+*KvApi* | [**kv_put**](docs/KvApi.md#kv_put) | **PUT** /entries | 
+*KvBatchApi* | [**kv_batch_delete_batch**](docs/KvBatchApi.md#kv_batch_delete_batch) | **DELETE** /entries/batch | 
+*KvBatchApi* | [**kv_batch_get_batch**](docs/KvBatchApi.md#kv_batch_get_batch) | **GET** /entries/batch | 
+*KvBatchApi* | [**kv_batch_put_batch**](docs/KvBatchApi.md#kv_batch_put_batch) | **PUT** /entries/batch | 
 *MatchmakerLobbiesApi* | [**matchmaker_lobbies_find**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_find) | **POST** /lobbies/find | 
 *MatchmakerLobbiesApi* | [**matchmaker_lobbies_join**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_join) | **POST** /lobbies/join | 
 *MatchmakerLobbiesApi* | [**matchmaker_lobbies_list**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_list) | **GET** /lobbies/list | 
@@ -422,6 +423,7 @@ Class | Method | HTTP request | Description
  - [IdentityListFollowersOutput](docs/IdentityListFollowersOutput.md)
  - [IdentityListFriendsOutput](docs/IdentityListFriendsOutput.md)
  - [IdentityListMutualFriendsOutput](docs/IdentityListMutualFriendsOutput.md)
+ - [IdentityListRecentFollowersOutput](docs/IdentityListRecentFollowersOutput.md)
  - [IdentityPrepareAvatarUploadOutput](docs/IdentityPrepareAvatarUploadOutput.md)
  - [IdentityPrepareAvatarUploadRequest](docs/IdentityPrepareAvatarUploadRequest.md)
  - [IdentityPrepareGameLinkOutput](docs/IdentityPrepareGameLinkOutput.md)
@@ -431,7 +433,6 @@ Class | Method | HTTP request | Description
  - [IdentitySearchOutput](docs/IdentitySearchOutput.md)
  - [IdentitySetGameActivityRequest](docs/IdentitySetGameActivityRequest.md)
  - [IdentitySetupOutput](docs/IdentitySetupOutput.md)
- - [IdentitySignupForBetaRequest](docs/IdentitySignupForBetaRequest.md)
  - [IdentityStatus](docs/IdentityStatus.md)
  - [IdentitySummary](docs/IdentitySummary.md)
  - [IdentityUpdateGameActivity](docs/IdentityUpdateGameActivity.md)
