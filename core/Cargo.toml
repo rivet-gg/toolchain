@@ -1,6 +1,6 @@
 [package]
 name = "rivet-cli-core"
-version = "0.0.41"
+version = "0.0.42"
 authors = ["Rivet Gaming, LLC <developer@rivet.gg>"]
 edition = "2018"
 license = "MIT"
