@@ -17,12 +17,12 @@ pub struct CloudMatchmakerDevelopmentPort {
     #[serde(rename = "port")]
     pub port: i32,
     #[serde(rename = "protocol")]
-    pub protocol: crate::models::CloudVersionMatchmakerProxyProtocol,
+    pub protocol: crate::models::CloudVersionMatchmakerPortProtocol,
 }
 
 impl CloudMatchmakerDevelopmentPort {
     /// A port configuration used to create development tokens.
-    pub fn new(port: i32, protocol: crate::models::CloudVersionMatchmakerProxyProtocol) -> CloudMatchmakerDevelopmentPort {
+    pub fn new(port: i32, protocol: crate::models::CloudVersionMatchmakerPortProtocol) -> CloudMatchmakerDevelopmentPort {
         CloudMatchmakerDevelopmentPort {
             port,
             protocol,

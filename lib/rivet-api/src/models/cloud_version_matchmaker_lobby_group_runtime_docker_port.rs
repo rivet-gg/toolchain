@@ -20,7 +20,7 @@ pub struct CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
     #[serde(rename = "port_range", skip_serializing_if = "Option::is_none")]
     pub port_range: Option<Box<crate::models::CloudVersionMatchmakerPortRange>>,
     #[serde(rename = "proxy_protocol")]
-    pub proxy_protocol: crate::models::CloudVersionMatchmakerProxyProtocol,
+    pub proxy_protocol: crate::models::CloudVersionMatchmakerPortProtocol,
     /// The port number to connect to.
     #[serde(rename = "target_port", skip_serializing_if = "Option::is_none")]
     pub target_port: Option<i32>,
@@ -28,7 +28,7 @@ pub struct CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
 
 impl CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
     /// **Deprecated: use GameMode instead** A docker port.
-    pub fn new(label: String, proxy_protocol: crate::models::CloudVersionMatchmakerProxyProtocol) -> CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
+    pub fn new(label: String, proxy_protocol: crate::models::CloudVersionMatchmakerPortProtocol) -> CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
         CloudVersionMatchmakerLobbyGroupRuntimeDockerPort {
             label,
             port_range: None,
