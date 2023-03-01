@@ -127,7 +127,7 @@ pub async fn create_dev_token(
 					protocol: port_config
 						.dev_protocol
 						.or(port_config.protocol)
-						.unwrap_or(models::CloudVersionMatchmakerProxyProtocol::Http),
+						.unwrap_or(models::CloudVersionMatchmakerPortProtocol::Http),
 				},
 			))
 		})
