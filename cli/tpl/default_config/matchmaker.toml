@@ -30,7 +30,7 @@
 	# with different protocols.
 	#
 	# How ports work: https://docs.rivet.gg/serverless-lobbies/concepts/ports
-	ports.default = { port = __PORT__ }
+	ports.default = { port = __PORT__, protocol = "https", dev_protocol = "http" }
 
 # What game modes are avaiable.
 #
