@@ -111,23 +111,41 @@ pub async fn create_dev_token(
 	let dev_ports = dev_ports
 		.into_iter()
 		.map(|(label, port_config)| {
-			let port = port_config
-				.dev_port
-				.or(port_config.port)
-				.context(format!("missing both dev_port and port from {label}"))?;
+			//
+			let (port, port_range) = if let Some(dev_port) = port_config.dev_port {
+				(Some(dev_port), None)
+			} else if let Some(dev_port_range) = port_config.dev_port_range.as_ref() {
+				(None, Some(dev_port_range.clone()))
+			} else if let Some(port) = port_config.port {
+				(Some(port), None)
+			} else if let Some(port_range) = port_config.port_range.as_ref() {
+				(None, Some(port_range.clone()))
+			} else {
+				bail!("missing both port and port_range")
+			};
 
-			if default_port.is_none() {
-				default_port = Some(port);
+			if let Some(port) = port {
+				if default_port.is_none() {
+					default_port = Some(port);
+				}
 			}
 
 			Ok((
 				label,
 				models::CloudMatchmakerDevelopmentPort {
 					port,
+					port_range,
 					protocol: port_config
 						.dev_protocol
-						.or(port_config.protocol)
-						.unwrap_or(models::CloudVersionMatchmakerPortProtocol::Http),
+						// Default to non-TLS version of the given protocol
+						.unwrap_or({
+							use models::CloudVersionMatchmakerPortProtocol::*;
+							match port_config.protocol {
+								Some(Https) | Some(Http) | None => Http,
+								Some(Tcp) | Some(TcpTls) => Tcp,
+								Some(Udp) => Udp,
+							}
+						}),
 				},
 			))
 		})
@@ -164,10 +182,11 @@ pub async fn create_dev_token(
 			.bool(term)
 			.await?
 	{
-		let env_file = format!(
-			"PORT={port}\n\n# Provide a development token for the lobby and client\n# Read more: https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}\nRIVET_PUBLIC_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n",
-			port = default_port.unwrap()
-		);
+		let mut env_file = 
+			"# Provide a development token for the lobby and client\n# Read more: https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}\nRIVET_PUBLIC_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n".to_string();
+		if let Some(default_port) = default_port {
+			env_file = format!("PORT={default_port}\n\n{env_file}");
+		}
 		fs::write(".env", env_file).await?;
 		term::status::success(format!("Wrote to .env"), "");
 	}
