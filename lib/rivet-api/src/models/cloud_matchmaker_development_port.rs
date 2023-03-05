@@ -14,17 +14,20 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloudMatchmakerDevelopmentPort {
-    #[serde(rename = "port")]
-    pub port: i32,
+    #[serde(rename = "port", skip_serializing_if = "Option::is_none")]
+    pub port: Option<i32>,
+    #[serde(rename = "port_range", skip_serializing_if = "Option::is_none")]
+    pub port_range: Option<Box<crate::models::CloudVersionMatchmakerPortRange>>,
     #[serde(rename = "protocol")]
-    pub protocol: crate::models::CloudVersionMatchmakerProxyProtocol,
+    pub protocol: crate::models::CloudVersionMatchmakerPortProtocol,
 }
 
 impl CloudMatchmakerDevelopmentPort {
     /// A port configuration used to create development tokens.
-    pub fn new(port: i32, protocol: crate::models::CloudVersionMatchmakerProxyProtocol) -> CloudMatchmakerDevelopmentPort {
+    pub fn new(protocol: crate::models::CloudVersionMatchmakerPortProtocol) -> CloudMatchmakerDevelopmentPort {
         CloudMatchmakerDevelopmentPort {
-            port,
+            port: None,
+            port_range: None,
             protocol,
         }
     }

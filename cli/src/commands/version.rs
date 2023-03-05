@@ -115,7 +115,7 @@ impl SubCommand {
 				let mut rivet_config =
 					read_config(overrides, namespace.as_ref().map(String::as_str)).await?;
 				eprintln!("{:#?}", rivet_config);
-				build_mock_config_dependencies(ctx, &mut rivet_config)?;
+				build_mock_config_dependencies(&mut rivet_config)?;
 
 				// Validate game version
 				let validate_res =
@@ -329,10 +329,7 @@ pub async fn read_config(
 /// build config dependencies.
 ///
 /// Used to build a config file that wil pass validation.
-pub fn build_mock_config_dependencies(
-	ctx: &cli_core::Ctx,
-	version: &mut models::CloudVersionConfig,
-) -> Result<()> {
+pub fn build_mock_config_dependencies(version: &mut models::CloudVersionConfig) -> Result<()> {
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		if let Some(docker) = matchmaker.docker.as_mut() {
 			docker.image = Some(Uuid::nil());

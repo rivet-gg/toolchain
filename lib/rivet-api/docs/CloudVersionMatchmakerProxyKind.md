@@ -1,4 +1,4 @@
-# CloudVersionMatchmakerProxyProtocol
+# CloudVersionMatchmakerProxyKind
 
 ## Properties
 

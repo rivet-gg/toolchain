@@ -183,7 +183,6 @@ docs/CloudVersionMatchmakerGameMode.md
 docs/CloudVersionMatchmakerGameModeIdleLobbiesConfig.md
 docs/CloudVersionMatchmakerGameModeRegion.md
 docs/CloudVersionMatchmakerGameModeRuntimeDocker.md
-docs/CloudVersionMatchmakerGameModeRuntimeDockerEnvVar.md
 docs/CloudVersionMatchmakerGameModeRuntimeDockerPort.md
 docs/CloudVersionMatchmakerLobbyGroup.md
 docs/CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig.md
@@ -193,8 +192,9 @@ docs/CloudVersionMatchmakerLobbyGroupRuntimeDocker.md
 docs/CloudVersionMatchmakerLobbyGroupRuntimeDockerEnvVar.md
 docs/CloudVersionMatchmakerLobbyGroupRuntimeDockerPort.md
 docs/CloudVersionMatchmakerNetworkMode.md
+docs/CloudVersionMatchmakerPortProtocol.md
 docs/CloudVersionMatchmakerPortRange.md
-docs/CloudVersionMatchmakerProxyProtocol.md
+docs/CloudVersionMatchmakerProxyKind.md
 docs/CloudVersionSummary.md
 docs/GameHandle.md
 docs/GameLeaderboardCategory.md
@@ -571,7 +571,6 @@ src/models/cloud_version_matchmaker_game_mode.rs
 src/models/cloud_version_matchmaker_game_mode_idle_lobbies_config.rs
 src/models/cloud_version_matchmaker_game_mode_region.rs
 src/models/cloud_version_matchmaker_game_mode_runtime_docker.rs
-src/models/cloud_version_matchmaker_game_mode_runtime_docker_env_var.rs
 src/models/cloud_version_matchmaker_game_mode_runtime_docker_port.rs
 src/models/cloud_version_matchmaker_lobby_group.rs
 src/models/cloud_version_matchmaker_lobby_group_idle_lobbies_config.rs
@@ -581,8 +580,9 @@ src/models/cloud_version_matchmaker_lobby_group_runtime_docker.rs
 src/models/cloud_version_matchmaker_lobby_group_runtime_docker_env_var.rs
 src/models/cloud_version_matchmaker_lobby_group_runtime_docker_port.rs
 src/models/cloud_version_matchmaker_network_mode.rs
+src/models/cloud_version_matchmaker_port_protocol.rs
 src/models/cloud_version_matchmaker_port_range.rs
-src/models/cloud_version_matchmaker_proxy_protocol.rs
+src/models/cloud_version_matchmaker_proxy_kind.rs
 src/models/cloud_version_summary.rs
 src/models/game_handle.rs
 src/models/game_leaderboard_category.rs
