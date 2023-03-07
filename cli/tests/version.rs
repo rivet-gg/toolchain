@@ -12,8 +12,8 @@ async fn basic() {
 	.unwrap();
 	let _user_config = rivet::commands::version::read_user_config(
 		vec![
-			("cdn.site".into(), json!("xxxx")),
-			("matchmaker.docker.image".into(), json!("xxxx")),
+			("cdn.site_id".into(), json!("xxxx")),
+			("matchmaker.docker.image_id".into(), json!("xxxx")),
 		],
 		Some("my-ns"),
 	)

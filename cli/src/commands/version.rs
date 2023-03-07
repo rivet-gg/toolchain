@@ -332,13 +332,13 @@ pub async fn read_config(
 pub fn build_mock_config_dependencies(version: &mut models::CloudVersionConfig) -> Result<()> {
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		if let Some(docker) = matchmaker.docker.as_mut() {
-			docker.image = Some(Uuid::nil());
+			docker.image_id = Some(Uuid::nil());
 		}
 
 		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
 			for (_, game_mode) in game_modes.iter_mut() {
 				if let Some(docker) = game_mode.docker.as_mut() {
-					docker.image = Some(Uuid::nil());
+					docker.image_id = Some(Uuid::nil());
 				}
 			}
 		}
@@ -346,7 +346,7 @@ pub fn build_mock_config_dependencies(version: &mut models::CloudVersionConfig) 
 
 	// Build CDN
 	if let Some(cdn) = version.cdn.as_mut() {
-		cdn.site = Some(Uuid::nil());
+		cdn.site_id = Some(Uuid::nil());
 	}
 
 	Ok(())
@@ -413,7 +413,19 @@ pub async fn build_image(
 				},
 			)
 			.await?;
-			docker.image = Some(Uuid::parse_str(&push_output.image_id)?);
+			docker.image = Some(push_output.image_id);
+		} else if let Some(docker_image) = docker.image.as_ref() {
+			// Upload build
+			let push_output = image::push(
+				ctx,
+				&image::ImagePushOpts {
+					tag: docker_image.clone(),
+					name: Some(gen::display_name_from_date()),
+					format: format.cloned(),
+				},
+			)
+			.await?;
+			docker.image = Some(push_output.image_id);
 		}
 	}
 
@@ -425,7 +437,7 @@ pub async fn build_site(
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
-	if cdn.site.is_none() {
+	if cdn.site_id.is_none() {
 		if let Some(build_output) = cdn.build_output.as_ref() {
 			if let Some(build_command) = cdn.build_command.as_ref() {
 				eprintln!();
@@ -456,7 +468,7 @@ pub async fn build_site(
 				},
 			)
 			.await?;
-			cdn.site = Some(Uuid::parse_str(&push_output.site_id)?);
+			cdn.site_id = Some(Uuid::parse_str(&push_output.site_id)?);
 		}
 	}
 
@@ -623,11 +635,11 @@ pub async fn build_and_push_compat(
 	};
 
 	if let Some(site_output) = site_output {
-		overrides.push(("cdn.site".into(), json!(site_output.site_id)));
+		overrides.push(("cdn.site_id".into(), json!(site_output.site_id)));
 	}
 	if let Some(build_output) = build_output {
 		overrides.push((
-			"matchmaker.docker.image".into(),
+			"matchmaker.docker.image_id".into(),
 			json!(build_output.image_id),
 		));
 	}
