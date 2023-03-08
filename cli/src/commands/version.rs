@@ -387,7 +387,7 @@ pub async fn build_image(
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
-	if docker.image.is_none() {
+	if docker.image_id.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
 			// Build image
 			eprintln!();
@@ -413,7 +413,7 @@ pub async fn build_image(
 				},
 			)
 			.await?;
-			docker.image = Some(push_output.image_id);
+			docker.image_id = Some(push_output.image_id);
 		} else if let Some(docker_image) = docker.image.as_ref() {
 			// Upload build
 			let push_output = image::push(
@@ -425,7 +425,7 @@ pub async fn build_image(
 				},
 			)
 			.await?;
-			docker.image = Some(push_output.image_id);
+			docker.image_id = Some(push_output.image_id);
 		}
 	}
 
@@ -468,7 +468,7 @@ pub async fn build_site(
 				},
 			)
 			.await?;
-			cdn.site_id = Some(Uuid::parse_str(&push_output.site_id)?);
+			cdn.site_id = Some(push_output.site_id);
 		}
 	}
 

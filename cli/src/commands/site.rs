@@ -10,6 +10,7 @@ use std::{
 		Arc,
 	},
 };
+use uuid::Uuid;
 
 use crate::util::{struct_fmt, term, upload};
 
@@ -46,7 +47,7 @@ impl SubCommand {
 
 #[derive(Serialize)]
 pub struct PushOutput {
-	pub site_id: String,
+	pub site_id: Uuid,
 }
 
 pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushOutput> {
@@ -163,7 +164,5 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	complete_res.context("cloud_uploads_complete_upload")?;
 	term::status::success("Site Upload Complete", "");
 
-	Ok(PushOutput {
-		site_id: site_id.to_string(),
-	})
+	Ok(PushOutput { site_id })
 }

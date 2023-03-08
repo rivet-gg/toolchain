@@ -5,6 +5,7 @@ use rand::{thread_rng, Rng};
 use serde::Serialize;
 use std::sync::Arc;
 use tokio::fs;
+use uuid::Uuid;
 
 use crate::util::{cmd, struct_fmt, term, upload};
 
@@ -42,7 +43,7 @@ impl SubCommand {
 
 #[derive(Serialize)]
 pub struct PushOutput {
-	pub image_id: String,
+	pub image_id: Uuid,
 }
 
 pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<PushOutput> {
