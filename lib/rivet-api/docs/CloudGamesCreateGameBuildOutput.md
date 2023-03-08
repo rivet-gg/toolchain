@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**build_id** | **String** | A universally unique identifier. | 
+**build_id** | [**uuid::Uuid**](uuid::Uuid.md) | A universally unique identifier. | 
 **image_presigned_request** | [**crate::models::UploadPresignedRequest**](UploadPresignedRequest.md) |  | 
 **upload_id** | **String** | A universally unique identifier. | 
 

@@ -17,14 +17,14 @@ pub struct CloudGamesCreateGameCdnSiteOutput {
     pub presigned_requests: Vec<crate::models::UploadPresignedRequest>,
     /// A universally unique identifier.
     #[serde(rename = "site_id")]
-    pub site_id: String,
+    pub site_id: uuid::Uuid,
     /// A universally unique identifier.
     #[serde(rename = "upload_id")]
     pub upload_id: String,
 }
 
 impl CloudGamesCreateGameCdnSiteOutput {
-    pub fn new(presigned_requests: Vec<crate::models::UploadPresignedRequest>, site_id: String, upload_id: String) -> CloudGamesCreateGameCdnSiteOutput {
+    pub fn new(presigned_requests: Vec<crate::models::UploadPresignedRequest>, site_id: uuid::Uuid, upload_id: String) -> CloudGamesCreateGameCdnSiteOutput {
         CloudGamesCreateGameCdnSiteOutput {
             presigned_requests,
             site_id,
