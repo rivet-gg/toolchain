@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatThreadExternalLinks {
     #[serde(rename = "chat")]
     pub chat: String,

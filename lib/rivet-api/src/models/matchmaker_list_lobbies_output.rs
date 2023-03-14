@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct MatchmakerListLobbiesOutput {
     #[serde(rename = "game_modes")]
     pub game_modes: Vec<crate::models::MatchmakerGameModeInfo>,

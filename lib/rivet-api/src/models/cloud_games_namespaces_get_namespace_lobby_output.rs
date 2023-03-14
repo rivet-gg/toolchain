@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesGetNamespaceLobbyOutput {
     #[serde(rename = "lobby")]
     pub lobby: Box<crate::models::CloudLogsLobbySummary>,

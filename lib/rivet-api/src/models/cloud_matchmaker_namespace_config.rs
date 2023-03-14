@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudMatchmakerNamespaceConfig {
     /// Unsigned 32 bit integer.
     #[serde(rename = "lobby_count_max")]

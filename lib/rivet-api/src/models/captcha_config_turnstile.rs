@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CaptchaConfigTurnstile {
     #[serde(rename = "client_response")]
     pub client_response: String,

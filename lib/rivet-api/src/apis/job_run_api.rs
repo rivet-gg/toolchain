@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`job_run_cleanup`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum JobRunCleanupError {
     UnknownValue(serde_json::Value),

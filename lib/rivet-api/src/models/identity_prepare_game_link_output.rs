@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityPrepareGameLinkOutput {
     /// RFC3339 timestamp
     #[serde(rename = "expire_ts")]

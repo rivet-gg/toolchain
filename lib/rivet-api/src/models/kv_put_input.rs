@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct KvPutInput {
     /// Any JSON value to set the key to.
     #[serde(rename = "key")]

@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerConfig {
     #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
     pub captcha: Option<Box<crate::models::CloudVersionMatchmakerCaptcha>>,

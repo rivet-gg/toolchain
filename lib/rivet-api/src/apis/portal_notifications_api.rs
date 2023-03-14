@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`portal_notifications_register_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PortalNotificationsRegisterNotificationsError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum PortalNotificationsRegisterNotificationsError {
 
 /// struct for typed errors of method [`portal_notifications_unregister_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PortalNotificationsUnregisterNotificationsError {
     UnknownValue(serde_json::Value),

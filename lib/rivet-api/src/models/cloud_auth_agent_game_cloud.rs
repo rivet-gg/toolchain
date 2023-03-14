@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudAuthAgentGameCloud {
     #[serde(rename = "game_id")]
     pub game_id: uuid::Uuid,

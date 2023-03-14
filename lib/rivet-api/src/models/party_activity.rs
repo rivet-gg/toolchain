@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyActivity {
     #[serde(rename = "idle", skip_serializing_if = "Option::is_none")]
     pub idle: Option<serde_json::Value>,

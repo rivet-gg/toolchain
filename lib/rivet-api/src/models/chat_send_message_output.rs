@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatSendMessageOutput {
     /// A universally unique identifier.
     #[serde(rename = "chat_message_id")]

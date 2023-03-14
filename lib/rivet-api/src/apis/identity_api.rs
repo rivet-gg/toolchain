@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`identity_complete_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityCompleteAvatarUploadError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum IdentityCompleteAvatarUploadError {
 
 /// struct for typed errors of method [`identity_follow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityFollowError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum IdentityFollowError {
 
 /// struct for typed errors of method [`identity_get_handles`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetHandlesError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum IdentityGetHandlesError {
 
 /// struct for typed errors of method [`identity_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetProfileError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum IdentityGetProfileError {
 
 /// struct for typed errors of method [`identity_get_self_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetSelfProfileError {
     UnknownValue(serde_json::Value),
@@ -52,6 +57,7 @@ pub enum IdentityGetSelfProfileError {
 
 /// struct for typed errors of method [`identity_get_summaries`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetSummariesError {
     UnknownValue(serde_json::Value),
@@ -59,6 +65,7 @@ pub enum IdentityGetSummariesError {
 
 /// struct for typed errors of method [`identity_ignore_recent_follower`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityIgnoreRecentFollowerError {
     UnknownValue(serde_json::Value),
@@ -66,6 +73,7 @@ pub enum IdentityIgnoreRecentFollowerError {
 
 /// struct for typed errors of method [`identity_list_followers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListFollowersError {
     UnknownValue(serde_json::Value),
@@ -73,6 +81,7 @@ pub enum IdentityListFollowersError {
 
 /// struct for typed errors of method [`identity_list_friends`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListFriendsError {
     UnknownValue(serde_json::Value),
@@ -80,6 +89,7 @@ pub enum IdentityListFriendsError {
 
 /// struct for typed errors of method [`identity_list_mutual_friends`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListMutualFriendsError {
     UnknownValue(serde_json::Value),
@@ -87,6 +97,7 @@ pub enum IdentityListMutualFriendsError {
 
 /// struct for typed errors of method [`identity_list_recent_followers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListRecentFollowersError {
     UnknownValue(serde_json::Value),
@@ -94,6 +105,7 @@ pub enum IdentityListRecentFollowersError {
 
 /// struct for typed errors of method [`identity_prepare_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityPrepareAvatarUploadError {
     UnknownValue(serde_json::Value),
@@ -101,6 +113,7 @@ pub enum IdentityPrepareAvatarUploadError {
 
 /// struct for typed errors of method [`identity_remove_game_activity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityRemoveGameActivityError {
     UnknownValue(serde_json::Value),
@@ -108,6 +121,7 @@ pub enum IdentityRemoveGameActivityError {
 
 /// struct for typed errors of method [`identity_report`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityReportError {
     UnknownValue(serde_json::Value),
@@ -115,6 +129,7 @@ pub enum IdentityReportError {
 
 /// struct for typed errors of method [`identity_search`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySearchError {
     UnknownValue(serde_json::Value),
@@ -122,6 +137,7 @@ pub enum IdentitySearchError {
 
 /// struct for typed errors of method [`identity_set_game_activity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySetGameActivityError {
     UnknownValue(serde_json::Value),
@@ -129,6 +145,7 @@ pub enum IdentitySetGameActivityError {
 
 /// struct for typed errors of method [`identity_setup`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySetupError {
     UnknownValue(serde_json::Value),
@@ -136,6 +153,7 @@ pub enum IdentitySetupError {
 
 /// struct for typed errors of method [`identity_unfollow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUnfollowError {
     UnknownValue(serde_json::Value),
@@ -143,6 +161,7 @@ pub enum IdentityUnfollowError {
 
 /// struct for typed errors of method [`identity_update_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUpdateProfileError {
     UnknownValue(serde_json::Value),
@@ -150,6 +169,7 @@ pub enum IdentityUpdateProfileError {
 
 /// struct for typed errors of method [`identity_update_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUpdateStatusError {
     UnknownValue(serde_json::Value),
@@ -157,6 +177,7 @@ pub enum IdentityUpdateStatusError {
 
 /// struct for typed errors of method [`identity_validate_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityValidateProfileError {
     UnknownValue(serde_json::Value),

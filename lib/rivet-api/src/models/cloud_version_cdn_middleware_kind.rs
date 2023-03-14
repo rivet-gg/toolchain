@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionCdnMiddlewareKind {
     #[serde(rename = "custom_headers", skip_serializing_if = "Option::is_none")]
     pub custom_headers: Option<Box<crate::models::CloudVersionCdnCustomHeadersMiddleware>>,

@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatWatchThreadOutput {
     /// All messages new messages posted to this thread. Ordered old to new.
     #[serde(rename = "chat_messages")]

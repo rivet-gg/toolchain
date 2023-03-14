@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_games_builds_create_game_build`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesBuildsCreateGameBuildError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudGamesBuildsCreateGameBuildError {
 
 /// struct for typed errors of method [`cloud_games_builds_list_game_builds`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesBuildsListGameBuildsError {
     UnknownValue(serde_json::Value),

@@ -12,6 +12,7 @@
 
 /// Represents the state of an external account linking process.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum AuthCompleteStatus {
     #[serde(rename = "switch_identity")]
     SwitchIdentity,

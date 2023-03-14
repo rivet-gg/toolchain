@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityLinksCancelRequest {
     /// Documentation at https://jwt.io/
     #[serde(rename = "identity_link_token")]

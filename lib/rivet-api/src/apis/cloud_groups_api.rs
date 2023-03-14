@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_groups_convert_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsConvertGroupError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudGroupsConvertGroupError {
 
 /// struct for typed errors of method [`cloud_groups_get_group_billing`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsGetGroupBillingError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum CloudGroupsGetGroupBillingError {
 
 /// struct for typed errors of method [`cloud_groups_get_group_invoices_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsGetGroupInvoicesListError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum CloudGroupsGetGroupInvoicesListError {
 
 /// struct for typed errors of method [`cloud_groups_get_group_payments_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsGetGroupPaymentsListError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum CloudGroupsGetGroupPaymentsListError {
 
 /// struct for typed errors of method [`cloud_groups_get_group_transfers_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsGetGroupTransfersListError {
     UnknownValue(serde_json::Value),
@@ -52,6 +57,7 @@ pub enum CloudGroupsGetGroupTransfersListError {
 
 /// struct for typed errors of method [`cloud_groups_group_billing_checkout`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsGroupBillingCheckoutError {
     UnknownValue(serde_json::Value),
@@ -59,6 +65,7 @@ pub enum CloudGroupsGroupBillingCheckoutError {
 
 /// struct for typed errors of method [`cloud_groups_validate_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsValidateGroupError {
     UnknownValue(serde_json::Value),

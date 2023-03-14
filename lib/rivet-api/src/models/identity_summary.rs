@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentitySummary {
     #[serde(rename = "account_number")]
     pub account_number: i32,

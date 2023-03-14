@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesGetGameByIdOutput {
     #[serde(rename = "game")]
     pub game: Box<crate::models::CloudGameFull>,

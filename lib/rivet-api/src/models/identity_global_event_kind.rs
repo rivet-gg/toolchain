@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventKind {
     #[serde(rename = "chat_message", skip_serializing_if = "Option::is_none")]
     pub chat_message: Option<Box<crate::models::IdentityGlobalEventChatMessage>>,

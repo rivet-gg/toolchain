@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventChatThreadRemove {
     #[serde(rename = "thread_id")]
     pub thread_id: uuid::Uuid,

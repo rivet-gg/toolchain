@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatGetThreadTopicOutput {
     #[serde(rename = "topic")]
     pub topic: Box<crate::models::ChatSimpleTopic>,

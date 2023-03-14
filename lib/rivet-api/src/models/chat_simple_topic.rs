@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatSimpleTopic {
     #[serde(rename = "direct", skip_serializing_if = "Option::is_none")]
     pub direct: Option<Box<crate::models::ChatSimpleTopicDirect>>,

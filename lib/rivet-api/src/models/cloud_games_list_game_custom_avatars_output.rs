@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesListGameCustomAvatarsOutput {
     /// A list of custom avatar summaries.
     #[serde(rename = "custom_avatars")]

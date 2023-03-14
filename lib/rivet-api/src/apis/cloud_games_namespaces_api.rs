@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_games_namespaces_add_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesAddNamespaceDomainError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudGamesNamespacesAddNamespaceDomainError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_create_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesCreateGameNamespaceError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum CloudGamesNamespacesCreateGameNamespaceError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_create_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_create_game_namespace_token_public`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesCreateGameNamespaceTokenPublicError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum CloudGamesNamespacesCreateGameNamespaceTokenPublicError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_get_game_namespace_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesGetGameNamespaceByIdError {
     UnknownValue(serde_json::Value),
@@ -52,6 +57,7 @@ pub enum CloudGamesNamespacesGetGameNamespaceByIdError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_remove_namespace_cdn_auth_user`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesRemoveNamespaceCdnAuthUserError {
     UnknownValue(serde_json::Value),
@@ -59,6 +65,7 @@ pub enum CloudGamesNamespacesRemoveNamespaceCdnAuthUserError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_remove_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesRemoveNamespaceDomainError {
     UnknownValue(serde_json::Value),
@@ -66,6 +73,7 @@ pub enum CloudGamesNamespacesRemoveNamespaceDomainError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_set_namespace_cdn_auth_type`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesSetNamespaceCdnAuthTypeError {
     UnknownValue(serde_json::Value),
@@ -73,6 +81,7 @@ pub enum CloudGamesNamespacesSetNamespaceCdnAuthTypeError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_toggle_namespace_domain_public_auth`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesToggleNamespaceDomainPublicAuthError {
     UnknownValue(serde_json::Value),
@@ -80,6 +89,7 @@ pub enum CloudGamesNamespacesToggleNamespaceDomainPublicAuthError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_update_game_namespace_matchmaker_config`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigError {
     UnknownValue(serde_json::Value),
@@ -87,6 +97,7 @@ pub enum CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_update_game_namespace_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesUpdateGameNamespaceVersionError {
     UnknownValue(serde_json::Value),
@@ -94,6 +105,7 @@ pub enum CloudGamesNamespacesUpdateGameNamespaceVersionError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_update_namespace_cdn_auth_user`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesUpdateNamespaceCdnAuthUserError {
     UnknownValue(serde_json::Value),
@@ -101,6 +113,7 @@ pub enum CloudGamesNamespacesUpdateNamespaceCdnAuthUserError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_validate_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesValidateGameNamespaceError {
     UnknownValue(serde_json::Value),
@@ -108,6 +121,7 @@ pub enum CloudGamesNamespacesValidateGameNamespaceError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_validate_game_namespace_matchmaker_config`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigError {
     UnknownValue(serde_json::Value),
@@ -115,6 +129,7 @@ pub enum CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_validate_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesValidateGameNamespaceTokenDevelopmentError {
     UnknownValue(serde_json::Value),

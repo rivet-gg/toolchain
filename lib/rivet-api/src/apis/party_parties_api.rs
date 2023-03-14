@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`party_parties_create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesCreateError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum PartyPartiesCreateError {
 
 /// struct for typed errors of method [`party_parties_create_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesCreateInviteError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum PartyPartiesCreateInviteError {
 
 /// struct for typed errors of method [`party_parties_get_from_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesGetFromInviteError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum PartyPartiesGetFromInviteError {
 
 /// struct for typed errors of method [`party_parties_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesGetProfileError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum PartyPartiesGetProfileError {
 
 /// struct for typed errors of method [`party_parties_get_self_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesGetSelfProfileError {
     UnknownValue(serde_json::Value),
@@ -52,6 +57,7 @@ pub enum PartyPartiesGetSelfProfileError {
 
 /// struct for typed errors of method [`party_parties_get_self_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesGetSelfSummaryError {
     UnknownValue(serde_json::Value),
@@ -59,6 +65,7 @@ pub enum PartyPartiesGetSelfSummaryError {
 
 /// struct for typed errors of method [`party_parties_get_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesGetSummaryError {
     UnknownValue(serde_json::Value),
@@ -66,6 +73,7 @@ pub enum PartyPartiesGetSummaryError {
 
 /// struct for typed errors of method [`party_parties_join`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesJoinError {
     UnknownValue(serde_json::Value),
@@ -73,6 +81,7 @@ pub enum PartyPartiesJoinError {
 
 /// struct for typed errors of method [`party_parties_kick_member`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesKickMemberError {
     UnknownValue(serde_json::Value),
@@ -80,6 +89,7 @@ pub enum PartyPartiesKickMemberError {
 
 /// struct for typed errors of method [`party_parties_leave`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesLeaveError {
     UnknownValue(serde_json::Value),
@@ -87,6 +97,7 @@ pub enum PartyPartiesLeaveError {
 
 /// struct for typed errors of method [`party_parties_revoke_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesRevokeInviteError {
     UnknownValue(serde_json::Value),
@@ -94,6 +105,7 @@ pub enum PartyPartiesRevokeInviteError {
 
 /// struct for typed errors of method [`party_parties_send_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesSendJoinRequestError {
     UnknownValue(serde_json::Value),
@@ -101,6 +113,7 @@ pub enum PartyPartiesSendJoinRequestError {
 
 /// struct for typed errors of method [`party_parties_set_publicity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesSetPublicityError {
     UnknownValue(serde_json::Value),
@@ -108,6 +121,7 @@ pub enum PartyPartiesSetPublicityError {
 
 /// struct for typed errors of method [`party_parties_transfer_ownership`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyPartiesTransferOwnershipError {
     UnknownValue(serde_json::Value),

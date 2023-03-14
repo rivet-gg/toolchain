@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesListGameBuildsOutput {
     /// A list of build summaries.
     #[serde(rename = "builds")]

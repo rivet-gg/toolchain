@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionIdentityConfig {
     #[serde(rename = "avatars", skip_serializing_if = "Option::is_none")]
     pub avatars: Option<Vec<uuid::Uuid>>,

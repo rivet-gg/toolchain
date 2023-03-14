@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_games_namespaces_analytics_get_namespace_analytics_matchmaker_live`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesAnalyticsGetNamespaceAnalyticsMatchmakerLiveError {
     UnknownValue(serde_json::Value),

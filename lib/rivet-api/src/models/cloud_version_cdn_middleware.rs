@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionCdnMiddleware {
     #[serde(rename = "kind")]
     pub kind: Box<crate::models::CloudVersionCdnMiddlewareKind>,

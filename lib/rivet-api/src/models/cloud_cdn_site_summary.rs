@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudCdnSiteSummary {
     /// Whether or not this site has completely been uploaded.
     #[serde(rename = "complete")]

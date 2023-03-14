@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct KvPutBatchInput {
     /// A list of entries to insert.
     #[serde(rename = "entries")]

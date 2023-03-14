@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`matchmaker_lobbies_find`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesFindError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum MatchmakerLobbiesFindError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_join`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesJoinError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum MatchmakerLobbiesJoinError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesListError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum MatchmakerLobbiesListError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_ready`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesReadyError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum MatchmakerLobbiesReadyError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_set_closed`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesSetClosedError {
     UnknownValue(serde_json::Value),

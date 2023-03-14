@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityGetGameLinkOutput {
     #[serde(rename = "current_identity")]
     pub current_identity: Box<crate::models::IdentityHandle>,

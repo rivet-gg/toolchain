@@ -12,6 +12,7 @@
 
 /// The state of the given identity's developer status.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum IdentityDevState {
     #[serde(rename = "inactive")]
     Inactive,

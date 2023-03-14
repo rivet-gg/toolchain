@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`party_activity_set_party_to_idle`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyActivitySetPartyToIdleError {
     UnknownValue(serde_json::Value),

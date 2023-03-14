@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct UploadPresignedRequest {
     /// The name of the file to upload.  This is the same as the one given in the upload prepare file. 
     #[serde(rename = "path")]

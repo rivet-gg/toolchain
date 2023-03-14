@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGetGroupPaymentsListOutput {
     /// The ID of the last payment listed.
     #[serde(rename = "end_payment_id", skip_serializing_if = "Option::is_none")]

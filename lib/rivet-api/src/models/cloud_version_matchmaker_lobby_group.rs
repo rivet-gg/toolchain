@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerLobbyGroup {
     /// Unsigned 32 bit integer.
     #[serde(rename = "max_players_direct")]

@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PortalRegisterNotificationsInput {
     #[serde(rename = "service")]
     pub service: Box<crate::models::PortalNotificationRegisterService>,

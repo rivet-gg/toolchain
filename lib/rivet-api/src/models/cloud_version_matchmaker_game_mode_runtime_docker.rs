@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerGameModeRuntimeDocker {
     #[serde(rename = "args", skip_serializing_if = "Option::is_none")]
     pub args: Option<Vec<String>>,

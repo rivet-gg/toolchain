@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`group_invites_consume_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupInvitesConsumeInviteError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum GroupInvitesConsumeInviteError {
 
 /// struct for typed errors of method [`group_invites_create_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupInvitesCreateInviteError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum GroupInvitesCreateInviteError {
 
 /// struct for typed errors of method [`group_invites_get_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupInvitesGetInviteError {
     UnknownValue(serde_json::Value),

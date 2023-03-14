@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerLobbyGroupRuntimeDocker {
     #[serde(rename = "args")]
     pub args: Vec<String>,

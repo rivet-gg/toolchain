@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`auth_tokens_refresh_identity_token`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum AuthTokensRefreshIdentityTokenError {
     UnknownValue(serde_json::Value),

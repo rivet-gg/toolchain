@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesCreateGameInput {
     /// A universally unique identifier.
     #[serde(rename = "developer_group_id")]

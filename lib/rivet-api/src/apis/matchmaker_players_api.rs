@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`matchmaker_players_connected`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerPlayersConnectedError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum MatchmakerPlayersConnectedError {
 
 /// struct for typed errors of method [`matchmaker_players_disconnected`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerPlayersDisconnectedError {
     UnknownValue(serde_json::Value),

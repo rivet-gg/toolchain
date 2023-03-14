@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`portal_admin_resolve_beta_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PortalAdminResolveBetaJoinRequestError {
     UnknownValue(serde_json::Value),

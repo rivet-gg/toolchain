@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct MatchmakerLobbiesSetClosedRequest {
     #[serde(rename = "is_closed")]
     pub is_closed: bool,

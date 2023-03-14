@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`group_ban_identity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupBanIdentityError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum GroupBanIdentityError {
 
 /// struct for typed errors of method [`group_complete_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupCompleteAvatarUploadError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum GroupCompleteAvatarUploadError {
 
 /// struct for typed errors of method [`group_create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupCreateError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum GroupCreateError {
 
 /// struct for typed errors of method [`group_get_bans`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetBansError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum GroupGetBansError {
 
 /// struct for typed errors of method [`group_get_join_requests`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetJoinRequestsError {
     UnknownValue(serde_json::Value),
@@ -52,6 +57,7 @@ pub enum GroupGetJoinRequestsError {
 
 /// struct for typed errors of method [`group_get_members`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetMembersError {
     UnknownValue(serde_json::Value),
@@ -59,6 +65,7 @@ pub enum GroupGetMembersError {
 
 /// struct for typed errors of method [`group_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetProfileError {
     UnknownValue(serde_json::Value),
@@ -66,6 +73,7 @@ pub enum GroupGetProfileError {
 
 /// struct for typed errors of method [`group_get_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetSummaryError {
     UnknownValue(serde_json::Value),
@@ -73,6 +81,7 @@ pub enum GroupGetSummaryError {
 
 /// struct for typed errors of method [`group_kick_member`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupKickMemberError {
     UnknownValue(serde_json::Value),
@@ -80,6 +89,7 @@ pub enum GroupKickMemberError {
 
 /// struct for typed errors of method [`group_leave`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupLeaveError {
     UnknownValue(serde_json::Value),
@@ -87,6 +97,7 @@ pub enum GroupLeaveError {
 
 /// struct for typed errors of method [`group_list_suggested`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupListSuggestedError {
     UnknownValue(serde_json::Value),
@@ -94,6 +105,7 @@ pub enum GroupListSuggestedError {
 
 /// struct for typed errors of method [`group_prepare_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupPrepareAvatarUploadError {
     UnknownValue(serde_json::Value),
@@ -101,6 +113,7 @@ pub enum GroupPrepareAvatarUploadError {
 
 /// struct for typed errors of method [`group_search`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupSearchError {
     UnknownValue(serde_json::Value),
@@ -108,6 +121,7 @@ pub enum GroupSearchError {
 
 /// struct for typed errors of method [`group_transfer_ownership`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupTransferOwnershipError {
     UnknownValue(serde_json::Value),
@@ -115,6 +129,7 @@ pub enum GroupTransferOwnershipError {
 
 /// struct for typed errors of method [`group_unban_identity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupUnbanIdentityError {
     UnknownValue(serde_json::Value),
@@ -122,6 +137,7 @@ pub enum GroupUnbanIdentityError {
 
 /// struct for typed errors of method [`group_update_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupUpdateProfileError {
     UnknownValue(serde_json::Value),
@@ -129,6 +145,7 @@ pub enum GroupUpdateProfileError {
 
 /// struct for typed errors of method [`group_validate_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupValidateProfileError {
     UnknownValue(serde_json::Value),

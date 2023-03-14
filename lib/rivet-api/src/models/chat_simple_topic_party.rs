@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatSimpleTopicParty {
     #[serde(rename = "party")]
     pub party: uuid::Uuid,

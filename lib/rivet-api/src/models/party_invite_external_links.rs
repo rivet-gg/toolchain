@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyInviteExternalLinks {
     /// The invite link used to join this party from an external site.
     #[serde(rename = "invite")]

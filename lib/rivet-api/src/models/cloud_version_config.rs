@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionConfig {
     #[serde(rename = "cdn", skip_serializing_if = "Option::is_none")]
     pub cdn: Option<Box<crate::models::CloudVersionCdnConfig>>,

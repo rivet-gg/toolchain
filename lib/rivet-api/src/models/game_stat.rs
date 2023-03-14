@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct GameStat {
     #[serde(rename = "config")]
     pub config: Box<crate::models::GameStatConfig>,

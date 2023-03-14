@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesListGameCdnSitesOutput {
     /// A list of CDN site summaries.
     #[serde(rename = "sites")]

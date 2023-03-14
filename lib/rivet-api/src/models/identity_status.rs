@@ -12,6 +12,7 @@
 
 /// The current status of an identity. This helps players understand if another player is currently playing or has their game in the background.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum IdentityStatus {
     #[serde(rename = "online")]
     Online,

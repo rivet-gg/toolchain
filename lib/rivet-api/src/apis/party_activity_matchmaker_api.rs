@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`party_activity_matchmaker_find_lobby_for_party`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyActivityMatchmakerFindLobbyForPartyError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum PartyActivityMatchmakerFindLobbyForPartyError {
 
 /// struct for typed errors of method [`party_activity_matchmaker_join_lobby_for_party`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyActivityMatchmakerJoinLobbyForPartyError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum PartyActivityMatchmakerJoinLobbyForPartyError {
 
 /// struct for typed errors of method [`party_activity_matchmaker_request_player`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PartyActivityMatchmakerRequestPlayerError {
     UnknownValue(serde_json::Value),

@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudLogsLobbyStatus {
     #[serde(rename = "running")]
     pub running: serde_json::Value,
