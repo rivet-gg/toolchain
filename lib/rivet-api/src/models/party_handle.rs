@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyHandle {
     #[serde(rename = "activity")]
     pub activity: Box<crate::models::PartyActivity>,

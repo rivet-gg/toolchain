@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGetGroupTransfersListOutput {
     /// The ID of the last transfer listed.
     #[serde(rename = "end_transfer_id", skip_serializing_if = "Option::is_none")]

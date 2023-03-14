@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerLobbyGroupRegion {
     #[serde(rename = "idle_lobbies", skip_serializing_if = "Option::is_none")]
     pub idle_lobbies: Option<Box<crate::models::CloudVersionMatchmakerLobbyGroupIdleLobbiesConfig>>,

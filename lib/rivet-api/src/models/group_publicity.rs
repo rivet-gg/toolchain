@@ -12,6 +12,7 @@
 
 /// The current publicity value for the given group.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum GroupPublicity {
     #[serde(rename = "open")]
     Open,

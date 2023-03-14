@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesExportMatchmakerLobbyHistoryOutput {
     /// The URL to a CSV file for the given lobby history.
     #[serde(rename = "url")]

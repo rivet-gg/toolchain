@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct GroupExternalLinks {
     /// A link to this group's chat page.
     #[serde(rename = "chat")]

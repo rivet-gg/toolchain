@@ -12,6 +12,7 @@
 
 /// A value denoting the status of a CDN domain's verification status.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum CloudCdnNamespaceDomainVerificationStatus {
     #[serde(rename = "active")]
     Active,

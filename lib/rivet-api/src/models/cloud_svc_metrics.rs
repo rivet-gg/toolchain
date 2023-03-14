@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudSvcMetrics {
     /// Total allocated memory (MB).
     #[serde(rename = "allocated_memory", skip_serializing_if = "Option::is_none")]

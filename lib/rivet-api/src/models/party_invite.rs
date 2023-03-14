@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyInvite {
     #[serde(rename = "alias", skip_serializing_if = "Option::is_none")]
     pub alias: Option<Box<crate::models::PartyInviteAlias>>,

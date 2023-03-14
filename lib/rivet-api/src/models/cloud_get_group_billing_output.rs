@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGetGroupBillingOutput {
     /// A list of region summaries.
     #[serde(rename = "available_regions")]

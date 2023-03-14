@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct KvGetOutput {
     /// Whether or not the entry has been deleted. Only set when watching this endpoint.
     #[serde(rename = "deleted", skip_serializing_if = "Option::is_none")]

@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventChatRead {
     /// RFC3339 timestamp
     #[serde(rename = "read_ts")]

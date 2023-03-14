@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_games_avatars_complete_custom_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesAvatarsCompleteCustomAvatarUploadError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudGamesAvatarsCompleteCustomAvatarUploadError {
 
 /// struct for typed errors of method [`cloud_games_avatars_list_game_custom_avatars`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesAvatarsListGameCustomAvatarsError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum CloudGamesAvatarsListGameCustomAvatarsError {
 
 /// struct for typed errors of method [`cloud_games_avatars_prepare_custom_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesAvatarsPrepareCustomAvatarUploadError {
     UnknownValue(serde_json::Value),

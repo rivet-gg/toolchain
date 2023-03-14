@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyGetSelfProfileOutput {
     #[serde(rename = "party", skip_serializing_if = "Option::is_none")]
     pub party: Option<Box<crate::models::PartyProfile>>,

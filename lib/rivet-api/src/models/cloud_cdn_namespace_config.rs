@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudCdnNamespaceConfig {
     #[serde(rename = "auth_type")]
     pub auth_type: crate::models::CloudCdnAuthType,

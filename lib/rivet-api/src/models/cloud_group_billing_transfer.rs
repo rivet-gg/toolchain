@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGroupBillingTransfer {
     /// Payment amount (in hundreths USD, 100 = $1.00).
     #[serde(rename = "amount")]

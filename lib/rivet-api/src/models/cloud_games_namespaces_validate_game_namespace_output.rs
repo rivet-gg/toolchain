@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesValidateGameNamespaceOutput {
     /// A list of validation errors.
     #[serde(rename = "errors")]

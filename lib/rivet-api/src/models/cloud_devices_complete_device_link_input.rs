@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudDevicesCompleteDeviceLinkInput {
     /// Documentation at https://jwt.io/
     #[serde(rename = "device_link_token")]

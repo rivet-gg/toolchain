@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyPublicity {
     #[serde(rename = "groups")]
     pub groups: crate::models::PartyPublicityLevel,

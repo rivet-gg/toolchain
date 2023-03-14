@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyGetSummaryOutput {
     #[serde(rename = "party")]
     pub party: Box<crate::models::PartySummary>,

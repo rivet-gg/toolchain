@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerCaptchaHcaptcha {
     #[serde(rename = "level")]
     pub level: crate::models::CloudVersionMatchmakerCaptchaHcaptchaLevel,

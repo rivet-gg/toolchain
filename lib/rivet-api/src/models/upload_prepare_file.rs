@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct UploadPrepareFile {
     /// Unsigned 64 bit integer.
     #[serde(rename = "content_length")]

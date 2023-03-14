@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesListNamespaceLobbiesOutput {
     /// A list of lobby log summaries.
     #[serde(rename = "lobbies")]

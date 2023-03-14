@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`kv_delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvDeleteError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum KvDeleteError {
 
 /// struct for typed errors of method [`kv_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvGetError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum KvGetError {
 
 /// struct for typed errors of method [`kv_put`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvPutError {
     UnknownValue(serde_json::Value),

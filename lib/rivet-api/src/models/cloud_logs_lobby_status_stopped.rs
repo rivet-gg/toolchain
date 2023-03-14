@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudLogsLobbyStatusStopped {
     /// The exit code returned by the lobby's main process when stopped.
     #[serde(rename = "exit_code")]

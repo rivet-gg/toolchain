@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`group_join_requests_create_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupJoinRequestsCreateJoinRequestError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum GroupJoinRequestsCreateJoinRequestError {
 
 /// struct for typed errors of method [`group_join_requests_resolve_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupJoinRequestsResolveJoinRequestError {
     UnknownValue(serde_json::Value),

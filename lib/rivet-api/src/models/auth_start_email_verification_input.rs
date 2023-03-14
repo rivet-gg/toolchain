@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct AuthStartEmailVerificationInput {
     #[serde(rename = "captcha")]
     pub captcha: Box<crate::models::CaptchaConfig>,

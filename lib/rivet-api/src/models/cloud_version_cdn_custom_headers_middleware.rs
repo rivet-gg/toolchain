@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudVersionCdnCustomHeadersMiddleware {
     #[serde(rename = "headers")]
     pub headers: Vec<crate::models::CloudVersionCdnHeader>,

@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`kv_batch_delete_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvBatchDeleteBatchError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum KvBatchDeleteBatchError {
 
 /// struct for typed errors of method [`kv_batch_get_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvBatchGetBatchError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum KvBatchGetBatchError {
 
 /// struct for typed errors of method [`kv_batch_put_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvBatchPutBatchError {
     UnknownValue(serde_json::Value),

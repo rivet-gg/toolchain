@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatSimpleTopicDirect {
     #[serde(rename = "identity_a")]
     pub identity_a: uuid::Uuid,

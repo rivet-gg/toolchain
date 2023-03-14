@@ -12,6 +12,7 @@
 
 /// How hard a captcha should be.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum CloudVersionMatchmakerCaptchaHcaptchaLevel {
     #[serde(rename = "easy")]
     Easy,

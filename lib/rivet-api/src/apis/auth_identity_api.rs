@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`auth_identity_complete_email_verification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum AuthIdentityCompleteEmailVerificationError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum AuthIdentityCompleteEmailVerificationError {
 
 /// struct for typed errors of method [`auth_identity_start_email_verification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum AuthIdentityStartEmailVerificationError {
     UnknownValue(serde_json::Value),

@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGroupBillingCheckoutInput {
     /// How much money to checkout (in hundred-thousandths USD, 100,000 = $1.00).
     #[serde(rename = "amount", skip_serializing_if = "Option::is_none")]

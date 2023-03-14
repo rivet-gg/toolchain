@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct MatchmakerLobbyInfo {
     #[serde(rename = "game_mode_id")]
     pub game_mode_id: String,

@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityPresence {
     #[serde(rename = "game_activity", skip_serializing_if = "Option::is_none")]
     pub game_activity: Option<Box<crate::models::IdentityGameActivity>>,

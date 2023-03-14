@@ -12,6 +12,7 @@
 
 /// A value denoting what type of authentication to use for a game namespace's CDN.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub enum CloudCdnAuthType {
     #[serde(rename = "none")]
     None,

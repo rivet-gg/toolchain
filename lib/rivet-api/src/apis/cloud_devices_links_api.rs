@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_devices_links_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudDevicesLinksCompleteError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudDevicesLinksCompleteError {
 
 /// struct for typed errors of method [`cloud_devices_links_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudDevicesLinksGetError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum CloudDevicesLinksGetError {
 
 /// struct for typed errors of method [`cloud_devices_links_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudDevicesLinksPrepareError {
     UnknownValue(serde_json::Value),

@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
     /// The hostname used for the token.
     #[serde(rename = "hostname")]

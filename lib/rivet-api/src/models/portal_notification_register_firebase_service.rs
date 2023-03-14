@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PortalNotificationRegisterFirebaseService {
     #[serde(rename = "access_key")]
     pub access_key: String,

@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`identity_links_cancel`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksCancelError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum IdentityLinksCancelError {
 
 /// struct for typed errors of method [`identity_links_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksCompleteError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum IdentityLinksCompleteError {
 
 /// struct for typed errors of method [`identity_links_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksGetError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum IdentityLinksGetError {
 
 /// struct for typed errors of method [`identity_links_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksPrepareError {
     UnknownValue(serde_json::Value),

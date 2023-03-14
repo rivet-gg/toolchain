@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`chat_get_thread_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatGetThreadHistoryError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum ChatGetThreadHistoryError {
 
 /// struct for typed errors of method [`chat_get_thread_topic`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatGetThreadTopicError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum ChatGetThreadTopicError {
 
 /// struct for typed errors of method [`chat_send_message`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatSendMessageError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum ChatSendMessageError {
 
 /// struct for typed errors of method [`chat_set_thread_read`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatSetThreadReadError {
     UnknownValue(serde_json::Value),
@@ -45,6 +49,7 @@ pub enum ChatSetThreadReadError {
 
 /// struct for typed errors of method [`chat_set_typing_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatSetTypingStatusError {
     UnknownValue(serde_json::Value),
@@ -52,6 +57,7 @@ pub enum ChatSetTypingStatusError {
 
 /// struct for typed errors of method [`chat_watch_thread`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatWatchThreadError {
     UnknownValue(serde_json::Value),

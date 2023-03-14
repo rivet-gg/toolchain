@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct AuthCompleteEmailVerificationInput {
     /// The code sent to the requestee's email.
     #[serde(rename = "code")]

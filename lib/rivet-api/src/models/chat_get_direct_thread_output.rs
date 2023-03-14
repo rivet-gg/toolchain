@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ChatGetDirectThreadOutput {
     #[serde(rename = "identity", skip_serializing_if = "Option::is_none")]
     pub identity: Option<Box<crate::models::IdentityHandle>>,

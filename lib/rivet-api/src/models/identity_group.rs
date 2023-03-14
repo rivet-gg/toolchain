@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityGroup {
     #[serde(rename = "group")]
     pub group: Box<crate::models::GroupHandle>,

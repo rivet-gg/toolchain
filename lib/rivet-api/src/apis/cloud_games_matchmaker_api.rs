@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_games_matchmaker_delete_matchmaker_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerDeleteMatchmakerLobbyError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudGamesMatchmakerDeleteMatchmakerLobbyError {
 
 /// struct for typed errors of method [`cloud_games_matchmaker_export_lobby_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerExportLobbyLogsError {
     UnknownValue(serde_json::Value),
@@ -31,6 +33,7 @@ pub enum CloudGamesMatchmakerExportLobbyLogsError {
 
 /// struct for typed errors of method [`cloud_games_matchmaker_export_matchmaker_lobby_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerExportMatchmakerLobbyHistoryError {
     UnknownValue(serde_json::Value),
@@ -38,6 +41,7 @@ pub enum CloudGamesMatchmakerExportMatchmakerLobbyHistoryError {
 
 /// struct for typed errors of method [`cloud_games_matchmaker_get_lobby_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerGetLobbyLogsError {
     UnknownValue(serde_json::Value),

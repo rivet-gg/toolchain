@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct KvGetBatchOutput {
     /// A list of key-value entries.
     #[serde(rename = "entries")]

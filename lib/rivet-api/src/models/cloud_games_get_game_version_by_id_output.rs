@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesGetGameVersionByIdOutput {
     #[serde(rename = "version")]
     pub version: Box<crate::models::CloudVersionFull>,

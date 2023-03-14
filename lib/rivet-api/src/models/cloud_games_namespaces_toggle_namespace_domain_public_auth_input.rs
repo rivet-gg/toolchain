@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesToggleNamespaceDomainPublicAuthInput {
     /// Whether or not to enable authentication based on domain.
     #[serde(rename = "enabled")]

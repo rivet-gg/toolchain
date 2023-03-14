@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct IdentityValidateProfileOutput {
     #[serde(rename = "errors")]
     pub errors: Vec<crate::models::ValidationError>,

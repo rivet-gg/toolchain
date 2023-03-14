@@ -17,6 +17,7 @@ use super::{Error, configuration};
 
 /// struct for typed errors of method [`cloud_games_namespaces_logs_get_namespace_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesLogsGetNamespaceLobbyError {
     UnknownValue(serde_json::Value),
@@ -24,6 +25,7 @@ pub enum CloudGamesNamespacesLogsGetNamespaceLobbyError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_logs_list_namespace_lobbies`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesLogsListNamespaceLobbiesError {
     UnknownValue(serde_json::Value),

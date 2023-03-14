@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CloudAuthAgent {
     #[serde(rename = "game_cloud", skip_serializing_if = "Option::is_none")]
     pub game_cloud: Option<Box<crate::models::CloudAuthAgentGameCloud>>,

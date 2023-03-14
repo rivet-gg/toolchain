@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PartyMemberStateMatchmakerLobby {
     #[serde(rename = "player_id")]
     pub player_id: uuid::Uuid,

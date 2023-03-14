@@ -12,6 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PortalResolveBetaJoinRequestInput {
     /// Whether or not to accept the beta join request.
     #[serde(rename = "resolution", skip_serializing_if = "Option::is_none")]

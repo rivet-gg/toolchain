@@ -13,6 +13,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct WatchResponse {
     /// Index indicating the version of the data responded. Pass this to `WatchQuery` to block and wait for the next response. 
     #[serde(rename = "index")]
