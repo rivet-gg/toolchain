@@ -422,8 +422,49 @@ pub async fn build_image(
 					.arg(".");
 				cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 			} else {
-				// TODO: Prep buildx builder
-				// Prepare builder
+				// Determine if needs to create a new builder
+				let mut inspect_cmd = Command::new("docker");
+				inspect_cmd.arg("buildx").arg("inspect");
+				let inspect_output = cmd::execute_docker_cmd_silent(
+					inspect_cmd,
+					"Failed to read Docker buildx info",
+				)
+				.await?;
+				let inspect_stdout = String::from_utf8(inspect_output.stdout)?;
+
+				// Extract driver
+				let buildx_driver = inspect_stdout
+					.split("\n")
+					.filter_map(|x| x.strip_prefix("Driver: "))
+					.next()
+					.context("could not read driver from buildx inspect output")?
+					.trim();
+
+				// Extract platform
+				let buildx_platforms = inspect_stdout
+					.split("\n")
+					.filter_map(|x| x.strip_prefix("Platforms: "))
+					.next()
+					.context("could not read driver from buildx inspect output")?
+					.split(",")
+					.map(|x| x.trim())
+					.collect::<Vec<_>>();
+				let has_amd64 = buildx_platforms.contains(&"linux/amd64");
+
+				// Create new builder if needed
+				if buildx_driver != "docker-container" || has_amd64 {
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("buildx")
+						.arg("create")
+						.arg("--use")
+						.arg("--driver")
+						.arg("docker-container")
+						.arg("--platform")
+						.arg("linux/amd64");
+					cmd::execute_docker_cmd(build_cmd, "Failed to create Docker buildx builder")
+						.await?;
+				}
 
 				// Build image
 				let mut build_cmd = Command::new("docker");
