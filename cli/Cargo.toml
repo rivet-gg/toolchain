@@ -1,6 +1,6 @@
 [package]
 name = "rivet"
-version = "0.0.47"
+version = "0.0.48"
 authors = ["Rivet Gaming, Inc. <developer@rivet.gg>"]
 edition = "2018"
 license = "MIT"
