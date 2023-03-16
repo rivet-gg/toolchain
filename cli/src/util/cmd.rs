@@ -7,7 +7,10 @@ pub async fn execute_docker_cmd(
 	match command.status().await {
 		Ok(status) => {
 			if !status.success() {
-				bail!("{error_message} ({})\n\nValidate that Docker is installed and running.", status);
+				bail!(
+					"{error_message} ({})\n\nValidate that Docker is installed and running.",
+					status
+				);
 			}
 			Ok(())
 		}
@@ -24,7 +27,7 @@ pub async fn execute_docker_cmd(
 pub async fn execute_docker_cmd_silent(
 	mut command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
-) -> Result<()> {
+) -> Result<std::process::Output> {
 	match command.output().await {
 		Ok(output) => {
 			if !output.status.success() {
@@ -35,7 +38,7 @@ pub async fn execute_docker_cmd_silent(
 					String::from_utf8_lossy(&output.stderr)
 				);
 			}
-			Ok(())
+			Ok(output)
 		}
 		Err(err) => {
 			if let std::io::ErrorKind::NotFound = err.kind() {
