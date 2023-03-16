@@ -3,7 +3,7 @@ use clap::Parser;
 use cli_core::rivet_api;
 use rand::{thread_rng, Rng};
 use serde::Serialize;
-use std::sync::Arc;
+use std::{path::PathBuf, sync::Arc};
 use tokio::fs;
 use uuid::Uuid;
 
@@ -12,12 +12,30 @@ use crate::util::{cmd, struct_fmt, term, upload};
 #[derive(Parser)]
 pub enum SubCommand {
 	/// Pushes a image to Rivet so it can be used in a version
-	Push(ImagePushOpts),
+	Push(ImagePushTagOpts),
 }
 
 #[derive(Parser)]
-pub struct ImagePushOpts {
+pub struct ImagePushTagOpts {
 	/// Docker tag to push
+	#[clap(long)]
+	pub tag: String,
+
+	/// Name of the image
+	#[clap(long)]
+	pub name: Option<String>,
+
+	#[clap(long, value_parser)]
+	pub format: Option<struct_fmt::Format>,
+}
+
+#[derive(Parser)]
+pub struct ImagePushTarOpts {
+	/// Path to already created tar.
+	#[clap(long)]
+	pub path: PathBuf,
+
+	/// Docker inside the image.
 	#[clap(long)]
 	pub tag: String,
 
@@ -33,7 +51,7 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::Push(push_opts) => {
-				let output = push(ctx, push_opts).await?;
+				let output = push_tag(ctx, push_opts).await?;
 				struct_fmt::print_opt(push_opts.format.as_ref(), &output)?;
 				Ok(())
 			}
@@ -46,9 +64,7 @@ pub struct PushOutput {
 	pub image_id: Uuid,
 }
 
-pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<PushOutput> {
-	let reqwest_client = Arc::new(reqwest::Client::new());
-
+pub async fn push_tag(ctx: &cli_core::Ctx, push_opts: &ImagePushTagOpts) -> Result<PushOutput> {
 	let tmp_image_file = tempfile::NamedTempFile::new()?;
 	let tmp_path = tmp_image_file.into_temp_path();
 
@@ -62,14 +78,14 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.take(16)
 		.collect::<String>()
 		.to_lowercase();
-	let image_tag = format!("rivet-game:{}", image_tag_tag);
+	let unique_image_tag = format!("rivet-game:{}", image_tag_tag);
 
 	let mut tag_cmd = tokio::process::Command::new("docker");
 	tag_cmd
 		.arg("image")
 		.arg("tag")
 		.arg(&push_opts.tag)
-		.arg(&image_tag);
+		.arg(&unique_image_tag);
 	cmd::execute_docker_cmd_silent(tag_cmd, "failed to tag Docker image").await?;
 
 	let mut save_cmd = tokio::process::Command::new("docker");
@@ -78,13 +94,28 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		.arg("save")
 		.arg("--output")
 		.arg(&tmp_path)
-		.arg(&image_tag);
+		.arg(&unique_image_tag);
 	cmd::execute_docker_cmd_silent(save_cmd, "failed to archive Docker image").await?;
 
-	// Inspect the image
-	let image_file_meta = fs::metadata(&tmp_path).await?;
+	push_tar(
+		ctx,
+		&ImagePushTarOpts {
+			path: tmp_path.to_owned(),
+			tag: unique_image_tag,
+			name: push_opts.name.clone(),
+			format: push_opts.format.clone(),
+		},
+	)
+	.await
+}
 
-	// Create imag
+pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Result<PushOutput> {
+	let reqwest_client = Arc::new(reqwest::Client::new());
+
+	// Inspect the image
+	let image_file_meta = fs::metadata(&push_opts.path).await?;
+
+	// Create image
 	let display_name = push_opts
 		.name
 		.clone()
@@ -104,7 +135,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 		&ctx.game_id,
 		rivet_api::models::CloudGamesCreateGameBuildInput {
 			display_name: display_name.clone(),
-			image_tag: image_tag.clone(),
+			image_tag: push_opts.tag.clone(),
 			image_file: Box::new(rivet_api::models::UploadPrepareFile {
 				path: "image.tar".into(),
 				content_type: Some(content_type.into()),
@@ -122,7 +153,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &ImagePushOpts) -> Result<Push
 	upload::upload_file(
 		&reqwest_client,
 		&build_res.image_presigned_request,
-		tmp_path,
+		&push_opts.path,
 		Some(content_type),
 	)
 	.await?;

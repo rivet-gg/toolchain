@@ -389,25 +389,106 @@ pub async fn build_image(
 ) -> Result<()> {
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
-			// Build image
+			// Determine if running x86
+			let mut arch_cmd = Command::new("docker");
+			arch_cmd
+				.arg("info")
+				.arg("--format")
+				.arg("{{.Architecture}}");
+			let arch_output =
+				cmd::execute_docker_cmd_silent(arch_cmd, "Failed to read Docker info").await?;
+			let is_x86_64 = String::from_utf8(arch_output.stdout)?.trim() == "x86_64";
+
 			eprintln!();
-			term::status::info("Building Image", dockerfile);
-			let tag = format!("rivet-game:{}", Uuid::new_v4());
-			let mut build_cmd = Command::new("docker");
-			build_cmd
-				.arg("build")
-				.arg("--file")
-				.arg(dockerfile)
-				.arg("--tag")
-				.arg(&tag)
-				.arg(".");
-			cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
+			let buildx_info = if is_x86_64 { "" } else { " (with buildx)" };
+			term::status::info("Building Image", format!("{dockerfile}{buildx_info}"));
+
+			// Create temp path to write to
+			let tmp_image_file = tempfile::NamedTempFile::new()?;
+			let tmp_path = tmp_image_file.into_temp_path();
+
+			// Build image
+			let unique_image_tag = format!("rivet-game:{}", Uuid::new_v4());
+			if is_x86_64 {
+				let mut build_cmd = Command::new("docker");
+				build_cmd
+					.arg("build")
+					.arg("--file")
+					.arg(dockerfile)
+					.arg("--tag")
+					.arg(&unique_image_tag)
+					.arg("--output")
+					.arg(format!("type=docker,dest={}", tmp_path.display()))
+					.arg(".");
+				cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
+			} else {
+				// Determine if needs to create a new builder
+				let mut inspect_cmd = Command::new("docker");
+				inspect_cmd.arg("buildx").arg("inspect");
+				let inspect_output = cmd::execute_docker_cmd_silent(
+					inspect_cmd,
+					"Failed to read Docker buildx info",
+				)
+				.await?;
+				let inspect_stdout = String::from_utf8(inspect_output.stdout)?;
+
+				// Extract driver
+				let buildx_driver = inspect_stdout
+					.split("\n")
+					.filter_map(|x| x.strip_prefix("Driver: "))
+					.next()
+					.context("could not read driver from buildx inspect output")?
+					.trim();
+
+				// Extract platform
+				let buildx_platforms = inspect_stdout
+					.split("\n")
+					.filter_map(|x| x.strip_prefix("Platforms: "))
+					.next()
+					.context("could not read driver from buildx inspect output")?
+					.split(",")
+					.map(|x| x.trim())
+					.collect::<Vec<_>>();
+				let has_amd64 = buildx_platforms.contains(&"linux/amd64");
+
+				// Create new builder if needed
+				if buildx_driver != "docker-container" || has_amd64 {
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("buildx")
+						.arg("create")
+						.arg("--use")
+						.arg("--driver")
+						.arg("docker-container")
+						.arg("--platform")
+						.arg("linux/amd64");
+					cmd::execute_docker_cmd(build_cmd, "Failed to create Docker buildx builder")
+						.await?;
+				}
+
+				// Build image
+				let mut build_cmd = Command::new("docker");
+				build_cmd
+					.arg("buildx")
+					.arg("build")
+					.arg("--platform")
+					.arg("linux/amd64")
+					.arg("--file")
+					.arg(dockerfile)
+					.arg("--tag")
+					.arg(&unique_image_tag)
+					.arg("--output")
+					.arg(format!("type=docker,dest={}", tmp_path.display()))
+					.arg(".");
+				cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
+			}
 
 			// Upload build
-			let push_output = image::push(
+			let push_output = image::push_tar(
 				ctx,
-				&image::ImagePushOpts {
-					tag,
+				&image::ImagePushTarOpts {
+					path: tmp_path.to_owned(),
+					tag: unique_image_tag,
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
 				},
@@ -416,9 +497,9 @@ pub async fn build_image(
 			docker.image_id = Some(push_output.image_id);
 		} else if let Some(docker_image) = docker.image.as_ref() {
 			// Upload build
-			let push_output = image::push(
+			let push_output = image::push_tag(
 				ctx,
-				&image::ImagePushOpts {
+				&image::ImagePushTagOpts {
 					tag: docker_image.clone(),
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
@@ -620,9 +701,9 @@ pub async fn build_and_push_compat(
 
 	let build_output = if let Some(build_tag) = build_tag {
 		Some(
-			image::push(
+			image::push_tag(
 				ctx,
-				&image::ImagePushOpts {
+				&image::ImagePushTagOpts {
 					tag: build_tag.clone(),
 					name: build_name.clone(),
 					format: format.clone(),
