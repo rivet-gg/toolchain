@@ -16,16 +16,15 @@ powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/ins
 
 ## Publishing Versions
 
-
-1. Update the version in `CHANGELOG.md`
-2. Run the following command
+Install the prerequisites:
 
 ```bash
-# One-time setup
 cargo install cargo-dist
 cargo install cargo-release
-
-# Release a version
-cargo release --no-publish --package rivet-cli --package rivet-cli-core 0.0.50
 ```
+
+To reelase, do the following:
+
+1. Update the version in `CHANGELOG.md`
+2. Run: `bin/release.sh`
 
