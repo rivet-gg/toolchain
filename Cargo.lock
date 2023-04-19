@@ -1621,7 +1621,7 @@ dependencies = [
 
 [[package]]
 name = "rivet-cli"
-version = "0.0.48"
+version = "0.0.50"
 dependencies = [
  "anyhow",
  "async-stream",
@@ -1652,7 +1652,7 @@ dependencies = [
 
 [[package]]
 name = "rivet-cli-core"
-version = "0.0.48"
+version = "0.0.50"
 dependencies = [
  "anyhow",
  "aws-smithy-client",
