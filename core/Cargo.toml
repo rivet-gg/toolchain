@@ -4,6 +4,7 @@ version = "0.0.48"
 authors = ["Rivet Gaming, LLC <developer@rivet.gg>"]
 edition = "2018"
 license = "MIT"
+description = "Managed game servers, matchmaking, and DDoS mitigation that lets you focus on building your game."
 homepage = "https://rivet.gg"
 repository = "https://github.com/rivet-gg/cli"
 build = "build.rs"
