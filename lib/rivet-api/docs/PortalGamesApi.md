@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## portal_games_get_game_profile
 
-> crate::models::PortalGetGameProfileOutput portal_games_get_game_profile(game_name_id, watch_index)
+> crate::models::PortalGetGameProfileResponse portal_games_get_game_profile(game_name_id, watch_index)
 
 
 Returns a game profile.
@@ -25,7 +25,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PortalGetGameProfileOutput**](PortalGetGameProfileOutput.md)
+[**crate::models::PortalGetGameProfileResponse**](PortalGetGameProfileResponse.md)
 
 ### Authorization
 

@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## cloud_games_tokens_create_cloud_token
 
-> crate::models::CloudGamesCreateCloudTokenOutput cloud_games_tokens_create_cloud_token(game_id)
+> crate::models::CloudGamesCreateCloudTokenResponse cloud_games_tokens_create_cloud_token(game_id)
 
 
 Creates a new game cloud token.
@@ -20,11 +20,11 @@ Creates a new game cloud token.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesCreateCloudTokenOutput**](CloudGamesCreateCloudTokenOutput.md)
+[**crate::models::CloudGamesCreateCloudTokenResponse**](CloudGamesCreateCloudTokenResponse.md)
 
 ### Authorization
 

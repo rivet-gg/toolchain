@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## cloud_devices_links_complete
 
-> cloud_devices_links_complete(cloud_devices_complete_device_link_input)
+> cloud_devices_links_complete(cloud_devices_complete_device_link_request)
 
 
 ### Parameters
@@ -20,7 +20,7 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**cloud_devices_complete_device_link_input** | [**CloudDevicesCompleteDeviceLinkInput**](CloudDevicesCompleteDeviceLinkInput.md) |  | [required] |
+**cloud_devices_complete_device_link_request** | [**CloudDevicesCompleteDeviceLinkRequest**](CloudDevicesCompleteDeviceLinkRequest.md) |  | [required] |
 
 ### Return type
 
@@ -33,14 +33,14 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## cloud_devices_links_get
 
-> crate::models::CloudDevicesGetDeviceLinkOutput cloud_devices_links_get(device_link_token, watch_index)
+> crate::models::CloudDevicesGetDeviceLinkResponse cloud_devices_links_get(device_link_token, watch_index)
 
 
 ### Parameters
@@ -53,7 +53,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::CloudDevicesGetDeviceLinkOutput**](CloudDevicesGetDeviceLinkOutput.md)
+[**crate::models::CloudDevicesGetDeviceLinkResponse**](CloudDevicesGetDeviceLinkResponse.md)
 
 ### Authorization
 
@@ -69,7 +69,7 @@ No authorization required
 
 ## cloud_devices_links_prepare
 
-> crate::models::CloudDevicesPrepareDeviceLinkOutput cloud_devices_links_prepare()
+> crate::models::CloudDevicesPrepareDeviceLinkResponse cloud_devices_links_prepare()
 
 
 ### Parameters
@@ -78,7 +78,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**crate::models::CloudDevicesPrepareDeviceLinkOutput**](CloudDevicesPrepareDeviceLinkOutput.md)
+[**crate::models::CloudDevicesPrepareDeviceLinkResponse**](CloudDevicesPrepareDeviceLinkResponse.md)
 
 ### Authorization
 

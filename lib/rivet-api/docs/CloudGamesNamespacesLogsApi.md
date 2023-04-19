@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## cloud_games_namespaces_logs_get_namespace_lobby
 
-> crate::models::CloudGamesNamespacesGetNamespaceLobbyOutput cloud_games_namespaces_logs_get_namespace_lobby(game_id, namespace_id, lobby_id)
+> crate::models::CloudGamesNamespacesGetNamespaceLobbyResponse cloud_games_namespaces_logs_get_namespace_lobby(game_id, namespace_id, lobby_id)
 
 
 Returns a lobby from the given game namespace.
@@ -21,13 +21,13 @@ Returns a lobby from the given game namespace.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**namespace_id** | **String** | A universally unique identifier. | [required] |
-**lobby_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**namespace_id** | **uuid::Uuid** |  | [required] |
+**lobby_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesNamespacesGetNamespaceLobbyOutput**](CloudGamesNamespacesGetNamespaceLobbyOutput.md)
+[**crate::models::CloudGamesNamespacesGetNamespaceLobbyResponse**](CloudGamesNamespacesGetNamespaceLobbyResponse.md)
 
 ### Authorization
 
@@ -43,7 +43,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_namespaces_logs_list_namespace_lobbies
 
-> crate::models::CloudGamesNamespacesListNamespaceLobbiesOutput cloud_games_namespaces_logs_list_namespace_lobbies(game_id, namespace_id, before_create_ts)
+> crate::models::CloudGamesNamespacesListNamespaceLobbiesResponse cloud_games_namespaces_logs_list_namespace_lobbies(game_id, namespace_id, before_create_ts)
 
 
 Returns a list of lobbies for the given game namespace.
@@ -53,13 +53,13 @@ Returns a list of lobbies for the given game namespace.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**namespace_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**namespace_id** | **uuid::Uuid** |  | [required] |
 **before_create_ts** | Option<**String**> | Returns lobbies created before this timestamp. |  |
 
 ### Return type
 
-[**crate::models::CloudGamesNamespacesListNamespaceLobbiesOutput**](CloudGamesNamespacesListNamespaceLobbiesOutput.md)
+[**crate::models::CloudGamesNamespacesListNamespaceLobbiesResponse**](CloudGamesNamespacesListNamespaceLobbiesResponse.md)
 
 ### Authorization
 

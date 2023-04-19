@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## group_invites_consume_invite
 
-> crate::models::GroupConsumeInviteOutput group_invites_consume_invite(group_invite_code)
+> crate::models::GroupConsumeInviteResponse group_invites_consume_invite(group_invite_code)
 
 
 Consumes a group invite to join a group.
@@ -22,11 +22,11 @@ Consumes a group invite to join a group.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_invite_code** | **String** | Provided by `rivet.api.group#CreateInviteOutput$code`. | [required] |
+**group_invite_code** | **String** | Provided by `rivet.api.group#CreateInviteResponse$code`. | [required] |
 
 ### Return type
 
-[**crate::models::GroupConsumeInviteOutput**](GroupConsumeInviteOutput.md)
+[**crate::models::GroupConsumeInviteResponse**](GroupConsumeInviteResponse.md)
 
 ### Authorization
 
@@ -42,7 +42,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_invites_create_invite
 
-> crate::models::GroupCreateInviteOutput group_invites_create_invite(group_id, group_create_invite_input)
+> crate::models::GroupCreateInviteResponse group_invites_create_invite(group_id, group_create_invite_request)
 
 
 Creates a group invite. Can be shared with other identities to let them join this group.
@@ -52,12 +52,12 @@ Creates a group invite. Can be shared with other identities to let them join thi
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**group_create_invite_input** | [**GroupCreateInviteInput**](GroupCreateInviteInput.md) |  | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**group_create_invite_request** | [**GroupCreateInviteRequest**](GroupCreateInviteRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::GroupCreateInviteOutput**](GroupCreateInviteOutput.md)
+[**crate::models::GroupCreateInviteResponse**](GroupCreateInviteResponse.md)
 
 ### Authorization
 
@@ -73,7 +73,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_invites_get_invite
 
-> crate::models::GroupGetInviteOutput group_invites_get_invite(group_invite_code)
+> crate::models::GroupGetInviteResponse group_invites_get_invite(group_invite_code)
 
 
 Inspects a group invite returning information about the team that created it.
@@ -83,11 +83,11 @@ Inspects a group invite returning information about the team that created it.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_invite_code** | **String** | Provided by `rivet.api.group#CreateInviteOutput$code`. | [required] |
+**group_invite_code** | **String** | Provided by `rivet.api.group#CreateInviteResponse$code`. | [required] |
 
 ### Return type
 
-[**crate::models::GroupGetInviteOutput**](GroupGetInviteOutput.md)
+[**crate::models::GroupGetInviteResponse**](GroupGetInviteResponse.md)
 
 ### Authorization
 

@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## chat_get_thread_history
 
-> crate::models::ChatGetThreadHistoryOutput chat_get_thread_history(thread_id, count, ts, query_direction)
+> crate::models::ChatGetThreadHistoryResponse chat_get_thread_history(thread_id, count, ts, query_direction)
 
 
 Returns message history for a given thread in a certain direction. Defaults to querying messages before ts.
@@ -25,14 +25,14 @@ Returns message history for a given thread in a certain direction. Defaults to q
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**thread_id** | **String** | A universally unique identifier. | [required] |
+**thread_id** | **uuid::Uuid** |  | [required] |
 **count** | **f64** | How many messages to collect in each direction. If querying `rivet.api.chat.common#QueryDirection$before_and_after`, `rivet.api.chat.common#QueryDirection$chat_messages` will be `count * 2`. | [required] |
 **ts** | Option<**String**> | RFC3339 timestamp. |  |
 **query_direction** | Option<**String**> | Represents which direction to query messages from relative to the given timestamp. |  |
 
 ### Return type
 
-[**crate::models::ChatGetThreadHistoryOutput**](ChatGetThreadHistoryOutput.md)
+[**crate::models::ChatGetThreadHistoryResponse**](ChatGetThreadHistoryResponse.md)
 
 ### Authorization
 
@@ -48,7 +48,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_get_thread_topic
 
-> crate::models::ChatGetThreadTopicOutput chat_get_thread_topic(thread_id)
+> crate::models::ChatGetThreadTopicResponse chat_get_thread_topic(thread_id)
 
 
 Fetches the topic of a thread.
@@ -58,11 +58,11 @@ Fetches the topic of a thread.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**thread_id** | **String** | A universally unique identifier. | [required] |
+**thread_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::ChatGetThreadTopicOutput**](ChatGetThreadTopicOutput.md)
+[**crate::models::ChatGetThreadTopicResponse**](ChatGetThreadTopicResponse.md)
 
 ### Authorization
 
@@ -78,7 +78,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_send_message
 
-> crate::models::ChatSendMessageOutput chat_send_message(chat_send_message_input)
+> crate::models::ChatSendMessageResponse chat_send_message(chat_send_message_request)
 
 
 Sends a chat message to a given topic.
@@ -88,11 +88,11 @@ Sends a chat message to a given topic.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**chat_send_message_input** | [**ChatSendMessageInput**](ChatSendMessageInput.md) |  | [required] |
+**chat_send_message_request** | [**ChatSendMessageRequest**](ChatSendMessageRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::ChatSendMessageOutput**](ChatSendMessageOutput.md)
+[**crate::models::ChatSendMessageResponse**](ChatSendMessageResponse.md)
 
 ### Authorization
 
@@ -108,7 +108,7 @@ Name | Type | Description  | Required | Notes
 
 ## chat_set_thread_read
 
-> chat_set_thread_read(thread_id, chat_set_thread_read_input)
+> chat_set_thread_read(thread_id, chat_set_thread_read_request)
 
 
 Updates the current identity's last read timestamp in the given thread.
@@ -118,8 +118,8 @@ Updates the current identity's last read timestamp in the given thread.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**thread_id** | **String** | A universally unique identifier. | [required] |
-**chat_set_thread_read_input** | [**ChatSetThreadReadInput**](ChatSetThreadReadInput.md) |  | [required] |
+**thread_id** | **uuid::Uuid** |  | [required] |
+**chat_set_thread_read_request** | [**ChatSetThreadReadRequest**](ChatSetThreadReadRequest.md) |  | [required] |
 
 ### Return type
 
@@ -132,14 +132,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## chat_set_typing_status
 
-> chat_set_typing_status(thread_id, chat_set_typing_status_input)
+> chat_set_typing_status(thread_id, chat_set_typing_status_request)
 
 
 Updates the current identity's typing status in the given thread.
@@ -149,8 +149,8 @@ Updates the current identity's typing status in the given thread.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**thread_id** | **String** | A universally unique identifier. | [required] |
-**chat_set_typing_status_input** | [**ChatSetTypingStatusInput**](ChatSetTypingStatusInput.md) |  | [required] |
+**thread_id** | **uuid::Uuid** |  | [required] |
+**chat_set_typing_status_request** | [**ChatSetTypingStatusRequest**](ChatSetTypingStatusRequest.md) |  | [required] |
 
 ### Return type
 
@@ -163,14 +163,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## chat_watch_thread
 
-> crate::models::ChatWatchThreadOutput chat_watch_thread(thread_id, watch_index)
+> crate::models::ChatWatchThreadResponse chat_watch_thread(thread_id, watch_index)
 
 
 Fetches all relevant changes from a thread that have happened since the given watch index.
@@ -180,12 +180,12 @@ Fetches all relevant changes from a thread that have happened since the given wa
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**thread_id** | **String** | A universally unique identifier. | [required] |
+**thread_id** | **uuid::Uuid** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::ChatWatchThreadOutput**](ChatWatchThreadOutput.md)
+[**crate::models::ChatWatchThreadResponse**](ChatWatchThreadResponse.md)
 
 ### Authorization
 

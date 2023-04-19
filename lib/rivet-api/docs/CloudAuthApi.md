@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## cloud_auth_inspect
 
-> crate::models::CloudInspectOutput cloud_auth_inspect()
+> crate::models::CloudInspectResponse cloud_auth_inspect()
 
 
 Returns information about the current authenticated agent.
@@ -21,7 +21,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**crate::models::CloudInspectOutput**](CloudInspectOutput.md)
+[**crate::models::CloudInspectResponse**](CloudInspectResponse.md)
 
 ### Authorization
 

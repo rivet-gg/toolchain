@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **duration** | **i64** | Unsigned 64 bit integer. | 
 **marks** | [**Vec<crate::models::CloudLogsPerfMark>**](CloudLogsPerfMark.md) | A list of performance marks. | 
-**req_id** | Option<**String**> | A universally unique identifier. | [optional]
+**req_id** | Option<[**uuid::Uuid**](uuid::Uuid.md)> |  | [optional]
 **spans** | [**Vec<crate::models::CloudLogsPerfSpan>**](CloudLogsPerfSpan.md) | A list of performance spans. | 
 **svc_name** | **String** | The name of the service. | 
 **ts** | **String** | RFC3339 timestamp. | 

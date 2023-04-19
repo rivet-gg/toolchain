@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## cloud_logs_get_ray_perf_logs
 
-> crate::models::CloudGetRayPerfLogsOutput cloud_logs_get_ray_perf_logs(ray_id)
+> crate::models::CloudGetRayPerfLogsResponse cloud_logs_get_ray_perf_logs(ray_id)
 
 
 Returns performance information about a Rivet Ray.
@@ -20,11 +20,11 @@ Returns performance information about a Rivet Ray.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**ray_id** | **String** | A universally unique identifier. | [required] |
+**ray_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGetRayPerfLogsOutput**](CloudGetRayPerfLogsOutput.md)
+[**crate::models::CloudGetRayPerfLogsResponse**](CloudGetRayPerfLogsResponse.md)
 
 ### Authorization
 

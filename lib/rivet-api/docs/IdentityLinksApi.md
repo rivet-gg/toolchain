@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## identity_links_cancel
 
-> identity_links_cancel(identity_links_cancel_request)
+> identity_links_cancel(identity_cancel_game_link_request)
 
 
 Cancels a game link. It can no longer be used to link after cancellation.
@@ -23,7 +23,7 @@ Cancels a game link. It can no longer be used to link after cancellation.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**identity_links_cancel_request** | [**IdentityLinksCancelRequest**](IdentityLinksCancelRequest.md) |  | [required] |
+**identity_cancel_game_link_request** | [**IdentityCancelGameLinkRequest**](IdentityCancelGameLinkRequest.md) |  | [required] |
 
 ### Return type
 
@@ -36,14 +36,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## identity_links_complete
 
-> identity_links_complete(identity_links_cancel_request)
+> identity_links_complete(identity_complete_game_link_request)
 
 
 Completes a game link process and returns whether or not the link is valid.
@@ -53,7 +53,7 @@ Completes a game link process and returns whether or not the link is valid.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**identity_links_cancel_request** | [**IdentityLinksCancelRequest**](IdentityLinksCancelRequest.md) |  | [required] |
+**identity_complete_game_link_request** | [**IdentityCompleteGameLinkRequest**](IdentityCompleteGameLinkRequest.md) |  | [required] |
 
 ### Return type
 
@@ -66,14 +66,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## identity_links_get
 
-> crate::models::IdentityGetGameLinkOutput identity_links_get(identity_link_token, watch_index)
+> crate::models::IdentityGetGameLinkResponse identity_links_get(identity_link_token, watch_index)
 
 
 Returns the current status of a linking process. Once `status` is `complete`, the identity's profile should be fetched again since they may have switched accounts.
@@ -88,7 +88,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityGetGameLinkOutput**](IdentityGetGameLinkOutput.md)
+[**crate::models::IdentityGetGameLinkResponse**](IdentityGetGameLinkResponse.md)
 
 ### Authorization
 
@@ -104,7 +104,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_links_prepare
 
-> crate::models::IdentityPrepareGameLinkOutput identity_links_prepare()
+> crate::models::IdentityPrepareGameLinkResponse identity_links_prepare()
 
 
 Begins the process for linking an identity with the Rivet Hub. # Importance of Linking Identities When an identity is created via `rivet.api.identity#SetupIdentity`, the identity is temporary and is not shared with other games the user plays. In order to make the identity permanent and synchronize the identity with other games, the identity must be linked with the hub. # Linking Process The linking process works by opening `identity_link_url` in a browser then polling `rivet.api.identity#GetGameLink` to wait for it to complete. This is designed to be as flexible as possible so `identity_link_url` can be opened on any device. For example, when playing a console game, the user can scan a QR code for `identity_link_url` to authenticate on their phone. 
@@ -115,7 +115,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**crate::models::IdentityPrepareGameLinkOutput**](IdentityPrepareGameLinkOutput.md)
+[**crate::models::IdentityPrepareGameLinkResponse**](IdentityPrepareGameLinkResponse.md)
 
 ### Authorization
 

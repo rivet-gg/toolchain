@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **description** | **String** | A description of the given game. | 
 **developer** | [**crate::models::GroupSummary**](GroupSummary.md) |  | 
 **display_name** | **String** | Represent a resource's readable display name. | 
-**game_id** | **String** | A universally unique identifier. | 
+**game_id** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
 **group_leaderboard_categories** | [**Vec<crate::models::GameLeaderboardCategory>**](GameLeaderboardCategory.md) | A list of game leaderboard categories. | 
 **identity_leaderboard_categories** | [**Vec<crate::models::GameLeaderboardCategory>**](GameLeaderboardCategory.md) | A list of game leaderboard categories. | 
 **logo_url** | Option<**String**> | The URL of this game's logo image. | [optional]

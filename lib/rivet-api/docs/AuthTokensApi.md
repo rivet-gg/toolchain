@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## auth_tokens_refresh_identity_token
 
-> crate::models::AuthRefreshIdentityTokenOutput auth_tokens_refresh_identity_token(auth_refresh_identity_token_input)
+> crate::models::AuthRefreshIdentityTokenResponse auth_tokens_refresh_identity_token(auth_refresh_identity_token_request)
 
 
 Refreshes the current identity's token and sets authentication headers.
@@ -20,11 +20,11 @@ Refreshes the current identity's token and sets authentication headers.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**auth_refresh_identity_token_input** | [**AuthRefreshIdentityTokenInput**](AuthRefreshIdentityTokenInput.md) |  | [required] |
+**auth_refresh_identity_token_request** | [**AuthRefreshIdentityTokenRequest**](AuthRefreshIdentityTokenRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::AuthRefreshIdentityTokenOutput**](AuthRefreshIdentityTokenOutput.md)
+[**crate::models::AuthRefreshIdentityTokenResponse**](AuthRefreshIdentityTokenResponse.md)
 
 ### Authorization
 

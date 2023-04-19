@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## identity_activities_list
 
-> crate::models::IdentityListActivitiesOutput identity_activities_list(watch_index)
+> crate::models::IdentityListActivitiesResponse identity_activities_list(watch_index)
 
 
 Returns an overview of all players currently online or in game.
@@ -24,7 +24,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityListActivitiesOutput**](IdentityListActivitiesOutput.md)
+[**crate::models::IdentityListActivitiesResponse**](IdentityListActivitiesResponse.md)
 
 ### Authorization
 

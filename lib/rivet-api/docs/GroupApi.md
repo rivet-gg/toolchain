@@ -36,8 +36,8 @@ Bans an identity from a group. Must be the owner of the group to perform this ac
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**identity_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**identity_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -50,7 +50,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -67,8 +67,8 @@ Completes an avatar image upload. Must be called after the file upload process c
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**upload_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**upload_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -81,14 +81,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## group_create
 
-> crate::models::GroupCreateOutput group_create(group_create_input)
+> crate::models::GroupCreateResponse group_create(group_create_request)
 
 
 Creates a new group.
@@ -98,11 +98,11 @@ Creates a new group.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_create_input** | [**GroupCreateInput**](GroupCreateInput.md) |  | [required] |
+**group_create_request** | [**GroupCreateRequest**](GroupCreateRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::GroupCreateOutput**](GroupCreateOutput.md)
+[**crate::models::GroupCreateResponse**](GroupCreateResponse.md)
 
 ### Authorization
 
@@ -118,7 +118,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_get_bans
 
-> crate::models::GroupGetBansOutput group_get_bans(group_id, anchor, count, watch_index)
+> crate::models::GroupGetBansResponse group_get_bans(group_id, anchor, count, watch_index)
 
 
 Returns a group's bans. Must have valid permissions to view.
@@ -128,14 +128,14 @@ Returns a group's bans. Must have valid permissions to view.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
 **anchor** | Option<**String**> | The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items. |  |
 **count** | Option<**f64**> | Amount of bans to return. |  |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::GroupGetBansOutput**](GroupGetBansOutput.md)
+[**crate::models::GroupGetBansResponse**](GroupGetBansResponse.md)
 
 ### Authorization
 
@@ -151,7 +151,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_get_join_requests
 
-> crate::models::GroupGetJoinRequestsOutput group_get_join_requests(group_id, anchor, count, watch_index)
+> crate::models::GroupGetJoinRequestsResponse group_get_join_requests(group_id, anchor, count, watch_index)
 
 
 Returns a group's join requests. Must have valid permissions to view.
@@ -161,14 +161,14 @@ Returns a group's join requests. Must have valid permissions to view.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
 **anchor** | Option<**String**> | The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items. |  |
 **count** | Option<**f64**> | Amount of join requests to return. |  |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::GroupGetJoinRequestsOutput**](GroupGetJoinRequestsOutput.md)
+[**crate::models::GroupGetJoinRequestsResponse**](GroupGetJoinRequestsResponse.md)
 
 ### Authorization
 
@@ -184,7 +184,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_get_members
 
-> crate::models::GroupGetMembersOutput group_get_members(group_id, anchor, count, watch_index)
+> crate::models::GroupGetMembersResponse group_get_members(group_id, anchor, count, watch_index)
 
 
 Returns a group's members.
@@ -194,14 +194,14 @@ Returns a group's members.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
 **anchor** | Option<**String**> | The pagination anchor. Set to the returned anchor of this endpoint to receive the next set of items. |  |
 **count** | Option<**f64**> | Amount of members to return. |  |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::GroupGetMembersOutput**](GroupGetMembersOutput.md)
+[**crate::models::GroupGetMembersResponse**](GroupGetMembersResponse.md)
 
 ### Authorization
 
@@ -217,7 +217,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_get_profile
 
-> crate::models::GroupGetProfileOutput group_get_profile(group_id, watch_index)
+> crate::models::GroupGetProfileResponse group_get_profile(group_id, watch_index)
 
 
 Returns a group profile.
@@ -227,12 +227,12 @@ Returns a group profile.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::GroupGetProfileOutput**](GroupGetProfileOutput.md)
+[**crate::models::GroupGetProfileResponse**](GroupGetProfileResponse.md)
 
 ### Authorization
 
@@ -248,7 +248,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_get_summary
 
-> crate::models::GroupGetSummaryOutput group_get_summary(group_id)
+> crate::models::GroupGetSummaryResponse group_get_summary(group_id)
 
 
 ### Parameters
@@ -256,11 +256,11 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::GroupGetSummaryOutput**](GroupGetSummaryOutput.md)
+[**crate::models::GroupGetSummaryResponse**](GroupGetSummaryResponse.md)
 
 ### Authorization
 
@@ -286,8 +286,8 @@ Kicks an identity from a group. Must be the owner of the group to perform this a
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**identity_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**identity_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -300,7 +300,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -317,7 +317,7 @@ Leaves a group.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -330,14 +330,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## group_list_suggested
 
-> crate::models::GroupListSuggestedOutput group_list_suggested(watch_index)
+> crate::models::GroupListSuggestedResponse group_list_suggested(watch_index)
 
 
 Returns a list of suggested groups.
@@ -351,7 +351,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GroupListSuggestedOutput**](GroupListSuggestedOutput.md)
+[**crate::models::GroupListSuggestedResponse**](GroupListSuggestedResponse.md)
 
 ### Authorization
 
@@ -367,7 +367,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_prepare_avatar_upload
 
-> crate::models::GroupPrepareAvatarUploadOutput group_prepare_avatar_upload(group_prepare_avatar_upload_input)
+> crate::models::GroupPrepareAvatarUploadResponse group_prepare_avatar_upload(group_prepare_avatar_upload_request)
 
 
 Prepares an avatar image upload. Complete upload with `rivet.api.group#CompleteAvatarUpload`.
@@ -377,11 +377,11 @@ Prepares an avatar image upload. Complete upload with `rivet.api.group#CompleteA
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_prepare_avatar_upload_input** | [**GroupPrepareAvatarUploadInput**](GroupPrepareAvatarUploadInput.md) |  | [required] |
+**group_prepare_avatar_upload_request** | [**GroupPrepareAvatarUploadRequest**](GroupPrepareAvatarUploadRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::GroupPrepareAvatarUploadOutput**](GroupPrepareAvatarUploadOutput.md)
+[**crate::models::GroupPrepareAvatarUploadResponse**](GroupPrepareAvatarUploadResponse.md)
 
 ### Authorization
 
@@ -397,7 +397,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_search
 
-> crate::models::GroupSearchOutput group_search(query, anchor, limit)
+> crate::models::GroupSearchResponse group_search(query, anchor, limit)
 
 
 Fuzzy search for groups.
@@ -413,7 +413,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::GroupSearchOutput**](GroupSearchOutput.md)
+[**crate::models::GroupSearchResponse**](GroupSearchResponse.md)
 
 ### Authorization
 
@@ -429,7 +429,7 @@ Name | Type | Description  | Required | Notes
 
 ## group_transfer_ownership
 
-> group_transfer_ownership(group_id, group_transfer_ownership_input)
+> group_transfer_ownership(group_id, group_transfer_ownership_request)
 
 
 Transfers ownership of a group to another identity.
@@ -439,8 +439,8 @@ Transfers ownership of a group to another identity.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**group_transfer_ownership_input** | [**GroupTransferOwnershipInput**](GroupTransferOwnershipInput.md) |  | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**group_transfer_ownership_request** | [**GroupTransferOwnershipRequest**](GroupTransferOwnershipRequest.md) |  | [required] |
 
 ### Return type
 
@@ -453,7 +453,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -470,8 +470,8 @@ Unbans an identity from a group. Must be the owner of the group to perform this 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**identity_id** | **String** | A universally unique identifier. | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**identity_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -484,14 +484,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## group_update_profile
 
-> group_update_profile(group_id, group_update_profile_input)
+> group_update_profile(group_id, group_update_profile_request)
 
 
 ### Parameters
@@ -499,8 +499,8 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **String** | A universally unique identifier. | [required] |
-**group_update_profile_input** | [**GroupUpdateProfileInput**](GroupUpdateProfileInput.md) |  | [required] |
+**group_id** | **uuid::Uuid** |  | [required] |
+**group_update_profile_request** | [**GroupUpdateProfileRequest**](GroupUpdateProfileRequest.md) |  | [required] |
 
 ### Return type
 
@@ -513,14 +513,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## group_validate_profile
 
-> crate::models::GroupValidateProfileOutput group_validate_profile(group_validate_profile_input)
+> crate::models::GroupValidateProfileResponse group_validate_profile(group_validate_profile_request)
 
 
 Validate contents of group profile. Use to provide immediate feedback on profile changes before committing them.
@@ -530,11 +530,11 @@ Validate contents of group profile. Use to provide immediate feedback on profile
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_validate_profile_input** | [**GroupValidateProfileInput**](GroupValidateProfileInput.md) |  | [required] |
+**group_validate_profile_request** | [**GroupValidateProfileRequest**](GroupValidateProfileRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::GroupValidateProfileOutput**](GroupValidateProfileOutput.md)
+[**crate::models::GroupValidateProfileResponse**](GroupValidateProfileResponse.md)
 
 ### Authorization
 

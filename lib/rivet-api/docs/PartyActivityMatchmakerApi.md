@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## party_activity_matchmaker_find_lobby_for_party
 
-> party_activity_matchmaker_find_lobby_for_party(party_activity_find_matchmaker_lobby_for_party_input)
+> party_activity_matchmaker_find_lobby_for_party(party_activity_find_matchmaker_lobby_for_party_request)
 
 
 Attempts to make the current identity's party find a lobby based on the given criteria. If succeeds, all party members will receive a `GlobalEventMatchmakerLobbyJoin` event with all the information required to join the lobby. This request will use the party player count configured for the lobby group. See `FindLobby`.
@@ -22,7 +22,7 @@ Attempts to make the current identity's party find a lobby based on the given cr
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_activity_find_matchmaker_lobby_for_party_input** | [**PartyActivityFindMatchmakerLobbyForPartyInput**](PartyActivityFindMatchmakerLobbyForPartyInput.md) |  | [required] |
+**party_activity_find_matchmaker_lobby_for_party_request** | [**PartyActivityFindMatchmakerLobbyForPartyRequest**](PartyActivityFindMatchmakerLobbyForPartyRequest.md) |  | [required] |
 
 ### Return type
 
@@ -35,14 +35,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## party_activity_matchmaker_join_lobby_for_party
 
-> party_activity_matchmaker_join_lobby_for_party(party_activity_join_matchmaker_lobby_for_party_input)
+> party_activity_matchmaker_join_lobby_for_party(party_activity_join_matchmaker_lobby_for_party_request)
 
 
 Attempts to make the current identity's party join a specific matchmaker lobby. This request will use the party player count configured for the lobby group. If succeeds, all party members will receive a `GlobalEventMatchmakerLobbyJoin` event with all the information required to join the lobby. Identity must be the party leader. See `JoinLobby`.
@@ -52,7 +52,7 @@ Attempts to make the current identity's party join a specific matchmaker lobby. 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_activity_join_matchmaker_lobby_for_party_input** | [**PartyActivityJoinMatchmakerLobbyForPartyInput**](PartyActivityJoinMatchmakerLobbyForPartyInput.md) |  | [required] |
+**party_activity_join_matchmaker_lobby_for_party_request** | [**PartyActivityJoinMatchmakerLobbyForPartyRequest**](PartyActivityJoinMatchmakerLobbyForPartyRequest.md) |  | [required] |
 
 ### Return type
 
@@ -65,7 +65,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -90,7 +90,7 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

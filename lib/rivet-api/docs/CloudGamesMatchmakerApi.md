@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## cloud_games_matchmaker_delete_matchmaker_lobby
 
-> crate::models::CloudGamesDeleteMatchmakerLobbyOutput cloud_games_matchmaker_delete_matchmaker_lobby(game_id, lobby_id)
+> crate::models::CloudGamesDeleteMatchmakerLobbyResponse cloud_games_matchmaker_delete_matchmaker_lobby(game_id, lobby_id)
 
 
 Deletes a matchmaker lobby, stopping it immediately.
@@ -23,12 +23,12 @@ Deletes a matchmaker lobby, stopping it immediately.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**lobby_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**lobby_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesDeleteMatchmakerLobbyOutput**](CloudGamesDeleteMatchmakerLobbyOutput.md)
+[**crate::models::CloudGamesDeleteMatchmakerLobbyResponse**](CloudGamesDeleteMatchmakerLobbyResponse.md)
 
 ### Authorization
 
@@ -44,7 +44,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_matchmaker_export_lobby_logs
 
-> crate::models::CloudGamesExportLobbyLogsOutput cloud_games_matchmaker_export_lobby_logs(game_id, lobby_id, cloud_games_export_lobby_logs_input)
+> crate::models::CloudGamesExportLobbyLogsResponse cloud_games_matchmaker_export_lobby_logs(game_id, lobby_id, cloud_games_export_lobby_logs_request)
 
 
 Generates a download URL for logs.
@@ -54,13 +54,13 @@ Generates a download URL for logs.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**lobby_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_export_lobby_logs_input** | [**CloudGamesExportLobbyLogsInput**](CloudGamesExportLobbyLogsInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**lobby_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_export_lobby_logs_request** | [**CloudGamesExportLobbyLogsRequest**](CloudGamesExportLobbyLogsRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesExportLobbyLogsOutput**](CloudGamesExportLobbyLogsOutput.md)
+[**crate::models::CloudGamesExportLobbyLogsResponse**](CloudGamesExportLobbyLogsResponse.md)
 
 ### Authorization
 
@@ -76,7 +76,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_matchmaker_export_matchmaker_lobby_history
 
-> crate::models::CloudGamesExportMatchmakerLobbyHistoryOutput cloud_games_matchmaker_export_matchmaker_lobby_history(game_id, cloud_games_export_matchmaker_lobby_history_input)
+> crate::models::CloudGamesExportMatchmakerLobbyHistoryResponse cloud_games_matchmaker_export_matchmaker_lobby_history(game_id, cloud_games_export_matchmaker_lobby_history_request)
 
 
 Exports lobby history over a given query time span.
@@ -86,12 +86,12 @@ Exports lobby history over a given query time span.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_export_matchmaker_lobby_history_input** | [**CloudGamesExportMatchmakerLobbyHistoryInput**](CloudGamesExportMatchmakerLobbyHistoryInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_export_matchmaker_lobby_history_request** | [**CloudGamesExportMatchmakerLobbyHistoryRequest**](CloudGamesExportMatchmakerLobbyHistoryRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesExportMatchmakerLobbyHistoryOutput**](CloudGamesExportMatchmakerLobbyHistoryOutput.md)
+[**crate::models::CloudGamesExportMatchmakerLobbyHistoryResponse**](CloudGamesExportMatchmakerLobbyHistoryResponse.md)
 
 ### Authorization
 
@@ -107,7 +107,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_matchmaker_get_lobby_logs
 
-> crate::models::CloudGamesGetLobbyLogsOutput cloud_games_matchmaker_get_lobby_logs(game_id, lobby_id, stream, watch_index)
+> crate::models::CloudGamesGetLobbyLogsResponse cloud_games_matchmaker_get_lobby_logs(game_id, lobby_id, stream, watch_index)
 
 
 Returns the logs for a given lobby.
@@ -117,14 +117,14 @@ Returns the logs for a given lobby.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**lobby_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**lobby_id** | **uuid::Uuid** |  | [required] |
 **stream** | **String** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::CloudGamesGetLobbyLogsOutput**](CloudGamesGetLobbyLogsOutput.md)
+[**crate::models::CloudGamesGetLobbyLogsResponse**](CloudGamesGetLobbyLogsResponse.md)
 
 ### Authorization
 

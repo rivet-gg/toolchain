@@ -22,8 +22,8 @@ Completes a custom avatar image upload. Must be called after the file upload pro
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**upload_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**upload_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -36,14 +36,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## cloud_games_avatars_list_game_custom_avatars
 
-> crate::models::CloudGamesListGameCustomAvatarsOutput cloud_games_avatars_list_game_custom_avatars(game_id)
+> crate::models::CloudGamesListGameCustomAvatarsResponse cloud_games_avatars_list_game_custom_avatars(game_id)
 
 
 Lists custom avatars for the given game.
@@ -53,11 +53,11 @@ Lists custom avatars for the given game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesListGameCustomAvatarsOutput**](CloudGamesListGameCustomAvatarsOutput.md)
+[**crate::models::CloudGamesListGameCustomAvatarsResponse**](CloudGamesListGameCustomAvatarsResponse.md)
 
 ### Authorization
 
@@ -73,7 +73,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_avatars_prepare_custom_avatar_upload
 
-> crate::models::CloudGamesPrepareCustomAvatarUploadOutput cloud_games_avatars_prepare_custom_avatar_upload(game_id, cloud_games_prepare_custom_avatar_upload_input)
+> crate::models::CloudGamesPrepareCustomAvatarUploadResponse cloud_games_avatars_prepare_custom_avatar_upload(game_id, cloud_games_prepare_custom_avatar_upload_request)
 
 
 Prepares a custom avatar image upload. Complete upload with `rivet.api.cloud#CompleteCustomAvatarUpload`.
@@ -83,12 +83,12 @@ Prepares a custom avatar image upload. Complete upload with `rivet.api.cloud#Com
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_prepare_custom_avatar_upload_input** | [**CloudGamesPrepareCustomAvatarUploadInput**](CloudGamesPrepareCustomAvatarUploadInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_prepare_custom_avatar_upload_request** | [**CloudGamesPrepareCustomAvatarUploadRequest**](CloudGamesPrepareCustomAvatarUploadRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesPrepareCustomAvatarUploadOutput**](CloudGamesPrepareCustomAvatarUploadOutput.md)
+[**crate::models::CloudGamesPrepareCustomAvatarUploadResponse**](CloudGamesPrepareCustomAvatarUploadResponse.md)
 
 ### Authorization
 

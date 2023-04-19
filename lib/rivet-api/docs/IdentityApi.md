@@ -12,16 +12,20 @@ Method | HTTP request | Description
 [**identity_get_summaries**](IdentityApi.md#identity_get_summaries) | **GET** /identities/batch/summary | 
 [**identity_ignore_recent_follower**](IdentityApi.md#identity_ignore_recent_follower) | **POST** /identities/self/recent-followers/{identity_id}/ignore | 
 [**identity_list_followers**](IdentityApi.md#identity_list_followers) | **GET** /identities/{identity_id}/followers | 
+[**identity_list_following**](IdentityApi.md#identity_list_following) | **GET** /identities/{identity_id}/following | 
 [**identity_list_friends**](IdentityApi.md#identity_list_friends) | **GET** /identities/self/friends | 
 [**identity_list_mutual_friends**](IdentityApi.md#identity_list_mutual_friends) | **GET** /identities/{identity_id}/mutual-friends | 
 [**identity_list_recent_followers**](IdentityApi.md#identity_list_recent_followers) | **GET** /identities/self/recent-followers | 
+[**identity_mark_deletion**](IdentityApi.md#identity_mark_deletion) | **POST** /identities/self/delete-request | 
 [**identity_prepare_avatar_upload**](IdentityApi.md#identity_prepare_avatar_upload) | **POST** /identities/avatar-upload/prepare | 
 [**identity_remove_game_activity**](IdentityApi.md#identity_remove_game_activity) | **DELETE** /identities/self/activity | 
 [**identity_report**](IdentityApi.md#identity_report) | **POST** /identities/{identity_id}/report | 
 [**identity_search**](IdentityApi.md#identity_search) | **GET** /identities/search | 
 [**identity_set_game_activity**](IdentityApi.md#identity_set_game_activity) | **POST** /identities/self/activity | 
 [**identity_setup**](IdentityApi.md#identity_setup) | **POST** /identities | 
+[**identity_signup_for_beta**](IdentityApi.md#identity_signup_for_beta) | **POST** /identities/self/beta-signup | 
 [**identity_unfollow**](IdentityApi.md#identity_unfollow) | **DELETE** /identities/{identity_id}/follow | 
+[**identity_unmark_deletion**](IdentityApi.md#identity_unmark_deletion) | **DELETE** /identities/self/delete-request | 
 [**identity_update_profile**](IdentityApi.md#identity_update_profile) | **POST** /identities/self/profile | 
 [**identity_update_status**](IdentityApi.md#identity_update_status) | **POST** /identities/identities/self/status | 
 [**identity_validate_profile**](IdentityApi.md#identity_validate_profile) | **POST** /identities/self/profile/validate | 
@@ -53,7 +57,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -83,14 +87,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## identity_get_handles
 
-> crate::models::IdentityGetHandlesOutput identity_get_handles(identity_ids)
+> crate::models::IdentityGetHandlesResponse identity_get_handles(identity_ids)
 
 
 Fetches a list of identity handles.
@@ -104,7 +108,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityGetHandlesOutput**](IdentityGetHandlesOutput.md)
+[**crate::models::IdentityGetHandlesResponse**](IdentityGetHandlesResponse.md)
 
 ### Authorization
 
@@ -120,7 +124,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_profile
 
-> crate::models::IdentityGetProfileOutput identity_get_profile(identity_id, watch_index)
+> crate::models::IdentityGetProfileResponse identity_get_profile(identity_id, watch_index)
 
 
 Fetches an identity profile.
@@ -135,7 +139,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityGetProfileOutput**](IdentityGetProfileOutput.md)
+[**crate::models::IdentityGetProfileResponse**](IdentityGetProfileResponse.md)
 
 ### Authorization
 
@@ -151,7 +155,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_self_profile
 
-> crate::models::IdentityGetProfileOutput identity_get_self_profile(watch_index)
+> crate::models::IdentityGetProfileResponse identity_get_self_profile(watch_index)
 
 
 Fetches the current identity's profile.
@@ -165,7 +169,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityGetProfileOutput**](IdentityGetProfileOutput.md)
+[**crate::models::IdentityGetProfileResponse**](IdentityGetProfileResponse.md)
 
 ### Authorization
 
@@ -181,7 +185,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_get_summaries
 
-> crate::models::IdentityGetSummariesOutput identity_get_summaries(identity_ids)
+> crate::models::IdentityGetSummariesResponse identity_get_summaries(identity_ids)
 
 
 Fetches a list of identity summaries.
@@ -195,7 +199,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityGetSummariesOutput**](IdentityGetSummariesOutput.md)
+[**crate::models::IdentityGetSummariesResponse**](IdentityGetSummariesResponse.md)
 
 ### Authorization
 
@@ -232,14 +236,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## identity_list_followers
 
-> crate::models::IdentityListFollowersOutput identity_list_followers(identity_id, anchor, limit)
+> crate::models::IdentityListFollowersResponse identity_list_followers(identity_id, anchor, limit)
 
 
 ### Parameters
@@ -253,7 +257,37 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityListFollowersOutput**](IdentityListFollowersOutput.md)
+[**crate::models::IdentityListFollowersResponse**](IdentityListFollowersResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## identity_list_following
+
+> crate::models::IdentityListFollowingResponse identity_list_following(identity_id, anchor, limit)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**identity_id** | **uuid::Uuid** |  | [required] |
+**anchor** | Option<**String**> |  |  |
+**limit** | Option<**String**> | Range is between 1 and 32 (inclusive). |  |
+
+### Return type
+
+[**crate::models::IdentityListFollowingResponse**](IdentityListFollowingResponse.md)
 
 ### Authorization
 
@@ -269,7 +303,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_list_friends
 
-> crate::models::IdentityListFriendsOutput identity_list_friends(anchor, limit)
+> crate::models::IdentityListFriendsResponse identity_list_friends(anchor, limit)
 
 
 ### Parameters
@@ -282,7 +316,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityListFriendsOutput**](IdentityListFriendsOutput.md)
+[**crate::models::IdentityListFriendsResponse**](IdentityListFriendsResponse.md)
 
 ### Authorization
 
@@ -298,7 +332,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_list_mutual_friends
 
-> crate::models::IdentityListMutualFriendsOutput identity_list_mutual_friends(identity_id, anchor, limit)
+> crate::models::IdentityListMutualFriendsResponse identity_list_mutual_friends(identity_id, anchor, limit)
 
 
 ### Parameters
@@ -312,7 +346,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityListMutualFriendsOutput**](IdentityListMutualFriendsOutput.md)
+[**crate::models::IdentityListMutualFriendsResponse**](IdentityListMutualFriendsResponse.md)
 
 ### Authorization
 
@@ -328,7 +362,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_list_recent_followers
 
-> crate::models::IdentityListRecentFollowersOutput identity_list_recent_followers(count, watch_index)
+> crate::models::IdentityListRecentFollowersResponse identity_list_recent_followers(count, watch_index)
 
 
 ### Parameters
@@ -341,7 +375,32 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityListRecentFollowersOutput**](IdentityListRecentFollowersOutput.md)
+[**crate::models::IdentityListRecentFollowersResponse**](IdentityListRecentFollowersResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## identity_mark_deletion
+
+> identity_mark_deletion()
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+ (empty response body)
 
 ### Authorization
 
@@ -357,7 +416,7 @@ Name | Type | Description  | Required | Notes
 
 ## identity_prepare_avatar_upload
 
-> crate::models::IdentityPrepareAvatarUploadOutput identity_prepare_avatar_upload(identity_prepare_avatar_upload_request)
+> crate::models::IdentityPrepareAvatarUploadResponse identity_prepare_avatar_upload(identity_prepare_avatar_upload_request)
 
 
 Prepares an avatar image upload. Complete upload with `CompleteIdentityAvatarUpload`.
@@ -371,7 +430,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityPrepareAvatarUploadOutput**](IdentityPrepareAvatarUploadOutput.md)
+[**crate::models::IdentityPrepareAvatarUploadResponse**](IdentityPrepareAvatarUploadResponse.md)
 
 ### Authorization
 
@@ -407,7 +466,7 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -438,14 +497,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## identity_search
 
-> crate::models::IdentitySearchOutput identity_search(query, anchor, limit)
+> crate::models::IdentitySearchResponse identity_search(query, anchor, limit)
 
 
 Fuzzy search for identities.
@@ -461,7 +520,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentitySearchOutput**](IdentitySearchOutput.md)
+[**crate::models::IdentitySearchResponse**](IdentitySearchResponse.md)
 
 ### Authorization
 
@@ -500,14 +559,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## identity_setup
 
-> crate::models::IdentitySetupOutput identity_setup(identity_link_token)
+> crate::models::IdentitySetupResponse identity_setup(identity_setup_request)
 
 
 Gets or creates an identity. Passing an existing identity token in the body refreshes the token. Temporary Accounts Until the identity is linked with the Rivet Hub (see `PrepareGameLink`), this identity will be temporary but still behave like all other identities. This is intended to allow users to play the game without signing up while still having the benefits of having an account. When they are ready to save their account, they should be instructed to link their account (see `PrepareGameLink`). Storing Token `identity_token` should be stored in some form of persistent storage. The token should be read from storage and passed to `Setup` every time the client starts.
@@ -517,11 +576,11 @@ Gets or creates an identity. Passing an existing identity token in the body refr
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**identity_link_token** | **String** |  | [required] |
+**identity_setup_request** | [**IdentitySetupRequest**](IdentitySetupRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::IdentitySetupOutput**](IdentitySetupOutput.md)
+[**crate::models::IdentitySetupResponse**](IdentitySetupResponse.md)
 
 ### Authorization
 
@@ -529,7 +588,37 @@ Name | Type | Description  | Required | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## identity_signup_for_beta
+
+> identity_signup_for_beta(identity_signup_for_beta_request)
+
+
+Completes an avatar image upload. Must be called after the file upload process completes.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**identity_signup_for_beta_request** | [**IdentitySignupForBetaRequest**](IdentitySignupForBetaRequest.md) |  | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -560,7 +649,32 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## identity_unmark_deletion
+
+> identity_unmark_deletion()
+
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -590,7 +704,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -620,7 +734,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -650,7 +764,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
