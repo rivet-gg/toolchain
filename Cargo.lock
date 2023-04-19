@@ -108,7 +108,7 @@ dependencies = [
  "aws-smithy-async",
  "aws-smithy-http",
  "aws-smithy-http-tower",
- "aws-smithy-types 0.41.0",
+ "aws-smithy-types",
  "bytes",
  "fastrand",
  "http",
@@ -130,7 +130,7 @@ version = "0.41.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d800c8684fa567cdf1abd9654c7997b2a887e7b06022938756193472ec7ec251"
 dependencies = [
- "aws-smithy-types 0.41.0",
+ "aws-smithy-types",
  "bytes",
  "bytes-utils",
  "futures-core",
@@ -166,7 +166,7 @@ version = "0.41.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3796e2a4a3b7d15db2fd5aec2de9220919332648f0a56a77b5c53caf4a9653fa"
 dependencies = [
- "aws-smithy-types 0.41.0",
+ "aws-smithy-types",
 ]
 
 [[package]]
@@ -175,19 +175,6 @@ version = "0.41.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c7f957a2250cc0fa4ccf155e00aeac9a81f600df7cd4ecc910c75030e6534f5"
 dependencies = [
- "itoa",
- "num-integer",
- "ryu",
- "time 0.3.20",
-]
-
-[[package]]
-name = "aws-smithy-types"
-version = "0.55.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd0afc731fd1417d791f9145a1e0c30e23ae0beaab9b4814017708ead2fc20f1"
-dependencies = [
- "base64-simd",
  "itoa",
  "num-integer",
  "ryu",
@@ -205,16 +192,6 @@ name = "base64"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4a4ddaa51a5bc52a6948f74c06d20aaaddb71924eab79b8c97a8c556e942d6a"
-
-[[package]]
-name = "base64-simd"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "339abbe78e73178762e23bea9dfd08e697eb3f3301cd4be981c0f78ba5859195"
-dependencies = [
- "outref",
- "vsimd",
-]
 
 [[package]]
 name = "bitflags"
@@ -1340,12 +1317,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ceedf44fb00f2d1984b0bc98102627ce622e083e49a5bacdb3e514fa4238e267"
 
 [[package]]
-name = "outref"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4030760ffd992bef45b0ae3f10ce1aba99e33464c90d14dd7c039884963ddc7a"
-
-[[package]]
 name = "papergrid"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1636,12 +1607,25 @@ dependencies = [
 ]
 
 [[package]]
-name = "rivet"
+name = "rivet-api"
+version = "0.0.1"
+dependencies = [
+ "reqwest",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "serde_with",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "rivet-cli"
 version = "0.0.48"
 dependencies = [
  "anyhow",
  "async-stream",
- "aws-smithy-types 0.55.1",
+ "aws-smithy-types",
  "chrono",
  "clap",
  "config",
@@ -1664,19 +1648,6 @@ dependencies = [
  "uuid",
  "vergen",
  "webbrowser",
-]
-
-[[package]]
-name = "rivet-api"
-version = "0.0.1"
-dependencies = [
- "reqwest",
- "serde",
- "serde_derive",
- "serde_json",
- "serde_with",
- "url",
- "uuid",
 ]
 
 [[package]]
@@ -1704,7 +1675,7 @@ dependencies = [
  "aws-smithy-client",
  "aws-smithy-http",
  "aws-smithy-json",
- "aws-smithy-types 0.41.0",
+ "aws-smithy-types",
  "bytes",
  "http",
  "tower",
@@ -2432,12 +2403,6 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
-
-[[package]]
-name = "vsimd"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c3082ca00d5a5ef149bb8b555a72ae84c9c59f7250f013ac822ac2e49b19c64"
 
 [[package]]
 name = "walkdir"

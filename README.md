@@ -26,6 +26,6 @@ cargo install cargo-dist
 cargo install cargo-release
 
 # Release a version
-cargo release --package rivet --no-publish X.X.X
+cargo release --no-publish --package rivet-cli --package rivet-cli-core 0.0.50
 ```
 
