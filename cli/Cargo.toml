@@ -4,6 +4,8 @@ version = "0.0.48"
 authors = ["Rivet Gaming, Inc. <developer@rivet.gg>"]
 edition = "2018"
 license = "MIT"
+homepage = "https://rivet.gg"
+repository = "https://github.com/rivet-gg/cli"
 build = "build.rs"
 
 [dependencies]
