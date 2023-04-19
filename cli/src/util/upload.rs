@@ -125,7 +125,7 @@ pub async fn upload_file(
 						let progress = (uploaded as f64 / file_len as f64) * 100.;
 
 						let duration = start.elapsed();
-						let rate = (uploaded as f64 / duration.as_secs_f64());
+						let rate = uploaded as f64 / duration.as_secs_f64();
 
 						let time_remaining_total = ((file_len as f64 - uploaded as f64) / rate).ceil() as usize;
 						let time_remaining_secs = time_remaining_total % 60;

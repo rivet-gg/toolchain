@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Default Docker build method is now Buildx, even if the native platform is x86
-- Update rivet-api to `v0.0.1-rc19`
+- Update dependency: `rivet-api`
 - Upgrade dependency: `tokio 1.27`
 - Removed unnecessary feature flags from `tokio`
 
