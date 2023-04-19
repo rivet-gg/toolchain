@@ -59,7 +59,7 @@ echo "> Installing Rivet CLI @ $RIVET_CLI_VERSION"
 
 if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 	echo
-	ASSET_NAME="rivet-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
+	ASSET_NAME="rivet-cli-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
 	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/${ASSET_NAME}"
 	echo "> Downloading $URL"
 	curl -fsSL "$URL" -o rivet_cli.tar.xz
@@ -70,7 +70,7 @@ if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 
 	echo
 	echo "> Installing rivet"
-	sudo mv "./rivet-${RIVET_CLI_VERSION}-x86_64-apple-darwin/rivet" "/usr/local/bin/rivet"
+	sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-apple-darwin/rivet-cli" "/usr/local/bin/rivet"
 elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
 	ASSET_NAME="rivet-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
@@ -85,9 +85,9 @@ elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
 	echo "> Installing rivet"
 	if command -v sudo; then
-		sudo mv "./rivet-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet" "/usr/local/bin/rivet"
+		sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet-cli" "/usr/local/bin/rivet"
 	else
-		mv "./rivet-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet" "/usr/local/bin/rivet"
+		mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet-cli" "/usr/local/bin/rivet"
 	fi
 else
 	exit 1
