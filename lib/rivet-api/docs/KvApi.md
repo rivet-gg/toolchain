@@ -5,8 +5,12 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**kv_delete**](KvApi.md#kv_delete) | **DELETE** /entries | 
+[**kv_delete_batch**](KvApi.md#kv_delete_batch) | **DELETE** /entries/batch | 
 [**kv_get**](KvApi.md#kv_get) | **GET** /entries | 
+[**kv_get_batch**](KvApi.md#kv_get_batch) | **GET** /entries/batch | 
+[**kv_list**](KvApi.md#kv_list) | **GET** /entries/list | 
 [**kv_put**](KvApi.md#kv_put) | **PUT** /entries | 
+[**kv_put_batch**](KvApi.md#kv_put_batch) | **PUT** /entries/batch | 
 
 
 
@@ -22,8 +26,8 @@ Deletes a key-value entry by key.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**key** | **String** | A string representing a key in the key-value database. Key path components are split by a slash (e.g. `a/b/c` has the path components `[\"a\", \"b\", \"c\"]`). Slashes can be escaped by using a forward slash (e.g. `a/b/c/d` has the path components `[\"a\", \"b/c\", \"d\"]`). See `rivet.api.kv.common#KeyComponents` for the structure of a `rivet.api.kv.common#Key` split by `/`. | [required] |
-**namespace_id** | Option<**String**> | A universally unique identifier. |  |
+**key** | **String** |  | [required] |
+**namespace_id** | Option<**uuid::Uuid**> |  |  |
 
 ### Return type
 
@@ -36,14 +40,45 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## kv_delete_batch
+
+> kv_delete_batch(keys, namespace_id)
+
+
+Deletes multiple key-value entries by key(s).
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**keys** | **String** |  | [required] |
+**namespace_id** | Option<**uuid::Uuid**> |  |  |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## kv_get
 
-> crate::models::KvGetOutput kv_get(key, watch_index, namespace_id)
+> crate::models::KvGetResponse kv_get(key, watch_index, namespace_id)
 
 
 Returns a specific key-value entry by key.
@@ -53,13 +88,76 @@ Returns a specific key-value entry by key.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**key** | **String** | A string representing a key in the key-value database. Key path components are split by a slash (e.g. `a/b/c` has the path components `[\"a\", \"b\", \"c\"]`). Slashes can be escaped by using a forward slash (e.g. `a/b/c/d` has the path components `[\"a\", \"b/c\", \"d\"]`). See `rivet.api.kv.common#KeyComponents` for the structure of a `rivet.api.kv.common#Key` split by `/`. | [required] |
+**key** | **String** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
-**namespace_id** | Option<**String**> | A universally unique identifier. |  |
+**namespace_id** | Option<**uuid::Uuid**> |  |  |
 
 ### Return type
 
-[**crate::models::KvGetOutput**](KvGetOutput.md)
+[**crate::models::KvGetResponse**](KvGetResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## kv_get_batch
+
+> crate::models::KvGetBatchResponse kv_get_batch(keys, watch_index, namespace_id)
+
+
+Gets multiple key-value entries by key(s).
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**keys** | **String** |  | [required] |
+**watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
+**namespace_id** | Option<**uuid::Uuid**> |  |  |
+
+### Return type
+
+[**crate::models::KvGetBatchResponse**](KvGetBatchResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## kv_list
+
+> crate::models::KvListResponse kv_list(directory, namespace_id)
+
+
+Lists all keys in a directory.
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**directory** | **String** |  | [required] |
+**namespace_id** | **uuid::Uuid** |  | [required] |
+
+### Return type
+
+[**crate::models::KvListResponse**](KvListResponse.md)
 
 ### Authorization
 
@@ -75,7 +173,7 @@ Name | Type | Description  | Required | Notes
 
 ## kv_put
 
-> kv_put(kv_put_input)
+> kv_put(kv_put_request)
 
 
 Puts (sets or overwrites) a key-value entry by key.
@@ -85,7 +183,7 @@ Puts (sets or overwrites) a key-value entry by key.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**kv_put_input** | [**KvPutInput**](KvPutInput.md) |  | [required] |
+**kv_put_request** | [**KvPutRequest**](KvPutRequest.md) |  | [required] |
 
 ### Return type
 
@@ -98,7 +196,37 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## kv_put_batch
+
+> kv_put_batch(kv_put_batch_request)
+
+
+Puts (sets or overwrites) multiple key-value entries by key(s).
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**kv_put_batch_request** | [**KvPutBatchRequest**](KvPutBatchRequest.md) |  | [required] |
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

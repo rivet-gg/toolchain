@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## cloud_games_cdn_create_game_cdn_site
 
-> crate::models::CloudGamesCreateGameCdnSiteOutput cloud_games_cdn_create_game_cdn_site(game_id, cloud_games_create_game_cdn_site_input)
+> crate::models::CloudGamesCreateGameCdnSiteResponse cloud_games_cdn_create_game_cdn_site(game_id, cloud_games_create_game_cdn_site_request)
 
 
 Creates a new CDN site for the given game.
@@ -21,12 +21,12 @@ Creates a new CDN site for the given game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_create_game_cdn_site_input** | [**CloudGamesCreateGameCdnSiteInput**](CloudGamesCreateGameCdnSiteInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_create_game_cdn_site_request** | [**CloudGamesCreateGameCdnSiteRequest**](CloudGamesCreateGameCdnSiteRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesCreateGameCdnSiteOutput**](CloudGamesCreateGameCdnSiteOutput.md)
+[**crate::models::CloudGamesCreateGameCdnSiteResponse**](CloudGamesCreateGameCdnSiteResponse.md)
 
 ### Authorization
 
@@ -42,7 +42,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_cdn_list_game_cdn_sites
 
-> crate::models::CloudGamesListGameCdnSitesOutput cloud_games_cdn_list_game_cdn_sites(game_id)
+> crate::models::CloudGamesListGameCdnSitesResponse cloud_games_cdn_list_game_cdn_sites(game_id)
 
 
 Lists CDN sites for a game.
@@ -52,11 +52,11 @@ Lists CDN sites for a game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesListGameCdnSitesOutput**](CloudGamesListGameCdnSitesOutput.md)
+[**crate::models::CloudGamesListGameCdnSitesResponse**](CloudGamesListGameCdnSitesResponse.md)
 
 ### Authorization
 

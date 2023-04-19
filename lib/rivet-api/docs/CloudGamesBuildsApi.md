@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## cloud_games_builds_create_game_build
 
-> crate::models::CloudGamesCreateGameBuildOutput cloud_games_builds_create_game_build(game_id, cloud_games_create_game_build_input)
+> crate::models::CloudGamesCreateGameBuildResponse cloud_games_builds_create_game_build(game_id, cloud_games_create_game_build_request)
 
 
 Creates a new game build for the given game.
@@ -21,12 +21,12 @@ Creates a new game build for the given game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_create_game_build_input** | [**CloudGamesCreateGameBuildInput**](CloudGamesCreateGameBuildInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_create_game_build_request** | [**CloudGamesCreateGameBuildRequest**](CloudGamesCreateGameBuildRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesCreateGameBuildOutput**](CloudGamesCreateGameBuildOutput.md)
+[**crate::models::CloudGamesCreateGameBuildResponse**](CloudGamesCreateGameBuildResponse.md)
 
 ### Authorization
 
@@ -42,7 +42,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_builds_list_game_builds
 
-> crate::models::CloudGamesListGameBuildsOutput cloud_games_builds_list_game_builds(game_id)
+> crate::models::CloudGamesListGameBuildsResponse cloud_games_builds_list_game_builds(game_id)
 
 
 Lists game builds for the given game.
@@ -52,11 +52,11 @@ Lists game builds for the given game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesListGameBuildsOutput**](CloudGamesListGameBuildsOutput.md)
+[**crate::models::CloudGamesListGameBuildsResponse**](CloudGamesListGameBuildsResponse.md)
 
 ### Authorization
 

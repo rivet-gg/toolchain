@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**cloud_games_games_game_banner_upload_prepare**](CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
 [**cloud_games_games_game_logo_upload_complete**](CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
 [**cloud_games_games_game_logo_upload_prepare**](CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
+[**cloud_games_games_get_analytics**](CloudGamesGamesApi.md#cloud_games_games_get_analytics) | **GET** /games/namespaces/analytics | 
 [**cloud_games_games_get_game_by_id**](CloudGamesGamesApi.md#cloud_games_games_get_game_by_id) | **GET** /games/{game_id} | 
 [**cloud_games_games_get_games**](CloudGamesGamesApi.md#cloud_games_games_get_games) | **GET** /games | 
 [**cloud_games_games_validate_game**](CloudGamesGamesApi.md#cloud_games_games_validate_game) | **POST** /games/validate | 
@@ -17,7 +18,7 @@ Method | HTTP request | Description
 
 ## cloud_games_games_create_game
 
-> crate::models::CloudGamesCreateGameOutput cloud_games_games_create_game(cloud_games_create_game_input)
+> crate::models::CloudGamesCreateGameResponse cloud_games_games_create_game(cloud_games_create_game_request)
 
 
 Creates a new game.
@@ -27,11 +28,11 @@ Creates a new game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**cloud_games_create_game_input** | [**CloudGamesCreateGameInput**](CloudGamesCreateGameInput.md) |  | [required] |
+**cloud_games_create_game_request** | [**CloudGamesCreateGameRequest**](CloudGamesCreateGameRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesCreateGameOutput**](CloudGamesCreateGameOutput.md)
+[**crate::models::CloudGamesCreateGameResponse**](CloudGamesCreateGameResponse.md)
 
 ### Authorization
 
@@ -57,8 +58,8 @@ Completes an game banner image upload. Must be called after the file upload proc
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**upload_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**upload_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -71,14 +72,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## cloud_games_games_game_banner_upload_prepare
 
-> crate::models::CloudGamesGameBannerUploadPrepareOutput cloud_games_games_game_banner_upload_prepare(game_id, cloud_games_game_banner_upload_prepare_input)
+> crate::models::CloudGamesGameBannerUploadPrepareResponse cloud_games_games_game_banner_upload_prepare(game_id, cloud_games_game_banner_upload_prepare_request)
 
 
 Prepares a game banner image upload.
@@ -88,12 +89,12 @@ Prepares a game banner image upload.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_game_banner_upload_prepare_input** | [**CloudGamesGameBannerUploadPrepareInput**](CloudGamesGameBannerUploadPrepareInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_game_banner_upload_prepare_request** | [**CloudGamesGameBannerUploadPrepareRequest**](CloudGamesGameBannerUploadPrepareRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesGameBannerUploadPrepareOutput**](CloudGamesGameBannerUploadPrepareOutput.md)
+[**crate::models::CloudGamesGameBannerUploadPrepareResponse**](CloudGamesGameBannerUploadPrepareResponse.md)
 
 ### Authorization
 
@@ -119,8 +120,8 @@ Completes a game logo image upload. Must be called after the file upload process
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**upload_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**upload_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -133,14 +134,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## cloud_games_games_game_logo_upload_prepare
 
-> crate::models::CloudGamesGameLogoUploadPrepareOutput cloud_games_games_game_logo_upload_prepare(game_id, cloud_games_game_logo_upload_prepare_input)
+> crate::models::CloudGamesGameLogoUploadPrepareResponse cloud_games_games_game_logo_upload_prepare(game_id, cloud_games_game_logo_upload_prepare_request)
 
 
 Prepares a game logo image upload.
@@ -150,12 +151,12 @@ Prepares a game logo image upload.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
-**cloud_games_game_logo_upload_prepare_input** | [**CloudGamesGameLogoUploadPrepareInput**](CloudGamesGameLogoUploadPrepareInput.md) |  | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
+**cloud_games_game_logo_upload_prepare_request** | [**CloudGamesGameLogoUploadPrepareRequest**](CloudGamesGameLogoUploadPrepareRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesGameLogoUploadPrepareOutput**](CloudGamesGameLogoUploadPrepareOutput.md)
+[**crate::models::CloudGamesGameLogoUploadPrepareResponse**](CloudGamesGameLogoUploadPrepareResponse.md)
 
 ### Authorization
 
@@ -169,9 +170,41 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## cloud_games_games_get_analytics
+
+> crate::models::CloudGamesGetAnalyticsResponse cloud_games_games_get_analytics(query_start, query_end, variants, game_ids, namespace_ids)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**query_start** | **String** |  | [required] |
+**query_end** | **String** |  | [required] |
+**variants** | [**CloudAnalyticsVariantQuery**](.md) |  | [required] |
+**game_ids** | Option<**String**> |  |  |
+**namespace_ids** | Option<**String**> |  |  |
+
+### Return type
+
+[**crate::models::CloudGamesGetAnalyticsResponse**](CloudGamesGetAnalyticsResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## cloud_games_games_get_game_by_id
 
-> crate::models::CloudGamesGetGameByIdOutput cloud_games_games_get_game_by_id(game_id, watch_index)
+> crate::models::CloudGamesGetGameByIdResponse cloud_games_games_get_game_by_id(game_id, watch_index)
 
 
 Returns a game by its game id.
@@ -181,12 +214,12 @@ Returns a game by its game id.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**game_id** | **String** | A universally unique identifier. | [required] |
+**game_id** | **uuid::Uuid** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::CloudGamesGetGameByIdOutput**](CloudGamesGetGameByIdOutput.md)
+[**crate::models::CloudGamesGetGameByIdResponse**](CloudGamesGetGameByIdResponse.md)
 
 ### Authorization
 
@@ -202,7 +235,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_games_get_games
 
-> crate::models::CloudGamesGetGamesOutput cloud_games_games_get_games(watch_index)
+> crate::models::CloudGamesGetGamesResponse cloud_games_games_get_games(watch_index)
 
 
 Returns a list of games in which the current identity is a group member of its development team.
@@ -216,7 +249,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::CloudGamesGetGamesOutput**](CloudGamesGetGamesOutput.md)
+[**crate::models::CloudGamesGetGamesResponse**](CloudGamesGetGamesResponse.md)
 
 ### Authorization
 
@@ -232,7 +265,7 @@ Name | Type | Description  | Required | Notes
 
 ## cloud_games_games_validate_game
 
-> crate::models::CloudGamesValidateGameOutput cloud_games_games_validate_game(cloud_games_validate_game_input)
+> crate::models::CloudGamesValidateGameResponse cloud_games_games_validate_game(cloud_games_validate_game_request)
 
 
 Validates information used to create a new game.
@@ -242,11 +275,11 @@ Validates information used to create a new game.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**cloud_games_validate_game_input** | [**CloudGamesValidateGameInput**](CloudGamesValidateGameInput.md) |  | [required] |
+**cloud_games_validate_game_request** | [**CloudGamesValidateGameRequest**](CloudGamesValidateGameRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::CloudGamesValidateGameOutput**](CloudGamesValidateGameOutput.md)
+[**crate::models::CloudGamesValidateGameResponse**](CloudGamesValidateGameResponse.md)
 
 ### Authorization
 

@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## matchmaker_lobbies_find
 
-> crate::models::MatchmakerFindLobbyOutput matchmaker_lobbies_find(matchmaker_lobbies_find_request, origin)
+> crate::models::MatchmakerFindLobbyResponse matchmaker_lobbies_find(matchmaker_lobbies_find_request, origin)
 
 
 Finds a lobby based on the given criteria. If a lobby is not found and `prevent_auto_create_lobby` is `true`,  a new lobby will be created. 
@@ -29,7 +29,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::MatchmakerFindLobbyOutput**](MatchmakerFindLobbyOutput.md)
+[**crate::models::MatchmakerFindLobbyResponse**](MatchmakerFindLobbyResponse.md)
 
 ### Authorization
 
@@ -45,7 +45,7 @@ Name | Type | Description  | Required | Notes
 
 ## matchmaker_lobbies_join
 
-> crate::models::MatchmakerJoinLobbyOutput matchmaker_lobbies_join(matchmaker_lobbies_join_request)
+> crate::models::MatchmakerJoinLobbyResponse matchmaker_lobbies_join(matchmaker_lobbies_join_request)
 
 
 Joins a specific lobby. This request will use the direct player count configured for the lobby group. 
@@ -59,7 +59,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::MatchmakerJoinLobbyOutput**](MatchmakerJoinLobbyOutput.md)
+[**crate::models::MatchmakerJoinLobbyResponse**](MatchmakerJoinLobbyResponse.md)
 
 ### Authorization
 
@@ -75,7 +75,7 @@ Name | Type | Description  | Required | Notes
 
 ## matchmaker_lobbies_list
 
-> crate::models::MatchmakerListLobbiesOutput matchmaker_lobbies_list()
+> crate::models::MatchmakerListLobbiesResponse matchmaker_lobbies_list()
 
 
 Lists all open lobbies.
@@ -86,7 +86,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**crate::models::MatchmakerListLobbiesOutput**](MatchmakerListLobbiesOutput.md)
+[**crate::models::MatchmakerListLobbiesResponse**](MatchmakerListLobbiesResponse.md)
 
 ### Authorization
 
@@ -122,7 +122,7 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -152,7 +152,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

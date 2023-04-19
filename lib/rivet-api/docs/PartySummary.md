@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **activity** | [**crate::models::PartyActivity**](PartyActivity.md) |  | 
-**create_ts** | **String** | RFC3339 timestamp | 
+**create_ts** | **String** |  | 
 **external** | [**crate::models::PartyExternalLinks**](PartyExternalLinks.md) |  | 
 **members** | [**Vec<crate::models::PartyMemberSummary>**](PartyMemberSummary.md) |  | 
 **party_id** | [**uuid::Uuid**](uuid::Uuid.md) |  | 

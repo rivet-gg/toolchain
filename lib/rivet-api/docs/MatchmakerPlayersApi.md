@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**matchmaker_players_connected**](MatchmakerPlayersApi.md#matchmaker_players_connected) | **POST** /players/connected | 
 [**matchmaker_players_disconnected**](MatchmakerPlayersApi.md#matchmaker_players_disconnected) | **POST** /players/disconnected | 
+[**matchmaker_players_get_statistics**](MatchmakerPlayersApi.md#matchmaker_players_get_statistics) | **GET** /players/statistics | 
 
 
 
@@ -34,7 +35,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -64,7 +65,34 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## matchmaker_players_get_statistics
+
+> crate::models::MatchmakerGetStatisticsResponse matchmaker_players_get_statistics()
+
+
+Gives matchmaker statistics about the players in game.
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**crate::models::MatchmakerGetStatisticsResponse**](MatchmakerGetStatisticsResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

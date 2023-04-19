@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## identity_events_watch
 
-> crate::models::IdentityWatchEventsOutput identity_events_watch(watch_index)
+> crate::models::IdentityWatchEventsResponse identity_events_watch(watch_index)
 
 
 Returns all events relative to the current identity.
@@ -24,7 +24,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::IdentityWatchEventsOutput**](IdentityWatchEventsOutput.md)
+[**crate::models::IdentityWatchEventsResponse**](IdentityWatchEventsResponse.md)
 
 ### Authorization
 

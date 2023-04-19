@@ -37,6 +37,15 @@ pub fn deser_structure_crate_error_internal_error_json_err(
 							.transpose()?,
 						);
 					}
+					"documentation" => {
+						builder = builder.set_documentation(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
 					"metadata" => {
 						builder = builder.set_metadata(Some(
 							aws_smithy_json::deserialize::token::expect_document(tokens)?,
@@ -86,6 +95,15 @@ pub fn deser_structure_crate_error_rate_limit_error_json_err(
 					}
 					"message" => {
 						builder = builder.set_message(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					"documentation" => {
+						builder = builder.set_documentation(
 							aws_smithy_json::deserialize::token::expect_string_or_null(
 								tokens.next(),
 							)?
@@ -149,6 +167,15 @@ pub fn deser_structure_crate_error_forbidden_error_json_err(
 							.transpose()?,
 						);
 					}
+					"documentation" => {
+						builder = builder.set_documentation(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
 					"metadata" => {
 						builder = builder.set_metadata(Some(
 							aws_smithy_json::deserialize::token::expect_document(tokens)?,
@@ -198,6 +225,15 @@ pub fn deser_structure_crate_error_unauthorized_error_json_err(
 					}
 					"message" => {
 						builder = builder.set_message(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					"documentation" => {
+						builder = builder.set_documentation(
 							aws_smithy_json::deserialize::token::expect_string_or_null(
 								tokens.next(),
 							)?
@@ -261,6 +297,15 @@ pub fn deser_structure_crate_error_not_found_error_json_err(
 							.transpose()?,
 						);
 					}
+					"documentation" => {
+						builder = builder.set_documentation(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
 					"metadata" => {
 						builder = builder.set_metadata(Some(
 							aws_smithy_json::deserialize::token::expect_document(tokens)?,
@@ -310,6 +355,15 @@ pub fn deser_structure_crate_error_bad_request_error_json_err(
 					}
 					"message" => {
 						builder = builder.set_message(
+							aws_smithy_json::deserialize::token::expect_string_or_null(
+								tokens.next(),
+							)?
+							.map(|s| s.to_unescaped().map(|u| u.into_owned()))
+							.transpose()?,
+						);
+					}
+					"documentation" => {
+						builder = builder.set_documentation(
 							aws_smithy_json::deserialize::token::expect_string_or_null(
 								tokens.next(),
 							)?

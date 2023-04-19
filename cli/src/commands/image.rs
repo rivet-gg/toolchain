@@ -134,7 +134,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 	let build_res = rivet_api::apis::cloud_games_builds_api::cloud_games_builds_create_game_build(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
-		rivet_api::models::CloudGamesCreateGameBuildInput {
+		rivet_api::models::CloudGamesCreateGameBuildRequest {
 			display_name: display_name.clone(),
 			image_tag: push_opts.tag.clone(),
 			image_file: Box::new(rivet_api::models::UploadPrepareFile {
@@ -161,7 +161,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
-		&build_res.upload_id,
+		&build_res.upload_id.to_string(),
 	)
 	.await;
 	if let Err(err) = complete_res.as_ref() {

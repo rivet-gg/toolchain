@@ -23,7 +23,7 @@ Method | HTTP request | Description
 
 ## party_parties_create
 
-> crate::models::PartyCreateOutput party_parties_create(party_create_input)
+> crate::models::PartyCreateResponse party_parties_create(party_create_request)
 
 
 Creates a new party.
@@ -33,11 +33,11 @@ Creates a new party.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_create_input** | [**PartyCreateInput**](PartyCreateInput.md) |  | [required] |
+**party_create_request** | [**PartyCreateRequest**](PartyCreateRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::PartyCreateOutput**](PartyCreateOutput.md)
+[**crate::models::PartyCreateResponse**](PartyCreateResponse.md)
 
 ### Authorization
 
@@ -53,7 +53,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_create_invite
 
-> crate::models::PartyCreateInviteOutput party_parties_create_invite(party_create_invite_input)
+> crate::models::PartyCreateInviteResponse party_parties_create_invite(party_create_invite_request)
 
 
 Creates a new party invite for the current identity's party. Identity must be the party leader.
@@ -63,11 +63,11 @@ Creates a new party invite for the current identity's party. Identity must be th
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_create_invite_input** | [**PartyCreateInviteInput**](PartyCreateInviteInput.md) |  | [required] |
+**party_create_invite_request** | [**PartyCreateInviteRequest**](PartyCreateInviteRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::PartyCreateInviteOutput**](PartyCreateInviteOutput.md)
+[**crate::models::PartyCreateInviteResponse**](PartyCreateInviteResponse.md)
 
 ### Authorization
 
@@ -83,7 +83,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_get_from_invite
 
-> crate::models::PartyGetInviteOutput party_parties_get_from_invite(token, alias)
+> crate::models::PartyGetInviteResponse party_parties_get_from_invite(token, alias)
 
 
 Fetches a party based on a given invite.
@@ -98,7 +98,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetInviteOutput**](PartyGetInviteOutput.md)
+[**crate::models::PartyGetInviteResponse**](PartyGetInviteResponse.md)
 
 ### Authorization
 
@@ -114,7 +114,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_get_profile
 
-> crate::models::PartyGetProfileOutput party_parties_get_profile(party_id, watch_index)
+> crate::models::PartyGetProfileResponse party_parties_get_profile(party_id, watch_index)
 
 
 Returns a party profile.
@@ -124,12 +124,12 @@ Returns a party profile.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_id** | **String** | A universally unique identifier. | [required] |
+**party_id** | **uuid::Uuid** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::PartyGetProfileOutput**](PartyGetProfileOutput.md)
+[**crate::models::PartyGetProfileResponse**](PartyGetProfileResponse.md)
 
 ### Authorization
 
@@ -145,7 +145,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_get_self_profile
 
-> crate::models::PartyGetSelfProfileOutput party_parties_get_self_profile(watch_index)
+> crate::models::PartyGetSelfProfileResponse party_parties_get_self_profile(watch_index)
 
 
 Returns a party profile for the party the current identity is a member of.
@@ -159,7 +159,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetSelfProfileOutput**](PartyGetSelfProfileOutput.md)
+[**crate::models::PartyGetSelfProfileResponse**](PartyGetSelfProfileResponse.md)
 
 ### Authorization
 
@@ -175,7 +175,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_get_self_summary
 
-> crate::models::PartyGetSelfSummaryOutput party_parties_get_self_summary(watch_index)
+> crate::models::PartyGetSelfSummaryResponse party_parties_get_self_summary(watch_index)
 
 
 Returns a party summary for the party the current identity is a member of.
@@ -189,7 +189,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::PartyGetSelfSummaryOutput**](PartyGetSelfSummaryOutput.md)
+[**crate::models::PartyGetSelfSummaryResponse**](PartyGetSelfSummaryResponse.md)
 
 ### Authorization
 
@@ -205,7 +205,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_get_summary
 
-> crate::models::PartyGetSummaryOutput party_parties_get_summary(party_id, watch_index)
+> crate::models::PartyGetSummaryResponse party_parties_get_summary(party_id, watch_index)
 
 
 Returns a party summary.
@@ -215,12 +215,12 @@ Returns a party summary.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_id** | **String** | A universally unique identifier. | [required] |
+**party_id** | **uuid::Uuid** |  | [required] |
 **watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::PartyGetSummaryOutput**](PartyGetSummaryOutput.md)
+[**crate::models::PartyGetSummaryResponse**](PartyGetSummaryResponse.md)
 
 ### Authorization
 
@@ -236,7 +236,7 @@ Name | Type | Description  | Required | Notes
 
 ## party_parties_join
 
-> crate::models::PartyJoinOutput party_parties_join(party_join_input)
+> crate::models::PartyJoinResponse party_parties_join(party_join_request)
 
 
 Joins a party using a given party invite.
@@ -246,11 +246,11 @@ Joins a party using a given party invite.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_join_input** | [**PartyJoinInput**](PartyJoinInput.md) |  | [required] |
+**party_join_request** | [**PartyJoinRequest**](PartyJoinRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::PartyJoinOutput**](PartyJoinOutput.md)
+[**crate::models::PartyJoinResponse**](PartyJoinResponse.md)
 
 ### Authorization
 
@@ -276,7 +276,7 @@ Kicks a member from the current identity's current party. Identity must be the p
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**identity_id** | **String** | A universally unique identifier. | [required] |
+**identity_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -289,7 +289,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -316,7 +316,7 @@ This endpoint does not need any parameter.
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -333,7 +333,7 @@ Revokes a party invite from the current identity's party. Identity must be the p
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**invite_id** | **String** | A universally unique identifier. | [required] |
+**invite_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -346,7 +346,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -361,7 +361,7 @@ Name | Type | Description  | Required | Notes
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_id** | **String** | A universally unique identifier. | [required] |
+**party_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -374,14 +374,14 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## party_parties_set_publicity
 
-> party_parties_set_publicity(party_set_publicity_input)
+> party_parties_set_publicity(party_set_publicity_request)
 
 
 Sets the publicity of a party. This configures who can view and join the party. Identity must be the party leader.
@@ -391,7 +391,7 @@ Sets the publicity of a party. This configures who can view and join the party. 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**party_set_publicity_input** | [**PartySetPublicityInput**](PartySetPublicityInput.md) |  | [required] |
+**party_set_publicity_request** | [**PartySetPublicityRequest**](PartySetPublicityRequest.md) |  | [required] |
 
 ### Return type
 
@@ -404,7 +404,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -421,7 +421,7 @@ Transfers ownership of the party to another party member. Identity must be the p
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**identity_id** | **String** | A universally unique identifier. | [required] |
+**identity_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
@@ -434,7 +434,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## portal_notifications_register_notifications
 
-> portal_notifications_register_notifications(portal_register_notifications_input)
+> portal_notifications_register_notifications(portal_register_notifications_request)
 
 
 Registers push notifications for the current identity.
@@ -21,7 +21,7 @@ Registers push notifications for the current identity.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**portal_register_notifications_input** | [**PortalRegisterNotificationsInput**](PortalRegisterNotificationsInput.md) |  | [required] |
+**portal_register_notifications_request** | [**PortalRegisterNotificationsRequest**](PortalRegisterNotificationsRequest.md) |  | [required] |
 
 ### Return type
 
@@ -34,7 +34,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -64,7 +64,7 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

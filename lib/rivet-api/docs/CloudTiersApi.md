@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## cloud_tiers_get_region_tiers
 
-> crate::models::CloudGetRegionTiersOutput cloud_tiers_get_region_tiers()
+> crate::models::CloudGetRegionTiersResponse cloud_tiers_get_region_tiers()
 
 
 Returns all available region tiers.
@@ -21,7 +21,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**crate::models::CloudGetRegionTiersOutput**](CloudGetRegionTiersOutput.md)
+[**crate::models::CloudGetRegionTiersResponse**](CloudGetRegionTiersResponse.md)
 
 ### Authorization
 

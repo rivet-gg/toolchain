@@ -7431,6 +7431,8 @@ pub struct BadRequestError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub documentation: std::option::Option<std::string::String>,
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
@@ -7438,6 +7440,10 @@ impl BadRequestError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn documentation(&self) -> std::option::Option<&str> {
+		self.documentation.as_deref()
 	}
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
@@ -7449,6 +7455,7 @@ impl std::fmt::Debug for BadRequestError {
 		let mut formatter = f.debug_struct("BadRequestError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("documentation", &self.documentation);
 		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
@@ -7477,6 +7484,7 @@ pub mod bad_request_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) documentation: std::option::Option<std::string::String>,
 		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
@@ -7500,6 +7508,19 @@ pub mod bad_request_error {
 			self.message = input;
 			self
 		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn documentation(mut self, input: impl Into<std::string::String>) -> Self {
+			self.documentation = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_documentation(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.documentation = input;
+			self
+		}
 		/// Unstructured metadata relating to an error. Must be manually parsed.
 		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
 			self.metadata = Some(input);
@@ -7518,6 +7539,7 @@ pub mod bad_request_error {
 			crate::error::BadRequestError {
 				code: self.code,
 				message: self.message,
+				documentation: self.documentation,
 				metadata: self.metadata,
 			}
 		}
@@ -7538,6 +7560,8 @@ pub struct NotFoundError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub documentation: std::option::Option<std::string::String>,
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
@@ -7545,6 +7569,10 @@ impl NotFoundError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn documentation(&self) -> std::option::Option<&str> {
+		self.documentation.as_deref()
 	}
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
@@ -7556,6 +7584,7 @@ impl std::fmt::Debug for NotFoundError {
 		let mut formatter = f.debug_struct("NotFoundError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("documentation", &self.documentation);
 		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
@@ -7584,6 +7613,7 @@ pub mod not_found_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) documentation: std::option::Option<std::string::String>,
 		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
@@ -7607,6 +7637,19 @@ pub mod not_found_error {
 			self.message = input;
 			self
 		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn documentation(mut self, input: impl Into<std::string::String>) -> Self {
+			self.documentation = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_documentation(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.documentation = input;
+			self
+		}
 		/// Unstructured metadata relating to an error. Must be manually parsed.
 		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
 			self.metadata = Some(input);
@@ -7625,6 +7668,7 @@ pub mod not_found_error {
 			crate::error::NotFoundError {
 				code: self.code,
 				message: self.message,
+				documentation: self.documentation,
 				metadata: self.metadata,
 			}
 		}
@@ -7645,6 +7689,8 @@ pub struct UnauthorizedError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub documentation: std::option::Option<std::string::String>,
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
@@ -7652,6 +7698,10 @@ impl UnauthorizedError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn documentation(&self) -> std::option::Option<&str> {
+		self.documentation.as_deref()
 	}
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
@@ -7663,6 +7713,7 @@ impl std::fmt::Debug for UnauthorizedError {
 		let mut formatter = f.debug_struct("UnauthorizedError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("documentation", &self.documentation);
 		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
@@ -7695,6 +7746,7 @@ pub mod unauthorized_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) documentation: std::option::Option<std::string::String>,
 		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
@@ -7718,6 +7770,19 @@ pub mod unauthorized_error {
 			self.message = input;
 			self
 		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn documentation(mut self, input: impl Into<std::string::String>) -> Self {
+			self.documentation = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_documentation(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.documentation = input;
+			self
+		}
 		/// Unstructured metadata relating to an error. Must be manually parsed.
 		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
 			self.metadata = Some(input);
@@ -7736,6 +7801,7 @@ pub mod unauthorized_error {
 			crate::error::UnauthorizedError {
 				code: self.code,
 				message: self.message,
+				documentation: self.documentation,
 				metadata: self.metadata,
 			}
 		}
@@ -7756,6 +7822,8 @@ pub struct ForbiddenError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub documentation: std::option::Option<std::string::String>,
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
@@ -7763,6 +7831,10 @@ impl ForbiddenError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn documentation(&self) -> std::option::Option<&str> {
+		self.documentation.as_deref()
 	}
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
@@ -7774,6 +7846,7 @@ impl std::fmt::Debug for ForbiddenError {
 		let mut formatter = f.debug_struct("ForbiddenError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("documentation", &self.documentation);
 		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
@@ -7802,6 +7875,7 @@ pub mod forbidden_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) documentation: std::option::Option<std::string::String>,
 		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
@@ -7825,6 +7899,19 @@ pub mod forbidden_error {
 			self.message = input;
 			self
 		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn documentation(mut self, input: impl Into<std::string::String>) -> Self {
+			self.documentation = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_documentation(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.documentation = input;
+			self
+		}
 		/// Unstructured metadata relating to an error. Must be manually parsed.
 		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
 			self.metadata = Some(input);
@@ -7843,6 +7930,7 @@ pub mod forbidden_error {
 			crate::error::ForbiddenError {
 				code: self.code,
 				message: self.message,
+				documentation: self.documentation,
 				metadata: self.metadata,
 			}
 		}
@@ -7863,6 +7951,8 @@ pub struct RateLimitError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub documentation: std::option::Option<std::string::String>,
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
@@ -7870,6 +7960,10 @@ impl RateLimitError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn documentation(&self) -> std::option::Option<&str> {
+		self.documentation.as_deref()
 	}
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
@@ -7881,6 +7975,7 @@ impl std::fmt::Debug for RateLimitError {
 		let mut formatter = f.debug_struct("RateLimitError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("documentation", &self.documentation);
 		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
@@ -7909,6 +8004,7 @@ pub mod rate_limit_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) documentation: std::option::Option<std::string::String>,
 		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
@@ -7932,6 +8028,19 @@ pub mod rate_limit_error {
 			self.message = input;
 			self
 		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn documentation(mut self, input: impl Into<std::string::String>) -> Self {
+			self.documentation = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_documentation(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.documentation = input;
+			self
+		}
 		/// Unstructured metadata relating to an error. Must be manually parsed.
 		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
 			self.metadata = Some(input);
@@ -7950,6 +8059,7 @@ pub mod rate_limit_error {
 			crate::error::RateLimitError {
 				code: self.code,
 				message: self.message,
+				documentation: self.documentation,
 				metadata: self.metadata,
 			}
 		}
@@ -7970,6 +8080,8 @@ pub struct InternalError {
 	pub code: std::option::Option<std::string::String>,
 	#[allow(missing_docs)] // documentation missing in model
 	pub message: std::option::Option<std::string::String>,
+	#[allow(missing_docs)] // documentation missing in model
+	pub documentation: std::option::Option<std::string::String>,
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub metadata: std::option::Option<aws_smithy_types::Document>,
 }
@@ -7977,6 +8089,10 @@ impl InternalError {
 	#[allow(missing_docs)] // documentation missing in model
 	pub fn code(&self) -> std::option::Option<&str> {
 		self.code.as_deref()
+	}
+	#[allow(missing_docs)] // documentation missing in model
+	pub fn documentation(&self) -> std::option::Option<&str> {
+		self.documentation.as_deref()
 	}
 	/// Unstructured metadata relating to an error. Must be manually parsed.
 	pub fn metadata(&self) -> std::option::Option<&aws_smithy_types::Document> {
@@ -7988,6 +8104,7 @@ impl std::fmt::Debug for InternalError {
 		let mut formatter = f.debug_struct("InternalError");
 		formatter.field("code", &self.code);
 		formatter.field("message", &self.message);
+		formatter.field("documentation", &self.documentation);
 		formatter.field("metadata", &self.metadata);
 		formatter.finish()
 	}
@@ -8020,6 +8137,7 @@ pub mod internal_error {
 	pub struct Builder {
 		pub(crate) code: std::option::Option<std::string::String>,
 		pub(crate) message: std::option::Option<std::string::String>,
+		pub(crate) documentation: std::option::Option<std::string::String>,
 		pub(crate) metadata: std::option::Option<aws_smithy_types::Document>,
 	}
 	impl Builder {
@@ -8043,6 +8161,19 @@ pub mod internal_error {
 			self.message = input;
 			self
 		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn documentation(mut self, input: impl Into<std::string::String>) -> Self {
+			self.documentation = Some(input.into());
+			self
+		}
+		#[allow(missing_docs)] // documentation missing in model
+		pub fn set_documentation(
+			mut self,
+			input: std::option::Option<std::string::String>,
+		) -> Self {
+			self.documentation = input;
+			self
+		}
 		/// Unstructured metadata relating to an error. Must be manually parsed.
 		pub fn metadata(mut self, input: aws_smithy_types::Document) -> Self {
 			self.metadata = Some(input);
@@ -8061,6 +8192,7 @@ pub mod internal_error {
 			crate::error::InternalError {
 				code: self.code,
 				message: self.message,
+				documentation: self.documentation,
 				metadata: self.metadata,
 			}
 		}

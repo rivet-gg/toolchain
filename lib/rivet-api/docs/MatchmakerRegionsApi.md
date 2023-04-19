@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## matchmaker_regions_list
 
-> crate::models::MatchmakerListRegionsOutput matchmaker_regions_list()
+> crate::models::MatchmakerListRegionsResponse matchmaker_regions_list()
 
 
 Returns a list of regions available to this namespace. Regions are sorted by most optimal to least optimal. The player's IP address is used to calculate the regions' optimality. 
@@ -21,7 +21,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**crate::models::MatchmakerListRegionsOutput**](MatchmakerListRegionsOutput.md)
+[**crate::models::MatchmakerListRegionsResponse**](MatchmakerListRegionsResponse.md)
 
 ### Authorization
 

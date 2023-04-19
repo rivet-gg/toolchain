@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## auth_identity_complete_email_verification
 
-> crate::models::AuthCompleteEmailVerificationOutput auth_identity_complete_email_verification(auth_complete_email_verification_input)
+> crate::models::AuthCompleteEmailVerificationResponse auth_identity_complete_email_verification(auth_complete_email_verification_request)
 
 
 Completes the email verification process.
@@ -21,11 +21,11 @@ Completes the email verification process.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**auth_complete_email_verification_input** | [**AuthCompleteEmailVerificationInput**](AuthCompleteEmailVerificationInput.md) |  | [required] |
+**auth_complete_email_verification_request** | [**AuthCompleteEmailVerificationRequest**](AuthCompleteEmailVerificationRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::AuthCompleteEmailVerificationOutput**](AuthCompleteEmailVerificationOutput.md)
+[**crate::models::AuthCompleteEmailVerificationResponse**](AuthCompleteEmailVerificationResponse.md)
 
 ### Authorization
 
@@ -41,7 +41,7 @@ Name | Type | Description  | Required | Notes
 
 ## auth_identity_start_email_verification
 
-> crate::models::AuthStartEmailVerificationOutput auth_identity_start_email_verification(auth_start_email_verification_input)
+> crate::models::AuthStartEmailVerificationResponse auth_identity_start_email_verification(auth_start_email_verification_request)
 
 
 Starts the verification process for linking an email to your identity.
@@ -51,11 +51,11 @@ Starts the verification process for linking an email to your identity.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**auth_start_email_verification_input** | [**AuthStartEmailVerificationInput**](AuthStartEmailVerificationInput.md) |  | [required] |
+**auth_start_email_verification_request** | [**AuthStartEmailVerificationRequest**](AuthStartEmailVerificationRequest.md) |  | [required] |
 
 ### Return type
 
-[**crate::models::AuthStartEmailVerificationOutput**](AuthStartEmailVerificationOutput.md)
+[**crate::models::AuthStartEmailVerificationResponse**](AuthStartEmailVerificationResponse.md)
 
 ### Authorization
 

@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## chat_identity_get_direct_thread
 
-> crate::models::ChatGetDirectThreadOutput chat_identity_get_direct_thread(identity_id)
+> crate::models::ChatGetDirectThreadResponse chat_identity_get_direct_thread(identity_id)
 
 
 Returns a thread ID with a given identity.
@@ -20,11 +20,11 @@ Returns a thread ID with a given identity.
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**identity_id** | **String** | A universally unique identifier. | [required] |
+**identity_id** | **uuid::Uuid** |  | [required] |
 
 ### Return type
 
-[**crate::models::ChatGetDirectThreadOutput**](ChatGetDirectThreadOutput.md)
+[**crate::models::ChatGetDirectThreadResponse**](ChatGetDirectThreadResponse.md)
 
 ### Authorization
 
