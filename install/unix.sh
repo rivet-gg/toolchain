@@ -48,7 +48,7 @@ if [ -z "$RIVET_CLI_VERSION" ]; then
 		curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases \
 		| ./jq -re \
 			--arg cli_asset_suffix "$CLI_ASSET_SUFFIX" \
-			'[.[] | select(.assets[] | select(.name | endswith($cli_asset_suffix)))] | first | .name' \
+			'[.[] | select(.assets[] | select(.name | endswith($cli_asset_suffix)))] | first | .tag_name' \
 	)"
 fi
 set -u
@@ -73,7 +73,7 @@ if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 	sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-apple-darwin/rivet-cli" "/usr/local/bin/rivet"
 elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
-	ASSET_NAME="rivet-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
+	ASSET_NAME="rivet-cli-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
 	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/${ASSET_NAME}"
 	echo "> Downloading $URL"
 	curl -fsSL "$URL" -o rivet_cli.tar.xz
