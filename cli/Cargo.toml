@@ -34,5 +34,5 @@ webbrowser = "0.8.7"
 
 [build-dependencies]
 anyhow = "1.0"
-vergen = { version = "7.5", default_features = false, features = ["build", "git", "rustc", "cargo"] }
+vergen = { version = "8.1", default_features = false, features = ["build", "git", "rustc", "cargo"] }
 
