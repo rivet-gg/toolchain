@@ -3,6 +3,7 @@ use clap::Parser;
 use cli_core::rivet_api::models;
 use serde::Serialize;
 use serde_json::json;
+use std::str::FromStr;
 use tabled::Tabled;
 use tokio::process::Command;
 use uuid::Uuid;
@@ -11,6 +12,32 @@ use crate::{
 	commands::{image, site},
 	util::{cmd, fmt, gen, struct_fmt, term},
 };
+
+/// Defines how Docker Build will be ran.
+#[derive(strum::EnumString)]
+enum DockerBuildMethod {
+	#[strum(serialize = "buildx")]
+	Buildx,
+
+	#[strum(serialize = "native")]
+	Native,
+}
+
+impl DockerBuildMethod {
+	fn from_env() -> Self {
+		std::env::var("_RIVET_DOCKER_BUILD_METHOD")
+			.ok()
+			.map_or_else(Default::default, |x| {
+				DockerBuildMethod::from_str(&x).unwrap_or_default()
+			})
+	}
+}
+
+impl Default for DockerBuildMethod {
+	fn default() -> Self {
+		DockerBuildMethod::Buildx
+	}
+}
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -389,18 +416,13 @@ pub async fn build_image(
 ) -> Result<()> {
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
-			// Determine if running x86
-			let mut arch_cmd = Command::new("docker");
-			arch_cmd
-				.arg("info")
-				.arg("--format")
-				.arg("{{.Architecture}}");
-			let arch_output =
-				cmd::execute_docker_cmd_silent(arch_cmd, "Failed to read Docker info").await?;
-			let is_x86_64 = String::from_utf8(arch_output.stdout)?.trim() == "x86_64";
+			let build_method = DockerBuildMethod::from_env();
 
 			eprintln!();
-			let buildx_info = if is_x86_64 { "" } else { " (with buildx)" };
+			let buildx_info = match build_method {
+				DockerBuildMethod::Native => " (with native)",
+				DockerBuildMethod::Buildx => " (with buildx)",
+			};
 			term::status::info("Building Image", format!("{dockerfile}{buildx_info}"));
 
 			// Create temp path to write to
@@ -409,78 +431,83 @@ pub async fn build_image(
 
 			// Build image
 			let unique_image_tag = format!("rivet-game:{}", Uuid::new_v4());
-			if is_x86_64 {
-				let mut build_cmd = Command::new("docker");
-				build_cmd
-					.arg("build")
-					.arg("--file")
-					.arg(dockerfile)
-					.arg("--tag")
-					.arg(&unique_image_tag)
-					.arg("--output")
-					.arg(format!("type=docker,dest={}", tmp_path.display()))
-					.arg(".");
-				cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
-			} else {
-				// Determine if needs to create a new builder
-				let mut inspect_cmd = Command::new("docker");
-				inspect_cmd.arg("buildx").arg("inspect");
-				let inspect_output = cmd::execute_docker_cmd_silent(
-					inspect_cmd,
-					"Failed to read Docker buildx info",
-				)
-				.await?;
-				let inspect_stdout = String::from_utf8(inspect_output.stdout)?;
+			match build_method {
+				DockerBuildMethod::Native => {
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("build")
+						.arg("--file")
+						.arg(dockerfile)
+						.arg("--tag")
+						.arg(&unique_image_tag)
+						.arg(".");
+					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 
-				// Extract driver
-				let buildx_driver = inspect_stdout
-					.split("\n")
-					.filter_map(|x| x.strip_prefix("Driver: "))
-					.next()
-					.context("could not read driver from buildx inspect output")?
-					.trim();
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("save")
+						.arg("--output")
+						.arg(&tmp_path)
+						.arg(&unique_image_tag);
+					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
+				}
+				DockerBuildMethod::Buildx => {
+					let builder_name = "rivet_cli";
 
-				// Extract platform
-				let buildx_platforms = inspect_stdout
-					.split("\n")
-					.filter_map(|x| x.strip_prefix("Platforms: "))
-					.next()
-					.context("could not read driver from buildx inspect output")?
-					.split(",")
-					.map(|x| x.trim())
-					.collect::<Vec<_>>();
-				let has_amd64 = buildx_platforms.contains(&"linux/amd64");
+					// Determine if needs to create a new builder
+					let mut inspect_cmd = Command::new("docker");
+					inspect_cmd.arg("buildx").arg("inspect").arg(builder_name);
+					let inspect_output =
+						cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
 
-				// Create new builder if needed
-				if buildx_driver != "docker-container" || has_amd64 {
+					if !inspect_output.status.success()
+						&& String::from_utf8(inspect_output.stderr.clone())?
+							.contains(&format!("ERROR: no builder \"{builder_name}\" found"))
+					{
+						// Create new builder
+
+						let mut build_cmd = Command::new("docker");
+						build_cmd
+							.arg("buildx")
+							.arg("create")
+							.arg("--name")
+							.arg(builder_name)
+							.arg("--driver")
+							.arg("docker-container")
+							.arg("--platform")
+							.arg("linux/amd64");
+						cmd::execute_docker_cmd(
+							build_cmd,
+							"Failed to create Docker Buildx builder",
+						)
+						.await?;
+					} else {
+						// Builder exists
+
+						cmd::error_for_output_failure(
+							&inspect_output,
+							"Failed to inspect Docker Buildx runner",
+						)?;
+					}
+
+					// Build image
 					let mut build_cmd = Command::new("docker");
 					build_cmd
 						.arg("buildx")
-						.arg("create")
-						.arg("--use")
-						.arg("--driver")
-						.arg("docker-container")
+						.arg("build")
+						.arg("--builder")
+						.arg(builder_name)
 						.arg("--platform")
-						.arg("linux/amd64");
-					cmd::execute_docker_cmd(build_cmd, "Failed to create Docker buildx builder")
-						.await?;
+						.arg("linux/amd64")
+						.arg("--file")
+						.arg(dockerfile)
+						.arg("--tag")
+						.arg(&unique_image_tag)
+						.arg("--output")
+						.arg(format!("type=docker,dest={}", tmp_path.display()))
+						.arg(".");
+					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 				}
-
-				// Build image
-				let mut build_cmd = Command::new("docker");
-				build_cmd
-					.arg("buildx")
-					.arg("build")
-					.arg("--platform")
-					.arg("linux/amd64")
-					.arg("--file")
-					.arg(dockerfile)
-					.arg("--tag")
-					.arg(&unique_image_tag)
-					.arg("--output")
-					.arg(format!("type=docker,dest={}", tmp_path.display()))
-					.arg(".");
-				cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 			}
 
 			// Upload build
