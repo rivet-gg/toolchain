@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.0.50] - 2023-04-18
 
+### Changed
+
+- Description, homepage, and repositor to Cargo.toml
+
 ### Fixed
 
 - Incorrect package version
