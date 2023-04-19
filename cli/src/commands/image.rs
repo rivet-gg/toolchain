@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{ensure, Context, Result};
 use clap::Parser;
 use cli_core::rivet_api;
 use rand::{thread_rng, Rng};
@@ -114,6 +114,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 
 	// Inspect the image
 	let image_file_meta = fs::metadata(&push_opts.path).await?;
+	ensure!(image_file_meta.len() > 0, "docker image archive is empty");
 
 	// Create image
 	let display_name = push_opts

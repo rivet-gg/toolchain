@@ -7,3 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Experimental build configuration flag `X_RIVET_DOCKER_BUILD_METHOD` can be set to `buildx` or `native`
+
+### Changed
+
+- Default Docker build method is now Buildx, even if the native platform is x86
+
