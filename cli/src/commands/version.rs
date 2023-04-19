@@ -149,7 +149,7 @@ impl SubCommand {
 				cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_validate_game_version(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
-					cli_core::rivet_api::models::CloudGamesValidateGameVersionInput {
+					cli_core::rivet_api::models::CloudGamesValidateGameVersionRequest {
 						display_name: "Mock Dispaly Name".into(),
 						config: Box::new(rivet_config),
 					},
@@ -601,7 +601,7 @@ pub fn rivet_game_url(game_name_id: &str, namespace_name_id: &str) -> String {
 
 #[derive(Serialize)]
 pub struct CreateOutput {
-	pub version_id: String,
+	pub version_id: Uuid,
 }
 
 /// Creates a new Rivet version.
@@ -647,7 +647,7 @@ pub async fn create(
 		cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
-			cli_core::rivet_api::models::CloudGamesCreateGameVersionInput {
+			cli_core::rivet_api::models::CloudGamesCreateGameVersionRequest {
 				display_name: display_name.clone(),
 				config: Box::new(rivet_config),
 			},
@@ -663,7 +663,7 @@ pub async fn create(
 	term::status::success("Published Version", &display_name);
 	term::status::info(
 		"Version Dashboard",
-		dashboard_url(&ctx.game_id, &version_id),
+		dashboard_url(&ctx.game_id, &version_id.to_string()),
 	);
 
 	// Deploy to namespace
@@ -677,8 +677,8 @@ pub async fn create(
 		cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
-			&namespace.namespace_id,
-			cli_core::rivet_api::models::CloudGamesNamespacesUpdateGameNamespaceVersionInput {
+			&namespace.namespace_id.to_string(),
+			cli_core::rivet_api::models::CloudGamesNamespacesUpdateGameNamespaceVersionRequest {
 				version_id: version_id.clone()
 			},
 		)

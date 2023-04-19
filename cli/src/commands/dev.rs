@@ -156,7 +156,7 @@ pub async fn create_dev_token(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
 			&staging_namespace_id,
-			cli_core::rivet_api::models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentInput {
+			cli_core::rivet_api::models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentRequest {
 				hostname: dev_hostname,
 				ports: Some(dev_ports),
 				lobby_ports: None,
