@@ -131,9 +131,17 @@ impl Prompt {
 		term.flush()?;
 
 		let input = if secure {
-			tokio::task::block_in_place(|| term.read_secure_line())?
+			tokio::task::spawn_blocking({
+				let term = term.clone();
+				move || term.read_secure_line()
+			})
+			.await??
 		} else {
-			tokio::task::block_in_place(|| term.read_line())?
+			tokio::task::spawn_blocking({
+				let term = term.clone();
+				move || term.read_line()
+			})
+			.await??
 		};
 
 		let input_trimmed = input.trim();

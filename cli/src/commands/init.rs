@@ -290,7 +290,11 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 
 	// Prompt user to press enter to open browser
 	term::status::info("Link your game", "Press Enter to open your browser");
-	tokio::task::block_in_place(|| term.read_char())?;
+	tokio::task::spawn_blocking({
+		let term = term.clone();
+		move || term.read_char()
+	})
+	.await??;
 
 	// Open link in browser
 	if webbrowser::open_browser_with_options(
