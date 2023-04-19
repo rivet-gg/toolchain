@@ -27,7 +27,7 @@ pub async fn execute_docker_cmd(
 
 /// Run a Docker command without output.
 pub async fn execute_docker_cmd_silent(
-	mut command: tokio::process::Command,
+	command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
 ) -> Result<std::process::Output> {
 	let output = execute_docker_cmd_silent_failable(command).await?;
