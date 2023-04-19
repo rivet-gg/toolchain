@@ -91,7 +91,7 @@ enum SubCommand {
 	Publish(version::PublishOpts),
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
 	let term = console::Term::stderr();
 	let opts = Opts::parse();
