@@ -23,7 +23,7 @@ cargo install cargo-dist
 cargo install cargo-release
 ```
 
-To reelase, do the following:
+To release, do the following:
 
 1. Update the version in `CHANGELOG.md`
 2. Run: `bin/release.sh`
