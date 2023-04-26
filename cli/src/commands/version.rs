@@ -462,7 +462,7 @@ pub async fn build_image(
 
 					if !inspect_output.status.success()
 						&& String::from_utf8(inspect_output.stderr.clone())?
-							.contains(&format!("ERROR: no builder \"{builder_name}\" found"))
+							.contains(&format!("no builder \"{builder_name}\" found"))
 					{
 						// Create new builder
 
