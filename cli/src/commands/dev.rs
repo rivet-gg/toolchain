@@ -176,7 +176,7 @@ pub async fn create_dev_token(
 			.await?
 	{
 		let mut env_file =
-			format!("# Provide a development token for the lobby and client. These are intentionally all the same value.\n# Read more: https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}\nRIVET_PUBLIC_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n");
+			format!("# Development token for local use only\n# See https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}");
 		fs::write(".env", env_file).await?;
 		term::status::success(format!("Wrote to .env"), "");
 	}
