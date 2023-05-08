@@ -107,7 +107,6 @@ pub async fn create_dev_token(
 		lobby_ports
 	};
 
-	let mut default_port = None;
 	let dev_ports = dev_ports
 		.into_iter()
 		.map(|(label, port_config)| {
@@ -123,12 +122,6 @@ pub async fn create_dev_token(
 			} else {
 				bail!("missing both port and port_range")
 			};
-
-			if let Some(port) = port {
-				if default_port.is_none() {
-					default_port = Some(port);
-				}
-			}
 
 			Ok((
 				label,
@@ -184,9 +177,6 @@ pub async fn create_dev_token(
 	{
 		let mut env_file =
 			format!("# Provide a development token for the lobby and client. These are intentionally all the same value.\n# Read more: https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}\nRIVET_PUBLIC_TOKEN={token}\nRIVET_LOBBY_TOKEN={token}\n");
-		if let Some(default_port) = default_port {
-			env_file = format!("PORT={default_port}\n\n{env_file}");
-		}
 		fs::write(".env", env_file).await?;
 		term::status::success(format!("Wrote to .env"), "");
 	}
