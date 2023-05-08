@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Generated .env mentions that the tokens are intentionally the same
+- Remove `PORT` from generated .env file
 
 ## [v0.0.50] - 2023-04-18
 
