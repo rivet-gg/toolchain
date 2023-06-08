@@ -17,7 +17,7 @@ if (!(Test-Path $BinDir)) {
 }
 
 $RivetZip = "$BinDir\rivet.zip"
-$RivetExe = "$BinDir\rivet.exe"
+$RivetExe = "$BinDir\rivet-cli.exe"
 $Target = 'x86_64-pc-windows-msvc'
 $CliAssetSuffix = "-${Target}.zip"
 
