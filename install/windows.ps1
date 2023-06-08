@@ -75,7 +75,7 @@ if (!(";${Path};".ToLower() -like "*;${BinDir};*".ToLower())) {
 
 Write-Host
 Write-Host "> Checking installation"
-rivet.exe --version
+rivet-cli.exe --version
 
 Write-Host
 Write-Host "Rivet was installed successfully to ${RivetExe}."
