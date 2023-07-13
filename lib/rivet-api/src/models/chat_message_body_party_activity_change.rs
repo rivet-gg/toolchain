@@ -13,15 +13,15 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct CloudGamesCreateGameResponse {
-    #[serde(rename = "game_id")]
-    pub game_id: uuid::Uuid,
+pub struct ChatMessageBodyPartyActivityChange {
+    #[serde(rename = "activity")]
+    pub activity: Box<crate::models::PartyActivity>,
 }
 
-impl CloudGamesCreateGameResponse {
-    pub fn new(game_id: uuid::Uuid) -> CloudGamesCreateGameResponse {
-        CloudGamesCreateGameResponse {
-            game_id,
+impl ChatMessageBodyPartyActivityChange {
+    pub fn new(activity: crate::models::PartyActivity) -> ChatMessageBodyPartyActivityChange {
+        ChatMessageBodyPartyActivityChange {
+            activity: Box::new(activity),
         }
     }
 }

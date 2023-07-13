@@ -1,12 +1,10 @@
-# CloudDestroyedLobbiesByExitCodeDataSet
+# ChatMessageBodyPartyActivityChange
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**destroyed_lobby_count** | **Vec<i64>** |  | 
-**exit_code** | **Vec<i32>** |  | 
-**ts** | **Vec<i64>** |  | 
+**activity** | [**crate::models::PartyActivity**](PartyActivity.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
