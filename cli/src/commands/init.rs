@@ -461,9 +461,9 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 
 /// Finds the Unreal project file in the current directory.
 async fn find_uproject_file() -> Result<Option<PathBuf>> {
-	let current_dir = std::env::current_dir().ok()?;
-	let mut read_dir = fs::read_dir(current_dir).await.ok()?;
-	while let Some(entry) = read_dir.next_entry().await.ok()?.flatten() {
+	let current_dir = std::env::current_dir()?;
+	let mut read_dir = fs::read_dir(current_dir).await?;
+	while let Some(entry) = read_dir.next_entry().await? {
 		let path = entry.path();
 		if let Some(ext) = path.extension() {
 			if ext == "uproject" {
