@@ -1,8 +1,8 @@
 use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
-use cli_core::{ctx, rivet_api};
+use cli_core::{ctx, rivet_api, Ctx};
 use console::{style, Term};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use tokio::{fs, io::AsyncWriteExt};
 
 use crate::{
@@ -10,10 +10,11 @@ use crate::{
 	util::{git, secrets, term},
 };
 
-const VERSION_HEAD: &'static str = include_str!("../../tpl/default_config/head.toml");
-const VERSION_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
-const VERSION_MATCHMAKER: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
-const VERSION_FOOT: &'static str = include_str!("../../tpl/default_config/foot.toml");
+const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.toml");
+const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
+const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
+
+const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/head.toml");
 
 #[derive(Parser)]
 pub struct Opts {
@@ -23,6 +24,10 @@ pub struct Opts {
 	update_gitignore: bool,
 	#[clap(long)]
 	create_version_config: bool,
+
+	// Presets
+	#[clap(long, alias = "unreal-engine")]
+	unreal: bool,
 
 	// Matchmaker
 	#[clap(long)]
@@ -54,6 +59,34 @@ impl Opts {
 		term: &Term,
 		override_api_url: Option<String>,
 	) -> Result<()> {
+		let ctx = self.build_ctx(term, cloud_token, override_api_url).await?;
+
+		self.update_gitignore(term, &ctx).await?;
+
+		if self.unreal {
+			self.create_config_unreal(term, &ctx).await?;
+		} else {
+			// Default pipeline
+			let has_version_config = self.create_config_default(term, &ctx).await?;
+			self.create_dev_token(term, &ctx, has_version_config)
+				.await?;
+		}
+
+		eprintln!();
+		term::status::success(
+			"What's next?",
+			"https://docs.rivet.gg/general/guides/crash-course",
+		);
+
+		Ok(())
+	}
+
+	async fn build_ctx(
+		&self,
+		term: &Term,
+		cloud_token: Option<&str>,
+		override_api_url: Option<String>,
+	) -> Result<Ctx> {
 		// Check if token already exists
 		let cloud_token = if let Some(cloud_token) = cloud_token.clone() {
 			Some(cloud_token.to_string())
@@ -80,7 +113,10 @@ impl Opts {
 			read_cloud_token(term, override_api_url.clone()).await?
 		};
 
-		// Update .gitignore
+		Ok(ctx)
+	}
+
+	async fn update_gitignore(&self, term: &Term, ctx: &Ctx) -> Result<()> {
 		if !git::check_ignore(Path::new(".rivet/")).await? {
 			if self.recommend
 				|| self.update_gitignore
@@ -111,7 +147,46 @@ impl Opts {
 			);
 		}
 
-		// Create rivet.version.toml
+		Ok(())
+	}
+
+	async fn create_config_unreal(&self, term: &Term, ctx: &Ctx) -> Result<()> {
+		let config_path = std::env::current_dir()?.join("rivet.version.toml");
+		let config_needs_creation = match fs::read_to_string(&config_path).await {
+			Ok(_) => false,
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
+			Err(err) => {
+				return Err(err.into());
+			}
+		};
+
+		// Read module name
+		let mut module_name_prompt = term::Prompt::new("Unreal game module name?").docs("Name of the Unreal module that holds the game code. This is usually the value of `$.Modules[0].Name` in the file `MyProject.unproject`.");
+		if let Some(module_name) = attempt_read_module_name().await? {
+			module_name_prompt = module_name_prompt.default_value(module_name);
+		}
+		let module_name = module_name_prompt.string(term).await?;
+
+		// Generate config file
+		if config_needs_creation || self.create_version_config {
+			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &module_name);
+
+			fs::write(config_path, version_config).await?;
+
+			term::status::success("Created rivet.version.toml", "");
+		} else {
+			term::status::success(
+				"Version already configured",
+				"Your game is already configured with rivet.version.toml",
+			);
+		}
+
+		// Generate Dockerfile
+
+		Ok(())
+	}
+
+	async fn create_config_default(&self, term: &Term, ctx: &Ctx) -> Result<bool> {
 		let config_path = std::env::current_dir()?.join("rivet.version.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
@@ -130,7 +205,7 @@ impl Opts {
 					.bool(term)
 					.await?
 			{
-				let mut version_config = VERSION_HEAD.to_string();
+				let mut version_config = CONFIG_DEFAULT_HEAD.to_string();
 
 				if self.matchmaker
 					|| term::Prompt::new("Enable Rivet Matchmaker?")
@@ -169,7 +244,7 @@ impl Opts {
 					}
 
 					version_config.push_str(
-						&VERSION_MATCHMAKER
+						&CONFIG_DEFAULT_MM
 							.replace("__DOCKERFILE__", &dockerfile_path)
 							.replace("__PORT__", &port.to_string()),
 					);
@@ -214,14 +289,13 @@ impl Opts {
 					}
 
 					version_config.push_str(
-						&VERSION_CDN
+						&CONFIG_DEFAULT_CDN
 							.replace("__BUILD_COMMAND__", &build_command.replace("\"", "\\\""))
 							.replace("__BUILD_OUTPUT__", &build_output),
 					);
 				}
 
-				version_config.push_str(&VERSION_FOOT);
-
+				// Write file
 				fs::write(config_path, version_config).await?;
 
 				term::status::success("Created rivet.version.toml", "");
@@ -238,7 +312,15 @@ impl Opts {
 			true
 		};
 
-		// Development flow
+		Ok(has_version_config)
+	}
+
+	async fn create_dev_token(
+		&self,
+		term: &Term,
+		ctx: &Ctx,
+		has_version_config: bool,
+	) -> Result<()> {
 		if has_version_config
 			&& commands::version::read_config(Vec::new(), None)
 				.await?
@@ -257,12 +339,6 @@ impl Opts {
 			.execute(term, &ctx)
 			.await?
 		}
-
-		eprintln!();
-		term::status::success(
-			"What's next?",
-			"https://docs.rivet.gg/general/guides/crash-course",
-		);
 
 		Ok(())
 	}
@@ -381,4 +457,53 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 	term::status::success("Token Saved", display_name);
 
 	Ok(new_ctx)
+}
+
+/// Finds the Unreal project file in the current directory.
+async fn find_uproject_file() -> Result<Option<PathBuf>> {
+	let current_dir = std::env::current_dir().ok()?;
+	let mut read_dir = fs::read_dir(current_dir).await.ok()?;
+	while let Some(entry) = read_dir.next_entry().await.ok()?.flatten() {
+		let path = entry.path();
+		if let Some(ext) = path.extension() {
+			if ext == "uproject" {
+				return Ok(Some(path));
+			}
+		}
+	}
+
+	Ok(None)
+}
+
+/// Attempts to read the module name from the uproject file.
+async fn attempt_read_module_name() -> Result<Option<String>> {
+	// Read uproject file
+	let uproject_path =
+		if let Some(path) = find_uproject_file().await.context("find_uproject_file")? {
+			path
+		} else {
+			return Ok(None);
+		};
+	let uproject_str = match fs::read_to_string(&uproject_path).await {
+		Ok(uproject) => uproject,
+		Err(err) => {
+			return Ok(None);
+		}
+	};
+	let uproject_json = match serde_json::from_str::<serde_json::Value>(&uproject_str) {
+		Ok(uproject_json) => uproject_json,
+		Err(err) => {
+			return Ok(None);
+		}
+	};
+
+	// Extract module name
+	let project_name = uproject_json
+		.get("Modules")
+		.and_then(|x| x.get(0))
+		.and_then(|x| x.get("Name"))
+		.and_then(|x| x.as_str())
+		.map(|x| x.to_string());
+
+	Ok(project_name)
 }
