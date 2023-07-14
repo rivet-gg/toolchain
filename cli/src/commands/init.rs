@@ -151,7 +151,7 @@ impl Opts {
 	}
 
 	async fn create_config_unreal(&self, term: &Term, ctx: &Ctx) -> Result<()> {
-		let config_path = std::env::current_dir()?.join("rivet.version.toml");
+		let config_path = std::env::current_dir()?.join("rivet.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
 			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
@@ -173,11 +173,11 @@ impl Opts {
 
 			fs::write(config_path, version_config).await?;
 
-			term::status::success("Created rivet.version.toml", "");
+			term::status::success("Created rivet.toml", "");
 		} else {
 			term::status::success(
 				"Version already configured",
-				"Your game is already configured with rivet.version.toml",
+				"Your game is already configured with rivet.toml",
 			);
 		}
 
@@ -187,7 +187,7 @@ impl Opts {
 	}
 
 	async fn create_config_default(&self, term: &Term, ctx: &Ctx) -> Result<bool> {
-		let config_path = std::env::current_dir()?.join("rivet.version.toml");
+		let config_path = std::env::current_dir()?.join("rivet.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
 			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
@@ -198,7 +198,7 @@ impl Opts {
 		let has_version_config = if config_needs_creation {
 			if self.recommend
 				|| self.create_version_config
-				|| term::Prompt::new("Create rivet.version.toml?")
+				|| term::Prompt::new("Create rivet.toml?")
 					.docs("This is the configuration file used to manage your game")
 					.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
 					.default_value("yes")
@@ -210,7 +210,7 @@ impl Opts {
 				if self.matchmaker
 					|| term::Prompt::new("Enable Rivet Matchmaker?")
 						.indent(1)
-						.context("rivet.version.toml")
+						.context("rivet.toml")
 						.docs("Setup your matchmaker configuration, this can be changed later")
 						.docs_url("https://docs.rivet.gg/matchmaker/introduction")
 						.default_value("yes")
@@ -253,7 +253,7 @@ impl Opts {
 				if self.cdn
 					|| term::Prompt::new("Enable Rivet CDN?")
 						.indent(1)
-						.context("rivet.version.toml")
+						.context("rivet.toml")
 						.docs("Setup service a website or static assets, this can be changed later")
 						.docs_url("https://docs.rivet.gg/cdn/introduction")
 						.default_value("yes")
@@ -298,7 +298,7 @@ impl Opts {
 				// Write file
 				fs::write(config_path, version_config).await?;
 
-				term::status::success("Created rivet.version.toml", "");
+				term::status::success("Created rivet.toml", "");
 
 				true
 			} else {
@@ -307,7 +307,7 @@ impl Opts {
 		} else {
 			term::status::success(
 				"Version already configured",
-				"Your game is already configured with rivet.version.toml",
+				"Your game is already configured with rivet.toml",
 			);
 			true
 		};
