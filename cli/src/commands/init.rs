@@ -14,7 +14,15 @@ const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config
 const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
 const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
 
-const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/head.toml");
+const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.toml");
+const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.toml");
+
+const UNREAL_SERVER_DEBUG_DOCKERFILE: &'static str =
+	include_str!("../../tpl/unreal_config/server.debug.Dockerfile");
+const UNREAL_SERVER_DEVELOPMENT_DOCKERFILE: &'static str =
+	include_str!("../../tpl/unreal_config/server.development.Dockerfile");
+const UNREAL_SERVER_SHIPPING_DOCKERFILE: &'static str =
+	include_str!("../../tpl/unreal_config/server.shipping.Dockerfile");
 
 #[derive(Parser)]
 pub struct Opts {
@@ -151,30 +159,86 @@ impl Opts {
 	}
 
 	async fn create_config_unreal(&self, term: &Term, ctx: &Ctx) -> Result<()> {
+		let dockerfile_dev_path = std::env::current_dir()?.join("server.development.Dockerfile");
+		let dockerfile_debug_path = std::env::current_dir()?.join("server.debug.Dockerfile");
+		let dockerfile_shipping_path = std::env::current_dir()?.join("server.shipping.Dockerfile");
 		let config_path = std::env::current_dir()?.join("rivet.toml");
-		let config_needs_creation = match fs::read_to_string(&config_path).await {
-			Ok(_) => false,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
-			Err(err) => {
-				return Err(err.into());
-			}
-		};
+		let config_prod_path = std::env::current_dir()?.join("rivet.prod.toml");
+
+		// Build the uproject path
+		let uproject_path = find_uproject_file()
+			.await
+			.context("find_uproject_file")?
+			.context("could not find *.uproject file")?;
+		let uproject_path_unix = uproject_path
+			.components()
+			.map(|c| c.as_os_str().to_string_lossy())
+			.collect::<Vec<_>>()
+			.join("/");
 
 		// Read module name
 		let mut module_name_prompt = term::Prompt::new("Unreal game module name?").docs("Name of the Unreal module that holds the game code. This is usually the value of `$.Modules[0].Name` in the file `MyProject.unproject`.");
-		if let Some(module_name) = attempt_read_module_name().await? {
+		if let Some(module_name) = attempt_read_module_name(&uproject_path).await? {
 			module_name_prompt = module_name_prompt.default_value(module_name);
 		}
-		let module_name = module_name_prompt.string(term).await?;
+		let game_module = module_name_prompt.string(term).await?;
+
+		// Generate Dockerfiles
+		let mut dockerfile_created = false;
+		if fs::try_exists(&dockerfile_dev_path).await? {
+			fs::write(
+				&dockerfile_dev_path,
+				UNREAL_SERVER_DEVELOPMENT_DOCKERFILE
+					.replace("__UPROJECT_PATH__", &uproject_path_unix)
+					.replace("__GAME_MODULE__", &game_module),
+			)
+			.await?;
+			term::status::success("Created server.development.Dockerfile", "");
+			dockerfile_created = true;
+		}
+		if fs::try_exists(&dockerfile_debug_path).await? {
+			fs::write(
+				&dockerfile_debug_path,
+				UNREAL_SERVER_DEBUG_DOCKERFILE
+					.replace("__UPROJECT_PATH__", &uproject_path_unix)
+					.replace("__GAME_MODULE__", &game_module),
+			)
+			.await?;
+			term::status::success("Created server.debug.Dockerfile", "");
+			dockerfile_created = true;
+		}
+		if fs::try_exists(&dockerfile_shipping_path).await? {
+			fs::write(
+				&dockerfile_shipping_path,
+				UNREAL_SERVER_SHIPPING_DOCKERFILE
+					.replace("__UPROJECT_PATH__", &uproject_path_unix)
+					.replace("__GAME_MODULE__", &game_module),
+			)
+			.await?;
+			term::status::success("Created server.shipping.Dockerfile", "");
+			dockerfile_created = true;
+		}
+		if !dockerfile_created {
+			term::status::success(
+				"Dockerfiles already created",
+				"Your game already has server.*.Dockerfile",
+			);
+		}
 
 		// Generate config file
-		if config_needs_creation || self.create_version_config {
-			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &module_name);
-
-			fs::write(config_path, version_config).await?;
-
+		let mut config_created = false;
+		if self.create_version_config || fs::try_exists(&config_path).await? {
+			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &game_module);
+			fs::write(&config_path, version_config).await?;
 			term::status::success("Created rivet.toml", "");
-		} else {
+			config_created = true;
+		}
+		if self.create_version_config || fs::try_exists(&config_prod_path).await? {
+			fs::write(&config_path, CONFIG_UNREAL_PROD).await?;
+			term::status::success("Created rivet.prod.toml", "");
+			config_created = true;
+		}
+		if !config_created {
 			term::status::success(
 				"Version already configured",
 				"Your game is already configured with rivet.toml",
@@ -476,14 +540,8 @@ async fn find_uproject_file() -> Result<Option<PathBuf>> {
 }
 
 /// Attempts to read the module name from the uproject file.
-async fn attempt_read_module_name() -> Result<Option<String>> {
+async fn attempt_read_module_name(uproject_path: &Path) -> Result<Option<String>> {
 	// Read uproject file
-	let uproject_path =
-		if let Some(path) = find_uproject_file().await.context("find_uproject_file")? {
-			path
-		} else {
-			return Ok(None);
-		};
 	let uproject_str = match fs::read_to_string(&uproject_path).await {
 		Ok(uproject) => uproject,
 		Err(err) => {
