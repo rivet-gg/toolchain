@@ -166,11 +166,14 @@ impl Opts {
 		let config_prod_path = std::env::current_dir()?.join("rivet.prod.toml");
 
 		// Build the uproject path
-		let uproject_path = find_uproject_file()
+		let current_dir = std::env::current_dir()?;
+		let uproject_path = find_uproject_file(&current_dir)
 			.await
 			.context("find_uproject_file")?
 			.context("could not find *.uproject file")?;
 		let uproject_path_unix = uproject_path
+			.strip_prefix(current_dir)
+			.context("failed to strip uproject path prefix")?
 			.components()
 			.map(|c| c.as_os_str().to_string_lossy())
 			.collect::<Vec<_>>()
@@ -185,7 +188,7 @@ impl Opts {
 
 		// Generate Dockerfiles
 		let mut dockerfile_created = false;
-		if fs::try_exists(&dockerfile_dev_path).await? {
+		if !fs::try_exists(&dockerfile_dev_path).await? {
 			fs::write(
 				&dockerfile_dev_path,
 				UNREAL_SERVER_DEVELOPMENT_DOCKERFILE
@@ -196,7 +199,7 @@ impl Opts {
 			term::status::success("Created server.development.Dockerfile", "");
 			dockerfile_created = true;
 		}
-		if fs::try_exists(&dockerfile_debug_path).await? {
+		if !fs::try_exists(&dockerfile_debug_path).await? {
 			fs::write(
 				&dockerfile_debug_path,
 				UNREAL_SERVER_DEBUG_DOCKERFILE
@@ -207,7 +210,7 @@ impl Opts {
 			term::status::success("Created server.debug.Dockerfile", "");
 			dockerfile_created = true;
 		}
-		if fs::try_exists(&dockerfile_shipping_path).await? {
+		if !fs::try_exists(&dockerfile_shipping_path).await? {
 			fs::write(
 				&dockerfile_shipping_path,
 				UNREAL_SERVER_SHIPPING_DOCKERFILE
@@ -227,14 +230,14 @@ impl Opts {
 
 		// Generate config file
 		let mut config_created = false;
-		if self.create_version_config || fs::try_exists(&config_path).await? {
+		if self.create_version_config || !fs::try_exists(&config_path).await? {
 			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &game_module);
 			fs::write(&config_path, version_config).await?;
 			term::status::success("Created rivet.toml", "");
 			config_created = true;
 		}
-		if self.create_version_config || fs::try_exists(&config_prod_path).await? {
-			fs::write(&config_path, CONFIG_UNREAL_PROD).await?;
+		if self.create_version_config || !fs::try_exists(&config_prod_path).await? {
+			fs::write(&config_prod_path, CONFIG_UNREAL_PROD).await?;
 			term::status::success("Created rivet.prod.toml", "");
 			config_created = true;
 		}
@@ -524,8 +527,7 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 }
 
 /// Finds the Unreal project file in the current directory.
-async fn find_uproject_file() -> Result<Option<PathBuf>> {
-	let current_dir = std::env::current_dir()?;
+async fn find_uproject_file(current_dir: &Path) -> Result<Option<PathBuf>> {
 	let mut read_dir = fs::read_dir(current_dir).await?;
 	while let Some(entry) = read_dir.next_entry().await? {
 		let path = entry.path();
