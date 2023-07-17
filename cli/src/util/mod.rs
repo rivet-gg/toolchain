@@ -7,3 +7,4 @@ pub mod secrets;
 pub mod struct_fmt;
 pub mod term;
 pub mod upload;
+pub mod download;
