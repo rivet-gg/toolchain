@@ -1,6 +1,6 @@
 # How the game lobbies run and how players connect to the game.
 #
-# https://rivet.gg/docs/matchmaker/introduction
+# https://rivet.gg/docs/matchmaker
 [matchmaker]
 	# How many players can join a specific lobby.
 	#

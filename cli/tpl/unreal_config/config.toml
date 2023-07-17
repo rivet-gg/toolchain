@@ -1,7 +1,7 @@
 # === Rivet Configuration ===
 # 
-# - More info: https://docs.rivet.gg/general/concepts/rivet-version-config
-# - Reference: https://docs.rivet.gg/cloud/api/post-games-versions#body
+# - More info: https://rivet.gg/docs/general/concepts/rivet-version-config
+# - Reference: https://rivet.gg/docs/cloud/api/post-games-versions#body
 # - Publish a new version with `rivet publish`
 #
 
@@ -10,16 +10,16 @@
 
 # How the game lobbies run and how players connect to the game.
 #
-# https://docs.rivet.gg/matchmaker/introduction
+# https://rivet.gg/docs/matchmaker
 [matchmaker]
 	# How many players can join a specific lobby.
 	#
-	# Read more about matchmaking: https://docs.rivet.gg/matchmaker/concepts/finding-lobby
+	# Read more about matchmaking: https://rivet.gg/docs/matchmaker/concepts/finding-lobby
 	max_players = 32
 
 	# The hardware to provide for lobbies.
 	#
-	# Available tiers: https://docs.rivet.gg/serverless-lobbies/concepts/available-tiers
+	# Available tiers: https://rivet.gg/docs/serverless-lobbies/concepts/available-tiers
 	tier = "basic-1d1"
 
 # What game modes are avaiable.
@@ -31,7 +31,7 @@
 
 # Which regions the game should be available in.
 #
-# Available regions: https://docs.rivet.gg/serverless-lobbies/concepts/available-regions
+# Available regions: https://rivet.gg/docs/serverless-lobbies/concepts/available-regions
 [matchmaker.regions]
 	lnd-sfo = {}
 	lnd-fra = {}

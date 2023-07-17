@@ -146,7 +146,7 @@ impl Opts {
 		eprintln!();
 		term::status::success(
 			"What's next?",
-			"https://docs.rivet.gg/general/guides/crash-course",
+			"https://rivet.gg/docs/general/guides/crash-course",
 		);
 
 		Ok(())
@@ -377,7 +377,7 @@ impl Opts {
 						.indent(1)
 						.context("rivet.toml")
 						.docs("Setup your matchmaker configuration, this can be changed later")
-						.docs_url("https://rivet.gg/docs/matchmaker/introduction")
+						.docs_url("https://rivet.gg/docs/matchmaker")
 						.default_value("yes")
 						.bool(term)
 						.await?
@@ -420,7 +420,7 @@ impl Opts {
 						.indent(1)
 						.context("rivet.toml")
 						.docs("Setup service a website or static assets, this can be changed later")
-						.docs_url("https://rivet.gg/docs/cdn/introduction")
+						.docs_url("https://rivet.gg/docs/cdn")
 						.default_value("yes")
 						.bool(term)
 						.await?
