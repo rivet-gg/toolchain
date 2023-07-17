@@ -37,6 +37,18 @@ enum InitEngine {
 	Custom,
 }
 
+impl InitEngine {
+	fn learn_url(&self) -> String {
+		match self {
+			InitEngine::Unity => "https://rivet.gg/learn/unity".to_string(),
+			InitEngine::Unreal => "https://rivet.gg/learn/unreal".to_string(),
+			InitEngine::Godot => "https://rivet.gg/learn/godot".to_string(),
+			InitEngine::HTML5 => "https://rivet.gg/learn/html5".to_string(),
+			InitEngine::Custom => "https://rivet.gg/learn/custom".to_string(),
+		}
+	}
+}
+
 impl FromStr for InitEngine {
 	type Err = anyhow::Error;
 
@@ -144,10 +156,7 @@ impl Opts {
 		self.update_gitignore(term).await?;
 
 		eprintln!();
-		term::status::success(
-			"What's next?",
-			"https://rivet.gg/docs/general/guides/crash-course",
-		);
+		term::status::success("What's next?", init_engine.learn_url());
 
 		Ok(())
 	}
@@ -346,7 +355,7 @@ impl Opts {
 				|| self.create_version_config
 				|| term::Prompt::new("Create rivet.toml?")
 					.docs("This is the configuration file used to manage your game")
-					.docs_url("https://rivet.gg/docs/general/concepts/rivet-version-config")
+					.docs_url("https://rivet.gg/docs/general/concepts/version-config")
 					.default_value("yes")
 					.bool(term)
 					.await?

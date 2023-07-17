@@ -1,5 +1,5 @@
 let
-	moz_overlay = import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/80627b282705101e7b38e19ca6e8df105031b072.tar.gz);
+	moz_overlay = import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/e6ca26fe8b9df914d4567604e426fbc185d9ef3e.tar.gz);
 	pkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
 in
 	pkgs.mkShell {
@@ -8,6 +8,7 @@ in
 			cacert
 
 			pkgs.latest.rustChannels.stable.rust
+            rust-script
 			pkg-config
 			openssl
 			libiconv

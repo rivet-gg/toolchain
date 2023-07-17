@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed `rivet.version.toml` to `rivet.toml`. All changes are backwards compatible.
 
+### Fixed
+
+- Broken links to old docs
+- Docker builder now catches missing builder errors correctly for older Docker versions
+
 ## [v0.0.51] - 2023-04-26
 
 ### Fixed
