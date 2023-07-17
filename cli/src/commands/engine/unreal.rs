@@ -2,7 +2,6 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use clap::Parser;
-use console::Term;
 use tokio::{process::Command, task::spawn_blocking};
 
 use crate::{commands, util};
@@ -16,18 +15,16 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, term: &Term, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::StartServer => {
 				let pwd = std::env::current_dir()?;
 
 				let token = commands::token::create::dev::execute(
-					term,
 					ctx,
 					&commands::token::create::dev::Opts {
-						dev_env: Some(false),
+						dev_env: false,
 						namespace: None,
-						format: None,
 					},
 				)
 				.await?

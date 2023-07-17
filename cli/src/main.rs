@@ -152,16 +152,16 @@ async fn main() -> Result<()> {
 			);
 		}
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
-		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
-		SubCommand::Token { command } => command.execute(&term, &ctx).await?,
+		SubCommand::Dev { command } => command.execute(&ctx).await?,
+		SubCommand::Token { command } => command.execute(&ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Image { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
-		SubCommand::Engine { command } => command.execute(&term, &ctx).await?,
-		SubCommand::Unreal { command } => command.execute(&term, &ctx).await?,
+		SubCommand::Engine { command } => command.execute(&ctx).await?,
+		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 	}
 
 	Ok(())

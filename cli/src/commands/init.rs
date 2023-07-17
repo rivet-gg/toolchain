@@ -507,11 +507,10 @@ impl Opts {
 			.await?)
 		{
 			commands::token::create::dev::Opts {
-				dev_env: Some(self.recommend || self.dev_env),
+				dev_env: true,
 				namespace: None,
-				format: None,
 			}
-			.execute(term, &ctx)
+			.execute(&ctx)
 			.await?
 		}
 
