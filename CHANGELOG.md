@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed `rivet.version.toml` to `rivet.toml`. All changes are backwards compatible.
+- Renamed `rivet publish` command to `rivet deploy` since this is the more commonly used alias
 
 ### Fixed
 

@@ -1,6 +1,6 @@
 # Rivet CLI
 
-## Installing
+## Installation
 
 ### macOS & Linux & WSL
 
@@ -13,6 +13,9 @@ curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh |
 ```
 powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex"
 ```
+
+## Documentation
+
 
 ## Publishing Versions
 

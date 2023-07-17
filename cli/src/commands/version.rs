@@ -51,8 +51,8 @@ pub enum SubCommand {
 	},
 
 	/// Pushes the build and site and creates a new version
-	#[clap(alias = "push-and-create", alias = "create")]
-	Publish(PublishOpts),
+	#[clap(alias = "push-and-create", alias = "create", alias = "publish")]
+	Deploy(DeployOpts),
 
 	/// Returns the config for a version
 	#[clap(alias = "read-config")]
@@ -61,7 +61,7 @@ pub enum SubCommand {
 		#[clap(long = "override", short)]
 		overrides: Vec<String>,
 
-		/// The namespace ID to publish to
+		/// The namespace ID to deploy to
 		#[clap(short = 'n', long)]
 		namespace: Option<String>,
 	},
@@ -133,7 +133,7 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Publish(opts) => opts.execute(ctx).await,
+			SubCommand::Deploy(opts) => opts.execute(ctx).await,
 			SubCommand::ValidateConfig {
 				overrides,
 				namespace,
@@ -191,7 +191,7 @@ impl SubCommand {
 }
 
 #[derive(Parser)]
-pub struct PublishOpts {
+pub struct DeployOpts {
 	/// Name of the version to create
 	#[clap(long = "name", alias = "display-name")]
 	display_name: Option<String>,
@@ -200,7 +200,7 @@ pub struct PublishOpts {
 	#[clap(long = "override", short)]
 	overrides: Vec<String>,
 
-	/// Namespace ID to publish to
+	/// Namespace ID to deploy to
 	#[clap(short = 'n', long)]
 	namespace: Option<String>,
 
@@ -232,7 +232,7 @@ pub struct PublishOpts {
 	format: Option<struct_fmt::Format>,
 }
 
-impl PublishOpts {
+impl DeployOpts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		// Parse overrides
 		let mut overrides = parse_config_override_args(&self.overrides)?;
@@ -661,7 +661,7 @@ pub async fn create(
 	let version_id = version_res.version_id;
 
 	eprintln!();
-	term::status::success("Published Version", &display_name);
+	term::status::success("Deployed Version", &display_name);
 	term::status::info(
 		"Version Dashboard",
 		dashboard_url(&ctx.game_id, &version_id.to_string()),
