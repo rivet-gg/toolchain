@@ -1,7 +1,7 @@
 # === Rivet Configuration ===
 # 
-# - More info: https://rivet.gg/docs/general/concepts/rivet-version-config
-# - Reference: https://rivet.gg/docs/cloud/api/post-games-versions#body
+# - More info: https://rivet.gg/docs/general/concepts/version-config
+# - Reference: https://rivet.gg/docs/cloud/api/games/versions/create-game-version
 # - Publish a new version with `rivet publish`
 #
 
