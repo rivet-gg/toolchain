@@ -1,14 +1,13 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Result};
 use clap::Parser;
-use cli_core::rivet_api::models;
+
 use console::Term;
-use serde::Serialize;
-use std::collections::HashMap;
-use tokio::fs;
+
+
+
 
 use crate::{
-	commands,
-	util::{struct_fmt, term},
+	util::{term},
 };
 
 #[derive(Parser)]
