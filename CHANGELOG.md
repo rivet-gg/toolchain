@@ -24,13 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Generated .env mentions that the tokens are intentionally the same
+- Remove `PORT`, `RIVET_LOBBY_TOKEN`, and `RIVET_PUBLIC_TOKEN` from generated .env file
+- Document development token in .env
 
 ## [v0.0.50] - 2023-04-18
 
 ### Changed
 
-- Description, homepage, and repositor to Cargo.toml
+- Description, homepage, and repository to Cargo.toml
 
 ### Fixed
 
