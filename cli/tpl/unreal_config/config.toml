@@ -1,3 +1,13 @@
+# === Rivet Configuration ===
+# 
+# - More info: https://docs.rivet.gg/general/concepts/rivet-version-config
+# - Reference: https://docs.rivet.gg/cloud/api/post-games-versions#body
+# - Publish a new version with `rivet publish`
+#
+
+[engine.unreal]
+    game_module = "__GAME_MODULE__"
+
 # How the game lobbies run and how players connect to the game.
 #
 # https://docs.rivet.gg/matchmaker/introduction
@@ -26,15 +36,7 @@
 	lnd-sfo = {}
 	lnd-fra = {}
 
-# Runtime configuration for the lobby's Docker container.
+# Runtime configuration for running the Unreal game server.
 [matchmaker.docker]
-	# If you're unfamiliar with Docker, here's how to write your own
-	# Dockerfile:
-	# https://docker-curriculum.com/#dockerfile
-	dockerfile = "__DOCKERFILE__"
-
-	# Which ports to allow players to connect to. Multiple ports can be defined
-	# with different protocols.
-	#
-	# How ports work: https://docs.rivet.gg/serverless-lobbies/concepts/ports
-	ports.default = { port = __PORT__, protocol = "https" }
+	dockerfile = "server.debug.Dockerfile"
+	ports.default = { port = 7777, protocol = "udp" }

@@ -11,7 +11,7 @@
 use reqwest;
 
 use super::{configuration, Error};
-use crate::{apis::ResponseContent, models::CloudAnalyticsVariantQuery};
+use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_games_create_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -74,20 +74,6 @@ pub enum CloudGamesGamesGameLogoUploadCompleteError {
 #[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGameLogoUploadPrepareError {
-	Status400(crate::models::ErrorBody),
-	Status403(crate::models::ErrorBody),
-	Status404(crate::models::ErrorBody),
-	Status408(crate::models::ErrorBody),
-	Status429(crate::models::ErrorBody),
-	Status500(crate::models::ErrorBody),
-	UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`cloud_games_games_get_analytics`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-#[serde(untagged)]
-pub enum CloudGamesGamesGetAnalyticsError {
 	Status400(crate::models::ErrorBody),
 	Status403(crate::models::ErrorBody),
 	Status404(crate::models::ErrorBody),
@@ -367,66 +353,6 @@ pub async fn cloud_games_games_game_logo_upload_prepare(
 		serde_json::from_str(&local_var_content).map_err(Error::from)
 	} else {
 		let local_var_entity: Option<CloudGamesGamesGameLogoUploadPrepareError> =
-			serde_json::from_str(&local_var_content).ok();
-		let local_var_error = ResponseContent {
-			status: local_var_status,
-			content: local_var_content,
-			entity: local_var_entity,
-		};
-		Err(Error::ResponseError(local_var_error))
-	}
-}
-
-pub async fn cloud_games_games_get_analytics(
-	configuration: &configuration::Configuration,
-	query_start: String,
-	query_end: String,
-	variants: CloudAnalyticsVariantQuery,
-	game_ids: Option<&str>,
-	namespace_ids: Option<&str>,
-) -> Result<crate::models::CloudGamesGetAnalyticsResponse, Error<CloudGamesGamesGetAnalyticsError>>
-{
-	let local_var_configuration = configuration;
-
-	let local_var_client = &local_var_configuration.client;
-
-	let local_var_uri_str = format!(
-		"{}/games/namespaces/analytics",
-		local_var_configuration.base_path
-	);
-	let mut local_var_req_builder =
-		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
-
-	local_var_req_builder =
-		local_var_req_builder.query(&[("query_start", &query_start.to_string())]);
-	local_var_req_builder = local_var_req_builder.query(&[("query_end", &query_end.to_string())]);
-	if let Some(ref local_var_str) = game_ids {
-		local_var_req_builder =
-			local_var_req_builder.query(&[("game_ids", &local_var_str.to_string())]);
-	}
-	if let Some(ref local_var_str) = namespace_ids {
-		local_var_req_builder =
-			local_var_req_builder.query(&[("namespace_ids", &local_var_str.to_string())]);
-	}
-	local_var_req_builder = local_var_req_builder.query(&[("variants", &variants.to_string())]);
-	if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-		local_var_req_builder =
-			local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-	}
-	if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
-		local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
-	};
-
-	let local_var_req = local_var_req_builder.build()?;
-	let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-	let local_var_status = local_var_resp.status();
-	let local_var_content = local_var_resp.text().await?;
-
-	if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-		serde_json::from_str(&local_var_content).map_err(Error::from)
-	} else {
-		let local_var_entity: Option<CloudGamesGamesGetAnalyticsError> =
 			serde_json::from_str(&local_var_content).ok();
 		let local_var_error = ResponseContent {
 			status: local_var_status,
