@@ -146,7 +146,7 @@ impl Opts {
 		eprintln!();
 		term::status::success(
 			"What's next?",
-			"https://docs.rivet.gg/general/guides/crash-course",
+			"https://rivet.gg/docs/general/guides/crash-course",
 		);
 
 		Ok(())
@@ -193,7 +193,7 @@ impl Opts {
 				|| self.update_gitignore
 				|| term::Prompt::new("Add .rivet/ to .gitignore?")
 					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
-					.docs_url("https://docs.rivet.gg/general/concepts/dot-rivet-directory")
+					.docs_url("https://rivet.gg/docs/general/concepts/dot-rivet-directory")
 					.default_value("yes")
 					.bool(term).await?
 			{
@@ -346,7 +346,7 @@ impl Opts {
 				|| self.create_version_config
 				|| term::Prompt::new("Create rivet.toml?")
 					.docs("This is the configuration file used to manage your game")
-					.docs_url("https://docs.rivet.gg/general/concepts/rivet-version-config")
+					.docs_url("https://rivet.gg/docs/general/concepts/rivet-version-config")
 					.default_value("yes")
 					.bool(term)
 					.await?
@@ -377,7 +377,7 @@ impl Opts {
 						.indent(1)
 						.context("rivet.toml")
 						.docs("Setup your matchmaker configuration, this can be changed later")
-						.docs_url("https://docs.rivet.gg/matchmaker/introduction")
+						.docs_url("https://rivet.gg/docs/matchmaker")
 						.default_value("yes")
 						.bool(term)
 						.await?
@@ -420,7 +420,7 @@ impl Opts {
 						.indent(1)
 						.context("rivet.toml")
 						.docs("Setup service a website or static assets, this can be changed later")
-						.docs_url("https://docs.rivet.gg/cdn/introduction")
+						.docs_url("https://rivet.gg/docs/cdn")
 						.default_value("yes")
 						.bool(term)
 						.await?
@@ -493,7 +493,7 @@ impl Opts {
 				.is_some() && (self.recommend
 			|| self.dev || term::Prompt::new("Setup development environment?")
 			.docs("Create development tokens that enable you to develop your game locally")
-			.docs_url("http://docs.rivet.gg/general/concepts/dev-tokens")
+			.docs_url("http://rivet.gg/docs/general/concepts/dev-tokens")
 			.bool(term)
 			.await?)
 		{

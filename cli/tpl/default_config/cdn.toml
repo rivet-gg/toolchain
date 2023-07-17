@@ -1,6 +1,6 @@
 # How Rivet CDN should host your static assets on our CDN.
 #
-# https://docs.rivet.gg/cdn/introduction
+# https://rivet.gg/docs/cdn
 [cdn]
 	# Command to run before uploading the site to Rivet. This can be used to
 	# build any JavaScript bundles or generate assets.
