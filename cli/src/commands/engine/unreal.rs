@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Result, Context};
 use clap::Parser;
 use tokio::process::Command;
 
@@ -9,10 +9,12 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, _ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::StartServer => {
-                let pwd = std::env::current_dir()?;
+				let pwd = std::env::current_dir()?;
+
+				let token:String = todo!();
 
 				// Build base image
 				Command::new("docker")
@@ -35,7 +37,7 @@ impl SubCommand {
 						"-it",
 						"--rm",
 						"-v",
-                        &format!("{}:/project", pwd.display()),
+						&format!("{}:/project", pwd.display()),
 						"-p",
 						"127.0.0.1:7777:7777/udp",
 						"rivet-unreal-server-development",

@@ -483,8 +483,9 @@ impl Opts {
 			.bool(term)
 			.await?)
 		{
-			commands::dev::CreateDevTokenOpts {
-				dev_env: self.recommend || self.dev_env,
+			commands::token::create::dev::Opts {
+				dev_env: Some(self.recommend || self.dev_env),
+				namespace: None,
 				format: None,
 			}
 			.execute(term, &ctx)
