@@ -38,7 +38,11 @@ pub struct Output {
 }
 
 pub async fn execute(term: &Term, ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
-    let ns_name_id = opts.namespace.as_ref().map(String::as_str).unwrap_or("staging");
+	let ns_name_id = opts
+		.namespace
+		.as_ref()
+		.map(String::as_str)
+		.unwrap_or("staging");
 
 	let game_res = ctx
 		.client()

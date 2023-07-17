@@ -59,6 +59,8 @@ pub struct Opts {
 	update_gitignore: bool,
 	#[clap(long)]
 	create_version_config: bool,
+	#[clap(long)]
+	install_plugin: bool,
 
 	// Presets
 	#[clap(long)]
@@ -132,8 +134,7 @@ impl Opts {
 			_ => {
 				// TODO: Add setup process for Unity & Godot & HTML5
 				// Default pipeline
-				let has_version_config =
-					self.create_config_default(term, init_engine).await?;
+				let has_version_config = self.create_config_default(term, init_engine).await?;
 				self.create_dev_token(term, &ctx, has_version_config)
 					.await?;
 			}
@@ -309,16 +310,23 @@ impl Opts {
 			);
 		}
 
-		// Generate Dockerfile
+		// Install plugin
+		if self.recommend
+			|| self.install_plugin
+			|| term::Prompt::new("Install or upgrade Unreal Engine Rivet plugin?")
+				.docs("This plugin is used to integrate your game with Rivet")
+				.docs_url("https://github.com/rivet-gg/plugin-unreal")
+				.default_value("yes")
+				.bool(term)
+				.await?
+		{
+			commands::engine::unreal::install_plugin().await?;
+		}
 
 		Ok(())
 	}
 
-	async fn create_config_default(
-		&self,
-		term: &Term,
-		init_engine: InitEngine,
-	) -> Result<bool> {
+	async fn create_config_default(&self, term: &Term, init_engine: InitEngine) -> Result<bool> {
 		let config_path = std::env::current_dir()?.join("rivet.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,

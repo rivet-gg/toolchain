@@ -68,20 +68,26 @@ impl SubCommand {
 				Ok(())
 			}
 			SubCommand::InstallPlugin => {
-				spawn_blocking(|| {
-					util::download::zip(
-						"https://github.com/rivet-gg/plugin-unreal/archive/refs/heads/main.zip",
-						&PathBuf::new()
-							.join("plugin-unreal-main")
-							.join("Plugins")
-							.join("Rivet"),
-						&PathBuf::new().join("Plugins").join("Rivet"),
-					)
-				})
-				.await??;
+				install_plugin().await?;
 
 				Ok(())
 			}
 		}
 	}
+}
+
+pub async fn install_plugin() -> Result<()> {
+	spawn_blocking(|| {
+		util::download::zip(
+			"https://github.com/rivet-gg/plugin-unreal/archive/refs/heads/main.zip",
+			&PathBuf::new()
+				.join("plugin-unreal-main")
+				.join("Plugins")
+				.join("Rivet"),
+			&PathBuf::new().join("Plugins").join("Rivet"),
+		)
+	})
+	.await??;
+
+	Ok(())
 }

@@ -1,5 +1,9 @@
 use anyhow::*;
-use std::{fs::{self, File}, io::{self, Write}, path::Path};
+use std::{
+	fs::{self, File},
+	io::{self, Write},
+	path::Path,
+};
 use tempfile::TempDir;
 use zip::ZipArchive;
 
@@ -38,9 +42,9 @@ fn download(url: &str, dest: &Path) -> Result<()> {
 }
 
 /// Extracts the contents of the directory.
-/// 
+///
 /// # Arguments
-/// 
+///
 /// * `archive_path` - The path to the archive file.
 /// * `inner_dir` - The directory inside the archive to copy from.
 /// * `extract_to` - The path to extract the directory to.
@@ -51,9 +55,8 @@ fn extract(archive_path: &Path, inner_dir: &Path, extract_to: &Path) -> Result<(
 		let mut file = archive.by_index(i)?;
 		let file_name = file.enclosed_name().context("unenclosed file name")?;
 
-        // Filter files that are not in the src_dir
-        let Result::Ok(file_name) = file_name.strip_prefix(inner_dir) else {
-            println!("file does not match src dir: {}", file_name.display());
+		// Filter files that are not in the src_dir
+		let Result::Ok(file_name) = file_name.strip_prefix(inner_dir) else {
             continue;
         };
 
