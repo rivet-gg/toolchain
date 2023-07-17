@@ -1,32 +1,26 @@
 use anyhow::*;
 use clap::Parser;
 use cli_core::rivet_api::models;
-use console::Term;
 use serde::Serialize;
 use std::collections::HashMap;
 use tokio::fs;
 
-use crate::{
-	commands,
-	util::{struct_fmt, term},
-};
+use crate::{commands, util::term};
 
 #[derive(Parser)]
 pub struct Opts {
 	/// Write token to .env file
 	#[clap(long)]
-	pub dev_env: Option<bool>,
+	pub dev_env: bool,
 	/// Namespace to create token for
 	#[clap(long)]
 	pub namespace: Option<String>,
-	#[clap(long, value_parser)]
-	pub format: Option<struct_fmt::Format>,
 }
 
 impl Opts {
-	pub async fn execute(&self, term: &Term, ctx: &cli_core::Ctx) -> Result<()> {
-		let output = execute(term, ctx, self).await?;
-		struct_fmt::print_opt(self.format.as_ref(), &output)?;
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+		let output = execute(ctx, self).await?;
+		println!("{}", output.token);
 
 		Ok(())
 	}
@@ -37,7 +31,7 @@ pub struct Output {
 	pub token: String,
 }
 
-pub async fn execute(term: &Term, ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
+pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 	let ns_name_id = opts
 		.namespace
 		.as_ref()
@@ -153,19 +147,7 @@ pub async fn execute(term: &Term, ctx: &cli_core::Ctx, opts: &Opts) -> Result<Ou
 		token_res.context("cloud_games_namespaces_create_game_namespace_token_development")?;
 	let token = token_res.token;
 
-	eprintln!();
-	term::status::success(format!("Token created"), "");
-
-	eprintln!();
-	if opts.dev_env != Some(false)
-		&& (opts.dev_env == Some(true)
-			|| term::Prompt::new("Write development token to .env file?")
-				.docs("We recommend storing your token in a .env file to keep it secure")
-				.docs_url("https://github.com/motdotla/dotenv#dotenv")
-				.default_value("yes")
-				.bool(term)
-				.await?)
-	{
+	if opts.dev_env {
 		let env_file =
             format!("# Development token for local use only\n# See https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}");
 		fs::write(".env", env_file).await?;

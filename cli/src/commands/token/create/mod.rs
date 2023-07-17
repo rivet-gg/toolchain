@@ -1,6 +1,5 @@
 use anyhow::Result;
 use clap::Parser;
-use console::Term;
 
 pub mod dev;
 
@@ -11,9 +10,9 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, term: &Term, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
-			SubCommand::Development(opts) => opts.execute(term, ctx).await,
+			SubCommand::Development(opts) => opts.execute(ctx).await,
 		}
 	}
 }
