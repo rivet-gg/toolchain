@@ -8,7 +8,7 @@ COPY --chown=ue4:ue4 . /project
 # Debug
 RUN rm -rf /project/Build /project/Saved /project/Intermediate /project/Binaries && \
 	/home/ue4/UnrealEngine/Engine/Build/BatchFiles/RunUAT.sh BuildCookRun \
-		-Server -NoClient -ServerConfig=Debug \
+		-Server -NoClient -ServerConfig=DebugGame \
 		'-Project=/project/__UPROJECT_PATH__' \
 		-UTF8Output -AllMaps -NoP4 -Build -Cook -Stage -Pak -Package -Archive \
 		-ArchiveDirectory=/project/Packaged \
