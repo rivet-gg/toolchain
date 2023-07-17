@@ -15,6 +15,8 @@
 pub struct CloudVersionConfig {
 	#[serde(rename = "cdn", skip_serializing_if = "Option::is_none")]
 	pub cdn: Option<Box<crate::models::CloudVersionCdnConfig>>,
+	#[serde(rename = "engine", skip_serializing_if = "Option::is_none")]
+	pub engine: Option<Box<crate::models::CloudVersionEngineConfig>>,
 	#[serde(rename = "identity", skip_serializing_if = "Option::is_none")]
 	pub identity: Option<Box<crate::models::CloudVersionIdentityConfig>>,
 	/// KV configuration for a given version.
@@ -29,6 +31,7 @@ impl CloudVersionConfig {
 	pub fn new() -> CloudVersionConfig {
 		CloudVersionConfig {
 			cdn: None,
+			engine: None,
 			identity: None,
 			kv: None,
 			matchmaker: None,

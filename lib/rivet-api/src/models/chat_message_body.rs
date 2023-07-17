@@ -29,7 +29,7 @@ pub struct ChatMessageBody {
 		rename = "party_activity_change",
 		skip_serializing_if = "Option::is_none"
 	)]
-	pub party_activity_change: Option<serde_json::Value>,
+	pub party_activity_change: Option<Box<crate::models::ChatMessageBodyPartyActivityChange>>,
 	#[serde(rename = "party_invite", skip_serializing_if = "Option::is_none")]
 	pub party_invite: Option<Box<crate::models::ChatMessageBodyPartyInvite>>,
 	#[serde(rename = "party_join", skip_serializing_if = "Option::is_none")]

@@ -13,10 +13,10 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CloudVersionCdnConfig {
-	/// Client-side configuration
+	/// _Configures Rivet CLI behavior. Has no effect on server behavior._
 	#[serde(rename = "build_command", skip_serializing_if = "Option::is_none")]
 	pub build_command: Option<String>,
-	/// Client-side configuration
+	/// _Configures Rivet CLI behavior. Has no effect on server behavior._
 	#[serde(rename = "build_output", skip_serializing_if = "Option::is_none")]
 	pub build_output: Option<String>,
 	/// Multiple CDN version routes.

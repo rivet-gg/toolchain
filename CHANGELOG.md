@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Unreal helper in `rivet init`
+- Installer for the Unreal Engine plugin with `rivet unreal install-plugin` or `rivet init --unreal`
+
+### Changed
+
+- Renamed `rivet.version.toml` to `rivet.toml`. All changes are backwards compatible.
+
+## [v0.0.51] - 2023-04-26
+
+### Fixed
+
+- Docker builder now catches missing builder errors correctly for older Docker versions
+
 ### Changed
 
 - Remove `PORT`, `RIVET_LOBBY_TOKEN`, and `RIVET_PUBLIC_TOKEN` from generated .env file
@@ -34,4 +49,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update dependency: `rivet-api`
 - Upgrade dependency: `tokio 1.27`
 - Removed unnecessary feature flags from `tokio`
-

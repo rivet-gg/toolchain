@@ -298,24 +298,28 @@ pub fn parse_config_override_args(
 		.collect::<Result<Vec<_>, Error>>()
 }
 
-/// Reads the Rivet version configuration file and applies overrides. Uses the
+/// Reads the Rivet configuration file and applies overrides. Uses the
 /// namespace to read override files.
 ///
 /// For example, in the namespace `foobar`, Rivet would first read
-/// `rivet.version.toml` then override with properties from
-/// `rivet.version.foobar.toml`.
+/// `rivet.toml` then override with properties from
+/// `rivet.foobar.toml`.
 pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
 ) -> Result<models::CloudVersionConfig> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
-		.add_source(config::File::with_name("rivet.version"));
+		.add_source(config::File::with_name("rivet").required(false))
+		// Support legacy `rivet.version.toml` file name
+		.add_source(config::File::with_name("rivet.version").required(false));
 
 	if let Some(namespace) = namespace {
-		config_builder = config_builder.add_source(
-			config::File::with_name(&format!("rivet.version.{namespace}")).required(false),
-		);
+		config_builder = config_builder
+			.add_source(config::File::with_name(&format!("rivet.{namespace}")).required(false))
+			.add_source(
+				config::File::with_name(&format!("rivet.version.{namespace}")).required(false),
+			);
 	}
 
 	// Apply overrides
@@ -341,13 +345,10 @@ pub async fn read_config(
 	}
 
 	// Read config
-	let config = config_builder
-		.build()
-		.await
-		.context("find version config")?;
+	let config = config_builder.build().await.context("find config")?;
 	let version = config
 		.try_deserialize::<models::CloudVersionConfig>()
-		.context("deserialize version config")?;
+		.context("deserialize config")?;
 
 	Ok(version)
 }
@@ -462,7 +463,7 @@ pub async fn build_image(
 
 					if !inspect_output.status.success()
 						&& String::from_utf8(inspect_output.stderr.clone())?
-							.contains(&format!("ERROR: no builder \"{builder_name}\" found"))
+							.contains(&format!("no builder \"{builder_name}\" found"))
 					{
 						// Create new builder
 

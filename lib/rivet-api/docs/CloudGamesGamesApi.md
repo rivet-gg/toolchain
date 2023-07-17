@@ -9,7 +9,6 @@ Method | HTTP request | Description
 [**cloud_games_games_game_banner_upload_prepare**](CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
 [**cloud_games_games_game_logo_upload_complete**](CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
 [**cloud_games_games_game_logo_upload_prepare**](CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
-[**cloud_games_games_get_analytics**](CloudGamesGamesApi.md#cloud_games_games_get_analytics) | **GET** /games/namespaces/analytics | 
 [**cloud_games_games_get_game_by_id**](CloudGamesGamesApi.md#cloud_games_games_get_game_by_id) | **GET** /games/{game_id} | 
 [**cloud_games_games_get_games**](CloudGamesGamesApi.md#cloud_games_games_get_games) | **GET** /games | 
 [**cloud_games_games_validate_game**](CloudGamesGamesApi.md#cloud_games_games_validate_game) | **POST** /games/validate | 
@@ -165,38 +164,6 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## cloud_games_games_get_analytics
-
-> crate::models::CloudGamesGetAnalyticsResponse cloud_games_games_get_analytics(query_start, query_end, variants, game_ids, namespace_ids)
-
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**query_start** | **String** |  | [required] |
-**query_end** | **String** |  | [required] |
-**variants** | [**CloudAnalyticsVariantQuery**](.md) |  | [required] |
-**game_ids** | Option<**String**> |  |  |
-**namespace_ids** | Option<**String**> |  |  |
-
-### Return type
-
-[**crate::models::CloudGamesGetAnalyticsResponse**](CloudGamesGetAnalyticsResponse.md)
-
-### Authorization
-
-[BearerAuth](../README.md#BearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

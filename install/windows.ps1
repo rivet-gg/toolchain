@@ -17,7 +17,7 @@ if (!(Test-Path $BinDir)) {
 }
 
 $RivetZip = "$BinDir\rivet.zip"
-$RivetExe = "$BinDir\rivet.exe"
+$RivetExe = "$BinDir\rivet-cli.exe"
 $Target = 'x86_64-pc-windows-msvc'
 $CliAssetSuffix = "-${Target}.zip"
 
@@ -32,7 +32,7 @@ if (!$Version) {
 	foreach ($Release in $Releases) {
 		$SelectedAssets = $Release.assets | Select-Object -ExpandProperty name | Where-Object { $_ -like "*$CliAssetSuffix" }
 		if ($SelectedAssets) {
-			$Version = $Release.name
+			$Version = $Release.tag_name
 			Break
 		}
 	}
@@ -46,7 +46,7 @@ Write-Host
 Write-Host "> Installing Rivet CLI @ ${Version}"
 
 # Download CLI
-$DownloadUrl = "https://github.com/rivet-gg/cli/releases/download/${Version}/rivet-${Version}-${Target}.zip"
+$DownloadUrl = "https://github.com/rivet-gg/cli/releases/download/${Version}/rivet-cli-${Version}-${Target}.zip"
 Write-Host
 Write-Host "> Downloading ${DownloadUrl}"
 Invoke-WebRequest $DownloadUrl -OutFile $RivetZip -UseBasicParsing
@@ -75,7 +75,7 @@ if (!(";${Path};".ToLower() -like "*;${BinDir};*".ToLower())) {
 
 Write-Host
 Write-Host "> Checking installation"
-rivet.exe --version
+rivet-cli.exe --version
 
 Write-Host
 Write-Host "Rivet was installed successfully to ${RivetExe}."
