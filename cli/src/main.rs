@@ -81,14 +81,15 @@ enum SubCommand {
 	},
 
 	/// Manages identity avatars
+	#[clap(hide = true)]
 	IdentityAvatar {
 		#[clap(subcommand)]
 		command: avatar::SubCommand,
 	},
 
-	/// Alias of `rivet version publish`
-	#[clap(alias = "deploy")]
-	Publish(version::PublishOpts),
+	/// Alias of `rivet version deploy`
+	#[clap(alias = "publish")]
+	Deploy(version::DeployOpts),
 
 	/// Run engine-specific commands
 	Engine {
@@ -97,7 +98,7 @@ enum SubCommand {
 	},
 
 	/// Alias of `rivet engine unreal`
-	#[clap(alias = "ue")]
+	#[clap(hide = true, alias = "ue")]
 	Unreal {
 		#[clap(subcommand)]
 		command: engine::unreal::SubCommand,
@@ -158,7 +159,7 @@ async fn main() -> Result<()> {
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Image { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
-		SubCommand::Publish(opts) => opts.execute(&ctx).await?,
+		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&term, &ctx).await?,
 	}

@@ -166,7 +166,7 @@ pub async fn execute(term: &Term, ctx: &cli_core::Ctx, opts: &Opts) -> Result<Ou
 				.bool(term)
 				.await?)
 	{
-		let mut env_file =
+		let env_file =
             format!("# Development token for local use only\n# See https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}");
 		fs::write(".env", env_file).await?;
 		term::status::success(format!("Wrote to .env"), "");
