@@ -1,5 +1,4 @@
 use anyhow::*;
-use fs_extra::dir::CopyOptions;
 use std::{fs::{self, File}, io::{self, Write}, path::Path};
 use tempfile::TempDir;
 use zip::ZipArchive;
@@ -14,21 +13,13 @@ pub fn zip(url: &str, src_dir_relative: &Path, dest_dir: &Path) -> Result<()> {
 	// Download the zip
 	download(url, &temp_path)?;
 
-	// Unzip the file
-	extract(&temp_path, &temp_dir.path())?;
-
-	// Copy the folder
-	let src_dir = temp_dir.path().join(src_dir_relative);
-
 	// Delete destination if it exists
 	if dest_dir.is_dir() {
 		fs::remove_dir_all(&dest_dir)?;
 	}
 
-	// Use fs_extra to copy the directory
-	let mut options = CopyOptions::new();
-    options.copy_inside = true;
-	fs_extra::dir::copy(&src_dir, &dest_dir, &options)?;
+	// Unzip the file
+	extract(&temp_path, &src_dir_relative, &dest_dir)?;
 
 	Ok(())
 }
@@ -47,13 +38,29 @@ fn download(url: &str, dest: &Path) -> Result<()> {
 }
 
 /// Extracts the contents of the directory.
-fn extract(archive_path: &Path, extract_to: &Path) -> Result<()> {
+/// 
+/// # Arguments
+/// 
+/// * `archive_path` - The path to the archive file.
+/// * `inner_dir` - The directory inside the archive to copy from.
+/// * `extract_to` - The path to extract the directory to.
+fn extract(archive_path: &Path, inner_dir: &Path, extract_to: &Path) -> Result<()> {
 	let mut archive = ZipArchive::new(fs::File::open(archive_path)?)?;
 
 	for i in 0..archive.len() {
 		let mut file = archive.by_index(i)?;
-		let outpath = extract_to.join(file.enclosed_name().context("unenclosed file name")?);
+		let file_name = file.enclosed_name().context("unenclosed file name")?;
 
+        // Filter files that are not in the src_dir
+        let Result::Ok(file_name) = file_name.strip_prefix(inner_dir) else {
+            println!("file does not match src dir: {}", file_name.display());
+            continue;
+        };
+
+		// Build dest path
+		let outpath = extract_to.join(file_name);
+
+		// Copy file
 		if file.name().ends_with('/') {
 			fs::create_dir_all(&outpath)?;
 		} else {
