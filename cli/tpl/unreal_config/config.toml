@@ -6,7 +6,7 @@
 #
 
 [engine.unreal]
-    game_module = "__MODULE_NAME__"
+    game_module = "__GAME_MODULE__"
 
 # How the game lobbies run and how players connect to the game.
 #
@@ -35,3 +35,8 @@
 [matchmaker.regions]
 	lnd-sfo = {}
 	lnd-fra = {}
+
+# Runtime configuration for running the Unreal game server.
+[matchmaker.docker]
+	dockerfile = "server.debug.Dockerfile"
+	ports.default = { port = 7777, protocol = "udp" }

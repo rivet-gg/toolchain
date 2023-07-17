@@ -2,7 +2,10 @@ use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api, Ctx};
 use console::{style, Term};
-use std::path::{Path, PathBuf};
+use std::{
+	path::{Path, PathBuf},
+	str::FromStr,
+};
 use tokio::{fs, io::AsyncWriteExt};
 
 use crate::{
@@ -14,7 +17,39 @@ const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config
 const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
 const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
 
-const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/head.toml");
+const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.toml");
+const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.toml");
+
+const UNREAL_SERVER_DEBUG_DOCKERFILE: &'static str =
+	include_str!("../../tpl/unreal_config/server.debug.Dockerfile");
+const UNREAL_SERVER_DEVELOPMENT_DOCKERFILE: &'static str =
+	include_str!("../../tpl/unreal_config/server.development.Dockerfile");
+const UNREAL_SERVER_SHIPPING_DOCKERFILE: &'static str =
+	include_str!("../../tpl/unreal_config/server.shipping.Dockerfile");
+
+#[derive(Clone, Copy)]
+enum InitEngine {
+	Unity,
+	Unreal,
+	Godot,
+	HTML5,
+	Custom,
+}
+
+impl FromStr for InitEngine {
+	type Err = anyhow::Error;
+
+	fn from_str(s: &str) -> Result<Self, Self::Err> {
+		match s {
+			"unity" => Ok(InitEngine::Unity),
+			"unreal" => Ok(InitEngine::Unreal),
+			"godot" => Ok(InitEngine::Godot),
+			"html5" => Ok(InitEngine::HTML5),
+			"custom" => Ok(InitEngine::Custom),
+			_ => bail!("Invalid engine"),
+		}
+	}
+}
 
 #[derive(Parser)]
 pub struct Opts {
@@ -26,8 +61,16 @@ pub struct Opts {
 	create_version_config: bool,
 
 	// Presets
-	#[clap(long, alias = "unreal-engine")]
+	#[clap(long)]
+	unity: bool,
+	#[clap(long)]
 	unreal: bool,
+	#[clap(long)]
+	godot: bool,
+	#[clap(long, alias = "web")]
+	html5: bool,
+	#[clap(long, alias = "docker")]
+	custom: bool,
 
 	// Matchmaker
 	#[clap(long)]
@@ -61,16 +104,42 @@ impl Opts {
 	) -> Result<()> {
 		let ctx = self.build_ctx(term, cloud_token, override_api_url).await?;
 
-		self.update_gitignore(term, &ctx).await?;
-
-		if self.unreal {
-			self.create_config_unreal(term, &ctx).await?;
+		// Select the engine to use
+		let init_engine = if self.unity {
+			InitEngine::Unity
+		} else if self.unreal {
+			InitEngine::Unreal
+		} else if self.godot {
+			InitEngine::Godot
+		} else if self.html5 {
+			InitEngine::HTML5
+		} else if self.custom {
+			InitEngine::Custom
 		} else {
-			// Default pipeline
-			let has_version_config = self.create_config_default(term, &ctx).await?;
-			self.create_dev_token(term, &ctx, has_version_config)
+			let engine = term::Prompt::new("What engine are you using?")
+				.docs("unity, unreal, godot, html5, or custom")
+				.default_value("custom")
+				.parsed::<InitEngine>(term)
 				.await?;
+			engine
+		};
+
+		// Run setup process
+		match init_engine {
+			InitEngine::Unreal => {
+				self.create_config_unreal(term).await?;
+			}
+			_ => {
+				// TODO: Add setup process for Unity & Godot & HTML5
+				// Default pipeline
+				let has_version_config =
+					self.create_config_default(term, init_engine).await?;
+				self.create_dev_token(term, &ctx, has_version_config)
+					.await?;
+			}
 		}
+
+		self.update_gitignore(term).await?;
 
 		eprintln!();
 		term::status::success(
@@ -116,7 +185,7 @@ impl Opts {
 		Ok(ctx)
 	}
 
-	async fn update_gitignore(&self, term: &Term, ctx: &Ctx) -> Result<()> {
+	async fn update_gitignore(&self, term: &Term) -> Result<()> {
 		if !git::check_ignore(Path::new(".rivet/")).await? {
 			if self.recommend
 				|| self.update_gitignore
@@ -150,31 +219,90 @@ impl Opts {
 		Ok(())
 	}
 
-	async fn create_config_unreal(&self, term: &Term, ctx: &Ctx) -> Result<()> {
+	async fn create_config_unreal(&self, term: &Term) -> Result<()> {
+		let dockerfile_dev_path = std::env::current_dir()?.join("server.development.Dockerfile");
+		let dockerfile_debug_path = std::env::current_dir()?.join("server.debug.Dockerfile");
+		let dockerfile_shipping_path = std::env::current_dir()?.join("server.shipping.Dockerfile");
 		let config_path = std::env::current_dir()?.join("rivet.toml");
-		let config_needs_creation = match fs::read_to_string(&config_path).await {
-			Ok(_) => false,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
-			Err(err) => {
-				return Err(err.into());
-			}
-		};
+		let config_prod_path = std::env::current_dir()?.join("rivet.prod.toml");
+
+		// Build the uproject path
+		let current_dir = std::env::current_dir()?;
+		let uproject_path = find_uproject_file(&current_dir)
+			.await
+			.context("find_uproject_file")?
+			.context("could not find *.uproject file")?;
+		let uproject_path_unix = uproject_path
+			.strip_prefix(current_dir)
+			.context("failed to strip uproject path prefix")?
+			.components()
+			.map(|c| c.as_os_str().to_string_lossy())
+			.collect::<Vec<_>>()
+			.join("/");
 
 		// Read module name
 		let mut module_name_prompt = term::Prompt::new("Unreal game module name?").docs("Name of the Unreal module that holds the game code. This is usually the value of `$.Modules[0].Name` in the file `MyProject.unproject`.");
-		if let Some(module_name) = attempt_read_module_name().await? {
+		if let Some(module_name) = attempt_read_module_name(&uproject_path).await? {
 			module_name_prompt = module_name_prompt.default_value(module_name);
 		}
-		let module_name = module_name_prompt.string(term).await?;
+		let game_module = module_name_prompt.string(term).await?;
+
+		// Generate Dockerfiles
+		let mut dockerfile_created = false;
+		if !fs::try_exists(&dockerfile_dev_path).await? {
+			fs::write(
+				&dockerfile_dev_path,
+				UNREAL_SERVER_DEVELOPMENT_DOCKERFILE
+					.replace("__UPROJECT_PATH__", &uproject_path_unix)
+					.replace("__GAME_MODULE__", &game_module),
+			)
+			.await?;
+			term::status::success("Created server.development.Dockerfile", "");
+			dockerfile_created = true;
+		}
+		if !fs::try_exists(&dockerfile_debug_path).await? {
+			fs::write(
+				&dockerfile_debug_path,
+				UNREAL_SERVER_DEBUG_DOCKERFILE
+					.replace("__UPROJECT_PATH__", &uproject_path_unix)
+					.replace("__GAME_MODULE__", &game_module),
+			)
+			.await?;
+			term::status::success("Created server.debug.Dockerfile", "");
+			dockerfile_created = true;
+		}
+		if !fs::try_exists(&dockerfile_shipping_path).await? {
+			fs::write(
+				&dockerfile_shipping_path,
+				UNREAL_SERVER_SHIPPING_DOCKERFILE
+					.replace("__UPROJECT_PATH__", &uproject_path_unix)
+					.replace("__GAME_MODULE__", &game_module),
+			)
+			.await?;
+			term::status::success("Created server.shipping.Dockerfile", "");
+			dockerfile_created = true;
+		}
+		if !dockerfile_created {
+			term::status::success(
+				"Dockerfiles already created",
+				"Your game already has server.*.Dockerfile",
+			);
+		}
 
 		// Generate config file
-		if config_needs_creation || self.create_version_config {
-			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &module_name);
-
-			fs::write(config_path, version_config).await?;
-
+		let mut config_created = false;
+		if self.create_version_config || !fs::try_exists(&config_path).await? {
+			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &game_module);
+			fs::write(&config_path, version_config).await?;
 			term::status::success("Created rivet.toml", "");
-		} else {
+			config_created = true;
+		}
+		if self.create_version_config || !fs::try_exists(&config_prod_path).await? {
+			fs::write(&config_prod_path, CONFIG_UNREAL_PROD).await?;
+			term::status::success("Created rivet.prod.toml", "");
+			config_created = true;
+		}
+		if !config_created {
 			term::status::success(
 				"Version already configured",
 				"Your game is already configured with rivet.toml",
@@ -186,7 +314,11 @@ impl Opts {
 		Ok(())
 	}
 
-	async fn create_config_default(&self, term: &Term, ctx: &Ctx) -> Result<bool> {
+	async fn create_config_default(
+		&self,
+		term: &Term,
+		init_engine: InitEngine,
+	) -> Result<bool> {
 		let config_path = std::env::current_dir()?.join("rivet.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
@@ -206,6 +338,25 @@ impl Opts {
 					.await?
 			{
 				let mut version_config = CONFIG_DEFAULT_HEAD.to_string();
+
+				// Add engine config
+				match init_engine {
+					InitEngine::Unity => {
+						version_config.push_str("[engine.unity]\n");
+					}
+					InitEngine::Unreal => {
+						version_config.push_str("[engine.unreal]\n");
+					}
+					InitEngine::Godot => {
+						version_config.push_str("[engine.godot]\n");
+					}
+					InitEngine::HTML5 => {
+						version_config.push_str("[engine.html5]\n");
+					}
+					InitEngine::Custom => {
+						// Do nothing
+					}
+				}
 
 				if self.matchmaker
 					|| term::Prompt::new("Enable Rivet Matchmaker?")
@@ -460,8 +611,7 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 }
 
 /// Finds the Unreal project file in the current directory.
-async fn find_uproject_file() -> Result<Option<PathBuf>> {
-	let current_dir = std::env::current_dir()?;
+async fn find_uproject_file(current_dir: &Path) -> Result<Option<PathBuf>> {
 	let mut read_dir = fs::read_dir(current_dir).await?;
 	while let Some(entry) = read_dir.next_entry().await? {
 		let path = entry.path();
@@ -476,23 +626,17 @@ async fn find_uproject_file() -> Result<Option<PathBuf>> {
 }
 
 /// Attempts to read the module name from the uproject file.
-async fn attempt_read_module_name() -> Result<Option<String>> {
+async fn attempt_read_module_name(uproject_path: &Path) -> Result<Option<String>> {
 	// Read uproject file
-	let uproject_path =
-		if let Some(path) = find_uproject_file().await.context("find_uproject_file")? {
-			path
-		} else {
-			return Ok(None);
-		};
 	let uproject_str = match fs::read_to_string(&uproject_path).await {
 		Ok(uproject) => uproject,
-		Err(err) => {
+		Err(_) => {
 			return Ok(None);
 		}
 	};
 	let uproject_json = match serde_json::from_str::<serde_json::Value>(&uproject_str) {
 		Ok(uproject_json) => uproject_json,
-		Err(err) => {
+		Err(_) => {
 			return Ok(None);
 		}
 	};

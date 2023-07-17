@@ -310,9 +310,9 @@ pub async fn read_config(
 ) -> Result<models::CloudVersionConfig> {
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
-		.add_source(config::File::with_name("rivet"))
+		.add_source(config::File::with_name("rivet").required(false))
 		// Support legacy `rivet.version.toml` file name
-		.add_source(config::File::with_name("rivet.version"));
+		.add_source(config::File::with_name("rivet.version").required(false));
 
 	if let Some(namespace) = namespace {
 		config_builder = config_builder
