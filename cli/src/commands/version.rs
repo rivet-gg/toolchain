@@ -24,12 +24,27 @@ enum DockerBuildMethod {
 }
 
 impl DockerBuildMethod {
-	fn from_env() -> Self {
-		std::env::var("_RIVET_DOCKER_BUILD_METHOD")
+	async fn auto() -> Result<Self> {
+		// Determine build method from env
+		if let Some(method) = std::env::var("_RIVET_DOCKER_BUILD_METHOD")
 			.ok()
-			.map_or_else(Default::default, |x| {
-				DockerBuildMethod::from_str(&x).unwrap_or_default()
-			})
+			.and_then(|x| DockerBuildMethod::from_str(&x).ok())
+		{
+			Ok(method)
+		} else {
+			// Validate that Buildx is installed
+			let mut buildx_version_cmd = Command::new("docker");
+			buildx_version_cmd.args(&["buildx", "version"]);
+			let buildx_version =
+				cmd::execute_docker_cmd_silent_failable(buildx_version_cmd).await?;
+
+			if buildx_version.status.success() {
+				Ok(DockerBuildMethod::Buildx)
+			} else {
+				println!("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
+				Ok(DockerBuildMethod::Native)
+			}
+		}
 	}
 }
 
@@ -417,7 +432,7 @@ pub async fn build_image(
 ) -> Result<()> {
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
-			let build_method = DockerBuildMethod::from_env();
+			let build_method = DockerBuildMethod::auto().await?;
 
 			eprintln!();
 			let buildx_info = match build_method {
