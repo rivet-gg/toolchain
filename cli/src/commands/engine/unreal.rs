@@ -1,6 +1,9 @@
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use clap::Parser;
+use console::Term;
 use tokio::process::Command;
+
+use crate::commands;
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -9,12 +12,22 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, term: &Term, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::StartServer => {
 				let pwd = std::env::current_dir()?;
 
-				let token:String = todo!();
+				let token = commands::token::create::dev::execute(
+					term,
+					ctx,
+					&commands::token::create::dev::Opts {
+						dev_env: Some(false),
+						namespace: None,
+						format: None,
+					},
+				)
+				.await?
+				.token;
 
 				// Build base image
 				Command::new("docker")
@@ -36,6 +49,8 @@ impl SubCommand {
 						"run",
 						"-it",
 						"--rm",
+						"--env",
+						&format!("RIVET_TOKEN={}", token),
 						"-v",
 						&format!("{}:/project", pwd.display()),
 						"-p",

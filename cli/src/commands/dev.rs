@@ -13,6 +13,7 @@ use crate::{
 
 #[derive(Parser)]
 pub enum SubCommand {
+	/// Deprecated.
 	CreateDevToken(crate::commands::token::create::dev::Opts),
 }
 

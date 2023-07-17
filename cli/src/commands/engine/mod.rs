@@ -1,5 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
+use console::Term;
 
 pub mod unreal;
 
@@ -9,9 +10,9 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self,term:&Term, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
-			SubCommand::Unreal{command} => command.execute(ctx).await,
+			SubCommand::Unreal{command} => command.execute(term, ctx).await,
 		}
 	}
 }
