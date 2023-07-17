@@ -40,7 +40,7 @@ impl FromStr for InitEngine {
 	type Err = anyhow::Error;
 
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
-		match s {
+		match s.to_lowercase().as_str() {
 			"unity" => Ok(InitEngine::Unity),
 			"unreal" => Ok(InitEngine::Unreal),
 			"godot" => Ok(InitEngine::Godot),
@@ -67,9 +67,9 @@ pub struct Opts {
 	unreal: bool,
 	#[clap(long)]
 	godot: bool,
-	#[clap(long, alias = "web")]
+	#[clap(long)]
 	html5: bool,
-	#[clap(long, alias = "docker")]
+	#[clap(long)]
 	custom: bool,
 
 	// Matchmaker
