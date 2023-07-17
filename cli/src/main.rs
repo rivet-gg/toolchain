@@ -111,7 +111,6 @@ enum SubCommand {
 		#[clap(subcommand)]
 		command: dev::SubCommand,
 	},
-
 }
 
 #[tokio::main(flavor = "current_thread")]

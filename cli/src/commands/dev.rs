@@ -1,14 +1,9 @@
-use anyhow::{Result};
+use anyhow::Result;
 use clap::Parser;
 
 use console::Term;
 
-
-
-
-use crate::{
-	util::{term},
-};
+use crate::util::term;
 
 #[derive(Parser)]
 pub enum SubCommand {

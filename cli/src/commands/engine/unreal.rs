@@ -1,14 +1,18 @@
-use anyhow::{Result};
+use std::path::PathBuf;
+
+use anyhow::Result;
 use clap::Parser;
 use console::Term;
-use tokio::process::Command;
+use tokio::{process::Command, task::spawn_blocking};
 
-use crate::commands;
+use crate::{commands, util};
 
 #[derive(Parser)]
 pub enum SubCommand {
 	/// Starts a server locally
 	StartServer,
+	/// Installs or updates the Rivet plugin
+	InstallPlugin,
 }
 
 impl SubCommand {
@@ -63,6 +67,27 @@ impl SubCommand {
 
 				Ok(())
 			}
+			SubCommand::InstallPlugin => {
+				install_plugin().await?;
+
+				Ok(())
+			}
 		}
 	}
+}
+
+pub async fn install_plugin() -> Result<()> {
+	spawn_blocking(|| {
+		util::download::zip(
+			"https://github.com/rivet-gg/plugin-unreal/archive/refs/heads/main.zip",
+			&PathBuf::new()
+				.join("plugin-unreal-main")
+				.join("Plugins")
+				.join("Rivet"),
+			&PathBuf::new().join("Plugins").join("Rivet"),
+		)
+	})
+	.await??;
+
+	Ok(())
 }

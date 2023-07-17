@@ -1,9 +1,6 @@
-use anyhow::{Result};
+use anyhow::Result;
 use clap::Parser;
 use console::Term;
-
-
-
 
 pub mod dev;
 
@@ -20,4 +17,3 @@ impl SubCommand {
 		}
 	}
 }
-

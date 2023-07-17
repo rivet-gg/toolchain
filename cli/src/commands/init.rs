@@ -20,6 +20,7 @@ const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/m
 const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.toml");
 const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.toml");
 
+const UNREAL_DOCKERIGNORE: &'static str = include_str!("../../tpl/unreal_config/.dockerignore");
 const UNREAL_SERVER_DEBUG_DOCKERFILE: &'static str =
 	include_str!("../../tpl/unreal_config/server.debug.Dockerfile");
 const UNREAL_SERVER_DEVELOPMENT_DOCKERFILE: &'static str =
@@ -59,6 +60,8 @@ pub struct Opts {
 	update_gitignore: bool,
 	#[clap(long)]
 	create_version_config: bool,
+	#[clap(long)]
+	install_plugin: bool,
 
 	// Presets
 	#[clap(long)]
@@ -132,8 +135,7 @@ impl Opts {
 			_ => {
 				// TODO: Add setup process for Unity & Godot & HTML5
 				// Default pipeline
-				let has_version_config =
-					self.create_config_default(term, init_engine).await?;
+				let has_version_config = self.create_config_default(term, init_engine).await?;
 				self.create_dev_token(term, &ctx, has_version_config)
 					.await?;
 			}
@@ -220,6 +222,7 @@ impl Opts {
 	}
 
 	async fn create_config_unreal(&self, term: &Term) -> Result<()> {
+		let dockerignore_path = std::env::current_dir()?.join(".dockerignore");
 		let dockerfile_dev_path = std::env::current_dir()?.join("server.development.Dockerfile");
 		let dockerfile_debug_path = std::env::current_dir()?.join("server.debug.Dockerfile");
 		let dockerfile_shipping_path = std::env::current_dir()?.join("server.shipping.Dockerfile");
@@ -249,6 +252,10 @@ impl Opts {
 
 		// Generate Dockerfiles
 		let mut dockerfile_created = false;
+		if !fs::try_exists(&dockerignore_path).await? {
+			fs::write(&dockerignore_path, UNREAL_DOCKERIGNORE).await?;
+			term::status::success("Created .dockerignore", "");
+		}
 		if !fs::try_exists(&dockerfile_dev_path).await? {
 			fs::write(
 				&dockerfile_dev_path,
@@ -309,16 +316,23 @@ impl Opts {
 			);
 		}
 
-		// Generate Dockerfile
+		// Install plugin
+		if self.recommend
+			|| self.install_plugin
+			|| term::Prompt::new("Install or upgrade Unreal Engine Rivet plugin?")
+				.docs("This plugin is used to integrate your game with Rivet")
+				.docs_url("https://github.com/rivet-gg/plugin-unreal")
+				.default_value("yes")
+				.bool(term)
+				.await?
+		{
+			commands::engine::unreal::install_plugin().await?;
+		}
 
 		Ok(())
 	}
 
-	async fn create_config_default(
-		&self,
-		term: &Term,
-		init_engine: InitEngine,
-	) -> Result<bool> {
+	async fn create_config_default(&self, term: &Term, init_engine: InitEngine) -> Result<bool> {
 		let config_path = std::env::current_dir()?.join("rivet.toml");
 		let config_needs_creation = match fs::read_to_string(&config_path).await {
 			Ok(_) => false,
