@@ -20,6 +20,7 @@ const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/m
 const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.toml");
 const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.toml");
 
+const UNREAL_DOCKERIGNORE: &'static str = include_str!("../../tpl/unreal_config/.dockerignore");
 const UNREAL_SERVER_DEBUG_DOCKERFILE: &'static str =
 	include_str!("../../tpl/unreal_config/server.debug.Dockerfile");
 const UNREAL_SERVER_DEVELOPMENT_DOCKERFILE: &'static str =
@@ -221,6 +222,7 @@ impl Opts {
 	}
 
 	async fn create_config_unreal(&self, term: &Term) -> Result<()> {
+		let dockerignore_path = std::env::current_dir()?.join(".dockerignore");
 		let dockerfile_dev_path = std::env::current_dir()?.join("server.development.Dockerfile");
 		let dockerfile_debug_path = std::env::current_dir()?.join("server.debug.Dockerfile");
 		let dockerfile_shipping_path = std::env::current_dir()?.join("server.shipping.Dockerfile");
@@ -250,6 +252,10 @@ impl Opts {
 
 		// Generate Dockerfiles
 		let mut dockerfile_created = false;
+		if !fs::try_exists(&dockerignore_path).await? {
+			fs::write(&dockerignore_path, UNREAL_DOCKERIGNORE).await?;
+			term::status::success("Created .dockerignore", "");
+		}
 		if !fs::try_exists(&dockerfile_dev_path).await? {
 			fs::write(
 				&dockerfile_dev_path,
