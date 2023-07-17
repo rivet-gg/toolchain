@@ -89,6 +89,13 @@ enum SubCommand {
 	/// Alias of `rivet version publish`
 	#[clap(alias = "deploy")]
 	Publish(version::PublishOpts),
+
+	/// Run engine-specific commands
+	Engine { #[clap(subcommand)] command: engine::SubCommand},
+
+	/// Alias of `rivet engine unreal`
+	#[clap(alias = "ue")]
+	Unreal {#[clap(subcommand)] command: engine::unreal::SubCommand},
 }
 
 #[tokio::main(flavor = "current_thread")]
@@ -136,6 +143,8 @@ async fn main() -> Result<()> {
 		SubCommand::Image { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
 		SubCommand::Publish(opts) => opts.execute(&ctx).await?,
+		SubCommand::Engine { command } => command.execute(&ctx).await?,
+		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 	}
 
 	Ok(())
