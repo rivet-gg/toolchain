@@ -52,7 +52,6 @@ Class | Method | HTTP request | Description
 *CloudGamesGamesApi* | [**cloud_games_games_game_banner_upload_prepare**](docs/CloudGamesGamesApi.md#cloud_games_games_game_banner_upload_prepare) | **POST** /games/{game_id}/banner-upload/prepare | 
 *CloudGamesGamesApi* | [**cloud_games_games_game_logo_upload_complete**](docs/CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_complete) | **POST** /games/{game_id}/logo-upload/{upload_id}/complete | 
 *CloudGamesGamesApi* | [**cloud_games_games_game_logo_upload_prepare**](docs/CloudGamesGamesApi.md#cloud_games_games_game_logo_upload_prepare) | **POST** /games/{game_id}/logo-upload/prepare | 
-*CloudGamesGamesApi* | [**cloud_games_games_get_analytics**](docs/CloudGamesGamesApi.md#cloud_games_games_get_analytics) | **GET** /games/namespaces/analytics | 
 *CloudGamesGamesApi* | [**cloud_games_games_get_game_by_id**](docs/CloudGamesGamesApi.md#cloud_games_games_get_game_by_id) | **GET** /games/{game_id} | 
 *CloudGamesGamesApi* | [**cloud_games_games_get_games**](docs/CloudGamesGamesApi.md#cloud_games_games_get_games) | **GET** /games | 
 *CloudGamesGamesApi* | [**cloud_games_games_validate_game**](docs/CloudGamesGamesApi.md#cloud_games_games_validate_game) | **POST** /games/validate | 
@@ -83,12 +82,7 @@ Class | Method | HTTP request | Description
 *CloudGamesVersionsApi* | [**cloud_games_versions_create_game_version**](docs/CloudGamesVersionsApi.md#cloud_games_versions_create_game_version) | **POST** /games/{game_id}/versions | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_get_game_version_by_id**](docs/CloudGamesVersionsApi.md#cloud_games_versions_get_game_version_by_id) | **GET** /games/{game_id}/versions/{version_id} | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_validate_game_version**](docs/CloudGamesVersionsApi.md#cloud_games_versions_validate_game_version) | **POST** /games/{game_id}/versions/validate | 
-*CloudGroupsApi* | [**cloud_groups_billing_checkout**](docs/CloudGroupsApi.md#cloud_groups_billing_checkout) | **POST** /groups/{group_id}/checkout | 
 *CloudGroupsApi* | [**cloud_groups_convert_group**](docs/CloudGroupsApi.md#cloud_groups_convert_group) | **POST** /groups/{group_id}/convert | 
-*CloudGroupsApi* | [**cloud_groups_get_billing**](docs/CloudGroupsApi.md#cloud_groups_get_billing) | **GET** /groups/{group_id}/billing | 
-*CloudGroupsApi* | [**cloud_groups_get_invoices_list**](docs/CloudGroupsApi.md#cloud_groups_get_invoices_list) | **GET** /groups/{group_id}/billing/invoices | 
-*CloudGroupsApi* | [**cloud_groups_get_payments_list**](docs/CloudGroupsApi.md#cloud_groups_get_payments_list) | **GET** /groups/{group_id}/billing/payments | 
-*CloudGroupsApi* | [**cloud_groups_get_transfers_list**](docs/CloudGroupsApi.md#cloud_groups_get_transfers_list) | **GET** /groups/{group_id}/billing/transfers | 
 *CloudGroupsApi* | [**cloud_groups_validate**](docs/CloudGroupsApi.md#cloud_groups_validate) | **POST** /groups/validate | 
 *CloudLogsApi* | [**cloud_logs_get_ray_perf_logs**](docs/CloudLogsApi.md#cloud_logs_get_ray_perf_logs) | **GET** /rays/{ray_id}/perf | 
 *CloudTiersApi* | [**cloud_tiers_get_region_tiers**](docs/CloudTiersApi.md#cloud_tiers_get_region_tiers) | **GET** /region-tiers | 
@@ -208,6 +202,7 @@ Class | Method | HTTP request | Description
  - [ChatMessageBodyGroupJoin](docs/ChatMessageBodyGroupJoin.md)
  - [ChatMessageBodyGroupLeave](docs/ChatMessageBodyGroupLeave.md)
  - [ChatMessageBodyGroupMemberKick](docs/ChatMessageBodyGroupMemberKick.md)
+ - [ChatMessageBodyPartyActivityChange](docs/ChatMessageBodyPartyActivityChange.md)
  - [ChatMessageBodyPartyInvite](docs/ChatMessageBodyPartyInvite.md)
  - [ChatMessageBodyPartyJoin](docs/ChatMessageBodyPartyJoin.md)
  - [ChatMessageBodyPartyJoinRequest](docs/ChatMessageBodyPartyJoinRequest.md)
@@ -233,13 +228,9 @@ Class | Method | HTTP request | Description
  - [ChatTopicParty](docs/ChatTopicParty.md)
  - [ChatTypingStatus](docs/ChatTypingStatus.md)
  - [ChatWatchThreadResponse](docs/ChatWatchThreadResponse.md)
- - [CloudAnalyticsVariantQuery](docs/CloudAnalyticsVariantQuery.md)
  - [CloudAuthAgent](docs/CloudAuthAgent.md)
  - [CloudAuthAgentGameCloud](docs/CloudAuthAgentGameCloud.md)
  - [CloudAuthAgentIdentity](docs/CloudAuthAgentIdentity.md)
- - [CloudAvgPlayDurationByGameModeDataSet](docs/CloudAvgPlayDurationByGameModeDataSet.md)
- - [CloudAvgPlayDurationByRegionDataSet](docs/CloudAvgPlayDurationByRegionDataSet.md)
- - [CloudAvgPlayDurationDataSet](docs/CloudAvgPlayDurationDataSet.md)
  - [CloudBuildSummary](docs/CloudBuildSummary.md)
  - [CloudCdnAuthType](docs/CloudCdnAuthType.md)
  - [CloudCdnNamespaceAuthUser](docs/CloudCdnNamespaceAuthUser.md)
@@ -250,12 +241,9 @@ Class | Method | HTTP request | Description
  - [CloudCdnNamespaceDomainVerificationStatus](docs/CloudCdnNamespaceDomainVerificationStatus.md)
  - [CloudCdnSiteSummary](docs/CloudCdnSiteSummary.md)
  - [CloudCustomAvatarSummary](docs/CloudCustomAvatarSummary.md)
- - [CloudDestroyedLobbiesByExitCodeDataSet](docs/CloudDestroyedLobbiesByExitCodeDataSet.md)
- - [CloudDestroyedLobbiesByFailureDataSet](docs/CloudDestroyedLobbiesByFailureDataSet.md)
  - [CloudDevicesCompleteDeviceLinkRequest](docs/CloudDevicesCompleteDeviceLinkRequest.md)
  - [CloudDevicesGetDeviceLinkResponse](docs/CloudDevicesGetDeviceLinkResponse.md)
  - [CloudDevicesPrepareDeviceLinkResponse](docs/CloudDevicesPrepareDeviceLinkResponse.md)
- - [CloudFailedLobbiesDataSet](docs/CloudFailedLobbiesDataSet.md)
  - [CloudGameFull](docs/CloudGameFull.md)
  - [CloudGameLobbyExpenses](docs/CloudGameLobbyExpenses.md)
  - [CloudGamesCreateCloudTokenResponse](docs/CloudGamesCreateCloudTokenResponse.md)
@@ -277,7 +265,6 @@ Class | Method | HTTP request | Description
  - [CloudGamesGameLogoUploadPrepareRequest](docs/CloudGamesGameLogoUploadPrepareRequest.md)
  - [CloudGamesGameLogoUploadPrepareResponse](docs/CloudGamesGameLogoUploadPrepareResponse.md)
  - [CloudGamesGameSummary](docs/CloudGamesGameSummary.md)
- - [CloudGamesGetAnalyticsResponse](docs/CloudGamesGetAnalyticsResponse.md)
  - [CloudGamesGetGameByIdResponse](docs/CloudGamesGetGameByIdResponse.md)
  - [CloudGamesGetGameVersionByIdResponse](docs/CloudGamesGetGameVersionByIdResponse.md)
  - [CloudGamesGetGamesResponse](docs/CloudGamesGetGamesResponse.md)
@@ -314,26 +301,15 @@ Class | Method | HTTP request | Description
  - [CloudGamesValidateGameResponse](docs/CloudGamesValidateGameResponse.md)
  - [CloudGamesValidateGameVersionRequest](docs/CloudGamesValidateGameVersionRequest.md)
  - [CloudGamesValidateGameVersionResponse](docs/CloudGamesValidateGameVersionResponse.md)
- - [CloudGetBillingResponse](docs/CloudGetBillingResponse.md)
- - [CloudGetInvoicesListResponse](docs/CloudGetInvoicesListResponse.md)
- - [CloudGetPaymentsListResponse](docs/CloudGetPaymentsListResponse.md)
  - [CloudGetRayPerfLogsResponse](docs/CloudGetRayPerfLogsResponse.md)
  - [CloudGetRegionTiersResponse](docs/CloudGetRegionTiersResponse.md)
- - [CloudGetTransfersListResponse](docs/CloudGetTransfersListResponse.md)
  - [CloudGroupBankSource](docs/CloudGroupBankSource.md)
- - [CloudGroupBillingCheckoutRequest](docs/CloudGroupBillingCheckoutRequest.md)
- - [CloudGroupBillingCheckoutResponse](docs/CloudGroupBillingCheckoutResponse.md)
  - [CloudGroupBillingInvoice](docs/CloudGroupBillingInvoice.md)
  - [CloudGroupBillingPayment](docs/CloudGroupBillingPayment.md)
  - [CloudGroupBillingStatus](docs/CloudGroupBillingStatus.md)
  - [CloudGroupBillingSummary](docs/CloudGroupBillingSummary.md)
  - [CloudGroupBillingTransfer](docs/CloudGroupBillingTransfer.md)
- - [CloudIdentitiesDataSet](docs/CloudIdentitiesDataSet.md)
  - [CloudInspectResponse](docs/CloudInspectResponse.md)
- - [CloudLobbyCountByGameModeDataSet](docs/CloudLobbyCountByGameModeDataSet.md)
- - [CloudLobbyCountByRegionDataSet](docs/CloudLobbyCountByRegionDataSet.md)
- - [CloudLobbyCountDataSet](docs/CloudLobbyCountDataSet.md)
- - [CloudLobbyReadyTimeDataSet](docs/CloudLobbyReadyTimeDataSet.md)
  - [CloudLobbySummaryAnalytics](docs/CloudLobbySummaryAnalytics.md)
  - [CloudLogsLobbyStatus](docs/CloudLogsLobbyStatus.md)
  - [CloudLogsLobbyStatusStopped](docs/CloudLogsLobbyStatusStopped.md)
@@ -342,17 +318,10 @@ Class | Method | HTTP request | Description
  - [CloudLogsPerfSpan](docs/CloudLogsPerfSpan.md)
  - [CloudMatchmakerDevelopmentPort](docs/CloudMatchmakerDevelopmentPort.md)
  - [CloudMatchmakerNamespaceConfig](docs/CloudMatchmakerNamespaceConfig.md)
- - [CloudMatchmakerOverviewDataSet](docs/CloudMatchmakerOverviewDataSet.md)
- - [CloudNamespaceAnalyticsDataSet](docs/CloudNamespaceAnalyticsDataSet.md)
  - [CloudNamespaceConfig](docs/CloudNamespaceConfig.md)
  - [CloudNamespaceFull](docs/CloudNamespaceFull.md)
  - [CloudNamespaceSummary](docs/CloudNamespaceSummary.md)
  - [CloudNamespaceVersion](docs/CloudNamespaceVersion.md)
- - [CloudNewLobbiesPerSecondDataSet](docs/CloudNewLobbiesPerSecondDataSet.md)
- - [CloudNewPlayersPerSecondDataSet](docs/CloudNewPlayersPerSecondDataSet.md)
- - [CloudPlayerCountByGameModeDataSet](docs/CloudPlayerCountByGameModeDataSet.md)
- - [CloudPlayerCountByRegionDataSet](docs/CloudPlayerCountByRegionDataSet.md)
- - [CloudPlayerCountDataSet](docs/CloudPlayerCountDataSet.md)
  - [CloudRegionSummary](docs/CloudRegionSummary.md)
  - [CloudRegionTier](docs/CloudRegionTier.md)
  - [CloudRegionTierExpenses](docs/CloudRegionTierExpenses.md)
@@ -368,6 +337,8 @@ Class | Method | HTTP request | Description
  - [CloudVersionCdnMiddlewareKind](docs/CloudVersionCdnMiddlewareKind.md)
  - [CloudVersionCdnRoute](docs/CloudVersionCdnRoute.md)
  - [CloudVersionConfig](docs/CloudVersionConfig.md)
+ - [CloudVersionEngineConfig](docs/CloudVersionEngineConfig.md)
+ - [CloudVersionEngineUnrealConfig](docs/CloudVersionEngineUnrealConfig.md)
  - [CloudVersionFull](docs/CloudVersionFull.md)
  - [CloudVersionIdentityConfig](docs/CloudVersionIdentityConfig.md)
  - [CloudVersionIdentityCustomAvatar](docs/CloudVersionIdentityCustomAvatar.md)

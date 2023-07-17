@@ -12,6 +12,13 @@
 	# Available tiers: https://rivet.gg/docs/serverless-lobbies/concepts/available-tiers
 	tier = "basic-1d1"
 
+# What game modes are avaiable.
+#
+# Properties like `max_players`, `tier`, `dockerfile`, `regions`, and more can
+# be overriden for specific game modes.
+[matchmaker.game_modes]
+	default = {}
+
 # Which regions the game should be available in.
 #
 # Available regions: https://rivet.gg/docs/serverless-lobbies/concepts/available-regions
@@ -31,11 +38,3 @@
 	#
 	# How ports work: https://rivet.gg/docs/serverless-lobbies/concepts/ports
 	ports.default = { port = __PORT__, protocol = "https" }
-
-# What game modes are avaiable.
-#
-# Properties like `max_players`, `tier`, `dockerfile`, `regions`, and more can
-# be overriden for specific game modes.
-[matchmaker.game_modes]
-	default = {}
-

@@ -27,7 +27,7 @@ pub enum CloudGamesNamespacesAnalyticsGetAnalyticsMatchmakerLiveError {
 	UnknownValue(serde_json::Value),
 }
 
-/// Returns live information about all active lobies for a given namespace.
+/// Returns live information about all active lobbies for a given namespace.
 pub async fn cloud_games_namespaces_analytics_get_analytics_matchmaker_live(
 	configuration: &configuration::Configuration,
 	game_id: &str,

@@ -13,7 +13,7 @@ Method | HTTP request | Description
 > crate::models::CloudGamesNamespacesGetAnalyticsMatchmakerLiveResponse cloud_games_namespaces_analytics_get_analytics_matchmaker_live(game_id, namespace_id)
 
 
-Returns live information about all active lobies for a given namespace.
+Returns live information about all active lobbies for a given namespace.
 
 ### Parameters
 

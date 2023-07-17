@@ -42,10 +42,10 @@ enum SubCommand {
 	#[clap(alias = "dash")]
 	Dashboard,
 
-	/// Initiates the development environment for this project
-	Dev {
+	/// Manages tokens
+	Token {
 		#[clap(subcommand)]
-		command: dev::SubCommand,
+		command: token::SubCommand,
 	},
 
 	/// Manages the game
@@ -89,6 +89,28 @@ enum SubCommand {
 	/// Alias of `rivet version publish`
 	#[clap(alias = "deploy")]
 	Publish(version::PublishOpts),
+
+	/// Run engine-specific commands
+	Engine {
+		#[clap(subcommand)]
+		command: engine::SubCommand,
+	},
+
+	/// Alias of `rivet engine unreal`
+	#[clap(alias = "ue")]
+	Unreal {
+		#[clap(subcommand)]
+		command: engine::unreal::SubCommand,
+	},
+
+	/// Deprecated.
+	///
+	/// Initiates the development environment for this project.
+	#[clap(hide = true)]
+	Dev {
+		#[clap(subcommand)]
+		command: dev::SubCommand,
+	},
 }
 
 #[tokio::main(flavor = "current_thread")]
@@ -130,12 +152,15 @@ async fn main() -> Result<()> {
 		}
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&term, &ctx).await?,
+		SubCommand::Token { command } => command.execute(&term, &ctx).await?,
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Image { command } => command.execute(&ctx).await?,
 		SubCommand::Site { command } => command.execute(&ctx).await?,
 		SubCommand::Publish(opts) => opts.execute(&ctx).await?,
+		SubCommand::Engine { command } => command.execute(&term, &ctx).await?,
+		SubCommand::Unreal { command } => command.execute(&term, &ctx).await?,
 	}
 
 	Ok(())
