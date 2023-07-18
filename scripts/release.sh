@@ -1,5 +1,5 @@
 #!/bin/sh
-set -euf -o pipefail
+set -euf
 
 cargo release --package rivet-cli --execute --no-publish --tag-prefix "" "$1"
 
