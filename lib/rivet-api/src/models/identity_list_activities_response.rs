@@ -15,8 +15,6 @@ pub struct IdentityListActivitiesResponse {
 	pub games: Vec<crate::models::GameSummary>,
 	#[serde(rename = "identities")]
 	pub identities: Vec<crate::models::IdentityHandle>,
-	#[serde(rename = "parties")]
-	pub parties: Vec<crate::models::PartySummary>,
 	#[serde(rename = "suggested_groups")]
 	pub suggested_groups: Vec<crate::models::GroupSummary>,
 	#[serde(rename = "suggested_players")]
@@ -29,7 +27,6 @@ impl IdentityListActivitiesResponse {
 	pub fn new(
 		games: Vec<crate::models::GameSummary>,
 		identities: Vec<crate::models::IdentityHandle>,
-		parties: Vec<crate::models::PartySummary>,
 		suggested_groups: Vec<crate::models::GroupSummary>,
 		suggested_players: Vec<crate::models::IdentityHandle>,
 		watch: crate::models::WatchResponse,
@@ -37,7 +34,6 @@ impl IdentityListActivitiesResponse {
 		IdentityListActivitiesResponse {
 			games,
 			identities,
-			parties,
 			suggested_groups,
 			suggested_players,
 			watch: Box::new(watch),

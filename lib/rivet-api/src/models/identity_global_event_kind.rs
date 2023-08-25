@@ -24,8 +24,6 @@ pub struct IdentityGlobalEventKind {
 		skip_serializing_if = "Option::is_none"
 	)]
 	pub matchmaker_lobby_join: Option<Box<crate::models::IdentityGlobalEventMatchmakerLobbyJoin>>,
-	#[serde(rename = "party_update", skip_serializing_if = "Option::is_none")]
-	pub party_update: Option<Box<crate::models::IdentityGlobalEventPartyUpdate>>,
 }
 
 impl IdentityGlobalEventKind {
@@ -36,7 +34,6 @@ impl IdentityGlobalEventKind {
 			chat_thread_remove: None,
 			identity_update: None,
 			matchmaker_lobby_join: None,
-			party_update: None,
 		}
 	}
 }

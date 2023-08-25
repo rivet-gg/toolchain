@@ -13,8 +13,6 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ChatSendMessageBody {
-	#[serde(rename = "party_invite", skip_serializing_if = "Option::is_none")]
-	pub party_invite: Option<Box<crate::models::ChatSendMessageBodyPartyInvite>>,
 	#[serde(rename = "text", skip_serializing_if = "Option::is_none")]
 	pub text: Option<Box<crate::models::ChatSendMessageBodyText>>,
 }
@@ -22,9 +20,6 @@ pub struct ChatSendMessageBody {
 impl ChatSendMessageBody {
 	/// Data to send in a chat message.
 	pub fn new() -> ChatSendMessageBody {
-		ChatSendMessageBody {
-			party_invite: None,
-			text: None,
-		}
+		ChatSendMessageBody { text: None }
 	}
 }

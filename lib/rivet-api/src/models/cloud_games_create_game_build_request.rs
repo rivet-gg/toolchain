@@ -19,6 +19,8 @@ pub struct CloudGamesCreateGameBuildRequest {
 	/// A tag given to the game build.
 	#[serde(rename = "image_tag")]
 	pub image_tag: String,
+	#[serde(rename = "multipart_upload", skip_serializing_if = "Option::is_none")]
+	pub multipart_upload: Option<bool>,
 }
 
 impl CloudGamesCreateGameBuildRequest {
@@ -31,6 +33,7 @@ impl CloudGamesCreateGameBuildRequest {
 			display_name,
 			image_file: Box::new(image_file),
 			image_tag,
+			multipart_upload: None,
 		}
 	}
 }

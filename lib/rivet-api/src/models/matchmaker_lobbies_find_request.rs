@@ -22,6 +22,13 @@ pub struct MatchmakerLobbiesFindRequest {
 	pub prevent_auto_create_lobby: Option<bool>,
 	#[serde(rename = "regions", skip_serializing_if = "Option::is_none")]
 	pub regions: Option<Vec<String>>,
+	#[serde(
+		rename = "verification_data",
+		default,
+		with = "::serde_with::rust::double_option",
+		skip_serializing_if = "Option::is_none"
+	)]
+	pub verification_data: Option<Option<serde_json::Value>>,
 }
 
 impl MatchmakerLobbiesFindRequest {
@@ -31,6 +38,7 @@ impl MatchmakerLobbiesFindRequest {
 			game_modes,
 			prevent_auto_create_lobby: None,
 			regions: None,
+			verification_data: None,
 		}
 	}
 }
