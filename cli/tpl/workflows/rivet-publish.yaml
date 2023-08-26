@@ -3,7 +3,7 @@ name: Publish Version to Rivet
 on:
   - push
 
-concurrency: 
+concurrency:
   group: publish-${{ github.ref }}
   cancel-in-progress: true
 
@@ -13,7 +13,6 @@ defaults:
     shell: bash
 
 jobs:
-
   push_build:
     name: Push Image
     runs-on: ubuntu-20.04
@@ -59,7 +58,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install Rivet CLI
         shell: bash

@@ -34,8 +34,8 @@ on:
       - v[0-9]+.*
 
 env:
-  ALL_CARGO_DIST_TARGET_ARGS: --target=x86_64-unknown-linux-gnu --target=x86_64-apple-darwin --target=x86_64-pc-windows-msvc 
-  ALL_CARGO_DIST_INSTALLER_ARGS: 
+  ALL_CARGO_DIST_TARGET_ARGS: --target=x86_64-unknown-linux-gnu --target=x86_64-apple-darwin --target=x86_64-pc-windows-msvc
+  ALL_CARGO_DIST_INSTALLER_ARGS:
 
 jobs:
   # Create the Github Release™️ so the packages have something to be uploaded to
@@ -52,7 +52,6 @@ jobs:
           # (required) GitHub token for creating GitHub Releases.
           token: ${{ secrets.GITHUB_TOKEN }}
 
-
   # Build and packages all the things
   upload-artifacts:
     needs: create-release
@@ -60,15 +59,15 @@ jobs:
       matrix:
         # For these target platforms
         include:
-        - target: x86_64-unknown-linux-gnu
-          os: ubuntu-20.04
-          install-dist: curl --proto '=https' --tlsv1.2 -L -sSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.2/installer.sh | sh
-        - target: x86_64-apple-darwin
-          os: macos-11
-          install-dist: curl --proto '=https' --tlsv1.2 -L -sSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.2/installer.sh | sh
-        - target: x86_64-pc-windows-msvc
-          os: windows-2019
-          install-dist: irm 'https://github.com/axodotdev/cargo-dist/releases/download/v0.0.2/installer.ps1' | iex
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-20.04
+            install-dist: curl --proto '=https' --tlsv1.2 -L -sSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.2/installer.sh | sh
+          - target: x86_64-apple-darwin
+            os: macos-11
+            install-dist: curl --proto '=https' --tlsv1.2 -L -sSf https://github.com/axodotdev/cargo-dist/releases/download/v0.0.2/installer.sh | sh
+          - target: x86_64-pc-windows-msvc
+            os: windows-2019
+            install-dist: irm 'https://github.com/axodotdev/cargo-dist/releases/download/v0.0.2/installer.ps1' | iex
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -133,4 +132,3 @@ jobs:
       - name: mark release as non-draft
         run: |
           gh release edit ${{ needs.create-release.outputs.tag }} --draft=false
-
