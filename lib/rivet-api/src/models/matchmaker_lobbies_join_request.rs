@@ -15,6 +15,13 @@ pub struct MatchmakerLobbiesJoinRequest {
 	pub captcha: Option<Box<crate::models::CaptchaConfig>>,
 	#[serde(rename = "lobby_id")]
 	pub lobby_id: String,
+	#[serde(
+		rename = "verification_data",
+		default,
+		with = "::serde_with::rust::double_option",
+		skip_serializing_if = "Option::is_none"
+	)]
+	pub verification_data: Option<Option<serde_json::Value>>,
 }
 
 impl MatchmakerLobbiesJoinRequest {
@@ -22,6 +29,7 @@ impl MatchmakerLobbiesJoinRequest {
 		MatchmakerLobbiesJoinRequest {
 			captcha: None,
 			lobby_id,
+			verification_data: None,
 		}
 	}
 }

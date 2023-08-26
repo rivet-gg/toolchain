@@ -142,6 +142,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 				content_type: Some(content_type.into()),
 				content_length: image_file_meta.len() as i64,
 			}),
+			multipart_upload: Some(false),
 		},
 	)
 	.await;
@@ -153,7 +154,10 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 
 	upload::upload_file(
 		&reqwest_client,
-		&build_res.image_presigned_request,
+		build_res
+			.image_presigned_request
+			.as_ref()
+			.context("image_presigned_request")?,
 		&push_opts.path,
 		Some(content_type),
 	)
