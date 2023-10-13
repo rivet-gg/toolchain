@@ -115,9 +115,9 @@ impl Opts {
 		&self,
 		cloud_token: Option<&str>,
 		term: &Term,
-		override_api_url: Option<String>,
+		override_endpoint: Option<String>,
 	) -> Result<()> {
-		let ctx = self.build_ctx(term, cloud_token, override_api_url).await?;
+		let ctx = self.build_ctx(term, cloud_token, override_endpoint).await?;
 
 		// Select the engine to use
 		let init_engine = if self.unity {
@@ -165,7 +165,7 @@ impl Opts {
 		&self,
 		term: &Term,
 		cloud_token: Option<&str>,
-		override_api_url: Option<String>,
+		override_endpoint: Option<String>,
 	) -> Result<Ctx> {
 		// Check if token already exists
 		let cloud_token = if let Some(cloud_token) = cloud_token.clone() {
@@ -174,7 +174,7 @@ impl Opts {
 			secrets::read_cloud_token().await?
 		};
 		let ctx = if let Some(cloud_token) = cloud_token {
-			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
+			let ctx = cli_core::ctx::init(override_endpoint.clone(), cloud_token).await?;
 
 			let game_res = ctx
 				.client()
@@ -190,7 +190,7 @@ impl Opts {
 
 			ctx
 		} else {
-			read_cloud_token(term, override_api_url.clone()).await?
+			read_cloud_token(term, override_endpoint.clone()).await?
 		};
 
 		Ok(ctx)
@@ -518,12 +518,12 @@ impl Opts {
 	}
 }
 
-async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Result<cli_core::Ctx> {
+async fn read_cloud_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
 	// Create OpenAPI configuration without bearer token to send link request
 	let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
-		base_path: override_api_url
+		base_path: override_endpoint
 			.clone()
-			.unwrap_or_else(|| ctx::DEFAULT_API_CLOUD_URL.to_string()),
+			.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string()),
 		user_agent: Some(ctx::user_agent()),
 		..Default::default()
 	};
@@ -592,7 +592,7 @@ async fn read_cloud_token(term: &Term, override_api_url: Option<String>) -> Resu
 
 	// Create new context
 	let new_ctx = cli_core::ctx::init(
-		override_api_url,
+		override_endpoint,
 		// Exclude overridden access token to check the token
 		cloud_token.clone(),
 	)

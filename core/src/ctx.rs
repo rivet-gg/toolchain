@@ -13,7 +13,7 @@ pub fn user_agent() -> String {
 	format!("CLI/{VERSION}")
 }
 
-pub const DEFAULT_API_CLOUD_URL: &'static str = "https://cloud.api.rivet.gg/v1";
+pub const DEFAULT_API_ENDPOINT: &'static str = "https://api.rivet.gg";
 
 pub type Ctx = Arc<CtxInner>;
 
@@ -44,11 +44,11 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 
 	let uri = override_api_url
 		.clone()
-		.unwrap_or_else(|| DEFAULT_API_CLOUD_URL.to_string());
+		.unwrap_or_else(|| DEFAULT_API_ENDPOINT.to_string());
 
 	// Create client
 	let rivet_cloud_config = rivet_cloud::Config::builder()
-		.set_uri(uri.clone())
+		.set_uri(format!("{uri}/cloud"))
 		.set_bearer_token(access_token.clone())
 		.build();
 	let http_client = rivet_cloud::Client::with_config(raw_client, rivet_cloud_config);
