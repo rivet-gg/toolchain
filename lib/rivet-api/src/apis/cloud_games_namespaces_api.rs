@@ -249,7 +249,7 @@ pub async fn cloud_games_namespaces_add_namespace_domain(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/domains",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/domains",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -301,7 +301,7 @@ pub async fn cloud_games_namespaces_create_game_namespace(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces",
+		"{}/cloud/games/{game_id}/namespaces",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);
@@ -353,7 +353,7 @@ pub async fn cloud_games_namespaces_create_game_namespace_token_development(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/tokens/development",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/tokens/development",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -405,7 +405,7 @@ pub async fn cloud_games_namespaces_create_game_namespace_token_public(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/tokens/public",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/tokens/public",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -455,7 +455,7 @@ pub async fn cloud_games_namespaces_get_game_namespace_by_id(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -507,7 +507,7 @@ pub async fn cloud_games_namespaces_get_game_namespace_version_history_list(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/version-history",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/version-history",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -563,7 +563,7 @@ pub async fn cloud_games_namespaces_remove_namespace_cdn_auth_user(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/auth-user/{user}",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/auth-user/{user}",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id),
@@ -612,7 +612,7 @@ pub async fn cloud_games_namespaces_remove_namespace_domain(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/domains/{domain}",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/domains/{domain}",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id),
@@ -661,7 +661,7 @@ pub async fn cloud_games_namespaces_set_namespace_cdn_auth_type(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/cdn-auth",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/cdn-auth",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -711,7 +711,7 @@ pub async fn cloud_games_namespaces_toggle_namespace_domain_public_auth(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/domain-public-auth",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/domain-public-auth",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -761,7 +761,7 @@ pub async fn cloud_games_namespaces_update_game_namespace_matchmaker_config(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/mm-config",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/mm-config",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -811,7 +811,7 @@ pub async fn cloud_games_namespaces_update_game_namespace_version(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/version",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/version",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -861,7 +861,7 @@ pub async fn cloud_games_namespaces_update_namespace_cdn_auth_user(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/auth-user",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/auth-user",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -913,7 +913,7 @@ pub async fn cloud_games_namespaces_validate_game_namespace(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/validate",
+		"{}/cloud/games/{game_id}/namespaces/validate",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);
@@ -965,7 +965,7 @@ pub async fn cloud_games_namespaces_validate_game_namespace_matchmaker_config(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/mm-config/validate",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/mm-config/validate",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)
@@ -1019,7 +1019,7 @@ pub async fn cloud_games_namespaces_validate_game_namespace_token_development(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/tokens/development/validate",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/tokens/development/validate",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)

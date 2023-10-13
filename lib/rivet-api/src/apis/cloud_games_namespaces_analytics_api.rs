@@ -41,7 +41,7 @@ pub async fn cloud_games_namespaces_analytics_get_analytics_matchmaker_live(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/analytics/matchmaker/live",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)

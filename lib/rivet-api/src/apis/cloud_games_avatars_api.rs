@@ -66,7 +66,7 @@ pub async fn cloud_games_avatars_complete_custom_avatar_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/avatar-upload/{upload_id}/complete",
+		"{}/cloud/games/{game_id}/avatar-upload/{upload_id}/complete",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		upload_id = crate::apis::urlencode(upload_id)
@@ -115,7 +115,7 @@ pub async fn cloud_games_avatars_list_game_custom_avatars(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/avatars",
+		"{}/cloud/games/{game_id}/avatars",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);
@@ -164,7 +164,7 @@ pub async fn cloud_games_avatars_prepare_custom_avatar_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/prepare",
+		"{}/cloud/games/{game_id}/prepare",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);

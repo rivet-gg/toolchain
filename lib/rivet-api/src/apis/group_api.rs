@@ -262,7 +262,7 @@ pub async fn group_ban_identity(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/bans/{identity_id}",
+		"{}/group/groups/{group_id}/bans/{identity_id}",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id),
 		identity_id = crate::apis::urlencode(identity_id)
@@ -309,7 +309,7 @@ pub async fn group_complete_avatar_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/avatar-upload/{upload_id}/complete",
+		"{}/group/groups/{group_id}/avatar-upload/{upload_id}/complete",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id),
 		upload_id = crate::apis::urlencode(upload_id)
@@ -354,7 +354,7 @@ pub async fn group_create(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/groups", local_var_configuration.base_path);
+	let local_var_uri_str = format!("{}/group/groups", local_var_configuration.base_path);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -400,7 +400,7 @@ pub async fn group_get_bans(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/bans",
+		"{}/group/groups/{group_id}/bans",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -460,7 +460,7 @@ pub async fn group_get_join_requests(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/join-requests",
+		"{}/group/groups/{group_id}/join-requests",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -520,7 +520,7 @@ pub async fn group_get_members(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/members",
+		"{}/group/groups/{group_id}/members",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -578,7 +578,7 @@ pub async fn group_get_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/profile",
+		"{}/group/groups/{group_id}/profile",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -626,7 +626,7 @@ pub async fn group_get_summary(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/summary",
+		"{}/group/groups/{group_id}/summary",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -672,7 +672,7 @@ pub async fn group_kick_member(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/kick/{identity_id}",
+		"{}/group/groups/{group_id}/kick/{identity_id}",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id),
 		identity_id = crate::apis::urlencode(identity_id)
@@ -718,7 +718,7 @@ pub async fn group_leave(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/leave",
+		"{}/group/groups/{group_id}/leave",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -762,7 +762,7 @@ pub async fn group_list_suggested(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/groups", local_var_configuration.base_path);
+	let local_var_uri_str = format!("{}/group/groups", local_var_configuration.base_path);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
@@ -808,7 +808,7 @@ pub async fn group_prepare_avatar_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/avatar-upload/prepare",
+		"{}/group/groups/avatar-upload/prepare",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -854,7 +854,7 @@ pub async fn group_search(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/groups/search", local_var_configuration.base_path);
+	let local_var_uri_str = format!("{}/group/groups/search", local_var_configuration.base_path);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
@@ -906,7 +906,7 @@ pub async fn group_transfer_ownership(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/transfer-owner",
+		"{}/group/groups/{group_id}/transfer-owner",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -953,7 +953,7 @@ pub async fn group_unban_identity(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/bans/{identity_id}",
+		"{}/group/groups/{group_id}/bans/{identity_id}",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id),
 		identity_id = crate::apis::urlencode(identity_id)
@@ -999,7 +999,7 @@ pub async fn group_update_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/profile",
+		"{}/group/groups/{group_id}/profile",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -1045,7 +1045,7 @@ pub async fn group_validate_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/profile/validate",
+		"{}/group/groups/profile/validate",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =

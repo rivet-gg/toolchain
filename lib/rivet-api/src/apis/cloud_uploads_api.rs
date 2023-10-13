@@ -37,7 +37,7 @@ pub async fn cloud_uploads_complete_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/uploads/{upload_id}/complete",
+		"{}/cloud/uploads/{upload_id}/complete",
 		local_var_configuration.base_path,
 		upload_id = crate::apis::urlencode(upload_id)
 	);

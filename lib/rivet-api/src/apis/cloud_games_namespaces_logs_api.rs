@@ -56,7 +56,7 @@ pub async fn cloud_games_namespaces_logs_get_namespace_lobby(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id}",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id}",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id),
@@ -108,7 +108,7 @@ pub async fn cloud_games_namespaces_logs_list_namespace_lobbies(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/namespaces/{namespace_id}/logs/lobbies",
+		"{}/cloud/games/{game_id}/namespaces/{namespace_id}/logs/lobbies",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		namespace_id = crate::apis::urlencode(namespace_id)

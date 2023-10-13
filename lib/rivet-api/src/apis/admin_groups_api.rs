@@ -36,7 +36,7 @@ pub async fn admin_groups_convert_developer(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/developer",
+		"{}/admin/groups/{group_id}/developer",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);

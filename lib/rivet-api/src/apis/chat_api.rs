@@ -110,7 +110,7 @@ pub async fn chat_get_thread_history(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/threads/{thread_id}/history",
+		"{}/chat/threads/{thread_id}/history",
 		local_var_configuration.base_path,
 		thread_id = crate::apis::urlencode(thread_id)
 	);
@@ -163,7 +163,7 @@ pub async fn chat_get_thread_topic(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/threads/{thread_id}/topic",
+		"{}/chat/threads/{thread_id}/topic",
 		local_var_configuration.base_path,
 		thread_id = crate::apis::urlencode(thread_id)
 	);
@@ -207,7 +207,7 @@ pub async fn chat_send_message(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/messages", local_var_configuration.base_path);
+	let local_var_uri_str = format!("{}/chat/messages", local_var_configuration.base_path);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -251,7 +251,7 @@ pub async fn chat_set_thread_read(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/threads/{thread_id}/read",
+		"{}/chat/threads/{thread_id}/read",
 		local_var_configuration.base_path,
 		thread_id = crate::apis::urlencode(thread_id)
 	);
@@ -298,7 +298,7 @@ pub async fn chat_set_typing_status(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/threads/{thread_id}/typing-status",
+		"{}/chat/threads/{thread_id}/typing-status",
 		local_var_configuration.base_path,
 		thread_id = crate::apis::urlencode(thread_id)
 	);
@@ -345,7 +345,7 @@ pub async fn chat_watch_thread(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/threads/{thread_id}/live",
+		"{}/chat/threads/{thread_id}/live",
 		local_var_configuration.base_path,
 		thread_id = crate::apis::urlencode(thread_id)
 	);

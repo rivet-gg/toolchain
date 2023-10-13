@@ -39,7 +39,7 @@ pub async fn auth_tokens_refresh_identity_token(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/tokens/identity", local_var_configuration.base_path);
+	let local_var_uri_str = format!("{}/auth/tokens/identity", local_var_configuration.base_path);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
