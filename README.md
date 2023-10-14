@@ -32,7 +32,7 @@ USAGE:
 
 OPTIONS:
         --api-url <API_URL>            [env: RIVET_CLOUD_API_URL=]
-        --cloud-token <CLOUD_TOKEN>    [env: RIVET_CLOUD_TOKEN=]
+        --token <CLOUD_TOKEN>    [env: RIVET_TOKEN=]
     -h, --help                         Print help information
     -V, --version                      Print version information
 

@@ -47,7 +47,7 @@ jobs:
       - name: Push Build
         id: push_build
         run: |
-          BUILD_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" build push --tag "${{ steps.consts.outputs.build_tag }}" --name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" --format json | jq -r '.build_id')"
+          BUILD_ID="$(rivet --token "${{ secrets.RIVET_TOKEN }}" build push --tag "${{ steps.consts.outputs.build_tag }}" --name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" --format json | jq -r '.build_id')"
           echo "::set-output name=build_id::$BUILD_ID"
 
   push_site:
@@ -79,7 +79,7 @@ jobs:
       - name: Push Site
         id: push_site
         run: |
-          SITE_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" site push --path '__SITE_BUILD_PATH__' --name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" --format json | jq -r '.site_id')"
+          SITE_ID="$(rivet --token "${{ secrets.RIVET_TOKEN }}" site push --path '__SITE_BUILD_PATH__' --name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" --format json | jq -r '.site_id')"
           echo "::set-output name=site_id::$SITE_ID"
 
   publish_version:
@@ -103,13 +103,13 @@ jobs:
       - name: Get Game
         id: get_game
         run: |
-          GAME_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" game get --format json | jq -r '.game_id')"
+          GAME_ID="$(rivet --token "${{ secrets.RIVET_TOKEN }}" game get --format json | jq -r '.game_id')"
           echo "::set-output name=game_id::$GAME_ID"
 
       - name: Create Version
         id: create_version
         run: |
-          VERSION_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" version create --namespace "${{ steps.consts.outputs.git_branch }}" --display-name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" -o "cdn.site=\"${{ needs.push_site.outputs.site_id }}\"" -o "matchmaker.docker.image=\"${{ needs.push_build.outputs.build_id }}\"" --format json | jq -r '.version_id')"
+          VERSION_ID="$(rivet --token "${{ secrets.RIVET_TOKEN }}" version create --namespace "${{ steps.consts.outputs.git_branch }}" --display-name "${{ steps.consts.outputs.git_branch }} (${{ steps.consts.outputs.git_sha_short }})" -o "cdn.site=\"${{ needs.push_site.outputs.site_id }}\"" -o "matchmaker.docker.image=\"${{ needs.push_build.outputs.build_id }}\"" --format json | jq -r '.version_id')"
           echo "::set-output name=version_id::$VERSION_ID"
 
       - name: Create Namespace
@@ -117,24 +117,24 @@ jobs:
         run: |
           NS_DISPLAY_NAME="${{ steps.consts.outputs.git_branch }}"
           NS_NAME_ID="$(sed -E 's/[^[:alnum:]]+/-/g' <<< "$NS_DISPLAY_NAME" | cut -c1-16)"
-          NAMESPACE_ID="$(rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" namespace create --name-id "$NS_NAME_ID" --display-name "$NS_DISPLAY_NAME"  --version "${{ steps.create_version.outputs.version_id }}" --format json | jq -r '.namespace_id')"
+          NAMESPACE_ID="$(rivet --token "${{ secrets.RIVET_TOKEN }}" namespace create --name-id "$NS_NAME_ID" --display-name "$NS_DISPLAY_NAME"  --version "${{ steps.create_version.outputs.version_id }}" --format json | jq -r '.namespace_id')"
           echo "::set-output name=namespace_id::$NAMESPACE_ID"
 
       - name: Set Version
         run: |
-          rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" namespace set-version --namespace "${{ steps.create_namespace.outputs.namespace_id }}" --version "${{ steps.create_version.outputs.version_id }}" --format json
+          rivet --token "${{ secrets.RIVET_TOKEN }}" namespace set-version --namespace "${{ steps.create_namespace.outputs.namespace_id }}" --version "${{ steps.create_version.outputs.version_id }}" --format json
 
       - name: Dashboards
         run: |
           echo
           echo "Game:"
-          rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" game dashboard
+          rivet --token "${{ secrets.RIVET_TOKEN }}" game dashboard
 
           echo
           echo "Namespace:"
-          rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" namespace dashboard "${{ steps.create_namespace.outputs.namespace_id }}"
+          rivet --token "${{ secrets.RIVET_TOKEN }}" namespace dashboard "${{ steps.create_namespace.outputs.namespace_id }}"
 
           echo
           echo "Version:"
-          rivet --cloud-token "${{ secrets.RIVET_CLOUD_TOKEN }}" version dashboard "${{ steps.create_version.outputs.version_id }}"
+          rivet --token "${{ secrets.RIVET_TOKEN }}" version dashboard "${{ steps.create_version.outputs.version_id }}"
           # Bump

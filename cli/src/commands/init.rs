@@ -113,11 +113,11 @@ pub struct Opts {
 impl Opts {
 	pub async fn execute(
 		&self,
-		cloud_token: Option<&str>,
+		token: Option<&str>,
 		term: &Term,
 		override_endpoint: Option<String>,
 	) -> Result<()> {
-		let ctx = self.build_ctx(term, cloud_token, override_endpoint).await?;
+		let ctx = self.build_ctx(term, token, override_endpoint).await?;
 
 		// Select the engine to use
 		let init_engine = if self.unity {
@@ -164,17 +164,17 @@ impl Opts {
 	async fn build_ctx(
 		&self,
 		term: &Term,
-		cloud_token: Option<&str>,
+		token: Option<&str>,
 		override_endpoint: Option<String>,
 	) -> Result<Ctx> {
 		// Check if token already exists
-		let cloud_token = if let Some(cloud_token) = cloud_token.clone() {
-			Some(cloud_token.to_string())
+		let token = if let Some(token) = token.clone() {
+			Some(token.to_string())
 		} else {
-			secrets::read_cloud_token().await?
+			secrets::read_token().await?
 		};
-		let ctx = if let Some(cloud_token) = cloud_token {
-			let ctx = cli_core::ctx::init(override_endpoint.clone(), cloud_token).await?;
+		let ctx = if let Some(token) = token {
+			let ctx = cli_core::ctx::init(override_endpoint.clone(), token).await?;
 
 			let game_res = ctx
 				.client()
@@ -190,7 +190,7 @@ impl Opts {
 
 			ctx
 		} else {
-			read_cloud_token(term, override_endpoint.clone()).await?
+			read_token(term, override_endpoint.clone()).await?
 		};
 
 		Ok(ctx)
@@ -518,7 +518,7 @@ impl Opts {
 	}
 }
 
-async fn read_cloud_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
+async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
 	// Create OpenAPI configuration without bearer token to send link request
 	let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
 		base_path: override_endpoint
@@ -571,7 +571,7 @@ async fn read_cloud_token(term: &Term, override_endpoint: Option<String>) -> Res
 
 	// Wait for link to complete
 	let mut watch_index = None;
-	let cloud_token = loop {
+	let token = loop {
 		let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_get(
 			&openapi_config_cloud_unauthed,
 			&prepare_res.device_link_token,
@@ -585,8 +585,8 @@ async fn read_cloud_token(term: &Term, override_endpoint: Option<String>) -> Res
 
 		watch_index = Some(prepare_res.watch.index);
 
-		if let Some(cloud_token) = prepare_res.cloud_token {
-			break cloud_token;
+		if let Some(token) = prepare_res.cloud_token {
+			break token;
 		}
 	};
 
@@ -594,7 +594,7 @@ async fn read_cloud_token(term: &Term, override_endpoint: Option<String>) -> Res
 	let new_ctx = cli_core::ctx::init(
 		override_endpoint,
 		// Exclude overridden access token to check the token
-		cloud_token.clone(),
+		token.clone(),
 	)
 	.await?;
 
@@ -626,7 +626,7 @@ async fn read_cloud_token(term: &Term, override_endpoint: Option<String>) -> Res
 	let display_name = game_res.game.display_name;
 
 	// Write the token
-	secrets::write_cloud_token(&cloud_token).await?;
+	secrets::write_cloud_token(&token).await?;
 
 	term::status::success("Token Saved", display_name);
 
