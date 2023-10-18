@@ -27,7 +27,7 @@ struct Opts {
 	command: SubCommand,
 
 	#[clap(long, env = "RIVET_API_ENDPOINT")]
-	endpoint: Option<String>,
+	api_endpoint: Option<String>,
 
 	#[clap(long, env = "RIVET_TOKEN")]
 	token: Option<String>,
@@ -125,7 +125,7 @@ async fn main() -> Result<()> {
 			.execute(
 				opts.token.as_ref().map(String::as_str),
 				&term,
-				opts.endpoint,
+				opts.api_endpoint,
 			)
 			.await;
 	}
@@ -140,7 +140,7 @@ async fn main() -> Result<()> {
 	};
 
 	// Create context
-	let ctx = cli_core::ctx::init(opts.endpoint.clone(), token).await?;
+	let ctx = cli_core::ctx::init(opts.api_endpoint.clone(), token).await?;
 
 	// Handle command
 	match opts.command {
