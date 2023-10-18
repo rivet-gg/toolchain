@@ -37,7 +37,7 @@ pub async fn chat_identity_get_direct_thread(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/thread",
+		"{}/chat/identities/{identity_id}/thread",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);

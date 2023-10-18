@@ -65,7 +65,7 @@ pub async fn group_invites_consume_invite(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/invites/{group_invite_code}/consume",
+		"{}/group/invites/{group_invite_code}/consume",
 		local_var_configuration.base_path,
 		group_invite_code = crate::apis::urlencode(group_invite_code)
 	);
@@ -111,7 +111,7 @@ pub async fn group_invites_create_invite(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/invites",
+		"{}/group/groups/{group_id}/invites",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -157,7 +157,7 @@ pub async fn group_invites_get_invite(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/invites/{group_invite_code}",
+		"{}/group/invites/{group_invite_code}",
 		local_var_configuration.base_path,
 		group_invite_code = crate::apis::urlencode(group_invite_code)
 	);

@@ -69,7 +69,7 @@ pub async fn cloud_games_versions_create_game_version(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/versions",
+		"{}/cloud/games/{game_id}/versions",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);
@@ -119,7 +119,7 @@ pub async fn cloud_games_versions_get_game_version_by_id(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/versions/{version_id}",
+		"{}/cloud/games/{game_id}/versions/{version_id}",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		version_id = crate::apis::urlencode(version_id)
@@ -169,7 +169,7 @@ pub async fn cloud_games_versions_validate_game_version(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/versions/validate",
+		"{}/cloud/games/{game_id}/versions/validate",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);

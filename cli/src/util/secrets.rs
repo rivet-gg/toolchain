@@ -3,7 +3,7 @@ use tokio::fs;
 
 use super::paths;
 
-pub async fn read_cloud_token() -> Result<Option<String>> {
+pub async fn read_token() -> Result<Option<String>> {
 	match fs::read_to_string(paths::cloud_token()?).await {
 		Ok(token) => Ok(Some(token)),
 		Err(err) if err.kind() == std::io::ErrorKind::NotFound => Ok(None),

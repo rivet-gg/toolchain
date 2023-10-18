@@ -40,7 +40,7 @@ pub async fn cloud_games_tokens_create_cloud_token(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/tokens/cloud",
+		"{}/cloud/games/{game_id}/tokens/cloud",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);

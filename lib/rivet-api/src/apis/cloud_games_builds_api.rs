@@ -55,7 +55,7 @@ pub async fn cloud_games_builds_create_game_build(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/builds",
+		"{}/cloud/games/{game_id}/builds",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);
@@ -104,7 +104,7 @@ pub async fn cloud_games_builds_list_game_builds(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/builds",
+		"{}/cloud/games/{game_id}/builds",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);

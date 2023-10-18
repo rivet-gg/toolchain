@@ -64,7 +64,10 @@ pub async fn matchmaker_players_connected(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/players/connected", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/players/connected",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -106,7 +109,10 @@ pub async fn matchmaker_players_disconnected(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/players/disconnected", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/players/disconnected",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -150,7 +156,10 @@ pub async fn matchmaker_players_get_statistics(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/players/statistics", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/players/statistics",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 

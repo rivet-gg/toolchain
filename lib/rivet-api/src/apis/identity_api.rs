@@ -373,7 +373,7 @@ pub async fn identity_complete_avatar_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/avatar-upload/{upload_id}/complete",
+		"{}/identity/identities/avatar-upload/{upload_id}/complete",
 		local_var_configuration.base_path,
 		upload_id = crate::apis::urlencode(upload_id)
 	);
@@ -418,7 +418,7 @@ pub async fn identity_follow(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/follow",
+		"{}/identity/identities/{identity_id}/follow",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -463,7 +463,7 @@ pub async fn identity_get_handles(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/batch/handle",
+		"{}/identity/identities/batch/handle",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -510,7 +510,7 @@ pub async fn identity_get_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/profile",
+		"{}/identity/identities/{identity_id}/profile",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -559,7 +559,7 @@ pub async fn identity_get_self_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/profile",
+		"{}/identity/identities/self/profile",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -607,7 +607,7 @@ pub async fn identity_get_summaries(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/batch/summary",
+		"{}/identity/identities/batch/summary",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -652,7 +652,7 @@ pub async fn identity_ignore_recent_follower(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/recent-followers/{identity_id}/ignore",
+		"{}/identity/identities/self/recent-followers/{identity_id}/ignore",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -698,7 +698,7 @@ pub async fn identity_list_followers(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/followers",
+		"{}/identity/identities/{identity_id}/followers",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -752,7 +752,7 @@ pub async fn identity_list_following(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/following",
+		"{}/identity/identities/{identity_id}/following",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -805,7 +805,7 @@ pub async fn identity_list_friends(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/friends",
+		"{}/identity/identities/self/friends",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -859,7 +859,7 @@ pub async fn identity_list_mutual_friends(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/mutual-friends",
+		"{}/identity/identities/{identity_id}/mutual-friends",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -915,7 +915,7 @@ pub async fn identity_list_recent_followers(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/recent-followers",
+		"{}/identity/identities/self/recent-followers",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -965,7 +965,7 @@ pub async fn identity_mark_deletion(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/delete-request",
+		"{}/identity/identities/self/delete-request",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1012,7 +1012,7 @@ pub async fn identity_prepare_avatar_upload(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/avatar-upload/prepare",
+		"{}/identity/identities/avatar-upload/prepare",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1056,7 +1056,7 @@ pub async fn identity_remove_game_activity(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/activity",
+		"{}/identity/identities/self/activity",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1101,7 +1101,7 @@ pub async fn identity_report(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/report",
+		"{}/identity/identities/{identity_id}/report",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -1148,7 +1148,10 @@ pub async fn identity_search(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/identities/search", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/identity/identities/search",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
@@ -1199,7 +1202,7 @@ pub async fn identity_set_game_activity(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/activity",
+		"{}/identity/identities/self/activity",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1243,7 +1246,7 @@ pub async fn identity_setup(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/identities", local_var_configuration.base_path);
+	let local_var_uri_str = format!("{}/identity/identities", local_var_configuration.base_path);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -1286,7 +1289,7 @@ pub async fn identity_signup_for_beta(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/beta-signup",
+		"{}/identity/identities/self/beta-signup",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1331,7 +1334,7 @@ pub async fn identity_unfollow(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/{identity_id}/follow",
+		"{}/identity/identities/{identity_id}/follow",
 		local_var_configuration.base_path,
 		identity_id = crate::apis::urlencode(identity_id)
 	);
@@ -1374,7 +1377,7 @@ pub async fn identity_unmark_deletion(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/delete-request",
+		"{}/identity/identities/self/delete-request",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1418,7 +1421,7 @@ pub async fn identity_update_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/profile",
+		"{}/identity/identities/self/profile",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1463,7 +1466,7 @@ pub async fn identity_update_status(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/identities/self/status",
+		"{}/identity/identities/identities/self/status",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -1508,7 +1511,7 @@ pub async fn identity_validate_profile(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identities/self/profile/validate",
+		"{}/identity/identities/self/profile/validate",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =

@@ -37,7 +37,7 @@ pub async fn cloud_logs_get_ray_perf_logs(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/rays/{ray_id}/perf",
+		"{}/cloud/rays/{ray_id}/perf",
 		local_var_configuration.base_path,
 		ray_id = crate::apis::urlencode(ray_id)
 	);

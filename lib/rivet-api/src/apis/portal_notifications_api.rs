@@ -51,7 +51,7 @@ pub async fn portal_notifications_register_notifications(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/notifications/register",
+		"{}/portal/notifications/register",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -96,7 +96,7 @@ pub async fn portal_notifications_unregister_notifications(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/notifications/register",
+		"{}/portal/notifications/register",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =

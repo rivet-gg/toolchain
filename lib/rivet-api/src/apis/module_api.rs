@@ -40,7 +40,7 @@ pub async fn module_call(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/modules/{module}/scripts/{script}/call",
+		"{}/module/modules/{module}/scripts/{script}/call",
 		local_var_configuration.base_path,
 		module = crate::apis::urlencode(module),
 		script = crate::apis::urlencode(script)

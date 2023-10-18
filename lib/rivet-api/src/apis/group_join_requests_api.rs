@@ -51,7 +51,7 @@ pub async fn group_join_requests_create_join_request(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/join-request",
+		"{}/group/groups/{group_id}/join-request",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id)
 	);
@@ -98,7 +98,7 @@ pub async fn group_join_requests_resolve_join_request(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/groups/{group_id}/join-request/{identity_id}",
+		"{}/group/groups/{group_id}/join-request/{identity_id}",
 		local_var_configuration.base_path,
 		group_id = crate::apis::urlencode(group_id),
 		identity_id = crate::apis::urlencode(identity_id)

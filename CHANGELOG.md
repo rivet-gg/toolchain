@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2.0] - Unreleased
+
+### Changed
+
+- Support new single-origin API endpoint (configured with `RIVET_API_ENDPOINT` environment variable or `--api-endpoint` flag)
+- Rename `RIVET_CLOUD_TOKEN` environment variable to `RIVET_TOKEN`
+- Rename `--cloud-token` flag to `--token`
+- Removed `RIVET_API_CLOUD_URL` in favor of `RIVET_API_ENDPOINT`
+
 ## [v0.1.2] - 2023-08-26
 
 ### Changed

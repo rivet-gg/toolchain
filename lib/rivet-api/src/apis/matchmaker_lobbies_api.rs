@@ -134,7 +134,10 @@ pub async fn matchmaker_lobbies_create(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/create", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/create",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -177,7 +180,10 @@ pub async fn matchmaker_lobbies_find(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/find", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/find",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -223,7 +229,7 @@ pub async fn matchmaker_lobbies_get_state(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/lobbies/{lobby_id}/state",
+		"{}/matchmaker/lobbies/{lobby_id}/state",
 		local_var_configuration.base_path,
 		lobby_id = crate::apis::urlencode(lobby_id)
 	);
@@ -267,7 +273,10 @@ pub async fn matchmaker_lobbies_join(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/join", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/join",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -309,7 +318,10 @@ pub async fn matchmaker_lobbies_list(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/list", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/list",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
@@ -353,7 +365,10 @@ pub async fn matchmaker_lobbies_ready(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/ready", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/ready",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
@@ -394,7 +409,10 @@ pub async fn matchmaker_lobbies_set_closed(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/closed", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/closed",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::PUT, local_var_uri_str.as_str());
 
@@ -435,7 +453,10 @@ pub async fn matchmaker_lobbies_set_state(
 
 	let local_var_client = &local_var_configuration.client;
 
-	let local_var_uri_str = format!("{}/lobbies/state", local_var_configuration.base_path);
+	let local_var_uri_str = format!(
+		"{}/matchmaker/lobbies/state",
+		local_var_configuration.base_path
+	);
 	let mut local_var_req_builder =
 		local_var_client.request(reqwest::Method::PUT, local_var_uri_str.as_str());
 

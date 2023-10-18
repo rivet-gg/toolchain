@@ -83,7 +83,7 @@ pub async fn cloud_games_matchmaker_delete_matchmaker_lobby(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/matchmaker/lobbies/{lobby_id}",
+		"{}/cloud/games/{game_id}/matchmaker/lobbies/{lobby_id}",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		lobby_id = crate::apis::urlencode(lobby_id)
@@ -134,7 +134,7 @@ pub async fn cloud_games_matchmaker_export_lobby_logs(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/matchmaker/lobbies/{lobby_id}/logs/export",
+		"{}/cloud/games/{game_id}/matchmaker/lobbies/{lobby_id}/logs/export",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		lobby_id = crate::apis::urlencode(lobby_id)
@@ -185,7 +185,7 @@ pub async fn cloud_games_matchmaker_export_matchmaker_lobby_history(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/matchmaker/lobbies/export-history",
+		"{}/cloud/games/{game_id}/matchmaker/lobbies/export-history",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id)
 	);
@@ -238,7 +238,7 @@ pub async fn cloud_games_matchmaker_get_lobby_logs(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/games/{game_id}/matchmaker/lobbies/{lobby_id}/logs",
+		"{}/cloud/games/{game_id}/matchmaker/lobbies/{lobby_id}/logs",
 		local_var_configuration.base_path,
 		game_id = crate::apis::urlencode(game_id),
 		lobby_id = crate::apis::urlencode(lobby_id)

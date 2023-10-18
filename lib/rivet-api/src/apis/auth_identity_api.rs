@@ -54,7 +54,7 @@ pub async fn auth_identity_complete_email_verification(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identity/email/complete-verification",
+		"{}/auth/identity/email/complete-verification",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
@@ -102,7 +102,7 @@ pub async fn auth_identity_start_email_verification(
 	let local_var_client = &local_var_configuration.client;
 
 	let local_var_uri_str = format!(
-		"{}/identity/email/start-verification",
+		"{}/auth/identity/email/start-verification",
 		local_var_configuration.base_path
 	);
 	let mut local_var_req_builder =
