@@ -1,10 +1,11 @@
 use anyhow::{bail, ensure, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::models;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::str::FromStr;
 use tabled::Tabled;
+use tempfile::TempDir;
 use tokio::process::Command;
 use uuid::Uuid;
 
@@ -458,14 +459,6 @@ pub async fn build_image(
 						.arg(&unique_image_tag)
 						.arg(".");
 					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
-
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("save")
-						.arg("--output")
-						.arg(&tmp_path)
-						.arg(&unique_image_tag);
-					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
 				}
 				DockerBuildMethod::Buildx => {
 					let builder_name = "rivet_cli";
@@ -520,9 +513,118 @@ pub async fn build_image(
 						.arg("--tag")
 						.arg(&unique_image_tag)
 						.arg("--output")
-						.arg(format!("type=docker,dest={}", tmp_path.display()))
+						.arg("type=docker")
 						.arg(".");
 					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
+				}
+			}
+
+			enum BuildKind {
+				DockerImage,
+				OciBundle,
+			}
+
+			let build_kind = BuildKind::OciBundle;
+
+			match build_kind {
+				BuildKind::DockerImage => {
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("save")
+						.arg("--output")
+						.arg(&tmp_path)
+						.arg(&unique_image_tag);
+					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
+				}
+				BuildKind::OciBundle => {
+					let temp_dir = TempDir::new()?;
+
+					let container_name = Uuid::new_v4().to_string();
+
+					// TODO: Rename build_cmd
+					// TODO: Rename error codes
+
+					let mut create_cmd = Command::new("docker");
+					create_cmd
+						.arg("container")
+						.arg("create")
+						.arg(&container_name)
+						.arg(&unique_image_tag);
+					cmd::execute_docker_cmd(create_cmd, "Docker failed to create container")
+						.await?;
+
+					let mut cp_cmd = Command::new("docker");
+					cp_cmd
+						.arg("container")
+						.arg("cp")
+						.arg("--archive")
+						.arg(format!("{container_name}:/"))
+						.arg(temp_dir.path().join("rootfs"));
+					cmd::execute_docker_cmd(cp_cmd, "Docker failed to copy files out of container")
+						.await?;
+
+					let mut rm_cmd = Command::new("docker");
+					rm_cmd
+						.arg("container")
+						.arg("rm")
+						.arg("--force")
+						.arg(&container_name);
+					cmd::execute_docker_cmd(rm_cmd, "Docker failed to remove container").await?;
+
+					let mut inspect_cmd = Command::new("docker");
+					inspect_cmd
+						.arg("image")
+						.arg("inspect")
+						.arg(&unique_image_tag);
+					let inspect_output =
+						cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
+
+					#[derive(Deserialize)]
+					#[serde(rename_all = "PascalCase")]
+					struct DockerImage {
+						config: DockerImageConfig,
+					}
+
+					#[derive(Deserialize)]
+					#[serde(rename_all = "PascalCase")]
+					struct DockerImageConfig {
+						#[serde(default)]
+						cmd: Vec<String>,
+						#[serde(default)]
+						entrypoint: Vec<String>,
+						env: Vec<String>,
+						user: String,
+						#[serde(default)]
+						working_dir: String,
+					}
+
+					// Parse image output
+					{
+						let image =
+							serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
+						let image = image.first().context("no image")?;
+
+						let mut config = serde_json::from_slice::<serde_json::Value>(
+							include_bytes!("../../static/config.json"),
+						)?;
+						if image.config.working_dir != "" {
+							config["process"]["cwd"] = json!(image.config.working_dir);
+						}
+
+						config["process"]["env"] = json!(image.config.env);
+
+						config["process"]["args"] =
+							json!([image.config.entrypoint.clone(), image.config.cmd.clone()]
+								.concat());
+
+						// TODO: User https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L183
+
+						tokio::fs::write(
+							temp_dir.path().join("config.json"),
+							serde_json::to_vec(&config)?,
+						)
+						.await?;
+					}
 				}
 			}
 
