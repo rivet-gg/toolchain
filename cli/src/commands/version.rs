@@ -510,6 +510,8 @@ pub async fn build_image(
 						.arg(dockerfile)
 						.arg("--tag")
 						.arg(&unique_image_tag)
+						.arg("--platform")
+						.arg("linux/amd64")
 						.arg(".");
 					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 				}
@@ -796,7 +798,10 @@ pub async fn build_image(
 						.arg("-cf")
 						.arg(&build_tar_path)
 						.arg(bundle_dir.path());
-                    cmd::error_for_output_failure(&archive_cmd.output().await?, "failed to archive oci bundle")?;
+					cmd::error_for_output_failure(
+						&archive_cmd.output().await?,
+						"failed to archive oci bundle",
+					)?;
 				}
 			}
 

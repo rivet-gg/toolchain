@@ -50,12 +50,12 @@ jobs:
         profile: minimal
         override: true
 
-    # - name: Run cargo test
-    #   uses: actions-rs/cargo@v1
-    #   env:
-    #     RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
-    #     RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
-    #     RUST_BACKTRACE: 1
-    #   with:
-    #     command: test
+    - name: Run cargo test
+      uses: actions-rs/cargo@v1
+      env:
+        RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
+        RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
+        RUST_BACKTRACE: 1
+      with:
+        command: test
 
