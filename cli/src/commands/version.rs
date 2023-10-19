@@ -876,6 +876,8 @@ pub async fn build_site(
 					let mut build_cmd = Command::new("/bin/sh");
 					build_cmd
 						.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
+						// Ensure we don't accidentally expose the token to a public build
+						.env_remove("RIVET_TOKEN")
 						.arg("-c")
 						.arg(build_command);
 					let build_status = build_cmd.status().await?;
@@ -884,6 +886,8 @@ pub async fn build_site(
 					let mut build_cmd = Command::new("cmd.exe");
 					build_cmd
 						.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
+						// Ensure we don't accidentally expose the token to a public build
+						.env_remove("RIVET_TOKEN")
 						.arg("/C")
 						.arg(build_command);
 					let build_status = build_cmd.status().await?;
