@@ -1,5 +1,5 @@
 [cdn]
-	build_command = "./build-cdn.sh"
+	build_command = "echo 'Hello, world!' > dist/index.html"
 	build_output = "dist"
 
 [matchmaker]
