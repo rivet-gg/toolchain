@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-22.04, windows-2022, macos-12]
     steps:
     - uses: actions/checkout@v2
     - name: Install Rust
@@ -22,6 +22,9 @@ jobs:
         override: true
     - name: Run cargo test
       uses: actions-rs/cargo@v1
+      env:
+        RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
+        RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
       with:
         command: test
 

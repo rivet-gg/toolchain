@@ -622,7 +622,7 @@ pub async fn build_image(
 					cmd::execute_docker_cmd_silent(rm_cmd, "Docker failed to remove container")
 						.await?;
 
-					let inspect_cmd = Command::new("docker");
+					let mut inspect_cmd = Command::new("docker");
 					inspect_cmd
 						.arg("image")
 						.arg("inspect")
@@ -802,7 +802,7 @@ pub async fn build_image(
 			}
 
 			// Clean up image from the registry
-			let remove_img_cmd = Command::new("docker");
+			let mut remove_img_cmd = Command::new("docker");
 			remove_img_cmd
 				.arg("image")
 				.arg("rm")
