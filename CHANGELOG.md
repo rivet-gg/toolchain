@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for building OCI bundles
 - Support for LZ4 compression of builds
 - E2E cross-platform tests in GitHub Actions
+- Expose `RIVET_API_ENDPOINT` to `cdn.build_command` to help automate deploying to multiple cluters
 
 ### Changed
 

@@ -874,12 +874,18 @@ pub async fn build_site(
 
 				if cfg!(unix) {
 					let mut build_cmd = Command::new("/bin/sh");
-					build_cmd.arg("-c").arg(build_command);
+					build_cmd
+						.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
+						.arg("-c")
+						.arg(build_command);
 					let build_status = build_cmd.status().await?;
 					ensure!(build_status.success(), "site failed to build");
 				} else if cfg!(windows) {
 					let mut build_cmd = Command::new("cmd.exe");
-					build_cmd.arg("/C").arg(build_command);
+					build_cmd
+						.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
+						.arg("/C")
+						.arg(build_command);
 					let build_status = build_cmd.status().await?;
 					ensure!(build_status.success(), "site failed to build");
 				} else {

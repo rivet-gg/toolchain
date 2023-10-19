@@ -23,7 +23,7 @@ type HttpClient =
 pub struct CtxInner {
 	http_client: HttpClient,
 	pub concurrent_uploads: usize,
-	pub override_api_url: Option<String>,
+	pub api_endpoint: String,
 	pub access_token: String,
 	pub game_id: String,
 
@@ -36,26 +36,26 @@ impl CtxInner {
 	}
 }
 
-pub async fn init(override_api_url: Option<String>, access_token: String) -> Result<Ctx, Error> {
+pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<Ctx, Error> {
 	let raw_client = rivet_cloud::Builder::dyn_https()
 		.middleware(tower::layer::util::Identity::new())
 		.sleep_impl(None)
 		.build();
 
-	let uri = override_api_url
+	let api_endpoint = api_endpoint
 		.clone()
 		.unwrap_or_else(|| DEFAULT_API_ENDPOINT.to_string());
 
 	// Create client
 	let rivet_cloud_config = rivet_cloud::Config::builder()
-		.set_uri(format!("{uri}/cloud"))
+		.set_uri(format!("{api_endpoint}/cloud"))
 		.set_bearer_token(access_token.clone())
 		.build();
 	let http_client = rivet_cloud::Client::with_config(raw_client, rivet_cloud_config);
 
 	// Create OpenAPI config
 	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
-		base_path: uri.clone(),
+		base_path: api_endpoint.clone(),
 		bearer_access_token: Some(access_token.clone()),
 		user_agent: Some(user_agent()),
 		..Default::default()
@@ -86,7 +86,7 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 	Ok(Arc::new(CtxInner {
 		http_client,
 		concurrent_uploads,
-		override_api_url,
+		api_endpoint,
 		access_token,
 		game_id,
 

@@ -158,7 +158,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 			.as_ref()
 			.context("image_presigned_request")?,
 		&push_opts.path,
-		None,
+		Option::<String>::None,
 	)
 	.await?;
 
