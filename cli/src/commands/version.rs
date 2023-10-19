@@ -796,8 +796,7 @@ pub async fn build_image(
 						.arg("-cf")
 						.arg(&build_tar_path)
 						.arg(bundle_dir.path());
-					let archive_status = archive_cmd.status().await?;
-					ensure!(archive_status.success(), "failed to archive oci bundle");
+                    cmd::error_for_output_failure(&archive_cmd.output().await?, "failed to archive oci bundle")?;
 				}
 			}
 
