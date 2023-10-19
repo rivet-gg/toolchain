@@ -622,6 +622,7 @@ pub async fn build_image(
 					cmd::execute_docker_cmd_silent(rm_cmd, "Docker failed to remove container")
 						.await?;
 
+					let inspect_cmd = Command::new("docker");
 					inspect_cmd
 						.arg("image")
 						.arg("inspect")
@@ -807,7 +808,7 @@ pub async fn build_image(
 				.arg("rm")
 				.arg("--force")
 				.arg(&unique_image_tag);
-			cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
+			cmd::execute_docker_cmd_silent_failable(remove_img_cmd).await?;
 
 			// Compress the bundle
 			let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
