@@ -19,6 +19,23 @@ jobs:
         os: [ubuntu-22.04, windows-2022, macos-12]
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install Homebrew
+      if: startsWith(matrix.os, 'macos-')
+      run: |
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "/usr/local/bin" >> $GITHUB_PATH
+
+    - name: Install Docker
+      if: startsWith(matrix.os, 'macos-')
+      run: |
+        brew install --cask docker
+        open /Applications/Docker.app
+        # Wait for Docker to start up
+        while ! docker info 2>/dev/null; do
+          sleep 1
+        done
+
     - name: Cache Cargo dependencies
       uses: actions/cache@v2
       with:
@@ -29,18 +46,20 @@ jobs:
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-cargo-
+
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         profile: minimal
         override: true
+
     - name: Run cargo test
       uses: actions-rs/cargo@v1
       env:
         RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
         RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
-        RUST_BACKTRACE: full
+        RUST_BACKTRACE: 1
       with:
         command: test
 
