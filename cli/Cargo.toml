@@ -35,7 +35,8 @@ tokio = { version = "1.27", default-features = false, features = ["fs", "macros"
 tokio-util = { version = "0.7", default-features = false, features = ["io-util"] }
 uuid = { version = "1.3", features = ["v4"] }
 webbrowser = "0.8.7"
-zip = "0.5.13"
+zip = "0.5"
+lz4 = "1.24"
 
 [build-dependencies]
 anyhow = "1.0"

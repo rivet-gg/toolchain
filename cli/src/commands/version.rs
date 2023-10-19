@@ -6,12 +6,14 @@ use serde_json::json;
 use std::str::FromStr;
 use tabled::Tabled;
 use tempfile::TempDir;
-use tokio::process::Command;
+use tokio::{
+	process::Command,
+};
 use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{cmd, fmt, gen, struct_fmt, term},
+	util::{cmd, fmt, gen, lz4, struct_fmt, term},
 };
 
 /// Defines how Docker Build will be ran.
@@ -22,6 +24,26 @@ enum DockerBuildMethod {
 
 	#[strum(serialize = "native")]
 	Native,
+}
+
+/// Defines what type of build to create.
+#[derive(strum::EnumString)]
+enum BuildKind {
+	#[strum(serialize = "docker-image")]
+	DockerImage,
+
+	#[strum(serialize = "oci-bundle")]
+	OciBundle,
+}
+
+/// Defines how to compress the output.
+#[derive(strum::EnumString)]
+enum BuildCompression {
+	#[strum(serialize = "none")]
+	None,
+
+	#[strum(serialize = "lz4")]
+	LZ4,
 }
 
 impl DockerBuildMethod {
@@ -45,6 +67,37 @@ impl DockerBuildMethod {
 				println!("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
 				Ok(DockerBuildMethod::Native)
 			}
+		}
+	}
+}
+
+impl BuildKind {
+	async fn auto() -> Result<BuildKind> {
+		// Determine build method from env
+		if let Some(method) = std::env::var("_RIVET_BUILD_KIND")
+			.ok()
+			.and_then(|x| BuildKind::from_str(&x).ok())
+		{
+			Ok(method)
+		} else {
+			Ok(BuildKind::OciBundle)
+		}
+	}
+}
+
+impl BuildCompression {
+	async fn auto(kind: &BuildKind) -> Result<BuildCompression> {
+		// Determine build method from env
+		if let Some(method) = std::env::var("_RIVET_BUILD_COMPRESSION")
+			.ok()
+			.and_then(|x| BuildCompression::from_str(&x).ok())
+		{
+			Ok(method)
+		} else {
+			Ok(match kind {
+				BuildKind::DockerImage => BuildCompression::None,
+				BuildKind::OciBundle => BuildCompression::LZ4,
+			})
 		}
 	}
 }
@@ -434,6 +487,8 @@ pub async fn build_image(
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = docker.dockerfile.as_ref() {
 			let build_method = DockerBuildMethod::auto().await?;
+			let build_kind = BuildKind::auto().await?;
+			let build_compression = BuildCompression::auto(&build_kind).await?;
 
 			eprintln!();
 			let buildx_info = match build_method {
@@ -443,8 +498,8 @@ pub async fn build_image(
 			term::status::info("Building Image", format!("{dockerfile}{buildx_info}"));
 
 			// Create temp path to write to
-			let tmp_image_file = tempfile::NamedTempFile::new()?;
-			let tmp_path = tmp_image_file.into_temp_path();
+			let build_tar_file = tempfile::NamedTempFile::new()?;
+			let build_tar_path = build_tar_file.into_temp_path();
 
 			// Build image
 			let unique_image_tag = format!("rivet-game:{}", Uuid::new_v4());
@@ -474,7 +529,6 @@ pub async fn build_image(
 							.contains(&format!("no builder \"{builder_name}\" found"))
 					{
 						// Create new builder
-
 						let mut build_cmd = Command::new("docker");
 						build_cmd
 							.arg("buildx")
@@ -519,35 +573,30 @@ pub async fn build_image(
 				}
 			}
 
-			enum BuildKind {
-				DockerImage,
-				OciBundle,
-			}
-
-			let build_kind = BuildKind::OciBundle;
-
 			match build_kind {
 				BuildKind::DockerImage => {
+					// Save the Docker image to a TAR
+
 					let mut build_cmd = Command::new("docker");
 					build_cmd
 						.arg("save")
 						.arg("--output")
-						.arg(&tmp_path)
+						.arg(&build_tar_path)
 						.arg(&unique_image_tag);
 					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
 				}
 				BuildKind::OciBundle => {
-					let temp_dir = TempDir::new()?;
+					// Convert the Docker image to an OCI bundle
 
-					let container_name = Uuid::new_v4().to_string();
+					let bundle_dir = TempDir::new()?;
 
-					// TODO: Rename build_cmd
-					// TODO: Rename error codes
+					let container_name = format!("rivet-game-{}", Uuid::new_v4());
 
 					let mut create_cmd = Command::new("docker");
 					create_cmd
 						.arg("container")
 						.arg("create")
+                        .arg("--name")
 						.arg(&container_name)
 						.arg(&unique_image_tag);
 					cmd::execute_docker_cmd(create_cmd, "Docker failed to create container")
@@ -559,7 +608,7 @@ pub async fn build_image(
 						.arg("cp")
 						.arg("--archive")
 						.arg(format!("{container_name}:/"))
-						.arg(temp_dir.path().join("rootfs"));
+						.arg(bundle_dir.path().join("rootfs"));
 					cmd::execute_docker_cmd(cp_cmd, "Docker failed to copy files out of container")
 						.await?;
 
@@ -620,11 +669,37 @@ pub async fn build_image(
 						// TODO: User https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L183
 
 						tokio::fs::write(
-							temp_dir.path().join("config.json"),
+							bundle_dir.path().join("config.json"),
 							serde_json::to_vec(&config)?,
 						)
 						.await?;
 					}
+
+					// Archive the bundle
+					let mut archive_cmd = Command::new("tar");
+					archive_cmd
+						.arg("-cf")
+						.arg(&build_tar_path)
+						.arg(bundle_dir.path());
+					let archive_status = archive_cmd.status().await?;
+					ensure!(archive_status.success(), "failed to archive oci bundle");
+				}
+			}
+
+			// Compress the bundle
+			let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
+			let build_tar_compressed_path = build_tar_compressed_file.into_temp_path();
+			match build_compression {
+				BuildCompression::None => {
+					tokio::fs::rename(&build_tar_path, &build_tar_compressed_path).await?;
+				}
+				BuildCompression::LZ4 => {
+                    let build_tar_path = build_tar_path.to_owned();
+                    let build_tar_compressed_path = build_tar_compressed_path.to_owned();
+					tokio::task::spawn_blocking(move || {
+						lz4::compress(&build_tar_path, &build_tar_compressed_path)
+					})
+					.await??;
 				}
 			}
 
@@ -632,7 +707,7 @@ pub async fn build_image(
 			let push_output = image::push_tar(
 				ctx,
 				&image::ImagePushTarOpts {
-					path: tmp_path.to_owned(),
+					path: build_tar_path.to_owned(),
 					tag: unique_image_tag,
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
