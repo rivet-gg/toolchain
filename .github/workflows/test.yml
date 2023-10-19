@@ -25,6 +25,7 @@ jobs:
       env:
         RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
         RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
+        RUST_BACKTRACE: full
       with:
         command: test
 
