@@ -6,9 +6,7 @@ use serde_json::json;
 use std::str::FromStr;
 use tabled::Tabled;
 use tempfile::TempDir;
-use tokio::{
-	process::Command,
-};
+use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
@@ -596,7 +594,7 @@ pub async fn build_image(
 					create_cmd
 						.arg("container")
 						.arg("create")
-                        .arg("--name")
+						.arg("--name")
 						.arg(&container_name)
 						.arg(&unique_image_tag);
 					cmd::execute_docker_cmd(create_cmd, "Docker failed to create container")
@@ -627,6 +625,10 @@ pub async fn build_image(
 						.arg(&unique_image_tag);
 					let inspect_output =
 						cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
+					println!(
+						"inspect: {}",
+						String::from_utf8_lossy(&inspect_output.stdout)
+					);
 
 					#[derive(Deserialize)]
 					#[serde(rename_all = "PascalCase")]
@@ -637,37 +639,150 @@ pub async fn build_image(
 					#[derive(Deserialize)]
 					#[serde(rename_all = "PascalCase")]
 					struct DockerImageConfig {
-						#[serde(default)]
-						cmd: Vec<String>,
-						#[serde(default)]
-						entrypoint: Vec<String>,
+						cmd: Option<Vec<String>>,
+						entrypoint: Option<Vec<String>>,
 						env: Vec<String>,
 						user: String,
 						#[serde(default)]
 						working_dir: String,
 					}
 
-					// Parse image output
+					// Convert Docker image to OCI bundle
+					//
+					// See umoci implementation: https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L183
 					{
+						// Parse image
 						let image =
 							serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
-						let image = image.first().context("no image")?;
+						let image = image.into_iter().next().context("no image")?;
 
+						// Read config
 						let mut config = serde_json::from_slice::<serde_json::Value>(
 							include_bytes!("../../static/config.json"),
 						)?;
+
+						// WORKDIR
+						//
+						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L144
 						if image.config.working_dir != "" {
 							config["process"]["cwd"] = json!(image.config.working_dir);
+						} else {
+							config["process"]["cwd"] = json!("/");
 						}
 
+						// ENV
+						//
+						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L149
 						config["process"]["env"] = json!(image.config.env);
 
-						config["process"]["args"] =
-							json!([image.config.entrypoint.clone(), image.config.cmd.clone()]
-								.concat());
+						// ENTRYPOINT + CMD
+						//
+						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L157
+						let args = std::iter::empty::<String>()
+							.chain(image.config.entrypoint.into_iter().flatten())
+							.chain(image.config.cmd.into_iter().flatten())
+							.collect::<Vec<_>>();
+						config["process"]["args"] = json!(args);
 
-						// TODO: User https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L183
+						// USER
+						//
+						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L174
+						//
+						// Moby passwd parser: https://github.com/moby/sys/blob/c0711cde08c8fa33857a2c28721659267f49b5e2/user/user.go
+						//
+						// If you're you're the guy at Docker who decided to reimplement passwd in Go for funzies, please reconsider next time.
+						{
+							// Parse user
+							let (user, group) =
+								if let Some((u, g)) = image.config.user.split_once(":") {
+									(u, Some(g))
+								} else {
+									(image.config.user.as_str(), None)
+								};
 
+							// Attempt to parse user to uid
+							let user_int = user.parse::<u32>().ok();
+							let group_int = group.and_then(|x| x.parse::<u32>().ok());
+
+							// Parse passwd file and find user
+							let users = crate::util::users::read_passwd_file(
+								&bundle_dir.path().join("rootfs/etc/passwd"),
+							)?;
+							let exec_user = users.iter().find(|x| {
+								user_int.map_or(false, |uid| x.uid == uid) || x.name == user
+							});
+
+							// Determine uid
+							let uid = if image.config.user.is_empty() {
+								0
+							} else if let Some(exec_user) = exec_user {
+								exec_user.uid
+							} else if let Some(uid) = user_int {
+								uid
+							} else {
+								term::status::warn("Cannot determine uid", format!("{} not in passwd file, please specify a raw uid like `USER 1000:1000`", image.config.user));
+								0
+							};
+
+							// Parse group file and find group
+							let groups = crate::util::users::read_group_file(
+								&bundle_dir.path().join("rootfs/etc/group"),
+							)?;
+							let exec_group = groups.iter().find(|x| {
+								if let Some(group) = group {
+									if let Some(gid) = group_int {
+										return x.gid == gid;
+									} else {
+										x.name == group
+									}
+								} else if let Some(exec_user) = &exec_user {
+									x.user_list.contains(&exec_user.name)
+								} else {
+									false
+								}
+							});
+
+							// Determine gid
+							let gid = if image.config.user.is_empty() {
+								0
+							} else if let Some(exec_group) = exec_group {
+								exec_group.gid
+							} else if let Some(gid) = group_int {
+								gid
+							} else {
+								term::status::warn("Cannot determine gid", format!("{} not in group file, please specify a raw uid & gid like `USER 1000:1000`", image.config.user));
+
+								0
+							};
+
+							// Validate not running as root
+							//
+							// See Kubernetes implementation https://github.com/kubernetes/kubernetes/blob/cea1d4e20b4a7886d8ff65f34c6d4f95efcb4742/pkg/kubelet/kuberuntime/security_context_others.go#L44C4-L44C4
+							if std::env::var("_RIVET_OCI_BUNDLE_ALLOW_ROOT")
+								.ok()
+								.map_or(false, |x| &x == "1")
+							{
+								if uid == 0 {
+									bail!("cannot run Docker container as root (i.e. uid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
+								}
+							}
+
+							// Specify user
+							config["process"]["user"]["uid"] = json!(uid);
+							config["process"]["user"]["gid"] = json!(gid);
+
+							// Add home if needed
+							if let Some(home) = exec_user.as_ref().map(|x| x.home.as_str()) {
+								if !home.is_empty() {
+									config["process"]["env"]
+										.as_array_mut()
+										.unwrap()
+										.push(json!(format!("HOME={home}")));
+								}
+							}
+						}
+
+						// Write config.json
 						tokio::fs::write(
 							bundle_dir.path().join("config.json"),
 							serde_json::to_vec(&config)?,
@@ -694,8 +809,8 @@ pub async fn build_image(
 					tokio::fs::rename(&build_tar_path, &build_tar_compressed_path).await?;
 				}
 				BuildCompression::LZ4 => {
-                    let build_tar_path = build_tar_path.to_owned();
-                    let build_tar_compressed_path = build_tar_compressed_path.to_owned();
+					let build_tar_path = build_tar_path.to_owned();
+					let build_tar_compressed_path = build_tar_compressed_path.to_owned();
 					tokio::task::spawn_blocking(move || {
 						lz4::compress(&build_tar_path, &build_tar_compressed_path)
 					})

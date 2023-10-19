@@ -10,7 +10,7 @@ async fn basic() {
 			.join("basic"),
 	)
 	.unwrap();
-	let _user_config = rivet::commands::version::read_user_config(
+	let _user_config = rivet_cli::commands::version::read_config(
 		vec![
 			("cdn.site_id".into(), json!("xxxx")),
 			("matchmaker.docker.image_id".into(), json!("xxxx")),
