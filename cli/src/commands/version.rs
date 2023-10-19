@@ -597,7 +597,7 @@ pub async fn build_image(
 						.arg("--name")
 						.arg(&container_name)
 						.arg(&unique_image_tag);
-					cmd::execute_docker_cmd(create_cmd, "Docker failed to create container")
+					cmd::execute_docker_cmd_silent(create_cmd, "Docker failed to create container")
 						.await?;
 
 					let mut cp_cmd = Command::new("docker");
@@ -607,8 +607,11 @@ pub async fn build_image(
 						.arg("--archive")
 						.arg(format!("{container_name}:/"))
 						.arg(bundle_dir.path().join("rootfs"));
-					cmd::execute_docker_cmd(cp_cmd, "Docker failed to copy files out of container")
-						.await?;
+					cmd::execute_docker_cmd_silent(
+						cp_cmd,
+						"Docker failed to copy files out of container",
+					)
+					.await?;
 
 					let mut rm_cmd = Command::new("docker");
 					rm_cmd
@@ -616,41 +619,37 @@ pub async fn build_image(
 						.arg("rm")
 						.arg("--force")
 						.arg(&container_name);
-					cmd::execute_docker_cmd(rm_cmd, "Docker failed to remove container").await?;
+					cmd::execute_docker_cmd_silent(rm_cmd, "Docker failed to remove container")
+						.await?;
 
-					let mut inspect_cmd = Command::new("docker");
 					inspect_cmd
 						.arg("image")
 						.arg("inspect")
 						.arg(&unique_image_tag);
 					let inspect_output =
 						cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
-					println!(
-						"inspect: {}",
-						String::from_utf8_lossy(&inspect_output.stdout)
-					);
-
-					#[derive(Deserialize)]
-					#[serde(rename_all = "PascalCase")]
-					struct DockerImage {
-						config: DockerImageConfig,
-					}
-
-					#[derive(Deserialize)]
-					#[serde(rename_all = "PascalCase")]
-					struct DockerImageConfig {
-						cmd: Option<Vec<String>>,
-						entrypoint: Option<Vec<String>>,
-						env: Vec<String>,
-						user: String,
-						#[serde(default)]
-						working_dir: String,
-					}
 
 					// Convert Docker image to OCI bundle
 					//
 					// See umoci implementation: https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L183
 					{
+						#[derive(Deserialize)]
+						#[serde(rename_all = "PascalCase")]
+						struct DockerImage {
+							config: DockerImageConfig,
+						}
+
+						#[derive(Deserialize)]
+						#[serde(rename_all = "PascalCase")]
+						struct DockerImageConfig {
+							cmd: Option<Vec<String>>,
+							entrypoint: Option<Vec<String>>,
+							env: Vec<String>,
+							user: String,
+							#[serde(default)]
+							working_dir: String,
+						}
+
 						// Parse image
 						let image =
 							serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
@@ -800,6 +799,15 @@ pub async fn build_image(
 					ensure!(archive_status.success(), "failed to archive oci bundle");
 				}
 			}
+
+			// Clean up image from the registry
+			let remove_img_cmd = Command::new("docker");
+			remove_img_cmd
+				.arg("image")
+				.arg("rm")
+				.arg("--force")
+				.arg(&unique_image_tag);
+			cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
 
 			// Compress the bundle
 			let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
