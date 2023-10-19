@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Run E2E cross-platform tests in GitHub Actions
+- Support for building OCI bundles
+- Support for LZ4 compression of builds
+- E2E cross-platform tests in GitHub Actions
 
 ### Changed
 
