@@ -252,9 +252,10 @@ async fn archive_oci_bundle(image_tag: &str) -> Result<tempfile::TempPath> {
 	let build_tar_path = tempfile::NamedTempFile::new()?.into_temp_path();
 	let mut archive_cmd = Command::new("tar");
 	archive_cmd
+		.current_dir(bundle_dir.path())
 		.arg("-cf")
 		.arg(&build_tar_path)
-		.arg(bundle_dir.path());
+		.arg(".");
 	cmd::error_for_output_failure(&archive_cmd.output().await?, "failed to archive oci bundle")?;
 
 	Ok(build_tar_path)
