@@ -1,110 +1,15 @@
-use anyhow::{bail, ensure, Context, Error, Result};
+use anyhow::{Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::models;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use serde_json::json;
-use std::str::FromStr;
 use tabled::Tabled;
-use tempfile::TempDir;
-use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{cmd, fmt, gen, lz4, struct_fmt, term},
+	util::{fmt, gen, struct_fmt, term},
 };
-
-/// Defines how Docker Build will be ran.
-#[derive(strum::EnumString)]
-enum DockerBuildMethod {
-	#[strum(serialize = "buildx")]
-	Buildx,
-
-	#[strum(serialize = "native")]
-	Native,
-}
-
-/// Defines what type of build to create.
-#[derive(strum::EnumString)]
-enum BuildKind {
-	#[strum(serialize = "docker-image")]
-	DockerImage,
-
-	#[strum(serialize = "oci-bundle")]
-	OciBundle,
-}
-
-/// Defines how to compress the output.
-#[derive(strum::EnumString)]
-enum BuildCompression {
-	#[strum(serialize = "none")]
-	None,
-
-	#[strum(serialize = "lz4")]
-	LZ4,
-}
-
-impl DockerBuildMethod {
-	async fn auto() -> Result<Self> {
-		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_DOCKER_BUILD_METHOD")
-			.ok()
-			.and_then(|x| DockerBuildMethod::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
-			// Validate that Buildx is installed
-			let mut buildx_version_cmd = Command::new("docker");
-			buildx_version_cmd.args(&["buildx", "version"]);
-			let buildx_version =
-				cmd::execute_docker_cmd_silent_failable(buildx_version_cmd).await?;
-
-			if buildx_version.status.success() {
-				Ok(DockerBuildMethod::Buildx)
-			} else {
-				println!("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
-				Ok(DockerBuildMethod::Native)
-			}
-		}
-	}
-}
-
-impl BuildKind {
-	async fn auto() -> Result<BuildKind> {
-		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_BUILD_KIND")
-			.ok()
-			.and_then(|x| BuildKind::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
-			Ok(BuildKind::OciBundle)
-		}
-	}
-}
-
-impl BuildCompression {
-	async fn auto(kind: &BuildKind) -> Result<BuildCompression> {
-		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_BUILD_COMPRESSION")
-			.ok()
-			.and_then(|x| BuildCompression::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
-			Ok(match kind {
-				BuildKind::DockerImage => BuildCompression::None,
-				BuildKind::OciBundle => BuildCompression::LZ4,
-			})
-		}
-	}
-}
-
-impl Default for DockerBuildMethod {
-	fn default() -> Self {
-		DockerBuildMethod::Buildx
-	}
-}
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -457,13 +362,13 @@ pub async fn build_config_dependencies(
 
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		if let Some(docker) = matchmaker.docker.as_mut() {
-			build_image(ctx, docker, format).await?;
+			build_and_push_image(ctx, docker, format).await?;
 		}
 
 		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
 			for (_, game_mode) in game_modes.iter_mut() {
 				if let Some(docker) = game_mode.docker.as_mut() {
-					build_image(ctx, docker, format).await?;
+					build_and_push_image(ctx, docker, format).await?;
 				}
 			}
 		}
@@ -471,372 +376,23 @@ pub async fn build_config_dependencies(
 
 	// Build CDN
 	if let Some(cdn) = version.cdn.as_mut() {
-		build_site(ctx, cdn, format).await?;
+		build_and_push_site(ctx, cdn, format).await?;
 	}
 
 	Ok(())
 }
 
-pub async fn build_image(
+pub async fn build_and_push_image(
 	ctx: &cli_core::Ctx,
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if docker.image_id.is_none() {
-		if let Some(dockerfile) = docker.dockerfile.as_ref() {
-			let build_method = DockerBuildMethod::auto().await?;
-			let build_kind = BuildKind::auto().await?;
-			let build_compression = BuildCompression::auto(&build_kind).await?;
-
-			eprintln!();
-			let buildx_info = match build_method {
-				DockerBuildMethod::Native => " (with native)",
-				DockerBuildMethod::Buildx => " (with buildx)",
-			};
-			term::status::info("Building Image", format!("{dockerfile}{buildx_info}"));
-
-			// Create temp path to write to
-			let build_tar_file = tempfile::NamedTempFile::new()?;
-			let build_tar_path = build_tar_file.into_temp_path();
-
-			// Build image
-			let unique_image_tag = format!("rivet-game:{}", Uuid::new_v4());
-			match build_method {
-				DockerBuildMethod::Native => {
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("build")
-						.arg("--file")
-						.arg(dockerfile)
-						.arg("--tag")
-						.arg(&unique_image_tag)
-						.arg("--platform")
-						.arg("linux/amd64")
-						.arg(".");
-					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
-				}
-				DockerBuildMethod::Buildx => {
-					let builder_name = "rivet_cli";
-
-					// Determine if needs to create a new builder
-					let mut inspect_cmd = Command::new("docker");
-					inspect_cmd.arg("buildx").arg("inspect").arg(builder_name);
-					let inspect_output =
-						cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
-
-					if !inspect_output.status.success()
-						&& String::from_utf8(inspect_output.stderr.clone())?
-							.contains(&format!("no builder \"{builder_name}\" found"))
-					{
-						// Create new builder
-						let mut build_cmd = Command::new("docker");
-						build_cmd
-							.arg("buildx")
-							.arg("create")
-							.arg("--name")
-							.arg(builder_name)
-							.arg("--driver")
-							.arg("docker-container")
-							.arg("--platform")
-							.arg("linux/amd64");
-						cmd::execute_docker_cmd(
-							build_cmd,
-							"Failed to create Docker Buildx builder",
-						)
-						.await?;
-					} else {
-						// Builder exists
-
-						cmd::error_for_output_failure(
-							&inspect_output,
-							"Failed to inspect Docker Buildx runner",
-						)?;
-					}
-
-					// Build image
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("buildx")
-						.arg("build")
-						.arg("--builder")
-						.arg(builder_name)
-						.arg("--platform")
-						.arg("linux/amd64")
-						.arg("--file")
-						.arg(dockerfile)
-						.arg("--tag")
-						.arg(&unique_image_tag)
-						.arg("--output")
-						.arg("type=docker")
-						.arg(".");
-					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
-				}
-			}
-
-			match build_kind {
-				BuildKind::DockerImage => {
-					// Save the Docker image to a TAR
-
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("save")
-						.arg("--output")
-						.arg(&build_tar_path)
-						.arg(&unique_image_tag);
-					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
-				}
-				BuildKind::OciBundle => {
-					// Convert the Docker image to an OCI bundle
-
-					let bundle_dir = TempDir::new()?;
-
-					let container_name = format!("rivet-game-{}", Uuid::new_v4());
-
-					let mut create_cmd = Command::new("docker");
-					create_cmd
-						.arg("container")
-						.arg("create")
-						.arg("--name")
-						.arg(&container_name)
-						.arg(&unique_image_tag);
-					cmd::execute_docker_cmd_silent(create_cmd, "Docker failed to create container")
-						.await?;
-
-					let mut cp_cmd = Command::new("docker");
-					cp_cmd
-						.arg("container")
-						.arg("cp")
-						.arg("--archive")
-						.arg(format!("{container_name}:/"))
-						.arg(bundle_dir.path().join("rootfs"));
-					cmd::execute_docker_cmd_silent(
-						cp_cmd,
-						"Docker failed to copy files out of container",
-					)
-					.await?;
-
-					let mut rm_cmd = Command::new("docker");
-					rm_cmd
-						.arg("container")
-						.arg("rm")
-						.arg("--force")
-						.arg(&container_name);
-					cmd::execute_docker_cmd_silent(rm_cmd, "Docker failed to remove container")
-						.await?;
-
-					let mut inspect_cmd = Command::new("docker");
-					inspect_cmd
-						.arg("image")
-						.arg("inspect")
-						.arg(&unique_image_tag);
-					let inspect_output =
-						cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
-
-					// Convert Docker image to OCI bundle
-					//
-					// See umoci implementation: https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L183
-					{
-						#[derive(Deserialize)]
-						#[serde(rename_all = "PascalCase")]
-						struct DockerImage {
-							config: DockerImageConfig,
-						}
-
-						#[derive(Deserialize)]
-						#[serde(rename_all = "PascalCase")]
-						struct DockerImageConfig {
-							cmd: Option<Vec<String>>,
-							entrypoint: Option<Vec<String>>,
-							env: Vec<String>,
-							user: String,
-							#[serde(default)]
-							working_dir: String,
-						}
-
-						// Parse image
-						let image =
-							serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
-						let image = image.into_iter().next().context("no image")?;
-
-						// Read config
-						let mut config = serde_json::from_slice::<serde_json::Value>(
-							include_bytes!("../../static/config.json"),
-						)?;
-
-						// WORKDIR
-						//
-						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L144
-						if image.config.working_dir != "" {
-							config["process"]["cwd"] = json!(image.config.working_dir);
-						} else {
-							config["process"]["cwd"] = json!("/");
-						}
-
-						// ENV
-						//
-						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L149
-						config["process"]["env"] = json!(image.config.env);
-
-						// ENTRYPOINT + CMD
-						//
-						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L157
-						let args = std::iter::empty::<String>()
-							.chain(image.config.entrypoint.into_iter().flatten())
-							.chain(image.config.cmd.into_iter().flatten())
-							.collect::<Vec<_>>();
-						config["process"]["args"] = json!(args);
-
-						// USER
-						//
-						// https://github.com/opencontainers/umoci/blob/312b2db3028f823443d6a74d86b05f65701b0d0e/oci/config/convert/runtime.go#L174
-						//
-						// Moby passwd parser: https://github.com/moby/sys/blob/c0711cde08c8fa33857a2c28721659267f49b5e2/user/user.go
-						//
-						// If you're you're the guy at Docker who decided to reimplement passwd in Go for funzies, please reconsider next time.
-						{
-							// Parse user
-							let (user, group) =
-								if let Some((u, g)) = image.config.user.split_once(":") {
-									(u, Some(g))
-								} else {
-									(image.config.user.as_str(), None)
-								};
-
-							// Attempt to parse user to uid
-							let user_int = user.parse::<u32>().ok();
-							let group_int = group.and_then(|x| x.parse::<u32>().ok());
-
-							// Parse passwd file and find user
-							let users = crate::util::users::read_passwd_file(
-								&bundle_dir.path().join("rootfs/etc/passwd"),
-							)?;
-							let exec_user = users.iter().find(|x| {
-								user_int.map_or(false, |uid| x.uid == uid) || x.name == user
-							});
-
-							// Determine uid
-							let uid = if image.config.user.is_empty() {
-								0
-							} else if let Some(exec_user) = exec_user {
-								exec_user.uid
-							} else if let Some(uid) = user_int {
-								uid
-							} else {
-								term::status::warn("Cannot determine uid", format!("{} not in passwd file, please specify a raw uid like `USER 1000:1000`", image.config.user));
-								0
-							};
-
-							// Parse group file and find group
-							let groups = crate::util::users::read_group_file(
-								&bundle_dir.path().join("rootfs/etc/group"),
-							)?;
-							let exec_group = groups.iter().find(|x| {
-								if let Some(group) = group {
-									if let Some(gid) = group_int {
-										return x.gid == gid;
-									} else {
-										x.name == group
-									}
-								} else if let Some(exec_user) = &exec_user {
-									x.user_list.contains(&exec_user.name)
-								} else {
-									false
-								}
-							});
-
-							// Determine gid
-							let gid = if image.config.user.is_empty() {
-								0
-							} else if let Some(exec_group) = exec_group {
-								exec_group.gid
-							} else if let Some(gid) = group_int {
-								gid
-							} else {
-								term::status::warn("Cannot determine gid", format!("{} not in group file, please specify a raw uid & gid like `USER 1000:1000`", image.config.user));
-
-								0
-							};
-
-							// Validate not running as root
-							//
-							// See Kubernetes implementation https://github.com/kubernetes/kubernetes/blob/cea1d4e20b4a7886d8ff65f34c6d4f95efcb4742/pkg/kubelet/kuberuntime/security_context_others.go#L44C4-L44C4
-							if std::env::var("_RIVET_OCI_BUNDLE_ALLOW_ROOT")
-								.ok()
-								.map_or(false, |x| &x == "1")
-							{
-								if uid == 0 {
-									bail!("cannot run Docker container as root (i.e. uid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
-								}
-							}
-
-							// Specify user
-							config["process"]["user"]["uid"] = json!(uid);
-							config["process"]["user"]["gid"] = json!(gid);
-
-							// Add home if needed
-							if let Some(home) = exec_user.as_ref().map(|x| x.home.as_str()) {
-								if !home.is_empty() {
-									config["process"]["env"]
-										.as_array_mut()
-										.unwrap()
-										.push(json!(format!("HOME={home}")));
-								}
-							}
-						}
-
-						// Write config.json
-						tokio::fs::write(
-							bundle_dir.path().join("config.json"),
-							serde_json::to_vec(&config)?,
-						)
-						.await?;
-					}
-
-					// Archive the bundle
-					let mut archive_cmd = Command::new("tar");
-					archive_cmd
-						.arg("-cf")
-						.arg(&build_tar_path)
-						.arg(bundle_dir.path());
-					cmd::error_for_output_failure(
-						&archive_cmd.output().await?,
-						"failed to archive oci bundle",
-					)?;
-				}
-			}
-
-			// Clean up image from the registry
-			let mut remove_img_cmd = Command::new("docker");
-			remove_img_cmd
-				.arg("image")
-				.arg("rm")
-				.arg("--force")
-				.arg(&unique_image_tag);
-			cmd::execute_docker_cmd_silent_failable(remove_img_cmd).await?;
-
-			// Compress the bundle
-			let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
-			let build_tar_compressed_path = build_tar_compressed_file.into_temp_path();
-			match build_compression {
-				BuildCompression::None => {
-					tokio::fs::rename(&build_tar_path, &build_tar_compressed_path).await?;
-				}
-				BuildCompression::LZ4 => {
-					let build_tar_path = build_tar_path.to_owned();
-					let build_tar_compressed_path = build_tar_compressed_path.to_owned();
-					tokio::task::spawn_blocking(move || {
-						lz4::compress(&build_tar_path, &build_tar_compressed_path)
-					})
-					.await??;
-				}
-			}
-
-			// Upload build
-			let push_output = image::push_tar(
+		if let Some(dockerfile) = &docker.dockerfile {
+			let push_output = image::build_and_push(
 				ctx,
-				&image::ImagePushTarOpts {
-					path: build_tar_path.to_owned(),
-					tag: unique_image_tag,
+				&image::BuildPushOpts {
+					dockerfile: dockerfile.clone(),
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
 				},
@@ -844,10 +400,9 @@ pub async fn build_image(
 			.await?;
 			docker.image_id = Some(push_output.image_id);
 		} else if let Some(docker_image) = docker.image.as_ref() {
-			// Upload build
-			let push_output = image::push_tag(
+			let push_output = image::push(
 				ctx,
-				&image::ImagePushTagOpts {
+				&image::PushOpts {
 					tag: docker_image.clone(),
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
@@ -860,54 +415,37 @@ pub async fn build_image(
 
 	Ok(())
 }
-
-pub async fn build_site(
+pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if cdn.site_id.is_none() {
-		if let Some(build_output) = cdn.build_output.as_ref() {
-			if let Some(build_command) = cdn.build_command.as_ref() {
-				eprintln!();
-				term::status::info("Building Site", build_command);
-
-				if cfg!(unix) {
-					let mut build_cmd = Command::new("/bin/sh");
-					build_cmd
-						.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
-						// Ensure we don't accidentally expose the token to a public build
-						.env_remove("RIVET_TOKEN")
-						.arg("-c")
-						.arg(build_command);
-					let build_status = build_cmd.status().await?;
-					ensure!(build_status.success(), "site failed to build");
-				} else if cfg!(windows) {
-					let mut build_cmd = Command::new("cmd.exe");
-					build_cmd
-						.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
-						// Ensure we don't accidentally expose the token to a public build
-						.env_remove("RIVET_TOKEN")
-						.arg("/C")
-						.arg(build_command);
-					let build_status = build_cmd.status().await?;
-					ensure!(build_status.success(), "site failed to build");
-				} else {
-					bail!("unknown machine type, expected unix or windows")
-				};
+		if let Some(build_output) = &cdn.build_output {
+			if let Some(build_command) = &cdn.build_command {
+				let push_output = site::build_and_push(
+					ctx,
+					&site::BuildPushOpts {
+						command: build_command.clone(),
+						path: build_output.clone(),
+						name: Some(gen::display_name_from_date()),
+						format: format.cloned(),
+					},
+				)
+				.await?;
+				cdn.site_id = Some(push_output.site_id);
+			} else {
+				let push_output = site::push(
+					ctx,
+					&site::PushOpts {
+						path: build_output.clone(),
+						name: Some(gen::display_name_from_date()),
+						format: format.cloned(),
+					},
+				)
+				.await?;
+				cdn.site_id = Some(push_output.site_id);
 			}
-
-			// Upload site
-			let push_output = site::push(
-				ctx,
-				&site::SitePushOpts {
-					path: build_output.clone(),
-					name: Some(gen::display_name_from_date()),
-					format: format.cloned(),
-				},
-			)
-			.await?;
-			cdn.site_id = Some(push_output.site_id);
 		}
 	}
 
@@ -1045,7 +583,7 @@ pub async fn build_and_push_compat(
 		Some(
 			site::push(
 				ctx,
-				&site::SitePushOpts {
+				&site::PushOpts {
 					path: site_path.clone(),
 					name: site_name.clone(),
 					format: format.clone(),
@@ -1059,9 +597,9 @@ pub async fn build_and_push_compat(
 
 	let build_output = if let Some(build_tag) = build_tag {
 		Some(
-			image::push_tag(
+			image::push(
 				ctx,
-				&image::ImagePushTagOpts {
+				&image::PushOpts {
 					tag: build_tag.clone(),
 					name: build_name.clone(),
 					format: format.clone(),

@@ -11,6 +11,8 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CloudGamesCreateGameBuildRequest {
+	#[serde(rename = "compression", skip_serializing_if = "Option::is_none")]
+	pub compression: Option<crate::models::CloudGamesBuildCompression>,
 	/// Represent a resource's readable display name.
 	#[serde(rename = "display_name")]
 	pub display_name: String,
@@ -19,6 +21,8 @@ pub struct CloudGamesCreateGameBuildRequest {
 	/// A tag given to the game build.
 	#[serde(rename = "image_tag")]
 	pub image_tag: String,
+	#[serde(rename = "kind", skip_serializing_if = "Option::is_none")]
+	pub kind: Option<crate::models::CloudGamesBuildKind>,
 	#[serde(rename = "multipart_upload", skip_serializing_if = "Option::is_none")]
 	pub multipart_upload: Option<bool>,
 }
@@ -30,9 +34,11 @@ impl CloudGamesCreateGameBuildRequest {
 		image_tag: String,
 	) -> CloudGamesCreateGameBuildRequest {
 		CloudGamesCreateGameBuildRequest {
+			compression: None,
 			display_name,
 			image_file: Box::new(image_file),
 			image_tag,
+			kind: None,
 			multipart_upload: None,
 		}
 	}
