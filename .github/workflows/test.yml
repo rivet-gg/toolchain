@@ -35,12 +35,13 @@ jobs:
       - name: Switch to Linux Containers
         if: startsWith(matrix.os, 'windows-')
         run: |
-          Uninstall-Package -Name docker -ProviderName DockerMSFTProvider -Force
           Get-VM WinContainerHost | Set-VMProcessor -ExposeVirtualizationExtensions $true
           Install-Module DockerProvider -Force
           Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview -Force
           [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
           Restart-Service docker
+          Get-ChildItem "C:\Program Files\"
+          Get-ChildItem "C:\Program Files\Docker"
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
