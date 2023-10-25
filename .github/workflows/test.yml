@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Install Homebrew
         if: startsWith(matrix.os, 'macos-')
         run: |
@@ -32,15 +35,14 @@ jobs:
           brew install docker
           colima start
 
-      - name: Switch to Linux Containers
-        if: startsWith(matrix.os, 'windows-')
-        run: |
-          Install-Module DockerProvider -Force
-          Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview -Force
-          [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
-          Restart-Service docker
-          Get-ChildItem "C:\Program Files\"
-          Get-ChildItem "C:\Program Files\Docker"
+      # - name: Switch to Linux Containers
+      #   if: startsWith(matrix.os, 'windows-')
+      #   run: |
+      #     Install-Module DockerProvider -Force
+      #     Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview -Force
+      #     [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
+      #     Restart-Service docker
+      #     Get-ChildItem "C:\Program Files\Docker"
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
@@ -60,11 +62,20 @@ jobs:
           profile: minimal
           override: true
 
-      - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        env:
-          RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
-          RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
-          RUST_BACKTRACE: 1
-        with:
-          command: test
+      # - name: Run cargo test
+      #   uses: actions-rs/cargo@v1
+      #   env:
+      #     RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
+      #     RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
+      #     RUST_BACKTRACE: 1
+      #   with:
+      #     command: test
+      - name: Test 2
+        run: >-
+          docker run
+          --name cargo_test
+          --rm
+          --workdir ${{ matrix.workdir }}
+          -v ${{ github.workspace }}:${{ matrix.workdir }}
+          ${{ matrix.container }}
+          cargo test
