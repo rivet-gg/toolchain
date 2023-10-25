@@ -35,7 +35,7 @@ jobs:
       - name: Switch to Windows Containers
         if: startsWith(matrix.os, 'windows-')
         run: |
-          "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchWindowsEngine
+          Start-Process -FilePath "C:\Program Files\Docker\Docker\DockerCli.exe" -ArgumentList "-SwitchWindowsEngine"
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
