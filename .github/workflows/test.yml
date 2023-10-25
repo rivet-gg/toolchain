@@ -32,10 +32,13 @@ jobs:
           brew install docker
           colima start
 
-      - name: Switch to Windows Containers
+      - name: Switch to Linux Containers
         if: startsWith(matrix.os, 'windows-')
         run: |
-          docker -SwitchWindowsEngine
+          Install-Module DockerProvider
+          Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview
+          [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
+          Restart-Service docker
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
