@@ -35,8 +35,8 @@ jobs:
       - name: test
         if: startsWith(matrix.os, 'windows-')
         run: |
+          Get-ChildItem C:\Windows\system32\
           Get-Command docker
-          Get-Command docker-cli
           Get-Command dockercli
 
       - name: Switch to Windows Containers
