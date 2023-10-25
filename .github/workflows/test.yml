@@ -63,20 +63,11 @@ jobs:
           profile: minimal
           override: true
 
-      # - name: Run cargo test
-      #   uses: actions-rs/cargo@v1
-      #   env:
-      #     RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
-      #     RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
-      #     RUST_BACKTRACE: 1
-      #   with:
-      #     command: test
-      - name: Test 2
-        run: >-
-          docker run
-          --name cargo_test
-          --rm
-          --workdir ${{ matrix.dir }}
-          -v ${{ github.workspace }}:${{ matrix.dir }}
-          ${{ matrix.container }}
-          cargo test
+      - name: Run cargo test
+        uses: actions-rs/cargo@v1
+        env:
+          RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
+          RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
+          RUST_BACKTRACE: 1
+        with:
+          command: test
