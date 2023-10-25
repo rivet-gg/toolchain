@@ -35,7 +35,7 @@ jobs:
       - name: Switch to Linux Containers
         if: startsWith(matrix.os, 'windows-')
         run: |
-          Install-Module DockerProvider
+          Install-Module DockerProvider -Force
           Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview
           [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
           Restart-Service docker
