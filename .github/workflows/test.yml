@@ -32,10 +32,15 @@ jobs:
           brew install docker
           colima start
 
+      - name: test
+        if: startsWith(matrix.os, 'windows-')
+        run: |
+          Get-ChildItem "C:\Program Files\Docker\Docker\"
+
       - name: Switch to Windows Containers
         if: startsWith(matrix.os, 'windows-')
         run: |
-          Start-Process -FilePath "C:\Program Files\Docker\Docker\DockerCli.exe" -ArgumentList "-SwitchWindowsEngine"
+          Start-Process -FilePath "C:\Program Files\Docker\Docker\Docker.exe" -ArgumentList "-SwitchWindowsEngine"
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
