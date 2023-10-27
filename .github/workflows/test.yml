@@ -23,7 +23,7 @@ jobs:
         if: contains(matrix.os, 'windows')
         run: |
           Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
-          Add-Content $env:GITHUB_PATH " C:\Strawberry\c\bin"
+          Add-Content $env:GITHUB_PATH "C:\Strawberry\c\bin"
           Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\site\bin"
           Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
           Add-Content $env:GITHUB_PATH "C:\Program Files\Git\cmd"
