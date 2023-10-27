@@ -48,19 +48,24 @@ jobs:
         if: contains(matrix.os, 'windows')
         run: |
           Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
+          Add-Content $env:GITHUB_PATH " C:\Strawberry\c\bin"
+          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\site\bin"
+          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
 
-      # - name: Test 2
-      #   if: contains(matrix.os, 'windows')
-      #   run: |
-      #     $env:PATH
-      #     $env:GITHUB_PATH
-      #     rustup
-
-      - name: Install Rust
+      - name: Install Rust (Windows)
         uses: actions-rs/toolchain@v1
+        if: contains(matrix.os, 'windows')
         env:
           RUSTUP_HOME: C:\Rust\.rustup
           CARGO_HOME: C:\Rust\.cargo
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        if: '!contains(matrix.os, "windows")'
         with:
           toolchain: stable
           profile: minimal
