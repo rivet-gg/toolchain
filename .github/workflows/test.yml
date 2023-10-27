@@ -43,9 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Install Homebrew
+      - name: Test
         if: contains(matrix.os, 'windows')
         run: |
+          [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+          echo "C:\Users\Administrator\.cargo\bin" >> $env:GITHUB_PATH
           $env:path
 
       - name: Install Rust
