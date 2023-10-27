@@ -47,7 +47,7 @@ jobs:
       - name: Update env
         if: contains(matrix.os, 'windows')
         run: |
-          Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
+          $env:PATH
 
       # - name: Test 2
       #   if: contains(matrix.os, 'windows')
@@ -59,8 +59,8 @@ jobs:
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         env:
-          RUSTUP_HOME: C:\Rust\rustup
-          CARGO_HOME: C:\Rust\cargo
+          RUSTUP_HOME: C:\Rust\.rustup
+          CARGO_HOME: C:\Rust\.cargo
         with:
           toolchain: stable
           profile: minimal
