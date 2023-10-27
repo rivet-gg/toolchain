@@ -49,7 +49,6 @@ jobs:
           $env:PATH
           Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
           $env:GITHUB_PATH
-          C:\Rust\.cargo\bin\rustup.exe
 
       - name: Test 2
         if: contains(matrix.os, 'windows')
