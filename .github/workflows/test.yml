@@ -18,7 +18,17 @@ jobs:
       matrix:
         os: [ubuntu-22.04, [windows, self-hosted], macos-12]
     steps:
-      - uses: actions/checkout@v4
+      # Needs to be done before checkout because of git
+      - name: Update env
+        if: contains(matrix.os, 'windows')
+        run: |
+          Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
+          Add-Content $env:GITHUB_PATH " C:\Strawberry\c\bin"
+          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\site\bin"
+          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
+          Add-Content $env:GITHUB_PATH "C:\Program Files\Git\cmd"
+
+      - uses: actions/checkout@v2
 
       - name: Install Homebrew
         if: startsWith(matrix.os, 'macos-')
@@ -42,16 +52,6 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
-
-      # We use a globally installed version of Rust
-      - name: Update env
-        if: contains(matrix.os, 'windows')
-        run: |
-          Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
-          Add-Content $env:GITHUB_PATH " C:\Strawberry\c\bin"
-          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\site\bin"
-          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
-          Add-Content $env:GITHUB_PATH "C:\Program Files\Git\cmd"
 
       - name: Install Rust (Windows)
         uses: actions-rs/toolchain@v1
