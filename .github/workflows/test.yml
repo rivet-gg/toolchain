@@ -18,7 +18,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, [windows, self-hosted], macos-12]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install Homebrew
         if: startsWith(matrix.os, 'macos-')
@@ -51,6 +51,7 @@ jobs:
           Add-Content $env:GITHUB_PATH " C:\Strawberry\c\bin"
           Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\site\bin"
           Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
+          Add-Content $env:GITHUB_PATH "C:\Program Files\Git\cmd"
 
       - name: Install Rust (Windows)
         uses: actions-rs/toolchain@v1
@@ -78,5 +79,6 @@ jobs:
           RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
           RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
           RUST_BACKTRACE: 1
+          CARGO_PROFILE_TEST_BUILD_OVERRIDE_DEBUG: true
         with:
           command: test
