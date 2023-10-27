@@ -48,8 +48,14 @@ jobs:
         run: |
           $env:PATH
           Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
+          $env:GITHUB_PATH
           C:\Rust\.cargo\bin\rustup.exe
-          rustup
+
+      - name: Test 2
+        if: contains(matrix.os, 'windows')
+        run: |
+          $env:PATH
+          $env:GITHUB_PATH
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
