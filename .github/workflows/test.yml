@@ -43,21 +43,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Test
+      # We use a globally installed version of Rust
+      - name: Update env
         if: contains(matrix.os, 'windows')
         run: |
-          $env:PATH
           Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
-          $env:GITHUB_PATH
 
-      - name: Test 2
-        if: contains(matrix.os, 'windows')
-        run: |
-          $env:PATH
-          $env:GITHUB_PATH
+      # - name: Test 2
+      #   if: contains(matrix.os, 'windows')
+      #   run: |
+      #     $env:PATH
+      #     $env:GITHUB_PATH
+      #     rustup
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
+        env:
+          RUSTUP_HOME: C:\Rust\rustup
+          CARGO_HOME: C:\Rust\cargo
         with:
           toolchain: stable
           profile: minimal
