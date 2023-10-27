@@ -47,7 +47,7 @@ jobs:
       - name: Update env
         if: contains(matrix.os, 'windows')
         run: |
-          $env:PATH
+          Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
 
       # - name: Test 2
       #   if: contains(matrix.os, 'windows')
