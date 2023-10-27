@@ -46,10 +46,10 @@ jobs:
       - name: Test
         if: contains(matrix.os, 'windows')
         run: |
-          [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-          $env:USERNAME
-          Add-Content $env:GITHUB_PATH "C:\Users\Administrator\.cargo\bin"
-          $env:path
+          $env:PATH
+          Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
+          C:\Rust\.cargo\bin\rustup.exe
+          rustup
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
