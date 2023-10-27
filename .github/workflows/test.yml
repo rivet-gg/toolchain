@@ -18,7 +18,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, [windows, self-hosted], macos-12]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install Homebrew
         if: startsWith(matrix.os, 'macos-')
