@@ -28,10 +28,10 @@ jobs:
           Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
           Add-Content $env:GITHUB_PATH "C:\Program Files\Git\cmd"
 
-      - name: Fix git file issues
-        if: contains(matrix.os, 'windows')
-        run: |
-          git config --global --add safe.directory C:/actions-runner/_work/cli/cli
+      # - name: Fix git file issues
+      #   if: contains(matrix.os, 'windows')
+      #   run: |
+      #     git config --global --add safe.directory C:/actions-runner/_work/cli/cli
 
       - uses: actions/checkout@v2
 
