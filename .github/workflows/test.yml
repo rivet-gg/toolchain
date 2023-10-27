@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-2022, macos-12]
+        os: [ubuntu-22.04, [windows, self-hosted], macos-12]
     steps:
       - uses: actions/checkout@v2
 
@@ -31,15 +31,6 @@ jobs:
         run: |
           brew install docker
           colima start
-
-      # - name: Switch to Linux Containers
-      #   if: startsWith(matrix.os, 'windows-')
-      #   run: |
-      #     Install-Module DockerProvider -Force
-      #     Install-Package Docker -ProviderName DockerProvider -RequiredVersion preview -Force
-      #     [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
-      #     Restart-Service docker
-      #     Get-ChildItem "C:\Program Files\Docker"
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
