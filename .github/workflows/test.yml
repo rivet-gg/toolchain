@@ -43,6 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
+      - name: Install Homebrew
+        if: contains(matrix.os, 'windows')
+        run: |
+          $env:path
+
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
