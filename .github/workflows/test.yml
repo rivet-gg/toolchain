@@ -65,7 +65,8 @@ jobs:
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
-        if: '!contains(matrix.os, "windows")'
+        if: |
+          !contains(matrix.os, 'windows')
         with:
           toolchain: stable
           profile: minimal
