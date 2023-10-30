@@ -16,23 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, [windows, self-hosted], macos-12]
+        os: [ubuntu-22.04, macos-12]
     steps:
-      # Needs to be done before checkout because of git
-      - name: Update env
-        if: contains(matrix.os, 'windows')
-        run: |
-          Add-Content $env:GITHUB_PATH "C:\Rust\.cargo\bin"
-          Add-Content $env:GITHUB_PATH "C:\Strawberry\c\bin"
-          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\site\bin"
-          Add-Content $env:GITHUB_PATH "C:\Strawberry\perl\bin"
-          Add-Content $env:GITHUB_PATH "C:\Program Files\Git\cmd"
-
-      # - name: Fix git file issues
-      #   if: contains(matrix.os, 'windows')
-      #   run: |
-      #     git config --global --add safe.directory C:/actions-runner/_work/cli/cli
-
       - uses: actions/checkout@v4
 
       - name: Install Homebrew
@@ -58,21 +43,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Install Rust (Windows)
-        uses: actions-rs/toolchain@v1
-        if: contains(matrix.os, 'windows')
-        env:
-          RUSTUP_HOME: C:\Rust\.rustup
-          CARGO_HOME: C:\Rust\.cargo
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-
       - name: Install Rust
         uses: actions-rs/toolchain@v1
-        if: |
-          !contains(matrix.os, 'windows')
         with:
           toolchain: stable
           profile: minimal
@@ -85,6 +57,5 @@ jobs:
           RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
           RUST_BACKTRACE: 1
           CARGO_PROFILE_TEST_BUILD_OVERRIDE_DEBUG: true
-          DOCKER_HOST: tcp://localhost:2376
         with:
           command: test
