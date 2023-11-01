@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `RIVET_CLOUD_TOKEN` environment variable to `RIVET_TOKEN`
 - Rename `--cloud-token` flag to `--token`
 - Removed `RIVET_API_CLOUD_URL` in favor of `RIVET_API_ENDPOINT`
+- Implemented multipart uploads for builds and sites (**breaking change**)
 
 ## [v0.1.2] - 2023-08-26
 
