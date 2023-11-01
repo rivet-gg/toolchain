@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`auth_identity_complete_email_verification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum AuthIdentityCompleteEmailVerificationError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum AuthIdentityCompleteEmailVerificationError {
 
 /// struct for typed errors of method [`auth_identity_start_email_verification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum AuthIdentityStartEmailVerificationError {
 	Status400(crate::models::ErrorBody),

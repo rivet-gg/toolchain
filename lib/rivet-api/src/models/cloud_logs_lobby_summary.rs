@@ -11,7 +11,6 @@
 /// CloudLogsLobbySummary : A logs summary for a lobby.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudLogsLobbySummary {
 	/// RFC3339 timestamp.
 	#[serde(rename = "create_ts")]

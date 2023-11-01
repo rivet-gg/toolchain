@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_matchmaker_delete_matchmaker_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerDeleteMatchmakerLobbyError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesMatchmakerDeleteMatchmakerLobbyError {
 
 /// struct for typed errors of method [`cloud_games_matchmaker_export_lobby_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerExportLobbyLogsError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum CloudGamesMatchmakerExportLobbyLogsError {
 
 /// struct for typed errors of method [`cloud_games_matchmaker_export_matchmaker_lobby_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerExportMatchmakerLobbyHistoryError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum CloudGamesMatchmakerExportMatchmakerLobbyHistoryError {
 
 /// struct for typed errors of method [`cloud_games_matchmaker_get_lobby_logs`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesMatchmakerGetLobbyLogsError {
 	Status400(crate::models::ErrorBody),

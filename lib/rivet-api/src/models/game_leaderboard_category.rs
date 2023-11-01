@@ -11,7 +11,6 @@
 /// GameLeaderboardCategory : A game leaderboard category.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GameLeaderboardCategory {
 	/// Represent a resource's readable display name.
 	#[serde(rename = "display_name")]

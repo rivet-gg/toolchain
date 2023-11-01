@@ -11,7 +11,6 @@
 /// GroupProfile : A list of group profiles.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupProfile {
 	/// The URL of this group's avatar image.
 	#[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]

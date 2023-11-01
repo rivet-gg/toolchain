@@ -11,7 +11,6 @@
 /// MatchmakerGameModeInfo : A game mode that the player can join.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerGameModeInfo {
 	/// A human readable short identifier used to references resources. Different than a `uuid` because this is intended to be human readable. Different than `DisplayName` because this should not include special characters and be short.
 	#[serde(rename = "game_mode_id")]

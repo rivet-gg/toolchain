@@ -11,7 +11,6 @@
 /// ChatSendMessageBody : Data to send in a chat message.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatSendMessageBody {
 	#[serde(rename = "text", skip_serializing_if = "Option::is_none")]
 	pub text: Option<Box<crate::models::ChatSendMessageBodyText>>,

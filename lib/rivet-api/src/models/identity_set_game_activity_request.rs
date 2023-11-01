@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentitySetGameActivityRequest {
 	#[serde(rename = "game_activity")]
 	pub game_activity: Box<crate::models::IdentityUpdateGameActivity>,

@@ -11,7 +11,6 @@
 /// KvEntry : A key-value entry.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct KvEntry {
 	#[serde(rename = "deleted", skip_serializing_if = "Option::is_none")]
 	pub deleted: Option<bool>,

@@ -11,7 +11,6 @@
 /// CloudMatchmakerDevelopmentPort : A port configuration used to create development tokens.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudMatchmakerDevelopmentPort {
 	#[serde(rename = "port", skip_serializing_if = "Option::is_none")]
 	pub port: Option<i32>,

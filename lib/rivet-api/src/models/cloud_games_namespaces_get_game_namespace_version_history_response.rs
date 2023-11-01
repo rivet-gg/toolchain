@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesGetGameNamespaceVersionHistoryResponse {
 	/// A list of previously deployed namespace versions.
 	#[serde(rename = "versions")]

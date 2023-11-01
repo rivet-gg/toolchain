@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupCreateResponse {
 	#[serde(rename = "group_id")]
 	pub group_id: uuid::Uuid,

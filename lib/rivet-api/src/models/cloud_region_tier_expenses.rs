@@ -11,7 +11,6 @@
 /// CloudRegionTierExpenses : Region tier expenses.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudRegionTierExpenses {
 	/// Amount of expenses for this region tier (in hundred-thousandths USD, 100,000 = $1.00).
 	#[serde(rename = "expenses")]

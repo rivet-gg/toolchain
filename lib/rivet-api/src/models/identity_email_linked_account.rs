@@ -11,7 +11,6 @@
 /// IdentityEmailLinkedAccount : An identity's linked email.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityEmailLinkedAccount {
 	/// A valid email address
 	#[serde(rename = "email")]

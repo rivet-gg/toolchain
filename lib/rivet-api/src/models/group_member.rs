@@ -11,7 +11,6 @@
 /// GroupMember : A group member.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupMember {
 	#[serde(rename = "identity")]
 	pub identity: Box<crate::models::IdentityHandle>,

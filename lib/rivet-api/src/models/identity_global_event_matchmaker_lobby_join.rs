@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventMatchmakerLobbyJoin {
 	#[serde(rename = "lobby")]
 	pub lobby: Box<crate::models::MatchmakerJoinLobby>,

@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`chat_identity_get_direct_thread`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatIdentityGetDirectThreadError {
 	Status400(crate::models::ErrorBody),

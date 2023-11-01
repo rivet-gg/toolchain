@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesCreateCloudTokenResponse {
 	/// A JSON Web Token. Slightly modified to include a description prefix and use Protobufs of JSON.
 	#[serde(rename = "token")]

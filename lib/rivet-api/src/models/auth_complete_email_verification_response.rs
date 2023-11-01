@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct AuthCompleteEmailVerificationResponse {
 	#[serde(rename = "status")]
 	pub status: crate::models::AuthCompleteStatus,

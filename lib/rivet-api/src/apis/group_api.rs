@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`group_ban_identity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupBanIdentityError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum GroupBanIdentityError {
 
 /// struct for typed errors of method [`group_complete_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupCompleteAvatarUploadError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum GroupCompleteAvatarUploadError {
 
 /// struct for typed errors of method [`group_create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupCreateError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum GroupCreateError {
 
 /// struct for typed errors of method [`group_get_bans`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetBansError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum GroupGetBansError {
 
 /// struct for typed errors of method [`group_get_join_requests`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetJoinRequestsError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum GroupGetJoinRequestsError {
 
 /// struct for typed errors of method [`group_get_members`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetMembersError {
 	Status400(crate::models::ErrorBody),
@@ -99,7 +93,6 @@ pub enum GroupGetMembersError {
 
 /// struct for typed errors of method [`group_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetProfileError {
 	Status400(crate::models::ErrorBody),
@@ -113,7 +106,6 @@ pub enum GroupGetProfileError {
 
 /// struct for typed errors of method [`group_get_summary`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupGetSummaryError {
 	Status400(crate::models::ErrorBody),
@@ -127,7 +119,6 @@ pub enum GroupGetSummaryError {
 
 /// struct for typed errors of method [`group_kick_member`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupKickMemberError {
 	Status400(crate::models::ErrorBody),
@@ -141,7 +132,6 @@ pub enum GroupKickMemberError {
 
 /// struct for typed errors of method [`group_leave`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupLeaveError {
 	Status400(crate::models::ErrorBody),
@@ -155,7 +145,6 @@ pub enum GroupLeaveError {
 
 /// struct for typed errors of method [`group_list_suggested`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupListSuggestedError {
 	Status400(crate::models::ErrorBody),
@@ -169,7 +158,6 @@ pub enum GroupListSuggestedError {
 
 /// struct for typed errors of method [`group_prepare_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupPrepareAvatarUploadError {
 	Status400(crate::models::ErrorBody),
@@ -183,7 +171,6 @@ pub enum GroupPrepareAvatarUploadError {
 
 /// struct for typed errors of method [`group_search`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupSearchError {
 	Status400(crate::models::ErrorBody),
@@ -197,7 +184,6 @@ pub enum GroupSearchError {
 
 /// struct for typed errors of method [`group_transfer_ownership`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupTransferOwnershipError {
 	Status400(crate::models::ErrorBody),
@@ -211,7 +197,6 @@ pub enum GroupTransferOwnershipError {
 
 /// struct for typed errors of method [`group_unban_identity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupUnbanIdentityError {
 	Status400(crate::models::ErrorBody),
@@ -225,7 +210,6 @@ pub enum GroupUnbanIdentityError {
 
 /// struct for typed errors of method [`group_update_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupUpdateProfileError {
 	Status400(crate::models::ErrorBody),
@@ -239,7 +223,6 @@ pub enum GroupUpdateProfileError {
 
 /// struct for typed errors of method [`group_validate_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupValidateProfileError {
 	Status400(crate::models::ErrorBody),

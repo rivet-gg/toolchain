@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatMessageBodyDeleted {
 	#[serde(rename = "sender")]
 	pub sender: Box<crate::models::IdentityHandle>,

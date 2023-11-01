@@ -11,7 +11,6 @@
 /// CloudGameFull : A full game.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGameFull {
 	/// A list of region summaries.
 	#[serde(rename = "available_regions")]

@@ -11,7 +11,6 @@
 /// GameStatSummary : A game statistic summary.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GameStatSummary {
 	#[serde(rename = "game")]
 	pub game: Box<crate::models::GameHandle>,

@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`chat_get_thread_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatGetThreadHistoryError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum ChatGetThreadHistoryError {
 
 /// struct for typed errors of method [`chat_get_thread_topic`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatGetThreadTopicError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum ChatGetThreadTopicError {
 
 /// struct for typed errors of method [`chat_send_message`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatSendMessageError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum ChatSendMessageError {
 
 /// struct for typed errors of method [`chat_set_thread_read`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatSetThreadReadError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum ChatSetThreadReadError {
 
 /// struct for typed errors of method [`chat_set_typing_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatSetTypingStatusError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum ChatSetTypingStatusError {
 
 /// struct for typed errors of method [`chat_watch_thread`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum ChatWatchThreadError {
 	Status400(crate::models::ErrorBody),

@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`portal_notifications_register_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PortalNotificationsRegisterNotificationsError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum PortalNotificationsRegisterNotificationsError {
 
 /// struct for typed errors of method [`portal_notifications_unregister_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum PortalNotificationsUnregisterNotificationsError {
 	Status400(crate::models::ErrorBody),

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupCreateInviteResponse {
 	/// The code that will be passed to `rivet.api.group#ConsumeInvite` to join a group.
 	#[serde(rename = "code")]

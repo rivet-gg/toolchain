@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`matchmaker_lobbies_create`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesCreateError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum MatchmakerLobbiesCreateError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_find`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesFindError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum MatchmakerLobbiesFindError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_get_state`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesGetStateError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum MatchmakerLobbiesGetStateError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_join`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesJoinError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum MatchmakerLobbiesJoinError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesListError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum MatchmakerLobbiesListError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_ready`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesReadyError {
 	Status400(crate::models::ErrorBody),
@@ -99,7 +93,6 @@ pub enum MatchmakerLobbiesReadyError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_set_closed`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesSetClosedError {
 	Status400(crate::models::ErrorBody),
@@ -113,7 +106,6 @@ pub enum MatchmakerLobbiesSetClosedError {
 
 /// struct for typed errors of method [`matchmaker_lobbies_set_state`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerLobbiesSetStateError {
 	Status400(crate::models::ErrorBody),

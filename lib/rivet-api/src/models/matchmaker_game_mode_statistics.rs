@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerGameModeStatistics {
 	#[serde(rename = "player_count")]
 	pub player_count: i64,

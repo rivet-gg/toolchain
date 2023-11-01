@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct PortalNotificationRegisterService {
 	#[serde(rename = "firebase", skip_serializing_if = "Option::is_none")]
 	pub firebase: Option<Box<crate::models::PortalNotificationRegisterFirebaseService>>,
