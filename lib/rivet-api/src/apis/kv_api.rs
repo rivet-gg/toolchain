@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`kv_delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvDeleteError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum KvDeleteError {
 
 /// struct for typed errors of method [`kv_delete_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvDeleteBatchError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum KvDeleteBatchError {
 
 /// struct for typed errors of method [`kv_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvGetError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum KvGetError {
 
 /// struct for typed errors of method [`kv_get_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvGetBatchError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum KvGetBatchError {
 
 /// struct for typed errors of method [`kv_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvListError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum KvListError {
 
 /// struct for typed errors of method [`kv_put`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvPutError {
 	Status400(crate::models::ErrorBody),
@@ -99,7 +93,6 @@ pub enum KvPutError {
 
 /// struct for typed errors of method [`kv_put_batch`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum KvPutBatchError {
 	Status400(crate::models::ErrorBody),

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerGetStatisticsResponse {
 	#[serde(rename = "game_modes")]
 	pub game_modes:

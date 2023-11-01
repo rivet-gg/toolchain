@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatSendMessageResponse {
 	#[serde(rename = "chat_message_id")]
 	pub chat_message_id: uuid::Uuid,

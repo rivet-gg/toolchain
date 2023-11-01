@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityReportRequest {
 	#[serde(rename = "reason", skip_serializing_if = "Option::is_none")]
 	pub reason: Option<String>,

@@ -11,7 +11,6 @@
 /// CloudCdnNamespaceDomainVerificationMethod : A union representing the verification method used for this CDN domain.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudCdnNamespaceDomainVerificationMethod {
 	#[serde(rename = "http", skip_serializing_if = "Option::is_none")]
 	pub http: Option<Box<crate::models::CloudCdnNamespaceDomainVerificationMethodHttp>>,

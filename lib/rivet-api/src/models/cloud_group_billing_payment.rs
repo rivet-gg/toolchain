@@ -11,7 +11,6 @@
 /// CloudGroupBillingPayment : A group's billing payment.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGroupBillingPayment {
 	/// Payment amount (in hundreths USD, 100 = $1.00).
 	#[serde(rename = "amount")]

@@ -11,7 +11,6 @@
 /// CloudLogsPerfSpan : A performance span.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudLogsPerfSpan {
 	/// RFC3339 timestamp.
 	#[serde(rename = "finish_ts", skip_serializing_if = "Option::is_none")]

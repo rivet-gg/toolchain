@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_namespaces_logs_get_namespace_lobby`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesLogsGetNamespaceLobbyError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesNamespacesLogsGetNamespaceLobbyError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_logs_list_namespace_lobbies`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesLogsListNamespaceLobbiesError {
 	Status400(crate::models::ErrorBody),

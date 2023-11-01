@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatMessage {
 	#[serde(rename = "body")]
 	pub body: Box<crate::models::ChatMessageBody>,

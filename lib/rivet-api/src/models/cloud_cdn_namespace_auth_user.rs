@@ -11,7 +11,6 @@
 /// CloudCdnNamespaceAuthUser : An authenticated CDN user for a given namespace.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudCdnNamespaceAuthUser {
 	/// A user name.
 	#[serde(rename = "user")]

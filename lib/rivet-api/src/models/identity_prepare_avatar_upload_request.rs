@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityPrepareAvatarUploadRequest {
 	#[serde(rename = "content_length")]
 	pub content_length: i64,

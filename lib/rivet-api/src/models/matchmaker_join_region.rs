@@ -11,7 +11,6 @@
 /// MatchmakerJoinRegion : A matchmaker lobby region.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerJoinRegion {
 	#[serde(rename = "display_name")]
 	pub display_name: String,

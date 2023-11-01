@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesDeleteMatchmakerLobbyResponse {
 	/// Whether or not the lobby was successfully stopped.
 	#[serde(rename = "did_remove", skip_serializing_if = "Option::is_none")]

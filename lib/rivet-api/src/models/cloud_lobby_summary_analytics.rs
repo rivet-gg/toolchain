@@ -11,7 +11,6 @@
 /// CloudLobbySummaryAnalytics : Analytical information about a lobby.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudLobbySummaryAnalytics {
 	/// RFC3339 timestamp.
 	#[serde(rename = "create_ts")]

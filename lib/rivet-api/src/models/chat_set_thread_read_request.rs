@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatSetThreadReadRequest {
 	/// Any messages newer than this timestamp will be marked as unread. This should be the current timestamp (in milliseconds).
 	#[serde(rename = "last_read_ts")]

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudDevicesPrepareDeviceLinkResponse {
 	#[serde(rename = "device_link_id")]
 	pub device_link_id: uuid::Uuid,

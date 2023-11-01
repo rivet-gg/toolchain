@@ -11,7 +11,6 @@
 /// GroupJoinRequest : A group join request.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupJoinRequest {
 	#[serde(rename = "identity")]
 	pub identity: Box<crate::models::IdentityHandle>,

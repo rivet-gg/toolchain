@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatGetThreadHistoryResponse {
 	/// Ordered old to new. If querying `rivet.api.chat.common#before_and_after`, this will be `count * 2` long.
 	#[serde(rename = "chat_messages")]

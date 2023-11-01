@@ -11,7 +11,6 @@
 /// CloudSvcPerf : A service performance summary.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudSvcPerf {
 	/// Unsigned 64 bit integer.
 	#[serde(rename = "duration")]

@@ -11,7 +11,6 @@
 /// CloudCdnNamespaceDomain : A CDN domain for a given namespace.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudCdnNamespaceDomain {
 	/// RFC3339 timestamp.
 	#[serde(rename = "create_ts")]

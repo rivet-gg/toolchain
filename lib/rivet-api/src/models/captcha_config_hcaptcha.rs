@@ -11,7 +11,6 @@
 /// CaptchaConfigHcaptcha : Captcha configuration.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CaptchaConfigHcaptcha {
 	#[serde(rename = "client_response")]
 	pub client_response: String,

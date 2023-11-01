@@ -11,7 +11,6 @@
 /// CloudGroupBillingInvoice : A group's billing invoice.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGroupBillingInvoice {
 	/// A URL to this invoice's CSV breakdown.
 	#[serde(rename = "csv_url")]

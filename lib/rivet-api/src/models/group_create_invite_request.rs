@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupCreateInviteRequest {
 	/// How long until the group invite expires (in milliseconds).
 	#[serde(rename = "ttl", skip_serializing_if = "Option::is_none")]

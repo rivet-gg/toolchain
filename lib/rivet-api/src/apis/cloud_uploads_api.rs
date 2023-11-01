@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_uploads_complete_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudUploadsCompleteUploadError {
 	Status400(crate::models::ErrorBody),

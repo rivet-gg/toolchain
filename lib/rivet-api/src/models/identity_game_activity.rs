@@ -11,7 +11,6 @@
 /// IdentityGameActivity : The game an identity is currently participating in.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityGameActivity {
 	#[serde(rename = "game")]
 	pub game: Box<crate::models::GameHandle>,

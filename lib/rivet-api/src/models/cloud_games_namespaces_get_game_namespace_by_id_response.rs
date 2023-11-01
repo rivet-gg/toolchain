@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesGetGameNamespaceByIdResponse {
 	#[serde(rename = "namespace")]
 	pub namespace: Box<crate::models::CloudNamespaceFull>,

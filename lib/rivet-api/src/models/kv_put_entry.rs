@@ -11,7 +11,6 @@
 /// KvPutEntry : A new entry to insert into the key-value database.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct KvPutEntry {
 	/// A string representing a key in the key-value database. Maximum length of 512 characters. *Recommended Key Path Format* Key path components are split by a slash (e.g. `a/b/c` has the path components `[\"a\", \"b\", \"c\"]`). Slashes can be escaped by using a backslash (e.g. `a/b/c/d` has the path components `[\"a\", \"b/c\", \"d\"]`). This format is not enforced by Rivet, but the tools built around Rivet KV work better if this format is used.
 	#[serde(rename = "key")]

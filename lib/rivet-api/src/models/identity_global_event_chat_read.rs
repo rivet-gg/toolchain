@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventChatRead {
 	#[serde(rename = "read_ts")]
 	pub read_ts: String,

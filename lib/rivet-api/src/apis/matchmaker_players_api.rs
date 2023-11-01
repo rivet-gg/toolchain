@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`matchmaker_players_connected`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerPlayersConnectedError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum MatchmakerPlayersConnectedError {
 
 /// struct for typed errors of method [`matchmaker_players_disconnected`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerPlayersDisconnectedError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum MatchmakerPlayersDisconnectedError {
 
 /// struct for typed errors of method [`matchmaker_players_get_statistics`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum MatchmakerPlayersGetStatisticsError {
 	Status400(crate::models::ErrorBody),

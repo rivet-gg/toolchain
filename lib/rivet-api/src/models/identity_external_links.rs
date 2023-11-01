@@ -11,7 +11,6 @@
 /// IdentityExternalLinks : External links for an identity.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityExternalLinks {
 	/// A link to a chat page with the given identity.
 	#[serde(rename = "chat", skip_serializing_if = "Option::is_none")]

@@ -11,7 +11,6 @@
 /// MatchmakerJoinPortRange : Inclusive range of ports that can be connected to.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerJoinPortRange {
 	/// Maximum port that can be connected to. Inclusive range.
 	#[serde(rename = "max")]

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGroupBankSource {
 	/// The bank account number of this group's bank source.
 	#[serde(rename = "account_number")]

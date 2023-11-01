@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_groups_convert_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsConvertGroupError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGroupsConvertGroupError {
 
 /// struct for typed errors of method [`cloud_groups_validate`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGroupsValidateError {
 	Status400(crate::models::ErrorBody),

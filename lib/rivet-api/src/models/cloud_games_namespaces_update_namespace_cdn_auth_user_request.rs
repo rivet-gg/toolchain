@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesUpdateNamespaceCdnAuthUserRequest {
 	/// A bcrypt encrypted password. An error is returned if the given string is not properly encrypted.
 	#[serde(rename = "password")]

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventChatMessage {
 	#[serde(rename = "thread")]
 	pub thread: Box<crate::models::ChatThread>,

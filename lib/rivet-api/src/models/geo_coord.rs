@@ -11,7 +11,6 @@
 /// GeoCoord : Geographical coordinates for a location on Planet Earth.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GeoCoord {
 	#[serde(rename = "latitude")]
 	pub latitude: f64,

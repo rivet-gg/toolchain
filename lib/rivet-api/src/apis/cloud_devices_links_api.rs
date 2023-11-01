@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_devices_links_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudDevicesLinksCompleteError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudDevicesLinksCompleteError {
 
 /// struct for typed errors of method [`cloud_devices_links_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudDevicesLinksGetError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum CloudDevicesLinksGetError {
 
 /// struct for typed errors of method [`cloud_devices_links_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudDevicesLinksPrepareError {
 	Status400(crate::models::ErrorBody),

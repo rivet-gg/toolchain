@@ -11,7 +11,6 @@
 /// GameStatConfig : A game statistic config.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GameStatConfig {
 	#[serde(rename = "aggregation")]
 	pub aggregation: crate::models::GameStatAggregationMethod,

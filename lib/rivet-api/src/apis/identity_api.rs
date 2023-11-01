@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`identity_complete_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityCompleteAvatarUploadError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum IdentityCompleteAvatarUploadError {
 
 /// struct for typed errors of method [`identity_follow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityFollowError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum IdentityFollowError {
 
 /// struct for typed errors of method [`identity_get_handles`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetHandlesError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum IdentityGetHandlesError {
 
 /// struct for typed errors of method [`identity_get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetProfileError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum IdentityGetProfileError {
 
 /// struct for typed errors of method [`identity_get_self_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetSelfProfileError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum IdentityGetSelfProfileError {
 
 /// struct for typed errors of method [`identity_get_summaries`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityGetSummariesError {
 	Status400(crate::models::ErrorBody),
@@ -99,7 +93,6 @@ pub enum IdentityGetSummariesError {
 
 /// struct for typed errors of method [`identity_ignore_recent_follower`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityIgnoreRecentFollowerError {
 	Status400(crate::models::ErrorBody),
@@ -113,7 +106,6 @@ pub enum IdentityIgnoreRecentFollowerError {
 
 /// struct for typed errors of method [`identity_list_followers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListFollowersError {
 	Status400(crate::models::ErrorBody),
@@ -127,7 +119,6 @@ pub enum IdentityListFollowersError {
 
 /// struct for typed errors of method [`identity_list_following`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListFollowingError {
 	Status400(crate::models::ErrorBody),
@@ -141,7 +132,6 @@ pub enum IdentityListFollowingError {
 
 /// struct for typed errors of method [`identity_list_friends`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListFriendsError {
 	Status400(crate::models::ErrorBody),
@@ -155,7 +145,6 @@ pub enum IdentityListFriendsError {
 
 /// struct for typed errors of method [`identity_list_mutual_friends`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListMutualFriendsError {
 	Status400(crate::models::ErrorBody),
@@ -169,7 +158,6 @@ pub enum IdentityListMutualFriendsError {
 
 /// struct for typed errors of method [`identity_list_recent_followers`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityListRecentFollowersError {
 	Status400(crate::models::ErrorBody),
@@ -183,7 +171,6 @@ pub enum IdentityListRecentFollowersError {
 
 /// struct for typed errors of method [`identity_mark_deletion`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityMarkDeletionError {
 	Status400(crate::models::ErrorBody),
@@ -197,7 +184,6 @@ pub enum IdentityMarkDeletionError {
 
 /// struct for typed errors of method [`identity_prepare_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityPrepareAvatarUploadError {
 	Status400(crate::models::ErrorBody),
@@ -211,7 +197,6 @@ pub enum IdentityPrepareAvatarUploadError {
 
 /// struct for typed errors of method [`identity_remove_game_activity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityRemoveGameActivityError {
 	Status400(crate::models::ErrorBody),
@@ -225,7 +210,6 @@ pub enum IdentityRemoveGameActivityError {
 
 /// struct for typed errors of method [`identity_report`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityReportError {
 	Status400(crate::models::ErrorBody),
@@ -239,7 +223,6 @@ pub enum IdentityReportError {
 
 /// struct for typed errors of method [`identity_search`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySearchError {
 	Status400(crate::models::ErrorBody),
@@ -253,7 +236,6 @@ pub enum IdentitySearchError {
 
 /// struct for typed errors of method [`identity_set_game_activity`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySetGameActivityError {
 	Status400(crate::models::ErrorBody),
@@ -267,7 +249,6 @@ pub enum IdentitySetGameActivityError {
 
 /// struct for typed errors of method [`identity_setup`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySetupError {
 	Status400(crate::models::ErrorBody),
@@ -281,7 +262,6 @@ pub enum IdentitySetupError {
 
 /// struct for typed errors of method [`identity_signup_for_beta`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentitySignupForBetaError {
 	Status400(crate::models::ErrorBody),
@@ -295,7 +275,6 @@ pub enum IdentitySignupForBetaError {
 
 /// struct for typed errors of method [`identity_unfollow`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUnfollowError {
 	Status400(crate::models::ErrorBody),
@@ -309,7 +288,6 @@ pub enum IdentityUnfollowError {
 
 /// struct for typed errors of method [`identity_unmark_deletion`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUnmarkDeletionError {
 	Status400(crate::models::ErrorBody),
@@ -323,7 +301,6 @@ pub enum IdentityUnmarkDeletionError {
 
 /// struct for typed errors of method [`identity_update_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUpdateProfileError {
 	Status400(crate::models::ErrorBody),
@@ -337,7 +314,6 @@ pub enum IdentityUpdateProfileError {
 
 /// struct for typed errors of method [`identity_update_status`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityUpdateStatusError {
 	Status400(crate::models::ErrorBody),
@@ -351,7 +327,6 @@ pub enum IdentityUpdateStatusError {
 
 /// struct for typed errors of method [`identity_validate_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityValidateProfileError {
 	Status400(crate::models::ErrorBody),

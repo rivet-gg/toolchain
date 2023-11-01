@@ -11,7 +11,6 @@
 /// MatchmakerJoinLobby : A matchmaker lobby.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerJoinLobby {
 	#[serde(rename = "lobby_id")]
 	pub lobby_id: uuid::Uuid,

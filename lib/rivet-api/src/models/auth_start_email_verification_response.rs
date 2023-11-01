@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct AuthStartEmailVerificationResponse {
 	#[serde(rename = "verification_id")]
 	pub verification_id: uuid::Uuid,

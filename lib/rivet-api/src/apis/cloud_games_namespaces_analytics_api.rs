@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_namespaces_analytics_get_analytics_matchmaker_live`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesAnalyticsGetAnalyticsMatchmakerLiveError {
 	Status400(crate::models::ErrorBody),

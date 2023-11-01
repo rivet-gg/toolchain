@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct PortalGetSuggestedGamesResponse {
 	/// A list of game summaries.
 	#[serde(rename = "games")]

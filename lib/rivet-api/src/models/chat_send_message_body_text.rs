@@ -11,7 +11,6 @@
 /// ChatSendMessageBodyText : The text in the text message.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatSendMessageBodyText {
 	#[serde(rename = "body")]
 	pub body: String,

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerPlayersConnectedRequest {
 	#[serde(rename = "player_token")]
 	pub player_token: String,

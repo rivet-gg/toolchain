@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesGetLobbyLogsResponse {
 	/// Sorted old to new.
 	#[serde(rename = "lines")]

@@ -11,7 +11,6 @@
 /// ChatSendTopic : Topic to send a chat message to.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatSendTopic {
 	#[serde(rename = "group_id", skip_serializing_if = "Option::is_none")]
 	pub group_id: Option<uuid::Uuid>,

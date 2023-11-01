@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerListRegionsResponse {
 	#[serde(rename = "regions")]
 	pub regions: Vec<crate::models::MatchmakerRegionInfo>,
