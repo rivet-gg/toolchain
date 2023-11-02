@@ -31,6 +31,9 @@ struct Opts {
 
 	#[clap(long, env = "RIVET_TOKEN")]
 	token: Option<String>,
+
+	#[clap(long, env = "TELEMETRY_DISABLED")]
+	telemetry_disabled: bool,
 }
 
 #[derive(Parser)]
@@ -116,8 +119,35 @@ enum SubCommand {
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
-	let term = console::Term::stderr();
 	let opts = Opts::parse();
+	let api_endpoint = opts.api_endpoint.clone();
+	let telemetry_disabled = opts.telemetry_disabled;
+	
+	let res = main_inner(opts).await;
+
+	// Blanket catch for all errors
+	if let Err(err) = &res {
+		let mut event = util::telemetry::build_event(
+			telemetry_disabled,
+			api_endpoint,
+			util::telemetry::GAME_ID.get(),
+			"cli_error",
+		)
+		.await?;
+		event.insert_prop(
+			"errors",
+			err.chain().map(|e| e.to_string()).collect::<Vec<_>>(),
+		)?;
+		util::telemetry::capture_event(telemetry_disabled, event).await?;
+	}
+
+	util::telemetry::wait_all().await;
+
+	res
+}
+
+async fn main_inner(opts: Opts) -> Result<()> {
+	let term = console::Term::stderr();
 
 	// Handle init command without the context
 	if let SubCommand::Init(init_opts) = &opts.command {
@@ -141,6 +171,9 @@ async fn main() -> Result<()> {
 
 	// Create context
 	let ctx = cli_core::ctx::init(opts.api_endpoint.clone(), token).await?;
+
+	// Set game id for errors
+	util::telemetry::GAME_ID.set(ctx.game_id.clone())?;
 
 	// Handle command
 	match opts.command {

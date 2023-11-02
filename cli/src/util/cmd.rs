@@ -30,13 +30,13 @@ pub async fn execute_docker_cmd_silent(
 	command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
 ) -> Result<std::process::Output> {
-	let output = execute_docker_cmd_silent_failable(command).await?;
+	let output = execute_docker_cmd_silent_fallible(command).await?;
 	error_for_output_failure(&output, error_message)?;
 	Ok(output)
 }
 
 /// Run a Docker command without output and ignore failures.
-pub async fn execute_docker_cmd_silent_failable(
+pub async fn execute_docker_cmd_silent_fallible(
 	mut command: tokio::process::Command,
 ) -> Result<std::process::Output> {
 	match command.output().await {
@@ -66,4 +66,22 @@ pub fn error_for_output_failure(
 	}
 
 	Ok(())
+}
+
+/// Throw an error if the output of a command failed.
+pub async fn read_stdout_fallible(mut command: tokio::process::Command) -> Result<String> {
+	let output = command.output().await?;
+
+	if !output.status.success() {
+		bail!(
+			"Command failed ({})\n\nstdout:\n{}\n\nstderr:\n{}",
+			output.status,
+			String::from_utf8_lossy(&output.stdout),
+			String::from_utf8_lossy(&output.stderr)
+		);
+	}
+
+	let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
+
+	Ok(stdout)
 }

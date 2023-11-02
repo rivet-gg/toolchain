@@ -12,6 +12,7 @@ build = "build.rs"
 [dependencies]
 anyhow = "1.0"
 async-stream = "0.3.3"
+async-posthog = { git = "https://github.com/rivet-gg/posthog-rs.git", rev = "ef4e80e" }
 aws-smithy-types = "*"
 chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }

@@ -143,6 +143,9 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 				content_length: image_file_meta.len() as i64,
 			}),
 			multipart_upload: Some(false),
+
+			compression: Some(rivet_api::models::CloudGamesBuildCompression::None),
+			kind: Some(rivet_api::models::CloudGamesBuildKind::DockerImage),
 		},
 	)
 	.await;

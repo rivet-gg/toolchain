@@ -56,8 +56,8 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 	let config = commands::version::read_config(Vec::new(), Some(ns_name_id)).await?;
 
 	let Some(matchmaker) = &config.matchmaker else {
-			bail!("matchmaker not enabled")
-		};
+		bail!("matchmaker not enabled")
+	};
 
 	let dev_hostname = matchmaker
 		.dev_hostname
