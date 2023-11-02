@@ -54,6 +54,7 @@ pub async fn build_event(
 ) -> Result<async_posthog::Event> {
 	let api_endpoint = api_endpoint
 	.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string());
+	let args = std::env::args().collect::<Vec<_>>();
 
 	let distinct_id = if let Some(game_id) = game_id {
 		format!("game:{game_id}")
@@ -110,6 +111,9 @@ pub async fn build_event(
 				"os_release": os_release,
 			}),
 		)?;
+
+		event.insert_prop("api_endpoint", api_endpoint)?;
+		event.insert_prop("args", args)?;
 	}
 
 	Ok(event)
