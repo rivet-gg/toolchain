@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
 use anyhow::Result;
+use cli_core::ctx;
 use serde_json::json;
 use tokio::{
 	sync::{Mutex, OnceCell},
 	task::JoinSet,
 	time::Duration,
 };
-use cli_core::ctx;
 
 use crate::util::cmd;
 
@@ -52,8 +52,7 @@ pub async fn build_event(
 	game_id: Option<&String>,
 	name: &str,
 ) -> Result<async_posthog::Event> {
-	let api_endpoint = api_endpoint
-	.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string());
+	let api_endpoint = api_endpoint.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string());
 	let args = std::env::args().collect::<Vec<_>>();
 
 	let distinct_id = if let Some(game_id) = game_id {

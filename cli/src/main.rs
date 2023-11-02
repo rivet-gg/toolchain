@@ -122,7 +122,7 @@ async fn main() -> Result<()> {
 	let opts = Opts::parse();
 	let api_endpoint = opts.api_endpoint.clone();
 	let telemetry_disabled = opts.telemetry_disabled;
-	
+
 	let res = main_inner(opts).await;
 
 	// Blanket catch for all errors
