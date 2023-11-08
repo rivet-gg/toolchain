@@ -33,7 +33,7 @@ struct Opts {
 	token: Option<String>,
 
 	#[clap(long, env = "TELEMETRY_DISABLED")]
-	telemetry_disabled: bool,
+	telemetry_disabled: Option<bool>,
 }
 
 #[derive(Parser)]
@@ -119,9 +119,9 @@ enum SubCommand {
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
-	let opts = Opts::parse();
+	let opts = read_opts().await?;
 	let api_endpoint = opts.api_endpoint.clone();
-	let telemetry_disabled = opts.telemetry_disabled;
+	let telemetry_disabled = opts.telemetry_disabled.unwrap_or_default();
 
 	let res = main_inner(opts).await;
 
@@ -198,4 +198,32 @@ async fn main_inner(opts: Opts) -> Result<()> {
 	}
 
 	Ok(())
+}
+
+/// Reads options from clap and reads/updates the internal config file.
+async fn read_opts() -> Result<Opts> {
+	let mut opts = Opts::parse();
+	let mut config = util::secrets::InternalConfig::read().await?;
+	let mut updated = false;
+
+	// Update config file if option was set from env/args
+	if let Some(api_endpoint) = &opts.api_endpoint {
+		config.api_endpoint = Some(api_endpoint.clone());
+		updated = true;
+	} else {
+		opts.api_endpoint = config.api_endpoint.clone();
+	}
+
+	if let Some(telemetry_disabled) = opts.telemetry_disabled {
+		config.telemetry_disabled = telemetry_disabled;
+		updated = true;
+	} else {
+		opts.telemetry_disabled = Some(config.telemetry_disabled);
+	}
+	
+	if updated {
+		config.write().await?;
+	}
+
+	Ok(opts)
 }
