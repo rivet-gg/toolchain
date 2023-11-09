@@ -11,7 +11,6 @@
 /// CloudGroupBillingSummary : A group billing summary.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGroupBillingSummary {
 	/// A group's available balance.
 	#[serde(rename = "balance")]

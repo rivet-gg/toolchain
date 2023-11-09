@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_avatars_complete_custom_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesAvatarsCompleteCustomAvatarUploadError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesAvatarsCompleteCustomAvatarUploadError {
 
 /// struct for typed errors of method [`cloud_games_avatars_list_game_custom_avatars`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesAvatarsListGameCustomAvatarsError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum CloudGamesAvatarsListGameCustomAvatarsError {
 
 /// struct for typed errors of method [`cloud_games_avatars_prepare_custom_avatar_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesAvatarsPrepareCustomAvatarUploadError {
 	Status400(crate::models::ErrorBody),

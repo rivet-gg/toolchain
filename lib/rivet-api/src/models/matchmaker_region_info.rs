@@ -11,7 +11,6 @@
 /// MatchmakerRegionInfo : A region that the player can connect to.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerRegionInfo {
 	#[serde(rename = "datacenter_coord")]
 	pub datacenter_coord: Box<crate::models::GeoCoord>,

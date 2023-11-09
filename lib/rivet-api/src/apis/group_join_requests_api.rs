@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`group_join_requests_create_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupJoinRequestsCreateJoinRequestError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum GroupJoinRequestsCreateJoinRequestError {
 
 /// struct for typed errors of method [`group_join_requests_resolve_join_request`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupJoinRequestsResolveJoinRequestError {
 	Status400(crate::models::ErrorBody),

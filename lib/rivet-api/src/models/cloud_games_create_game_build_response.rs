@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesCreateGameBuildResponse {
 	#[serde(rename = "build_id")]
 	pub build_id: uuid::Uuid,

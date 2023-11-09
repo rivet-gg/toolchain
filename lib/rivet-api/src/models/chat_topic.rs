@@ -11,7 +11,6 @@
 /// ChatTopic : Represents the topic of the given chat thread.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatTopic {
 	#[serde(rename = "direct", skip_serializing_if = "Option::is_none")]
 	pub direct: Option<Box<crate::models::ChatTopicDirect>>,

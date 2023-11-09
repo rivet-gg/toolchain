@@ -11,7 +11,6 @@
 /// ValidationError : An error given by failed content validation.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ValidationError {
 	/// A list of strings denoting the origin of a validation error.
 	#[serde(rename = "path")]

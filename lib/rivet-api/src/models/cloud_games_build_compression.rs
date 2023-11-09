@@ -10,7 +10,6 @@
 
 ///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub enum CloudGamesBuildCompression {
 	#[serde(rename = "none")]
 	None,

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGetRayPerfLogsResponse {
 	/// A list of service performance summaries.
 	#[serde(rename = "perf_lists")]

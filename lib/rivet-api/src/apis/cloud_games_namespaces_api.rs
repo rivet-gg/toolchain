@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_namespaces_add_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesAddNamespaceDomainError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesNamespacesAddNamespaceDomainError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_create_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesCreateGameNamespaceError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum CloudGamesNamespacesCreateGameNamespaceError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_create_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_create_game_namespace_token_public`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesCreateGameNamespaceTokenPublicError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum CloudGamesNamespacesCreateGameNamespaceTokenPublicError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_get_game_namespace_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesGetGameNamespaceByIdError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum CloudGamesNamespacesGetGameNamespaceByIdError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_get_game_namespace_version_history_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesGetGameNamespaceVersionHistoryListError {
 	Status400(crate::models::ErrorBody),
@@ -99,7 +93,6 @@ pub enum CloudGamesNamespacesGetGameNamespaceVersionHistoryListError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_remove_namespace_cdn_auth_user`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesRemoveNamespaceCdnAuthUserError {
 	Status400(crate::models::ErrorBody),
@@ -113,7 +106,6 @@ pub enum CloudGamesNamespacesRemoveNamespaceCdnAuthUserError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_remove_namespace_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesRemoveNamespaceDomainError {
 	Status400(crate::models::ErrorBody),
@@ -127,7 +119,6 @@ pub enum CloudGamesNamespacesRemoveNamespaceDomainError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_set_namespace_cdn_auth_type`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesSetNamespaceCdnAuthTypeError {
 	Status400(crate::models::ErrorBody),
@@ -141,7 +132,6 @@ pub enum CloudGamesNamespacesSetNamespaceCdnAuthTypeError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_toggle_namespace_domain_public_auth`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesToggleNamespaceDomainPublicAuthError {
 	Status400(crate::models::ErrorBody),
@@ -155,7 +145,6 @@ pub enum CloudGamesNamespacesToggleNamespaceDomainPublicAuthError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_update_game_namespace_matchmaker_config`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigError {
 	Status400(crate::models::ErrorBody),
@@ -169,7 +158,6 @@ pub enum CloudGamesNamespacesUpdateGameNamespaceMatchmakerConfigError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_update_game_namespace_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesUpdateGameNamespaceVersionError {
 	Status400(crate::models::ErrorBody),
@@ -183,7 +171,6 @@ pub enum CloudGamesNamespacesUpdateGameNamespaceVersionError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_update_namespace_cdn_auth_user`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesUpdateNamespaceCdnAuthUserError {
 	Status400(crate::models::ErrorBody),
@@ -197,7 +184,6 @@ pub enum CloudGamesNamespacesUpdateNamespaceCdnAuthUserError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_validate_game_namespace`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesValidateGameNamespaceError {
 	Status400(crate::models::ErrorBody),
@@ -211,7 +197,6 @@ pub enum CloudGamesNamespacesValidateGameNamespaceError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_validate_game_namespace_matchmaker_config`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigError {
 	Status400(crate::models::ErrorBody),
@@ -225,7 +210,6 @@ pub enum CloudGamesNamespacesValidateGameNamespaceMatchmakerConfigError {
 
 /// struct for typed errors of method [`cloud_games_namespaces_validate_game_namespace_token_development`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesNamespacesValidateGameNamespaceTokenDevelopmentError {
 	Status400(crate::models::ErrorBody),

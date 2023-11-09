@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_versions_create_game_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesVersionsCreateGameVersionError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesVersionsCreateGameVersionError {
 
 /// struct for typed errors of method [`cloud_games_versions_get_game_version_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesVersionsGetGameVersionByIdError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum CloudGamesVersionsGetGameVersionByIdError {
 
 /// struct for typed errors of method [`cloud_games_versions_validate_game_version`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesVersionsValidateGameVersionError {
 	Status400(crate::models::ErrorBody),

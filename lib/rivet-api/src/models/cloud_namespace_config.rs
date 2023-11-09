@@ -11,7 +11,6 @@
 /// CloudNamespaceConfig : Cloud configuration for a given namespace.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudNamespaceConfig {
 	#[serde(rename = "cdn")]
 	pub cdn: Box<crate::models::CloudCdnNamespaceConfig>,

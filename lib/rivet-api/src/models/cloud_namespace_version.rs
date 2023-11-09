@@ -11,7 +11,6 @@
 /// CloudNamespaceVersion : A previously deployed namespace version.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudNamespaceVersion {
 	/// RFC3339 timestamp.
 	#[serde(rename = "deploy_ts")]

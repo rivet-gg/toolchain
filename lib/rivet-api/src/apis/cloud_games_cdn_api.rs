@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_cdn_create_game_cdn_site`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesCdnCreateGameCdnSiteError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesCdnCreateGameCdnSiteError {
 
 /// struct for typed errors of method [`cloud_games_cdn_list_game_cdn_sites`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesCdnListGameCdnSitesError {
 	Status400(crate::models::ErrorBody),

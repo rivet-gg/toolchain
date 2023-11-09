@@ -11,7 +11,6 @@
 /// CloudLogsPerfMark : A performance mark.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudLogsPerfMark {
 	/// The label given to this performance mark.
 	#[serde(rename = "label")]

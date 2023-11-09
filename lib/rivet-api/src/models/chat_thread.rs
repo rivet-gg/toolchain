@@ -11,7 +11,6 @@
 /// ChatThread : A chat thread
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatThread {
 	#[serde(rename = "create_ts")]
 	pub create_ts: String,

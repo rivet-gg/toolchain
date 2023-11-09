@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ModuleCallResponse {
 	#[serde(rename = "data", deserialize_with = "Option::deserialize")]
 	pub data: Option<serde_json::Value>,

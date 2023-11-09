@@ -11,7 +11,6 @@
 /// IdentityProfile : An identity profile.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityProfile {
 	#[serde(rename = "account_number")]
 	pub account_number: i32,

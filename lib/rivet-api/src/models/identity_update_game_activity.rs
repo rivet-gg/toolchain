@@ -11,7 +11,6 @@
 /// IdentityUpdateGameActivity : Information about the identity's current game. This is information that all other identities can see about what the current identity is doing.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityUpdateGameActivity {
 	/// A short message about the current game activity.
 	#[serde(rename = "message", skip_serializing_if = "Option::is_none")]

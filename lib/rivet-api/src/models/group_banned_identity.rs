@@ -11,7 +11,6 @@
 /// GroupBannedIdentity : A banned identity.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupBannedIdentity {
 	/// RFC3339 timestamp.
 	#[serde(rename = "ban_ts")]

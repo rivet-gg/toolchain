@@ -11,7 +11,6 @@
 /// ChatMessageBody : Represents types of chat message bodies.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct ChatMessageBody {
 	#[serde(rename = "chat_create", skip_serializing_if = "Option::is_none")]
 	pub chat_create: Option<serde_json::Value>,

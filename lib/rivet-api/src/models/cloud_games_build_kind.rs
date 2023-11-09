@@ -10,7 +10,6 @@
 
 ///
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub enum CloudGamesBuildKind {
 	#[serde(rename = "docker_image")]
 	DockerImage,

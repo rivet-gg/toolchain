@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesGetAnalyticsMatchmakerLiveResponse {
 	/// A list of analytics lobby summaries.
 	#[serde(rename = "lobbies")]

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct PortalGetGameProfileResponse {
 	#[serde(rename = "game")]
 	pub game: Box<crate::models::GameProfile>,

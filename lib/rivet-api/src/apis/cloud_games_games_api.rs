@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`cloud_games_games_create_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesCreateGameError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum CloudGamesGamesCreateGameError {
 
 /// struct for typed errors of method [`cloud_games_games_game_banner_upload_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGameBannerUploadCompleteError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum CloudGamesGamesGameBannerUploadCompleteError {
 
 /// struct for typed errors of method [`cloud_games_games_game_banner_upload_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGameBannerUploadPrepareError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum CloudGamesGamesGameBannerUploadPrepareError {
 
 /// struct for typed errors of method [`cloud_games_games_game_logo_upload_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGameLogoUploadCompleteError {
 	Status400(crate::models::ErrorBody),
@@ -71,7 +67,6 @@ pub enum CloudGamesGamesGameLogoUploadCompleteError {
 
 /// struct for typed errors of method [`cloud_games_games_game_logo_upload_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGameLogoUploadPrepareError {
 	Status400(crate::models::ErrorBody),
@@ -85,7 +80,6 @@ pub enum CloudGamesGamesGameLogoUploadPrepareError {
 
 /// struct for typed errors of method [`cloud_games_games_get_game_by_id`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGetGameByIdError {
 	Status400(crate::models::ErrorBody),
@@ -99,7 +93,6 @@ pub enum CloudGamesGamesGetGameByIdError {
 
 /// struct for typed errors of method [`cloud_games_games_get_games`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesGetGamesError {
 	Status400(crate::models::ErrorBody),
@@ -113,7 +106,6 @@ pub enum CloudGamesGamesGetGamesError {
 
 /// struct for typed errors of method [`cloud_games_games_validate_game`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum CloudGamesGamesValidateGameError {
 	Status400(crate::models::ErrorBody),

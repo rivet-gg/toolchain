@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityListFollowersResponse {
 	#[serde(rename = "anchor", skip_serializing_if = "Option::is_none")]
 	pub anchor: Option<String>,

@@ -11,7 +11,6 @@
 /// IdentityLinkedAccount : A union representing an identity's linked accounts.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityLinkedAccount {
 	#[serde(rename = "email", skip_serializing_if = "Option::is_none")]
 	pub email: Option<Box<crate::models::IdentityEmailLinkedAccount>>,

@@ -11,7 +11,6 @@
 /// CloudNamespaceSummary : A namespace summary.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudNamespaceSummary {
 	/// RFC3339 timestamp.
 	#[serde(rename = "create_ts")]

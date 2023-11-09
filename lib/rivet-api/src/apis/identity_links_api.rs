@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`identity_links_cancel`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksCancelError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum IdentityLinksCancelError {
 
 /// struct for typed errors of method [`identity_links_complete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksCompleteError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum IdentityLinksCompleteError {
 
 /// struct for typed errors of method [`identity_links_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksGetError {
 	Status400(crate::models::ErrorBody),
@@ -57,7 +54,6 @@ pub enum IdentityLinksGetError {
 
 /// struct for typed errors of method [`identity_links_prepare`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum IdentityLinksPrepareError {
 	Status400(crate::models::ErrorBody),

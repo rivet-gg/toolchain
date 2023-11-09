@@ -11,7 +11,6 @@
 /// CloudGameLobbyExpenses : Game lobby expenses.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGameLobbyExpenses {
 	/// A list of multiple region tier expenses.
 	#[serde(rename = "expenses")]

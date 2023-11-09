@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesGameLogoUploadPrepareResponse {
 	#[serde(rename = "presigned_request")]
 	pub presigned_request: Box<crate::models::UploadPresignedRequest>,

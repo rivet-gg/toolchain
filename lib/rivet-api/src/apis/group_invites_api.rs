@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`group_invites_consume_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupInvitesConsumeInviteError {
 	Status400(crate::models::ErrorBody),
@@ -29,7 +28,6 @@ pub enum GroupInvitesConsumeInviteError {
 
 /// struct for typed errors of method [`group_invites_create_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupInvitesCreateInviteError {
 	Status400(crate::models::ErrorBody),
@@ -43,7 +41,6 @@ pub enum GroupInvitesCreateInviteError {
 
 /// struct for typed errors of method [`group_invites_get_invite`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum GroupInvitesGetInviteError {
 	Status400(crate::models::ErrorBody),

@@ -11,7 +11,6 @@
 /// IdentityGlobalEventChatThreadRemove : Received any time the current identity is no longer able to access the  given thread. This can happen if the identity leaves a group or party.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct IdentityGlobalEventChatThreadRemove {
 	#[serde(rename = "thread_id")]
 	pub thread_id: uuid::Uuid,

@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct AuthRefreshIdentityTokenRequest {
 	/// When `true`, the current identity for the provided cookie will be logged out and a new identity will be returned.
 	#[serde(rename = "logout", skip_serializing_if = "Option::is_none")]

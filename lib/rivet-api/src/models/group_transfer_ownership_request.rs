@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct GroupTransferOwnershipRequest {
 	/// Identity to transfer the group to. Must be a member of the group.
 	#[serde(rename = "new_owner_identity_id")]

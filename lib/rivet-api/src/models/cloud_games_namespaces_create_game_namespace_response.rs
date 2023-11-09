@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesCreateGameNamespaceResponse {
 	#[serde(rename = "namespace_id")]
 	pub namespace_id: uuid::Uuid,

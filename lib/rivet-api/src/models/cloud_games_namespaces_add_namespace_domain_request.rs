@@ -9,7 +9,6 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesNamespacesAddNamespaceDomainRequest {
 	/// A valid domain name (no protocol).
 	#[serde(rename = "domain")]

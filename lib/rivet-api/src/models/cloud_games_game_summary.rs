@@ -11,7 +11,6 @@
 /// CloudGamesGameSummary : A game summary.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CloudGamesGameSummary {
 	/// The URL of this game's banner image.
 	#[serde(rename = "banner_url", skip_serializing_if = "Option::is_none")]

@@ -11,7 +11,6 @@
 /// MatchmakerJoinPlayer : A matchmaker lobby player.
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct MatchmakerJoinPlayer {
 	/// Documentation at https://jwt.io/
 	#[serde(rename = "token")]

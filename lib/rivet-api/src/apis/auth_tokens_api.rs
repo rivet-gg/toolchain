@@ -15,7 +15,6 @@ use crate::apis::ResponseContent;
 
 /// struct for typed errors of method [`auth_tokens_refresh_identity_token`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum AuthTokensRefreshIdentityTokenError {
 	Status400(crate::models::ErrorBody),

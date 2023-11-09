@@ -12,7 +12,6 @@
 
 /// A value denoting the format method of a game statistic.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub enum GameStatFormatMethod {
 	#[serde(rename = "integer")]
 	Integer,

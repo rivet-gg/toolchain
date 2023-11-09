@@ -11,7 +11,6 @@
 /// CaptchaConfig : Methods to verify a captcha
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
 pub struct CaptchaConfig {
 	#[serde(rename = "hcaptcha", skip_serializing_if = "Option::is_none")]
 	pub hcaptcha: Option<Box<crate::models::CaptchaConfigHcaptcha>>,
