@@ -11,6 +11,47 @@ use crate::{
 	util::{fmt, gen, struct_fmt, term},
 };
 
+/// Defines how Docker Build will be ran.
+#[derive(strum::EnumString)]
+enum DockerBuildMethod {
+	#[strum(serialize = "buildx")]
+	Buildx,
+
+	#[strum(serialize = "native")]
+	Native,
+}
+
+impl DockerBuildMethod {
+	async fn auto() -> Result<Self> {
+		// Determine build method from env
+		if let Some(method) = std::env::var("_RIVET_DOCKER_BUILD_METHOD")
+			.ok()
+			.and_then(|x| DockerBuildMethod::from_str(&x).ok())
+		{
+			Ok(method)
+		} else {
+			// Validate that Buildx is installed
+			let mut buildx_version_cmd = Command::new("docker");
+			buildx_version_cmd.args(&["buildx", "version"]);
+			let buildx_version =
+				cmd::execute_docker_cmd_silent_fallible(buildx_version_cmd).await?;
+
+			if buildx_version.status.success() {
+				Ok(DockerBuildMethod::Buildx)
+			} else {
+				println!("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
+				Ok(DockerBuildMethod::Native)
+			}
+		}
+	}
+}
+
+impl Default for DockerBuildMethod {
+	fn default() -> Self {
+		DockerBuildMethod::Buildx
+	}
+}
+
 #[derive(Parser)]
 pub enum SubCommand {
 	/// List all versions
@@ -122,7 +163,7 @@ impl SubCommand {
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
 					cli_core::rivet_api::models::CloudGamesValidateGameVersionRequest {
-						display_name: "Mock Dispaly Name".into(),
+						display_name: "Mock Display Name".into(),
 						config: Box::new(rivet_config),
 					},
 				)
@@ -388,8 +429,103 @@ pub async fn build_and_push_image(
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if docker.image_id.is_none() {
-		if let Some(dockerfile) = &docker.dockerfile {
-			let push_output = image::build_and_push(
+		if let Some(dockerfile) = docker.dockerfile.as_ref() {
+			let build_method = DockerBuildMethod::auto().await?;
+
+			eprintln!();
+			let buildx_info = match build_method {
+				DockerBuildMethod::Native => " (with native)",
+				DockerBuildMethod::Buildx => " (with buildx)",
+			};
+			term::status::info("Building Image", format!("{dockerfile}{buildx_info}"));
+
+			// Create temp path to write to
+			let tmp_image_file = tempfile::NamedTempFile::new()?;
+			let tmp_path = tmp_image_file.into_temp_path();
+
+			// Build image
+			let unique_image_tag = format!("rivet-game:{}", Uuid::new_v4());
+			match build_method {
+				DockerBuildMethod::Native => {
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("build")
+						.arg("--file")
+						.arg(dockerfile)
+						.arg("--tag")
+						.arg(&unique_image_tag)
+						.arg(".");
+					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
+
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("save")
+						.arg("--output")
+						.arg(&tmp_path)
+						.arg(&unique_image_tag);
+					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
+				}
+				DockerBuildMethod::Buildx => {
+					let builder_name = "rivet_cli";
+
+					// Determine if needs to create a new builder
+					let mut inspect_cmd = Command::new("docker");
+					inspect_cmd.arg("buildx").arg("inspect").arg(builder_name);
+					let inspect_output =
+						cmd::execute_docker_cmd_silent_fallible(inspect_cmd).await?;
+
+					if !inspect_output.status.success()
+						&& String::from_utf8(inspect_output.stderr.clone())?
+							.contains(&format!("no builder \"{builder_name}\" found"))
+					{
+						// Create new builder
+
+						let mut build_cmd = Command::new("docker");
+						build_cmd
+							.arg("buildx")
+							.arg("create")
+							.arg("--name")
+							.arg(builder_name)
+							.arg("--driver")
+							.arg("docker-container")
+							.arg("--platform")
+							.arg("linux/amd64");
+						cmd::execute_docker_cmd(
+							build_cmd,
+							"Failed to create Docker Buildx builder",
+						)
+						.await?;
+					} else {
+						// Builder exists
+
+						cmd::error_for_output_failure(
+							&inspect_output,
+							"Failed to inspect Docker Buildx runner",
+						)?;
+					}
+
+					// Build image
+					let mut build_cmd = Command::new("docker");
+					build_cmd
+						.arg("buildx")
+						.arg("build")
+						.arg("--builder")
+						.arg(builder_name)
+						.arg("--platform")
+						.arg("linux/amd64")
+						.arg("--file")
+						.arg(dockerfile)
+						.arg("--tag")
+						.arg(&unique_image_tag)
+						.arg("--output")
+						.arg(format!("type=docker,dest={}", tmp_path.display()))
+						.arg(".");
+					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
+				}
+			}
+
+			// Upload build
+			let push_output = image::push_tar(
 				ctx,
 				&image::BuildPushOpts {
 					dockerfile: dockerfile.clone(),

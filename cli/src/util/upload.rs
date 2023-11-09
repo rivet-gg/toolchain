@@ -96,18 +96,35 @@ pub async fn upload_file(
 		let file = File::open(path.as_ref()).await?;
 		let file_meta = file.metadata().await?;
 		let path = presigned_req.path.clone();
-		let total_size = format_file_size(file_meta.len())?;
 
-		eprintln!(
-			"  * {path}: Uploading {total_size} [{mime}]",
-			mime = content_type.clone().unwrap_or_default(),
-		);
+		let file_len = file_meta.len();
+		let is_multipart = presigned_req.content_length as u64 != file_len;
+		let total_size = if is_multipart {
+			format_file_size(presigned_req.content_length as u64)?
+		} else {
+			format_file_size(file_len)?
+		};
+
+		if is_multipart {
+			eprintln!(
+				"  * {path}: Uploading chunk {} - {} [{mime}]",
+				format_file_size(presigned_req.byte_offset as u64)?,
+				format_file_size(
+					(presigned_req.byte_offset + presigned_req.content_length) as u64
+				)?,
+				mime = content_type.clone().unwrap_or_default(),
+			);
+		} else {
+			eprintln!(
+				"  * {path}: Uploading {total_size} [{mime}]",
+				mime = content_type.clone().unwrap_or_default(),
+			);
+		}
 
 		// Create upload stream with progress
 		let mut reader_stream = ReaderStream::new(file);
 
 		let mut uploaded = 0usize;
-		let file_len = file_meta.len();
 
 		let start = Instant::now();
 		let mut last_log = Instant::now();
@@ -149,7 +166,7 @@ pub async fn upload_file(
 		let start = Instant::now();
 		let mut req = reqwest_client
 			.put(&presigned_req.url)
-			.header("content-length", file_meta.len());
+			.header("content-length", presigned_req.content_length);
 		if let Some(content_type) = &content_type {
 			req = req.header("content-type", content_type.to_string());
 		}
