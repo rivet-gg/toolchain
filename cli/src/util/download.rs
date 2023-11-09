@@ -57,8 +57,8 @@ fn extract(archive_path: &Path, inner_dir: &Path, extract_to: &Path) -> Result<(
 
 		// Filter files that are not in the src_dir
 		let Result::Ok(file_name) = file_name.strip_prefix(inner_dir) else {
-            continue;
-        };
+			continue;
+		};
 
 		// Build dest path
 		let outpath = extract_to.join(file_name);

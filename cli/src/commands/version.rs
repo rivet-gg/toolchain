@@ -165,7 +165,7 @@ impl SubCommand {
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
 					cli_core::rivet_api::models::CloudGamesValidateGameVersionRequest {
-						display_name: "Mock Dispaly Name".into(),
+						display_name: "Mock Display Name".into(),
 						config: Box::new(rivet_config),
 					},
 				)
