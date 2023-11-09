@@ -155,16 +155,15 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &ImagePushTarOpts) -> Resu
 	let build_res = build_res.context("cloud_games_builds_create_game_build")?;
 	let image_id = build_res.build_id;
 
-	upload::upload_file(
-		&reqwest_client,
-		build_res
-			.image_presigned_request
-			.as_ref()
-			.context("image_presigned_request")?,
-		&push_opts.path,
-		Some(content_type),
-	)
-	.await?;
+	for presigned_request in build_res.image_presigned_requests.unwrap_or_default() {
+		upload::upload_file(
+			&reqwest_client,
+			&presigned_request,
+			&push_opts.path,
+			Some(content_type),
+		)
+		.await?;
+	}
 
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
