@@ -31,6 +31,9 @@ struct Opts {
 
 	#[clap(long, env = "RIVET_TOKEN")]
 	token: Option<String>,
+
+	#[clap(long, env = "TELEMETRY_DISABLED")]
+	telemetry_disabled: Option<bool>,
 }
 
 #[derive(Parser)]
@@ -116,8 +119,35 @@ enum SubCommand {
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
+	let opts = read_opts().await?;
+	let api_endpoint = opts.api_endpoint.clone();
+	let telemetry_disabled = opts.telemetry_disabled.unwrap_or_default();
+
+	let res = main_inner(opts).await;
+
+	// Blanket catch for all errors
+	if let Err(err) = &res {
+		let mut event = util::telemetry::build_event(
+			telemetry_disabled,
+			api_endpoint,
+			util::telemetry::GAME_ID.get(),
+			"cli_error",
+		)
+		.await?;
+		event.insert_prop(
+			"errors",
+			err.chain().map(|e| e.to_string()).collect::<Vec<_>>(),
+		)?;
+		util::telemetry::capture_event(telemetry_disabled, event).await?;
+	}
+
+	util::telemetry::wait_all().await;
+
+	res
+}
+
+async fn main_inner(opts: Opts) -> Result<()> {
 	let term = console::Term::stderr();
-	let opts = Opts::parse();
 
 	// Handle init command without the context
 	if let SubCommand::Init(init_opts) = &opts.command {
@@ -142,6 +172,9 @@ async fn main() -> Result<()> {
 	// Create context
 	let ctx = cli_core::ctx::init(opts.api_endpoint.clone(), token).await?;
 
+	// Set game id for errors
+	util::telemetry::GAME_ID.set(ctx.game_id.clone())?;
+
 	// Handle command
 	match opts.command {
 		SubCommand::Init(_) => unreachable!(),
@@ -165,4 +198,32 @@ async fn main() -> Result<()> {
 	}
 
 	Ok(())
+}
+
+/// Reads options from clap and reads/updates the internal config file.
+async fn read_opts() -> Result<Opts> {
+	let mut opts = Opts::parse();
+	let mut config = util::secrets::InternalConfig::read().await?;
+	let mut updated = false;
+
+	// Update config file if option was set from env/args
+	if let Some(api_endpoint) = &opts.api_endpoint {
+		config.api_endpoint = Some(api_endpoint.clone());
+		updated = true;
+	} else {
+		opts.api_endpoint = config.api_endpoint.clone();
+	}
+
+	if let Some(telemetry_disabled) = opts.telemetry_disabled {
+		config.telemetry_disabled = telemetry_disabled;
+		updated = true;
+	} else {
+		opts.telemetry_disabled = Some(config.telemetry_disabled);
+	}
+	
+	if updated {
+		config.write().await?;
+	}
+
+	Ok(opts)
 }

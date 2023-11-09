@@ -8,3 +8,7 @@ pub fn internal_config() -> Result<PathBuf> {
 pub fn cloud_token() -> Result<PathBuf> {
 	Ok(internal_config()?.join("cloud_token"))
 }
+
+pub fn internal_config_file() -> Result<PathBuf> {
+	Ok(internal_config()?.join("config.toml"))
+}
