@@ -107,7 +107,7 @@ async fn archive_oci_bundle(image_tag: &str) -> Result<tempfile::TempPath> {
 		// Inspect image
 		let mut inspect_cmd = Command::new("docker");
 		inspect_cmd.arg("image").arg("inspect").arg(&image_tag);
-		let inspect_output = cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
+		let inspect_output = cmd::execute_docker_cmd_silent_fallible(inspect_cmd).await?;
 		let image = serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
 		let image = image.into_iter().next().context("no image")?;
 

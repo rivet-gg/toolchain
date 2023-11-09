@@ -220,7 +220,7 @@ async fn read_opts() -> Result<Opts> {
 	} else {
 		opts.telemetry_disabled = Some(config.telemetry_disabled);
 	}
-	
+
 	if updated {
 		config.write().await?;
 	}

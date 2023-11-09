@@ -35,7 +35,7 @@ impl DockerBuildMethod {
 			let mut buildx_version_cmd = Command::new("docker");
 			buildx_version_cmd.args(&["buildx", "version"]);
 			let buildx_version =
-				cmd::execute_docker_cmd_silent_failable(buildx_version_cmd).await?;
+				cmd::execute_docker_cmd_silent_fallible(buildx_version_cmd).await?;
 
 			if buildx_version.status.success() {
 				Ok(DockerBuildMethod::Buildx)
@@ -94,7 +94,7 @@ pub async fn build_image(
 			// Determine if needs to create a new builder
 			let mut inspect_cmd = Command::new("docker");
 			inspect_cmd.arg("buildx").arg("inspect").arg(builder_name);
-			let inspect_output = cmd::execute_docker_cmd_silent_failable(inspect_cmd).await?;
+			let inspect_output = cmd::execute_docker_cmd_silent_fallible(inspect_cmd).await?;
 
 			if !inspect_output.status.success()
 				&& String::from_utf8(inspect_output.stderr.clone())?
@@ -153,7 +153,7 @@ pub async fn build_image(
 		.arg("rm")
 		.arg("--force")
 		.arg(&image_tag);
-	cmd::execute_docker_cmd_silent_failable(remove_img_cmd).await?;
+	cmd::execute_docker_cmd_silent_fallible(remove_img_cmd).await?;
 
 	Ok(BuildImageOutput {
 		tag: image_tag,

@@ -1,6 +1,6 @@
 mod archive;
 mod build;
-mod push;
+pub mod push;
 
 use anyhow::Result;
 use clap::Parser;

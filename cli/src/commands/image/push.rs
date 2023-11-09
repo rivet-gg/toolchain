@@ -43,6 +43,8 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 		.name
 		.clone()
 		.unwrap_or_else(|| push_opts.tag.clone());
+	let content_type = "application/x-tar";
+
 	eprintln!();
 	term::status::info(
 		"Uploading Image",
@@ -52,6 +54,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 			size = upload::format_file_size(image_file_meta.len())?
 		),
 	);
+
 	let build_res = rivet_api::apis::cloud_games_builds_api::cloud_games_builds_create_game_build(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
@@ -60,7 +63,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 			image_tag: push_opts.tag.clone(),
 			image_file: Box::new(rivet_api::models::UploadPrepareFile {
 				path: "image.tar".into(),
-				content_type: None,
+				content_type: Some(content_type.into()),
 				content_length: image_file_meta.len() as i64,
 			}),
 			kind: Some(match push_opts.kind {
