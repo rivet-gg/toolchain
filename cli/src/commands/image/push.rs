@@ -1,5 +1,6 @@
 use anyhow::{ensure, Context, Result};
 use cli_core::rivet_api;
+use futures_util::stream::{StreamExt, TryStreamExt};
 use serde::Serialize;
 use std::{path::PathBuf, sync::Arc};
 use tokio::fs;
@@ -85,16 +86,25 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 	let image_id = build_res.build_id;
 
 	if multipart_enabled() {
-		for presigned_request in build_res.image_presigned_requests.unwrap() {
-			upload::upload_file(
-				&reqwest_client,
-				&presigned_request,
-				&push_opts.path,
-				Some(content_type),
-			)
+		// Upload chunks in parallel
+		futures_util::stream::iter(build_res.image_presigned_requests.unwrap())
+			.map(|presigned_request| {
+				let reqwest_client = reqwest_client.clone();
+				async move {
+					upload::upload_file(
+						&reqwest_client,
+						&presigned_request,
+						&push_opts.path,
+						Some(content_type),
+					)
+					.await
+				}
+			})
+			.buffer_unordered(8)
+			.try_collect::<Vec<_>>()
 			.await?;
-		}
 	} else {
+		// Upload file
 		upload::upload_file(
 			&reqwest_client,
 			&build_res.image_presigned_request.unwrap(),
@@ -104,7 +114,6 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 		.await?;
 	}
 
-	println!("cloud config: {:?}", ctx.openapi_config_cloud);
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&build_res.upload_id.to_string(),
