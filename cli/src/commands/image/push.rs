@@ -43,7 +43,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 		.name
 		.clone()
 		.unwrap_or_else(|| push_opts.tag.clone());
-	let content_type = "application/x-tar";
+	let content_type = "binary/octet-stream";
 
 	eprintln!();
 	term::status::info(
@@ -74,7 +74,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 				BuildCompression::None => rivet_api::models::CloudGamesBuildCompression::None,
 				BuildCompression::Lz4 => rivet_api::models::CloudGamesBuildCompression::Lz4,
 			}),
-			multipart_upload: Some(true),
+			multipart_upload: Some(multipart_enabled()),
 		},
 	)
 	.await;
@@ -84,16 +84,27 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 	let build_res = build_res.context("cloud_games_builds_create_game_build")?;
 	let image_id = build_res.build_id;
 
-	for presigned_request in build_res.image_presigned_requests.unwrap_or_default() {
+	if multipart_enabled() {
+		for presigned_request in build_res.image_presigned_requests.unwrap() {
+			upload::upload_file(
+				&reqwest_client,
+				&presigned_request,
+				&push_opts.path,
+				Some(content_type),
+			)
+			.await?;
+		}
+	} else {
 		upload::upload_file(
 			&reqwest_client,
-			&presigned_request,
+			&build_res.image_presigned_request.unwrap(),
 			&push_opts.path,
 			Some(content_type),
 		)
 		.await?;
 	}
 
+	println!("cloud config: {:?}", ctx.openapi_config_cloud);
 	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&build_res.upload_id.to_string(),
@@ -108,4 +119,10 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 	Ok(PushOutput {
 		image_id: image_id.to_owned(),
 	})
+}
+
+fn multipart_enabled() -> bool {
+	!std::env::var("_RIVET_UPLOAD_DISABLE_MULTIPART")
+		.ok()
+		.map_or(false, |x| &x == "1")
 }
