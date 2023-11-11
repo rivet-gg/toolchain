@@ -62,18 +62,11 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 	};
 
 	// Inspect token
-	let inspect = http_client
-		.inspect()
-		.send()
+	let inspect = rivet_api::apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
 		.await
 		.map_err(|source| Error::InspectFail { source })?;
-	let game_id = if let crate::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) =
-		inspect.agent.as_ref().ok_or_else(|| Error::Internal {
-			message: "inspect.agent".into(),
-		})? {
-		game_cloud.game_id.clone().ok_or_else(|| Error::Internal {
-			message: "game_cloud.game_id".into(),
-		})?
+	let game_id = if let Some(game_cloud) = inspect.agent.game_cloud {
+		game_cloud.game_id
 	} else {
 		return Err(Error::InvalidAgentKind);
 	};
@@ -88,7 +81,7 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 		concurrent_uploads,
 		override_api_url,
 		access_token,
-		game_id,
+		game_id: game_id.to_string(),
 
 		openapi_config_cloud,
 	}))
