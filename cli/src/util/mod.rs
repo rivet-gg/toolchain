@@ -1,6 +1,5 @@
 pub mod cmd;
 pub mod download;
-pub mod fmt;
 pub mod gen;
 pub mod git;
 pub mod paths;
