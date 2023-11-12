@@ -1,8 +1,9 @@
 use anyhow::{Context, Result};
 use clap::Parser;
+use cli_core::rivet_api;
 use tabled::Tabled;
 
-use crate::util::{fmt, term, upload};
+use crate::util::{term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -14,13 +15,8 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let custom_avatars_res = ctx
-					.client()
-					.list_game_custom_avatars()
-					.game_id(&ctx.game_id)
-					.send()
-					.await
-					.context("client.list_game_custom_avatars")?;
+				let custom_avatars_res = rivet_api::apis::cloud_games_avatars_api::cloud_games_avatars_list_game_custom_avatars(&ctx.openapi_config_cloud, &ctx.game_id).await
+					.context("cloud_games_avatars_list_game_custom_avatars")?;
 
 				#[derive(Tabled)]
 				struct CustomAvatar {
@@ -35,29 +31,17 @@ impl SubCommand {
 				}
 
 				let custom_avatars = custom_avatars_res
-					.custom_avatars()
-					.context("custom_avatars_res.custom_avatars")?
+					.custom_avatars
 					.iter()
 					.map(|custom_avatar| {
 						Ok(CustomAvatar {
-							upload_id: custom_avatar
-								.upload_id()
-								.context("custom_avatar.upload_id")?
-								.to_string(),
-							created: fmt::date(
-								custom_avatar
-									.create_ts()
-									.context("custom_avatar.create_ts")?,
-							),
-							size: upload::format_file_size(
-								custom_avatar
-									.content_length()
-									.context("custom_avatar.content_length")? as u64,
-							)?,
+							upload_id: custom_avatar.upload_id.to_string(),
+							created: custom_avatar.create_ts.clone(),
+							size: upload::format_file_size(custom_avatar.content_length as u64)?,
 							url: custom_avatar
-								.url()
-								.context("custom_avatar.url")?
-								.to_string(),
+								.url
+								.clone()
+								.unwrap_or_else(|| "(Upload not finished)".to_string()),
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
