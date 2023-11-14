@@ -7,15 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.2.0] - Unreleased
 
+### Added
+
+- Support for building OCI bundles
+- Support for LZ4 compression of builds
+- **[BREAKING]** Expose `RIVET_API_ENDPOINT` to `cdn.build_command` to help automate deploying to multiple cluters
+- **[BREAKING]** Unset `RIVET_TOKEN` to `cdn.build_command` in order to ensure the cloud token isn't accidentally baked in a build
+- `image build-push` command to automatically build & push an image
+- `site build-push` command to automatially build and push a site
+- E2E cross-platform tests in GitHub Actions
+
 ### Changed
 
-- Support new single-origin API endpoint (configured with `RIVET_API_ENDPOINT` environment variable or `--api-endpoint` flag)
-- Rename `RIVET_CLOUD_TOKEN` environment variable to `RIVET_TOKEN`
-- Rename `--cloud-token` flag to `--token`
-- Removed `RIVET_API_CLOUD_URL` in favor of `RIVET_API_ENDPOINT`
+- **[BREAKING]** Support new single-origin API endpoint (configured with `RIVET_API_ENDPOINT` environment variable or `--api-endpoint` flag)
+- **[BREAKING]** Rename `RIVET_CLOUD_TOKEN` environment variable to `RIVET_TOKEN`
+- **[BREAKING]** Rename `--cloud-token` flag to `--token`
+- **[BREAKING]** Removed `RIVET_API_CLOUD_URL` in favor of `RIVET_API_ENDPOINT`
 - Added telemetry beacon for fatal errors. Opt out with `--telemetry-disabled` or `TELEMETRY_DISABLED=1`
 - Added internal config to store api endpoint and telemetry options
-- Implemented multipart uploads for builds and sites
+- Implemented multipart uploads for builds and sites, disable multipart uploads with `_RIVET_UPLOAD_DISABLE_MULTIPART`
 
 ## [v0.1.2] - 2023-08-26
 

@@ -1,5 +1,5 @@
 let
-	moz_overlay = import (builtins.fetchTarball https://github.com/mozilla/nixpkgs-mozilla/archive/e6ca26fe8b9df914d4567604e426fbc185d9ef3e.tar.gz);
+	moz_overlay = import (builtins.fetchTarball "https://github.com/mozilla/nixpkgs-mozilla/archive/6eabade97bc28d707a8b9d82ad13ef143836736e.tar.gz");
 	pkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
 in
 	pkgs.mkShell {

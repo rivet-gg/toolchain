@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use cli_core::rivet_api;
 use futures_util::{StreamExt, TryStreamExt};
@@ -10,17 +10,19 @@ use std::{
 		Arc,
 	},
 };
+use tokio::process::Command;
 use uuid::Uuid;
 
-use crate::util::{struct_fmt, term, upload};
+use crate::util::{gen, struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
-	Push(SitePushOpts),
+	Push(PushOpts),
+	BuildPush(BuildPushOpts),
 }
 
 #[derive(Parser)]
-pub struct SitePushOpts {
+pub struct PushOpts {
 	/// Path of the site to push
 	#[clap(long)]
 	pub path: String,
@@ -41,6 +43,11 @@ impl SubCommand {
 				struct_fmt::print_opt(push_opts.format.as_ref(), &output)?;
 				Ok(())
 			}
+			SubCommand::BuildPush(push_opts) => {
+				let output = build_and_push(ctx, push_opts).await?;
+				struct_fmt::print_opt(push_opts.format.as_ref(), &output)?;
+				Ok(())
+			}
 		}
 	}
 }
@@ -50,7 +57,7 @@ pub struct PushOutput {
 	pub site_id: Uuid,
 }
 
-pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushOutput> {
+pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutput> {
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
 	let upload_path = env::current_dir()?.join(&push_opts.path);
@@ -165,4 +172,65 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &SitePushOpts) -> Result<PushO
 	term::status::success("Site Upload Complete", "");
 
 	Ok(PushOutput { site_id })
+}
+
+#[derive(Parser)]
+pub struct BuildPushOpts {
+	/// Command to run before pushing
+	///
+	/// The `RIVET_API_ENDPOINT` environment variable will be exposed to this command. The
+	/// `RIVET_TOKEN` environment variable will be removed for security.
+	#[clap(long)]
+	pub command: String,
+
+	/// Path of the site to push
+	#[clap(long)]
+	pub path: String,
+
+	/// Name of the build
+	#[clap(long)]
+	pub name: Option<String>,
+
+	#[clap(long, value_parser)]
+	pub format: Option<struct_fmt::Format>,
+}
+
+pub async fn build_and_push(ctx: &cli_core::Ctx, push_opts: &BuildPushOpts) -> Result<PushOutput> {
+	eprintln!();
+	term::status::info("Building Site", &push_opts.command);
+
+	if cfg!(unix) {
+		let mut build_cmd = Command::new("/bin/sh");
+		build_cmd
+			.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
+			// Ensure we don't accidentally expose the token to a public build
+			.env_remove("RIVET_TOKEN")
+			.arg("-c")
+			.arg(&push_opts.command);
+		let build_status = build_cmd.status().await?;
+		ensure!(build_status.success(), "site failed to build");
+	} else if cfg!(windows) {
+		let mut build_cmd = Command::new("cmd.exe");
+		build_cmd
+			.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
+			// Ensure we don't accidentally expose the token to a public build
+			.env_remove("RIVET_TOKEN")
+			.arg("/C")
+			.arg(&push_opts.command);
+		let build_status = build_cmd.status().await?;
+		ensure!(build_status.success(), "site failed to build");
+	} else {
+		bail!("unknown machine type, expected unix or windows")
+	};
+
+	// Upload site
+	push(
+		ctx,
+		&PushOpts {
+			path: push_opts.path.clone(),
+			name: Some(gen::display_name_from_date()),
+			format: push_opts.format.clone(),
+		},
+	)
+	.await
 }

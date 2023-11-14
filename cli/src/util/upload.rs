@@ -5,8 +5,12 @@ use std::{
 	path::{Path, PathBuf},
 	time::{Duration, Instant},
 };
-use tokio::fs::File;
+use tokio::{
+	fs::File,
+	io::{AsyncReadExt, AsyncSeekExt},
+};
 use tokio_util::io::ReaderStream;
+// use bytes::Bytes;
 
 /// Prepared file that will be uploaded to S3.
 #[derive(Clone)]
@@ -93,7 +97,7 @@ pub async fn upload_file(
 	let mut attempts = 0;
 	let upload_time = 'upload: loop {
 		// Read file
-		let file = File::open(path.as_ref()).await?;
+		let mut file = File::open(path.as_ref()).await?;
 		let file_meta = file.metadata().await?;
 		let path = presigned_req.path.clone();
 
@@ -121,8 +125,10 @@ pub async fn upload_file(
 			);
 		}
 
-		// Create upload stream with progress
-		let mut reader_stream = ReaderStream::new(file);
+		// Create a reader for the slice of the file we need to read
+		file.seek(tokio::io::SeekFrom::Start(presigned_req.byte_offset as u64))
+			.await?;
+		let mut reader_stream = ReaderStream::new(file.take(presigned_req.content_length as u64));
 
 		let mut uploaded = 0usize;
 
@@ -130,6 +136,7 @@ pub async fn upload_file(
 		let mut last_log = Instant::now();
 		let log_freq = Duration::from_secs(1);
 
+		// Process the stream with upload progress
 		let async_stream = async_stream::stream! {
 			while let Some(chunk) = reader_stream.next().await {
 				if let Ok(chunk) = &chunk {

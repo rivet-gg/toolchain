@@ -17,63 +17,34 @@ pub const DEFAULT_API_ENDPOINT: &'static str = "https://api.rivet.gg";
 
 pub type Ctx = Arc<CtxInner>;
 
-type HttpClient =
-	rivet_cloud::Client<aws_smithy_client::erase::DynConnector, tower::layer::util::Identity>;
-
 pub struct CtxInner {
-	http_client: HttpClient,
 	pub concurrent_uploads: usize,
-	pub override_api_url: Option<String>,
+	pub api_endpoint: String,
 	pub access_token: String,
 	pub game_id: String,
 
 	pub openapi_config_cloud: rivet_api::apis::configuration::Configuration,
 }
 
-impl CtxInner {
-	pub fn client(&self) -> &HttpClient {
-		&self.http_client
-	}
-}
-
-pub async fn init(override_api_url: Option<String>, access_token: String) -> Result<Ctx, Error> {
-	let raw_client = rivet_cloud::Builder::dyn_https()
-		.middleware(tower::layer::util::Identity::new())
-		.sleep_impl(None)
-		.build();
-
-	let uri = override_api_url
+pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<Ctx, Error> {
+	let api_endpoint = api_endpoint
 		.clone()
 		.unwrap_or_else(|| DEFAULT_API_ENDPOINT.to_string());
 
-	// Create client
-	let rivet_cloud_config = rivet_cloud::Config::builder()
-		.set_uri(format!("{uri}/cloud"))
-		.set_bearer_token(access_token.clone())
-		.build();
-	let http_client = rivet_cloud::Client::with_config(raw_client, rivet_cloud_config);
-
 	// Create OpenAPI config
 	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
-		base_path: uri.clone(),
+		base_path: api_endpoint.clone(),
 		bearer_access_token: Some(access_token.clone()),
 		user_agent: Some(user_agent()),
 		..Default::default()
 	};
 
 	// Inspect token
-	let inspect = http_client
-		.inspect()
-		.send()
+	let inspect = rivet_api::apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
 		.await
 		.map_err(|source| Error::InspectFail { source })?;
-	let game_id = if let crate::rivet_cloud::model::AuthAgent::GameCloud(game_cloud) =
-		inspect.agent.as_ref().ok_or_else(|| Error::Internal {
-			message: "inspect.agent".into(),
-		})? {
-		game_cloud.game_id.clone().ok_or_else(|| Error::Internal {
-			message: "game_cloud.game_id".into(),
-		})?
+	let game_id = if let Some(game_cloud) = inspect.agent.game_cloud {
+		game_cloud.game_id
 	} else {
 		return Err(Error::InvalidAgentKind);
 	};
@@ -84,11 +55,10 @@ pub async fn init(override_api_url: Option<String>, access_token: String) -> Res
 		.unwrap_or(8);
 
 	Ok(Arc::new(CtxInner {
-		http_client,
 		concurrent_uploads,
-		override_api_url,
+		api_endpoint,
 		access_token,
-		game_id,
+		game_id: game_id.to_string(),
 
 		openapi_config_cloud,
 	}))

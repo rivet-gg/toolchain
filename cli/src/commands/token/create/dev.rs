@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::Parser;
-use cli_core::rivet_api::models;
+use cli_core::rivet_api::{self, models};
 use serde::Serialize;
 use std::collections::HashMap;
 use tokio::fs;
@@ -38,25 +38,25 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 		.map(String::as_str)
 		.unwrap_or("staging");
 
-	let game_res = ctx
-		.client()
-		.get_game_by_id()
-		.game_id(&ctx.game_id)
-		.send()
-		.await
-		.context("client.get_game_by_id")?;
-	let game = game_res.game.context("game_res.game")?;
-	let game_ns = game.namespaces().context("game.namespaces")?;
-	let staging_namespace_id = game_ns
+	let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		None,
+	)
+	.await
+	.context("cloud_games_games_get_game_by_id")?;
+	let staging_namespace_id = game_res
+		.game
+		.namespaces
 		.iter()
-		.find(|x| x.name_id().map_or(false, |x| x == ns_name_id))
-		.and_then(|x| x.namespace_id())
-		.context("game.namespaces.find(\"staging\").namespace_id")?;
+		.find(|x| x.name_id == ns_name_id)
+		.map(|x| x.namespace_id.to_string())
+		.context("game_res.game.namespaces.find(\"staging\").namespace_id")?;
 
 	let config = commands::version::read_config(Vec::new(), Some(ns_name_id)).await?;
 
 	let Some(matchmaker) = &config.matchmaker else {
-		bail!("matchmaker not enabled")
+		bail!("matchmaker not enabled");
 	};
 
 	let dev_hostname = matchmaker

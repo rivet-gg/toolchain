@@ -1,58 +1,15 @@
-use anyhow::{bail, ensure, Context, Error, Result};
+use anyhow::{Context, Error, Result};
 use clap::Parser;
-use cli_core::rivet_api::models;
+use cli_core::rivet_api::{self, models};
 use serde::Serialize;
 use serde_json::json;
-use std::str::FromStr;
 use tabled::Tabled;
-use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{cmd, fmt, gen, struct_fmt, term},
+	util::{gen, struct_fmt, term},
 };
-
-/// Defines how Docker Build will be ran.
-#[derive(strum::EnumString)]
-enum DockerBuildMethod {
-	#[strum(serialize = "buildx")]
-	Buildx,
-
-	#[strum(serialize = "native")]
-	Native,
-}
-
-impl DockerBuildMethod {
-	async fn auto() -> Result<Self> {
-		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_DOCKER_BUILD_METHOD")
-			.ok()
-			.and_then(|x| DockerBuildMethod::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
-			// Validate that Buildx is installed
-			let mut buildx_version_cmd = Command::new("docker");
-			buildx_version_cmd.args(&["buildx", "version"]);
-			let buildx_version =
-				cmd::execute_docker_cmd_silent_fallible(buildx_version_cmd).await?;
-
-			if buildx_version.status.success() {
-				Ok(DockerBuildMethod::Buildx)
-			} else {
-				println!("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
-				Ok(DockerBuildMethod::Native)
-			}
-		}
-	}
-}
-
-impl Default for DockerBuildMethod {
-	fn default() -> Self {
-		DockerBuildMethod::Buildx
-	}
-}
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -90,15 +47,16 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let game_res = ctx
-					.client()
-					.get_game_by_id()
-					.game_id(&ctx.game_id)
-					.send()
+				let game_res =
+					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
 					.await
-					.context("client.get_game_by_id")?;
-				let game = game_res.game.context("game_res.game")?;
-				let namespaces = game.namespaces().context("game.namespaces")?;
+					.context("cloud_games_games_get_game_by_id")?;
+				let game = &game_res.game;
+				let namespaces = &game.namespaces;
 
 				#[derive(Tabled)]
 				struct Version {
@@ -113,28 +71,21 @@ impl SubCommand {
 				}
 
 				let mut version = game
-					.versions()
-					.context("game.versions")?
+					.versions
 					.iter()
 					.map(|version| {
 						let ns = namespaces
 							.iter()
-							.filter(|ns| ns.version_id() == version.version_id())
-							.filter_map(|ns| ns.display_name())
-							.collect::<Vec<&str>>()
+							.filter(|ns| ns.version_id == version.version_id)
+							.map(|ns| ns.display_name.as_str())
+							.collect::<Vec<_>>()
 							.join(", ");
 
 						Ok(Version {
-							display_name: version
-								.display_name()
-								.context("version.display_name")?
-								.to_string(),
+							display_name: version.display_name.clone(),
 							namespaces: ns,
-							created: fmt::date(version.create_ts().context("version.create_ts")?),
-							version_id: version
-								.version_id()
-								.context("version.version_id")?
-								.to_string(),
+							created: version.create_ts.clone(),
+							version_id: version.version_id.to_string(),
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
@@ -189,13 +140,8 @@ impl SubCommand {
 			}
 			SubCommand::Dashboard { version } => {
 				// Check the version exists
-				ctx.client()
-					.get_game_version_by_id()
-					.game_id(&ctx.game_id)
-					.version_id(version)
-					.send()
-					.await
-					.context("client.get_game_version_by_id")?;
+				rivet_api::apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(&ctx.openapi_config_cloud, &ctx.game_id, &version).await
+				.context("cloud_games_versions_get_game_version_by_id")?;
 
 				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, version)));
 
@@ -279,15 +225,15 @@ impl DeployOpts {
 
 /// Prints information about a game version
 async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
-	let version_res = ctx
-		.client()
-		.get_game_version_by_id()
-		.game_id(&ctx.game_id)
-		.version_id(version_id)
-		.send()
+	let version_res =
+		rivet_api::apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			&version_id,
+		)
 		.await
-		.context("client.get_game_version_by_id")?;
-	let version = version_res.version().context("version_res.version")?;
+		.context("cloud_games_versions_get_game_version_by_id")?;
+	let version = &version_res.version;
 
 	println!("{version:#?}");
 
@@ -405,13 +351,13 @@ pub async fn build_config_dependencies(
 
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		if let Some(docker) = matchmaker.docker.as_mut() {
-			build_image(ctx, docker, format).await?;
+			build_and_push_image(ctx, docker, format).await?;
 		}
 
 		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
 			for (_, game_mode) in game_modes.iter_mut() {
 				if let Some(docker) = game_mode.docker.as_mut() {
-					build_image(ctx, docker, format).await?;
+					build_and_push_image(ctx, docker, format).await?;
 				}
 			}
 		}
@@ -419,119 +365,23 @@ pub async fn build_config_dependencies(
 
 	// Build CDN
 	if let Some(cdn) = version.cdn.as_mut() {
-		build_site(ctx, cdn, format).await?;
+		build_and_push_site(ctx, cdn, format).await?;
 	}
 
 	Ok(())
 }
 
-pub async fn build_image(
+pub async fn build_and_push_image(
 	ctx: &cli_core::Ctx,
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if docker.image_id.is_none() {
-		if let Some(dockerfile) = docker.dockerfile.as_ref() {
-			let build_method = DockerBuildMethod::auto().await?;
-
-			eprintln!();
-			let buildx_info = match build_method {
-				DockerBuildMethod::Native => " (with native)",
-				DockerBuildMethod::Buildx => " (with buildx)",
-			};
-			term::status::info("Building Image", format!("{dockerfile}{buildx_info}"));
-
-			// Create temp path to write to
-			let tmp_image_file = tempfile::NamedTempFile::new()?;
-			let tmp_path = tmp_image_file.into_temp_path();
-
-			// Build image
-			let unique_image_tag = format!("rivet-game:{}", Uuid::new_v4());
-			match build_method {
-				DockerBuildMethod::Native => {
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("build")
-						.arg("--file")
-						.arg(dockerfile)
-						.arg("--tag")
-						.arg(&unique_image_tag)
-						.arg(".");
-					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
-
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("save")
-						.arg("--output")
-						.arg(&tmp_path)
-						.arg(&unique_image_tag);
-					cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
-				}
-				DockerBuildMethod::Buildx => {
-					let builder_name = "rivet_cli";
-
-					// Determine if needs to create a new builder
-					let mut inspect_cmd = Command::new("docker");
-					inspect_cmd.arg("buildx").arg("inspect").arg(builder_name);
-					let inspect_output =
-						cmd::execute_docker_cmd_silent_fallible(inspect_cmd).await?;
-
-					if !inspect_output.status.success()
-						&& String::from_utf8(inspect_output.stderr.clone())?
-							.contains(&format!("no builder \"{builder_name}\" found"))
-					{
-						// Create new builder
-
-						let mut build_cmd = Command::new("docker");
-						build_cmd
-							.arg("buildx")
-							.arg("create")
-							.arg("--name")
-							.arg(builder_name)
-							.arg("--driver")
-							.arg("docker-container")
-							.arg("--platform")
-							.arg("linux/amd64");
-						cmd::execute_docker_cmd(
-							build_cmd,
-							"Failed to create Docker Buildx builder",
-						)
-						.await?;
-					} else {
-						// Builder exists
-
-						cmd::error_for_output_failure(
-							&inspect_output,
-							"Failed to inspect Docker Buildx runner",
-						)?;
-					}
-
-					// Build image
-					let mut build_cmd = Command::new("docker");
-					build_cmd
-						.arg("buildx")
-						.arg("build")
-						.arg("--builder")
-						.arg(builder_name)
-						.arg("--platform")
-						.arg("linux/amd64")
-						.arg("--file")
-						.arg(dockerfile)
-						.arg("--tag")
-						.arg(&unique_image_tag)
-						.arg("--output")
-						.arg(format!("type=docker,dest={}", tmp_path.display()))
-						.arg(".");
-					cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
-				}
-			}
-
-			// Upload build
-			let push_output = image::push_tar(
+		if let Some(dockerfile) = &docker.dockerfile {
+			let push_output = image::build_and_push(
 				ctx,
-				&image::ImagePushTarOpts {
-					path: tmp_path.to_owned(),
-					tag: unique_image_tag,
+				&image::BuildPushOpts {
+					dockerfile: dockerfile.clone(),
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
 				},
@@ -539,10 +389,9 @@ pub async fn build_image(
 			.await?;
 			docker.image_id = Some(push_output.image_id);
 		} else if let Some(docker_image) = docker.image.as_ref() {
-			// Upload build
-			let push_output = image::push_tag(
+			let push_output = image::push(
 				ctx,
-				&image::ImagePushTagOpts {
+				&image::PushOpts {
 					tag: docker_image.clone(),
 					name: Some(gen::display_name_from_date()),
 					format: format.cloned(),
@@ -555,44 +404,37 @@ pub async fn build_image(
 
 	Ok(())
 }
-
-pub async fn build_site(
+pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if cdn.site_id.is_none() {
-		if let Some(build_output) = cdn.build_output.as_ref() {
-			if let Some(build_command) = cdn.build_command.as_ref() {
-				eprintln!();
-				term::status::info("Building Site", build_command);
-
-				if cfg!(unix) {
-					let mut build_cmd = Command::new("/bin/sh");
-					build_cmd.arg("-c").arg(build_command);
-					let build_status = build_cmd.status().await?;
-					ensure!(build_status.success(), "site failed to build");
-				} else if cfg!(windows) {
-					let mut build_cmd = Command::new("cmd.exe");
-					build_cmd.arg("/C").arg(build_command);
-					let build_status = build_cmd.status().await?;
-					ensure!(build_status.success(), "site failed to build");
-				} else {
-					bail!("unknown machine type, expected unix or windows")
-				};
+		if let Some(build_output) = &cdn.build_output {
+			if let Some(build_command) = &cdn.build_command {
+				let push_output = site::build_and_push(
+					ctx,
+					&site::BuildPushOpts {
+						command: build_command.clone(),
+						path: build_output.clone(),
+						name: Some(gen::display_name_from_date()),
+						format: format.cloned(),
+					},
+				)
+				.await?;
+				cdn.site_id = Some(push_output.site_id);
+			} else {
+				let push_output = site::push(
+					ctx,
+					&site::PushOpts {
+						path: build_output.clone(),
+						name: Some(gen::display_name_from_date()),
+						format: format.cloned(),
+					},
+				)
+				.await?;
+				cdn.site_id = Some(push_output.site_id);
 			}
-
-			// Upload site
-			let push_output = site::push(
-				ctx,
-				&site::SitePushOpts {
-					path: build_output.clone(),
-					name: Some(gen::display_name_from_date()),
-					format: format.cloned(),
-				},
-			)
-			.await?;
-			cdn.site_id = Some(push_output.site_id);
 		}
 	}
 
@@ -730,7 +572,7 @@ pub async fn build_and_push_compat(
 		Some(
 			site::push(
 				ctx,
-				&site::SitePushOpts {
+				&site::PushOpts {
 					path: site_path.clone(),
 					name: site_name.clone(),
 					format: format.clone(),
@@ -744,9 +586,9 @@ pub async fn build_and_push_compat(
 
 	let build_output = if let Some(build_tag) = build_tag {
 		Some(
-			image::push_tag(
+			image::push(
 				ctx,
-				&image::ImagePushTagOpts {
+				&image::PushOpts {
 					tag: build_tag.clone(),
 					name: build_name.clone(),
 					format: format.clone(),

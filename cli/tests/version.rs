@@ -1,4 +1,5 @@
 use serde_json::json;
+use uuid::Uuid;
 
 #[tokio::test]
 async fn basic() {
@@ -10,10 +11,10 @@ async fn basic() {
 			.join("basic"),
 	)
 	.unwrap();
-	let _user_config = rivet::commands::version::read_user_config(
+	let _user_config = rivet_cli::commands::version::read_config(
 		vec![
-			("cdn.site_id".into(), json!("xxxx")),
-			("matchmaker.docker.image_id".into(), json!("xxxx")),
+			("cdn.site_id".into(), json!(Uuid::new_v4())),
+			("matchmaker.docker.image_id".into(), json!(Uuid::new_v4())),
 		],
 		Some("my-ns"),
 	)
