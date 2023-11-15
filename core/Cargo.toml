@@ -10,7 +10,6 @@ repository = "https://github.com/rivet-gg/cli"
 build = "build.rs"
 
 [dependencies]
-aws-smithy-client = "^0.41.0"
 home = "0.5.3"
 openssl = { version = "*", features = ["vendored"] }  # Required for cross compilation, see https://github.com/sfackler/rust-openssl/issues/603#issuecomment-822619837
 rivet-api = { path = "../lib/rivet-api" }
