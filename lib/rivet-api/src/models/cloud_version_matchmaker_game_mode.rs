@@ -13,16 +13,12 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CloudVersionMatchmakerGameMode {
-	#[serde(rename = "create_config", skip_serializing_if = "Option::is_none")]
-	pub create_config: Option<Box<crate::models::CloudVersionMatchmakerGameModeCreateConfig>>,
+	#[serde(rename = "actions", skip_serializing_if = "Option::is_none")]
+	pub actions: Option<Box<crate::models::CloudVersionMatchmakerGameModeActions>>,
 	#[serde(rename = "docker", skip_serializing_if = "Option::is_none")]
 	pub docker: Option<Box<crate::models::CloudVersionMatchmakerGameModeRuntimeDocker>>,
-	#[serde(rename = "find_config", skip_serializing_if = "Option::is_none")]
-	pub find_config: Option<Box<crate::models::CloudVersionMatchmakerGameModeFindConfig>>,
 	#[serde(rename = "idle_lobbies", skip_serializing_if = "Option::is_none")]
 	pub idle_lobbies: Option<Box<crate::models::CloudVersionMatchmakerGameModeIdleLobbiesConfig>>,
-	#[serde(rename = "join_config", skip_serializing_if = "Option::is_none")]
-	pub join_config: Option<Box<crate::models::CloudVersionMatchmakerGameModeJoinConfig>>,
 	#[serde(rename = "listable", skip_serializing_if = "Option::is_none")]
 	pub listable: Option<bool>,
 	#[serde(rename = "max_players", skip_serializing_if = "Option::is_none")]
@@ -43,11 +39,9 @@ impl CloudVersionMatchmakerGameMode {
 	/// A game mode.
 	pub fn new() -> CloudVersionMatchmakerGameMode {
 		CloudVersionMatchmakerGameMode {
-			create_config: None,
+			actions: None,
 			docker: None,
-			find_config: None,
 			idle_lobbies: None,
-			join_config: None,
 			listable: None,
 			max_players: None,
 			max_players_direct: None,
