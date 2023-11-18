@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **[BREAKING]** Rename `RIVET_CLOUD_TOKEN` environment variable to `RIVET_TOKEN`
 - **[BREAKING]** Rename `--cloud-token` flag to `--token`
 - **[BREAKING]** Removed `RIVET_API_CLOUD_URL` in favor of `RIVET_API_ENDPOINT`
+- **[BREAKING]** Updated custom games config schema
 - **[BREAKING]** Removed domain map from turnstile configuration, replaced with `site_key` and `secret_key`
 - Added telemetry beacon for fatal errors. Opt out with `--telemetry-disabled` or `TELEMETRY_DISABLED=1`
 - Added internal config to store api endpoint and telemetry options
