@@ -169,7 +169,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 		println!("Error: {err:?}");
 	}
 	complete_res.context("cloud_uploads_complete_upload")?;
-	term::status::success("Site Upload Complete", "");
+	term::status::success("Site Upload Complete", site_id);
 
 	Ok(PushOutput { site_id })
 }
