@@ -9,13 +9,13 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct AuthStartEmailVerificationResponse {
-	#[serde(rename = "verification_id")]
-	pub verification_id: uuid::Uuid,
+pub struct AdminLoginResponse {
+	#[serde(rename = "url")]
+	pub url: String,
 }
 
-impl AuthStartEmailVerificationResponse {
-	pub fn new(verification_id: uuid::Uuid) -> AuthStartEmailVerificationResponse {
-		AuthStartEmailVerificationResponse { verification_id }
+impl AdminLoginResponse {
+	pub fn new(url: String) -> AdminLoginResponse {
+		AdminLoginResponse { url }
 	}
 }
