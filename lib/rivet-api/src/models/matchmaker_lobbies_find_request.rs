@@ -14,6 +14,8 @@ pub struct MatchmakerLobbiesFindRequest {
 	pub captcha: Option<Box<crate::models::CaptchaConfig>>,
 	#[serde(rename = "game_modes")]
 	pub game_modes: Vec<String>,
+	#[serde(rename = "max_players", skip_serializing_if = "Option::is_none")]
+	pub max_players: Option<i32>,
 	#[serde(
 		rename = "prevent_auto_create_lobby",
 		skip_serializing_if = "Option::is_none"
@@ -21,6 +23,8 @@ pub struct MatchmakerLobbiesFindRequest {
 	pub prevent_auto_create_lobby: Option<bool>,
 	#[serde(rename = "regions", skip_serializing_if = "Option::is_none")]
 	pub regions: Option<Vec<String>>,
+	#[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
+	pub tags: Option<::std::collections::HashMap<String, String>>,
 	#[serde(
 		rename = "verification_data",
 		default,
@@ -35,8 +39,10 @@ impl MatchmakerLobbiesFindRequest {
 		MatchmakerLobbiesFindRequest {
 			captcha: None,
 			game_modes,
+			max_players: None,
 			prevent_auto_create_lobby: None,
 			regions: None,
+			tags: None,
 			verification_data: None,
 		}
 	}
