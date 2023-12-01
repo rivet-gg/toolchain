@@ -1,16 +1,16 @@
-# \AdminGroupsApi
+# \AdminApi
 
 All URIs are relative to *https://api.rivet.gg*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**admin_groups_convert_developer**](AdminGroupsApi.md#admin_groups_convert_developer) | **POST** /admin/groups/{group_id}/developer | 
+[**admin_login**](AdminApi.md#admin_login) | **POST** /admin/login | 
 
 
 
-## admin_groups_convert_developer
+## admin_login
 
-> admin_groups_convert_developer(group_id)
+> crate::models::AdminLoginResponse admin_login(admin_login_request)
 
 
 ### Parameters
@@ -18,11 +18,11 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**group_id** | **uuid::Uuid** |  | [required] |
+**admin_login_request** | [**AdminLoginRequest**](AdminLoginRequest.md) |  | [required] |
 
 ### Return type
 
- (empty response body)
+[**crate::models::AdminLoginResponse**](AdminLoginResponse.md)
 
 ### Authorization
 
@@ -30,7 +30,7 @@ Name | Type | Description  | Required | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

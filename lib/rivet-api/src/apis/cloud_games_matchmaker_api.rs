@@ -223,7 +223,7 @@ pub async fn cloud_games_matchmaker_get_lobby_logs(
 	configuration: &configuration::Configuration,
 	game_id: &str,
 	lobby_id: &str,
-	stream: &str,
+	stream: crate::models::CloudGamesLogStream,
 	watch_index: Option<&str>,
 ) -> Result<
 	crate::models::CloudGamesGetLobbyLogsResponse,
