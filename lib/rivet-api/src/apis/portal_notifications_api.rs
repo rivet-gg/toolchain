@@ -87,7 +87,7 @@ pub async fn portal_notifications_register_notifications(
 /// Unregister push notification for the current identity.
 pub async fn portal_notifications_unregister_notifications(
 	configuration: &configuration::Configuration,
-	service: &str,
+	service: crate::models::PortalNotificationUnregisterService,
 ) -> Result<(), Error<PortalNotificationsUnregisterNotificationsError>> {
 	let local_var_configuration = configuration;
 

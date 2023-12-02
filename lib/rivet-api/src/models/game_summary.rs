@@ -25,6 +25,9 @@ pub struct GameSummary {
 	/// A human readable short identifier used to references resources. Different than a `uuid` because this is intended to be human readable. Different than `DisplayName` because this should not include special characters and be short.
 	#[serde(rename = "name_id")]
 	pub name_id: String,
+	/// Unsigned 32 bit integer.
+	#[serde(rename = "total_player_count")]
+	pub total_player_count: i32,
 	#[serde(rename = "url")]
 	pub url: String,
 }
@@ -35,6 +38,7 @@ impl GameSummary {
 		display_name: String,
 		game_id: uuid::Uuid,
 		name_id: String,
+		total_player_count: i32,
 		url: String,
 	) -> GameSummary {
 		GameSummary {
@@ -44,6 +48,7 @@ impl GameSummary {
 			game_id,
 			logo_url: None,
 			name_id,
+			total_player_count,
 			url,
 		}
 	}
