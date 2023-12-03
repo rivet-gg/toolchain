@@ -1,9 +1,11 @@
 use anyhow::{Context, Result};
 use clap::Parser;
+use cli_core::rivet_api::{self, models};
 use serde::Serialize;
 use tabled::Tabled;
+use uuid::Uuid;
 
-use crate::util::{fmt, struct_fmt, term};
+use crate::util::{struct_fmt, term};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -12,7 +14,7 @@ pub enum SubCommand {
 	/// Get details about a specific namespace
 	Get {
 		/// Namespace ID
-		namespace: String,
+		namespace: Uuid,
 		#[clap(long, value_parser)]
 		format: struct_fmt::Format,
 	},
@@ -26,7 +28,7 @@ pub enum SubCommand {
 		display_name: String,
 		/// Initial version to publish to the namespace
 		#[clap(long)]
-		version: String,
+		version: Uuid,
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
 	},
@@ -34,10 +36,10 @@ pub enum SubCommand {
 	SetVersion {
 		/// The namespace ID to update
 		#[clap(long, short, alias = "ns")]
-		namespace: String,
+		namespace: Uuid,
 		/// The version ID to publish
 		#[clap(long, short)]
-		version: String,
+		version: Uuid,
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
 	},
@@ -45,7 +47,7 @@ pub enum SubCommand {
 	#[clap(alias = "dash")]
 	Dashboard {
 		/// The namespace ID
-		namespace: String,
+		namespace: Uuid,
 	},
 }
 
@@ -53,15 +55,16 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let game_res = ctx
-					.client()
-					.get_game_by_id()
-					.game_id(&ctx.game_id)
-					.send()
+				let game_res =
+					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
 					.await
-					.context("client.get_game_by_id")?;
-				let game = game_res.game.context("game_res.game")?;
-				let game_versions = game.versions().context("game.versions")?;
+					.context("cloud_games_games_get_game_by_id")?;
+				let game = &game_res.game;
+				let game_versions = &game.versions;
 
 				#[derive(Tabled)]
 				struct Namespace {
@@ -78,23 +81,21 @@ impl SubCommand {
 				}
 
 				let mut ns = game
-					.namespaces()
-					.context("game.namespaces")?
+					.namespaces
 					.iter()
 					.map(|ns| {
-						let version_id = ns.version_id().context("ns.version_id")?.to_string();
 						let version_name = game_versions
 							.iter()
-							.find(|x| x.version_id().map_or(false, |id| id == version_id))
-							.and_then(|x| x.display_name())
-							.map_or_else(|| version_id.to_string(), |x| x.to_string());
+							.find(|x| x.version_id == ns.version_id)
+							.map(|x| x.display_name.clone())
+							.unwrap_or_else(|| ns.version_id.to_string());
 
 						Ok(Namespace {
-							display_name: ns.display_name().context("ns.display_name")?.to_string(),
-							name_id: ns.name_id().context("ns.name_id")?.to_string(),
-							namespace_id: ns.namespace_id().context("ns.namespace_id")?.to_string(),
+							display_name: ns.display_name.clone(),
+							name_id: ns.name_id.clone(),
+							namespace_id: ns.namespace_id.to_string(),
 							version: version_name,
-							created: fmt::date(ns.create_ts().context("ns.create_ts")?),
+							created: ns.create_ts.clone(),
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
@@ -104,7 +105,7 @@ impl SubCommand {
 				Ok(())
 			}
 			SubCommand::Get { namespace, format } => {
-				print_ns(ctx, format, &namespace).await?;
+				print_ns(ctx, format, &namespace.to_string()).await?;
 
 				Ok(())
 			}
@@ -115,44 +116,40 @@ impl SubCommand {
 				format,
 			} => {
 				// Get game
-				let game_res = ctx
-					.client()
-					.get_game_by_id()
-					.game_id(&ctx.game_id)
-					.send()
+				let game_res =
+					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
 					.await
-					.context("client.get_game_by_id")?;
-				let game = game_res.game().context("game_res.game")?;
-				let namespaces = game.namespaces().context("game.namespaces")?;
+					.context("cloud_games_games_get_game_by_id")?;
+				let namespaces = &game_res.game.namespaces;
 
 				// Get or create namespace
-				let ns_id =
-					if let Some(ns) = namespaces.iter().find(|ns| ns.name_id() == Some(&name_id)) {
-						let ns_id = ns.namespace_id().context("ns.namespace_id")?;
-						let display_name = ns.display_name().context("ns.display_name")?;
+				let ns_id = if let Some(ns) = namespaces.iter().find(|ns| &ns.name_id == name_id) {
+					let ns_id = ns.namespace_id.to_string();
+					let display_name = &ns.display_name;
 
-						term::status::success("Found Existing", display_name);
+					term::status::success("Found Existing", display_name);
 
-						ns_id.to_owned()
-					} else {
-						let create_res = ctx
-							.client()
-							.create_game_namespace()
-							.game_id(&ctx.game_id)
-							.display_name(display_name)
-							.name_id(name_id)
-							.version_id(version)
-							.send()
-							.await
-							.context("client.create_game_namespace")?;
-						let ns_id = create_res
-							.namespace_id()
-							.context("create_res.namespace_id")?;
+					ns_id
+				} else {
+					let create_res = rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					models::CloudGamesNamespacesCreateGameNamespaceRequest {
+						display_name: display_name.clone(),
+						name_id: name_id.clone(),
+						version_id: *version,
+					}).await
+					.context("cloud_games_namespaces_create_game_namespace")?;
+					let ns_id = create_res.namespace_id.to_string();
 
-						term::status::success("Created", display_name);
+					term::status::success("Created", display_name);
 
-						ns_id.to_owned()
-					};
+					ns_id
+				};
 
 				term::status::info("Dashboard", dashboard_url(&ctx.game_id, &ns_id));
 
@@ -167,34 +164,37 @@ impl SubCommand {
 				version,
 				format,
 			} => {
-				ctx.client()
-					.update_game_namespace_version()
-					.game_id(&ctx.game_id)
-					.namespace_id(namespace)
-					.version_id(version)
-					.send()
-					.await
-					.context("client.update_game_namespace_version")?;
+				rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					&namespace.to_string(),
+					models::CloudGamesNamespacesUpdateGameNamespaceVersionRequest {
+						version_id: *version,
+					}
+				).await
+				.context("cloud_games_namespaces_update_game_namespace_version")?;
 
 				term::status::success("Version Set", "");
 
 				if let Some(format) = format {
-					print_ns(ctx, format, &namespace).await?;
+					print_ns(ctx, format, &namespace.to_string()).await?;
 				}
 
 				Ok(())
 			}
 			SubCommand::Dashboard { namespace } => {
 				// Check the namespace exists
-				ctx.client()
-					.get_game_namespace_by_id()
-					.game_id(&ctx.game_id)
-					.namespace_id(namespace)
-					.send()
-					.await
-					.context("client.get_game_version_by_id")?;
+				rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					&namespace.to_string()
+				).await
+				.context("cloud_games_namespaces_get_game_namespace_by_id")?;
 
-				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, namespace)));
+				eprintln!(
+					"{}",
+					term::link(dashboard_url(&ctx.game_id, &namespace.to_string()))
+				);
 
 				Ok(())
 			}
@@ -207,15 +207,9 @@ async fn print_ns(
 	format: &struct_fmt::Format,
 	namespace_id: &str,
 ) -> Result<()> {
-	let ns_res = ctx
-		.client()
-		.get_game_namespace_by_id()
-		.game_id(&ctx.game_id)
-		.namespace_id(namespace_id)
-		.send()
-		.await
-		.context("client.get_game_version_by_id")?;
-	let ns = ns_res.namespace().context("ns_res.namespace")?;
+	let ns_res = rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(&ctx.openapi_config_cloud, &ctx.game_id, namespace_id).await
+		.context("cloud_games_namespaces_get_game_namespace_by_id")?;
+	let ns = &ns_res.namespace;
 
 	#[derive(Serialize)]
 	struct Output<'a> {
@@ -227,10 +221,10 @@ async fn print_ns(
 	struct_fmt::print(
 		format,
 		&Output {
-			namespace_id: ns.namespace_id().context("ns.namespace_id")?,
-			created: &fmt::date(ns.create_ts().context("ns.create_ts")?),
-			display_name: &ns.display_name().context("ns.display_name")?,
-			version_id: &ns.version_id().context("ns.version_id")?,
+			namespace_id: &ns.namespace_id.to_string(),
+			created: &ns.create_ts,
+			display_name: &ns.display_name,
+			version_id: &ns.version_id.to_string(),
 		},
 	)?;
 

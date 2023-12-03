@@ -26,7 +26,7 @@ pub enum Error {
 
 	#[error("inspect fail: {source}")]
 	InspectFail {
-		source: aws_smithy_client::SdkError<rivet_cloud::error::InspectError>,
+		source: rivet_api::apis::Error<rivet_api::apis::cloud_auth_api::CloudAuthInspectError>,
 	},
 
 	#[error("config {key}: {message}")]

@@ -1,6 +1,6 @@
 use anyhow::{bail, ensure, Context, Error, Result};
 use clap::Parser;
-use cli_core::rivet_api::models;
+use cli_core::rivet_api::{self, models};
 use serde::Serialize;
 use serde_json::json;
 use std::str::FromStr;
@@ -10,7 +10,7 @@ use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{cmd, fmt, gen, struct_fmt, term},
+	util::{cmd, gen, struct_fmt, term},
 };
 
 /// Defines how Docker Build will be ran.
@@ -90,15 +90,16 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let game_res = ctx
-					.client()
-					.get_game_by_id()
-					.game_id(&ctx.game_id)
-					.send()
+				let game_res =
+					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
 					.await
-					.context("client.get_game_by_id")?;
-				let game = game_res.game.context("game_res.game")?;
-				let namespaces = game.namespaces().context("game.namespaces")?;
+					.context("cloud_games_games_get_game_by_id")?;
+				let game = &game_res.game;
+				let namespaces = &game.namespaces;
 
 				#[derive(Tabled)]
 				struct Version {
@@ -113,28 +114,21 @@ impl SubCommand {
 				}
 
 				let mut version = game
-					.versions()
-					.context("game.versions")?
+					.versions
 					.iter()
 					.map(|version| {
 						let ns = namespaces
 							.iter()
-							.filter(|ns| ns.version_id() == version.version_id())
-							.filter_map(|ns| ns.display_name())
-							.collect::<Vec<&str>>()
+							.filter(|ns| ns.version_id == version.version_id)
+							.map(|ns| ns.display_name.as_str())
+							.collect::<Vec<_>>()
 							.join(", ");
 
 						Ok(Version {
-							display_name: version
-								.display_name()
-								.context("version.display_name")?
-								.to_string(),
+							display_name: version.display_name.clone(),
 							namespaces: ns,
-							created: fmt::date(version.create_ts().context("version.create_ts")?),
-							version_id: version
-								.version_id()
-								.context("version.version_id")?
-								.to_string(),
+							created: version.create_ts.clone(),
+							version_id: version.version_id.to_string(),
 						})
 					})
 					.collect::<Result<Vec<_>>>()?;
@@ -189,13 +183,8 @@ impl SubCommand {
 			}
 			SubCommand::Dashboard { version } => {
 				// Check the version exists
-				ctx.client()
-					.get_game_version_by_id()
-					.game_id(&ctx.game_id)
-					.version_id(version)
-					.send()
-					.await
-					.context("client.get_game_version_by_id")?;
+				rivet_api::apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(&ctx.openapi_config_cloud, &ctx.game_id, &version).await
+				.context("cloud_games_versions_get_game_version_by_id")?;
 
 				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, version)));
 
@@ -279,15 +268,15 @@ impl DeployOpts {
 
 /// Prints information about a game version
 async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
-	let version_res = ctx
-		.client()
-		.get_game_version_by_id()
-		.game_id(&ctx.game_id)
-		.version_id(version_id)
-		.send()
+	let version_res =
+		rivet_api::apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			&version_id,
+		)
 		.await
-		.context("client.get_game_version_by_id")?;
-	let version = version_res.version().context("version_res.version")?;
+		.context("cloud_games_versions_get_game_version_by_id")?;
+	let version = &version_res.version;
 
 	println!("{version:#?}");
 

@@ -12,8 +12,8 @@
 #[serde(deny_unknown_fields)]
 pub struct CloudGamesPrepareCustomAvatarUploadRequest {
 	/// Unsigned 64 bit integer.
-	#[serde(rename = "content_length", skip_serializing_if = "Option::is_none")]
-	pub content_length: Option<i64>,
+	#[serde(rename = "content_length")]
+	pub content_length: i64,
 	/// The MIME type of the custom avatar.
 	#[serde(rename = "mime", skip_serializing_if = "Option::is_none")]
 	pub mime: Option<String>,
@@ -23,9 +23,9 @@ pub struct CloudGamesPrepareCustomAvatarUploadRequest {
 }
 
 impl CloudGamesPrepareCustomAvatarUploadRequest {
-	pub fn new(path: String) -> CloudGamesPrepareCustomAvatarUploadRequest {
+	pub fn new(content_length: i64, path: String) -> CloudGamesPrepareCustomAvatarUploadRequest {
 		CloudGamesPrepareCustomAvatarUploadRequest {
-			content_length: None,
+			content_length,
 			mime: None,
 			path,
 		}

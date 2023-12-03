@@ -176,15 +176,15 @@ impl Opts {
 		let ctx = if let Some(cloud_token) = cloud_token {
 			let ctx = cli_core::ctx::init(override_api_url.clone(), cloud_token).await?;
 
-			let game_res = ctx
-				.client()
-				.get_game_by_id()
-				.game_id(&ctx.game_id)
-				.send()
+			let game_res =
+				rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					None,
+				)
 				.await
-				.context("client.get_game_by_id")?;
-			let game = game_res.game().context("game_res.game")?;
-			let display_name = game.display_name().context("game.display_name")?;
+				.context("cloud_games_games_get_game_by_id")?;
+			let display_name = game_res.game.display_name;
 
 			term::status::success("Found existing token", display_name);
 
