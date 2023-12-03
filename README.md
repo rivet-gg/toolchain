@@ -4,13 +4,31 @@
 
 ### macOS & Linux & WSL
 
+**Install latest version**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 ```
+
+**Install specific version**
+
+```bash
+export RIVET_CLI_VERSION="v0.2.0"
 curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 ```
 
 ### Windows (cmd & PowerShell)
 
+**Install latest version**
+
 ```
+powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex"
+```
+
+**Install specific version**
+
+```bash
+$env:RIVET_CLI_VERSION="v0.2.0"
 powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex"
 ```
 
