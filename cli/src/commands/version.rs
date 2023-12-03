@@ -10,7 +10,7 @@ use uuid::Uuid;
 
 use crate::{
 	commands::{image, site},
-	util::{cmd, fmt, gen, struct_fmt, term},
+	util::{cmd, gen, struct_fmt, term},
 };
 
 /// Defines how Docker Build will be ran.
