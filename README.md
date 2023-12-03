@@ -12,6 +12,8 @@ curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh |
 
 **Install specific version**
 
+We recommend specifying the CLI version in CI environments.
+
 ```bash
 export RIVET_CLI_VERSION="v0.2.0"
 curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
@@ -26,6 +28,8 @@ powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/ins
 ```
 
 **Install specific version**
+
+We recommend specifying the CLI version in CI environments.
 
 ```bash
 $env:RIVET_CLI_VERSION="v0.2.0"
