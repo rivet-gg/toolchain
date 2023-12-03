@@ -26,37 +26,11 @@ pub struct CtxInner {
 	pub openapi_config_cloud: rivet_api::apis::configuration::Configuration,
 }
 
-<<<<<<< HEAD
-impl CtxInner {
-	pub fn client(&self) -> &HttpClient {
-		&self.http_client
-	}
-}
-
 pub async fn init(override_api_url: Option<String>, access_token: String) -> Result<Ctx, Error> {
-	let raw_client = rivet_cloud::Builder::dyn_https()
-		.middleware(tower::layer::util::Identity::new())
-		.sleep_impl(None)
-		.build();
-
 	let uri = override_api_url
-=======
-pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<Ctx, Error> {
-	let api_endpoint = api_endpoint
->>>>>>> 6b49b27 (Remove smithy API usage)
 		.clone()
 		.unwrap_or_else(|| DEFAULT_API_CLOUD_URL.to_string());
 
-<<<<<<< HEAD
-	// Create client
-	let rivet_cloud_config = rivet_cloud::Config::builder()
-		.set_uri(uri.clone())
-		.set_bearer_token(access_token.clone())
-		.build();
-	let http_client = rivet_cloud::Client::with_config(raw_client, rivet_cloud_config);
-
-=======
->>>>>>> 6b49b27 (Remove smithy API usage)
 	// Create OpenAPI config
 	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
 		base_path: uri.clone(),
