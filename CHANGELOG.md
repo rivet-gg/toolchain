@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Auto-generated & recommended config is now a `rivet.yaml` file
 - **[BREAKING]** Removed support for file formats that are not YAML, TOML, or JSON in order to simplify maintaining forward compatibility
+- Merged `.rivet/cloud_token` and `.rivet/config.toml` in to unified `.rivet/config.yaml`
 
 ## [v0.2.0] - 2020-12-1
 
@@ -17,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for building OCI bundles
 - Support for LZ4 compression of builds
-- **[BREAKING]** Expose `RIVET_API_ENDPOINT` to `cdn.build_command` to help automate deploying to multiple cluters
+- **[BREAKING]** Expose `RIVET_API_ENDPOINT` to `cdn.build_command` to help automate deploying to multiple clusters
 - **[BREAKING]** Unset `RIVET_TOKEN` to `cdn.build_command` in order to ensure the cloud token isn't accidentally baked in a build
 - `image build-push` command to automatically build & push an image
 - `site build-push` command to automatially build and push a site

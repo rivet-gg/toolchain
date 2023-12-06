@@ -1,11 +1,12 @@
+use crate::util::internal_config;
 use anyhow::{Context, Result};
 use clap::Parser;
 use commands::*;
-use util::secrets;
 
 mod commands;
 mod util;
 
+// IMPORTANT: Do not read `api_endpoint`, `token`, and `telemetry_disabled` directly from `opts`. These properties are written to the config. Use `internal_config::read`.
 #[derive(Parser)]
 #[clap(
 	author = "Rivet Gaming, Inc. <developer@rivet.gg>",
@@ -120,25 +121,23 @@ enum SubCommand {
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<()> {
 	let opts = read_opts().await?;
-	let api_endpoint = opts.api_endpoint.clone();
-	let telemetry_disabled = opts.telemetry_disabled.unwrap_or_default();
 
 	let res = main_inner(opts).await;
 
 	// Blanket catch for all errors
 	if let Err(err) = &res {
-		let mut event = util::telemetry::build_event(
-			telemetry_disabled,
-			api_endpoint,
+		util::telemetry::capture_event(
 			util::telemetry::GAME_ID.get(),
 			"cli_error",
+			Some(|event: &mut async_posthog::Event| {
+				event.insert_prop(
+					"errors",
+					err.chain().map(|e| e.to_string()).collect::<Vec<_>>(),
+				)?;
+                Ok(())
+			}),
 		)
 		.await?;
-		event.insert_prop(
-			"errors",
-			err.chain().map(|e| e.to_string()).collect::<Vec<_>>(),
-		)?;
-		util::telemetry::capture_event(telemetry_disabled, event).await?;
 	}
 
 	util::telemetry::wait_all().await;
@@ -164,7 +163,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 	let token = if let Some(token) = opts.token {
 		token
 	} else {
-		secrets::read_token()
+		internal_config::read(|x| x.tokens.cloud.clone())
 			.await?
 			.context("no Rivet token found, please run `rivet init`")?
 	};
@@ -202,27 +201,14 @@ async fn main_inner(opts: Opts) -> Result<()> {
 
 /// Reads options from clap and reads/updates the internal config file.
 async fn read_opts() -> Result<Opts> {
-	let mut opts = Opts::parse();
-	let mut config = util::secrets::InternalConfig::read().await?;
-	let mut updated = false;
+	let opts = Opts::parse();
 
-	// Update config file if option was set from env/args
 	if let Some(api_endpoint) = &opts.api_endpoint {
-		config.api_endpoint = Some(api_endpoint.clone());
-		updated = true;
-	} else {
-		opts.api_endpoint = config.api_endpoint.clone();
+		internal_config::mutate(|x| x.cluster.api_endpoint = Some(api_endpoint.clone())).await?;
 	}
 
 	if let Some(telemetry_disabled) = opts.telemetry_disabled {
-		config.telemetry_disabled = telemetry_disabled;
-		updated = true;
-	} else {
-		opts.telemetry_disabled = Some(config.telemetry_disabled);
-	}
-
-	if updated {
-		config.write().await?;
+		internal_config::mutate(|x| x.telemetry.disabled = telemetry_disabled).await?;
 	}
 
 	Ok(opts)

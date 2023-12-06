@@ -1,6 +1,6 @@
 #!/bin/sh
-set -euf -o pipefail
+set -euf
 
-./bin/test-setup.sh
-./bin/test-cmd.sh "$@"
+./scripts/test_setup.sh
+./scripts/test_cmd.sh "$@"
 
