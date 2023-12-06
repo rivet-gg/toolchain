@@ -13,12 +13,12 @@ use crate::{
 	util::{git, secrets, term},
 };
 
-const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.toml");
-const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
-const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
+const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
+const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.yaml");
+const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.yaml");
 
-const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.toml");
-const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.toml");
+const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.yaml");
+const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.yaml");
 
 const UNREAL_DOCKERIGNORE: &'static str = include_str!("../../tpl/unreal_config/.dockerignore");
 const UNREAL_SERVER_DEBUG_DOCKERFILE: &'static str =
