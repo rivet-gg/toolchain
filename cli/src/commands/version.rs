@@ -263,8 +263,8 @@ pub fn parse_config_override_args(
 /// namespace to read override files.
 ///
 /// For example, in the namespace `foobar`, Rivet would first read
-/// `rivet.toml` then override with properties from
-/// `rivet.foobar.toml`.
+/// `rivet.yaml` then override with properties from
+/// `rivet.foobar.yaml`.
 pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
