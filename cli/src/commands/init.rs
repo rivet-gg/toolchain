@@ -111,13 +111,13 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(
-		&self,
-		token: Option<&str>,
-		term: &Term,
-		override_endpoint: Option<String>,
-	) -> Result<()> {
-		let ctx = self.build_ctx(term, token, override_endpoint).await?;
+	pub async fn execute(&self, term: &Term) -> Result<()> {
+		let (api_endpoint, token) =
+			internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
+				.await?;
+		let ctx = self
+			.build_ctx(term, token.as_ref().map(|x| x.as_str()), api_endpoint)
+			.await?;
 
 		// Select the engine to use
 		let init_engine = if self.unity {

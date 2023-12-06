@@ -134,7 +134,7 @@ async fn main() -> Result<()> {
 					"errors",
 					err.chain().map(|e| e.to_string()).collect::<Vec<_>>(),
 				)?;
-                Ok(())
+				Ok(())
 			}),
 		)
 		.await?;
@@ -150,26 +150,14 @@ async fn main_inner(opts: Opts) -> Result<()> {
 
 	// Handle init command without the context
 	if let SubCommand::Init(init_opts) = &opts.command {
-		return init_opts
-			.execute(
-				opts.token.as_ref().map(String::as_str),
-				&term,
-				opts.api_endpoint,
-			)
-			.await;
+		return init_opts.execute(&term).await;
 	}
 
 	// Read token
-	let token = if let Some(token) = opts.token {
-		token
-	} else {
-		internal_config::read(|x| x.tokens.cloud.clone())
-			.await?
-			.context("no Rivet token found, please run `rivet init`")?
-	};
-
-	// Create context
-	let ctx = cli_core::ctx::init(opts.api_endpoint.clone(), token).await?;
+	let (api_endpoint, token) =
+		internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())).await?;
+	let token = token.context("no Rivet token found, please run `rivet init`")?;
+	let ctx = cli_core::ctx::init(api_endpoint, token).await?;
 
 	// Set game id for errors
 	util::telemetry::GAME_ID.set(ctx.game_id.clone())?;
@@ -203,13 +191,20 @@ async fn main_inner(opts: Opts) -> Result<()> {
 async fn read_opts() -> Result<Opts> {
 	let opts = Opts::parse();
 
-	if let Some(api_endpoint) = &opts.api_endpoint {
-		internal_config::mutate(|x| x.cluster.api_endpoint = Some(api_endpoint.clone())).await?;
-	}
+	internal_config::mutate(|config| {
+		if let Some(api_endpoint) = &opts.api_endpoint {
+			config.cluster.api_endpoint = Some(api_endpoint.clone());
+		}
 
-	if let Some(telemetry_disabled) = opts.telemetry_disabled {
-		internal_config::mutate(|x| x.telemetry.disabled = telemetry_disabled).await?;
-	}
+		if let Some(token) = &opts.token {
+			config.tokens.cloud = Some(token.clone());
+		}
+
+		if let Some(telemetry_disabled) = opts.telemetry_disabled {
+			config.telemetry.disabled = telemetry_disabled;
+		}
+	})
+	.await?;
 
 	Ok(opts)
 }
