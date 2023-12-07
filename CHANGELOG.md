@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Auto-generated & recommended config is now a `rivet.yaml` file
-- **[BREAKING]** Removed support for file formats that are not YAML, TOML, or JSON in order to simplify maintaining forward compatibility
 - Merged `.rivet/cloud_token` and `.rivet/config.toml` in to unified `.rivet/config.yaml`
+- **[BREAKING]** Removed support for file formats that are not YAML, TOML, or JSON in order to simplify maintaining forward compatibility
+- **[BREAKING]** Throw error if both `.yaml` and `.yml` config exist
 
 ## [v0.2.0] - 2020-12-1
 
