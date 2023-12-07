@@ -361,16 +361,16 @@ impl Opts {
 				// Add engine config
 				match init_engine {
 					InitEngine::Unity => {
-						version_config.push_str("[engine.unity]\n");
+						version_config.push_str("engine:\n  unity: {}\n\n");
 					}
 					InitEngine::Unreal => {
-						version_config.push_str("[engine.unreal]\n");
+						version_config.push_str("engine:\n  unreal: {}\n\n");
 					}
 					InitEngine::Godot => {
-						version_config.push_str("[engine.godot]\n");
+						version_config.push_str("engine:\n  godot: {}\n\n");
 					}
 					InitEngine::HTML5 => {
-						version_config.push_str("[engine.html5]\n");
+						version_config.push_str("engine:\n  html5: {}\n\n");
 					}
 					InitEngine::Custom => {
 						// Do nothing
