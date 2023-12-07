@@ -342,15 +342,11 @@ impl Opts {
 	}
 
 	async fn create_config_default(&self, term: &Term, init_engine: InitEngine) -> Result<bool> {
-		let config_path = std::env::current_dir()?.join("rivet.yaml");
-		let config_needs_creation = match fs::read_to_string(&config_path).await {
-			Ok(_) => false,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
-			Err(err) => {
-				return Err(err.into());
-			}
-		};
-		let has_version_config = if config_needs_creation {
+		let current_dir = std::env::current_dir()?;
+		let config_exists = ["rivet.yaml", "rivet.toml", "rivet.json"]
+			.iter()
+			.any(|file_name| current_dir.join(file_name).exists());
+		let has_version_config = if !config_exists {
 			if self.recommend
 				|| self.create_version_config
 				|| term::Prompt::new("Create rivet.yaml?")
@@ -470,7 +466,7 @@ impl Opts {
 				}
 
 				// Write file
-				fs::write(config_path, version_config).await?;
+				fs::write(current_dir.join("rivet.yaml"), version_config).await?;
 
 				term::status::success("Created rivet.yaml", "");
 
