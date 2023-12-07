@@ -25,12 +25,12 @@ matchmaker:
     # Dockerfile: https://docker-curriculum.com/#dockerfile
     dockerfile: __DOCKERFILE__
 
-  # Which ports to allow players to connect to. Multiple ports can be defined
-  # with different protocols.
-  #
-  # How ports work: https://rivet.gg/docs/serverless-lobbies/concepts/ports
-  ports:
-    default:
-      port: __PORT__
-      protocol: https
+    # Which ports to allow players to connect to. Multiple ports can be defined
+    # with different protocols.
+    #
+    # How ports work: https://rivet.gg/docs/serverless-lobbies/concepts/ports
+    ports:
+      default:
+        port: __PORT__
+        protocol: https
 
