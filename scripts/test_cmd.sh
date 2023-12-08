@@ -1,6 +1,6 @@
 #!/bin/sh
-set -euf -o pipefail
+set -euf
 
-(cd ../test-game/ && ../cli/target/debug/rivet "$@")
-# (cd ../test-game && docker run -v "$(pwd):/app" ghcr.io/rivet-gg/cli "$@")
+(cd ../sandbox/ && ../cli/target/debug/rivet "$@")
+# (cd ../sandbox && docker run -v "$(pwd):/app" ghcr.io/rivet-gg/cli "$@")
 
