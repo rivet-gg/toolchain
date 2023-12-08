@@ -10,15 +10,15 @@ use tokio::{fs, io::AsyncWriteExt};
 
 use crate::{
 	commands,
-	util::{git, secrets, term},
+	util::{git, internal_config, term},
 };
 
-const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.toml");
-const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.toml");
-const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.toml");
+const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
+const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.yaml");
+const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.yaml");
 
-const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.toml");
-const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.toml");
+const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.yaml");
+const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.yaml");
 
 const UNREAL_DOCKERIGNORE: &'static str = include_str!("../../tpl/unreal_config/.dockerignore");
 const UNREAL_SERVER_DEBUG_DOCKERFILE: &'static str =
@@ -111,13 +111,13 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(
-		&self,
-		token: Option<&str>,
-		term: &Term,
-		override_endpoint: Option<String>,
-	) -> Result<()> {
-		let ctx = self.build_ctx(term, token, override_endpoint).await?;
+	pub async fn execute(&self, term: &Term) -> Result<()> {
+		let (api_endpoint, token) =
+			internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
+				.await?;
+		let ctx = self
+			.build_ctx(term, token.as_ref().map(|x| x.as_str()), api_endpoint)
+			.await?;
 
 		// Select the engine to use
 		let init_engine = if self.unity {
@@ -171,7 +171,7 @@ impl Opts {
 		let token = if let Some(token) = token.clone() {
 			Some(token.to_string())
 		} else {
-			secrets::read_token().await?
+			internal_config::read(|x| x.tokens.cloud.clone()).await?
 		};
 		let ctx = if let Some(token) = token {
 			let ctx = cli_core::ctx::init(override_endpoint.clone(), token).await?;
@@ -235,8 +235,8 @@ impl Opts {
 		let dockerfile_dev_path = std::env::current_dir()?.join("server.development.Dockerfile");
 		let dockerfile_debug_path = std::env::current_dir()?.join("server.debug.Dockerfile");
 		let dockerfile_shipping_path = std::env::current_dir()?.join("server.shipping.Dockerfile");
-		let config_path = std::env::current_dir()?.join("rivet.toml");
-		let config_prod_path = std::env::current_dir()?.join("rivet.prod.toml");
+		let config_path = std::env::current_dir()?.join("rivet.yaml");
+		let config_prod_path = std::env::current_dir()?.join("rivet.prod.yaml");
 
 		// Build the uproject path
 		let current_dir = std::env::current_dir()?;
@@ -310,18 +310,18 @@ impl Opts {
 		if self.create_version_config || !fs::try_exists(&config_path).await? {
 			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &game_module);
 			fs::write(&config_path, version_config).await?;
-			term::status::success("Created rivet.toml", "");
+			term::status::success("Created rivet.yaml", "");
 			config_created = true;
 		}
 		if self.create_version_config || !fs::try_exists(&config_prod_path).await? {
 			fs::write(&config_prod_path, CONFIG_UNREAL_PROD).await?;
-			term::status::success("Created rivet.prod.toml", "");
+			term::status::success("Created rivet.prod.yaml", "");
 			config_created = true;
 		}
 		if !config_created {
 			term::status::success(
 				"Version already configured",
-				"Your game is already configured with rivet.toml",
+				"Your game is already configured with rivet.yaml",
 			);
 		}
 
@@ -342,18 +342,14 @@ impl Opts {
 	}
 
 	async fn create_config_default(&self, term: &Term, init_engine: InitEngine) -> Result<bool> {
-		let config_path = std::env::current_dir()?.join("rivet.toml");
-		let config_needs_creation = match fs::read_to_string(&config_path).await {
-			Ok(_) => false,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => true,
-			Err(err) => {
-				return Err(err.into());
-			}
-		};
-		let has_version_config = if config_needs_creation {
+		let current_dir = std::env::current_dir()?;
+		let config_exists = ["rivet.yaml", "rivet.toml", "rivet.json"]
+			.iter()
+			.any(|file_name| current_dir.join(file_name).exists());
+		let has_version_config = if !config_exists {
 			if self.recommend
 				|| self.create_version_config
-				|| term::Prompt::new("Create rivet.toml?")
+				|| term::Prompt::new("Create rivet.yaml?")
 					.docs("This is the configuration file used to manage your game")
 					.docs_url("https://rivet.gg/docs/general/concepts/version-config")
 					.default_value("yes")
@@ -365,16 +361,16 @@ impl Opts {
 				// Add engine config
 				match init_engine {
 					InitEngine::Unity => {
-						version_config.push_str("[engine.unity]\n");
+						version_config.push_str("engine:\n  unity: {}\n\n");
 					}
 					InitEngine::Unreal => {
-						version_config.push_str("[engine.unreal]\n");
+						version_config.push_str("engine:\n  unreal: {}\n\n");
 					}
 					InitEngine::Godot => {
-						version_config.push_str("[engine.godot]\n");
+						version_config.push_str("engine:\n  godot: {}\n\n");
 					}
 					InitEngine::HTML5 => {
-						version_config.push_str("[engine.html5]\n");
+						version_config.push_str("engine:\n  html5: {}\n\n");
 					}
 					InitEngine::Custom => {
 						// Do nothing
@@ -384,7 +380,7 @@ impl Opts {
 				if self.matchmaker
 					|| term::Prompt::new("Enable Rivet Matchmaker?")
 						.indent(1)
-						.context("rivet.toml")
+						.context("rivet.yaml")
 						.docs("Setup your matchmaker configuration, this can be changed later")
 						.docs_url("https://rivet.gg/docs/matchmaker")
 						.default_value("yes")
@@ -427,7 +423,7 @@ impl Opts {
 				if self.cdn
 					|| term::Prompt::new("Enable Rivet CDN?")
 						.indent(1)
-						.context("rivet.toml")
+						.context("rivet.yaml")
 						.docs("Setup service a website or static assets, this can be changed later")
 						.docs_url("https://rivet.gg/docs/cdn")
 						.default_value("yes")
@@ -470,9 +466,9 @@ impl Opts {
 				}
 
 				// Write file
-				fs::write(config_path, version_config).await?;
+				fs::write(current_dir.join("rivet.yaml"), version_config).await?;
 
-				term::status::success("Created rivet.toml", "");
+				term::status::success("Created rivet.yaml", "");
 
 				true
 			} else {
@@ -481,7 +477,7 @@ impl Opts {
 		} else {
 			term::status::success(
 				"Version already configured",
-				"Your game is already configured with rivet.toml",
+				"Your game is already configured with rivet.yaml",
 			);
 			true
 		};
@@ -626,7 +622,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	let display_name = game_res.game.display_name;
 
 	// Write the token
-	secrets::write_cloud_token(&token).await?;
+	internal_config::mutate(|x| x.tokens.cloud = Some(token)).await?;
 
 	term::status::success("Token Saved", display_name);
 

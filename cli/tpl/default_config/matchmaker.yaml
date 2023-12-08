@@ -1,0 +1,36 @@
+# How the game lobbies run and how players connect to the game.
+#
+# https://rivet.gg/docs/matchmaker
+matchmaker:
+  # How many players can join a specific lobby.
+  #
+  # Read more about matchmaking: https://rivet.gg/docs/matchmaker/concepts/finding-lobby
+  max_players: 32
+
+  # The hardware to provide for lobbies.
+  #
+  # Available tiers: https://rivet.gg/docs/serverless-lobbies/concepts/available-tiers
+  tier: basic-1d1
+
+  # What game modes are available.
+  #
+  # Properties like `max_players`, `tier`, `dockerfile`, `regions`, and more can
+  # be overridden for specific game modes.
+  game_modes:
+    default: {}
+
+  # Runtime configuration for the lobby's Docker container.
+  docker:
+    # If you're unfamiliar with Docker, here's how to write your own
+    # Dockerfile: https://docker-curriculum.com/#dockerfile
+    dockerfile: __DOCKERFILE__
+
+    # Which ports to allow players to connect to. Multiple ports can be defined
+    # with different protocols.
+    #
+    # How ports work: https://rivet.gg/docs/serverless-lobbies/concepts/ports
+    ports:
+      default:
+        port: __PORT__
+        protocol: https
+

@@ -31,7 +31,7 @@ async fn walk_dir(url_re: &Regex, dir: &str) -> Result<()> {
     for entry in WalkDir::new(dir)
         .into_iter()
         .filter_map(Result::ok)
-        .filter(|e| e.file_type().is_file() && e.path().extension().map_or(false, |ext| ext == "rs" || ext == "toml")) {
+        .filter(|e| e.file_type().is_file() && e.path().extension().map_or(false, |ext| ext == "rs" ||  ext == "yaml" || ext == "toml" || ext == "json")) {
 
         println!("> {}", entry.path().display());
         

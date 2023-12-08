@@ -1,4 +1,6 @@
-use anyhow::{Context, Error, Result};
+use std::collections::HashSet;
+
+use anyhow::{bail, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::{self, models};
 use serde::Serialize;
@@ -263,12 +265,40 @@ pub fn parse_config_override_args(
 /// namespace to read override files.
 ///
 /// For example, in the namespace `foobar`, Rivet would first read
-/// `rivet.toml` then override with properties from
-/// `rivet.foobar.toml`.
+/// `rivet.yaml` then override with properties from
+/// `rivet.foobar.yaml`.
 pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
 ) -> Result<models::CloudVersionConfig> {
+	// Check for conflicting .yaml and .yml file suffixes
+	//
+	// It's almost always a mistake when this happens, so we fail by default here.
+	let mut files = HashSet::new();
+	let mut dir = tokio::fs::read_dir(".").await?;
+	while let Some(entry) = dir.next_entry().await? {
+		let path = entry.path();
+		if let Some(ext) = path.extension() {
+			if ext == "yaml" || ext == "yml" {
+				let Some(file_name) = path
+					.file_stem()
+					.and_then(|x| x.to_str())
+					.map(|x| x.to_owned())
+				else {
+					continue;
+				};
+
+				if file_name.starts_with("rivet") {
+					if files.contains(&file_name) {
+						bail!("Found conflicting config files: {0}.yaml and {0}.yml. Please remove one.", file_name);
+					}
+
+					files.insert(file_name);
+				}
+			}
+		}
+	}
+
 	// Build base config
 	let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default()
 		.add_source(config::File::with_name("rivet").required(false))
