@@ -12,6 +12,7 @@ mkdir /tmp/rivet_cli_install
 cd /tmp/rivet_cli_install
 
 UNAME="$(uname -s)"
+ARCH="$(uname -m)"
 
 # Find asset suffix
 if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
@@ -20,8 +21,14 @@ if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 
 	echo
 	echo "> Installing jq"
-	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64" -o ./jq
+	if [ "$ARCH" = "x86_64" ]; then
+		url="https://github.com/jqlang/jq/releases/download/jq-1.7/jq-macos-amd64"
+	elif [ "$ARCH" = "arm64" ]; then
+		url="https://github.com/jqlang/jq/releases/download/jq-1.7/jq-macos-arm64"
+	fi
+	curl -fsSL "$url" -o ./jq
 	chmod +x ./jq
+
 
 	CLI_ASSET_SUFFIX="-x86_64-apple-darwin.tar.xz"
 elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
@@ -30,7 +37,7 @@ elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 
 	echo
 	echo "> Installing jq"
-	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux$(getconf LONG_BIT)" -o ./jq
+	curl -fsSL "https://github.com/stedolan/jq/releases/download/jq-1.7/jq-linux$(getconf LONG_BIT)" -o ./jq
 	chmod +x ./jq
 
 	CLI_ASSET_SUFFIX="-x86_64-unknown-linux-gnu.tar.xz"
