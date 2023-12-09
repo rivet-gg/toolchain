@@ -46,6 +46,27 @@ else
 	exit 1
 fi
 
+# Determine install location
+set +u
+if [ -z "$BIN_DIR" ]; then
+	BIN_DIR="/usr/local/bin"
+fi
+set -u
+INSTALL_PATH="$BIN_DIR/rivet"
+
+if [ ! -d "$BIN_DIR" ]; then
+
+	if command -v sudo; then
+        echo
+        echo "> Creating directory $BIN_DIR (requires sudo)"
+        sudo mkdir -p $BIN_DIR
+	else
+        echo
+        echo "> Creating directory $BIN_DIR"
+        mkdir -p $BIN_DIR
+	fi
+fi
+
 # Find CLI version
 set +u
 if [ -z "$RIVET_CLI_VERSION" ]; then
@@ -61,10 +82,10 @@ fi
 set -u
 
 echo
-echo "> Installing Rivet CLI @ $RIVET_CLI_VERSION"
-
+echo "> Installing Rivet CLI $RIVET_CLI_VERSION"
 
 if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
+
 	echo
 	ASSET_NAME="rivet-cli-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
 	URL="https://github.com/rivet-gg/cli/releases/download/${RIVET_CLI_VERSION}/${ASSET_NAME}"
@@ -76,8 +97,8 @@ if [ "$(printf '%s' "$UNAME" | cut -c 1-6)" = "Darwin" ]; then
 	tar xJf rivet_cli.tar.xz
 
 	echo
-	echo "> Installing rivet"
-	sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-apple-darwin/rivet-cli" "/usr/local/bin/rivet"
+    echo "> Installing rivet to $INSTALL_PATH (requires sudo)"
+	sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-apple-darwin/rivet-cli" "$INSTALL_PATH"
 elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo
 	ASSET_NAME="rivet-cli-${RIVET_CLI_VERSION}${CLI_ASSET_SUFFIX}"
@@ -89,20 +110,27 @@ elif [ "$(printf '%s' "$UNAME" | cut -c 1-5)" = "Linux" ]; then
 	echo "> Extracting rivet.tar.gz"
 	tar xJf rivet_cli.tar.xz
 
-	echo
-	echo "> Installing rivet"
 	if command -v sudo; then
-		sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet-cli" "/usr/local/bin/rivet"
+        echo
+        echo "> Installing rivet to $INSTALL_PATH (requires sudo)"
+		sudo mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet-cli" "$INSTALL_PATH"
 	else
-		mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet-cli" "/usr/local/bin/rivet"
+        echo
+        echo "> Installing rivet to $INSTALL_PATH"
+		mv "./rivet-cli-${RIVET_CLI_VERSION}-x86_64-unknown-linux-gnu/rivet-cli" "$INSTALL_PATH"
 	fi
 else
 	exit 1
 fi
 
+case ":$PATH:" in
+    *:$BIN_DIR:*) ;;
+    *) echo "WARNING: $BIN_DIR is not in \$PATH" ;;
+esac
+
 echo
 echo "> Checking installation"
-rivet --version
+"$BIN_DIR/rivet" --version
 
 echo
 echo "Rivet was installed successfully."
