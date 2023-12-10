@@ -49,6 +49,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added internal config to store api endpoint and telemetry options
 - Implemented multipart uploads for builds and sites, disable multipart uploads with `_RIVET_UPLOAD_DISABLE_MULTIPART`
 
+## [v0.1.4] - 2023-12-9
+
+### Added
+
+- Darwin ARM release artifact
+
+### Changed
+
+- Update `cargo-dist` to 0.5.0
+
+## [v0.1.3] - 2023-12-3
+
+### Changed
+
+- Replace Smithy-generated API library with OpenAPI-generated library in order to fix `invalid certificate timestamp: UnknownLog` error
+
 ## [v0.1.2] - 2023-08-26
 
 ### Changed
