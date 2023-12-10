@@ -32,8 +32,7 @@ powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/ins
 We recommend specifying the CLI version in CI environments.
 
 ```bash
-$env:RIVET_CLI_VERSION="v0.2.0"
-powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"
+powershell -Command "$env:RIVET_CLI_VERSION='v0.2.0'; iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"
 ```
 
 ### Build from source
