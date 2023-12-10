@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v0.3.0] - Unreleased
+## [v0.3.0] - 2023-12-10
 
 ### Added
 
@@ -14,9 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Default version names are now generated as `YYYY.MM (X)` format (where `X` is an incrementing index)
 - Auto-generated & recommended config is now a `rivet.yaml` file
-- Merged `.rivet/cloud_token` and `.rivet/config.toml` in to unified `.rivet/config.yaml`
+- Default version names are now generated as `YYYY.MM (X)` format (where `X` is an incrementing index)
+- Merged `.rivet/cloud_token` and `.rivet/config.toml` in to unified internal `.rivet/config.yaml` config file
 - **[BREAKING]** Removed support for file formats that are not YAML, TOML, or JSON in order to simplify maintaining forward compatibility
 - **[BREAKING]** Throw error if both `.yaml` and `.yml` config exist
 
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Install script (Unix)** Installing ARM64 `jq` binary on ARM-based Macs
 - **Install script (Unix)** Automatically create `$BIN_DIR` if doesn't exist, specifically on macOS Sonoma which does not provide a `/usr/local/bin` by default
 
-## [v0.2.0] - 2020-12-1
+## [v0.2.0] - 2023-12-1
 
 ### Added
 
