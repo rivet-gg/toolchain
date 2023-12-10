@@ -7,7 +7,7 @@ use clap::Parser;
 use std::{path::Path, str::FromStr};
 use uuid::Uuid;
 
-use crate::util::{cmd, gen, struct_fmt};
+use crate::util::{cmd, struct_fmt};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -180,7 +180,7 @@ pub async fn build_and_push(
 		&push::PushOpts {
 			path: build_output.path.to_owned(),
 			tag: build_output.tag,
-			name: Some(gen::display_name_from_date()),
+			name: push_opts.name.clone(),
 			kind: build_kind,
 			compression: build_compression,
 			format: push_opts.format.clone(),

@@ -13,7 +13,7 @@ use std::{
 use tokio::process::Command;
 use uuid::Uuid;
 
-use crate::util::{gen, struct_fmt, term, upload};
+use crate::util::{struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -228,7 +228,7 @@ pub async fn build_and_push(ctx: &cli_core::Ctx, push_opts: &BuildPushOpts) -> R
 		ctx,
 		&PushOpts {
 			path: push_opts.path.clone(),
-			name: Some(gen::display_name_from_date()),
+			name: push_opts.name.clone(),
 			format: push_opts.format.clone(),
 		},
 	)

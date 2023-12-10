@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Default version names are now generated as `YYYY.MM (X)` format (where `X` is an incrementing index)
 - Auto-generated & recommended config is now a `rivet.yaml` file
 - Merged `.rivet/cloud_token` and `.rivet/config.toml` in to unified `.rivet/config.yaml`
 - **[BREAKING]** Removed support for file formats that are not YAML, TOML, or JSON in order to simplify maintaining forward compatibility

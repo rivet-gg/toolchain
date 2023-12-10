@@ -170,25 +170,25 @@ pub struct DeployOpts {
 	/// Deprecated.
 	///
 	/// The build tag to upload
-	#[clap(long)]
+	#[clap(hide = true, long)]
 	build_tag: Option<String>,
 
 	/// Deprecated.
 	///
 	/// The name to assign to the build
-	#[clap(long)]
+	#[clap(hide = true, long)]
 	build_name: Option<String>,
 
 	/// Deprecated.
 	///
 	/// The path to the site directory to upload
-	#[clap(long)]
+	#[clap(hide = true, long)]
 	site_path: Option<String>,
 
 	/// Deprecated.
 	///
 	/// The name of the site that will be created
-	#[clap(long)]
+	#[clap(hide = true, long)]
 	site_name: Option<String>,
 
 	#[clap(long, value_parser)]
@@ -200,6 +200,7 @@ impl DeployOpts {
 		// Parse overrides
 		let mut overrides = parse_config_override_args(&self.overrides)?;
 
+		// Build & push site & build before creating version
 		build_and_push_compat(
 			ctx,
 			&mut overrides,
@@ -211,6 +212,7 @@ impl DeployOpts {
 		)
 		.await?;
 
+		// Create version
 		let output = create(
 			ctx,
 			self.display_name.as_ref().map(String::as_str),
@@ -375,19 +377,20 @@ pub fn build_mock_config_dependencies(version: &mut models::CloudVersionConfig) 
 pub async fn build_config_dependencies(
 	ctx: &cli_core::Ctx,
 	version: &mut models::CloudVersionConfig,
+	display_name: &str,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	// TODO: Do this for all possible docker endpoints
 
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		if let Some(docker) = matchmaker.docker.as_mut() {
-			build_and_push_image(ctx, docker, format).await?;
+			build_and_push_image(ctx, display_name, docker, format).await?;
 		}
 
 		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
 			for (_, game_mode) in game_modes.iter_mut() {
 				if let Some(docker) = game_mode.docker.as_mut() {
-					build_and_push_image(ctx, docker, format).await?;
+					build_and_push_image(ctx, display_name, docker, format).await?;
 				}
 			}
 		}
@@ -395,7 +398,7 @@ pub async fn build_config_dependencies(
 
 	// Build CDN
 	if let Some(cdn) = version.cdn.as_mut() {
-		build_and_push_site(ctx, cdn, format).await?;
+		build_and_push_site(ctx, display_name, cdn, format).await?;
 	}
 
 	Ok(())
@@ -403,6 +406,7 @@ pub async fn build_config_dependencies(
 
 pub async fn build_and_push_image(
 	ctx: &cli_core::Ctx,
+	display_name: &str,
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
@@ -412,7 +416,7 @@ pub async fn build_and_push_image(
 				ctx,
 				&image::BuildPushOpts {
 					dockerfile: dockerfile.clone(),
-					name: Some(gen::display_name_from_date()),
+					name: Some(display_name.to_string()),
 					format: format.cloned(),
 				},
 			)
@@ -423,7 +427,7 @@ pub async fn build_and_push_image(
 				ctx,
 				&image::PushOpts {
 					tag: docker_image.clone(),
-					name: Some(gen::display_name_from_date()),
+					name: Some(display_name.to_string()),
 					format: format.cloned(),
 				},
 			)
@@ -436,6 +440,7 @@ pub async fn build_and_push_image(
 }
 pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
+	display_name: &str,
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
@@ -447,7 +452,7 @@ pub async fn build_and_push_site(
 					&site::BuildPushOpts {
 						command: build_command.clone(),
 						path: build_output.clone(),
-						name: Some(gen::display_name_from_date()),
+						name: Some(display_name.to_string()),
 						format: format.cloned(),
 					},
 				)
@@ -458,7 +463,7 @@ pub async fn build_and_push_site(
 					ctx,
 					&site::PushOpts {
 						path: build_output.clone(),
-						name: Some(gen::display_name_from_date()),
+						name: Some(display_name.to_string()),
 						format: format.cloned(),
 					},
 				)
@@ -500,7 +505,6 @@ pub async fn create(
 	namespace_name_id: Option<&str>,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<CreateOutput> {
-	let display_name = display_name.map_or_else(gen::display_name_from_date, |x| x.to_string());
 	// Fetch game data
 	let game_res =
 		cli_core::rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
@@ -526,9 +530,16 @@ pub async fn create(
 		None
 	};
 
+	// Generate version name if needed
+	let display_name = if let Some(x) = &display_name {
+		x.to_string()
+	} else {
+		gen::version_display_name(&game_res.game)?
+	};
+
 	// Parse config
 	let mut rivet_config = read_config(overrides, namespace_name_id).await?;
-	build_config_dependencies(ctx, &mut rivet_config, format).await?;
+	build_config_dependencies(ctx, &mut rivet_config, &display_name, format).await?;
 
 	// Create game version
 	let version_res =
@@ -586,9 +597,10 @@ pub async fn create(
 	Ok(CreateOutput { version_id })
 }
 
-/// Backwards compatibility for site & Docker build pushing
+/// Backwards compatibility for site & Docker build pushing from the CLI flags.
 ///
-/// Developers should use the parameters inside the config itself instead
+/// Developers should override config properties instead. For example: `rivet deploy -o matchmaker.docker.image_id=xxxx -o
+/// cdn.path=xxxx`
 pub async fn build_and_push_compat(
 	ctx: &cli_core::Ctx,
 	overrides: &mut Vec<(String, serde_json::Value)>,
