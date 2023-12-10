@@ -16,7 +16,7 @@ We recommend specifying the CLI version in CI environments.
 
 ```bash
 export RIVET_CLI_VERSION="v0.2.0"
-curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
+curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/${RIVET_CLI_VERSION}/install/unix.sh | sh
 ```
 
 ### Windows (cmd & PowerShell)
@@ -33,7 +33,7 @@ We recommend specifying the CLI version in CI environments.
 
 ```bash
 $env:RIVET_CLI_VERSION="v0.2.0"
-powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex"
+powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"
 ```
 
 ### Build from source
