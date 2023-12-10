@@ -453,7 +453,11 @@ impl Opts {
 	}
 }
 
-async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
+pub async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
+	dbg!(
+		"read_token with override_endpoint: {:?}",
+		&override_endpoint
+	);
 	// Create OpenAPI configuration without bearer token to send link request
 	let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
 		base_path: override_endpoint
@@ -462,6 +466,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 		user_agent: Some(ctx::user_agent()),
 		..Default::default()
 	};
+	dbg!(&openapi_config_cloud_unauthed);
 
 	// Prepare the link
 	let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_prepare(
@@ -473,6 +478,8 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	}
 	let prepare_res = prepare_res.context("cloud_devices_links_prepare")?;
 
+	dbg!("");
+
 	// Prompt user to press enter to open browser
 	term::status::info("Link your game", "Press Enter to open your browser");
 	tokio::task::spawn_blocking({
@@ -480,6 +487,8 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 		move || term.read_char()
 	})
 	.await??;
+
+	dbg!("");
 
 	// Open link in browser
 	if webbrowser::open_browser_with_options(

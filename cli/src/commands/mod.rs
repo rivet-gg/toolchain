@@ -5,6 +5,7 @@ pub mod game;
 pub mod image;
 pub mod init;
 pub mod ns;
+pub mod sidekick;
 pub mod site;
 pub mod token;
 pub mod version;

@@ -101,6 +101,11 @@ enum SubCommand {
 		command: engine::SubCommand,
 	},
 
+	Sidekick {
+		#[clap(subcommand)]
+		command: sidekick::SubCommand,
+	},
+
 	/// Alias of `rivet engine unreal`
 	#[clap(hide = true, alias = "ue")]
 	Unreal {
@@ -183,6 +188,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
+		SubCommand::Sidekick { command } => command.execute(&ctx, &term).await?,
 	}
 
 	Ok(())

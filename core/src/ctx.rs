@@ -31,6 +31,8 @@ pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<
 		.clone()
 		.unwrap_or_else(|| DEFAULT_API_ENDPOINT.to_string());
 
+	dbg!("Using {}", &api_endpoint);
+
 	// Create OpenAPI config
 	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
 		base_path: api_endpoint.clone(),
