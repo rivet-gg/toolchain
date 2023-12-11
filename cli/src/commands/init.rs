@@ -2,6 +2,7 @@ use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api, Ctx};
 use console::{style, Term};
+use rivet_cli::util::paths;
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -112,6 +113,17 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, term: &Term) -> Result<()> {
+		// Remove legacy `.rivet` dir if exists
+		let legacy_project_meta_path = paths::project_root()?.join(".rivet");
+		if fs::metadata(&legacy_project_meta_path).await.is_ok() {
+			term::status::warn(
+				"Deleting legacy project metadata",
+				".rivet/ folder is moved to a global config",
+			);
+			fs::remove_dir_all(&legacy_project_meta_path).await?;
+		}
+
+		// Build context
 		let (api_endpoint, token) = global_config::read_project(|x| {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
