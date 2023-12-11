@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.3.1] - Unreleased
 
-### Changelog
+### Changed
 
 - Global flags (`--api-endpoint`, `--token`, and `--disable-telemetry`) can now be used in subcommands (e.g. `rivet init --token foobar` instead of `rivet --token foobar init`)
+
+### Fixed
+
+- **Install script** Now installs non-prerelease GitHub releases
 
 ## [v0.3.0] - 2023-12-10
 

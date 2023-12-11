@@ -12,7 +12,7 @@ curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh |
 
 **Install specific version**
 
-We recommend specifying the CLI version in CI environments.
+We recommend specifying the CLI version in CI environments. This also allows you to install prerelease versions of the CLI.
 
 ```bash
 export RIVET_CLI_VERSION="v0.3.0"
@@ -29,7 +29,7 @@ powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/ins
 
 **Install specific version**
 
-We recommend specifying the CLI version in CI environments.
+We recommend specifying the CLI version in CI environments. This also allows you to install prerelease versions of the CLI.
 
 ```bash
 powershell -Command "$env:RIVET_CLI_VERSION='v0.3.0'; iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"

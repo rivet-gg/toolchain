@@ -87,7 +87,7 @@ if [ -z "$RIVET_CLI_VERSION" ]; then
 		curl -fsSL https://api.github.com/repos/rivet-gg/cli/releases \
 		| ./jq -re \
 			--arg file_name "$FILE_NAME" \
-			'[.[] | select(.assets[] | select(.name | endswith($file_name)))] | first | .tag_name' \
+			'[.[] | select(.prerelease == false and (.assets[] | select(.name | endswith($file_name))))] | first | .tag_name' \
 	)"
 fi
 set -u
