@@ -6,7 +6,7 @@ pub fn project_root() -> Result<PathBuf> {
 }
 
 pub fn global_config_dir() -> Result<PathBuf> {
-	Ok(dirs::config_dir().context("config dir")?.join(".rivet"))
+	Ok(dirs::config_dir().context("config dir")?.join("rivet"))
 }
 
 pub fn global_config_file() -> Result<PathBuf> {
