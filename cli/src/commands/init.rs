@@ -202,17 +202,17 @@ impl Opts {
 			if self.recommend
 				|| self.update_gitignore
 				|| term::Prompt::new("Add .env to .gitignore?")
-					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
-					.docs_url("https://rivet.gg/docs/general/concepts/dot-rivet-directory")
+					.docs(".env holds the develpoment token that should not be version controlled")
 					.default_value("yes")
-					.bool(term).await?
+					.bool(term)
+					.await?
 			{
 				let mut file = fs::OpenOptions::new()
 					.write(true)
 					.append(true)
 					.open(".gitignore")
 					.await?;
-				file.write_all(b"\n### Rivet ###\n.env\n").await?;
+				file.write_all(b"\n.env\n").await?;
 
 				ensure!(
 					git::check_ignore(Path::new(".env")).await?,
