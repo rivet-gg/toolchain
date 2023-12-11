@@ -198,10 +198,10 @@ impl Opts {
 	}
 
 	async fn update_gitignore(&self, term: &Term) -> Result<()> {
-		if !git::check_ignore(Path::new(".rivet/")).await? {
+		if !git::check_ignore(Path::new(".env")).await? {
 			if self.recommend
 				|| self.update_gitignore
-				|| term::Prompt::new("Add .rivet/ to .gitignore?")
+				|| term::Prompt::new("Add .env to .gitignore?")
 					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
 					.docs_url("https://rivet.gg/docs/general/concepts/dot-rivet-directory")
 					.default_value("yes")
@@ -212,19 +212,19 @@ impl Opts {
 					.append(true)
 					.open(".gitignore")
 					.await?;
-				file.write_all(b"\n### Rivet ###\n.rivet/\n.env\n").await?;
+				file.write_all(b"\n### Rivet ###\n.env\n").await?;
 
 				ensure!(
-					git::check_ignore(Path::new(".rivet/")).await?,
-					"updated gitignore does not ignore Rivet files"
+					git::check_ignore(Path::new(".env")).await?,
+					"updated gitignore does not ignore .env"
 				);
 
-				term::status::success("Finished", "Git will now ignore the .rivet/ folder");
+				term::status::success("Finished", "Git will now ignore the .env file");
 			}
 		} else {
 			term::status::success(
 				".gitignore already configured",
-				"The .rivet/ folder is already ignored by Git",
+				"The .env file is already ignored by Git",
 			);
 		}
 
