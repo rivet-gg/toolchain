@@ -31,10 +31,12 @@ if (!$Version) {
 	$Releases = Invoke-RestMethod -Uri "https://api.github.com/repos/rivet-gg/cli/releases"
 
 	foreach ($Release in $Releases) {
-		$SelectedAssets = $Release.assets | Select-Object -ExpandProperty name | Where-Object { $_ -eq $FileName }
-		if ($SelectedAssets) {
-			$Version = $Release.tag_name
-			Break
+		if (-not $Release.prerelease) {
+			$SelectedAssets = $Release.assets | Select-Object -ExpandProperty name | Where-Object { $_ -eq $FileName }
+			if ($SelectedAssets) {
+				$Version = $Release.tag_name
+				Break
+			}
 		}
 	}
 
