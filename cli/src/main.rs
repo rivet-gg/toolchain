@@ -27,13 +27,13 @@ struct Opts {
 	#[clap(subcommand)]
 	command: SubCommand,
 
-	#[clap(long, env = "RIVET_API_ENDPOINT")]
+	#[clap(global = true, long, env = "RIVET_API_ENDPOINT")]
 	api_endpoint: Option<String>,
 
-	#[clap(long, env = "RIVET_TOKEN")]
+	#[clap(global = true, long, env = "RIVET_TOKEN")]
 	token: Option<String>,
 
-	#[clap(long, env = "TELEMETRY_DISABLED")]
+	#[clap(global = true, long, env = "TELEMETRY_DISABLED")]
 	telemetry_disabled: Option<bool>,
 }
 
