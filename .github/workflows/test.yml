@@ -32,6 +32,7 @@ jobs:
 
       - name: Cache Cargo dependencies
         uses: actions/cache@v2
+        timeout-minutes: 10
         with:
           path: |
             ~/.cargo/registry
