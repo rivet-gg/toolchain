@@ -2,6 +2,7 @@ use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api, Ctx};
 use console::{style, Term};
+use rivet_cli::util::paths;
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -112,6 +113,17 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, term: &Term) -> Result<()> {
+		// Remove legacy `.rivet` dir if exists
+		let legacy_project_meta_path = paths::project_root()?.join(".rivet");
+		if fs::metadata(&legacy_project_meta_path).await.is_ok() {
+			term::status::warn(
+				"Deleting legacy project metadata",
+				".rivet/ folder is moved to a global config",
+			);
+			fs::remove_dir_all(&legacy_project_meta_path).await?;
+		}
+
+		// Build context
 		let (api_endpoint, token) = global_config::read_project(|x| {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
@@ -198,33 +210,33 @@ impl Opts {
 	}
 
 	async fn update_gitignore(&self, term: &Term) -> Result<()> {
-		if !git::check_ignore(Path::new(".rivet/")).await? {
+		if !git::check_ignore(Path::new(".env")).await? {
 			if self.recommend
 				|| self.update_gitignore
-				|| term::Prompt::new("Add .rivet/ to .gitignore?")
-					.docs(".rivet/ holds secrets and local configuration files that should not be version controlled")
-					.docs_url("https://rivet.gg/docs/general/concepts/dot-rivet-directory")
+				|| term::Prompt::new("Add .env to .gitignore?")
+					.docs(".env holds the develpoment token that should not be version controlled")
 					.default_value("yes")
-					.bool(term).await?
+					.bool(term)
+					.await?
 			{
 				let mut file = fs::OpenOptions::new()
 					.write(true)
 					.append(true)
 					.open(".gitignore")
 					.await?;
-				file.write_all(b"\n### Rivet ###\n.rivet/\n.env\n").await?;
+				file.write_all(b"\n.env\n").await?;
 
 				ensure!(
-					git::check_ignore(Path::new(".rivet/")).await?,
-					"updated gitignore does not ignore Rivet files"
+					git::check_ignore(Path::new(".env")).await?,
+					"updated gitignore does not ignore .env"
 				);
 
-				term::status::success("Finished", "Git will now ignore the .rivet/ folder");
+				term::status::success("Finished", "Git will now ignore the .env file");
 			}
 		} else {
 			term::status::success(
 				".gitignore already configured",
-				"The .rivet/ folder is already ignored by Git",
+				"The .env file is already ignored by Git",
 			);
 		}
 
