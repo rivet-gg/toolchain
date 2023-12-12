@@ -1,6 +1,7 @@
 use std::{collections::HashMap, path::PathBuf};
 
 use anyhow::Result;
+use cli_core::rivet_api::models;
 use serde::{Deserialize, Serialize};
 use tokio::{
 	fs,
@@ -41,8 +42,24 @@ pub struct Telemetry {
 
 #[derive(Default, Serialize, Deserialize)]
 pub struct Tokens {
+	/// Cloud token used to authenticate all API requests.
+	///
+	/// If none provided, will be prompted for token on `rivet init`.
 	#[serde(default)]
 	pub cloud: Option<String>,
+
+	/// List of cached development tokens. Before creating a new token, this list will be checked
+	/// for an existing token.
+	#[serde(default)]
+	pub development: Vec<DevelopmentToken>,
+}
+
+#[derive(Default, Serialize, Deserialize)]
+pub struct DevelopmentToken {
+	pub namespace_name_id: String,
+	pub hostname: String,
+	pub ports: HashMap<String, models::CloudMatchmakerDevelopmentPort>,
+	pub token: String,
 }
 
 static SINGLETON: OnceCell<Mutex<GlobalConfig>> = OnceCell::const_new();

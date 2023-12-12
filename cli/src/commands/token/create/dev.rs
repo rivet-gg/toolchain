@@ -4,7 +4,7 @@ use cli_core::rivet_api::{self, models};
 use serde::Serialize;
 use std::collections::HashMap;
 
-use crate::commands;
+use crate::{commands, util::global_config};
 
 #[derive(Parser)]
 pub struct Opts {
@@ -34,21 +34,70 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 		.map(String::as_str)
 		.unwrap_or("staging");
 
-	let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-		&ctx.openapi_config_cloud,
-		&ctx.game_id,
-		None,
-	)
-	.await
-	.context("cloud_games_games_get_game_by_id")?;
-	let staging_namespace_id = game_res
-		.game
-		.namespaces
-		.iter()
-		.find(|x| x.name_id == ns_name_id)
-		.map(|x| x.namespace_id.to_string())
-		.context("game_res.game.namespaces.find(\"staging\").namespace_id")?;
+	// Read dev config properties
+	let (dev_hostname, dev_ports) = read_config(ns_name_id).await?;
 
+	// Attempt to find existing token
+	let existing_token = global_config::read_project(|config| {
+		config
+			.tokens
+			.development
+			.iter()
+			.find(|t| {
+				t.namespace_name_id == ns_name_id
+					&& t.hostname == dev_hostname
+					&& t.ports == dev_ports
+			})
+			.map(|x| x.token.clone())
+	})
+	.await?;
+	if let Some(token) = existing_token {
+		return Ok(Output { token });
+	}
+
+	// Create dev token
+	let namespace_id = fetch_namespace_id(&ctx, &ns_name_id).await?;
+	let token_res = cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace_token_development(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			&namespace_id,
+			cli_core::rivet_api::models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentRequest {
+				hostname: dev_hostname.clone(),
+				ports: Some(dev_ports.clone()),
+				lobby_ports: None,
+			},
+		)
+		.await;
+	if let Err(err) = token_res.as_ref() {
+		println!("Error: {err:?}");
+	}
+	let token_res =
+		token_res.context("cloud_games_namespaces_create_game_namespace_token_development")?;
+	let token = token_res.token;
+
+	// Save token
+	global_config::mutate_project(|config| {
+		config
+			.tokens
+			.development
+			.push(global_config::DevelopmentToken {
+				namespace_name_id: ns_name_id.to_owned(),
+				hostname: dev_hostname,
+				ports: dev_ports,
+				token: token.clone(),
+			});
+	})
+	.await?;
+
+	Ok(Output { token })
+}
+
+async fn read_config(
+	ns_name_id: &str,
+) -> Result<(
+	String,
+	HashMap<String, models::CloudMatchmakerDevelopmentPort>,
+)> {
 	let config = commands::version::read_config(Vec::new(), Some(ns_name_id)).await?;
 
 	let Some(matchmaker) = &config.matchmaker else {
@@ -124,24 +173,24 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 		})
 		.collect::<Result<HashMap<_, _>>>()?;
 
-	// Create dev token
-	let token_res = cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace_token_development(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-			&staging_namespace_id,
-			cli_core::rivet_api::models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentRequest {
-				hostname: dev_hostname,
-				ports: Some(dev_ports),
-				lobby_ports: None,
-			},
-		)
-		.await;
-	if let Err(err) = token_res.as_ref() {
-		println!("Error: {err:?}");
-	}
-	let token_res =
-		token_res.context("cloud_games_namespaces_create_game_namespace_token_development")?;
-	let token = token_res.token;
+	Ok((dev_hostname, dev_ports))
+}
 
-	Ok(Output { token })
+async fn fetch_namespace_id(ctx: &cli_core::Ctx, ns_name_id: &str) -> Result<String> {
+	let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		None,
+	)
+	.await
+	.context("cloud_games_games_get_game_by_id")?;
+	let namespace_id = game_res
+		.game
+		.namespaces
+		.iter()
+		.find(|x| x.name_id == ns_name_id)
+		.map(|x| x.namespace_id.to_string())
+		.context("no namespace for name id")?;
+
+	Ok(namespace_id)
 }
