@@ -1,4 +1,4 @@
-use crate::util::internal_config;
+use crate::util::global_config;
 use anyhow::{Context, Result};
 use clap::Parser;
 use commands::*;
@@ -6,7 +6,7 @@ use commands::*;
 mod commands;
 mod util;
 
-// IMPORTANT: Do not read `api_endpoint`, `token`, and `telemetry_disabled` directly from `opts`. These properties are written to the config. Use `internal_config::read`.
+// IMPORTANT: Do not read `api_endpoint`, `token`, and `telemetry_disabled` directly from `opts`. These properties are written to the config. Use `global_config::read_project`.
 #[derive(Parser)]
 #[clap(
 	author = "Rivet Gaming, Inc. <developer@rivet.gg>",
@@ -155,7 +155,8 @@ async fn main_inner(opts: Opts) -> Result<()> {
 
 	// Read token
 	let (api_endpoint, token) =
-		internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())).await?;
+		global_config::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
+			.await?;
 	let token = token.context("no Rivet token found, please run `rivet init`")?;
 	let ctx = cli_core::ctx::init(api_endpoint, token).await?;
 
@@ -191,7 +192,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 async fn read_opts() -> Result<Opts> {
 	let opts = Opts::parse();
 
-	internal_config::mutate(|config| {
+	global_config::mutate_project(|config| {
 		if let Some(api_endpoint) = &opts.api_endpoint {
 			config.cluster.api_endpoint = Some(api_endpoint.clone());
 		}

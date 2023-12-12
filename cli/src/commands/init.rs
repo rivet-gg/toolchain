@@ -10,7 +10,7 @@ use tokio::{fs, io::AsyncWriteExt};
 
 use crate::{
 	commands,
-	util::{git, internal_config, term},
+	util::{git, global_config, term},
 };
 
 const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
@@ -112,9 +112,10 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, term: &Term) -> Result<()> {
-		let (api_endpoint, token) =
-			internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
-				.await?;
+		let (api_endpoint, token) = global_config::read_project(|x| {
+			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+		})
+		.await?;
 		let ctx = self
 			.build_ctx(term, token.as_ref().map(|x| x.as_str()), api_endpoint)
 			.await?;
@@ -171,7 +172,7 @@ impl Opts {
 		let token = if let Some(token) = token.clone() {
 			Some(token.to_string())
 		} else {
-			internal_config::read(|x| x.tokens.cloud.clone()).await?
+			global_config::read_project(|x| x.tokens.cloud.clone()).await?
 		};
 		let ctx = if let Some(token) = token {
 			let ctx = cli_core::ctx::init(override_endpoint.clone(), token).await?;
@@ -622,7 +623,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	let display_name = game_res.game.display_name;
 
 	// Write the token
-	internal_config::mutate(|x| x.tokens.cloud = Some(token)).await?;
+	global_config::mutate_project(|x| x.tokens.cloud = Some(token)).await?;
 
 	term::status::success("Token Saved", display_name);
 

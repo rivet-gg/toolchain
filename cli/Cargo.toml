@@ -19,6 +19,7 @@ clap = { version = "3.2.16", features = ["derive", "env"] }
 cli-core = { path = "../core", package = "rivet-cli-core" }
 config = { version = "0.13.2", default-features = false, features = ["yaml", "toml", "json"] }
 console = "0.15"
+dirs = "5.0"
 fs_extra = "1.2.0"
 futures-util = "0.3"
 humansize = "1.1"
