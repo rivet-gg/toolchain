@@ -158,6 +158,13 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		return init_opts.execute(&term).await;
 	}
 
+	// Sidekick sign-in can also be called before the token is read
+	if let SubCommand::Sidekick { command } = &opts.command {
+		if let sidekick::SubCommand::SignIn { .. } = command {
+			return command.execute_sign_in(&term).await;
+		}
+	}
+
 	// Read token
 	let (api_endpoint, token) =
 		global_config::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
