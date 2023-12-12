@@ -10,10 +10,9 @@ use std::{
 		Arc,
 	},
 };
-use tokio::process::Command;
 use uuid::Uuid;
 
-use crate::util::{struct_fmt, term, upload};
+use crate::util::{cmd, struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -210,29 +209,11 @@ pub async fn build_and_push(
 	eprintln!();
 	term::status::info("Building Site", &push_opts.command);
 
-	if cfg!(unix) {
-		let mut build_cmd = Command::new("/bin/sh");
-		build_cmd
-			.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
-			// Ensure we don't accidentally expose the token to a public build
-			.env_remove("RIVET_TOKEN")
-			.arg("-c")
-			.arg(&push_opts.command);
-		let build_status = build_cmd.status().await?;
-		ensure!(build_status.success(), "site failed to build");
-	} else if cfg!(windows) {
-		let mut build_cmd = Command::new("cmd.exe");
-		build_cmd
-			.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
-			// Ensure we don't accidentally expose the token to a public build
-			.env_remove("RIVET_TOKEN")
-			.arg("/C")
-			.arg(&push_opts.command);
-		let build_status = build_cmd.status().await?;
-		ensure!(build_status.success(), "site failed to build");
-	} else {
-		bail!("unknown machine type, expected unix or windows")
-	};
+	cmd::run_script(
+		&push_opts.command,
+		vec![("RIVET_API_ENDPOINT".into(), ctx.api_endpoint.clone())],
+	)
+	.await?;
 
 	// Upload site
 	push(
