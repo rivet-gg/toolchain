@@ -128,36 +128,46 @@ impl Opts {
 			commands::version::read_config_partial(Vec::new(), None).await.ok();
 
 		// Select the engine to use
-		let init_engine = if let Some(engine) = partial_config.as_ref().and_then(|x| x.engine.as_ref()) {
-            if engine.unity.is_some() {
-                InitEngine::Unity
-            } else if engine.unreal.is_some() {
-                InitEngine::Unreal
-            } else if engine.godot.is_some() {
-                InitEngine::Godot
-            } else if engine.html5.is_some() {
-                InitEngine::HTML5
+        let init_engine = if let Some(partial_config)  = &partial_config{
+            // Read the engine from the existing config
+
+            if let Some(engine) = &partial_config.engine {
+                if engine.unity.is_some() {
+                    InitEngine::Unity
+                } else if engine.unreal.is_some() {
+                    InitEngine::Unreal
+                } else if engine.godot.is_some() {
+                    InitEngine::Godot
+                } else if engine.html5.is_some() {
+                    InitEngine::HTML5
+                } else {
+                    InitEngine::Custom
+                }
             } else {
                 InitEngine::Custom
             }
-        } else if self.unity {
-			InitEngine::Unity
-		} else if self.unreal {
-			InitEngine::Unreal
-		} else if self.godot {
-			InitEngine::Godot
-		} else if self.html5 {
-			InitEngine::HTML5
-		} else if self.custom {
-			InitEngine::Custom
-		} else {
-			let engine = term::Prompt::new("What engine are you using?")
-				.docs("unity, unreal, godot, html5, or custom")
-				.default_value("custom")
-				.parsed::<InitEngine>(term)
-				.await?;
-			engine
-		};
+        } else {
+            // Use user input for the engine
+
+            if self.unity {
+                InitEngine::Unity
+            } else if self.unreal {
+                InitEngine::Unreal
+            } else if self.godot {
+                InitEngine::Godot
+            } else if self.html5 {
+                InitEngine::HTML5
+            } else if self.custom {
+                InitEngine::Custom
+            } else {
+                let engine = term::Prompt::new("What engine are you using?")
+                    .docs("unity, unreal, godot, html5, or custom")
+                    .default_value("custom")
+                    .parsed::<InitEngine>(term)
+                    .await?;
+                engine
+            }
+        };
 
 		// Run setup process
 		match init_engine {
