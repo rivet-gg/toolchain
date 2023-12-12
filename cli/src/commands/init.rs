@@ -2,7 +2,6 @@ use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api, Ctx};
 use console::{style, Term};
-use rivet_cli::util::paths;
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -11,7 +10,7 @@ use tokio::{fs, io::AsyncWriteExt};
 
 use crate::{
 	commands,
-	util::{git, global_config, term},
+	util::{git, global_config, paths, term},
 };
 
 const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
@@ -515,12 +514,14 @@ impl Opts {
 			.bool(term)
 			.await?)
 		{
-			commands::token::create::dev::Opts {
-				dev_env: true,
-				namespace: None,
-			}
-			.execute(&ctx)
-			.await?
+			commands::token::create::dev::execute(
+				&ctx,
+				&commands::token::create::dev::Opts {
+					dev_env: true,
+					namespace: None,
+				},
+			)
+			.await?;
 		}
 
 		Ok(())
