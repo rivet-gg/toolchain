@@ -1,7 +1,6 @@
 pub mod cmd;
 pub mod download;
 pub mod gen;
-pub mod git;
 pub mod global_config;
 pub mod lz4;
 pub mod paths;
