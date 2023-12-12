@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use anyhow::{bail, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::{self, models};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 use tabled::Tabled;
 use uuid::Uuid;
@@ -273,6 +273,28 @@ pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
 ) -> Result<models::CloudVersionConfig> {
+	read_config_inner::<models::CloudVersionConfig>(overrides, namespace).await
+}
+
+#[derive(Deserialize)]
+pub struct CloudVersionConfigPartial {
+	#[serde(rename = "engine", skip_serializing_if = "Option::is_none")]
+	pub engine: Option<Box<models::CloudVersionEngineConfig>>,
+}
+
+/// Similar to `read_config`. Reads a partial config that can be used for `rivet init`.
+pub async fn read_config_partial(
+	overrides: Vec<(String, serde_json::Value)>,
+	namespace: Option<&str>,
+) -> Result<CloudVersionConfigPartial> {
+	read_config_inner::<CloudVersionConfigPartial>(overrides, namespace).await
+}
+
+/// Reads the version config to the given type. See `read_config` and `read_config_partial`.
+async fn read_config_inner<T: serde::de::DeserializeOwned>(
+	overrides: Vec<(String, serde_json::Value)>,
+	namespace: Option<&str>,
+) -> Result<T> {
 	// Check for conflicting .yaml and .yml file suffixes
 	//
 	// It's almost always a mistake when this happens, so we fail by default here.
@@ -340,7 +362,7 @@ pub async fn read_config(
 	// Read config
 	let config = config_builder.build().await.context("find config")?;
 	let version = config
-		.try_deserialize::<models::CloudVersionConfig>()
+		.try_deserialize::<T>()
 		.context("deserialize config")?;
 
 	Ok(version)

@@ -123,8 +123,24 @@ impl Opts {
 			.init_ctx_and_token(term, token.as_ref().map(|x| x.as_str()), api_endpoint)
 			.await?;
 
+        // Attempt to read the existing config
+        let partial_config = 
+			commands::version::read_config_partial(Vec::new(), None).await.ok();
+
 		// Select the engine to use
-		let init_engine = if self.unity {
+		let init_engine = if let Some(engine) = partial_config.as_ref().and_then(|x| x.engine.as_ref()) {
+            if engine.unity.is_some() {
+                InitEngine::Unity
+            } else if engine.unreal.is_some() {
+                InitEngine::Unreal
+            } else if engine.godot.is_some() {
+                InitEngine::Godot
+            } else if engine.html5.is_some() {
+                InitEngine::HTML5
+            } else {
+                InitEngine::Custom
+            }
+        } else if self.unity {
 			InitEngine::Unity
 		} else if self.unreal {
 			InitEngine::Unreal
