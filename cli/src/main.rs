@@ -96,9 +96,9 @@ enum SubCommand {
 		command: cdn::SubCommand,
 	},
 
-	/// Opens the dashboard for this game
-	#[clap(alias = "run")]
-	Run(run::Opts),
+	/// Runs a command with Rivet development env vars populated
+	#[clap(alias = "execute")]
+	Exec(exec::Opts),
 
 	/// Run engine-specific commands
 	Engine {
@@ -327,7 +327,7 @@ async fn handle_opts() -> GlobalResult<()> {
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Docker { command } => command.execute(&ctx).await?,
 		SubCommand::CDN { command } => command.execute(&ctx).await?,
-		SubCommand::Run(opts) => opts.execute(&ctx).await?,
+		SubCommand::Exec(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,

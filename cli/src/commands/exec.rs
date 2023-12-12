@@ -1,10 +1,9 @@
-use clap::Parser;
-use global_error::prelude::*;
-
 use crate::{
 	commands,
 	util::{cmd, term},
 };
+use clap::Parser;
+use global_error::prelude::*;
 
 #[derive(Parser)]
 pub struct Opts {
@@ -58,13 +57,6 @@ impl Opts {
 				bail!("Cannot use both --this-machine and --rivet-servers");
 			}
 		};
-		let token = commands::token::create::dev::execute(
-			ctx,
-			&commands::token::create::dev::Opts {
-				namespace: self.namespace.clone(),
-			},
-		)
-		.await?;
 
 		// Run command
 		cmd::run_script(
