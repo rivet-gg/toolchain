@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Removed engine prompt if Rivet config already exists
 - **[BREAKING]** No longer automatically creates/updates `.env` file in favor of using `rivet token create development`
 - Global flags (`--api-endpoint`, `--token`, and `--disable-telemetry`) can now be used in subcommands (e.g. `rivet init --token foobar` instead of `rivet --token foobar init`)
 - Moved project metadata to global configuration file
