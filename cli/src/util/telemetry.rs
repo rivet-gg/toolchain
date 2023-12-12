@@ -9,7 +9,7 @@ use tokio::{
 	time::Duration,
 };
 
-use crate::util::{cmd, internal_config};
+use crate::util::{cmd, global_config};
 
 pub static JOIN_SET: OnceCell<Mutex<JoinSet<()>>> = OnceCell::const_new();
 pub static GAME_ID: OnceCell<String> = OnceCell::const_new();
@@ -51,10 +51,10 @@ pub async fn capture_event<F: FnOnce(&mut async_posthog::Event) -> Result<()>>(
 	name: &str,
 	mutate: Option<F>,
 ) -> Result<()> {
-	let api_endpoint = internal_config::read(|x| x.cluster.api_endpoint.clone())
+	let api_endpoint = global_config::read_project(|x| x.cluster.api_endpoint.clone())
 		.await?
 		.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string());
-	let telemetry_disabled = internal_config::read(|x| x.telemetry.disabled).await?;
+	let telemetry_disabled = global_config::read_project(|x| x.telemetry.disabled).await?;
 	let args = std::env::args().collect::<Vec<_>>();
 
 	let distinct_id = if let Some(game_id) = game_id {
