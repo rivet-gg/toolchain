@@ -3,15 +3,11 @@ use clap::Parser;
 use cli_core::rivet_api::{self, models};
 use serde::Serialize;
 use std::collections::HashMap;
-use tokio::fs;
 
-use crate::{commands, util::term};
+use crate::commands;
 
 #[derive(Parser)]
 pub struct Opts {
-	/// Write token to .env file
-	#[clap(long)]
-	pub dev_env: bool,
 	/// Namespace to create token for
 	#[clap(long)]
 	pub namespace: Option<String>,
@@ -146,13 +142,6 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 	let token_res =
 		token_res.context("cloud_games_namespaces_create_game_namespace_token_development")?;
 	let token = token_res.token;
-
-	if opts.dev_env {
-		let env_file =
-            format!("# Development token for local use only\n# See https://docs.rivet.gg/general/concepts/dev-tokens\nRIVET_TOKEN={token}");
-		fs::write(".env", env_file).await?;
-		term::status::success(format!("Wrote to .env"), "");
-	}
 
 	Ok(Output { token })
 }
