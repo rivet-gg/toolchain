@@ -180,7 +180,11 @@ async fn main_inner(opts: Opts) -> GlobalResult<()> {
 			.await?;
 
 	// Sidekick sign-in can also be called before the token is valitdated
-	if let SubCommand::Sidekick { command, show_terminal } = &opts.command {
+	if let SubCommand::Sidekick {
+		command,
+		show_terminal,
+	} = &opts.command
+	{
 		command.pre_execute(&token).await?;
 		return Ok(());
 	}
