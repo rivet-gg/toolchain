@@ -1,4 +1,4 @@
-use anyhow::{bail, ensure, Context, Result};
+use anyhow::{bail, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api, Ctx};
 use console::{style, Term};
@@ -6,11 +6,11 @@ use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
 };
-use tokio::{fs, io::AsyncWriteExt};
+use tokio::fs;
 
 use crate::{
 	commands,
-	util::{git, global_config, paths, term},
+	util::{global_config, paths, term},
 };
 
 const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
@@ -69,8 +69,6 @@ pub struct Opts {
 	#[clap(long)]
 	recommend: bool,
 	#[clap(long)]
-	update_gitignore: bool,
-	#[clap(long)]
 	create_version_config: bool,
 	#[clap(long)]
 	install_plugin: bool,
@@ -102,12 +100,6 @@ pub struct Opts {
 	cdn_build_command: Option<String>,
 	#[clap(long)]
 	cdn_build_output: Option<String>,
-
-	// Dev
-	#[clap(long)]
-	dev: bool,
-	#[clap(long)]
-	dev_env: bool,
 }
 
 impl Opts {
@@ -127,8 +119,8 @@ impl Opts {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
 		.await?;
-		let ctx = self
-			.build_ctx(term, token.as_ref().map(|x| x.as_str()), api_endpoint)
+		let _ctx = self
+			.init_ctx_and_token(term, token.as_ref().map(|x| x.as_str()), api_endpoint)
 			.await?;
 
 		// Select the engine to use
@@ -159,13 +151,9 @@ impl Opts {
 			_ => {
 				// TODO: Add setup process for Unity & Godot & HTML5
 				// Default pipeline
-				let has_version_config = self.create_config_default(term, init_engine).await?;
-				self.create_dev_token(term, &ctx, has_version_config)
-					.await?;
+				self.create_config_default(term, init_engine).await?;
 			}
 		}
-
-		self.update_gitignore(term).await?;
 
 		eprintln!();
 		term::status::success("What's next?", init_engine.learn_url());
@@ -173,7 +161,8 @@ impl Opts {
 		Ok(())
 	}
 
-	async fn build_ctx(
+	/// Gets or creates the cloud token & creates an initial context.
+	async fn init_ctx_and_token(
 		&self,
 		term: &Term,
 		token: Option<&str>,
@@ -206,40 +195,6 @@ impl Opts {
 		};
 
 		Ok(ctx)
-	}
-
-	async fn update_gitignore(&self, term: &Term) -> Result<()> {
-		if !git::check_ignore(Path::new(".env")).await? {
-			if self.recommend
-				|| self.update_gitignore
-				|| term::Prompt::new("Add .env to .gitignore?")
-					.docs(".env holds the develpoment token that should not be version controlled")
-					.default_value("yes")
-					.bool(term)
-					.await?
-			{
-				let mut file = fs::OpenOptions::new()
-					.write(true)
-					.append(true)
-					.open(".gitignore")
-					.await?;
-				file.write_all(b"\n.env\n").await?;
-
-				ensure!(
-					git::check_ignore(Path::new(".env")).await?,
-					"updated gitignore does not ignore .env"
-				);
-
-				term::status::success("Finished", "Git will now ignore the .env file");
-			}
-		} else {
-			term::status::success(
-				".gitignore already configured",
-				"The .env file is already ignored by Git",
-			);
-		}
-
-		Ok(())
 	}
 
 	async fn create_config_unreal(&self, term: &Term) -> Result<()> {
@@ -495,36 +450,6 @@ impl Opts {
 		};
 
 		Ok(has_version_config)
-	}
-
-	async fn create_dev_token(
-		&self,
-		term: &Term,
-		ctx: &Ctx,
-		has_version_config: bool,
-	) -> Result<()> {
-		if has_version_config
-			&& commands::version::read_config(Vec::new(), None)
-				.await?
-				.matchmaker
-				.is_some() && (self.recommend
-			|| self.dev || term::Prompt::new("Setup development environment?")
-			.docs("Create development tokens that enable you to develop your game locally")
-			.docs_url("http://rivet.gg/docs/general/concepts/dev-tokens")
-			.bool(term)
-			.await?)
-		{
-			commands::token::create::dev::execute(
-				&ctx,
-				&commands::token::create::dev::Opts {
-					dev_env: true,
-					namespace: None,
-				},
-			)
-			.await?;
-		}
-
-		Ok(())
 	}
 }
 

@@ -22,10 +22,7 @@ impl SubCommand {
 
 				let token = commands::token::create::dev::execute(
 					ctx,
-					&commands::token::create::dev::Opts {
-						dev_env: false,
-						namespace: None,
-					},
+					&commands::token::create::dev::Opts { namespace: None },
 				)
 				.await?
 				.token;

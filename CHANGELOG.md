@@ -5,10 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v0.3.1] - 2023-12-11
+## [v0.4.0] - Unreleased
+
+### Added
+
+- Development token cache to make `rivet token create development` run faster
 
 ### Changed
 
+- **[BREAKING]** No longer automatically creates/updates `.env` file in favor of using `rivet token create development`
 - Global flags (`--api-endpoint`, `--token`, and `--disable-telemetry`) can now be used in subcommands (e.g. `rivet init --token foobar` instead of `rivet --token foobar init`)
 - Moved project metadata to global configuration file
 - Removed `.rivet` from auto-generated `.gitignore`
