@@ -12,7 +12,7 @@ use anyhow::bail;
 use console::style;
 
 use crate::util::{
-	internal_config,
+	global_config,
 	struct_fmt::{self, Format},
 	term,
 };
@@ -39,7 +39,12 @@ enum SideKickResponse {
 #[derive(Serialize)]
 struct SideKickResponseOk {
 	// The messages from the sidekick call.
-	// messages: Vec<SideKickMessage>,
+	messages: Vec<SideKickMessage>,
+}
+
+#[derive(Serialize)]
+enum SideKickMessage {
+	String(String),
 }
 
 /// The response from a sidekick call that was unsuccessful.
@@ -50,9 +55,10 @@ enum SideKickResponseErr {
 
 impl SubCommand {
 	pub async fn execute_sign_in(&self, _term: &Term) -> Result<()> {
-		let (api_endpoint, _token) =
-			internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
-				.await?;
+		let (api_endpoint, _token) = global_config::read_project(|x| {
+			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+		})
+		.await?;
 		// Call the
 		dbg!("read_token with override_endpoint: {:?}", &api_endpoint);
 		// Create OpenAPI configuration without bearer token to send link request
@@ -161,26 +167,25 @@ impl SubCommand {
 		let display_name = game_res.game.display_name;
 
 		// Write the token
-		internal_config::mutate(|x| x.tokens.cloud = Some(token)).await?;
+		global_config::mutate_project(|x| x.tokens.cloud = Some(token)).await?;
 
 		term::status::success("Token Saved", display_name);
 
-		// Ok(new_ctx)
-
-		// #[derive(Serialize)]
-		// struct Output<'a> {
-		// 	game_id: &'a str,
-		// }
-		// struct_fmt::print(format, &Output { game_id: &game_id })?;
+		struct_fmt::print(
+			&Format::Json,
+			&SideKickResponse::Ok(SideKickResponseOk {
+				messages: vec![SideKickMessage::String("Token Saved".to_string())],
+			}),
+		)?;
 
 		Ok(())
 	}
 
 	pub async fn execute(&self, _ctx: &cli_core::Ctx, _term: &Term) -> Result<()> {
-		dbg!("");
-		let (_api_endpoint, _token) =
-			internal_config::read(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
-				.await?;
+		let (_api_endpoint, _token) = global_config::read_project(|x| {
+			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+		})
+		.await?;
 
 		match self {
 			SubCommand::SignIn => unreachable!("SignIn should be handled before this"),
