@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use cli_core::rivet_api::{self, models};
+use cli_core::rivet_api::{apis, models};
 use serde::Serialize;
 use tabled::Tabled;
 use uuid::Uuid;
@@ -55,14 +55,13 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let game_res =
-					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-						&ctx.openapi_config_cloud,
-						&ctx.game_id,
-						None,
-					)
-					.await
-					.context("cloud_games_games_get_game_by_id")?;
+				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					None,
+				)
+				.await
+				.context("cloud_games_games_get_game_by_id")?;
 				let game = &game_res.game;
 				let game_versions = &game.versions;
 
@@ -116,14 +115,13 @@ impl SubCommand {
 				format,
 			} => {
 				// Get game
-				let game_res =
-					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-						&ctx.openapi_config_cloud,
-						&ctx.game_id,
-						None,
-					)
-					.await
-					.context("cloud_games_games_get_game_by_id")?;
+				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					None,
+				)
+				.await
+				.context("cloud_games_games_get_game_by_id")?;
 				let namespaces = &game_res.game.namespaces;
 
 				// Get or create namespace
@@ -135,7 +133,7 @@ impl SubCommand {
 
 					ns_id
 				} else {
-					let create_res = rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace(
+					let create_res = apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
 					models::CloudGamesNamespacesCreateGameNamespaceRequest {
@@ -164,7 +162,7 @@ impl SubCommand {
 				version,
 				format,
 			} => {
-				rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
+				apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
 					&namespace.to_string(),
@@ -184,11 +182,12 @@ impl SubCommand {
 			}
 			SubCommand::Dashboard { namespace } => {
 				// Check the namespace exists
-				rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
+				apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
-					&namespace.to_string()
-				).await
+					&namespace.to_string(),
+				)
+				.await
 				.context("cloud_games_namespaces_get_game_namespace_by_id")?;
 
 				eprintln!(
@@ -207,8 +206,13 @@ async fn print_ns(
 	format: &struct_fmt::Format,
 	namespace_id: &str,
 ) -> Result<()> {
-	let ns_res = rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(&ctx.openapi_config_cloud, &ctx.game_id, namespace_id).await
-		.context("cloud_games_namespaces_get_game_namespace_by_id")?;
+	let ns_res = apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		namespace_id,
+	)
+	.await
+	.context("cloud_games_namespaces_get_game_namespace_by_id")?;
 	let ns = &ns_res.namespace;
 
 	#[derive(Serialize)]

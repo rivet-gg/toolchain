@@ -1,6 +1,6 @@
 use anyhow::{bail, Context, Result};
 use clap::Parser;
-use cli_core::{ctx, rivet_api, Ctx};
+use cli_core::{ctx, rivet_api::apis, Ctx};
 use console::{style, Term};
 use std::{
 	path::{Path, PathBuf},
@@ -204,14 +204,13 @@ impl Opts {
 		let ctx = if let Some(token) = token {
 			let ctx = cli_core::ctx::init(override_endpoint.clone(), token).await?;
 
-			let game_res =
-				rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-					&ctx.openapi_config_cloud,
-					&ctx.game_id,
-					None,
-				)
-				.await
-				.context("cloud_games_games_get_game_by_id")?;
+			let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+				&ctx.openapi_config_cloud,
+				&ctx.game_id,
+				None,
+			)
+			.await
+			.context("cloud_games_games_get_game_by_id")?;
 			let display_name = game_res.game.display_name;
 
 			term::status::success("Found existing token", display_name);
@@ -482,7 +481,7 @@ impl Opts {
 
 async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
 	// Create OpenAPI configuration without bearer token to send link request
-	let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
+	let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 		base_path: override_endpoint
 			.clone()
 			.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string()),
@@ -491,10 +490,9 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	};
 
 	// Prepare the link
-	let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_prepare(
-		&openapi_config_cloud_unauthed,
-	)
-	.await;
+	let prepare_res =
+		apis::cloud_devices_links_api::cloud_devices_links_prepare(&openapi_config_cloud_unauthed)
+			.await;
 	if let Err(err) = prepare_res.as_ref() {
 		println!("Error: {err:?}");
 	}
@@ -534,7 +532,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	// Wait for link to complete
 	let mut watch_index = None;
 	let token = loop {
-		let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_get(
+		let prepare_res = apis::cloud_devices_links_api::cloud_devices_links_get(
 			&openapi_config_cloud_unauthed,
 			&prepare_res.device_link_token,
 			watch_index.as_ref().map(String::as_str),
@@ -561,8 +559,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	.await?;
 
 	// Inspect the token
-	let inspect_res =
-		rivet_api::apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await;
+	let inspect_res = apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await;
 	if let Err(err) = inspect_res.as_ref() {
 		println!("Error: {err:?}");
 	}
@@ -575,7 +572,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	let game_id = game_cloud.game_id;
 
 	// Extract game data
-	let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
 		&new_ctx.openapi_config_cloud,
 		&game_id.to_string(),
 		None,

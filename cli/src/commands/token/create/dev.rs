@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::Parser;
-use cli_core::rivet_api::{self, models};
+use cli_core::rivet_api::{apis, models};
 use serde::Serialize;
 use std::collections::HashMap;
 
@@ -57,11 +57,11 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 
 	// Create dev token
 	let namespace_id = fetch_namespace_id(&ctx, &ns_name_id).await?;
-	let token_res = cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace_token_development(
+	let token_res = apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace_token_development(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
 			&namespace_id,
-			cli_core::rivet_api::models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentRequest {
+			models::CloudGamesNamespacesCreateGameNamespaceTokenDevelopmentRequest {
 				hostname: dev_hostname.clone(),
 				ports: Some(dev_ports.clone()),
 				lobby_ports: None,
@@ -177,7 +177,7 @@ async fn read_config(
 }
 
 async fn fetch_namespace_id(ctx: &cli_core::Ctx, ns_name_id: &str) -> Result<String> {
-	let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
 		None,

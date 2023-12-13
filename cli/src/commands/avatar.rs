@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use cli_core::rivet_api;
+use cli_core::rivet_api::apis;
 use tabled::Tabled;
 
 use crate::util::{term, upload};
@@ -15,7 +15,12 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let custom_avatars_res = rivet_api::apis::cloud_games_avatars_api::cloud_games_avatars_list_game_custom_avatars(&ctx.openapi_config_cloud, &ctx.game_id).await
+				let custom_avatars_res =
+					apis::cloud_games_avatars_api::cloud_games_avatars_list_game_custom_avatars(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+					)
+					.await
 					.context("cloud_games_avatars_list_game_custom_avatars")?;
 
 				#[derive(Tabled)]

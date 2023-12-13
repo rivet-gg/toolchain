@@ -1,5 +1,5 @@
 use anyhow::{ensure, Context, Result};
-use cli_core::rivet_api;
+use cli_core::rivet_api::{apis, models};
 use futures_util::stream::{StreamExt, TryStreamExt};
 use serde::Serialize;
 use std::{path::PathBuf, sync::Arc};
@@ -56,24 +56,24 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 		),
 	);
 
-	let build_res = rivet_api::apis::cloud_games_builds_api::cloud_games_builds_create_game_build(
+	let build_res = apis::cloud_games_builds_api::cloud_games_builds_create_game_build(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
-		rivet_api::models::CloudGamesCreateGameBuildRequest {
+		models::CloudGamesCreateGameBuildRequest {
 			display_name: display_name.clone(),
 			image_tag: push_opts.tag.clone(),
-			image_file: Box::new(rivet_api::models::UploadPrepareFile {
+			image_file: Box::new(models::UploadPrepareFile {
 				path: "image.tar".into(),
 				content_type: Some(content_type.into()),
 				content_length: image_file_meta.len() as i64,
 			}),
 			kind: Some(match push_opts.kind {
-				BuildKind::DockerImage => rivet_api::models::CloudGamesBuildKind::DockerImage,
-				BuildKind::OciBundle => rivet_api::models::CloudGamesBuildKind::OciBundle,
+				BuildKind::DockerImage => models::CloudGamesBuildKind::DockerImage,
+				BuildKind::OciBundle => models::CloudGamesBuildKind::OciBundle,
 			}),
 			compression: Some(match push_opts.compression {
-				BuildCompression::None => rivet_api::models::CloudGamesBuildCompression::None,
-				BuildCompression::Lz4 => rivet_api::models::CloudGamesBuildCompression::Lz4,
+				BuildCompression::None => models::CloudGamesBuildCompression::None,
+				BuildCompression::Lz4 => models::CloudGamesBuildCompression::Lz4,
 			}),
 			multipart_upload: Some(multipart_enabled()),
 		},
@@ -114,7 +114,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 		.await?;
 	}
 
-	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
+	let complete_res = apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&build_res.upload_id.to_string(),
 	)

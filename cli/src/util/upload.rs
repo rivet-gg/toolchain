@@ -1,5 +1,5 @@
 use anyhow::{bail, Context, Result};
-use cli_core::rivet_api;
+use cli_core::rivet_api::models;
 use futures_util::stream::StreamExt;
 use std::{
 	path::{Path, PathBuf},
@@ -16,7 +16,7 @@ use tokio_util::io::ReaderStream;
 #[derive(Clone)]
 pub struct UploadFile {
 	pub absolute_path: PathBuf,
-	pub prepared: rivet_api::models::UploadPrepareFile,
+	pub prepared: models::UploadPrepareFile,
 }
 
 pub fn format_file_size(bytes: u64) -> Result<String> {
@@ -69,7 +69,7 @@ pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 
 			files.push(UploadFile {
 				absolute_path: file_path.to_path_buf(),
-				prepared: rivet_api::models::UploadPrepareFile {
+				prepared: models::UploadPrepareFile {
 					path: path_str,
 					content_type,
 					content_length: file_meta.len() as i64,
@@ -84,7 +84,7 @@ pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 /// Uploads a file to a given URL.
 pub async fn upload_file(
 	reqwest_client: &reqwest::Client,
-	presigned_req: &rivet_api::models::UploadPresignedRequest,
+	presigned_req: &models::UploadPresignedRequest,
 	path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
 ) -> Result<()> {
