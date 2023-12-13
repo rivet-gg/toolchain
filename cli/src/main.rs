@@ -101,6 +101,12 @@ enum SubCommand {
 		command: engine::SubCommand,
 	},
 
+	#[clap(hide = true)]
+	Sidekick {
+		#[clap(subcommand)]
+		command: sidekick::SubCommand,
+	},
+
 	/// Alias of `rivet engine unreal`
 	#[clap(hide = true, alias = "ue")]
 	Unreal {
@@ -168,6 +174,17 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		return init_opts.execute(&term).await;
 	}
 
+	// Sidekick sign-in can also be called before the token is read
+	if let SubCommand::Sidekick { command } = &opts.command {
+		match command {
+			sidekick::SubCommand::GetLink { .. } => return command.get_link().await,
+			sidekick::SubCommand::WaitForLogin {
+				device_link_url: token,
+			} => return command.wait_for_login(token).await,
+			_ => {}
+		}
+	}
+
 	// Read token
 	let (api_endpoint, token) =
 		global_config::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
@@ -209,6 +226,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,
+		SubCommand::Sidekick { command } => command.execute(&ctx, &term).await?,
 	}
 
 	Ok(())
