@@ -15,6 +15,7 @@ pub mod get_link;
 pub mod get_token;
 pub mod get_version;
 pub mod wait_for_login;
+pub mod deploy;
 
 pub trait SideKickHandler: Serialize {
 	fn print(&self) {
@@ -34,6 +35,8 @@ pub enum SubCommand {
 	GetToken(get_token::Opts),
 	/// Get the version of the CLI
 	GetVersion(get_version::Opts),
+	/// Deploy a version
+	Deploy(deploy::Opts),
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -179,6 +182,7 @@ impl SubCommand {
 			}
 			SubCommand::GetToken(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetVersion(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::Deploy(opts) => serialize_output(opts.execute(ctx).await),
 		};
 
 		// Print the response
