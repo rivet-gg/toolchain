@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.4.0] - Unreleased
 
+### Added
+
+- Development token cache to make `rivet token create development` run faster
+
 ### Changed
 
 - **[BREAKING]** No longer automatically creates/updates `.env` file in favor of using `rivet token create development`
