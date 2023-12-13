@@ -10,6 +10,7 @@ pub mod exec;
 pub mod game;
 pub mod init;
 pub mod ns;
+pub mod run;
 pub mod sidekick;
 pub mod token;
 pub mod unlink;

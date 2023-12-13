@@ -1,17 +1,18 @@
+use clap::Parser;
+use global_error::prelude::*;
+
 use crate::{
 	commands,
 	util::{cmd, term},
 };
-use clap::Parser;
-use global_error::prelude::*;
 
 #[derive(Parser)]
 pub struct Opts {
-	/// Script to run
+	/// Name of the script to run
 	#[clap(index = 1)]
-	pub command: String,
+	pub script: String,
 
-	/// Namespace to execute command against
+	/// Namespace to execute script against
 	#[clap(short = 'n', long)]
 	pub namespace: Option<String>,
 
@@ -28,7 +29,18 @@ impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		term::status::warn(
 			"EXPERIMENTAL",
-			"`rivet exec` is experimental and subject to change",
+			"`rivet run` is experimental and subject to change",
+		);
+
+		// Read script
+		let config = crate::commands::config::read_config(
+			Vec::new(),
+			self.namespace.as_ref().map(String::as_str),
+		)
+		.await?;
+		let command = unwrap_with!(
+			config.scripts.as_ref().and_then(|x| x.get(&self.script)),
+			CLI_SCRIPT_NOT_FOUND
 		);
 
 		// Get dev token
@@ -60,7 +72,7 @@ impl Opts {
 
 		// Run command
 		cmd::run_script(
-			&self.command,
+			&command,
 			vec![
 				("RIVET_API_ENDPOINT".into(), ctx.api_endpoint.clone()),
 				("RIVET_TOKEN".into(), token),
