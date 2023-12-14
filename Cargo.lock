@@ -1661,6 +1661,7 @@ dependencies = [
  "term_size",
  "tokio",
  "tokio-util",
+ "url",
  "uuid",
  "vergen",
  "webbrowser",

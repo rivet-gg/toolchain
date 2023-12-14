@@ -7,6 +7,7 @@ use cli_core::{
 use console::Term;
 use serde::Serialize;
 use serde_json::{json, Value};
+use url::Url;
 
 use crate::util::{
 	global_config,
@@ -27,6 +28,12 @@ pub enum SubCommand {
 	CheckLoginState,
 	/// Get the token from the CLI
 	GetToken,
+	///
+	GetVersion {
+		/// The namespace to get the version for
+		#[structopt(short, long)]
+		namespace: String,
+	},
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -208,6 +215,36 @@ impl SubCommand {
 					&Format::Json,
 					&SideKickResponse::Ok(json!({
 						"token": ctx.access_token,
+					})),
+				)?;
+			}
+			SubCommand::GetVersion { namespace } => {
+				// Get the game ID
+				let game_res =
+					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
+					.await
+					.context("cloud_games_games_get_game_by_id")?;
+				let game_id = game_res.game.game_id.to_string();
+
+				// Build the URL from the game ID and the namespace
+				let url = format!(
+					"{}/games/{}/namespaces/{}/versions",
+					ctx.api_endpoint, game_id, namespace
+				);
+
+				// Parse the URL and change the subdomain from `api` to `hub`
+				let mut parsed_url = Url::parse(&url).unwrap();
+				let host = parsed_url.host_str().unwrap().replace("api", "hub");
+				parsed_url.set_host(Some(&host)).unwrap();
+
+				struct_fmt::print(
+					&Format::Json,
+					&SideKickResponse::Ok(json!({
+						"output": parsed_url.to_string(),
 					})),
 				)?;
 			}
