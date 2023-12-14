@@ -21,10 +21,12 @@ pub enum SubCommand {
 	WaitForLogin {
 		/// The token to poll for
 		#[structopt(short, long)]
-		device_link_url: String,
+		device_link_token: String,
 	},
 	/// Check if the CLI is logged in already
 	CheckLoginState,
+	/// Get the token from the CLI
+	GetToken,
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -80,7 +82,7 @@ impl SubCommand {
 		Ok(())
 	}
 
-	pub async fn wait_for_login(&self, token: &String) -> Result<()> {
+	pub async fn wait_for_login(&self, device_link_token: &String) -> Result<()> {
 		let (api_endpoint, _token) = global_config::read_project(|x| {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
@@ -100,7 +102,7 @@ impl SubCommand {
 		let token = loop {
 			let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_get(
 				&openapi_config_cloud_unauthed,
-				&token,
+				&device_link_token,
 				watch_index.as_ref().map(String::as_str),
 			)
 			.await;
@@ -189,7 +191,7 @@ impl SubCommand {
 		Ok(())
 	}
 
-	pub async fn execute(&self, _ctx: &cli_core::Ctx, _term: &Term) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx, _term: &Term) -> Result<()> {
 		let (_api_endpoint, _token) = global_config::read_project(|x| {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
@@ -201,6 +203,27 @@ impl SubCommand {
 				unreachable!("WaitForLogin should be handled before this")
 			}
 			SubCommand::CheckLoginState => todo!(),
+			SubCommand::GetToken => {
+				struct_fmt::print(
+					&Format::Json,
+					&SideKickResponse::Ok(json!({
+						"token": ctx.access_token,
+					})),
+				)?;
+			}
+		}
+
+		Ok(())
+	}
+
+	pub fn validate_token(&self, token: &Option<String>) -> Result<()> {
+		if token.is_none() {
+			struct_fmt::print(
+				&Format::Json,
+				&SideKickResponse::Err(json!({
+					"error": "No Rivet token found, please do the sign in process",
+				})),
+			)?;
 		}
 
 		Ok(())

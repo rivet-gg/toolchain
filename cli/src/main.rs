@@ -174,21 +174,31 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		return init_opts.execute(&term).await;
 	}
 
-	// Sidekick sign-in can also be called before the token is read
-	if let SubCommand::Sidekick { command } = &opts.command {
-		match command {
-			sidekick::SubCommand::GetLink { .. } => return command.get_link().await,
-			sidekick::SubCommand::WaitForLogin {
-				device_link_url: token,
-			} => return command.wait_for_login(token).await,
-			_ => {}
-		}
-	}
-
 	// Read token
 	let (api_endpoint, token) =
 		global_config::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
 			.await?;
+
+	// Sidekick sign-in can also be called before the token is valitdated
+	if let SubCommand::Sidekick { command } = &opts.command {
+		match command {
+			sidekick::SubCommand::GetLink { .. } => return command.get_link().await,
+			sidekick::SubCommand::WaitForLogin { device_link_token } => {
+				return command.wait_for_login(device_link_token).await
+			}
+			sidekick::SubCommand::CheckLoginState => return command.validate_token(&token),
+			_ => {
+				// If the command is anything else, we need to check if a token
+				// has already been provided. If not, we need to print an error
+				// and return early since that's what the plugins will expect.
+				if let Err(_) = command.validate_token(&token) {
+					// The message has already been printed out so we can just
+					// return Ok here.
+					return Ok(());
+				}
+			}
+		}
+	}
 
 	let Some(token) = token else {
 		if !os::is_linux_and_root() {
@@ -204,6 +214,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 
 		bail!("rivet token not found")
 	};
+
 	let ctx = cli_core::ctx::init(api_endpoint, token).await?;
 
 	// Set game id for errors
