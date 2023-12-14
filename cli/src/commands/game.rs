@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use cli_core::rivet_api;
+use cli_core::rivet_api::apis;
 use serde::Serialize;
 
 use crate::util::{struct_fmt, term};
@@ -21,14 +21,13 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::Get { format } => {
-				let game_res =
-					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-						&ctx.openapi_config_cloud,
-						&ctx.game_id,
-						None,
-					)
-					.await
-					.context("cloud_games_games_get_game_by_id")?;
+				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					None,
+				)
+				.await
+				.context("cloud_games_games_get_game_by_id")?;
 				let game_id = game_res.game.game_id.to_string();
 
 				#[derive(Serialize)]

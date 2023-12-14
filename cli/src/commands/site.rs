@@ -1,6 +1,6 @@
 use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
-use cli_core::rivet_api;
+use cli_core::rivet_api::{apis, models};
 use futures_util::{StreamExt, TryStreamExt};
 use serde::Serialize;
 use std::{
@@ -93,10 +93,10 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 
 	eprintln!("  * Upload path: {}", upload_path.display());
 	// Create site
-	let site_res = rivet_api::apis::cloud_games_cdn_api::cloud_games_cdn_create_game_cdn_site(
+	let site_res = apis::cloud_games_cdn_api::cloud_games_cdn_create_game_cdn_site(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
-		rivet_api::models::CloudGamesCreateGameCdnSiteRequest {
+		models::CloudGamesCreateGameCdnSiteRequest {
 			display_name: display_name.clone(),
 			files: files.iter().map(|f| f.prepared.clone()).collect(),
 		},
@@ -160,7 +160,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 	}
 
 	eprintln!();
-	let complete_res = rivet_api::apis::cloud_uploads_api::cloud_uploads_complete_upload(
+	let complete_res = apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&site_res.upload_id.to_string(),
 	)

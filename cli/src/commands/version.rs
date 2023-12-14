@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use anyhow::{bail, Context, Error, Result};
 use clap::Parser;
-use cli_core::rivet_api::{self, models};
+use cli_core::rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use tabled::Tabled;
@@ -49,14 +49,13 @@ impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::List => {
-				let game_res =
-					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-						&ctx.openapi_config_cloud,
-						&ctx.game_id,
-						None,
-					)
-					.await
-					.context("cloud_games_games_get_game_by_id")?;
+				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					None,
+				)
+				.await
+				.context("cloud_games_games_get_game_by_id")?;
 				let game = &game_res.game;
 				let namespaces = &game.namespaces;
 
@@ -114,15 +113,15 @@ impl SubCommand {
 
 				// Validate game version
 				let validate_res =
-				cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_validate_game_version(
-					&ctx.openapi_config_cloud,
-					&ctx.game_id,
-					cli_core::rivet_api::models::CloudGamesValidateGameVersionRequest {
-						display_name: "Mock Display Name".into(),
-						config: Box::new(rivet_config),
-					},
-				)
-				.await;
+					apis::cloud_games_versions_api::cloud_games_versions_validate_game_version(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						models::CloudGamesValidateGameVersionRequest {
+							display_name: "Mock Display Name".into(),
+							config: Box::new(rivet_config),
+						},
+					)
+					.await;
 				eprintln!();
 				if let Err(err) = validate_res.as_ref() {
 					eprintln!("Error: {err:?}");
@@ -142,7 +141,12 @@ impl SubCommand {
 			}
 			SubCommand::Dashboard { version } => {
 				// Check the version exists
-				rivet_api::apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(&ctx.openapi_config_cloud, &ctx.game_id, &version).await
+				apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					&version,
+				)
+				.await
 				.context("cloud_games_versions_get_game_version_by_id")?;
 
 				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, version)));
@@ -229,14 +233,13 @@ impl DeployOpts {
 
 /// Prints information about a game version
 async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
-	let version_res =
-		rivet_api::apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-			&version_id,
-		)
-		.await
-		.context("cloud_games_versions_get_game_version_by_id")?;
+	let version_res = apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		&version_id,
+	)
+	.await
+	.context("cloud_games_versions_get_game_version_by_id")?;
 	let version = &version_res.version;
 
 	println!("{version:#?}");
@@ -528,13 +531,12 @@ pub async fn create(
 	format: Option<&struct_fmt::Format>,
 ) -> Result<CreateOutput> {
 	// Fetch game data
-	let game_res =
-		cli_core::rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-			None,
-		)
-		.await;
+	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		None,
+	)
+	.await;
 	if let Err(err) = game_res.as_ref() {
 		println!("Error: {err:?}");
 	}
@@ -564,16 +566,15 @@ pub async fn create(
 	build_config_dependencies(ctx, &mut rivet_config, &display_name, format).await?;
 
 	// Create game version
-	let version_res =
-		cli_core::rivet_api::apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-			cli_core::rivet_api::models::CloudGamesCreateGameVersionRequest {
-				display_name: display_name.clone(),
-				config: Box::new(rivet_config),
-			},
-		)
-		.await;
+	let version_res = apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+		models::CloudGamesCreateGameVersionRequest {
+			display_name: display_name.clone(),
+			config: Box::new(rivet_config),
+		},
+	)
+	.await;
 	if let Err(err) = version_res.as_ref() {
 		println!("Error: {err:?}");
 	}
@@ -595,15 +596,15 @@ pub async fn create(
 			format!("{} -> {}", display_name, namespace.display_name),
 		);
 		let update_version_res =
-		cli_core::rivet_api::apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-			&namespace.namespace_id.to_string(),
-			cli_core::rivet_api::models::CloudGamesNamespacesUpdateGameNamespaceVersionRequest {
-				version_id: version_id.clone()
-			},
-		)
-		.await;
+			apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
+				&ctx.openapi_config_cloud,
+				&ctx.game_id,
+				&namespace.namespace_id.to_string(),
+				models::CloudGamesNamespacesUpdateGameNamespaceVersionRequest {
+					version_id: version_id.clone(),
+				},
+			)
+			.await;
 		if let Err(err) = update_version_res.as_ref() {
 			println!("Error: {err:?}");
 		}

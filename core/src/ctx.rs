@@ -1,3 +1,4 @@
+use rivet_api::apis;
 use std::{env, sync::Arc};
 
 use crate::error::Error;
@@ -23,7 +24,7 @@ pub struct CtxInner {
 	pub access_token: String,
 	pub game_id: String,
 
-	pub openapi_config_cloud: rivet_api::apis::configuration::Configuration,
+	pub openapi_config_cloud: apis::configuration::Configuration,
 }
 
 pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<Ctx, Error> {
@@ -32,7 +33,7 @@ pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<
 		.unwrap_or_else(|| DEFAULT_API_ENDPOINT.to_string());
 
 	// Create OpenAPI config
-	let openapi_config_cloud = rivet_api::apis::configuration::Configuration {
+	let openapi_config_cloud = apis::configuration::Configuration {
 		base_path: api_endpoint.clone(),
 		bearer_access_token: Some(access_token.clone()),
 		user_agent: Some(user_agent()),
@@ -40,7 +41,7 @@ pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<
 	};
 
 	// Inspect token
-	let inspect = rivet_api::apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
+	let inspect = apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
 		.await
 		.map_err(|source| Error::InspectFail { source })?;
 	let game_id = if let Some(game_cloud) = inspect.agent.game_cloud {
