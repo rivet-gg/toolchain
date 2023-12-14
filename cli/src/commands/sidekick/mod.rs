@@ -12,9 +12,9 @@ use crate::util::{
 
 pub mod check_login_state;
 pub mod deploy;
+pub mod get_bootstrap_data;
 pub mod get_cli_version;
 pub mod get_link;
-pub mod get_token;
 pub mod get_version;
 pub mod wait_for_login;
 
@@ -33,7 +33,7 @@ pub enum SubCommand {
 	/// Check if the CLI is logged in already
 	CheckLoginState(check_login_state::Opts),
 	/// Get the token from the CLI
-	GetToken(get_token::Opts),
+	GetBootstrapData(get_bootstrap_data::Opts),
 	/// Get the version of the CLI
 	GetVersion(get_version::Opts),
 	/// Deploy a version
@@ -185,7 +185,7 @@ impl SubCommand {
 			| SubCommand::GetCliVersion(_) => {
 				unreachable!("This command should be handled before this")
 			}
-			SubCommand::GetToken(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetBootstrapData(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetVersion(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::Deploy(opts) => serialize_output(opts.execute(ctx).await),
 		};
