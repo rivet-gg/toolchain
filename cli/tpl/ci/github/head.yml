@@ -1,0 +1,36 @@
+name: Deploy to Rivet
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  prepare:
+    runs-on: ubuntu-20.04
+    outputs:
+      ns_name: ${{ steps.set_ns_name.outputs.ns_name }}
+      version_name: ${{ steps.set_version_name.outputs.version_name }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up Rivet CLI
+        run: |
+          export RIVET_CLI_VERSION="__RIVET_CLI_VERSION__"
+          curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
+
+      - name: Generate ns_name and version_name
+        id: set_ns_name
+        run: |
+          branch_name=${GITHUB_REF#refs/heads/}
+          ns_name=$(echo $branch_name | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z-]//g')
+          short_hash=$(git rev-parse --short HEAD)
+          version_name="${short_hash} (${ns_name})"
+          echo "::set-output name=ns_name::$ns_name"
+          echo "::set-output name=version_name::$version_name"
+
+      - name: Create Namespace
+        run: |
+          rivet namespace create --id "${{ steps.set_ns_name.outputs.ns_name }}" --name "$branch_name" --version "0.0.1" || true
+

@@ -108,6 +108,13 @@ enum SubCommand {
 		command: engine::unreal::SubCommand,
 	},
 
+	/// Run CI-specific commands
+	#[clap(alias = "ci")]
+	ContinuousIntegration {
+		#[clap(subcommand)]
+		command: ci::SubCommand,
+	},
+
 	/// Deprecated.
 	///
 	/// Initiates the development environment for this project.
@@ -183,6 +190,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
+		SubCommand::ContinuousIntegration { command } => command.execute(&ctx).await?,
 	}
 
 	Ok(())

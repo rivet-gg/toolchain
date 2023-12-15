@@ -1,4 +1,5 @@
 pub mod avatar;
+pub mod ci;
 pub mod dev;
 pub mod engine;
 pub mod game;

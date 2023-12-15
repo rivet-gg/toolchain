@@ -1,0 +1,17 @@
+  deploy-version:
+    needs: [__NEEDS__]
+    needs: [build-docker, build-cdn]
+    runs-on: ubuntu-20.04
+    env:
+      RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
+      RIVET_TOKEN: ${{ secrets.RIVET_CLOUD_TOKEN }}
+    steps:
+      - name: Set up Rivet CLI
+        run: |
+          export RIVET_CLI_VERSION="__RIVET_CLI_VERSION__"
+          curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
+
+      - name: Deploy Version
+        run: |
+          rivet deploy --namespace '${{ needs.prepare.outputs.ns_name }}' __DEPLOY_OVERRIDES__
+
