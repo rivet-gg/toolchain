@@ -28,7 +28,7 @@ pub enum SubCommand {
 		display_name: String,
 		/// Initial version to publish to the namespace
 		#[clap(long)]
-		version: Uuid,
+		version: Option<Uuid>,
 		#[clap(long, value_parser)]
 		format: Option<struct_fmt::Format>,
 	},
@@ -124,6 +124,18 @@ impl SubCommand {
 				.context("cloud_games_games_get_game_by_id")?;
 				let namespaces = &game_res.game.namespaces;
 
+				// Find the default version to use
+				let version_id = if let Some(version) = version {
+					*version
+				} else {
+					game_res
+						.game
+						.versions
+						.last()
+						.context("no versions")?
+						.version_id
+				};
+
 				// Get or create namespace
 				let ns_id = if let Some(ns) = namespaces.iter().find(|ns| &ns.name_id == name_id) {
 					let ns_id = ns.namespace_id.to_string();
@@ -139,7 +151,7 @@ impl SubCommand {
 					models::CloudGamesNamespacesCreateGameNamespaceRequest {
 						display_name: display_name.clone(),
 						name_id: name_id.clone(),
-						version_id: *version,
+						version_id,
 					}).await
 					.context("cloud_games_namespaces_create_game_namespace")?;
 					let ns_id = create_res.namespace_id.to_string();
