@@ -9,7 +9,7 @@
       RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Rivet CLI
         run: |
@@ -19,6 +19,6 @@
       - name: Build Docker Image
         id: build_image
         run: |
-          output=$(rivet image build-push --format json --name '${{ needs.prepare.outputs.ns_name }}' --dockerfile '__DOCKERFILE_PATH__')
-          echo "::set-output name=image_id::$(echo $output | jq -r '.image_id')"
+          output=$(rivet image build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --dockerfile '__DOCKERFILE_PATH__' | tail -n1)
+          echo "image_id=$(echo $output | jq -r '.image_id')" >> "$GITHUB_OUTPUT"
 

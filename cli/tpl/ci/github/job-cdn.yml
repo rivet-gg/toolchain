@@ -9,7 +9,7 @@
       RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Rivet CLI
         run: |
@@ -19,6 +19,6 @@
       - name: Build CDN
         id: build_cdn
         run: |
-          output=$(rivet site build-push --format json --name '${{ needs.prepare.outputs.ns_name }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__')
-          echo "::set-output name=site_id::$(echo $output | jq -r '.site_id')"
+          output=$(rivet site build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__' | tail -n1)
+          echo "site_id=$(echo $output | jq -r '.site_id')" >> "$GITHUB_OUTPUT"
 
