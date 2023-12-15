@@ -1,18 +1,24 @@
-  build-cdn:
+  build_cdn:
+    name: Build CDN Site
     needs: prepare
     runs-on: ubuntu-20.04
+    outputs:
+      site_id: ${{ steps.build_cdn.outputs.site_id }}
     env:
       RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
-      RIVET_TOKEN: ${{ secrets.RIVET_CLOUD_TOKEN }}
+      RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Set up Rivet CLI
         run: |
           export RIVET_CLI_VERSION="__RIVET_CLI_VERSION__"
           curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 
       - name: Build CDN
+        id: build_cdn
         run: |
-          output=$(rivet site build-push --format json --dockerfile Dockerfile --name '${{ needs.prepare.outputs.ns_name }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__')
+          output=$(rivet site build-push --format json --name '${{ needs.prepare.outputs.ns_name }}' --command '__BUILD_COMMAND__' --path '__BUILD_COMMAND__')
           echo "::set-output name=site_id::$(echo $output | jq -r '.site_id')"
-        id: build-cdn
 

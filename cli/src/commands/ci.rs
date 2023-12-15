@@ -133,9 +133,9 @@ async fn gen_github_workflow(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> 
 	// CDN job
 	if let Some(cdn) = &version.cdn {
 		if cdn.site_id.is_none() {
-			needs_jobs.push("build-cdn".to_string());
+			needs_jobs.push("build_cdn".to_string());
 			overrides.push(format!(
-				"cdn.site_id=\"${{{{ needs.build-cdn.outputs.site_id }}}}\""
+				"cdn.site_id=\"${{{{ needs.build_cdn.outputs.site_id }}}}\""
 			));
 			let build_command = cdn
 				.build_command
@@ -170,7 +170,10 @@ async fn gen_github_workflow(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> 
 
 fn common_substitute(ctx: &cli_core::Ctx, input: &str) -> String {
 	input
-		.replace("__RIVET_CLI_VERSION__", env!("VERGEN_BUILD_SEMVER"))
+		.replace(
+			"__RIVET_CLI_VERSION__",
+			&format!("v{}", env!("VERGEN_BUILD_SEMVER")),
+		)
 		.replace("__RIVET_API_ENDPOINT__", &ctx.api_endpoint)
 }
 
@@ -203,7 +206,7 @@ fn append_dockerfile(
 	let job_name = if let Some(x) = existing_dockerfiles.get(dockerfile_path) {
 		x.to_string()
 	} else {
-		let job_name = format!("buid-job-{}", config_path.replace(".", "-"));
+		let job_name = format!("build_job_{}", config_path.replace(".", "-"));
 		needs_jobs.push(job_name.clone());
 		existing_dockerfiles.insert(dockerfile_path.to_string(), job_name.clone());
 

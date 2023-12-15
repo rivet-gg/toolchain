@@ -1,11 +1,14 @@
-  deploy-version:
-    needs: [__NEEDS__]
-    needs: [build-docker, build-cdn]
+  deploy:
+    name: Deploy
+    needs: [prepare, __NEEDS_JOBS__]
     runs-on: ubuntu-20.04
     env:
       RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
-      RIVET_TOKEN: ${{ secrets.RIVET_CLOUD_TOKEN }}
+      RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Set up Rivet CLI
         run: |
           export RIVET_CLI_VERSION="__RIVET_CLI_VERSION__"
@@ -13,5 +16,5 @@
 
       - name: Deploy Version
         run: |
-          rivet deploy --namespace '${{ needs.prepare.outputs.ns_name }}' __DEPLOY_OVERRIDES__
+          rivet deploy --namespace '${{ needs.prepare.outputs.ns_name }}' --name '${{ needs.prepare.outputs.version_name}}' __DEPLOY_OVERRIDES__
 
