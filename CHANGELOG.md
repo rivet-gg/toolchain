@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved project metadata to global configuration file
 - Removed `.rivet` from auto-generated `.gitignore`
 - `rivet namespace create` can be called without specifying `--version`
+- **[BREAKING]** Change `TELEMETRY_DISABLED` env var to `RIVET_TELEMETRY_DISABLED`
 
 ### Fixed
 
