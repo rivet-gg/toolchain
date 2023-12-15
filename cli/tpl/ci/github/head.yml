@@ -16,11 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Set up Rivet CLI
-        run: |
-          export RIVET_CLI_VERSION="__RIVET_CLI_VERSION__"
-          curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
-
       - name: Generate ns_name and version_name
         id: derive_names
         run: |
@@ -30,11 +25,4 @@ jobs:
           version_name="${short_hash} (${ns_name})"
           echo "::set-output name=ns_name::$ns_name"
           echo "::set-output name=version_name::$version_name"
-
-      - name: Create Namespace
-        env:
-          RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
-          RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
-        run: |
-          rivet namespace create --id "${{ steps.derive_names.outputs.ns_name }}" --name "$branch_name" --version "0.0.1" || true
 

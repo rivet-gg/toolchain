@@ -14,6 +14,11 @@
           export RIVET_CLI_VERSION="__RIVET_CLI_VERSION__"
           curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
 
+      - name: Create Namespace
+        run: |
+          # Ignore error if namespace already exists
+          rivet namespace create --id "${{ needs.prepare.outputs.ns_name }}" --name "$branch_name" --version "0.0.1" || true
+
       - name: Deploy Version
         run: |
           rivet deploy --namespace '${{ needs.prepare.outputs.ns_name }}' --name '${{ needs.prepare.outputs.version_name}}' __DEPLOY_OVERRIDES__
