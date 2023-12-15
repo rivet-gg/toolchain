@@ -184,7 +184,7 @@ fn validate_idle_lobbies(
 	if let Some(il) = idle_lobbies {
 		ensure!(
 			il.min == 0,
-			"creating ci workflows with idle lobbies will spawn unsued lobbies, rerun with --allow-idle-lobbies to ignore"
+			"creating ci workflows with idle lobbies will spawn unused lobbies, rerun with --allow-idle-lobbies to ignore"
 		);
 	}
 
