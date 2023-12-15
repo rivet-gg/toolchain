@@ -19,6 +19,6 @@
       - name: Build CDN
         id: build_cdn
         run: |
-          output=$(rivet site build-push --format json --name '${{ needs.prepare.outputs.ns_name }}' --command '__BUILD_COMMAND__' --path '__BUILD_COMMAND__')
+          output=$(rivet site build-push --format json --name '${{ needs.prepare.outputs.ns_name }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__')
           echo "::set-output name=site_id::$(echo $output | jq -r '.site_id')"
 
