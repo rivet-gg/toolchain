@@ -20,7 +20,7 @@ matchmaker:
 
   # The hardware to provide for lobbies.
   #
-  # Available tiers: https://rivet.gg/docs/serverless-lobbies/concepts/available-tiers
+  # Available tiers: https://rivet.gg/docs/dynamic-servers/concepts/available-tiers
   tier: basic-1d1
 
   # What game modes are available.
