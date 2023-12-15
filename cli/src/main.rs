@@ -33,7 +33,7 @@ struct Opts {
 	#[clap(global = true, long, env = "RIVET_TOKEN")]
 	token: Option<String>,
 
-	#[clap(global = true, long, env = "TELEMETRY_DISABLED")]
+	#[clap(global = true, long, env = "RIVET_TELEMETRY_DISABLED")]
 	telemetry_disabled: Option<bool>,
 }
 
