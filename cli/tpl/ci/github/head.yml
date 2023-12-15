@@ -1,0 +1,31 @@
+name: Deploy to Rivet
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-20.04
+    outputs:
+      branch_name: ${{ steps.derive_names.outputs.branch_name }}
+      ns_name_id: ${{ steps.derive_names.outputs.ns_name_id }}
+      version_name: ${{ steps.derive_names.outputs.version_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Generate ns_name and version_name
+        id: derive_names
+        run: |
+          branch_name=${GITHUB_REF#refs/heads/}
+          # Max namespace length is 16 characters
+          ns_name_id=$(echo $branch_name | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]\+/-/g' | cut -c 1-16)
+          short_hash=$(git rev-parse --short HEAD)
+          version_name="${short_hash} (${branch_name})"
+          echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
+          echo "ns_name_id=$ns_name_id" >> "$GITHUB_OUTPUT"
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
+

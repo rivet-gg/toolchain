@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Auto-generate GitHub Actions with `rivet ci generate github`
 - Development token cache to make `rivet token create development` run faster
 
 ### Changed
