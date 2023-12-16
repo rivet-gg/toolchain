@@ -1,8 +1,17 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> 0209274 (GlobalResult refactor)
 use sysinfo::System;
 use anyhow::Result;
 =======
 >>>>>>> 13f3653 (GlobalResult refactor)
+<<<<<<< HEAD
+=======
+>>>>>>> 636062a (GlobalResult refactor)
+>>>>>>> 0209274 (GlobalResult refactor)
 use cli_core::ctx;
 use global_error::prelude::*;
 use serde_json::json;
