@@ -2,8 +2,8 @@ mod archive;
 mod build;
 pub mod push;
 
-use anyhow::Result;
 use clap::Parser;
+use global_error::prelude::*;
 use std::{path::Path, str::FromStr};
 use uuid::Uuid;
 
@@ -46,7 +46,7 @@ pub struct BuildPushOpts {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::Push(push_opts) => {
 				let output = push(ctx, push_opts).await?;
@@ -82,7 +82,7 @@ impl Default for BuildKind {
 }
 
 impl BuildKind {
-	pub async fn from_env() -> Result<BuildKind> {
+	pub async fn from_env() -> GlobalResult<BuildKind> {
 		// Determine build method from env
 		if let Some(method) = std::env::var("_RIVET_BUILD_KIND")
 			.ok()
@@ -113,7 +113,7 @@ impl Default for BuildCompression {
 }
 
 impl BuildCompression {
-	pub async fn from_env(kind: &BuildKind) -> Result<BuildCompression> {
+	pub async fn from_env(kind: &BuildKind) -> GlobalResult<BuildCompression> {
 		// Determine build method from env
 		if let Some(method) = std::env::var("_RIVET_BUILD_COMPRESSION")
 			.ok()
@@ -129,7 +129,7 @@ impl BuildCompression {
 	}
 }
 
-pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<push::PushOutput> {
+pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<push::PushOutput> {
 	// Re-tag image with unique tag
 	let unique_image_tag = generate_unique_image_tag();
 	let mut tag_cmd = tokio::process::Command::new("docker");
@@ -163,7 +163,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<push::Pus
 pub async fn build_and_push(
 	ctx: &cli_core::Ctx,
 	push_opts: &BuildPushOpts,
-) -> Result<push::PushOutput> {
+) -> GlobalResult<push::PushOutput> {
 	// Build image
 	let build_kind = BuildKind::from_env().await?;
 	let build_compression = BuildCompression::from_env(&build_kind).await?;

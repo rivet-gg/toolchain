@@ -1,5 +1,5 @@
-use anyhow::Result;
 use clap::Parser;
+use global_error::prelude::*;
 
 pub mod dev;
 pub mod pub_ns;
@@ -20,7 +20,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::Development(opts) => opts.execute(ctx).await,
 			SubCommand::Public(opts) => opts.execute(ctx).await,

@@ -1,7 +1,7 @@
-use anyhow::{bail, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api::apis, Ctx};
 use console::{style, Color, Style, Term};
+use global_error::prelude::*;
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -77,7 +77,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self, term: &Term) -> Result<()> {
+	pub async fn execute(&self, term: &Term) -> GlobalResult<()> {
 		// Remove legacy `.rivet` dir if exists
 		let legacy_project_meta_path = paths::project_root()?.join(".rivet");
 		if fs::metadata(&legacy_project_meta_path).await.is_ok() {
@@ -192,7 +192,7 @@ impl Opts {
 		term: &Term,
 		token: Option<&str>,
 		override_endpoint: Option<String>,
-	) -> Result<Ctx> {
+	) -> GlobalResult<Ctx> {
 		// Check if token already exists
 		let token = if let Some(token) = token.clone() {
 			Some(token.to_string())
@@ -202,13 +202,14 @@ impl Opts {
 		let ctx = if let Some(token) = token {
 			let ctx = cli_core::ctx::init(override_endpoint.clone(), token).await?;
 
-			let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-				&ctx.openapi_config_cloud,
-				&ctx.game_id,
-				None,
-			)
-			.await
-			.context("cloud_games_games_get_game_by_id")?;
+			let game_res = unwrap!(
+				apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					&ctx.openapi_config_cloud,
+					&ctx.game_id,
+					None,
+				)
+				.await
+			);
 			let display_name = game_res.game.display_name;
 
 			term::status::success("Found existing token", display_name);
@@ -221,7 +222,7 @@ impl Opts {
 		Ok(ctx)
 	}
 
-	async fn create_config_unreal(&self, term: &Term) -> Result<()> {
+	async fn create_config_unreal(&self, term: &Term) -> GlobalResult<()> {
 		let dockerignore_path = std::env::current_dir()?.join(".dockerignore");
 		let dockerfile_dev_path = std::env::current_dir()?.join("server.development.Dockerfile");
 		let dockerfile_debug_path = std::env::current_dir()?.join("server.debug.Dockerfile");
@@ -231,17 +232,18 @@ impl Opts {
 
 		// Build the uproject path
 		let current_dir = std::env::current_dir()?;
-		let uproject_path = find_uproject_file(&current_dir)
-			.await
-			.context("find_uproject_file")?
-			.context("could not find *.uproject file")?;
-		let uproject_path_unix = uproject_path
-			.strip_prefix(current_dir)
-			.context("failed to strip uproject path prefix")?
-			.components()
-			.map(|c| c.as_os_str().to_string_lossy())
-			.collect::<Vec<_>>()
-			.join("/");
+		let uproject_path = unwrap!(unwrap!(
+			find_uproject_file(&current_dir).await,
+			"could not find *.uproject file"
+		));
+		let uproject_path_unix = unwrap!(
+			uproject_path.strip_prefix(current_dir),
+			"failed to strip uproject path prefix"
+		)
+		.components()
+		.map(|c| c.as_os_str().to_string_lossy())
+		.collect::<Vec<_>>()
+		.join("/");
 
 		// Read module name
 		let mut module_name_prompt = term::Prompt::new("Unreal game module name?").docs("Name of the Unreal module that holds the game code. This is usually the value of `$.Modules[0].Name` in the file `MyProject.unproject`.");
@@ -339,7 +341,7 @@ impl Opts {
 		Ok(())
 	}
 
-	async fn create_config_default(&self, init_engine: InitEngine) -> Result<bool> {
+	async fn create_config_default(&self, init_engine: InitEngine) -> GlobalResult<bool> {
 		let current_dir = std::env::current_dir()?;
 		let config_exists = ["rivet.yaml", "rivet.toml", "rivet.json"]
 			.iter()
@@ -389,7 +391,7 @@ impl Opts {
 	}
 }
 
-async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cli_core::Ctx> {
+async fn read_token(term: &Term, override_endpoint: Option<String>) -> GlobalResult<cli_core::Ctx> {
 	// Create OpenAPI configuration without bearer token to send link request
 	let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 		base_path: override_endpoint
@@ -406,7 +408,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	if let Err(err) = prepare_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let prepare_res = prepare_res.context("cloud_devices_links_prepare")?;
+	let prepare_res = prepare_res?;
 
 	// Prompt user to press enter to open browser
 	term::status::info("Link your game", "Press Enter to open your browser");
@@ -454,7 +456,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 		if let Err(err) = prepare_res.as_ref() {
 			println!("Error: {err:?}");
 		}
-		let prepare_res = prepare_res.context("cloud_devices_links_get")?;
+		let prepare_res = unwrap!(prepare_res);
 
 		watch_index = Some(prepare_res.watch.index);
 
@@ -476,7 +478,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	if let Err(err) = inspect_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let inspect_res = inspect_res.context("cloud_auth_inspect")?;
+	let inspect_res = unwrap!(inspect_res);
 
 	// Find the game ID
 	let Some(game_cloud) = inspect_res.agent.game_cloud.as_ref() else {
@@ -494,7 +496,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	if let Err(err) = game_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let game_res = game_res.context("cloud_games_games_get_game_by_id")?;
+	let game_res = unwrap!(game_res);
 	let display_name = game_res.game.display_name;
 
 	// Write the token
@@ -506,7 +508,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 }
 
 /// Finds the Unreal project file in the current directory.
-async fn find_uproject_file(current_dir: &Path) -> Result<Option<PathBuf>> {
+async fn find_uproject_file(current_dir: &Path) -> GlobalResult<Option<PathBuf>> {
 	let mut read_dir = fs::read_dir(current_dir).await?;
 	while let Some(entry) = read_dir.next_entry().await? {
 		let path = entry.path();
@@ -521,7 +523,7 @@ async fn find_uproject_file(current_dir: &Path) -> Result<Option<PathBuf>> {
 }
 
 /// Attempts to read the module name from the uproject file.
-async fn attempt_read_module_name(uproject_path: &Path) -> Result<Option<String>> {
+async fn attempt_read_module_name(uproject_path: &Path) -> GlobalResult<Option<String>> {
 	// Read uproject file
 	let uproject_str = match fs::read_to_string(&uproject_path).await {
 		Ok(uproject) => uproject,

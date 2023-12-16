@@ -1,5 +1,5 @@
-use anyhow::Result;
 use clap::Parser;
+use global_error::prelude::*;
 
 use crate::util::term;
 
@@ -11,7 +11,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::CreateDevToken(opts) => {
 				term::status::warn(

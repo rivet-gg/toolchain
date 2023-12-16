@@ -1,7 +1,7 @@
-use anyhow::{Context, Result};
 use cli_core::rivet_api::models;
+use global_error::prelude::*;
 
-pub fn version_display_name(game: &models::CloudGameFull) -> Result<String> {
+pub fn version_display_name(game: &models::CloudGameFull) -> GlobalResult<String> {
 	// Generate date
 	//
 	// Use UTC in order to ensure that the month is consistent if a team is collaborating from
@@ -14,11 +14,7 @@ pub fn version_display_name(game: &models::CloudGameFull) -> Result<String> {
 	let mut max_index = 0;
 	for version in &game.versions {
 		if let Some(captures) = re.captures(&version.display_name) {
-			let version_idx = captures
-				.get(1)
-				.context("regex capture")?
-				.as_str()
-				.parse::<i64>()?;
+			let version_idx = unwrap!(captures.get(1)).as_str().parse::<i64>()?;
 			max_index = max_index.max(version_idx);
 		}
 	}
