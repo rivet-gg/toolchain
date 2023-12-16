@@ -1,10 +1,10 @@
-use anyhow::{bail, Result};
+use global_error::prelude::*;
 
 /// Run a Docker command with full output.
 pub async fn execute_docker_cmd(
 	mut command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	match command.status().await {
 		Ok(status) => {
 			if !status.success() {
@@ -29,7 +29,7 @@ pub async fn execute_docker_cmd(
 pub async fn execute_docker_cmd_silent(
 	command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
-) -> Result<std::process::Output> {
+) -> GlobalResult<std::process::Output> {
 	let output = execute_docker_cmd_silent_fallible(command).await?;
 	error_for_output_failure(&output, error_message)?;
 	Ok(output)
@@ -38,7 +38,7 @@ pub async fn execute_docker_cmd_silent(
 /// Run a Docker command without output and ignore failures.
 pub async fn execute_docker_cmd_silent_fallible(
 	mut command: tokio::process::Command,
-) -> Result<std::process::Output> {
+) -> GlobalResult<std::process::Output> {
 	match command.output().await {
 		Ok(output) => Ok(output),
 		Err(err) => {
@@ -55,7 +55,7 @@ pub async fn execute_docker_cmd_silent_fallible(
 pub fn error_for_output_failure(
 	output: &std::process::Output,
 	error_message: impl std::fmt::Display,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	if !output.status.success() {
 		bail!(
 			"{error_message} ({})\n\nstdout:\n{}\n\nstderr:\n{}",
@@ -69,7 +69,7 @@ pub fn error_for_output_failure(
 }
 
 /// Throw an error if the output of a command failed.
-pub async fn read_stdout_fallible(mut command: tokio::process::Command) -> Result<String> {
+pub async fn read_stdout_fallible(mut command: tokio::process::Command) -> GlobalResult<String> {
 	let output = command.output().await?;
 
 	if !output.status.success() {

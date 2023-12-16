@@ -1,6 +1,6 @@
-use anyhow::{Context, Result};
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
+use global_error::prelude::*;
 use serde::Serialize;
 use tabled::Tabled;
 use uuid::Uuid;
@@ -52,16 +52,17 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::List => {
-				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-					&ctx.openapi_config_cloud,
-					&ctx.game_id,
-					None,
-				)
-				.await
-				.context("cloud_games_games_get_game_by_id")?;
+				let game_res = unwrap!(
+					apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
+					.await
+				);
 				let game = &game_res.game;
 				let game_versions = &game.versions;
 
@@ -97,7 +98,7 @@ impl SubCommand {
 							created: ns.create_ts.clone(),
 						})
 					})
-					.collect::<Result<Vec<_>>>()?;
+					.collect::<GlobalResult<Vec<_>>>()?;
 				ns.reverse();
 				term::table(&ns);
 
@@ -115,25 +116,21 @@ impl SubCommand {
 				format,
 			} => {
 				// Get game
-				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-					&ctx.openapi_config_cloud,
-					&ctx.game_id,
-					None,
-				)
-				.await
-				.context("cloud_games_games_get_game_by_id")?;
+				let game_res = unwrap!(
+					apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
+					.await
+				);
 				let namespaces = &game_res.game.namespaces;
 
 				// Find the default version to use
 				let version_id = if let Some(version) = version {
 					*version
 				} else {
-					game_res
-						.game
-						.versions
-						.last()
-						.context("no versions")?
-						.version_id
+					unwrap!(game_res.game.versions.last(), "no versions").version_id
 				};
 
 				// Get or create namespace
@@ -145,15 +142,14 @@ impl SubCommand {
 
 					ns_id
 				} else {
-					let create_res = apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace(
+					let create_res = unwrap!(apis::cloud_games_namespaces_api::cloud_games_namespaces_create_game_namespace(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
 					models::CloudGamesNamespacesCreateGameNamespaceRequest {
 						display_name: display_name.clone(),
 						name_id: name_id.clone(),
 						version_id,
-					}).await
-					.context("cloud_games_namespaces_create_game_namespace")?;
+					}).await);
 					let ns_id = create_res.namespace_id.to_string();
 
 					term::status::success("Created", display_name);
@@ -174,15 +170,14 @@ impl SubCommand {
 				version,
 				format,
 			} => {
-				apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
+				unwrap!(apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
 					&namespace.to_string(),
 					models::CloudGamesNamespacesUpdateGameNamespaceVersionRequest {
 						version_id: *version,
 					}
-				).await
-				.context("cloud_games_namespaces_update_game_namespace_version")?;
+				).await);
 
 				term::status::success("Version Set", "");
 
@@ -194,13 +189,11 @@ impl SubCommand {
 			}
 			SubCommand::View { namespace } => {
 				// Check the namespace exists
-				apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
+				unwrap!(apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
 					&ctx.openapi_config_cloud,
 					&ctx.game_id,
-					&namespace.to_string(),
-				)
-				.await
-				.context("cloud_games_namespaces_get_game_namespace_by_id")?;
+					&namespace.to_string()
+				).await);
 
 				eprintln!(
 					"{}",
@@ -217,14 +210,15 @@ async fn print_ns(
 	ctx: &cli_core::Ctx,
 	format: &struct_fmt::Format,
 	namespace_id: &str,
-) -> Result<()> {
-	let ns_res = apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
-		&ctx.openapi_config_cloud,
-		&ctx.game_id,
-		namespace_id,
-	)
-	.await
-	.context("cloud_games_namespaces_get_game_namespace_by_id")?;
+) -> GlobalResult<()> {
+	let ns_res = unwrap!(
+		apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			namespace_id
+		)
+		.await
+	);
 	let ns = &ns_res.namespace;
 
 	#[derive(Serialize)]

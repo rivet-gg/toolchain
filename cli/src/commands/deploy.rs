@@ -1,6 +1,6 @@
-use anyhow::{bail, Context, Result};
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
+use global_error::prelude::*;
 use serde::Serialize;
 use serde_json::json;
 use uuid::Uuid;
@@ -57,7 +57,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		// Validate config
 		let errors = config::ValidateOpts {
 			overrides: self.overrides.clone(),
@@ -120,7 +120,7 @@ pub async fn build_and_push_compat(
 	site_name: &Option<String>,
 	concurrent_uploads: usize,
 	format: &Option<struct_fmt::Format>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	let site_output = if let Some(site_path) = site_path {
 		Some(
 			cdn::push(
@@ -180,7 +180,7 @@ pub async fn deploy(
 	namespace_name_id: Option<&str>,
 	concurrent_uploads: usize,
 	format: Option<&struct_fmt::Format>,
-) -> Result<DeployOutput> {
+) -> GlobalResult<DeployOutput> {
 	// Fetch game data
 	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
 		&ctx.openapi_config_cloud,
@@ -191,16 +191,13 @@ pub async fn deploy(
 	if let Err(err) = game_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let game_res = game_res.context("cloud_games_games_get_game_by_id")?;
+	let game_res = unwrap!(game_res);
 	let namespace = if let Some(namespace) = namespace_name_id {
-		Some(
-			game_res
-				.game
-				.namespaces
-				.iter()
-				.find(|x| x.name_id == namespace)
-				.context("namespace not found")?,
-		)
+		Some(unwrap!(game_res
+			.game
+			.namespaces
+			.iter()
+			.find(|x| x.name_id == namespace)))
 	} else {
 		None
 	};
@@ -236,7 +233,7 @@ pub async fn deploy(
 	if let Err(err) = version_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let version_res = version_res.context("versions_create_game_version")?;
+	let version_res = unwrap!(version_res);
 	let version_id = version_res.version_id;
 
 	eprintln!();
@@ -266,7 +263,7 @@ pub async fn deploy(
 		if let Err(err) = update_version_res.as_ref() {
 			println!("Error: {err:?}");
 		}
-		update_version_res.context("cloud_games_namespaces_update_game_namespace_version")?;
+		unwrap!(update_version_res);
 		term::status::success(
 			"Deploy Succeeded",
 			version::rivet_game_url(&game_res.game.name_id, &namespace.name_id),
@@ -286,7 +283,7 @@ pub async fn build_config_dependencies(
 	concurrent_uploads: usize,
 
 	format: Option<&struct_fmt::Format>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		// matchmaker.docker
 		let default_image_id = if let Some(docker) = matchmaker.docker.as_mut() {
@@ -332,7 +329,7 @@ pub async fn build_and_push_image(
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
 	default_image_id: Option<Uuid>,
-) -> Result<Option<Uuid>> {
+) -> GlobalResult<Option<Uuid>> {
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = &docker.dockerfile {
 			let push_output = docker::build_and_push(
@@ -371,7 +368,7 @@ pub async fn build_and_push_site(
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	concurrent_uploads: usize,
 	format: Option<&struct_fmt::Format>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	if cdn.site_id.is_none() {
 		if let Some(build_output) = &cdn.build_output {
 			if let Some(build_command) = &cdn.build_command {

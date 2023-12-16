@@ -1,6 +1,6 @@
-use anyhow::*;
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
+use global_error::prelude::*;
 use serde::Serialize;
 use std::collections::HashMap;
 
@@ -14,7 +14,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		let output = execute(ctx, self).await?;
 		print!("{}", output.token);
 
@@ -27,7 +27,7 @@ pub struct Output {
 	pub token: String,
 }
 
-pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
+pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> GlobalResult<Output> {
 	let ns_name_id = opts
 		.namespace
 		.as_ref()
@@ -71,8 +71,7 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 	if let Err(err) = token_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let token_res =
-		token_res.context("cloud_games_namespaces_create_game_namespace_token_development")?;
+	let token_res = unwrap!(token_res);
 	let token = token_res.token;
 
 	// Save token
@@ -94,7 +93,7 @@ pub async fn execute(ctx: &cli_core::Ctx, opts: &Opts) -> Result<Output> {
 
 async fn read_config(
 	ns_name_id: &str,
-) -> Result<(
+) -> GlobalResult<(
 	String,
 	HashMap<String, models::CloudMatchmakerDevelopmentPort>,
 )> {
@@ -171,26 +170,30 @@ async fn read_config(
 				},
 			))
 		})
-		.collect::<Result<HashMap<_, _>>>()?;
+		.collect::<GlobalResult<HashMap<_, _>>>()?;
 
 	Ok((dev_hostname, dev_ports))
 }
 
-async fn fetch_namespace_id(ctx: &cli_core::Ctx, ns_name_id: &str) -> Result<String> {
-	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-		&ctx.openapi_config_cloud,
-		&ctx.game_id,
-		None,
-	)
-	.await
-	.context("cloud_games_games_get_game_by_id")?;
-	let namespace_id = game_res
-		.game
-		.namespaces
-		.iter()
-		.find(|x| x.name_id == ns_name_id)
-		.map(|x| x.namespace_id.to_string())
-		.context("no namespace for name id")?;
+async fn fetch_namespace_id(ctx: &cli_core::Ctx, ns_name_id: &str) -> GlobalResult<String> {
+	let game_res = unwrap!(
+		apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			None,
+		)
+		.await
+	);
+	let namespace_id = unwrap!(
+		game_res
+			.game
+			.namespaces
+			.iter()
+			.find(|x| x.name_id == ns_name_id)
+			.map(|x| x.namespace_id.to_string()),
+		"no namespace for name id {}",
+		ns_name_id
+	);
 
 	Ok(namespace_id)
 }

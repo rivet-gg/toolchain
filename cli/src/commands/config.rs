@@ -1,9 +1,8 @@
-use std::collections::HashSet;
-
-use anyhow::{bail, Context, Error, Result};
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
+use global_error::prelude::*;
 use serde::Deserialize;
+use std::collections::HashSet;
 use uuid::Uuid;
 
 #[derive(Parser)]
@@ -14,7 +13,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::Validate(opts) => {
 				let errors = opts.execute(ctx).await?;
@@ -48,7 +47,7 @@ pub struct ValidateOpts {
 }
 
 impl ValidateOpts {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<Vec<models::ValidationError>> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<Vec<models::ValidationError>> {
 		let overrides = parse_config_override_args(&self.overrides)?;
 		let mut rivet_config =
 			read_config(overrides, self.namespace.as_ref().map(String::as_str)).await?;
@@ -58,7 +57,7 @@ impl ValidateOpts {
 		build_mock_config_dependencies(&mut rivet_config)?;
 
 		// Validate game version
-		let validate_res =
+		let validate_res = unwrap!(
 			apis::cloud_games_versions_api::cloud_games_versions_validate_game_version(
 				&ctx.openapi_config_cloud,
 				&ctx.game_id,
@@ -68,7 +67,7 @@ impl ValidateOpts {
 				},
 			)
 			.await
-			.context("cloud_games_versions_validate_game_version")?;
+		);
 
 		Ok(validate_res.errors)
 	}
@@ -77,20 +76,18 @@ impl ValidateOpts {
 /// Parses config parameters passed to override version parameters
 pub fn parse_config_override_args(
 	overrides: &[String],
-) -> Result<Vec<(String, serde_json::Value)>> {
+) -> GlobalResult<Vec<(String, serde_json::Value)>> {
 	overrides
 		.iter()
 		.map(|value| {
-			value
-				.split_once("=")
-				.context("override needs equal")
-				.and_then(|(key, value)| {
-					let value_json = serde_json::from_str::<serde_json::Value>(value)
-						.context("invalid override value json")?;
-					Ok((key.to_string(), value_json))
-				})
+			let (key, value) = unwrap!(value.split_once("="), "override needs equal");
+			let value_json = unwrap!(
+				serde_json::from_str::<serde_json::Value>(value),
+				"invalid override value json"
+			);
+			Ok((key.to_string(), value_json))
 		})
-		.collect::<Result<Vec<_>, Error>>()
+		.collect::<Result<Vec<_>, GlobalError>>()
 }
 
 /// Reads the Rivet configuration file and applies overrides. Uses the
@@ -102,7 +99,7 @@ pub fn parse_config_override_args(
 pub async fn read_config(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
-) -> Result<models::CloudVersionConfig> {
+) -> GlobalResult<models::CloudVersionConfig> {
 	read_config_inner::<models::CloudVersionConfig>(overrides, namespace).await
 }
 
@@ -116,7 +113,7 @@ pub struct CloudVersionConfigPartial {
 pub async fn read_config_partial(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
-) -> Result<CloudVersionConfigPartial> {
+) -> GlobalResult<CloudVersionConfigPartial> {
 	read_config_inner::<CloudVersionConfigPartial>(overrides, namespace).await
 }
 
@@ -124,7 +121,7 @@ pub async fn read_config_partial(
 async fn read_config_inner<T: serde::de::DeserializeOwned>(
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace: Option<&str>,
-) -> Result<T> {
+) -> GlobalResult<T> {
 	// Check for conflicting .yaml and .yml file suffixes
 	//
 	// It's almost always a mistake when this happens, so we fail by default here.
@@ -179,21 +176,19 @@ async fn read_config_inner<T: serde::de::DeserializeOwned>(
 		//
 		// We have to embed the value in `Empty` because the value can't be at
 		// the root of the config.
-		let config_value = config::Config::try_from(&Empty { root: v })
-			.context("read override value to config value")?
-			.get::<config::Value>("root")?;
+		let config_value = unwrap!(
+			config::Config::try_from(&Empty { root: v }),
+			"read override value to config value"
+		)
+		.get::<config::Value>("root")?;
 
 		// Add the override
-		config_builder = config_builder
-			.set_override(k, config_value)
-			.context("set override")?;
+		config_builder = unwrap!(config_builder.set_override(k, config_value), "set override");
 	}
 
 	// Read config
-	let config = config_builder.build().await.context("find config")?;
-	let version = config
-		.try_deserialize::<T>()
-		.context("deserialize config")?;
+	let config = unwrap!(config_builder.build().await, "find config");
+	let version = unwrap!(config.try_deserialize::<T>(), "deserialize config");
 
 	Ok(version)
 }
@@ -202,7 +197,9 @@ async fn read_config_inner<T: serde::de::DeserializeOwned>(
 /// build config dependencies.
 ///
 /// Used to build a config file that wil pass validation.
-pub fn build_mock_config_dependencies(version: &mut models::CloudVersionConfig) -> Result<()> {
+pub fn build_mock_config_dependencies(
+	version: &mut models::CloudVersionConfig,
+) -> GlobalResult<()> {
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
 		if let Some(docker) = matchmaker.docker.as_mut() {
 			docker.image_id = Some(Uuid::nil());

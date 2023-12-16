@@ -1,11 +1,11 @@
-use anyhow::Result;
+use global_error::prelude::*;
 use std::{
 	fs::File,
 	io::{BufReader, BufWriter},
 	path::Path,
 };
 
-pub fn compress(input_path: &Path, output_path: &Path) -> Result<()> {
+pub fn compress(input_path: &Path, output_path: &Path) -> GlobalResult<()> {
 	let input_file = File::open(&input_path)?;
 	let mut reader = BufReader::new(input_file);
 

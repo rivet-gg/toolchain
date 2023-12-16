@@ -1,6 +1,6 @@
-use anyhow::{bail, Context, Result};
 use cli_core::rivet_api::models;
 use futures_util::stream::StreamExt;
+use global_error::prelude::*;
 use std::{
 	path::{Path, PathBuf},
 	time::{Duration, Instant},
@@ -10,7 +10,6 @@ use tokio::{
 	io::{AsyncReadExt, AsyncSeekExt},
 };
 use tokio_util::io::ReaderStream;
-// use bytes::Bytes;
 
 /// Prepared file that will be uploaded to S3.
 #[derive(Clone)]
@@ -19,21 +18,18 @@ pub struct UploadFile {
 	pub prepared: models::UploadPrepareFile,
 }
 
-pub fn format_file_size(bytes: u64) -> Result<String> {
+pub fn format_file_size(bytes: u64) -> GlobalResult<String> {
 	use humansize::FileSize;
 
 	let size = format!(
 		"{}",
-		bytes
-			.file_size(humansize::file_size_opts::DECIMAL)
-			.ok()
-			.context("format file size")?
+		unwrap!(bytes.file_size(humansize::file_size_opts::DECIMAL).ok())
 	);
 	Ok(size)
 }
 
 /// Lists all files in a directory and returns the data required to upload them.
-pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
+pub fn prepare_upload_dir(base_path: &Path) -> GlobalResult<Vec<UploadFile>> {
 	use std::path::Component;
 
 	let mut files = Vec::<UploadFile>::new();
@@ -87,7 +83,7 @@ pub async fn upload_file(
 	presigned_req: &models::UploadPresignedRequest,
 	path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	let content_type = content_type.map(|x| x.to_string());
 
 	// Try the upload multiple times since DigitalOcean spaces is incredibly
@@ -183,11 +179,13 @@ pub async fn upload_file(
 			break 'upload upload_time;
 		} else {
 			if attempts > 4 {
-				bail!(
+				let response_status = res.status();
+				let response_text = res.text().await?;
+				let text = format!(
 					"failed to upload file: {}\n{:?}",
-					res.status(),
-					res.text().await
+					response_status, response_text
 				);
+				bail!(&text);
 			} else {
 				attempts += 1;
 				eprintln!(

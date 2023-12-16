@@ -1,6 +1,6 @@
 // See https://github.com/moby/sys/blob/c0711cde08c8fa33857a2c28721659267f49b5e2/user/user.go
 
-use anyhow::{bail, Result};
+use global_error::prelude::*;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -15,7 +15,7 @@ pub struct User {
 	pub shell: String,
 }
 
-pub fn read_passwd_file(path: &Path) -> Result<Vec<User>> {
+pub fn read_passwd_file(path: &Path) -> GlobalResult<Vec<User>> {
 	let file = File::open(&path)?;
 	let reader = io::BufReader::new(file);
 
@@ -60,7 +60,7 @@ pub struct Group {
 	pub user_list: Vec<String>,
 }
 
-pub fn read_group_file(path: &Path) -> Result<Vec<Group>> {
+pub fn read_group_file(path: &Path) -> GlobalResult<Vec<Group>> {
 	let file = File::open(&path)?;
 	let reader = io::BufReader::new(file);
 
@@ -72,7 +72,9 @@ pub fn read_group_file(path: &Path) -> Result<Vec<Group>> {
 					groups.push(group);
 				}
 			}
-			Err(e) => bail!("Error reading line: {}", e),
+			Err(e) => {
+				bail!("Error reading line: {}", e)
+			}
 		}
 	}
 

@@ -1,6 +1,6 @@
-use anyhow::{ensure, Context, Result};
 use clap::Parser;
 use cli_core::rivet_api::models;
+use global_error::prelude::*;
 use std::collections::HashMap;
 use tokio::fs;
 
@@ -19,7 +19,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::Generate { command } => command.execute(ctx).await,
 		}
@@ -33,7 +33,7 @@ pub enum GenerateOpts {
 }
 
 impl GenerateOpts {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			GenerateOpts::GitHub(opts) => gen_github(ctx, opts).await,
 		}
@@ -50,13 +50,13 @@ pub struct GenerateGitHubOpts {
 	allow_idle_lobbies: bool,
 }
 
-async fn gen_github(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> Result<()> {
+async fn gen_github(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> GlobalResult<()> {
 	let relative_path = opts
 		.path
 		.clone()
 		.unwrap_or_else(|| ".github/workflows/rivet-deploy.yml".to_string());
 	let path = paths::project_root()?.join(relative_path);
-	let path_parent = path.parent().context("path has no parent")?;
+	let path_parent = unwrap!(path.parent(), "path has no parent");
 
 	// Create parent path for workflow
 	fs::create_dir_all(&path_parent).await?;
@@ -73,7 +73,10 @@ async fn gen_github(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> Result<()
 }
 
 // TODO: Strings in this workflow are not appropriately escaped
-async fn gen_github_workflow(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> Result<String> {
+async fn gen_github_workflow(
+	ctx: &cli_core::Ctx,
+	opts: &GenerateGitHubOpts,
+) -> GlobalResult<String> {
 	let mut version = config::read_config(Vec::new(), None).await?;
 
 	let mut workflow = String::new();
@@ -137,14 +140,9 @@ async fn gen_github_workflow(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> 
 			overrides.push(format!(
 				"cdn.site_id=\"${{{{ needs.build_cdn.outputs.site_id }}}}\""
 			));
-			let build_command = cdn
-				.build_command
-				.as_ref()
-				.context("cdn.build_command is required")?;
-			let build_output = cdn
-				.build_output
-				.as_ref()
-				.context("cdn.build_output is required")?;
+			let build_command =
+				unwrap!(cdn.build_command.as_ref(), "cdn.build_command is required");
+			let build_output = unwrap!(cdn.build_output.as_ref(), "cdn.build_output is required");
 
 			let cdn_job = common_substitute(ctx, include_str!("../../tpl/ci/github/job-cdn.yml"))
 				.replace("__BUILD_COMMAND__", build_command)
@@ -180,7 +178,7 @@ fn common_substitute(ctx: &cli_core::Ctx, input: &str) -> String {
 /// Validate that idle lobbies are not used in CI workflows
 fn validate_idle_lobbies(
 	idle_lobbies: &Option<Box<models::CloudVersionMatchmakerGameModeIdleLobbiesConfig>>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	if let Some(il) = idle_lobbies {
 		ensure!(
 			il.min == 0,
@@ -199,7 +197,7 @@ fn append_dockerfile(
 	config_path: &str,
 	dockerfile_path: Option<&str>,
 	existing_dockerfiles: &mut HashMap<String, String>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	let dockerfile_path = dockerfile_path.unwrap_or("Dockerfile");
 
 	// Build Dockerfile. Deduplicate build commands for the same Dockerfile.

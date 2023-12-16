@@ -1,6 +1,8 @@
-use anyhow::{bail, Result};
 use clap::Parser;
 use commands::*;
+use global_error::prelude::*;
+use serde_json::json;
+use util::struct_fmt::{self, Format};
 
 use util::{global_config, os, term};
 
@@ -140,7 +142,7 @@ enum SubCommand {
 }
 
 #[tokio::main(flavor = "current_thread")]
-async fn main() -> Result<()> {
+async fn main() -> GlobalResult<()> {
 	let opts = read_opts().await?;
 
 	let res = main_inner(opts).await;
@@ -151,10 +153,7 @@ async fn main() -> Result<()> {
 			util::telemetry::GAME_ID.get(),
 			"cli_error",
 			Some(|event: &mut async_posthog::Event| {
-				event.insert_prop(
-					"errors",
-					err.chain().map(|e| e.to_string()).collect::<Vec<_>>(),
-				)?;
+				event.insert_prop("errors", format!("{}", err))?;
 				Ok(())
 			}),
 		)
@@ -166,7 +165,7 @@ async fn main() -> Result<()> {
 	res
 }
 
-async fn main_inner(opts: Opts) -> Result<()> {
+async fn main_inner(opts: Opts) -> GlobalResult<()> {
 	let term = console::Term::stderr();
 
 	// Handle init command without the context
@@ -181,12 +180,12 @@ async fn main_inner(opts: Opts) -> Result<()> {
 
 	// Sidekick sign-in can also be called before the token is valitdated
 	if let SubCommand::Sidekick { command } = &opts.command {
-		match command {
-			sidekick::SubCommand::GetLink { .. } => return command.get_link().await,
+		let response: GlobalResult<_> = match command {
+			sidekick::SubCommand::GetLink { .. } => command.get_link().await,
 			sidekick::SubCommand::WaitForLogin { device_link_token } => {
-				return command.wait_for_login(device_link_token).await
+				command.wait_for_login(device_link_token).await
 			}
-			sidekick::SubCommand::CheckLoginState => return command.validate_token(&token),
+			sidekick::SubCommand::CheckLoginState => command.validate_token(&token),
 			_ => {
 				// If the command is anything else, we need to check if a token
 				// has already been provided. If not, we need to print an error
@@ -194,10 +193,31 @@ async fn main_inner(opts: Opts) -> Result<()> {
 				if let Err(_) = command.validate_token(&token) {
 					// The message has already been printed out so we can just
 					// return Ok here.
-					return Ok(());
+					Ok(sidekick::SideKickResponse(json!({
+						"output": "Token not found. Please run `rivet sidekick get-link` to sign in."
+					})))
+				} else {
+					Ok(sidekick::SideKickResponse(json!({})))
 				}
 			}
+		};
+
+		// Print the response
+		match response {
+			Ok(sidekick_response) => {
+				struct_fmt::print(&Format::Json, &json!({ "Ok": sidekick_response }))?;
+			}
+			Err(global_error) => {
+				struct_fmt::print(
+					&Format::Json,
+					&json!({
+						"Err": global_error.to_string()
+					}),
+				)?;
+			}
 		}
+
+		return Ok(());
 	}
 
 	let Some(token) = token else {
@@ -215,7 +235,6 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		bail!("rivet token not found")
 	};
 
-	let token = token.context("no Rivet token found, please run `rivet init`")?;
 	let ctx = cli_core::ctx::init(api_endpoint, token).await?;
 
 	// Set game id for errors
@@ -238,14 +257,26 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,
-		SubCommand::Sidekick { command } => command.execute(&ctx, &term).await?,
+		SubCommand::Sidekick { command } => match command.execute(&ctx, &term).await {
+			Ok(sidekick_response) => {
+				struct_fmt::print(&Format::Json, &json!({ "Ok": sidekick_response }))?;
+			}
+			Err(global_error) => {
+				struct_fmt::print(
+					&Format::Json,
+					&json!({
+						"Err": global_error.to_string()
+					}),
+				)?;
+			}
+		},
 	}
 
 	Ok(())
 }
 
 /// Reads options from clap and reads/updates the internal config file.
-async fn read_opts() -> Result<Opts> {
+async fn read_opts() -> GlobalResult<Opts> {
 	let opts = Opts::parse();
 
 	global_config::mutate_project(|config| {
