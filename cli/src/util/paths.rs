@@ -1,14 +1,14 @@
-use anyhow::{Context, Result};
+use global_error::prelude::*;
 use std::{env, path::PathBuf};
 
-pub fn project_root() -> Result<PathBuf> {
+pub fn project_root() -> GlobalResult<PathBuf> {
 	Ok(env::current_dir()?)
 }
 
-pub fn global_config_dir() -> Result<PathBuf> {
-	Ok(dirs::config_dir().context("config dir")?.join("rivet"))
+pub fn global_config_dir() -> GlobalResult<PathBuf> {
+	Ok(unwrap!(dirs::config_dir()).join("rivet"))
 }
 
-pub fn global_config_file() -> Result<PathBuf> {
+pub fn global_config_file() -> GlobalResult<PathBuf> {
 	Ok(global_config_dir()?.join("config.yaml"))
 }

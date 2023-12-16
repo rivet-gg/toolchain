@@ -1,6 +1,6 @@
-use anyhow::{Context, Result};
 use clap::Parser;
 use cli_core::rivet_api::apis;
+use global_error::prelude::*;
 use tabled::Tabled;
 
 use crate::util::{term, upload};
@@ -12,16 +12,16 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::List => {
-				let custom_avatars_res =
+				let custom_avatars_res = unwrap!(
 					apis::cloud_games_avatars_api::cloud_games_avatars_list_game_custom_avatars(
 						&ctx.openapi_config_cloud,
-						&ctx.game_id,
+						&ctx.game_id
 					)
 					.await
-					.context("cloud_games_avatars_list_game_custom_avatars")?;
+				);
 
 				#[derive(Tabled)]
 				struct CustomAvatar {
@@ -49,7 +49,7 @@ impl SubCommand {
 								.unwrap_or_else(|| "(Upload not finished)".to_string()),
 						})
 					})
-					.collect::<Result<Vec<_>>>()?;
+					.collect::<GlobalResult<Vec<_>>>()?;
 
 				term::table(&custom_avatars);
 

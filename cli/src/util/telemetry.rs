@@ -1,8 +1,7 @@
-use std::collections::HashMap;
-
-use anyhow::Result;
 use cli_core::ctx;
+use global_error::prelude::*;
 use serde_json::json;
+use std::collections::HashMap;
 use tokio::{
 	sync::{Mutex, OnceCell},
 	task::JoinSet,
@@ -46,11 +45,11 @@ fn build_client() -> async_posthog::Client {
 /// Builds a new PostHog event with associated data.
 ///
 /// This is slightly expensive, so it should not be used frequently.
-pub async fn capture_event<F: FnOnce(&mut async_posthog::Event) -> Result<()>>(
+pub async fn capture_event<F: FnOnce(&mut async_posthog::Event) -> GlobalResult<()>>(
 	game_id: Option<&String>,
 	name: &str,
 	mutate: Option<F>,
-) -> Result<()> {
+) -> GlobalResult<()> {
 	let api_endpoint = global_config::read_project(|x| x.cluster.api_endpoint.clone())
 		.await?
 		.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string());

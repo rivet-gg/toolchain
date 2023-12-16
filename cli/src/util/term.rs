@@ -1,5 +1,5 @@
-use anyhow::Result;
 use console::{style, StyledObject, Term};
+use global_error::prelude::*;
 use std::str::FromStr;
 use tabled::{Table, Tabled};
 
@@ -119,15 +119,15 @@ impl Prompt {
 		}
 	}
 
-	async fn read_line(&self, term: &Term) -> Result<String> {
+	async fn read_line(&self, term: &Term) -> GlobalResult<String> {
 		self.read_line_inner(term, false).await
 	}
 
-	// async fn read_line_secure(&self, term: &Term) -> Result<String> {
+	// async fn read_line_secure(&self, term: &Term) -> GlobalResult<String> {
 	// 	self.read_line_inner(term, true).await
 	// }
 
-	async fn read_line_inner(&self, term: &Term, secure: bool) -> Result<String> {
+	async fn read_line_inner(&self, term: &Term, secure: bool) -> GlobalResult<String> {
 		term.flush()?;
 
 		let input = if secure {
@@ -155,7 +155,7 @@ impl Prompt {
 		Ok(input_trimmed.to_string())
 	}
 
-	pub async fn bool(&self, term: &Term) -> Result<bool> {
+	pub async fn bool(&self, term: &Term) -> GlobalResult<bool> {
 		let i = self.gen_indent();
 
 		self.print_header();
@@ -174,7 +174,7 @@ impl Prompt {
 		}
 	}
 
-	pub async fn parsed<T>(&self, term: &Term) -> Result<T>
+	pub async fn parsed<T>(&self, term: &Term) -> GlobalResult<T>
 	where
 		T: FromStr,
 	{
@@ -194,7 +194,7 @@ impl Prompt {
 		}
 	}
 
-	pub async fn string(&self, term: &Term) -> Result<String> {
+	pub async fn string(&self, term: &Term) -> GlobalResult<String> {
 		let i = self.gen_indent();
 
 		self.print_header();
@@ -211,7 +211,7 @@ impl Prompt {
 		}
 	}
 
-	// pub async fn string_secure(&self, term: &Term) -> Result<String> {
+	// pub async fn string_secure(&self, term: &Term) -> GlobalResult<String> {
 	// 	let i = self.gen_indent();
 
 	// 	self.print_header();

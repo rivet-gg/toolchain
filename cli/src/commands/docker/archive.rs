@@ -1,4 +1,4 @@
-use anyhow::{bail, Context, Result};
+use global_error::prelude::*;
 use serde::Deserialize;
 use serde_json::json;
 use std::path::Path;
@@ -13,7 +13,7 @@ pub async fn create_archive(
 	image_tag: &str,
 	build_kind: BuildKind,
 	build_compression: BuildCompression,
-) -> Result<tempfile::TempPath> {
+) -> GlobalResult<tempfile::TempPath> {
 	eprintln!();
 	term::status::info(
 		"Archiving Image",
@@ -33,7 +33,7 @@ pub async fn create_archive(
 }
 
 /// Save Docker image
-async fn archive_docker_image(image_tag: &str) -> Result<tempfile::TempPath> {
+async fn archive_docker_image(image_tag: &str) -> GlobalResult<tempfile::TempPath> {
 	let build_tar_path = tempfile::NamedTempFile::new()?.into_temp_path();
 
 	let mut build_cmd = Command::new("docker");
@@ -48,7 +48,7 @@ async fn archive_docker_image(image_tag: &str) -> Result<tempfile::TempPath> {
 }
 
 /// Convert the Docker image to an OCI bundle
-async fn archive_oci_bundle(image_tag: &str) -> Result<tempfile::TempPath> {
+async fn archive_oci_bundle(image_tag: &str) -> GlobalResult<tempfile::TempPath> {
 	let bundle_dir = tempfile::TempDir::new()?;
 
 	// Create container and copy files to rootfs
@@ -109,7 +109,7 @@ async fn archive_oci_bundle(image_tag: &str) -> Result<tempfile::TempPath> {
 		inspect_cmd.arg("image").arg("inspect").arg(&image_tag);
 		let inspect_output = cmd::execute_docker_cmd_silent_fallible(inspect_cmd).await?;
 		let image = serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
-		let image = image.into_iter().next().context("no image")?;
+		let image = unwrap!(image.into_iter().next(), "no image");
 
 		// Read config
 		let mut config = serde_json::from_slice::<serde_json::Value>(include_bytes!(
@@ -264,7 +264,7 @@ async fn archive_oci_bundle(image_tag: &str) -> Result<tempfile::TempPath> {
 async fn compress_archive(
 	build_tar_path: &Path,
 	compression: BuildCompression,
-) -> Result<tempfile::TempPath> {
+) -> GlobalResult<tempfile::TempPath> {
 	// Compress the bundle
 	let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
 	let build_tar_compressed_path = build_tar_compressed_file.into_temp_path();

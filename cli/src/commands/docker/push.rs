@@ -1,6 +1,6 @@
-use anyhow::{ensure, Context, Result};
 use cli_core::rivet_api::{apis, models};
 use futures_util::stream::{StreamExt, TryStreamExt};
+use global_error::prelude::*;
 use serde::Serialize;
 use std::{path::PathBuf, sync::Arc};
 use tokio::fs;
@@ -32,7 +32,7 @@ pub struct PushOutput {
 	pub image_id: Uuid,
 }
 
-pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutput> {
+pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<PushOutput> {
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
 	// Inspect the image
@@ -82,7 +82,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 	if let Err(err) = build_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let build_res = build_res.context("cloud_games_builds_create_game_build")?;
+	let build_res = unwrap!(build_res,);
 	let image_id = build_res.build_id;
 
 	if multipart_enabled() {
@@ -122,7 +122,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushO
 	if let Err(err) = complete_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	complete_res.context("cloud_uploads_complete_upload")?;
+	unwrap!(complete_res);
 	term::status::success("Image Upload Complete", "");
 
 	Ok(PushOutput {

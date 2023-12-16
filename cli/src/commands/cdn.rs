@@ -1,7 +1,7 @@
-use anyhow::{bail, ensure, Context, Result};
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
 use futures_util::{StreamExt, TryStreamExt};
+use global_error::prelude::*;
 use serde::Serialize;
 use std::{
 	env,
@@ -40,7 +40,7 @@ pub struct PushOpts {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::Push(push_opts) => {
 				let output = push(ctx, push_opts).await?;
@@ -61,7 +61,7 @@ pub struct PushOutput {
 	pub site_id: Uuid,
 }
 
-pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutput> {
+pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<PushOutput> {
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
 	let upload_path = env::current_dir()?.join(&push_opts.path);
@@ -109,7 +109,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 	if let Err(err) = site_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	let site_res = site_res.context("cloud_games_cdn_create_game_cdn_site")?;
+	let site_res = unwrap!(site_res);
 	let site_id = site_res.site_id;
 
 	{
@@ -131,10 +131,10 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 
 					async move {
 						// Find the matching prepared file
-						let file = files
-							.iter()
-							.find(|f| f.prepared.path == presigned_req.path)
-							.context("missing prepared file")?;
+						let file = unwrap!(
+							files.iter().find(|f| f.prepared.path == presigned_req.path),
+							"missing prepared file"
+						);
 
 						upload::upload_file(
 							&reqwest_client,
@@ -156,7 +156,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 							upload::format_file_size(total_bytes)?
 						);
 
-						Result::<()>::Ok(())
+						GlobalResult::<()>::Ok(())
 					}
 				}
 			})
@@ -172,7 +172,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 	if let Err(err) = complete_res.as_ref() {
 		println!("Error: {err:?}");
 	}
-	complete_res.context("cloud_uploads_complete_upload")?;
+	unwrap!(complete_res);
 	term::status::success("Site Upload Complete", site_id);
 
 	Ok(PushOutput { site_id })
@@ -203,7 +203,10 @@ pub struct BuildPushOpts {
 	pub format: Option<struct_fmt::Format>,
 }
 
-pub async fn build_and_push(ctx: &cli_core::Ctx, push_opts: &BuildPushOpts) -> Result<PushOutput> {
+pub async fn build_and_push(
+	ctx: &cli_core::Ctx,
+	push_opts: &BuildPushOpts,
+) -> GlobalResult<PushOutput> {
 	eprintln!();
 	term::status::info("Building Site", &push_opts.command);
 

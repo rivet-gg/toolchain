@@ -1,18 +1,15 @@
-use anyhow::{bail, Context, Result};
 use clap::Parser;
 use cli_core::{
 	ctx,
-	rivet_api::{self},
+	rivet_api::{self, apis},
 };
 use console::Term;
+use global_error::prelude::*;
 use serde::Serialize;
 use serde_json::{json, Value};
 use url::Url;
 
-use crate::util::{
-	global_config,
-	struct_fmt::{self, Format},
-};
+use crate::util::global_config;
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -41,20 +38,19 @@ pub enum SubCommand {
 /// This is so a single schema can be parsed by whatever is consuming the
 /// sidekick output.
 #[derive(Serialize)]
-enum SideKickResponse {
-	Ok(Value),
-	Err(Value),
-}
+pub struct SideKickResponse(pub Value);
 
 impl SubCommand {
-	pub async fn get_link(&self) -> Result<()> {
-		let (api_endpoint, _token) = global_config::read_project(|x| {
-			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
-		})
-		.await?;
+	pub async fn get_link(&self) -> GlobalResult<SideKickResponse> {
+		let (api_endpoint, _token) = unwrap!(
+			global_config::read_project(|x| {
+				(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+			})
+			.await
+		);
 
 		// Create OpenAPI configuration without bearer token to send link request
-		let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
+		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 			base_path: api_endpoint
 				.clone()
 				.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string()),
@@ -63,40 +59,30 @@ impl SubCommand {
 		};
 
 		// Prepare the link
-		let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_prepare(
-			&openapi_config_cloud_unauthed,
-		)
-		.await;
-		if let Err(err) = prepare_res.as_ref() {
-			struct_fmt::print(
-				&Format::Json,
-				&SideKickResponse::Err(json!({
-					"error": err.to_string(),
-				})),
-			)?;
-			bail!("Error: {err:?}");
-		}
-		let prepare_res = prepare_res.context("cloud_devices_links_prepare")?;
+		let prepare_res = unwrap!(
+			apis::cloud_devices_links_api::cloud_devices_links_prepare(
+				&openapi_config_cloud_unauthed,
+			)
+			.await
+		);
 
-		struct_fmt::print(
-			&Format::Json,
-			&SideKickResponse::Ok(json!({
-				"device_link_url": prepare_res.device_link_url,
-				"device_link_token": prepare_res.device_link_token,
-			})),
-		)?;
-
-		Ok(())
+		Ok(SideKickResponse(json!({
+			"device_link_url": prepare_res.device_link_url,
+			"device_link_token": prepare_res.device_link_token,
+		})))
 	}
 
-	pub async fn wait_for_login(&self, device_link_token: &String) -> Result<()> {
+	pub async fn wait_for_login(
+		&self,
+		device_link_token: &String,
+	) -> GlobalResult<SideKickResponse> {
 		let (api_endpoint, _token) = global_config::read_project(|x| {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
 		.await?;
 
 		// Create OpenAPI configuration without bearer token to send link request
-		let openapi_config_cloud_unauthed = rivet_api::apis::configuration::Configuration {
+		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 			base_path: api_endpoint
 				.clone()
 				.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string()),
@@ -107,22 +93,14 @@ impl SubCommand {
 		// Wait for link to complete
 		let mut watch_index = None;
 		let token = loop {
-			let prepare_res = rivet_api::apis::cloud_devices_links_api::cloud_devices_links_get(
-				&openapi_config_cloud_unauthed,
-				&device_link_token,
-				watch_index.as_ref().map(String::as_str),
-			)
-			.await;
-			if let Err(err) = prepare_res.as_ref() {
-				struct_fmt::print(
-					&Format::Json,
-					&SideKickResponse::Err(json!({
-						"error": err.to_string(),
-					})),
-				)?;
-				bail!("Error: {err:?}");
-			}
-			let prepare_res = prepare_res.context("cloud_devices_links_get")?;
+			let prepare_res = unwrap!(
+				apis::cloud_devices_links_api::cloud_devices_links_get(
+					&openapi_config_cloud_unauthed,
+					&device_link_token,
+					watch_index.as_ref().map(String::as_str),
+				)
+				.await
+			);
 
 			watch_index = Some(prepare_res.watch.index);
 
@@ -141,64 +119,34 @@ impl SubCommand {
 
 		// Inspect the token
 		let inspect_res =
-			rivet_api::apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud)
-				.await;
-		if let Err(err) = inspect_res.as_ref() {
-			struct_fmt::print(
-				&Format::Json,
-				&SideKickResponse::Err(json!({
-					"error": err.to_string(),
-				})),
-			)?;
-
-			bail!("Error: {err:?}");
-		}
-		let inspect_res = inspect_res.context("cloud_auth_inspect")?;
+			unwrap!(apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await);
 
 		// Find the game ID
-		let Some(game_cloud) = inspect_res.agent.game_cloud.as_ref() else {
-			struct_fmt::print(
-				&Format::Json,
-				&SideKickResponse::Err(json!({
-					"error": "token is not a GameCloud token",
-				})),
-			)?;
-			bail!("token is not a GameCloud token")
-		};
-		let game_id = game_cloud.game_id;
+		let game_id = unwrap!(inspect_res.agent.game_cloud).game_id;
 
 		// Extract game data
-		let game_res = rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-			&new_ctx.openapi_config_cloud,
-			&game_id.to_string(),
-			None,
-		)
-		.await;
-		if let Err(err) = game_res.as_ref() {
-			struct_fmt::print(
-				&Format::Json,
-				&SideKickResponse::Err(json!({
-					"error": err.to_string(),
-				})),
-			)?;
-			bail!("Error: {err:?}");
-		}
-		let game_res = game_res.context("cloud_games_games_get_game_by_id")?;
+		let game_res = unwrap!(
+			apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+				&new_ctx.openapi_config_cloud,
+				&game_id.to_string(),
+				None,
+			)
+			.await
+		);
 
 		// Write the token
 		global_config::mutate_project(|x| x.tokens.cloud = Some(token)).await?;
 
-		struct_fmt::print(
-			&Format::Json,
-			&SideKickResponse::Ok(json!({
-				"output": "Token Saved"
-			})),
-		)?;
-
-		Ok(())
+		Ok(SideKickResponse(json!({
+			"output": "Token Saved"
+		})))
 	}
 
-	pub async fn execute(&self, ctx: &cli_core::Ctx, _term: &Term) -> Result<()> {
+	pub async fn execute(
+		&self,
+		ctx: &cli_core::Ctx,
+		_term: &Term,
+	) -> GlobalResult<SideKickResponse> {
 		let (_api_endpoint, _token) = global_config::read_project(|x| {
 			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
 		})
@@ -210,24 +158,19 @@ impl SubCommand {
 				unreachable!("WaitForLogin should be handled before this")
 			}
 			SubCommand::CheckLoginState => todo!(),
-			SubCommand::GetToken => {
-				struct_fmt::print(
-					&Format::Json,
-					&SideKickResponse::Ok(json!({
-						"token": ctx.access_token,
-					})),
-				)?;
-			}
+			SubCommand::GetToken => Ok(SideKickResponse(json!({
+				"token": ctx.access_token,
+			}))),
 			SubCommand::GetVersion { namespace } => {
 				// Get the game ID
-				let game_res =
+				let game_res = unwrap!(
 					rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
 						&ctx.openapi_config_cloud,
 						&ctx.game_id,
 						None,
 					)
 					.await
-					.context("cloud_games_games_get_game_by_id")?;
+				);
 				let game_id = game_res.game.game_id.to_string();
 
 				// Build the URL from the game ID and the namespace
@@ -241,28 +184,20 @@ impl SubCommand {
 				let host = parsed_url.host_str().unwrap().replace("api", "hub");
 				parsed_url.set_host(Some(&host)).unwrap();
 
-				struct_fmt::print(
-					&Format::Json,
-					&SideKickResponse::Ok(json!({
-						"output": parsed_url.to_string(),
-					})),
-				)?;
+				Ok(SideKickResponse(json!({
+					"output": parsed_url.to_string(),
+				})))
 			}
 		}
-
-		Ok(())
 	}
 
-	pub fn validate_token(&self, token: &Option<String>) -> Result<()> {
+	pub fn validate_token(&self, token: &Option<String>) -> GlobalResult<SideKickResponse> {
 		if token.is_none() {
-			struct_fmt::print(
-				&Format::Json,
-				&SideKickResponse::Err(json!({
-					"error": "No Rivet token found, please do the sign in process",
-				})),
-			)?;
+			bail!("No Rivet token found, please do the sign in process");
 		}
 
-		Ok(())
+		Ok(SideKickResponse(json!({
+			"output": "Token Valid",
+		})))
 	}
 }

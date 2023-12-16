@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
-use anyhow::Result;
 use clap::Parser;
+use global_error::prelude::*;
 use tokio::{process::Command, task::spawn_blocking};
 
 use crate::{commands, util};
@@ -15,7 +15,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::StartServer => {
 				let pwd = std::env::current_dir()?;
@@ -70,7 +70,7 @@ impl SubCommand {
 	}
 }
 
-pub async fn install_plugin() -> Result<()> {
+pub async fn install_plugin() -> GlobalResult<()> {
 	spawn_blocking(|| {
 		util::download::zip(
 			"https://github.com/rivet-gg/plugin-unreal/archive/refs/heads/main.zip",
