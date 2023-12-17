@@ -9,7 +9,7 @@ use crate::{commands, util::global_config};
 #[derive(Parser)]
 pub struct Opts {
 	/// Namespace to create token for
-	#[clap(long)]
+	#[clap(short = 'n', long)]
 	pub namespace: Option<String>,
 }
 
