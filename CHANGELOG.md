@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix `matchmaker.game_modes.*.docker.image_id` from `matchmaker.docker.image_id`
 - **Install script** Now installs non-prerelease GitHub releases
 
 ## [v0.3.0] - 2023-12-10

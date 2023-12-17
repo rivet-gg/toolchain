@@ -405,17 +405,21 @@ pub async fn build_config_dependencies(
 	display_name: &str,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
-	// TODO: Do this for all possible docker endpoints
-
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
-		if let Some(docker) = matchmaker.docker.as_mut() {
-			build_and_push_image(ctx, display_name, docker, format).await?;
-		}
+        // matchmaker.docker
+		let default_image_id = if let Some(docker) = matchmaker.docker.as_mut() {
+            let image_id = build_and_push_image(ctx, display_name, docker, format, None).await?;
+            docker.image_id = image_id;
+            image_id
+		} else {
+            None
+        };
 
+        // matchmaker.game_modes.*.docker
 		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
 			for (_, game_mode) in game_modes.iter_mut() {
 				if let Some(docker) = game_mode.docker.as_mut() {
-					build_and_push_image(ctx, display_name, docker, format).await?;
+                    docker.image_id = build_and_push_image(ctx, display_name, docker, format, default_image_id).await?;
 				}
 			}
 		}
@@ -429,12 +433,22 @@ pub async fn build_config_dependencies(
 	Ok(())
 }
 
+/// Builds image if not specified and returns the image ID.
+///
+/// The image ID is chosen in order of priority:
+///
+/// - `dockerfile` Build the Dockerfile
+/// - `image` Upload a prebuilt image
+/// - `default_image_id` Use the image ID defined at the base of the matchmaker config
+///
+/// If none are true, `None` is returned.
 pub async fn build_and_push_image(
 	ctx: &cli_core::Ctx,
 	display_name: &str,
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
-) -> Result<()> {
+    default_image_id: Option<Uuid>,
+) -> Result<Option<Uuid>> {
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = &docker.dockerfile {
 			let push_output = image::build_and_push(
@@ -446,7 +460,8 @@ pub async fn build_and_push_image(
 				},
 			)
 			.await?;
-			docker.image_id = Some(push_output.image_id);
+
+            return Ok(Some(push_output.image_id));
 		} else if let Some(docker_image) = docker.image.as_ref() {
 			let push_output = image::push(
 				ctx,
@@ -457,11 +472,15 @@ pub async fn build_and_push_image(
 				},
 			)
 			.await?;
-			docker.image_id = Some(push_output.image_id);
-		}
+
+            return Ok(Some(push_output.image_id));
+		} else if let Some(image_id) = default_image_id {
+            return Ok(Some(image_id));
+
+        }
 	}
 
-	Ok(())
+    Ok(None)
 }
 pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
