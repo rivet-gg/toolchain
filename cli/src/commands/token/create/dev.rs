@@ -16,7 +16,7 @@ pub struct Opts {
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		let output = execute(ctx, self).await?;
-		println!("{}", output.token);
+		print!("{}", output.token);
 
 		Ok(())
 	}
