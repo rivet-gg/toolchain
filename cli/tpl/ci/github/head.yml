@@ -18,6 +18,9 @@ jobs:
       branch_name: ${{ steps.derive_names.outputs.branch_name }}
       ns_name_id: ${{ steps.derive_names.outputs.ns_name_id }}
       version_name: ${{ steps.derive_names.outputs.version_name }}
+    defaults:
+      run:
+        shell: bash
     env:
       RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
       RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}

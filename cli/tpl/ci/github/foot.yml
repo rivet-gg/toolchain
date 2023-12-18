@@ -2,6 +2,9 @@
     name: Deploy
     needs: [prepare, __NEEDS_JOBS__]
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
     env:
       RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
       RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
@@ -16,8 +19,7 @@
 
       - name: Create Namespace
         run: |
-          # Ignore error if namespace already exists
-          rivet namespace create --id "${{ needs.prepare.outputs.ns_name_id }}" --name "${{ needs.prepare.outputs.branch_name }}" || true
+          rivet namespace create --id "${{ needs.prepare.outputs.ns_name_id }}" --name "${{ needs.prepare.outputs.branch_name }}"
 
       - name: Deploy Version
         run: |
