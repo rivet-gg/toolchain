@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `.rivet` from auto-generated `.gitignore`
 - `rivet namespace create` can be called without specifying `--version`
 - **[BREAKING]** Change `TELEMETRY_DISABLED` env var to `RIVET_TELEMETRY_DISABLED`
+- Remove trailing line break from `rivet token create development`
 
 ### Fixed
 
