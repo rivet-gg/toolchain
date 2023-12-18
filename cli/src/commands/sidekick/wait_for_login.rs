@@ -11,7 +11,7 @@ use super::SideKickHandler;
 #[derive(Parser)]
 pub struct Opts {
 	/// The token to poll for
-	#[structopt(short, long)]
+	#[structopt(long)]
 	device_link_token: String,
 }
 
