@@ -124,7 +124,7 @@ impl Opts {
 			.await?;
 
 		// Attempt to read the existing config
-		let partial_config = commands::version::read_config_partial(Vec::new(), None)
+		let partial_config = commands::config::read_config_partial(Vec::new(), None)
 			.await
 			.ok();
 

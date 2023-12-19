@@ -46,6 +46,12 @@ enum SubCommand {
 	#[clap(alias = "publish")]
 	Deploy(deploy::Opts),
 
+	/// Manages rivet.yaml config
+	Config {
+		#[clap(subcommand)]
+		command: config::SubCommand,
+	},
+
 	/// Manages tokens
 	Token {
 		#[clap(subcommand)]
@@ -171,6 +177,8 @@ async fn main_inner(opts: Opts) -> Result<()> {
 	// Handle command
 	match opts.command {
 		SubCommand::Init(_) => unreachable!(),
+		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
+		SubCommand::Config { command } => command.execute(&ctx).await?,
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&ctx).await?,
 		SubCommand::Token { command } => command.execute(&ctx).await?,
@@ -179,7 +187,6 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Docker { command } => command.execute(&ctx).await?,
 		SubCommand::CDN { command } => command.execute(&ctx).await?,
-		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,

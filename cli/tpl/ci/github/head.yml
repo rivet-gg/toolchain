@@ -44,5 +44,5 @@ jobs:
 
       - name: Validate config
         run: |
-          rivet version validate-config --namespace '${{ steps.derive_names.outputs.ns_name_id }}'
+          rivet config validate --namespace '${{ steps.derive_names.outputs.ns_name_id }}'
 

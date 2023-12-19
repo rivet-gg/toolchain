@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use tokio::fs;
 
 use crate::{
-	commands::version,
+	commands::config,
 	util::{paths, term},
 };
 
@@ -74,7 +74,7 @@ async fn gen_github(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> Result<()
 
 // TODO: Strings in this workflow are not appropriately escaped
 async fn gen_github_workflow(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> Result<String> {
-	let mut version = version::read_config(Vec::new(), None).await?;
+	let mut version = config::read_config(Vec::new(), None).await?;
 
 	let mut workflow = String::new();
 

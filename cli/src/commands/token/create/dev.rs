@@ -98,7 +98,7 @@ async fn read_config(
 	String,
 	HashMap<String, models::CloudMatchmakerDevelopmentPort>,
 )> {
-	let config = commands::version::read_config(Vec::new(), Some(ns_name_id)).await?;
+	let config = commands::config::read_config(Vec::new(), Some(ns_name_id)).await?;
 
 	let Some(matchmaker) = &config.matchmaker else {
 		bail!("matchmaker not enabled");
