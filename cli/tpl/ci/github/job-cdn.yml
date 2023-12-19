@@ -19,6 +19,6 @@
       - name: Build CDN
         id: build_cdn
         run: |
-          output=$(rivet site build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__' | tail -n1)
+          output=$(rivet cdn build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__' | tail -n1)
           echo "site_id=$(echo $output | jq -r '.site_id')" >> "$GITHUB_OUTPUT"
 
