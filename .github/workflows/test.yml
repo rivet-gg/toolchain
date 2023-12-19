@@ -40,6 +40,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
+      - name: Run cargo fmt
+        run: |
+          nix-shell --run "cargo fmt --all --check"
+
       - name: Run cargo test
         run: |
           nix-shell --run "cargo test"
