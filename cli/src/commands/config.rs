@@ -16,7 +16,19 @@ pub enum SubCommand {
 impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
-			SubCommand::Validate(opts) => opts.execute(ctx).await,
+			SubCommand::Validate(opts) => {
+				let errors = opts.execute(ctx).await?;
+				if !errors.is_empty() {
+					eprintln!("Found errors:");
+					for error in errors {
+						println!("- {error:?}");
+					}
+				} else {
+					eprintln!("Config is valid.");
+				}
+
+				Ok(())
+			}
 		}
 	}
 }
@@ -25,19 +37,24 @@ impl SubCommand {
 pub struct ValidateOpts {
 	/// Override specific properties of the config
 	#[clap(long = "override", short)]
-	overrides: Vec<String>,
+	pub overrides: Vec<String>,
 
 	/// The namespace ID to deploy to
 	#[clap(short = 'n', long)]
-	namespace: Option<String>,
+	pub namespace: Option<String>,
+
+	/// Prints a verbose version of the config
+	pub print: bool,
 }
 
 impl ValidateOpts {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<Vec<models::ValidationError>> {
 		let overrides = parse_config_override_args(&self.overrides)?;
 		let mut rivet_config =
 			read_config(overrides, self.namespace.as_ref().map(String::as_str)).await?;
-		eprintln!("{:#?}", rivet_config);
+		if self.print {
+			eprintln!("{:#?}", rivet_config);
+		}
 		build_mock_config_dependencies(&mut rivet_config)?;
 
 		// Validate game version
@@ -50,22 +67,10 @@ impl ValidateOpts {
 					config: Box::new(rivet_config),
 				},
 			)
-			.await;
-		eprintln!();
-		if let Err(err) = validate_res.as_ref() {
-			eprintln!("Error: {err:?}");
-		}
-		let validate_res = validate_res.context("cloud_games_versions_validate_game_version")?;
-		if !validate_res.errors.is_empty() {
-			eprintln!("Found errors:");
-			for error in validate_res.errors {
-				println!("- {error:?}");
-			}
-		} else {
-			eprintln!("Config is valid.");
-		}
+			.await
+			.context("cloud_games_versions_validate_game_version")?;
 
-		Ok(())
+		Ok(validate_res.errors)
 	}
 }
 
