@@ -1,7 +1,7 @@
 use anyhow::{bail, Context, Result};
 use clap::Parser;
 use cli_core::{ctx, rivet_api::apis, Ctx};
-use console::{style, Term};
+use console::{style, Color, Style, Term};
 use std::{
 	path::{Path, PathBuf},
 	str::FromStr,
@@ -14,8 +14,6 @@ use crate::{
 };
 
 const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
-const CONFIG_DEFAULT_CDN: &'static str = include_str!("../../tpl/default_config/cdn.yaml");
-const CONFIG_DEFAULT_MM: &'static str = include_str!("../../tpl/default_config/matchmaker.yaml");
 
 const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.yaml");
 const CONFIG_UNREAL_PROD: &'static str = include_str!("../../tpl/unreal_config/config-prod.yaml");
@@ -67,14 +65,6 @@ impl FromStr for InitEngine {
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(long)]
-	recommend: bool,
-	#[clap(long)]
-	create_version_config: bool,
-	#[clap(long)]
-	install_plugin: bool,
-
-	// Presets
-	#[clap(long)]
 	unity: bool,
 	#[clap(long)]
 	unreal: bool,
@@ -84,22 +74,6 @@ pub struct Opts {
 	html5: bool,
 	#[clap(long)]
 	custom: bool,
-
-	// Matchmaker
-	#[clap(long)]
-	matchmaker: bool,
-	#[clap(long)]
-	matchmaker_port: Option<u16>,
-	#[clap(long)]
-	matchmaker_dockerfile: Option<String>,
-
-	// CDN
-	#[clap(long)]
-	cdn: bool,
-	#[clap(long)]
-	cdn_build_command: Option<String>,
-	#[clap(long)]
-	cdn_build_output: Option<String>,
 }
 
 impl Opts {
@@ -128,28 +102,28 @@ impl Opts {
 			.await
 			.ok();
 
-		// Select the engine to use
-		let init_engine = if let Some(partial_config) = &partial_config {
-			// Read the engine from the existing config
-
-			if let Some(engine) = &partial_config.engine {
+		// Read the engine from the existing config
+		let init_engine =
+			if let Some(engine) = partial_config.as_ref().and_then(|x| x.engine.as_ref()) {
 				if engine.unity.is_some() {
-					InitEngine::Unity
+					Some(InitEngine::Unity)
 				} else if engine.unreal.is_some() {
-					InitEngine::Unreal
+					Some(InitEngine::Unreal)
 				} else if engine.godot.is_some() {
-					InitEngine::Godot
+					Some(InitEngine::Godot)
 				} else if engine.html5.is_some() {
-					InitEngine::HTML5
+					Some(InitEngine::HTML5)
 				} else {
-					InitEngine::Custom
+					None
 				}
 			} else {
-				InitEngine::Custom
-			}
-		} else {
-			// Use user input for the engine
+				None
+			};
 
+		// Prompt for engine if not provided
+		let init_engine = if let Some(x) = init_engine {
+			x
+		} else {
 			if self.unity {
 				InitEngine::Unity
 			} else if self.unreal {
@@ -178,12 +152,34 @@ impl Opts {
 			_ => {
 				// TODO: Add setup process for Unity & Godot & HTML5
 				// Default pipeline
-				self.create_config_default(term, init_engine).await?;
+				self.create_config_default(init_engine).await?;
 			}
 		}
 
+		let width = term.size_checked().map(|x| x.1).unwrap_or(80) as usize;
+
 		eprintln!();
-		term::status::success("What's next?", init_engine.learn_url());
+		eprintln!();
+		eprintln!("{}", style(center_text("Welcome to", width)).bold());
+		eprintln!(
+			"{}",
+			center_text(include_str!("../../tpl/graphics/logo.txt"), width)
+		);
+		eprintln!();
+		eprintln!(
+			"{}",
+			style(center_text("Riveting Experiences", width))
+				.italic()
+				.dim()
+		);
+		eprintln!();
+		rainbow_line(width);
+		eprintln!();
+		eprintln!(
+			"{}",
+			center_text(include_str!("../../tpl/graphics/get-started.txt"), width)
+		);
+		eprintln!();
 
 		Ok(())
 	}
@@ -300,16 +296,25 @@ impl Opts {
 
 		// Generate config file
 		let mut config_created = false;
-		if self.create_version_config || !fs::try_exists(&config_path).await? {
-			let version_config = CONFIG_UNREAL.replace("__GAME_MODULE__", &game_module);
+		if fs::try_exists(&config_path).await? {
+			let mut version_config =
+				CONFIG_DEFAULT_HEAD.replace("__LEARN_URL__", "https://rivet.gg/learn/unreal");
+			version_config.push_str(&CONFIG_UNREAL.replace("__GAME_MODULE__", &game_module));
 			fs::write(&config_path, version_config).await?;
-			term::status::success("Created rivet.yaml", "");
+
+			eprintln!();
+			term::status::success(
+				"Created rivet.yaml",
+				"https://rivet.gg/docs/general/concepts/version-config",
+			);
 			config_created = true;
-		}
-		if self.create_version_config || !fs::try_exists(&config_prod_path).await? {
-			fs::write(&config_prod_path, CONFIG_UNREAL_PROD).await?;
-			term::status::success("Created rivet.prod.yaml", "");
-			config_created = true;
+
+			// Only create prod config if no default config already exists
+			if fs::try_exists(&config_prod_path).await? {
+				fs::write(&config_prod_path, CONFIG_UNREAL_PROD).await?;
+				term::status::success("Created rivet.prod.yaml", "");
+				config_created = true;
+			}
 		}
 		if !config_created {
 			term::status::success(
@@ -319,10 +324,8 @@ impl Opts {
 		}
 
 		// Install plugin
-		if self.recommend
-			|| self.install_plugin
-			|| term::Prompt::new("Install or upgrade Unreal Engine Rivet plugin?")
-				.docs("This plugin is used to integrate your game with Rivet")
+		if term::Prompt::new("Install or upgrade Unreal Engine Rivet plugin?")
+				.docs("This plugin is used to integrate your game with Rivet. This can be done later with `rivet unreal install-plugin`")
 				.docs_url("https://github.com/rivet-gg/plugin-unreal")
 				.default_value("yes")
 				.bool(term)
@@ -334,139 +337,44 @@ impl Opts {
 		Ok(())
 	}
 
-	async fn create_config_default(&self, term: &Term, init_engine: InitEngine) -> Result<bool> {
+	async fn create_config_default(&self, init_engine: InitEngine) -> Result<bool> {
 		let current_dir = std::env::current_dir()?;
 		let config_exists = ["rivet.yaml", "rivet.toml", "rivet.json"]
 			.iter()
 			.any(|file_name| current_dir.join(file_name).exists());
 		let has_version_config = if !config_exists {
-			if self.recommend
-				|| self.create_version_config
-				|| term::Prompt::new("Create rivet.yaml?")
-					.docs("This is the configuration file used to manage your game")
-					.docs_url("https://rivet.gg/docs/general/concepts/version-config")
-					.default_value("yes")
-					.bool(term)
-					.await?
-			{
-				let mut version_config = CONFIG_DEFAULT_HEAD.to_string();
+			let mut version_config =
+				CONFIG_DEFAULT_HEAD.replace("__LEARN_URL__", &init_engine.learn_url());
 
-				// Add engine config
-				match init_engine {
-					InitEngine::Unity => {
-						version_config.push_str("engine:\n  unity: {}\n\n");
-					}
-					InitEngine::Unreal => {
-						version_config.push_str("engine:\n  unreal: {}\n\n");
-					}
-					InitEngine::Godot => {
-						version_config.push_str("engine:\n  godot: {}\n\n");
-					}
-					InitEngine::HTML5 => {
-						version_config.push_str("engine:\n  html5: {}\n\n");
-					}
-					InitEngine::Custom => {
-						// Do nothing
-					}
+			// Add engine config
+			match init_engine {
+				InitEngine::Unity => {
+					version_config.push_str("engine:\n  unity: {}\n\n");
 				}
-
-				if self.matchmaker
-					|| term::Prompt::new("Enable Rivet Matchmaker?")
-						.indent(1)
-						.context("rivet.yaml")
-						.docs("Setup your matchmaker configuration, this can be changed later")
-						.docs_url("https://rivet.gg/docs/matchmaker")
-						.default_value("yes")
-						.bool(term)
-						.await?
-				{
-					let port = if let Some(port) = &self.matchmaker_port {
-						*port
-					} else {
-						term::Prompt::new("What port does your game server listen on?")
-							.indent(2)
-							.context("Matchmaker")
-							.default_value("8080")
-							.parsed::<u16>(term)
-							.await?
-					};
-
-					let mut dockerfile_path = if let Some(dockerfile) = &self.matchmaker_dockerfile
-					{
-						dockerfile.clone()
-					} else {
-						term::Prompt::new("Path to the server's Dockerfile?")
-							.indent(2)
-							.context("Matchmaker")
-							.default_value("Dockerfile")
-							.string(term)
-							.await?
-					};
-					if dockerfile_path.is_empty() {
-						dockerfile_path = "Dockerfile".to_string();
-					}
-
-					version_config.push_str(
-						&CONFIG_DEFAULT_MM
-							.replace("__DOCKERFILE__", &dockerfile_path)
-							.replace("__PORT__", &port.to_string()),
-					);
+				InitEngine::Unreal => {
+					version_config.push_str("engine:\n  unreal: {}\n\n");
 				}
-
-				if self.cdn
-					|| term::Prompt::new("Enable Rivet CDN?")
-						.indent(1)
-						.context("rivet.yaml")
-						.docs("Setup service a website or static assets, this can be changed later")
-						.docs_url("https://rivet.gg/docs/cdn")
-						.default_value("yes")
-						.bool(term)
-						.await?
-				{
-					let mut build_command = if let Some(build_command) = &self.cdn_build_command {
-						build_command.clone()
-					} else {
-						term::Prompt::new("What command will run before uploading your site?")
-							.indent(2)
-							.context("CDN")
-							.default_value("echo 'Nothing to do'")
-							.string(term)
-							.await?
-					};
-					if build_command.is_empty() {
-						build_command = "echo 'Nothing to do'".to_string();
-					}
-
-					let mut build_output = if let Some(build_output) = &self.cdn_build_output {
-						build_output.clone()
-					} else {
-						term::Prompt::new("What directory should be uploaded to Rivet CDN?")
-							.indent(2)
-							.context("CDN")
-							.default_value("dist/")
-							.string(term)
-							.await?
-					};
-					if build_output.is_empty() {
-						build_output = "dist/".to_string();
-					}
-
-					version_config.push_str(
-						&CONFIG_DEFAULT_CDN
-							.replace("__BUILD_COMMAND__", &build_command.replace("\"", "\\\""))
-							.replace("__BUILD_OUTPUT__", &build_output),
-					);
+				InitEngine::Godot => {
+					version_config.push_str("engine:\n  godot: {}\n\n");
 				}
-
-				// Write file
-				fs::write(current_dir.join("rivet.yaml"), version_config).await?;
-
-				term::status::success("Created rivet.yaml", "");
-
-				true
-			} else {
-				false
+				InitEngine::HTML5 => {
+					version_config.push_str("engine:\n  html5: {}\n\n");
+				}
+				InitEngine::Custom => {
+					// Do nothing
+				}
 			}
+
+			// Write file
+			fs::write(current_dir.join("rivet.yaml"), version_config).await?;
+
+			eprintln!();
+			term::status::success(
+				"Created rivet.yaml",
+				"https://rivet.gg/docs/general/concepts/version-config",
+			);
+
+			true
 		} else {
 			term::status::success(
 				"Version already configured",
@@ -587,7 +495,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	// Write the token
 	global_config::mutate_project(|x| x.tokens.cloud = Some(token)).await?;
 
-	term::status::success("Token Saved", display_name);
+	term::status::success("Linked Game", display_name);
 
 	Ok(new_ctx)
 }
@@ -632,4 +540,52 @@ async fn attempt_read_module_name(uproject_path: &Path) -> Result<Option<String>
 		.map(|x| x.to_string());
 
 	Ok(project_name)
+}
+
+fn center_text(input: &str, width: usize) -> String {
+	let longest_len = input
+		.lines()
+		.map(|line| line.chars().count())
+		.max()
+		.unwrap_or(0);
+
+	let padding = (width.saturating_sub(longest_len)) / 2;
+	let padding_str = " ".repeat(padding);
+
+	input
+		.lines()
+		.map(|line| format!("{padding_str}{line}"))
+		.collect::<Vec<String>>()
+		.join("\n")
+}
+
+fn rainbow_line(len: usize) {
+	let term = Term::stdout();
+	let colors = [
+		Color::Red,
+		Color::Yellow,
+		Color::Green,
+		Color::Cyan,
+		Color::Blue,
+		Color::Magenta,
+	];
+	let block_len = len / colors.len();
+	let block = "█".repeat(block_len);
+
+	// Print rainbow lines
+	for &color in colors.iter() {
+		let styled = Style::new().fg(color).apply_to(&block);
+		term.write_str(&styled.to_string()).unwrap();
+	}
+
+	// Fill the remaining blocks
+	let remaining = len % (colors.len() * block_len);
+	for _ in 0..remaining {
+		let styled = Style::new()
+			.fg(colors.last().unwrap().clone())
+			.apply_to("█");
+		term.write_str(&styled.to_string()).unwrap();
+	}
+
+	term.write_str("\n").unwrap();
 }

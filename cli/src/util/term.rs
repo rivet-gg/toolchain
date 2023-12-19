@@ -64,10 +64,10 @@ impl Prompt {
 		}
 	}
 
-	pub fn context(mut self, context: impl ToString) -> Self {
-		self.context = Some(context.to_string());
-		self
-	}
+	// pub fn context(mut self, context: impl ToString) -> Self {
+	// 	self.context = Some(context.to_string());
+	// 	self
+	// }
 
 	pub fn docs(mut self, docs: impl ToString) -> Self {
 		self.docs = Some(docs.to_string());
@@ -84,10 +84,10 @@ impl Prompt {
 		self
 	}
 
-	pub fn indent(mut self, indent: usize) -> Self {
-		self.indent = indent;
-		self
-	}
+	// pub fn indent(mut self, indent: usize) -> Self {
+	// 	self.indent = indent;
+	// 	self
+	// }
 }
 
 impl Prompt {

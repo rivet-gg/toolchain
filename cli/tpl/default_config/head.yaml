@@ -1,6 +1,11 @@
 # === Rivet Configuration ===
 # 
-# - More info: https://rivet.gg/docs/general/concepts/version-config
+# - Documentation: __LEARN_URL___
 # - Reference: https://rivet.gg/docs/cloud/api/games/versions/create-game-version
-# - Publish a new version with `rivet publish`
+# - More info: https://rivet.gg/docs/general/concepts/version-config
 #
+#          ┌───────────────────────────────────────┐
+#          │   This configuration file is empty.   │
+#          │ Get started at https://rivet.gg/learn │
+#          └───────────────────────────────────────┘
+
