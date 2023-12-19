@@ -14,7 +14,9 @@ pub mod check_login_state;
 pub mod deploy;
 pub mod get_bootstrap_data;
 pub mod get_cli_version;
+pub mod get_dev_namespace_token;
 pub mod get_link;
+pub mod get_pub_namespace_token;
 pub mod get_version;
 pub mod wait_for_login;
 
@@ -40,6 +42,10 @@ pub enum SubCommand {
 	Deploy(deploy::Opts),
 	/// Get the CLI version
 	GetCliVersion(get_cli_version::Opts),
+	/// Get a public namespace token
+	GetPublicNamespaceToken(get_pub_namespace_token::Opts),
+	/// Get a development namespace token
+	GetDevelopmentNamespaceToken(get_dev_namespace_token::Opts),
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -188,6 +194,10 @@ impl SubCommand {
 			SubCommand::GetBootstrapData(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetVersion(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::Deploy(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetPublicNamespaceToken(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetDevelopmentNamespaceToken(opts) => {
+				serialize_output(opts.execute(ctx).await)
+			}
 		};
 
 		// Print the response
