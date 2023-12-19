@@ -44,8 +44,8 @@ pub enum SubCommand {
 		format: Option<struct_fmt::Format>,
 	},
 	/// Show the namespace dashboard
-	#[clap(alias = "dash")]
-	Dashboard {
+	#[clap(alias = "dashboard", alias = "dash")]
+	View {
 		/// The namespace ID
 		namespace: Uuid,
 	},
@@ -192,7 +192,7 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Dashboard { namespace } => {
+			SubCommand::View { namespace } => {
 				// Check the namespace exists
 				apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
 					&ctx.openapi_config_cloud,

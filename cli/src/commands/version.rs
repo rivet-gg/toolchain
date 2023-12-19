@@ -41,8 +41,8 @@ pub enum SubCommand {
 	},
 
 	/// Show the a version's dashboard
-	#[clap(alias("dash"))]
-	Dashboard { version: String },
+	#[clap(alias = "dashboard", alias("dash"))]
+	View { version: String },
 }
 
 impl SubCommand {
@@ -139,7 +139,7 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Dashboard { version } => {
+			SubCommand::View { version } => {
 				// Check the version exists
 				apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
 					&ctx.openapi_config_cloud,
