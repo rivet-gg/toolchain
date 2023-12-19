@@ -42,6 +42,10 @@ enum SubCommand {
 	/// Guided setup for this project
 	Init(init::Opts),
 
+	/// Pushes required resources and creates a new version
+	#[clap(alias = "publish")]
+	Deploy(deploy::Opts),
+
 	/// Manages tokens
 	Token {
 		#[clap(subcommand)]
@@ -80,10 +84,6 @@ enum SubCommand {
 		#[clap(subcommand)]
 		command: cdn::SubCommand,
 	},
-
-	/// Alias of `rivet version deploy`
-	#[clap(alias = "publish")]
-	Deploy(version::DeployOpts),
 
 	/// Run engine-specific commands
 	Engine {
