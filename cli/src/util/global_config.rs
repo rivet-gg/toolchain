@@ -48,10 +48,20 @@ pub struct Tokens {
 	#[serde(default)]
 	pub cloud: Option<String>,
 
+	/// List of cached public namespace tokens.
+	#[serde(default)]
+	pub public_namespace: Vec<PublicNamespaceToken>,
+
 	/// List of cached development tokens. Before creating a new token, this list will be checked
 	/// for an existing token.
 	#[serde(default)]
 	pub development: Vec<DevelopmentToken>,
+}
+
+#[derive(Default, Serialize, Deserialize)]
+pub struct PublicNamespaceToken {
+	pub namespace_name_id: String,
+	pub token: String,
 }
 
 #[derive(Default, Serialize, Deserialize)]
