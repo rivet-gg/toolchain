@@ -16,7 +16,7 @@ pub enum SubCommand {
 		version: String,
 	},
 
-	/// Show a version's dashboard
+	/// Show version's dashboard
 	#[clap(alias = "dashboard", alias("dash"))]
 	View { version: String },
 
