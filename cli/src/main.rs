@@ -42,6 +42,9 @@ enum SubCommand {
 	/// Guided setup for this project
 	Init(init::Opts),
 
+	/// Removes configured authentication token for this project
+	Unlink(unlink::Opts),
+
 	/// Pushes required resources and creates a new version
 	#[clap(alias = "publish")]
 	Deploy(deploy::Opts),
@@ -177,6 +180,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 	// Handle command
 	match opts.command {
 		SubCommand::Init(_) => unreachable!(),
+		SubCommand::Unlink(opts) => opts.execute(&ctx).await?,
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Config { command } => command.execute(&ctx).await?,
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,

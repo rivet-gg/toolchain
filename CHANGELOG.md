@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Development token cache to make `rivet token create development` run faster
 - Shorthand `-n` for `--namespace` flag in `rivet token create development`
 - `rivet deploy` validates config before building & uploading resources
+- `rivet unlink` command to remove authentication token
 
 ### Changed
 
