@@ -6,7 +6,7 @@ use serde_json::json;
 use uuid::Uuid;
 
 use crate::{
-	commands::{cdn, docker, version},
+	commands::{cdn, config, docker, version},
 	util::{gen, struct_fmt, term},
 };
 
@@ -55,7 +55,7 @@ pub struct Opts {
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		// Parse overrides
-		let mut overrides = version::parse_config_override_args(&self.overrides)?;
+		let mut overrides = config::parse_config_override_args(&self.overrides)?;
 
 		// Build & push site & build before creating version
 		build_and_push_compat(
@@ -187,7 +187,7 @@ pub async fn deploy(
 	};
 
 	// Parse config
-	let mut rivet_config = version::read_config(overrides, namespace_name_id).await?;
+	let mut rivet_config = config::read_config(overrides, namespace_name_id).await?;
 	build_config_dependencies(ctx, &mut rivet_config, &display_name, format).await?;
 
 	// Create game version

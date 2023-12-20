@@ -1,6 +1,7 @@
 pub mod avatar;
 pub mod cdn;
 pub mod ci;
+pub mod config;
 pub mod deploy;
 pub mod dev;
 pub mod docker;

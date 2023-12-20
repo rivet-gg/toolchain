@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename `rivet image` subcommands to `rivet docker` (alias still supported)
 - Rename `dashboard` subcommands to `view` (alias still supported)
 - Move `rivet version deploy` to `rivet deploy`
+- Move `rivet version config-validate` to `rivet config validate`
 
 ### Fixed
 
