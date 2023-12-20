@@ -18,6 +18,9 @@
 
       - name: Build CDN
         id: build_cdn
+        env:
+          # CI always has a good internet connection, so we can increase the concurrent uploads to upload large numbers of files faster
+          RIVET_CONCURRENT_UPLOADS: 128
         run: |
           output=$(rivet cdn build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --command '__BUILD_COMMAND__' --path '__BUILD_OUTPUT__' | tail -n1)
           echo "site_id=$(echo $output | jq -r '.site_id')" >> "$GITHUB_OUTPUT"
