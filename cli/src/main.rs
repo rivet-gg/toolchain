@@ -42,10 +42,6 @@ enum SubCommand {
 	/// Guided setup for this project
 	Init(init::Opts),
 
-	/// Opens the dashboard for this game
-	#[clap(alias = "dash")]
-	Dashboard,
-
 	/// Manages tokens
 	Token {
 		#[clap(subcommand)]
@@ -103,8 +99,7 @@ enum SubCommand {
 	},
 
 	/// Run CI-specific commands
-	#[clap(alias = "ci")]
-	ContinuousIntegration {
+	CI {
 		#[clap(subcommand)]
 		command: ci::SubCommand,
 	},
@@ -176,12 +171,6 @@ async fn main_inner(opts: Opts) -> Result<()> {
 	// Handle command
 	match opts.command {
 		SubCommand::Init(_) => unreachable!(),
-		SubCommand::Dashboard => {
-			println!(
-				"https://hub.rivet.gg/developer/games/{game_id}",
-				game_id = ctx.game_id
-			);
-		}
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,
 		SubCommand::Dev { command } => command.execute(&ctx).await?,
 		SubCommand::Token { command } => command.execute(&ctx).await?,
@@ -193,7 +182,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
-		SubCommand::ContinuousIntegration { command } => command.execute(&ctx).await?,
+		SubCommand::CI { command } => command.execute(&ctx).await?,
 	}
 
 	Ok(())

@@ -12,9 +12,10 @@ pub enum SubCommand {
 		#[clap(long, value_parser)]
 		format: struct_fmt::Format,
 	},
-	/// Show the current game dashboard
-	#[clap(alias = "dash")]
-	Dashboard,
+
+	/// Open the game in the hub
+	#[clap(alias = "dashboard", alias = "dash")]
+	View,
 }
 
 impl SubCommand {
@@ -38,7 +39,7 @@ impl SubCommand {
 
 				Ok(())
 			}
-			SubCommand::Dashboard => {
+			SubCommand::View => {
 				eprintln!("{}", term::link(dashboard_url(&ctx.game_id)));
 
 				Ok(())

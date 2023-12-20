@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove trailing line break from `rivet token create development`
 - Rename `rivet site` subcommands to `rivet cdn` (alias still supported)
 - Rename `rivet image` subcommands to `rivet docker` (alias still supported)
+- Rename `dashboard` subcommands to `view` (alias still supported)
 
 ### Fixed
 
