@@ -6,6 +6,7 @@ use crate::util::term;
 #[derive(Parser)]
 pub enum SubCommand {
 	/// Deprecated.
+	#[clap(hide = true)]
 	CreateDevToken(crate::commands::token::create::dev::Opts),
 }
 
