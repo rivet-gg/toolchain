@@ -19,6 +19,8 @@ export RIVET_CLI_VERSION="v0.4.0"
 curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/${RIVET_CLI_VERSION}/install/unix.sh | sh
 ```
 
+_The `export` keyword is important. The variable `RIVET_CLI_VERSION` needs to be accessible inside the install script._
+
 ### Windows (cmd & PowerShell)
 
 **Install latest version**
