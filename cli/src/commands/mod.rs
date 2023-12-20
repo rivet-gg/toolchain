@@ -10,4 +10,5 @@ pub mod game;
 pub mod init;
 pub mod ns;
 pub mod token;
+pub mod unlink;
 pub mod version;

@@ -14,7 +14,7 @@ use super::paths;
 #[derive(Default, Serialize, Deserialize)]
 pub struct GlobalConfig {
 	/// Store project meta by the absolute path to the project.
-	project_roots: HashMap<PathBuf, ProjectMeta>,
+	pub project_roots: HashMap<PathBuf, ProjectMeta>,
 }
 
 /// Config stored in .rivet/config.yaml. Used to store persistent data.
