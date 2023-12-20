@@ -4,6 +4,9 @@
     runs-on: ubuntu-20.04
     outputs:
       site_id: ${{ steps.build_cdn.outputs.site_id }}
+    defaults:
+      run:
+        shell: bash
     env:
       RIVET_API_ENDPOINT: "__RIVET_API_ENDPOINT__"
       RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
