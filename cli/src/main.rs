@@ -72,23 +72,17 @@ enum SubCommand {
 	},
 
 	/// Manages builds for Serverless Lobbies
-	#[clap(alias = "build")]
-	Image {
+	#[clap(alias = "image", alias = "build")]
+	Docker {
 		#[clap(subcommand)]
-		command: image::SubCommand,
+		command: docker::SubCommand,
 	},
 
 	/// Manages sites for the CDN
-	Site {
+	#[clap(alias = "site")]
+	CDN {
 		#[clap(subcommand)]
-		command: site::SubCommand,
-	},
-
-	/// Manages identity avatars
-	#[clap(hide = true)]
-	IdentityAvatar {
-		#[clap(subcommand)]
-		command: avatar::SubCommand,
+		command: cdn::SubCommand,
 	},
 
 	/// Alias of `rivet version deploy`
@@ -113,6 +107,15 @@ enum SubCommand {
 	ContinuousIntegration {
 		#[clap(subcommand)]
 		command: ci::SubCommand,
+	},
+
+	/// Deprecated.
+	///
+	/// Manages identity avatars
+	#[clap(hide = true)]
+	IdentityAvatar {
+		#[clap(subcommand)]
+		command: avatar::SubCommand,
 	},
 
 	/// Deprecated.
@@ -185,8 +188,8 @@ async fn main_inner(opts: Opts) -> Result<()> {
 		SubCommand::Game { command } => command.execute(&ctx).await?,
 		SubCommand::Namespace { command } => command.execute(&ctx).await?,
 		SubCommand::Version { command } => command.execute(&ctx).await?,
-		SubCommand::Image { command } => command.execute(&ctx).await?,
-		SubCommand::Site { command } => command.execute(&ctx).await?,
+		SubCommand::Docker { command } => command.execute(&ctx).await?,
+		SubCommand::CDN { command } => command.execute(&ctx).await?,
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,

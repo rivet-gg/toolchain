@@ -9,7 +9,7 @@ use tabled::Tabled;
 use uuid::Uuid;
 
 use crate::{
-	commands::{image, site},
+	commands::{cdn, docker},
 	util::{gen, struct_fmt, term},
 };
 
@@ -406,20 +406,22 @@ pub async fn build_config_dependencies(
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
-        // matchmaker.docker
+		// matchmaker.docker
 		let default_image_id = if let Some(docker) = matchmaker.docker.as_mut() {
-            let image_id = build_and_push_image(ctx, display_name, docker, format, None).await?;
-            docker.image_id = image_id;
-            image_id
+			let image_id = build_and_push_image(ctx, display_name, docker, format, None).await?;
+			docker.image_id = image_id;
+			image_id
 		} else {
-            None
-        };
+			None
+		};
 
-        // matchmaker.game_modes.*.docker
+		// matchmaker.game_modes.*.docker
 		if let Some(game_modes) = matchmaker.game_modes.as_mut() {
 			for (_, game_mode) in game_modes.iter_mut() {
 				if let Some(docker) = game_mode.docker.as_mut() {
-                    docker.image_id = build_and_push_image(ctx, display_name, docker, format, default_image_id).await?;
+					docker.image_id =
+						build_and_push_image(ctx, display_name, docker, format, default_image_id)
+							.await?;
 				}
 			}
 		}
@@ -447,13 +449,13 @@ pub async fn build_and_push_image(
 	display_name: &str,
 	docker: &mut Box<models::CloudVersionMatchmakerGameModeRuntimeDocker>,
 	format: Option<&struct_fmt::Format>,
-    default_image_id: Option<Uuid>,
+	default_image_id: Option<Uuid>,
 ) -> Result<Option<Uuid>> {
 	if docker.image_id.is_none() {
 		if let Some(dockerfile) = &docker.dockerfile {
-			let push_output = image::build_and_push(
+			let push_output = docker::build_and_push(
 				ctx,
-				&image::BuildPushOpts {
+				&docker::BuildPushOpts {
 					dockerfile: dockerfile.clone(),
 					name: Some(display_name.to_string()),
 					format: format.cloned(),
@@ -461,11 +463,11 @@ pub async fn build_and_push_image(
 			)
 			.await?;
 
-            return Ok(Some(push_output.image_id));
+			return Ok(Some(push_output.image_id));
 		} else if let Some(docker_image) = docker.image.as_ref() {
-			let push_output = image::push(
+			let push_output = docker::push(
 				ctx,
-				&image::PushOpts {
+				&docker::PushOpts {
 					tag: docker_image.clone(),
 					name: Some(display_name.to_string()),
 					format: format.cloned(),
@@ -473,14 +475,13 @@ pub async fn build_and_push_image(
 			)
 			.await?;
 
-            return Ok(Some(push_output.image_id));
+			return Ok(Some(push_output.image_id));
 		} else if let Some(image_id) = default_image_id {
-            return Ok(Some(image_id));
-
-        }
+			return Ok(Some(image_id));
+		}
 	}
 
-    Ok(None)
+	Ok(None)
 }
 pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
@@ -491,9 +492,9 @@ pub async fn build_and_push_site(
 	if cdn.site_id.is_none() {
 		if let Some(build_output) = &cdn.build_output {
 			if let Some(build_command) = &cdn.build_command {
-				let push_output = site::build_and_push(
+				let push_output = cdn::build_and_push(
 					ctx,
-					&site::BuildPushOpts {
+					&cdn::BuildPushOpts {
 						command: build_command.clone(),
 						path: build_output.clone(),
 						name: Some(display_name.to_string()),
@@ -503,9 +504,9 @@ pub async fn build_and_push_site(
 				.await?;
 				cdn.site_id = Some(push_output.site_id);
 			} else {
-				let push_output = site::push(
+				let push_output = cdn::push(
 					ctx,
-					&site::PushOpts {
+					&cdn::PushOpts {
 						path: build_output.clone(),
 						name: Some(display_name.to_string()),
 						format: format.cloned(),
@@ -654,9 +655,9 @@ pub async fn build_and_push_compat(
 ) -> Result<()> {
 	let site_output = if let Some(site_path) = site_path {
 		Some(
-			site::push(
+			cdn::push(
 				ctx,
-				&site::PushOpts {
+				&cdn::PushOpts {
 					path: site_path.clone(),
 					name: site_name.clone(),
 					format: format.clone(),
@@ -670,9 +671,9 @@ pub async fn build_and_push_compat(
 
 	let build_output = if let Some(build_tag) = build_tag {
 		Some(
-			image::push(
+			docker::push(
 				ctx,
-				&image::PushOpts {
+				&docker::PushOpts {
 					tag: build_tag.clone(),
 					name: build_name.clone(),
 					format: format.clone(),

@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `rivet namespace create` can be called without specifying `--version`
 - **[BREAKING]** Change `TELEMETRY_DISABLED` env var to `RIVET_TELEMETRY_DISABLED`
 - Remove trailing line break from `rivet token create development`
+- Rename `rivet site` subcommands to `rivet cdn` (alias still supported)
+- Rename `rivet image` subcommands to `rivet docker` (alias still supported)
 
 ### Fixed
 

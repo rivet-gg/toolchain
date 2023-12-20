@@ -19,6 +19,6 @@
       - name: Build Docker Image
         id: build_image
         run: |
-          output=$(rivet image build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --dockerfile '__DOCKERFILE_PATH__' | tail -n1)
+          output=$(rivet docker build-push --format json --name '${{ needs.prepare.outputs.ns_name_id }}' --dockerfile '__DOCKERFILE_PATH__' | tail -n1)
           echo "image_id=$(echo $output | jq -r '.image_id')" >> "$GITHUB_OUTPUT"
 
