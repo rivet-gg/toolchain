@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move `rivet version deploy` to `rivet deploy`
 - Move `rivet version config-validate` to `rivet config validate`
 - Move `RIVET_CONCURRENT_UPLOADS` env var to CLI flag on appropriate commands (env var still works)
+- Streamline `rivet init` experience
 
 ### Fixed
 
