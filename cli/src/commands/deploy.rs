@@ -24,6 +24,10 @@ pub struct Opts {
 	#[clap(short = 'n', long)]
 	namespace: Option<String>,
 
+	/// Number of files to upload in parallel
+	#[clap(long, env = "RIVET_CONCURRENT_UPLOADS", default_value = "8")]
+	concurrent_uploads: usize,
+
 	#[clap(long, value_parser)]
 	format: Option<struct_fmt::Format>,
 
@@ -65,6 +69,7 @@ impl Opts {
 			&self.build_name,
 			&self.site_path,
 			&self.site_name,
+			self.concurrent_uploads,
 			&self.format,
 		)
 		.await?;
@@ -75,6 +80,7 @@ impl Opts {
 			self.display_name.as_ref().map(String::as_str),
 			overrides,
 			self.namespace.as_ref().map(String::as_str),
+			self.concurrent_uploads,
 			self.format.as_ref(),
 		)
 		.await?;
@@ -95,6 +101,7 @@ pub async fn build_and_push_compat(
 	build_name: &Option<String>,
 	site_path: &Option<String>,
 	site_name: &Option<String>,
+	concurrent_uploads: usize,
 	format: &Option<struct_fmt::Format>,
 ) -> Result<()> {
 	let site_output = if let Some(site_path) = site_path {
@@ -104,6 +111,7 @@ pub async fn build_and_push_compat(
 				&cdn::PushOpts {
 					path: site_path.clone(),
 					name: site_name.clone(),
+					concurrent_uploads,
 					format: format.clone(),
 				},
 			)
@@ -153,6 +161,7 @@ pub async fn deploy(
 	display_name: Option<&str>,
 	overrides: Vec<(String, serde_json::Value)>,
 	namespace_name_id: Option<&str>,
+	concurrent_uploads: usize,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<DeployOutput> {
 	// Fetch game data
@@ -188,7 +197,14 @@ pub async fn deploy(
 
 	// Parse config
 	let mut rivet_config = config::read_config(overrides, namespace_name_id).await?;
-	build_config_dependencies(ctx, &mut rivet_config, &display_name, format).await?;
+	build_config_dependencies(
+		ctx,
+		&mut rivet_config,
+		&display_name,
+		concurrent_uploads,
+		format,
+	)
+	.await?;
 
 	// Create game version
 	let version_res = apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
@@ -250,6 +266,8 @@ pub async fn build_config_dependencies(
 	ctx: &cli_core::Ctx,
 	version: &mut models::CloudVersionConfig,
 	display_name: &str,
+	concurrent_uploads: usize,
+
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if let Some(matchmaker) = version.matchmaker.as_mut() {
@@ -276,7 +294,7 @@ pub async fn build_config_dependencies(
 
 	// Build CDN
 	if let Some(cdn) = version.cdn.as_mut() {
-		build_and_push_site(ctx, display_name, cdn, format).await?;
+		build_and_push_site(ctx, display_name, cdn, concurrent_uploads, format).await?;
 	}
 
 	Ok(())
@@ -334,6 +352,7 @@ pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
 	display_name: &str,
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
+	concurrent_uploads: usize,
 	format: Option<&struct_fmt::Format>,
 ) -> Result<()> {
 	if cdn.site_id.is_none() {
@@ -345,6 +364,7 @@ pub async fn build_and_push_site(
 						command: build_command.clone(),
 						path: build_output.clone(),
 						name: Some(display_name.to_string()),
+						concurrent_uploads,
 						format: format.cloned(),
 					},
 				)
@@ -356,6 +376,7 @@ pub async fn build_and_push_site(
 					&cdn::PushOpts {
 						path: build_output.clone(),
 						name: Some(display_name.to_string()),
+						concurrent_uploads,
 						format: format.cloned(),
 					},
 				)

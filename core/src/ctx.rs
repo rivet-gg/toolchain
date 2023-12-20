@@ -19,7 +19,6 @@ pub const DEFAULT_API_ENDPOINT: &'static str = "https://api.rivet.gg";
 pub type Ctx = Arc<CtxInner>;
 
 pub struct CtxInner {
-	pub concurrent_uploads: usize,
 	pub api_endpoint: String,
 	pub access_token: String,
 	pub game_id: String,
@@ -50,13 +49,7 @@ pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<
 		return Err(Error::InvalidAgentKind);
 	};
 
-	let concurrent_uploads = env::var("RIVET_CONCURRENT_UPLOADS")
-		.ok()
-		.and_then(|x| x.parse::<usize>().ok())
-		.unwrap_or(8);
-
 	Ok(Arc::new(CtxInner {
-		concurrent_uploads,
 		api_endpoint,
 		access_token,
 		game_id: game_id.to_string(),

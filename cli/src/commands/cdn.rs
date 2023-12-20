@@ -31,6 +31,10 @@ pub struct PushOpts {
 	#[clap(long)]
 	pub name: Option<String>,
 
+	/// Number of files to upload in parallel
+	#[clap(long, env = "RIVET_CONCURRENT_UPLOADS", default_value = "8")]
+	pub concurrent_uploads: usize,
+
 	#[clap(long, value_parser)]
 	pub format: Option<struct_fmt::Format>,
 }
@@ -118,7 +122,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> Result<PushOutpu
 		let files = Arc::new(files.clone());
 		futures_util::stream::iter(presigned_requests)
 			.map(Ok)
-			.try_for_each_concurrent(ctx.concurrent_uploads, move |presigned_req| {
+			.try_for_each_concurrent(push_opts.concurrent_uploads, move |presigned_req| {
 				let counter = counter.clone();
 				let counter_bytes = counter_bytes.clone();
 				{
@@ -191,6 +195,10 @@ pub struct BuildPushOpts {
 	#[clap(long)]
 	pub name: Option<String>,
 
+	/// Number of files to upload in parallel
+	#[clap(long, env = "RIVET_CONCURRENT_UPLOADS", default_value = "8")]
+	pub concurrent_uploads: usize,
+
 	#[clap(long, value_parser)]
 	pub format: Option<struct_fmt::Format>,
 }
@@ -229,6 +237,7 @@ pub async fn build_and_push(ctx: &cli_core::Ctx, push_opts: &BuildPushOpts) -> R
 		&PushOpts {
 			path: push_opts.path.clone(),
 			name: push_opts.name.clone(),
+			concurrent_uploads: push_opts.concurrent_uploads,
 			format: push_opts.format.clone(),
 		},
 	)
