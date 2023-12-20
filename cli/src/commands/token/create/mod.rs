@@ -12,18 +12,18 @@ pub enum SubCommand {
 	#[clap(alias = "dev")]
 	Development(dev::Opts),
 
-	/// Creates a public namespace token
+	/// Creates a public token
 	///
 	/// https://rivet.gg/docs/general/concepts/token-types#namespace-development
-	#[clap(alias = "public", alias = "pub")]
-	PublicNamespace(pub_ns::Opts),
+	#[clap(alias = "pub")]
+	Public(pub_ns::Opts),
 }
 
 impl SubCommand {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
 		match self {
 			SubCommand::Development(opts) => opts.execute(ctx).await,
-			SubCommand::PublicNamespace(opts) => opts.execute(ctx).await,
+			SubCommand::Public(opts) => opts.execute(ctx).await,
 		}
 	}
 }
