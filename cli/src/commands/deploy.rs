@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
 use serde::Serialize;
@@ -58,7 +58,24 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
-		// Parse overrides
+		// Validate config
+		let errors = config::ValidateOpts {
+			overrides: self.overrides.clone(),
+			namespace: self.namespace.clone(),
+			print: false,
+		}
+		.execute(ctx)
+		.await?;
+		if !errors.is_empty() {
+			eprintln!("Found errors:");
+			for error in errors {
+				println!("- {error:?}");
+			}
+
+			bail!("config is invalid")
+		}
+
+		// Parse args
 		let mut overrides = config::parse_config_override_args(&self.overrides)?;
 
 		// Build & push site & build before creating version
