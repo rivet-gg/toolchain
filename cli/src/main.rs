@@ -1,7 +1,8 @@
-use crate::util::global_config;
-use anyhow::{Context, Result};
+use anyhow::{bail, Result};
 use clap::Parser;
 use commands::*;
+
+use util::{global_config, os, term};
 
 mod commands;
 mod util;
@@ -171,7 +172,21 @@ async fn main_inner(opts: Opts) -> Result<()> {
 	let (api_endpoint, token) =
 		global_config::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
 			.await?;
-	let token = token.context("no Rivet token found, please run `rivet init`")?;
+
+	let Some(token) = token else {
+		if !os::is_linux_and_root() {
+			term::status::error("Unauthenticated", "Run `rivet init` to authenticate");
+		} else {
+			// On Linux, the config is stored in $HOME/.config/rivet/config.yaml. When using sudo,
+			// $HOME is not the same the normal user, so it won't be able to find the config.
+			term::status::error(
+                "Unauthenticated with sudo",
+				"Please rerun this command without sudo or run `sudo rivet init` to authenticate as root",
+			);
+		}
+
+		bail!("rivet token not found")
+	};
 	let ctx = cli_core::ctx::init(api_endpoint, token).await?;
 
 	// Set game id for errors
