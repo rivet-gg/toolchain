@@ -181,7 +181,7 @@ async fn main_inner(opts: Opts) -> Result<()> {
 			// $HOME is not the same the normal user, so it won't be able to find the config.
 			term::status::error(
                 "Unauthenticated with sudo",
-				"Please rerun this command without sudo or run `sudo rivet init` to authenticate  as root",
+				"Please rerun this command without sudo or run `sudo rivet init` to authenticate as root",
 			);
 		}
 
