@@ -1,9 +1,7 @@
 use clap::Parser;
-use cli_core::rivet_api::{apis, models};
+use cli_core::rivet_api::apis;
 use global_error::prelude::*;
-use serde::{Deserialize, Serialize};
-use serde_json::json;
-use std::collections::HashSet;
+
 use tabled::Tabled;
 
 use crate::{commands::deploy, util::term};
