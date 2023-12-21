@@ -10,7 +10,7 @@ use tokio::fs;
 
 use crate::{
 	commands,
-	util::{global_config, paths, term},
+	util::{global_config, os, paths, term},
 };
 
 const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../tpl/default_config/head.yaml");
@@ -415,12 +415,15 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> Result<cl
 	.await??;
 
 	// Open link in browser
-	if webbrowser::open_browser_with_options(
-		webbrowser::Browser::Default,
-		&prepare_res.device_link_url,
-		webbrowser::BrowserOptions::new().with_suppress_output(true),
-	)
-	.is_ok()
+	//
+	// Linux root users often cannot open the browser, so we fallback to printing the URL
+	if !os::is_linux_and_root()
+		&& webbrowser::open_browser_with_options(
+			webbrowser::Browser::Default,
+			&prepare_res.device_link_url,
+			webbrowser::BrowserOptions::new().with_suppress_output(true),
+		)
+		.is_ok()
 	{
 		term::status::info(
 			"Waiting for link",
