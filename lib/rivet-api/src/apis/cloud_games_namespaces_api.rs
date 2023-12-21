@@ -633,7 +633,7 @@ pub async fn cloud_games_namespaces_remove_namespace_domain(
 	}
 }
 
-/// Updates the CDN authentication type of the given game namesapce.
+/// Updates the CDN authentication type of the given game namespace.
 pub async fn cloud_games_namespaces_set_namespace_cdn_auth_type(
 	configuration: &configuration::Configuration,
 	game_id: &str,
@@ -683,7 +683,7 @@ pub async fn cloud_games_namespaces_set_namespace_cdn_auth_type(
 	}
 }
 
-/// Toggles whether or not to allow authentication based on domain for the given game namesapce.
+/// Toggles whether or not to allow authentication based on domain for the given game namespace.
 pub async fn cloud_games_namespaces_toggle_namespace_domain_public_auth(
 	configuration: &configuration::Configuration,
 	game_id: &str,
