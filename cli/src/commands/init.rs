@@ -113,6 +113,8 @@ impl Opts {
 					Some(InitEngine::Godot)
 				} else if engine.html5.is_some() {
 					Some(InitEngine::HTML5)
+				} else if engine.custom.is_some() {
+					Some(InitEngine::Custom)
 				} else {
 					None
 				}
@@ -361,7 +363,7 @@ impl Opts {
 					version_config.push_str("engine:\n  html5: {}\n\n");
 				}
 				InitEngine::Custom => {
-					// Do nothing
+					version_config.push_str("engine:\n  custom: {}\n\n");
 				}
 			}
 
