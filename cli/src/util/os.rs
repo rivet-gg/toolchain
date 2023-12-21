@@ -1,0 +1,12 @@
+pub fn is_linux() -> bool {
+	std::env::consts::OS == "linux"
+}
+
+pub fn is_root() -> bool {
+	nix::unistd::Uid::current().is_root()
+}
+
+/// There are a lot of edge cases for Linux root that we need to frequently handle.
+pub fn is_linux_and_root() -> bool {
+	is_linux() && is_root()
+}

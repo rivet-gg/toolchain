@@ -3,6 +3,7 @@ pub mod download;
 pub mod gen;
 pub mod global_config;
 pub mod lz4;
+pub mod os;
 pub mod paths;
 pub mod struct_fmt;
 pub mod telemetry;
