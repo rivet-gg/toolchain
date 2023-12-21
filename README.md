@@ -37,11 +37,23 @@ We recommend specifying the CLI version in CI environments. This also allows you
 powershell -Command "$env:RIVET_CLI_VERSION='v0.4.0'; iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"
 ```
 
-### Build from source
+### Install from source
 
 ```
 cargo install --git=https://github.com/rivet-gg/cli
 ```
+
+**Important** This will install the CLI as `rivet-cli` (not `rivet`).
+
+### Build from source
+
+```
+git clone https://github.com/rivet-gg/cli
+cd cli
+cargo build
+```
+
+The executable will be available at _target/debug/rivet-cli_.
 
 ## Documentation
 
