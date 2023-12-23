@@ -10,14 +10,20 @@ in
 			pkgs.latest.rustChannels.stable.rust
             rust-script
 			pkg-config
+			perl
+
+			# Libraries
 			openssl
 			libiconv
+			protobuf
+			zlib
 
 			shellcheck
 		] ++ (
 			pkgs.lib.optionals stdenv.isDarwin [
 				darwin.apple_sdk.frameworks.Security
 				darwin.apple_sdk.frameworks.CoreServices
+				darwin.apple_sdk.frameworks.SystemConfiguration
 			]
 		);
 	}
