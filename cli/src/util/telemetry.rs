@@ -1,5 +1,4 @@
-use std::collections::HashMap;
-
+use sysinfo::System;
 use anyhow::Result;
 use cli_core::ctx;
 use serde_json::json;
@@ -80,22 +79,6 @@ pub async fn capture_event<F: FnOnce(&mut async_posthog::Event) -> Result<()>>(
 		"rustc_version": env!("VERGEN_RUSTC_SEMVER")
 	});
 
-	// Helps us diagnose issues based on the host OS.
-	let mut cmd = tokio::process::Command::new("uname");
-	cmd.arg("-a");
-	let uname = cmd::read_stdout_fallible(cmd).await?;
-
-	let os_release = tokio::fs::read_to_string("/etc/os-release")
-		.await
-		.ok()
-		.map(|x| {
-			x.split("\n")
-				.map(|x| x.trim())
-				.filter_map(|x| x.split_once("="))
-				.map(|(k, v)| (k.to_string(), v.to_string()))
-				.collect::<HashMap<_, _>>()
-		});
-
 	// Add properties
 	if let Some(game_id) = game_id {
 		event.insert_prop(
@@ -112,8 +95,13 @@ pub async fn capture_event<F: FnOnce(&mut async_posthog::Event) -> Result<()>>(
 			"game_id": game_id,
 			"api_endpoint": api_endpoint,
 			"version": version,
-			"uname": uname,
-			"os_release": os_release,
+			"sys": {
+				"name": System::name(),
+				"kernel_version": System::kernel_version(),
+				"os_version": System::os_version(),
+				"host_name": System::host_name(),
+				"cpu_arch": System::cpu_arch(),
+			},
 		}),
 	)?;
 
