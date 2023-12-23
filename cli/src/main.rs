@@ -105,9 +105,13 @@ enum SubCommand {
 	Sidekick {
 		#[clap(subcommand)]
 		command: sidekick::SubCommand,
-		// #[clap(opts)]
 		#[clap(long)]
 		show_terminal: bool,
+		/// Indicates internally that this command is being managed by the CLI
+		/// and run inside a separate terminal. This is needed to prevent the
+		/// CLI from printing its own status messages.
+		#[clap(long, hidden = true)]
+		inside_terminal: bool,
 	},
 
 	/// Alias of `rivet engine unreal`
@@ -182,10 +186,11 @@ async fn main_inner(opts: Opts) -> GlobalResult<()> {
 	// Sidekick sign-in can also be called before the token is valitdated
 	if let SubCommand::Sidekick {
 		command,
-		show_terminal,
+		inside_terminal,
+		..
 	} = &opts.command
 	{
-		if let Ok(PreExecuteHandled::Yes) = command.pre_execute(&token).await {
+		if let Ok(PreExecuteHandled::Yes) = command.pre_execute(&token, *inside_terminal).await {
 			return Ok(());
 		}
 	}
@@ -230,7 +235,12 @@ async fn main_inner(opts: Opts) -> GlobalResult<()> {
 		SubCommand::Sidekick {
 			command,
 			show_terminal,
-		} => command.execute(&ctx, &term, show_terminal).await?,
+			inside_terminal,
+		} => {
+			command
+				.execute(&ctx, &term, show_terminal, inside_terminal)
+				.await?
+		}
 	}
 
 	Ok(())

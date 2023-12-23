@@ -3,7 +3,7 @@ use console::Term;
 use global_error::prelude::*;
 use serde::Serialize;
 use serde_json::{json, Value};
-use std::process::Command;
+use std::{io::Read, process::Command};
 
 use crate::util::{
 	global_config,
@@ -14,8 +14,8 @@ pub mod check_login_state;
 pub mod deploy;
 pub mod get_bootstrap_data;
 pub mod get_cli_version;
-pub mod get_namespace_dev_token;
 pub mod get_link;
+pub mod get_namespace_dev_token;
 pub mod get_namespace_pub_token;
 pub mod get_version;
 pub mod wait_for_login;
@@ -68,10 +68,7 @@ struct Terminal {
 	/// The name of the terminal emulator command
 	name: &'static str,
 	/// The flag to pass the command to the terminal emulator
-	prompt_str: &'static str,
-	/// Whether the command should be passed as a single argument (quoted) or as
-	/// multiple arguments
-	quote: bool,
+	prompt_str: &'static [&'static str],
 }
 
 /// Terminals that don't work (note, more work might make them work):
@@ -79,63 +76,48 @@ struct Terminal {
 /// - guake (runs the whole window, doesn't handle closing)
 /// - upterm (doesn't have an arg to pass a command it)
 /// - x-terminal-emulator
-const TERMINALS: [Terminal; 10] = [
-	Terminal {
-		name: "gnome-terminal",
-		prompt_str: "--",
-		quote: false,
-	},
+/// - tilda (doesn't show automatically)
+/// - terminator (issues running the command)
+/// - xfce4-terminal (issues running the command)
+const TERMINALS: [Terminal; 7] = [
 	Terminal {
 		name: "kitty",
-		prompt_str: "-e",
-		quote: false,
+		prompt_str: &["-e"],
 	},
 	Terminal {
 		name: "konsole",
-		prompt_str: "-e",
-		quote: false,
+		prompt_str: &["-e"],
+	},
+	Terminal {
+		name: "gnome-terminal",
+		prompt_str: &["--"],
 	},
 	Terminal {
 		name: "st",
-		prompt_str: "-e",
-		quote: false,
-	},
-	Terminal {
-		name: "terminator",
-		prompt_str: "-e",
-		quote: true,
-	},
-	Terminal {
-		name: "tilda",
-		prompt_str: "-c",
-		quote: true,
+		prompt_str: &["-e"],
 	},
 	Terminal {
 		name: "tilix",
-		prompt_str: "-e",
-		quote: false,
+		prompt_str: &["-e"],
 	},
 	Terminal {
 		name: "urxvt",
-		prompt_str: "-e",
-		quote: false,
-	},
-	Terminal {
-		name: "xfce4-terminal",
-		prompt_str: "-e",
-		quote: true,
+		prompt_str: &["-e"],
 	},
 	Terminal {
 		name: "xterm",
-		prompt_str: "-e",
-		quote: false,
+		prompt_str: &["-e"],
 	},
 ];
 
 impl SubCommand {
 	/// These commands run before a token is required, so they don't have access
 	/// to ctx
-	pub async fn pre_execute(&self, token: &Option<String>) -> GlobalResult<PreExecuteHandled> {
+	pub async fn pre_execute(
+		&self,
+		token: &Option<String>,
+		inside_terminal: bool,
+	) -> GlobalResult<PreExecuteHandled> {
 		let mut handled = PreExecuteHandled::Yes;
 		let response = match self {
 			SubCommand::GetLink(opts) => serialize_output(opts.execute().await),
@@ -161,8 +143,10 @@ impl SubCommand {
 		};
 
 		if let PreExecuteHandled::Yes = handled {
-			// Print the response
-			SubCommand::print(response)?;
+			// Print the response, but only if we're not inside a terminal
+			if !inside_terminal {
+				SubCommand::print(response)?;
+			}
 		}
 
 		Ok(handled)
@@ -173,6 +157,7 @@ impl SubCommand {
 		ctx: &cli_core::Ctx,
 		_term: &Term,
 		show_terminal: bool,
+		inside_terminal: bool,
 	) -> GlobalResult<()> {
 		if show_terminal {
 			SubCommand::show_terminal(ctx).await?;
@@ -200,8 +185,10 @@ impl SubCommand {
 			}
 		};
 
-		// Print the response
-		SubCommand::print(response)?;
+		// Print the response, but only if we're not inside a terminal
+		if !inside_terminal {
+			SubCommand::print(response)?;
+		}
 
 		Ok(())
 	}
@@ -295,7 +282,7 @@ impl SubCommand {
 			// of them.
 			let mut command = None;
 
-			for terminal in &TERMINALS {
+			for terminal in TERMINALS {
 				if which::which(terminal.name).is_ok() {
 					command = Some(terminal);
 					break;
@@ -304,16 +291,51 @@ impl SubCommand {
 
 			match command {
 				Some(terminal) => {
-					if terminal.quote {
-						args = vec![args.join(" ")];
-					}
+					// See if they have bash installed. If not, fallback to sh
+					let shell = if which::which("bash").is_ok() {
+						"bash"
+					} else {
+						"sh"
+					};
+
+					// Insert the flag --inside-terminal right after `sidekick`
+					// in the args. The only args before it are the binary path
+					// to the binary and `sidekick` itself, so it can go at the
+					// 2nd index.
+					args.insert(2, "--inside-terminal".to_string());
+
+					// Add a "press any key to continue" message to the end of
+					// the arguments to be run
+					args.append(
+						vec![
+							"&&",
+							"read",
+							"-n",
+							"1",
+							"-s",
+							"-r",
+							"-p",
+							"\"Press any key to continue\"",
+						]
+						.iter()
+						.map(|x| x.to_string())
+						.collect::<Vec<_>>()
+						.as_mut(),
+					);
+
+					args = vec![args.join(" ")];
 
 					Command::new(terminal.name)
 						// This is the flag to run a command in the
 						// terminal. Most will use -e, but some might use
 						// something different.
-						.arg(terminal.prompt_str)
-						.args(args)
+						.args(terminal.prompt_str)
+						// We pass everything to a shell manually so that we can
+						// pass an entire string of the rest of the commands.
+						// This is more consistant across terminals on linux.
+						.arg(shell)
+						.arg("-c")
+						.args(&args)
 						.spawn()
 						.expect("Terminal emulator failed to start");
 				}
@@ -346,17 +368,11 @@ mod tests {
 			let file_name = format!("{}.txt", terminal.name);
 
 			let mut args = Vec::new();
-			// If we want to pass the command as a single string, we can just do
-			// an entire string
-			if terminal.quote {
-				args.push(format!("touch {}", file_name));
-			} else {
-				args.push("touch".to_string());
-				args.push(file_name.clone());
-			}
+
+			args.push(format!("touch {}", file_name));
 
 			let output = Command::new(terminal.name)
-				.arg(terminal.prompt_str)
+				.args(terminal.prompt_str)
 				.args(&args)
 				.output()
 				.expect("Failed to execute command");
