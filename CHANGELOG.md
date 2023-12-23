@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Cleaner unauthenticated error
 
+### Fixed
+
+- Custom engines no longer get prompted to select engine when running `rivet init` for the second time
+
 ## [v0.4.0] - 2023-12-20
 
 ### Added
