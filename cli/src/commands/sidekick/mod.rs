@@ -12,6 +12,7 @@ use crate::util::{
 
 pub mod check_login_state;
 pub mod deploy;
+pub mod generate_config;
 pub mod get_bootstrap_data;
 pub mod get_cli_version;
 pub mod get_link;
@@ -46,6 +47,8 @@ pub enum SubCommand {
 	GetNamespacePubicToken(get_namespace_pub_token::Opts),
 	/// Get a development namespace token
 	GetNamespaceDevelopmentToken(get_namespace_dev_token::Opts),
+	/// Generate config
+	GenerateConfig(generate_config::Opts),
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -124,6 +127,7 @@ impl SubCommand {
 			SubCommand::WaitForLogin(opts) => serialize_output(opts.execute().await),
 			SubCommand::CheckLoginState(_opts) => serialize_output(self.validate_token(&token)),
 			SubCommand::GetCliVersion(opts) => serialize_output(opts.execute().await),
+			SubCommand::GenerateConfig(opts) => serialize_output(opts.execute()),
 			_ => {
 				// If the command is anything else, we need to check if a token
 				// has already been provided. If not, we need to print an error
@@ -173,6 +177,7 @@ impl SubCommand {
 			SubCommand::GetLink(_)
 			| SubCommand::CheckLoginState(_)
 			| SubCommand::WaitForLogin(_)
+			| SubCommand::GenerateConfig(_)
 			| SubCommand::GetCliVersion(_) => {
 				unreachable!("This command should be handled before this")
 			}
