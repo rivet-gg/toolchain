@@ -67,21 +67,3 @@ pub fn error_for_output_failure(
 
 	Ok(())
 }
-
-/// Throw an error if the output of a command failed.
-pub async fn read_stdout_fallible(mut command: tokio::process::Command) -> GlobalResult<String> {
-	let output = command.output().await?;
-
-	if !output.status.success() {
-		bail!(
-			"Command failed ({})\n\nstdout:\n{}\n\nstderr:\n{}",
-			output.status,
-			String::from_utf8_lossy(&output.stdout),
-			String::from_utf8_lossy(&output.stderr)
-		);
-	}
-
-	let stdout = String::from_utf8_lossy(&output.stdout).trim().to_string();
-
-	Ok(stdout)
-}

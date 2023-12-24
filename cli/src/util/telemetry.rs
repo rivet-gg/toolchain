@@ -8,7 +8,7 @@ use tokio::{
 	time::Duration,
 };
 
-use crate::util::{cmd, global_config};
+use crate::util::global_config;
 
 pub static JOIN_SET: OnceCell<Mutex<JoinSet<()>>> = OnceCell::const_new();
 pub static GAME_ID: OnceCell<String> = OnceCell::const_new();
