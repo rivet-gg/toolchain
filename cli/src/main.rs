@@ -2,12 +2,8 @@ use clap::Parser;
 use commands::{sidekick::PreExecuteHandled, *};
 use global_error::prelude::*;
 use serde_json::json;
-use std::{collections::BTreeMap, process::ExitCode};
-use util::{
-	global_config, os,
-	struct_fmt::{self, Format},
-	term,
-};
+use std::process::ExitCode;
+use util::{global_config, os, term};
 
 mod commands;
 mod util;
