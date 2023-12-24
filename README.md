@@ -2,7 +2,8 @@
 
 ## Installation
 
-### macOS & Linux & WSL
+<details>
+<summary><b>macOS & Linux & WSL</b></summary>
 
 **Install latest version**
 
@@ -20,8 +21,10 @@ curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/${RIVET_CLI_VERSION}/i
 ```
 
 _The `export` keyword is important. The variable `RIVET_CLI_VERSION` needs to be accessible inside the install script._
+</details>
 
-### Windows (cmd)
+<details>
+<summary><b>Windows (cmd)</b></summary>
 
 **Install latest version**
 
@@ -36,8 +39,10 @@ We recommend specifying the CLI version in CI environments. This also allows you
 ```sh
 powershell -Command "$env:RIVET_CLI_VERSION='v0.4.0'; iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"
 ```
+</details>
 
-### Windows (PowerShell)
+<details>
+<summary><b>Windows (PowerShell)</b></summary>
 
 **Install latest version**
 
@@ -53,16 +58,21 @@ We recommend specifying the CLI version in CI environments. This also allows you
 $env:RIVET_CLI_VERSION='v0.4.0'
 iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex
 ```
+</details>
 
-### Install from GitHub
+<details>
+<summary><b>Install from GitHub</b></summary>
+
 
 ```sh
 cargo install --git=https://github.com/rivet-gg/cli
 ```
 
 **Important** This will install the CLI as `rivet-cli` (not `rivet`).
+</details>
 
-### Build from source
+<details>
+<summary><b>Build from source</b></summary>
 
 ```sh
 git clone https://github.com/rivet-gg/cli
@@ -71,6 +81,7 @@ cargo build
 ```
 
 The executable will be available at _target/debug/rivet-cli_.
+</details>
 
 ## Documentation
 
