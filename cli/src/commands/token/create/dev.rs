@@ -99,80 +99,83 @@ async fn read_config(
 )> {
 	let config = commands::config::read_config(Vec::new(), Some(ns_name_id)).await?;
 
-	let Some(matchmaker) = &config.matchmaker else {
-		bail!("matchmaker not enabled");
-	};
+	if let Some(matchmaker) = &config.matchmaker {
+		let dev_hostname = matchmaker
+			.dev_hostname
+			.clone()
+			.unwrap_or_else(|| "127.0.0.1".to_string());
 
-	let dev_hostname = matchmaker
-		.dev_hostname
-		.clone()
-		.unwrap_or_else(|| "127.0.0.1".to_string());
+		// Read lobby ports that we need to expose
+		let dev_ports = {
+			let mut lobby_ports =
+				HashMap::<String, &models::CloudVersionMatchmakerGameModeRuntimeDockerPort>::new();
 
-	// Read lobby ports that we need to expose
-	let dev_ports = {
-		let mut lobby_ports =
-			HashMap::<String, &models::CloudVersionMatchmakerGameModeRuntimeDockerPort>::new();
-
-		// Register lobby ports from all game modes
-		if let Some(game_modes) = matchmaker.game_modes.as_ref() {
-			for game_mode in game_modes.values() {
-				if let Some(ports) = game_mode.docker.as_ref().and_then(|x| x.ports.as_ref()) {
-					for (label, port) in ports {
-						lobby_ports.insert(label.clone(), port);
+			// Register lobby ports from all game modes
+			if let Some(game_modes) = matchmaker.game_modes.as_ref() {
+				for game_mode in game_modes.values() {
+					if let Some(ports) = game_mode.docker.as_ref().and_then(|x| x.ports.as_ref()) {
+						for (label, port) in ports {
+							lobby_ports.insert(label.clone(), port);
+						}
 					}
 				}
 			}
-		}
 
-		// Global overrides take priority because we don't know what game
-		// mode will be running locally
-		if let Some(ports) = matchmaker.docker.as_ref().and_then(|x| x.ports.as_ref()) {
-			for (label, port) in ports {
-				lobby_ports.insert(label.clone(), port);
+			// Global overrides take priority because we don't know what game
+			// mode will be running locally
+			if let Some(ports) = matchmaker.docker.as_ref().and_then(|x| x.ports.as_ref()) {
+				for (label, port) in ports {
+					lobby_ports.insert(label.clone(), port);
+				}
 			}
-		}
 
-		lobby_ports
-	};
+			lobby_ports
+		};
 
-	let dev_ports = dev_ports
-		.into_iter()
-		.map(|(label, port_config)| {
-			//
-			let (port, port_range) = if let Some(dev_port) = port_config.dev_port {
-				(Some(dev_port), None)
-			} else if let Some(dev_port_range) = port_config.dev_port_range.as_ref() {
-				(None, Some(dev_port_range.clone()))
-			} else if let Some(port) = port_config.port {
-				(Some(port), None)
-			} else if let Some(port_range) = port_config.port_range.as_ref() {
-				(None, Some(port_range.clone()))
-			} else {
-				bail!("missing both port and port_range")
-			};
+		let dev_ports = dev_ports
+			.into_iter()
+			.map(|(label, port_config)| {
+				//
+				let (port, port_range) = if let Some(dev_port) = port_config.dev_port {
+					(Some(dev_port), None)
+				} else if let Some(dev_port_range) = port_config.dev_port_range.as_ref() {
+					(None, Some(dev_port_range.clone()))
+				} else if let Some(port) = port_config.port {
+					(Some(port), None)
+				} else if let Some(port_range) = port_config.port_range.as_ref() {
+					(None, Some(port_range.clone()))
+				} else {
+					bail!("missing both port and port_range")
+				};
 
-			Ok((
-				label,
-				models::CloudMatchmakerDevelopmentPort {
-					port,
-					port_range,
-					protocol: port_config
-						.dev_protocol
-						// Default to non-TLS version of the given protocol
-						.unwrap_or({
-							use models::CloudVersionMatchmakerPortProtocol::*;
-							match port_config.protocol {
-								Some(Https) | Some(Http) | None => Http,
-								Some(Tcp) | Some(TcpTls) => Tcp,
-								Some(Udp) => Udp,
-							}
-						}),
-				},
-			))
-		})
-		.collect::<GlobalResult<HashMap<_, _>>>()?;
+				Ok((
+					label,
+					models::CloudMatchmakerDevelopmentPort {
+						port,
+						port_range,
+						protocol: port_config
+							.dev_protocol
+							// Default to non-TLS version of the given protocol
+							.unwrap_or({
+								use models::CloudVersionMatchmakerPortProtocol::*;
+								match port_config.protocol {
+									Some(Https) | Some(Http) | None => Http,
+									Some(Tcp) | Some(TcpTls) => Tcp,
+									Some(Udp) => Udp,
+								}
+							}),
+					},
+				))
+			})
+			.collect::<GlobalResult<HashMap<_, _>>>()?;
 
-	Ok((dev_hostname, dev_ports))
+		Ok((dev_hostname, dev_ports))
+	} else {
+		Ok((
+			"127.0.0.1".to_string(),
+			HashMap::<String, models::CloudMatchmakerDevelopmentPort>::new(),
+		))
+	}
 }
 
 async fn fetch_namespace_id(ctx: &cli_core::Ctx, ns_name_id: &str) -> GlobalResult<String> {
