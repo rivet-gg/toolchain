@@ -1,8 +1,13 @@
 use clap::Parser;
 use commands::{sidekick::PreExecuteHandled, *};
 use global_error::prelude::*;
-
-use util::{global_config, os, term};
+use serde_json::json;
+use std::{collections::BTreeMap, process::ExitCode};
+use util::{
+	global_config, os,
+	struct_fmt::{self, Format},
+	term,
+};
 
 mod commands;
 mod util;
@@ -146,32 +151,132 @@ enum SubCommand {
 	},
 }
 
-#[tokio::main(flavor = "current_thread")]
-async fn main() -> GlobalResult<()> {
-	let opts = read_opts().await?;
+fn main() -> ExitCode {
+	// We use a sync main for Sentry. Read more: https://docs.sentry.io/platforms/rust/#async-main-function
 
-	let res = main_inner(opts).await;
+	// This has a 2 second deadline to flush any remaining events which is sufficient for
+	// short-lived commands.
+	let _guard = sentry::init(("https://05632d74d4bc90958ed4ada487acfd8e@o4504307129188352.ingest.sentry.io/4506447486976000", sentry::ClientOptions {
+        release: sentry::release_name!(),
+        ..Default::default()
+    }));
+
+	// Run main
+	let exit_code = tokio::runtime::Builder::new_current_thread()
+		.enable_all()
+		.build()
+		.unwrap()
+		.block_on(async move { main_async().await });
+
+	exit_code
+}
+
+async fn main_async() -> ExitCode {
+	let res = handle_opts().await;
 
 	// Blanket catch for all errors
-	if let Err(err) = &res {
-		util::telemetry::capture_event(
+	let exit_code = match res {
+		Ok(_) => ExitCode::SUCCESS,
+		Err(err) => {
+			// Pretty-print error
+			match &err {
+				GlobalError::Internal { ty, message, .. } => {
+					term::status::error(ty, message);
+				}
+				GlobalError::BadRequest { code, .. } => {
+					term::status::error(code, err.message());
+				}
+			}
+
+			// Capture event in Sentry
+			// TODO: Add system context
+			let event = match &err {
+				GlobalError::Internal {
+					ty,
+					message,
+					debug,
+					code,
+					retry_immediately: _,
+				} => sentry::protocol::Event {
+					level: sentry::protocol::Level::Error,
+					exception: sentry::protocol::Values {
+						values: vec![sentry::protocol::Exception {
+							ty: ty.clone(),
+							value: Some(debug.clone()),
+							..Default::default()
+						}],
+					},
+					message: Some(message.clone()),
+					tags: vec![(
+						"internal_error_code".to_string(),
+						Into::<i32>::into(*code).to_string(),
+					)]
+					.into_iter()
+					.collect(),
+					..Default::default()
+				},
+				GlobalError::BadRequest {
+					code,
+					context,
+					metadata,
+				} => sentry::protocol::Event {
+					level: sentry::protocol::Level::Warning,
+					exception: sentry::protocol::Values {
+						values: vec![sentry::protocol::Exception {
+							ty: "BadRequest".into(),
+							value: Some(code.clone()),
+							..Default::default()
+						}],
+					},
+					message: Some(err.message()),
+					extra: vec![
+						("context".to_string(), json!(context)),
+						(
+							"metadata".to_string(),
+							metadata
+								.as_ref()
+								.and_then(|x| serde_json::from_str::<serde_json::Value>(&x).ok())
+								.unwrap_or_else(|| serde_json::Value::Null),
+						),
+					]
+					.into_iter()
+					.collect(),
+					..Default::default()
+				},
+			};
+			let event_id = sentry::capture_event(event);
+
+			// Capture event in PostHog
+			let capture_res = util::telemetry::capture_event(
 			util::telemetry::GAME_ID.get(),
-			"cli_error",
+			"$exception",
 			Some(|event: &mut async_posthog::Event| {
 				event.insert_prop("errors", format!("{}", err))?;
+
+				event.insert_prop("$sentry_event_id", event_id.to_string())?;
+				event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gg/issues/?project=4506447486976000&query={event_id}"))?;
+
 				Ok(())
 			}),
-		)
-		.await?;
-	}
+		).await;
+			if let Err(err) = capture_res {
+				eprintln!("Failed to capture event in PostHog: {:?}", err);
+			}
+
+			ExitCode::FAILURE
+		}
+	};
 
 	util::telemetry::wait_all().await;
 
-	res
+	exit_code
 }
 
-async fn main_inner(opts: Opts) -> GlobalResult<()> {
+async fn handle_opts() -> GlobalResult<()> {
 	let term = console::Term::stderr();
+
+	// Read opts
+	let opts = read_opts().await?;
 
 	// Handle init command without the context
 	if let SubCommand::Init(init_opts) = &opts.command {
