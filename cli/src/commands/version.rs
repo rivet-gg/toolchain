@@ -1,6 +1,9 @@
-use anyhow::{Context, Result};
 use clap::Parser;
-use cli_core::rivet_api::apis;
+use cli_core::rivet_api::{apis, models};
+use global_error::prelude::*;
+use serde::{Deserialize, Serialize};
+use serde_json::json;
+use std::collections::HashSet;
 use tabled::Tabled;
 
 use crate::{commands::deploy, util::term};
@@ -33,16 +36,17 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self, ctx: &cli_core::Ctx) -> Result<()> {
+	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		match self {
 			SubCommand::List => {
-				let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
-					&ctx.openapi_config_cloud,
-					&ctx.game_id,
-					None,
-				)
-				.await
-				.context("cloud_games_games_get_game_by_id")?;
+				let game_res = unwrap!(
+					apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						None,
+					)
+					.await
+				);
 				let game = &game_res.game;
 				let namespaces = &game.namespaces;
 
@@ -76,7 +80,7 @@ impl SubCommand {
 							version_id: version.version_id.to_string(),
 						})
 					})
-					.collect::<Result<Vec<_>>>()?;
+					.collect::<GlobalResult<Vec<_>>>()?;
 				version.reverse();
 				term::table(&version);
 
@@ -90,13 +94,14 @@ impl SubCommand {
 			SubCommand::Deploy(opts) => opts.execute(ctx).await,
 			SubCommand::View { version } => {
 				// Check the version exists
-				apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
-					&ctx.openapi_config_cloud,
-					&ctx.game_id,
-					&version,
-				)
-				.await
-				.context("cloud_games_versions_get_game_version_by_id")?;
+				unwrap!(
+					apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
+						&ctx.openapi_config_cloud,
+						&ctx.game_id,
+						&version
+					)
+					.await
+				);
 
 				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, version)));
 
@@ -107,14 +112,15 @@ impl SubCommand {
 }
 
 /// Prints information about a game version
-async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> Result<()> {
-	let version_res = apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
-		&ctx.openapi_config_cloud,
-		&ctx.game_id,
-		&version_id,
-	)
-	.await
-	.context("cloud_games_versions_get_game_version_by_id")?;
+async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> GlobalResult<()> {
+	let version_res = unwrap!(
+		apis::cloud_games_versions_api::cloud_games_versions_get_game_version_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			&version_id,
+		)
+		.await
+	);
 	let version = &version_res.version;
 
 	println!("{version:#?}");

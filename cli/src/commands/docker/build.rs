@@ -1,6 +1,6 @@
 use std::{path::Path, str::FromStr};
 
-use anyhow::Result;
+use global_error::prelude::*;
 use tokio::process::Command;
 
 use crate::util::{cmd, term};
@@ -23,7 +23,7 @@ impl Default for DockerBuildMethod {
 }
 
 impl DockerBuildMethod {
-	pub async fn from_env() -> Result<Self> {
+	pub async fn from_env() -> GlobalResult<Self> {
 		// Determine build method from env
 		if let Some(method) = std::env::var("_RIVET_DOCKER_BUILD_METHOD")
 			.ok()
@@ -57,7 +57,7 @@ pub async fn build_image(
 	dockerfile: &Path,
 	build_kind: super::BuildKind,
 	build_compression: super::BuildCompression,
-) -> Result<BuildImageOutput> {
+) -> GlobalResult<BuildImageOutput> {
 	// if docker.image_id.is_none() {
 	// if let Some(dockerfile) = docker.dockerfile.as_ref() {
 	let build_method = DockerBuildMethod::from_env().await?;

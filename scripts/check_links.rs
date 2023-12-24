@@ -13,10 +13,10 @@ use walkdir::WalkDir;
 use regex::Regex;
 use reqwest::StatusCode;
 use std::time::Duration;
-use anyhow::Result;
+
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() -> GlobalResult<()> {
     // Defines a regex to find URLs
     let url_re = Regex::new(r"https?://[\w/\.\-_]+")?;
     
@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-async fn walk_dir(url_re: &Regex, dir: &str) -> Result<()> {
+async fn walk_dir(url_re: &Regex, dir: &str) -> GlobalResult<()> {
     // Walks through current directory and its subdirectories
     for entry in WalkDir::new(dir)
         .into_iter()
@@ -56,7 +56,7 @@ async fn walk_dir(url_re: &Regex, dir: &str) -> Result<()> {
     Ok(())
 }
 
-async fn check_link(url: &str) -> Result<StatusCode> {
+async fn check_link(url: &str) -> GlobalResult<StatusCode> {
     let client = reqwest::Client::new();
     let response = client.get(url).timeout(Duration::from_secs(5)).send().await?;
     Ok(response.status())

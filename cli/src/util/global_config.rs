@@ -1,7 +1,7 @@
 use std::{collections::HashMap, path::PathBuf};
 
-use anyhow::Result;
 use cli_core::rivet_api::models;
+use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 use tokio::{
 	fs,
@@ -77,13 +77,13 @@ static SINGLETON: OnceCell<Mutex<GlobalConfig>> = OnceCell::const_new();
 /// Gets the global config instance.
 ///
 /// Use `read` to read properties from the config.
-async fn get_or_init() -> Result<&'static Mutex<GlobalConfig>> {
+async fn get_or_init() -> GlobalResult<&'static Mutex<GlobalConfig>> {
 	SINGLETON
-		.get_or_try_init::<anyhow::Error, _, _>(|| async {
+		.get_or_try_init::<GlobalError, _, _>(|| async {
 			let path = paths::global_config_file()?;
 
 			let config = match fs::read_to_string(&path).await {
-				Ok(config) => serde_yaml::from_str(&config).map_err(Into::<anyhow::Error>::into)?,
+				Ok(config) => serde_yaml::from_str(&config).map_err(Into::<GlobalError>::into)?,
 				Err(err) if err.kind() == std::io::ErrorKind::NotFound => GlobalConfig::default(),
 				Err(err) => return Err(err.into()),
 			};
@@ -96,7 +96,7 @@ async fn get_or_init() -> Result<&'static Mutex<GlobalConfig>> {
 /// Writes the config to the file system.
 ///
 /// Use `mutate` to make changes to the config publicly.
-async fn write(config: &GlobalConfig) -> Result<()> {
+async fn write(config: &GlobalConfig) -> GlobalResult<()> {
 	fs::create_dir_all(paths::global_config_dir()?).await?;
 	fs::write(paths::global_config_file()?, serde_yaml::to_string(config)?).await?;
 
@@ -104,7 +104,9 @@ async fn write(config: &GlobalConfig) -> Result<()> {
 }
 
 /// Reads from the global config.
-pub async fn try_read_global<F: FnOnce(&GlobalConfig) -> Result<T>, T>(cb: F) -> Result<T> {
+pub async fn try_read_global<F: FnOnce(&GlobalConfig) -> GlobalResult<T>, T>(
+	cb: F,
+) -> GlobalResult<T> {
 	let singleton = get_or_init().await?;
 	let mut lock = singleton.lock().await;
 
@@ -117,7 +119,9 @@ pub async fn try_read_global<F: FnOnce(&GlobalConfig) -> Result<T>, T>(cb: F) ->
 /// Reads from the project meta.
 ///
 /// If project meta does not exist, returns the default value.
-pub async fn try_read_project<F: FnOnce(&ProjectMeta) -> Result<T>, T>(cb: F) -> Result<T> {
+pub async fn try_read_project<F: FnOnce(&ProjectMeta) -> GlobalResult<T>, T>(
+	cb: F,
+) -> GlobalResult<T> {
 	let project_root = paths::project_root()?;
 	try_read_global(|config| {
 		if let Some(project_config) = config.project_roots.get(&project_root) {
@@ -130,11 +134,13 @@ pub async fn try_read_project<F: FnOnce(&ProjectMeta) -> Result<T>, T>(cb: F) ->
 }
 
 /// Non-failable version of `try_read_project`.
-pub async fn read_project<F: FnOnce(&ProjectMeta) -> T, T>(cb: F) -> Result<T> {
+pub async fn read_project<F: FnOnce(&ProjectMeta) -> T, T>(cb: F) -> GlobalResult<T> {
 	try_read_project(|x| Ok(cb(x))).await
 }
 
-pub async fn try_mutate_global<F: FnOnce(&mut GlobalConfig) -> Result<()>>(cb: F) -> Result<()> {
+pub async fn try_mutate_global<F: FnOnce(&mut GlobalConfig) -> GlobalResult<()>>(
+	cb: F,
+) -> GlobalResult<()> {
 	let singleton = get_or_init().await?;
 	let mut lock = singleton.lock().await;
 
@@ -150,7 +156,9 @@ pub async fn try_mutate_global<F: FnOnce(&mut GlobalConfig) -> Result<()>>(cb: F
 /// Mutates the project meta.
 ///
 /// If the project meta does not exist, a default one will be inserted and modified.
-pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> Result<()>>(cb: F) -> Result<()> {
+pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> GlobalResult<()>>(
+	cb: F,
+) -> GlobalResult<()> {
 	let project_root = paths::project_root()?;
 	try_mutate_global(|config| {
 		let project_config = config.project_roots.entry(project_root).or_default();
@@ -160,6 +168,6 @@ pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> Result<()>>(cb: F
 }
 
 /// Non-failable version of `try_mutate_project`.
-pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> ()>(cb: F) -> Result<()> {
+pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> ()>(cb: F) -> GlobalResult<()> {
 	try_mutate_project(|x| Ok(cb(x))).await
 }
