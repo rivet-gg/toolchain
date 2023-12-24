@@ -157,7 +157,7 @@ impl SubCommand {
 					ns_id
 				};
 
-				term::status::info("Dashboard", dashboard_url(&ctx.game_id, &ns_id));
+				term::status::info("Dashboard", dashboard_url(&ctx, &ctx.game_id, &ns_id));
 
 				if let Some(format) = format {
 					print_ns(ctx, format, &ns_id).await?;
@@ -197,7 +197,7 @@ impl SubCommand {
 
 				eprintln!(
 					"{}",
-					term::link(dashboard_url(&ctx.game_id, &namespace.to_string()))
+					term::link(dashboard_url(&ctx, &ctx.game_id, &namespace.to_string()))
 				);
 
 				Ok(())
@@ -241,6 +241,9 @@ async fn print_ns(
 	Ok(())
 }
 
-pub fn dashboard_url(game_id: &str, ns_id: &str) -> String {
-	format!("https://hub.rivet.gg/developer/games/{game_id}/namespaces/{ns_id}",)
+pub fn dashboard_url(ctx: &cli_core::Ctx, game_id: &str, ns_id: &str) -> String {
+	format!(
+		"{}/developer/games/{game_id}/namespaces/{ns_id}",
+		ctx.bootstrap.origins.hub
+	)
 }

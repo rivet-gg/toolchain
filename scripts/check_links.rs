@@ -41,7 +41,7 @@ async fn walk_dir(url_re: &Regex, dir: &str) -> GlobalResult<()> {
         // Finds all URLs in the file
         for url in url_re.find_iter(&contents) {
                 // Exclude URLs
-                if url.as_str().contains("hub.rivet.gg") || url.as_str().contains("api.rivet.gg") {
+                if url.as_str().contains("api.rivet.gg") {
                     continue;
                 }
 

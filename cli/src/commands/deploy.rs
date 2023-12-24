@@ -248,7 +248,7 @@ pub async fn deploy(
 	term::status::success("Deployed Version", &display_name);
 	term::status::info(
 		"Version Dashboard",
-		version::dashboard_url(&ctx.game_id, &version_id.to_string()),
+		version::dashboard_url(&ctx, &ctx.game_id, &version_id.to_string()),
 	);
 
 	// Deploy to namespace

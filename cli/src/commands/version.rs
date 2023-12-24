@@ -101,7 +101,7 @@ impl SubCommand {
 					.await
 				);
 
-				eprintln!("{}", term::link(dashboard_url(&ctx.game_id, version)));
+				eprintln!("{}", term::link(dashboard_url(&ctx, &ctx.game_id, version)));
 
 				Ok(())
 			}
@@ -126,9 +126,10 @@ async fn print_version(ctx: &cli_core::Ctx, version_id: &str) -> GlobalResult<()
 	Ok(())
 }
 
-pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
+pub fn dashboard_url(ctx: &cli_core::Ctx, game_id: &str, version_id: &str) -> String {
 	format!(
-		"https://hub.rivet.gg/developer/games/{game_id}/versions/{version_id}",
+		"{}/developer/games/{game_id}/versions/{version_id}",
+		ctx.bootstrap.origins.hub,
 		game_id = game_id,
 		version_id = version_id
 	)
