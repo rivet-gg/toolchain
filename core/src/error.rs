@@ -31,6 +31,11 @@ pub enum Error {
 
 	#[error("config {key}: {message}")]
 	Config { key: String, message: String },
+
+	#[error("bootstrap fail: {source}")]
+	BootstrapFail {
+		source: rivet_api::apis::Error<rivet_api::apis::cloud_api::CloudBootstrapError>,
+	},
 }
 
 impl Error {

@@ -23,6 +23,9 @@ pub struct CtxInner {
 	pub access_token: String,
 	pub game_id: String,
 
+	/// Domains that host parts of Rivet
+	pub bootstrap: rivet_api::models::CloudBootstrapResponse,
+
 	pub openapi_config_cloud: apis::configuration::Configuration,
 }
 
@@ -39,11 +42,24 @@ pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<
 		..Default::default()
 	};
 
-	// Inspect token
-	let inspect = apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
-		.await
-		.map_err(|source| Error::InspectFail { source })?;
-	let game_id = if let Some(game_cloud) = inspect.agent.game_cloud {
+	// Make requests
+	let (inspect_response, bootstrap_response): (
+		rivet_api::models::CloudInspectResponse,
+		rivet_api::models::CloudBootstrapResponse,
+	) = tokio::try_join!(
+		async {
+			apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
+				.await
+				.map_err(|e| Error::InspectFail { source: e })
+		},
+		async {
+			apis::cloud_api::cloud_bootstrap(&openapi_config_cloud)
+				.await
+				.map_err(|e| Error::BootstrapFail { source: e })
+		}
+	)?;
+
+	let game_id = if let Some(game_cloud) = inspect_response.agent.game_cloud {
 		game_cloud.game_id
 	} else {
 		return Err(Error::InvalidAgentKind);
@@ -53,7 +69,7 @@ pub async fn init(api_endpoint: Option<String>, access_token: String) -> Result<
 		api_endpoint,
 		access_token,
 		game_id: game_id.to_string(),
-
+		bootstrap: bootstrap_response,
 		openapi_config_cloud,
 	}))
 }
