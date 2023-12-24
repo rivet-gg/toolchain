@@ -1,6 +1,8 @@
 let
 	moz_overlay = import (builtins.fetchTarball "https://github.com/mozilla/nixpkgs-mozilla/archive/6eabade97bc28d707a8b9d82ad13ef143836736e.tar.gz");
-	pkgs = import <nixpkgs> { overlays = [ moz_overlay ]; };
+	pkgs = import (fetchTarball {
+		url = "https://github.com/NixOS/nixpkgs/archive/refs/tags/23.05.tar.gz";
+	}) { overlays = [ moz_overlay ]; };
 in
 	pkgs.mkShell {
 		name = "rivet-cli";
@@ -15,7 +17,6 @@ in
 			# Libraries
 			openssl
 			libiconv
-			protobuf
 			zlib
 
 			shellcheck

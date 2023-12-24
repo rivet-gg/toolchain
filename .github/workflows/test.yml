@@ -45,10 +45,11 @@ jobs:
           nix-shell --run "cargo fmt --all --check"
 
       - name: Run cargo test
-        run: |
-          nix-shell --run "cargo test"
         env:
           RIVET_API_ENDPOINT: ${{ secrets.RIVET_API_ENDPOINT }}
           RIVET_TOKEN: ${{ secrets.RIVET_TOKEN }}
           RUST_BACKTRACE: 1
           CARGO_PROFILE_TEST_BUILD_OVERRIDE_DEBUG: true
+        run: |
+          nix-shell --run "cargo test"
+
