@@ -11,11 +11,12 @@ use crate::util::{
 };
 
 pub mod check_login_state;
+pub mod deploy;
+pub mod get_cli_version;
 pub mod get_link;
 pub mod get_token;
 pub mod get_version;
 pub mod wait_for_login;
-pub mod deploy;
 
 pub trait SideKickHandler: Serialize {
 	fn print(&self) {
@@ -37,6 +38,8 @@ pub enum SubCommand {
 	GetVersion(get_version::Opts),
 	/// Deploy a version
 	Deploy(deploy::Opts),
+	/// Get the CLI version
+	GetCliVersion(get_cli_version::Opts),
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -132,6 +135,7 @@ impl SubCommand {
 			SubCommand::GetLink(opts) => serialize_output(opts.execute().await),
 			SubCommand::WaitForLogin(opts) => serialize_output(opts.execute().await),
 			SubCommand::CheckLoginState(_opts) => serialize_output(self.validate_token(&token)),
+			SubCommand::GetCliVersion(opts) => serialize_output(opts.execute().await),
 			_ => {
 				// If the command is anything else, we need to check if a token
 				// has already been provided. If not, we need to print an error
@@ -177,7 +181,8 @@ impl SubCommand {
 		let response = match self {
 			SubCommand::GetLink(_)
 			| SubCommand::CheckLoginState(_)
-			| SubCommand::WaitForLogin(_) => {
+			| SubCommand::WaitForLogin(_)
+			| SubCommand::GetCliVersion(_) => {
 				unreachable!("This command should be handled before this")
 			}
 			SubCommand::GetToken(opts) => serialize_output(opts.execute(ctx).await),
