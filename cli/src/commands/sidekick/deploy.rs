@@ -1,12 +1,12 @@
 use clap::Parser;
-use cli_core::{ctx, rivet_api::apis};
+
 use global_error::prelude::*;
 use serde::Serialize;
 
 use crate::commands::config::parse_config_override_args;
 use crate::commands::deploy::build_and_push_compat;
 use crate::commands::deploy::deploy;
-use crate::util::global_config;
+
 use crate::util::struct_fmt;
 
 use super::SideKickHandler;
