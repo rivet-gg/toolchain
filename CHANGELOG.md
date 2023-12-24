@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shorthand `-n` for `--namespace` flag in `rivet token create development`
 - `rivet deploy` validates config before building & uploading resources
 - `rivet unlink` command to remove authentication token
+- Pretty-printed errors instead of default debug format
+- Error reporting to Sentry
 
 ### Changed
 
