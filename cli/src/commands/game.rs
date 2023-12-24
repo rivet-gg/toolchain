@@ -41,7 +41,7 @@ impl SubCommand {
 				Ok(())
 			}
 			SubCommand::View => {
-				eprintln!("{}", term::link(dashboard_url(&ctx.game_id)));
+				eprintln!("{}", term::link(dashboard_url(&ctx, &ctx.game_id)));
 
 				Ok(())
 			}
@@ -49,6 +49,6 @@ impl SubCommand {
 	}
 }
 
-pub fn dashboard_url(game_id: &str) -> String {
-	format!("https://hub.rivet.gg/developer/games/{game_id}")
+pub fn dashboard_url(ctx: &cli_core::Ctx, game_id: &str) -> String {
+	format!("{}/developer/games/{game_id}", ctx.bootstrap.origins.hub)
 }
