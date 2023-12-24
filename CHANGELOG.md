@@ -5,15 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0-rc.1] - 2023-12-21
+## [Unreleased]
 
 ### Added
 
 - Warning if running unauthenticated commands as a sudo user
+- Added `sidekick unlink` subcommand to unlink the current project from the
+  Rivet CLI
+- Added `sidekick generate-config` subcommand to generate a Rivet config file
+- Added `sidekick get-namespace-dev-token` and `sidekick
+  get-namespace-public-token` subcommands to get a Rivet token for a namespace
+- Added `sidekick get-bootstrap-data` subcommand to get the initial data about
+  the signed-in user
+- Added `sidekick get-cli-version` subcommand to get the version of the Rivet
+  CLI
+- Added `sidekick deploy` to do the process of deploying a build to Rivet
+- Added ability for `sidekick` to open terminal in a new window for commands
+  that need to be shown (e.g. `sidekick deploy`)
+- Added nix to CI as `GlobalError` requires Protobuf
+- Added `sidekick get-version` subcommand to get the manage version URL in the
+  hub
+- Added `sidekick get-token` subcommand to get a Rivet token for a user
+- Added `sidekick check-login-state` subcommand to see if a user is logged in
+  through the CLI
+- Added `sidekick wait-for-login` subcommand to long-poll for a user to sign in
+- Added `sidekick get-link` subcommand to get a sign-in link for a user
+- Added hidden `Sidekick` subcommand to be used by external tools (e.g. engine
+  plugins) to interact with the Rivet CLI
 
 ### Changed
 
 - Cleaner unauthenticated error
+- Changed `sidekick` to a more modular architecture
+- Changed error handling in CLI to use `GlobalResult` from main repo instead of
+  `anyhow`
+- Unix install script can now take the environment variable `BIN_DIR` to specify
+  the installation directory, preventing the need for sudo in certain cases
+- Rivet CLI now references the `rivet-cli-api` from the Rivet main repo rather
+  than storing its own copy
 
 ### Fixed
 
