@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `x86_64-unknown-linux-musl` artifact
 - Version names are now generated with incrementing indexes on the backend without race conditions
 - Warning if running unauthenticated commands as a sudo user
 - `sidekick unlink` subcommand to unlink the current project from the
@@ -23,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `sidekick deploy` to do the process of deploying a build to Rivet
 - ability for `sidekick` to open terminal in a new window for commands
   that need to be shown (e.g. `sidekick deploy`)
-- nix to CI as `GlobalError` requires Protobuf
 - `sidekick get-version` subcommand to get the manage version URL in the
   hub
 - `sidekick get-token` subcommand to get a Rivet token for a user
@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the installation directory, preventing the need for sudo in certain cases
 - Rivet CLI now references the `rivet-cli-api` from the Rivet main repo rather
   than storing its own copy
+- Update `cargo-dist` to 0.6.2
 
 ### Fixed
 

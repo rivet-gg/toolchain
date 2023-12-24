@@ -191,7 +191,6 @@ async fn main_async() -> ExitCode {
 					ty,
 					message,
 					debug,
-					code,
 					retry_immediately: _,
 				} => sentry::protocol::Event {
 					level: sentry::protocol::Level::Error,
@@ -203,12 +202,6 @@ async fn main_async() -> ExitCode {
 						}],
 					},
 					message: Some(message.clone()),
-					tags: vec![(
-						"internal_error_code".to_string(),
-						Into::<i32>::into(*code).to_string(),
-					)]
-					.into_iter()
-					.collect(),
 					..Default::default()
 				},
 				GlobalError::BadRequest {
