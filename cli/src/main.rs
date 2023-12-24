@@ -35,7 +35,7 @@ struct Opts {
 	token: Option<String>,
 
 	#[clap(global = true, long, env = "RIVET_TELEMETRY_DISABLED")]
-	telemetry_disabled: Option<bool>,
+	telemetry_disabled: bool,
 }
 
 #[derive(Parser)]
@@ -227,8 +227,8 @@ async fn read_opts() -> Result<Opts> {
 			config.tokens.cloud = Some(token.clone());
 		}
 
-		if let Some(telemetry_disabled) = opts.telemetry_disabled {
-			config.telemetry.disabled = telemetry_disabled;
+		if opts.telemetry_disabled {
+			config.telemetry.disabled = true;
 		}
 	})
 	.await?;
