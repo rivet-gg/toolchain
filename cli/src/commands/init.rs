@@ -27,7 +27,7 @@ const UNREAL_SERVER_SHIPPING_DOCKERFILE: &'static str =
 	include_str!("../../tpl/unreal_config/server.shipping.Dockerfile");
 
 #[derive(Clone, Copy)]
-enum InitEngine {
+pub enum InitEngine {
 	Unity,
 	Unreal,
 	Godot,
@@ -36,7 +36,7 @@ enum InitEngine {
 }
 
 impl InitEngine {
-	fn learn_url(&self) -> String {
+	pub fn learn_url(&self) -> String {
 		match self {
 			InitEngine::Unity => "https://rivet.gg/learn/unity".to_string(),
 			InitEngine::Unreal => "https://rivet.gg/learn/unreal".to_string(),
@@ -341,7 +341,7 @@ impl Opts {
 		Ok(())
 	}
 
-	async fn create_config_default(&self, init_engine: InitEngine) -> GlobalResult<bool> {
+	pub async fn create_config_default(&self, init_engine: InitEngine) -> GlobalResult<bool> {
 		let current_dir = std::env::current_dir()?;
 		let config_exists = ["rivet.yaml", "rivet.toml", "rivet.json"]
 			.iter()
