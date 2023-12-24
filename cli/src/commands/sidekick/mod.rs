@@ -3,14 +3,13 @@ use console::Term;
 use global_error::prelude::*;
 use serde::Serialize;
 use serde_json::{json, Value};
-use std::{io::Read, process::Command};
+use std::process::Command;
 
 use crate::util::{
 	global_config,
 	struct_fmt::{self, Format},
 };
 
-pub mod check_login_state;
 pub mod deploy;
 pub mod generate_config;
 pub mod get_bootstrap_data;
@@ -35,7 +34,7 @@ pub enum SubCommand {
 	/// Long poll the server to check if the user has signed in
 	WaitForLogin(wait_for_login::Opts),
 	/// Check if the CLI is logged in already
-	CheckLoginState(check_login_state::Opts),
+	CheckLoginState,
 	/// Get the token from the CLI
 	GetBootstrapData(get_bootstrap_data::Opts),
 	/// Get the version of the CLI
@@ -128,7 +127,7 @@ impl SubCommand {
 		let response = match self {
 			SubCommand::GetLink(opts) => serialize_output(opts.execute().await),
 			SubCommand::WaitForLogin(opts) => serialize_output(opts.execute().await),
-			SubCommand::CheckLoginState(_opts) => serialize_output(self.validate_token(&token)),
+			SubCommand::CheckLoginState => serialize_output(self.validate_token(&token)),
 			SubCommand::GetCliVersion(opts) => serialize_output(opts.execute().await),
 			SubCommand::GenerateConfig(opts) => serialize_output(opts.execute()),
 			_ => {
@@ -178,7 +177,7 @@ impl SubCommand {
 
 		let response = match self {
 			SubCommand::GetLink(_)
-			| SubCommand::CheckLoginState(_)
+			| SubCommand::CheckLoginState
 			| SubCommand::WaitForLogin(_)
 			| SubCommand::GenerateConfig(_)
 			| SubCommand::GetCliVersion(_) => {
@@ -230,7 +229,7 @@ impl SubCommand {
 		Ok(())
 	}
 
-	pub async fn show_terminal(ctx: &cli_core::Ctx) -> GlobalResult<()> {
+	pub async fn show_terminal(_ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		// TODO(forest): The code doesn't handle the case where the binary
 		// path or the arguments contain special characters that might need
 		// to be escaped or quoted.
@@ -253,8 +252,6 @@ impl SubCommand {
 
 		// Add the binary path back as the first argument
 		args.insert(0, binary_path.to_str().unwrap().to_string());
-
-		let command_to_run = format!("{} {}", binary_path.to_str().unwrap(), args.join(" "));
 
 		#[cfg(target_os = "windows")]
 		Command::new("cmd.exe")

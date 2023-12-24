@@ -9,7 +9,7 @@ async fn e2e_deploy() {
 		.join("basic");
 
 	let mut cmd = Command::cargo_bin("rivet-cli").unwrap();
-	let assert = cmd
+	let _assert = cmd
 		.current_dir(project_dir)
 		.arg("deploy")
 		.arg("-n")
