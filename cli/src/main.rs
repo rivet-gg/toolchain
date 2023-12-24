@@ -105,6 +105,9 @@ enum SubCommand {
 	Sidekick {
 		#[clap(subcommand)]
 		command: sidekick::SubCommand,
+		// #[clap(opts)]
+		#[clap(long)]
+		show_terminal: bool,
 	},
 
 	/// Alias of `rivet engine unreal`
@@ -177,7 +180,7 @@ async fn main_inner(opts: Opts) -> GlobalResult<()> {
 			.await?;
 
 	// Sidekick sign-in can also be called before the token is valitdated
-	if let SubCommand::Sidekick { command } = &opts.command {
+	if let SubCommand::Sidekick { command, show_terminal } = &opts.command {
 		if let Ok(PreExecuteHandled::Yes) = command.pre_execute(&token).await {
 			return Ok(());
 		}
@@ -220,7 +223,10 @@ async fn main_inner(opts: Opts) -> GlobalResult<()> {
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,
-		SubCommand::Sidekick { command } => command.execute(&ctx, &term).await?,
+		SubCommand::Sidekick {
+			command,
+			show_terminal,
+		} => command.execute(&ctx, &term, show_terminal).await?,
 	}
 
 	Ok(())
