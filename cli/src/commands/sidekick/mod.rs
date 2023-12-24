@@ -19,6 +19,7 @@ pub mod get_link;
 pub mod get_namespace_dev_token;
 pub mod get_namespace_pub_token;
 pub mod get_version;
+pub mod unlink;
 pub mod wait_for_login;
 
 pub trait SideKickHandler: Serialize {
@@ -49,6 +50,8 @@ pub enum SubCommand {
 	GetNamespaceDevelopmentToken(get_namespace_dev_token::Opts),
 	/// Generate config
 	GenerateConfig(generate_config::Opts),
+	/// Unlink current game
+	Unlink(unlink::Opts),
 }
 
 /// Any response that can come from the sidekick. There should only be a single
@@ -188,6 +191,7 @@ impl SubCommand {
 			SubCommand::GetNamespaceDevelopmentToken(opts) => {
 				serialize_output(opts.execute(ctx).await)
 			}
+			SubCommand::Unlink(opts) => serialize_output(opts.execute(ctx).await),
 		};
 
 		// Print the response, but only if we're not inside a terminal
