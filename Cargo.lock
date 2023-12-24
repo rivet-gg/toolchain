@@ -1913,7 +1913,7 @@ dependencies = [
 [[package]]
 name = "rivet-api-cli"
 version = "0.0.1"
-source = "git+https://github.com/rivet-gg/rivet?rev=231a5acebc9c4b4c719389d5087fb44dee1f89b1#231a5acebc9c4b4c719389d5087fb44dee1f89b1"
+source = "git+https://github.com/rivet-gg/rivet?rev=4caa926e42a4c5e432a1a1731e8fcb4f2ae6b2bf#4caa926e42a4c5e432a1a1731e8fcb4f2ae6b2bf"
 dependencies = [
  "reqwest",
  "serde",

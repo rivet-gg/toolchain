@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::{
 	commands::{cdn, config, docker, version},
-	util::{gen, struct_fmt, term},
+	util::{struct_fmt, term},
 };
 
 #[derive(Parser)]
@@ -187,11 +187,7 @@ pub async fn deploy(
 		&ctx.game_id,
 		None,
 	)
-	.await;
-	if let Err(err) = game_res.as_ref() {
-		println!("Error: {err:?}");
-	}
-	let game_res = unwrap!(game_res);
+	.await?;
 	let namespace = if let Some(namespace) = namespace_name_id {
 		Some(unwrap!(game_res
 			.game
@@ -202,12 +198,23 @@ pub async fn deploy(
 		None
 	};
 
-	// Generate version name if needed
+	// Choose display name
 	let display_name = if let Some(x) = &display_name {
+		// Use predefined version
+
 		x.to_string()
 	} else {
-		gen::version_display_name(&game_res.game)?
+		// Generate version name
+
+		let reserve_res =
+			apis::cloud_games_versions_api::cloud_games_versions_reserve_version_name(
+				&ctx.openapi_config_cloud,
+				&ctx.game_id,
+			)
+			.await?;
+		reserve_res.version_display_name
 	};
+	term::status::info("Deploying", &display_name);
 
 	// Parse config
 	let mut rivet_config = config::read_config(overrides, namespace_name_id).await?;
