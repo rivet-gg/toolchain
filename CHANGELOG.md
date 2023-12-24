@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Windows compilation no longer fails with `nix` dependency
 - `--telemetry-disabled` no longer requires explicit `true`
 - Collect system metrics using `sysinfo::System` instead of `uname` command for compatability with Windows
+- CDN URL on deploy complete now pulls dynamic DNS from bootstrap API
+- CDN URL on deploy complete is no longer displayed if CDN is not enabled for the game
 
 ## [v0.4.0] - 2023-12-20
 

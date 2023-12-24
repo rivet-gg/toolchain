@@ -134,10 +134,10 @@ pub fn dashboard_url(game_id: &str, version_id: &str) -> String {
 	)
 }
 
-pub fn rivet_game_url(game_name_id: &str, namespace_name_id: &str) -> String {
+pub fn rivet_game_url(domain_cdn: &str, game_name_id: &str, namespace_name_id: &str) -> String {
 	if namespace_name_id == "prod" {
-		format!("https://{game_name_id}.rivet.game/")
+		format!("https://{game_name_id}.{domain_cdn}/")
 	} else {
-		format!("https://{game_name_id}--{namespace_name_id}.rivet.game/")
+		format!("https://{game_name_id}--{namespace_name_id}.{domain_cdn}/")
 	}
 }

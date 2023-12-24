@@ -228,6 +228,7 @@ pub async fn deploy(
 	.await?;
 
 	// Create game version
+	let has_cdn = rivet_config.cdn.is_some();
 	let version_res = apis::cloud_games_versions_api::cloud_games_versions_create_game_version(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
@@ -271,10 +272,14 @@ pub async fn deploy(
 			println!("Error: {err:?}");
 		}
 		unwrap!(update_version_res);
-		term::status::success(
-			"Deploy Succeeded",
-			version::rivet_game_url(&game_res.game.name_id, &namespace.name_id),
-		);
+		if let (true, Some(domains)) = (has_cdn, &ctx.bootstrap.domains) {
+			term::status::success(
+				"Deploy Succeeded",
+				version::rivet_game_url(&domains.cdn, &game_res.game.name_id, &namespace.name_id),
+			);
+		} else {
+			term::status::success("Deploy Succeeded", "");
+		}
 	}
 
 	eprintln!();
