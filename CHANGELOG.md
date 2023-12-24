@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Custom engines no longer get prompted to select engine when running `rivet init` for the second time
 - Windows compilation no longer fails with `nix` dependency
+- `--telemetry-disabled` no longer requires explicit `true`
 
 ## [v0.4.0] - 2023-12-20
 
