@@ -78,14 +78,24 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, term: &Term) -> GlobalResult<()> {
-		// Remove legacy `.rivet` dir if exists
+		// Remove legacy `.rivet/config.[yaml|toml|json]` files if they exists
 		let legacy_project_meta_path = paths::project_root()?.join(".rivet");
-		if fs::metadata(&legacy_project_meta_path).await.is_ok() {
+		if let Ok(mut entries) = fs::read_dir(&legacy_project_meta_path).await {
 			term::status::warn(
 				"Deleting legacy project metadata",
-				".rivet/ folder is moved to a global config",
+				".rivet/config.toml file is moved to a global config",
 			);
-			fs::remove_dir_all(&legacy_project_meta_path).await?;
+			while let Some(entry) = entries.next_entry().await? {
+				if let Some(file_name) = entry.file_name().to_str() {
+					if file_name.starts_with("config")
+						&& [".toml"]
+							.iter()
+							.any(|ext| file_name.ends_with(ext))
+					{
+						fs::remove_file(entry.path()).await?;
+					}
+				}
+			}
 		}
 
 		// Build context
