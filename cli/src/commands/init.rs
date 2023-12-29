@@ -48,9 +48,9 @@ impl InitEngine {
 }
 
 impl FromStr for InitEngine {
-	type Err = anyhow::Error;
+	type Err = GlobalError;
 
-	fn from_str(s: &str) -> Result<Self, Self::Err> {
+	fn from_str(s: &str) -> GlobalResult<Self> {
 		match s.to_lowercase().as_str() {
 			"unity" => Ok(InitEngine::Unity),
 			"unreal" => Ok(InitEngine::Unreal),

@@ -10,13 +10,12 @@ repository = "https://github.com/rivet-gg/cli"
 build = "build.rs"
 
 [dependencies]
-# Disable less common file formats. Preserve TOML for backwards compatibility.
-anyhow = "1.0"
 async-posthog = { git = "https://github.com/rivet-gg/posthog-rs.git", rev = "ef4e80e" }
 async-stream = "0.3.3"
 chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }
 cli-core = { path = "../core", package = "rivet-cli-core" }
+# Disable less common file formats. Preserve TOML for backwards compatibility.
 config = { version = "0.13.2", default-features = false, features = ["yaml", "toml", "json"] }
 console = "0.15"
 dirs = "5.0"
