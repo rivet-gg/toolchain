@@ -1,6 +1,5 @@
-use std::{path::Path, str::FromStr};
-
 use global_error::prelude::*;
+use std::{collections::HashMap, path::Path, str::FromStr};
 use tokio::process::Command;
 
 use crate::util::{cmd, term};
@@ -58,6 +57,7 @@ pub async fn build_image(
 	dockerfile: &Path,
 	build_kind: super::BuildKind,
 	build_compression: super::BuildCompression,
+	build_args: Option<&[String]>,
 ) -> GlobalResult<BuildImageOutput> {
 	// if docker.image_id.is_none() {
 	// if let Some(dockerfile) = docker.dockerfile.as_ref() {
@@ -73,6 +73,20 @@ pub async fn build_image(
 		format!("{}{buildx_info}", dockerfile.display()),
 	);
 
+	// Build args
+	let mut build_arg_flags = HashMap::<String, String>::new();
+	if let Some(build_args) = build_args {
+		for item in build_args {
+			let (k, v) = unwrap!(item.split_once('='), "Build arg missing '=': {item}");
+			ensure!(
+				!k.starts_with("RIVET_"),
+				"Build arg must not start with 'RIVET_': {k}"
+			);
+			build_arg_flags.insert(k.into(), v.into());
+		}
+	}
+	build_arg_flags.insert("RIVET_API_ENDPOINT".into(), ctx.api_endpoint.clone());
+
 	// Build image
 	let image_tag = super::generate_unique_image_tag();
 	match build_method {
@@ -86,8 +100,12 @@ pub async fn build_image(
 				.arg(dockerfile)
 				.arg("--tag")
 				.arg(&image_tag)
-				.arg("--build-arg")
-				.arg(format!("RIVET_API_ENDPOINT={}", ctx.api_endpoint))
+				.args(
+					&build_arg_flags
+						.iter()
+						.map(|(k, v)| format!("--build-arg={}={}", k, v))
+						.collect::<Vec<String>>(),
+				)
 				.arg(".");
 			cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 		}
@@ -138,8 +156,12 @@ pub async fn build_image(
 				.arg(dockerfile)
 				.arg("--tag")
 				.arg(&image_tag)
-				.arg("--build-arg")
-				.arg(format!("RIVET_API_ENDPOINT={}", ctx.api_endpoint))
+				.args(
+					&build_arg_flags
+						.iter()
+						.map(|(k, v)| format!("--build-arg={}={}", k, v))
+						.collect::<Vec<String>>(),
+				)
 				.arg("--output")
 				.arg("type=docker")
 				.arg(".");

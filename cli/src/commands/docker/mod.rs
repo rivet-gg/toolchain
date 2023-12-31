@@ -41,6 +41,10 @@ pub struct BuildPushOpts {
 	#[clap(long)]
 	pub name: Option<String>,
 
+	/// Docker build args
+	#[clap(long = "build-arg")]
+	pub build_args: Option<Vec<String>>,
+
 	#[clap(long, value_parser)]
 	pub format: Option<struct_fmt::Format>,
 }
@@ -172,6 +176,7 @@ pub async fn build_and_push(
 		&Path::new(&push_opts.dockerfile),
 		build_kind,
 		build_compression,
+		push_opts.build_args.as_ref().map(|x| x.as_slice()),
 	)
 	.await?;
 

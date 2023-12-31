@@ -361,6 +361,14 @@ pub async fn build_and_push_image(
 				&docker::BuildPushOpts {
 					dockerfile: dockerfile.clone(),
 					name: Some(display_name.to_string()),
+					build_args: Some(
+						docker
+							.build_args
+							.iter()
+							.flatten()
+							.map(|(k, v)| format!("{k}={v}"))
+							.collect(),
+					),
 					format: format.cloned(),
 				},
 			)
