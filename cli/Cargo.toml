@@ -21,7 +21,7 @@ console = "0.15"
 dirs = "5.0"
 fs_extra = "1.2.0"
 futures-util = "0.3"
-global-error = {  git = "https://github.com/rivet-gg/rivet.git", rev = "50a4d647f9a3212a072bdec9511a37d6ce4c7b2d" }
+global-error = {  git = "https://github.com/rivet-gg/rivet.git", rev = "22baf31efa3ffcdad65ecc72ce25425ab61b9c6f" }
 humansize = "1.1"
 ignore = "0.4"
 lz4 = "1.24"

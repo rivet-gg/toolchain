@@ -220,6 +220,7 @@ pub async fn deploy(
 	let mut rivet_config = config::read_config(overrides, namespace_name_id).await?;
 	build_config_dependencies(
 		ctx,
+		namespace_name_id,
 		&mut rivet_config,
 		&display_name,
 		concurrent_uploads,
@@ -290,6 +291,7 @@ pub async fn deploy(
 /// Builds the Docker image and CDN site if needed.
 pub async fn build_config_dependencies(
 	ctx: &cli_core::Ctx,
+	namespace: Option<&str>,
 	version: &mut models::CloudVersionConfig,
 	display_name: &str,
 	concurrent_uploads: usize,
@@ -320,7 +322,15 @@ pub async fn build_config_dependencies(
 
 	// Build CDN
 	if let Some(cdn) = version.cdn.as_mut() {
-		build_and_push_site(ctx, display_name, cdn, concurrent_uploads, format).await?;
+		build_and_push_site(
+			ctx,
+			namespace,
+			display_name,
+			cdn,
+			concurrent_uploads,
+			format,
+		)
+		.await?;
 	}
 
 	Ok(())
@@ -376,6 +386,7 @@ pub async fn build_and_push_image(
 }
 pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
+	namespace: Option<&str>,
 	display_name: &str,
 	cdn: &mut Box<models::CloudVersionCdnConfig>,
 	concurrent_uploads: usize,
@@ -387,6 +398,7 @@ pub async fn build_and_push_site(
 				let push_output = cdn::build_and_push(
 					ctx,
 					&cdn::BuildPushOpts {
+						namespace: namespace.map(String::from),
 						command: build_command.clone(),
 						path: build_output.clone(),
 						name: Some(display_name.to_string()),

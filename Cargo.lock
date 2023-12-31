@@ -616,7 +616,7 @@ dependencies = [
 [[package]]
 name = "formatted-error"
 version = "0.1.0"
-source = "git+https://github.com/rivet-gg/rivet.git?rev=50a4d647f9a3212a072bdec9511a37d6ce4c7b2d#50a4d647f9a3212a072bdec9511a37d6ce4c7b2d"
+source = "git+https://github.com/rivet-gg/rivet.git?rev=22baf31efa3ffcdad65ecc72ce25425ab61b9c6f#22baf31efa3ffcdad65ecc72ce25425ab61b9c6f"
 dependencies = [
  "gray_matter",
  "hashbrown 0.12.3",
@@ -738,7 +738,7 @@ dependencies = [
 [[package]]
 name = "global-error"
 version = "0.1.5"
-source = "git+https://github.com/rivet-gg/rivet.git?rev=50a4d647f9a3212a072bdec9511a37d6ce4c7b2d#50a4d647f9a3212a072bdec9511a37d6ce4c7b2d"
+source = "git+https://github.com/rivet-gg/rivet.git?rev=22baf31efa3ffcdad65ecc72ce25425ab61b9c6f#22baf31efa3ffcdad65ecc72ce25425ab61b9c6f"
 dependencies = [
  "formatted-error",
  "http",
@@ -1753,7 +1753,7 @@ dependencies = [
 [[package]]
 name = "rivet-api-cli"
 version = "0.0.1"
-source = "git+https://github.com/rivet-gg/rivet?rev=4caa926e42a4c5e432a1a1731e8fcb4f2ae6b2bf#4caa926e42a4c5e432a1a1731e8fcb4f2ae6b2bf"
+source = "git+https://github.com/rivet-gg/rivet?rev=38cc393126011e08fb0cd01040908dcc1dea80a8#38cc393126011e08fb0cd01040908dcc1dea80a8"
 dependencies = [
  "reqwest",
  "serde",

@@ -10,10 +10,9 @@ use std::{
 		Arc,
 	},
 };
-use tokio::process::Command;
 use uuid::Uuid;
 
-use crate::util::{struct_fmt, term, upload};
+use crate::util::{cmd, struct_fmt, term, upload};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -180,6 +179,10 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 
 #[derive(Parser)]
 pub struct BuildPushOpts {
+	/// Namespace to connect to
+	#[clap(long)]
+	pub namespace: Option<String>,
+
 	/// Command to run before pushing
 	///
 	/// The `RIVET_API_ENDPOINT` environment variable will be exposed to this command. The
@@ -210,29 +213,16 @@ pub async fn build_and_push(
 	eprintln!();
 	term::status::info("Building Site", &push_opts.command);
 
-	if cfg!(unix) {
-		let mut build_cmd = Command::new("/bin/sh");
-		build_cmd
-			.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
-			// Ensure we don't accidentally expose the token to a public build
-			.env_remove("RIVET_TOKEN")
-			.arg("-c")
-			.arg(&push_opts.command);
-		let build_status = build_cmd.status().await?;
-		ensure!(build_status.success(), "site failed to build");
-	} else if cfg!(windows) {
-		let mut build_cmd = Command::new("cmd.exe");
-		build_cmd
-			.env("RIVET_API_ENDPOINT", &ctx.api_endpoint)
-			// Ensure we don't accidentally expose the token to a public build
-			.env_remove("RIVET_TOKEN")
-			.arg("/C")
-			.arg(&push_opts.command);
-		let build_status = build_cmd.status().await?;
-		ensure!(build_status.success(), "site failed to build");
-	} else {
-		bail!("unknown machine type, expected unix or windows")
-	};
+	cmd::run_with_rivet(
+		ctx,
+		cmd::RunWithRivetOpts {
+			command: &push_opts.command,
+			envs: Vec::new(),
+			namespace: push_opts.namespace.as_ref().map(String::as_str),
+			token: cmd::RunWithRivetToken::RivetServers,
+		},
+	)
+	.await?;
 
 	// Upload site
 	push(

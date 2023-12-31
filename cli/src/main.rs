@@ -96,6 +96,14 @@ enum SubCommand {
 		command: cdn::SubCommand,
 	},
 
+	/// [EXPERIMENTAL] Wraps a given command and populates the Rivet development environment
+	#[clap(alias = "execute")]
+	Exec(exec::Opts),
+
+	/// [EXPERIMENTAL] Runs a script defined in rivet.yaml
+	#[clap(alias = "run")]
+	Run(run::Opts),
+
 	/// Run engine-specific commands
 	Engine {
 		#[clap(subcommand)]
@@ -323,6 +331,8 @@ async fn handle_opts() -> GlobalResult<()> {
 		SubCommand::Version { command } => command.execute(&ctx).await?,
 		SubCommand::Docker { command } => command.execute(&ctx).await?,
 		SubCommand::CDN { command } => command.execute(&ctx).await?,
+		SubCommand::Exec(opts) => opts.execute(&ctx).await?,
+		SubCommand::Run(opts) => opts.execute(&ctx).await?,
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,
