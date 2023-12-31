@@ -43,6 +43,7 @@ pub struct ValidateOpts {
 	pub namespace: Option<String>,
 
 	/// Prints a verbose version of the config
+	#[clap(short = 'p', long)]
 	pub print: bool,
 }
 

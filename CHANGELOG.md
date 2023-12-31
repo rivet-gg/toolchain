@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 - Overriding `matchmaker.docker.image_id` getting ignored
+- `rivet config validate` now uses `--print` flag instead of a positional argument
 
 ## [v1.0.0-rc.1] - 2023-12-24
 
