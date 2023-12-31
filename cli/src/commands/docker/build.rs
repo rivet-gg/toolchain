@@ -54,6 +54,7 @@ pub struct BuildImageOutput {
 
 /// Builds an image and archives it to a path.
 pub async fn build_image(
+	ctx: &cli_core::Ctx,
 	dockerfile: &Path,
 	build_kind: super::BuildKind,
 	build_compression: super::BuildCompression,
@@ -79,12 +80,14 @@ pub async fn build_image(
 			let mut build_cmd = Command::new("docker");
 			build_cmd
 				.arg("build")
+				.arg("--platform")
+				.arg("linux/amd64")
 				.arg("--file")
 				.arg(dockerfile)
 				.arg("--tag")
 				.arg(&image_tag)
-				.arg("--platform")
-				.arg("linux/amd64")
+				.arg("--build-arg")
+				.arg(format!("RIVET_API_ENDPOINT={}", ctx.api_endpoint))
 				.arg(".");
 			cmd::execute_docker_cmd(build_cmd, "Docker image failed to build").await?;
 		}
@@ -135,6 +138,8 @@ pub async fn build_image(
 				.arg(dockerfile)
 				.arg("--tag")
 				.arg(&image_tag)
+				.arg("--build-arg")
+				.arg(format!("RIVET_API_ENDPOINT={}", ctx.api_endpoint))
 				.arg("--output")
 				.arg("type=docker")
 				.arg(".");

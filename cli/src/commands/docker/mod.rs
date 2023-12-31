@@ -168,6 +168,7 @@ pub async fn build_and_push(
 	let build_kind = BuildKind::from_env().await?;
 	let build_compression = BuildCompression::from_env(&build_kind).await?;
 	let build_output = build::build_image(
+		ctx,
 		&Path::new(&push_opts.dockerfile),
 		build_kind,
 		build_compression,
