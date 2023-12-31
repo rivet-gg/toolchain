@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - `rivet exec` command to run arbitrary commands with `RIVET_API_ENDPOINT` and `RIVET_TOKEN` environment variables
-- `rivet run` command to run scripts from the `scripts` portion of `rivet.yaml` with `RIVET_API_ENDPOINT` and `RIVET_TOKEN` environment variables
 - `RIVET_API_ENDPOINT` arg is passed to `docker build` by default
+- `rivet run` command to run scripts from the `scripts` portion of `rivet.yaml` with `RIVET_API_ENDPOINT`, `RIVET_TOKEN`, and `RIVET_NAMESPACE` environment variables
+- `RIVET_TOKEN` and `RIVET_NAMESPACE` now additionally passed to `cdn.build_command`
 
 ## Fixed
 

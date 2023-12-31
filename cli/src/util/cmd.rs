@@ -67,14 +67,14 @@ pub async fn run_with_rivet(ctx: &cli_core::Ctx, opts: RunWithRivetOpts<'_>) -> 
 	};
 
 	// Run command
-	run(
-		&opts.command,
-		vec![
-			("RIVET_API_ENDPOINT".into(), ctx.api_endpoint.clone()),
-			("RIVET_TOKEN".into(), token),
-		],
-	)
-	.await?;
+	let mut envs = vec![
+		("RIVET_API_ENDPOINT".into(), ctx.api_endpoint.clone()),
+		("RIVET_TOKEN".into(), token),
+	];
+	if let Some(namespace) = opts.namespace {
+		envs.push(("RIVET_NAMESPACE".into(), namespace.into()));
+	}
+	run(&opts.command, envs).await?;
 
 	Ok(())
 }
