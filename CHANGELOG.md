@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `rivet run` command to run scripts from the `scripts` portion of `rivet.yaml` with `RIVET_API_ENDPOINT` and `RIVET_TOKEN` environment variables
 - `RIVET_API_ENDPOINT` arg is passed to `docker build` by default
 
+## Fixed
+
+- Overriding `matchmaker.docker.image_id` getting ignored
+
 ## [v1.0.0-rc.1] - 2023-12-24
 
 ### Added

@@ -352,7 +352,9 @@ pub async fn build_and_push_image(
 	format: Option<&struct_fmt::Format>,
 	default_image_id: Option<Uuid>,
 ) -> GlobalResult<Option<Uuid>> {
-	if docker.image_id.is_none() {
+	if let Some(image_id) = docker.image_id {
+		Ok(Some(image_id))
+	} else {
 		if let Some(dockerfile) = &docker.dockerfile {
 			let push_output = docker::build_and_push(
 				ctx,
@@ -379,10 +381,10 @@ pub async fn build_and_push_image(
 			return Ok(Some(push_output.image_id));
 		} else if let Some(image_id) = default_image_id {
 			return Ok(Some(image_id));
+		} else {
+			Ok(None)
 		}
 	}
-
-	Ok(None)
 }
 pub async fn build_and_push_site(
 	ctx: &cli_core::Ctx,
