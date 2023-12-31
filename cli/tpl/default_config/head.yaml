@@ -1,11 +1,14 @@
-# === Rivet Configuration ===
-# 
-# - Documentation: __LEARN_URL___
-# - Reference: https://rivet.gg/docs/cloud/api/games/versions/create-game-version
-# - More info: https://rivet.gg/docs/general/concepts/version-config
+# yaml-language-server: $schema=https://rivet.gg/rivet.schema.json
+
+
 #
-#          ┌───────────────────────────────────────┐
-#          │   This configuration file is empty.   │
-#          │ Get started at https://rivet.gg/learn │
-#          └───────────────────────────────────────┘
+#                           Welcome to Rivet
+#
+#          ┌─────────────────────────────────────────────────┐
+#          │        This configuration file is empty.        │
+#          │                                                 │
+#          │       Get started: https://rivet.gg/learn       │
+#          │ Reference: https://rivet.gg/docs/general/config │
+#          └─────────────────────────────────────────────────┘
+#
 
