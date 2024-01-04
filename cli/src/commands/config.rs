@@ -1,7 +1,7 @@
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
 use global_error::prelude::*;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use uuid::Uuid;
 
@@ -104,7 +104,7 @@ pub async fn read_config(
 	read_config_inner::<models::CloudVersionConfig>(overrides, namespace).await
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct CloudVersionConfigPartial {
 	#[serde(rename = "engine", skip_serializing_if = "Option::is_none")]
 	pub engine: Option<Box<models::CloudVersionEngineConfig>>,

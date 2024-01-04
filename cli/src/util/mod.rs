@@ -7,5 +7,7 @@ pub mod paths;
 pub mod struct_fmt;
 pub mod telemetry;
 pub mod term;
+pub mod text;
 pub mod upload;
 pub mod users;
+pub mod version_config;

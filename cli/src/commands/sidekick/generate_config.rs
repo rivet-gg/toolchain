@@ -1,9 +1,9 @@
 use clap::Parser;
 use global_error::prelude::*;
 use serde::Serialize;
-use std::fs;
+use tokio::fs;
 
-use crate::commands::init::InitEngine;
+use crate::util::version_config::Engine;
 
 use super::SideKickHandler;
 
@@ -28,20 +28,18 @@ pub struct Output {
 
 impl SideKickHandler for Output {}
 
-const CONFIG_DEFAULT_HEAD: &'static str = include_str!("../../../tpl/default_config/head.yaml");
-
 impl Opts {
-	pub fn execute(&self) -> GlobalResult<Output> {
+	pub async fn execute(&self) -> GlobalResult<Output> {
 		let engine = if self.unity {
-			InitEngine::Unity
+			Engine::Unity
 		} else if self.unreal {
-			InitEngine::Unreal
+			Engine::Unreal
 		} else if self.godot {
-			InitEngine::Godot
+			Engine::Godot
 		} else if self.html5 {
-			InitEngine::HTML5
+			Engine::Html5
 		} else {
-			InitEngine::Custom
+			Engine::Custom
 		};
 
 		let current_dir = std::env::current_dir()?;
@@ -50,30 +48,9 @@ impl Opts {
 			.any(|file_name| current_dir.join(file_name).exists());
 
 		if !config_exists {
-			let mut version_config =
-				CONFIG_DEFAULT_HEAD.replace("__LEARN_URL__", &engine.learn_url());
-
-			// Add engine config
-			match engine {
-				InitEngine::Unity => {
-					version_config.push_str("engine:\n  unity: {}\n\n");
-				}
-				InitEngine::Unreal => {
-					version_config.push_str("engine:\n  unreal: {}\n\n");
-				}
-				InitEngine::Godot => {
-					version_config.push_str("engine:\n  godot: {}\n\n");
-				}
-				InitEngine::HTML5 => {
-					version_config.push_str("engine:\n  html5: {}\n\n");
-				}
-				InitEngine::Custom => {
-					// Do nothing
-				}
-			}
-
 			// Write file
-			fs::write(current_dir.join("rivet.yaml"), version_config)?;
+			let version_config = crate::util::version_config::generate(&engine, true)?;
+			fs::write(current_dir.join("rivet.yaml"), version_config).await?;
 
 			return Ok(Output {
 				output: "Created rivet.yaml".to_string(),

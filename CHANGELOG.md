@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `RIVET_API_ENDPOINT` and `RIVET_NAMESPACE` arg is passed to `docker build` by default
 - `RIVET_TOKEN` and `RIVET_NAMESPACE` now additionally passed to `cdn.build_command`
 
+## Changed
+
+- Reworked `rivet init` process to cleanly communicate next steps & unique links for the selected engine
+- Updated generated `rivet.yaml` on `rivet init` to be more concise and helpful & unique content for the selected engine
+
 ## Fixed
 
 - Overriding `matchmaker.docker.image_id` getting ignored

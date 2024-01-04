@@ -129,7 +129,7 @@ impl SubCommand {
 			SubCommand::WaitForLogin(opts) => serialize_output(opts.execute().await),
 			SubCommand::CheckLoginState => serialize_output(self.validate_token(&token)),
 			SubCommand::GetCliVersion(opts) => serialize_output(opts.execute().await),
-			SubCommand::GenerateConfig(opts) => serialize_output(opts.execute()),
+			SubCommand::GenerateConfig(opts) => serialize_output(opts.execute().await),
 			_ => {
 				// If the command is anything else, we need to check if a token
 				// has already been provided. If not, we need to print an error
