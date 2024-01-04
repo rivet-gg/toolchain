@@ -44,7 +44,7 @@ pub enum SubCommand {
 	/// Get the CLI version
 	GetCliVersion(get_cli_version::Opts),
 	/// Get a public namespace token
-	GetNamespacePubicToken(get_namespace_pub_token::Opts),
+	GetNamespacePublicToken(get_namespace_pub_token::Opts),
 	/// Get a development namespace token
 	GetNamespaceDevelopmentToken(get_namespace_dev_token::Opts),
 	/// Generate config
@@ -186,7 +186,7 @@ impl SubCommand {
 			SubCommand::GetBootstrapData(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetVersion(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::Deploy(opts) => serialize_output(opts.execute(ctx).await),
-			SubCommand::GetNamespacePubicToken(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetNamespacePublicToken(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetNamespaceDevelopmentToken(opts) => {
 				serialize_output(opts.execute(ctx).await)
 			}
