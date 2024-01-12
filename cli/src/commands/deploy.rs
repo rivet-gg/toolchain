@@ -410,6 +410,10 @@ pub async fn build_and_push_site(
 					&cdn::BuildPushOpts {
 						namespace: namespace.map(String::from),
 						command: build_command.clone(),
+						env: cdn
+							.build_env
+							.as_ref()
+							.map(|x| x.iter().map(|(k, v)| format!("{k}={v}")).collect()),
 						path: build_output.clone(),
 						name: Some(display_name.to_string()),
 						concurrent_uploads,

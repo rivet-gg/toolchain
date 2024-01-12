@@ -53,7 +53,7 @@ impl Opts {
 			ctx,
 			cmd::RunWithRivetOpts {
 				command,
-				envs: Vec::new(),
+				env: Vec::new(),
 				namespace: self.namespace.as_deref(),
 				token,
 			},

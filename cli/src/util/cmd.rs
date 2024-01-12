@@ -31,7 +31,7 @@ pub enum RunWithRivetToken {
 
 pub struct RunWithRivetOpts<'a> {
 	pub command: &'a str,
-	pub envs: Vec<(String, String)>,
+	pub env: Vec<(String, String)>,
 
 	/// Namespace to execute against
 	pub namespace: Option<&'a str>,

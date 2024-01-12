@@ -190,6 +190,10 @@ pub struct BuildPushOpts {
 	#[clap(long)]
 	pub command: String,
 
+	/// Environment variables to set for the command
+	#[clap(long)]
+	pub env: Option<Vec<String>>,
+
 	/// Path of the site to push
 	#[clap(long)]
 	pub path: String,
@@ -213,11 +217,23 @@ pub async fn build_and_push(
 	eprintln!();
 	term::status::info("Building Site", &push_opts.command);
 
+	// Parse env
+	let env = push_opts
+		.env
+		.iter()
+		.flatten()
+		.map(|e| {
+			let (k, v) = unwrap!(e.split_once("="), "Env entry missing '='");
+			GlobalResult::Ok((k.to_string(), v.to_string()))
+		})
+		.collect::<GlobalResult<Vec<_>>>()?;
+
+	// Run build
 	cmd::run_with_rivet(
 		ctx,
 		cmd::RunWithRivetOpts {
 			command: &push_opts.command,
-			envs: Vec::new(),
+			env,
 			namespace: push_opts.namespace.as_ref().map(String::as_str),
 			token: cmd::RunWithRivetToken::RivetServers,
 		},
