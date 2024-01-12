@@ -45,6 +45,9 @@ async fn archive_docker_image(image_tag: &str) -> GlobalResult<tempfile::TempPat
 		.arg(&image_tag);
 	cmd::execute_docker_cmd(build_cmd, "Docker failed to save image").await?;
 
+	// We have no way of validating that this Docker image is not running as root, so the container
+	// will fail on setup at runtime if attempting to run as UID/GID 0.
+
 	Ok(build_tar_path)
 }
 
@@ -221,7 +224,10 @@ async fn archive_oci_bundle(image_tag: &str) -> GlobalResult<tempfile::TempPath>
 				.map_or(false, |x| &x == "1")
 			{
 				if uid == 0 {
-					bail!("cannot run Docker container as root (i.e. uid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
+					bail!("cannot run Docker container as root user (i.e. uid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
+				}
+				if gid == 0 {
+					bail!("cannot run Docker container as root group (i.e. gid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
 				}
 			}
 
