@@ -4,13 +4,10 @@ use cli_core::{
 	rivet_api::{apis, models},
 	Ctx,
 };
-use console::{style, Color, Style, Term};
+use console::{style, Term};
 use global_error::prelude::*;
-use serde_json::json;
-use std::{
-	path::{Path, PathBuf},
-	str::FromStr,
-};
+
+use std::path::{Path, PathBuf};
 use tokio::fs;
 
 use crate::{

@@ -1,4 +1,4 @@
-use console::{style, Color, Style, Term};
+use console::{Color, Style, Term};
 use regex::Regex;
 
 pub fn center_text(input: &str, width: usize) -> String {

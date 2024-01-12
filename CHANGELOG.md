@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reworked `rivet init` process to cleanly communicate next steps & unique links for the selected engine
 - Updated generated `rivet.yaml` on `rivet init` to be more concise and helpful & unique content for the selected engine
-- Update OCI bundle archival process to operate on TAR streams instead of using the host's file system to preserve ownership & persmissions
+- Update OCI bundle archival process to operate on TAR streams instead of using the host's file system to preserve ownership & permissions
 
 ## Fixed
 
