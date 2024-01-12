@@ -1,9 +1,6 @@
 // See https://github.com/moby/sys/blob/c0711cde08c8fa33857a2c28721659267f49b5e2/user/user.go
 
 use global_error::prelude::*;
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
 
 // MARK: passwd
 #[derive(Debug)]
@@ -15,19 +12,11 @@ pub struct User {
 	pub shell: String,
 }
 
-pub fn read_passwd_file(path: &Path) -> GlobalResult<Vec<User>> {
-	let file = File::open(&path)?;
-	let reader = io::BufReader::new(file);
-
+pub fn read_passwd_file(passwd_file: &str) -> GlobalResult<Vec<User>> {
 	let mut users = Vec::new();
-	for line in reader.lines() {
-		match line {
-			Ok(content) => {
-				if let Some(user) = parse_passwd_line(&content) {
-					users.push(user);
-				}
-			}
-			Err(e) => bail!("Error reading line: {}", e),
+	for line in passwd_file.lines() {
+		if let Some(user) = parse_passwd_line(&line) {
+			users.push(user);
 		}
 	}
 
@@ -60,21 +49,11 @@ pub struct Group {
 	pub user_list: Vec<String>,
 }
 
-pub fn read_group_file(path: &Path) -> GlobalResult<Vec<Group>> {
-	let file = File::open(&path)?;
-	let reader = io::BufReader::new(file);
-
+pub fn read_group_file(group_file: &str) -> GlobalResult<Vec<Group>> {
 	let mut groups = Vec::new();
-	for line in reader.lines() {
-		match line {
-			Ok(content) => {
-				if let Some(group) = parse_group_line(&content) {
-					groups.push(group);
-				}
-			}
-			Err(e) => {
-				bail!("Error reading line: {}", e)
-			}
+	for line in group_file.lines() {
+		if let Some(group) = parse_group_line(&line) {
+			groups.push(group);
 		}
 	}
 
