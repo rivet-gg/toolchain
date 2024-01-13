@@ -21,8 +21,12 @@ pub struct Opts {
 	overrides: Vec<String>,
 
 	/// Namespace ID to deploy to
-	#[clap(short = 'n', long)]
+	#[clap(index = 1)]
 	namespace: Option<String>,
+
+	/// Deploys a version without assigning a namespace to it
+	#[clap(long)]
+	no_namespace: bool,
 
 	/// Number of files to upload in parallel
 	#[clap(long, env = "RIVET_CONCURRENT_UPLOADS", default_value = "8")]
@@ -30,6 +34,12 @@ pub struct Opts {
 
 	#[clap(long, value_parser)]
 	format: Option<struct_fmt::Format>,
+
+	/// Deprecated.
+	///
+	/// Namespace ID to deploy to
+	#[clap(hide = true, short = 'n', long = "namespace")]
+	namespace_flag: Option<String>,
 
 	/// Deprecated.
 	///
@@ -58,10 +68,21 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
+		// Derive namespace
+		let namespace = match (
+			self.namespace.as_ref().or(self.namespace_flag.as_ref()),
+			self.no_namespace,
+		) {
+			(Some(_), true) => bail!("Cannot specify both namespace argument and --no-namespace"),
+			(None, false) => bail!("Must specify either namespace argument or --no-namespace"),
+			(Some(namespace), false) => Some(namespace),
+			(None, true) => None,
+		};
+
 		// Validate config
 		let errors = config::ValidateOpts {
 			overrides: self.overrides.clone(),
-			namespace: self.namespace.clone(),
+			namespace: namespace.cloned(),
 			print: false,
 		}
 		.execute(ctx)
@@ -96,7 +117,7 @@ impl Opts {
 			ctx,
 			self.display_name.as_ref().map(String::as_str),
 			overrides,
-			self.namespace.as_ref().map(String::as_str),
+			namespace.as_ref().map(|x| x.as_str()),
 			self.concurrent_uploads,
 			self.format.as_ref(),
 		)

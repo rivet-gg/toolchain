@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `rivet exec` command to run arbitrary commands with `RIVET_API_ENDPOINT` and `RIVET_TOKEN` environment variables
 - `rivet run` command to run scripts from the `scripts` portion of `rivet.yaml` with `RIVET_API_ENDPOINT`, `RIVET_TOKEN`, and `RIVET_NAMESPACE` environment variables
+- `rivet deploy` now can now specify the namespace inline (e.g. `rivet deploy prod` instead of `rivet deploy -n prod`)
 - `matchmaker.docker.build_args` to configure Docker build args
 - `cdn.build_env` to configure environment variables for building the site
 - `RIVET_API_ENDPOINT` and `RIVET_NAMESPACE` arg is passed to `docker build` by default
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reworked `rivet init` process to cleanly communicate next steps & unique links for the selected engine
 - Updated generated `rivet.yaml` on `rivet init` to be more concise and helpful & unique content for the selected engine
 - Update OCI bundle archival process to operate on TAR streams instead of using the host's file system to preserve ownership & permissions
+- **[BREAKING]** `rivet deploy` now requires a `--no-namespace` flag if no namespace is provided
 
 ## Fixed
 

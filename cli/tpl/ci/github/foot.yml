@@ -23,5 +23,5 @@
 
       - name: Deploy Version
         run: |
-          rivet deploy --namespace '${{ needs.prepare.outputs.ns_name_id }}' --name '${{ needs.prepare.outputs.version_name }}' __DEPLOY_OVERRIDES__
+          rivet deploy '${{ needs.prepare.outputs.ns_name_id }}' --name '${{ needs.prepare.outputs.version_name }}' __DEPLOY_OVERRIDES__
 
