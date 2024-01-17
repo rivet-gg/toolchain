@@ -136,6 +136,12 @@ enum SubCommand {
 		command: ci::SubCommand,
 	},
 
+	/// Manages global configuration file
+	GlobalConfig {
+		#[clap(subcommand)]
+		command: commands::global_config::SubCommand,
+	},
+
 	/// Deprecated.
 	///
 	/// Manages identity avatars
@@ -275,9 +281,18 @@ async fn handle_opts() -> GlobalResult<()> {
 	// Read opts
 	let opts = read_opts().await?;
 
-	// Handle init command without the context
-	if let SubCommand::Init(init_opts) = &opts.command {
-		return init_opts.execute(&term).await;
+	// Handle commands that need to run before we have the context
+	match &opts.command {
+		SubCommand::Init(init_opts) => {
+			return init_opts.execute(&term).await;
+		}
+		SubCommand::Unlink(opts) => {
+			return opts.execute().await;
+		}
+		SubCommand::GlobalConfig { command } => {
+			return command.execute().await;
+		}
+		_ => {}
 	}
 
 	// Read token
@@ -319,8 +334,9 @@ async fn handle_opts() -> GlobalResult<()> {
 
 	// Handle command
 	match opts.command {
-		SubCommand::Init(_) => unreachable!(),
-		SubCommand::Unlink(opts) => opts.execute(&ctx).await?,
+		SubCommand::Init(_) | SubCommand::Unlink(_) | SubCommand::GlobalConfig { .. } => {
+			unreachable!()
+		}
 		SubCommand::Deploy(opts) => opts.execute(&ctx).await?,
 		SubCommand::Config { command } => command.execute(&ctx).await?,
 		SubCommand::IdentityAvatar { command } => command.execute(&ctx).await?,

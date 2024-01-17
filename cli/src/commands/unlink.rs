@@ -7,7 +7,7 @@ use crate::util::{global_config, paths};
 pub struct Opts {}
 
 impl Opts {
-	pub async fn execute(&self, _ctx: &cli_core::Ctx) -> GlobalResult<()> {
+	pub async fn execute(&self) -> GlobalResult<()> {
 		unlink().await
 	}
 }

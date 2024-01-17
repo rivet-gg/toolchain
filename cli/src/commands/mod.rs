@@ -8,6 +8,7 @@ pub mod docker;
 pub mod engine;
 pub mod exec;
 pub mod game;
+pub mod global_config;
 pub mod init;
 pub mod ns;
 pub mod run;
