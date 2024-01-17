@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Fixed
 
 - `rivet unlink` now works even if the credentials are invalid
+- Docker image UID & GID validation no longer disabled by default
 
 ## [v1.0.0-rc.2] - 2024-01-13
 

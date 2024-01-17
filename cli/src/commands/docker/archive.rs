@@ -219,9 +219,9 @@ async fn archive_oci_bundle(image_tag: &str) -> GlobalResult<tempfile::TempPath>
 			// Validate not running as root
 			//
 			// See Kubernetes implementation https://github.com/kubernetes/kubernetes/blob/cea1d4e20b4a7886d8ff65f34c6d4f95efcb4742/pkg/kubelet/kuberuntime/security_context_others.go#L44C4-L44C4
-			if std::env::var("_RIVET_OCI_BUNDLE_ALLOW_ROOT")
+			if !std::env::var("_RIVET_OCI_BUNDLE_ALLOW_ROOT")
 				.ok()
-				.map_or(false, |x| &x == "1")
+				.map_or(true, |x| &x == "1")
 			{
 				if uid == 0 {
 					bail!("cannot run Docker container as root user (i.e. uid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
