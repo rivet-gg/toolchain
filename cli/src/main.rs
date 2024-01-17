@@ -372,6 +372,7 @@ async fn read_opts() -> GlobalResult<Opts> {
 
 	global_config::mutate_project(|config| {
 		if let Some(api_endpoint) = &opts.api_endpoint {
+			let api_endpoint = crate::util::api::normalize_api_endpoint(&api_endpoint)?;
 			config.cluster.api_endpoint = Some(api_endpoint.clone());
 		}
 
@@ -382,8 +383,10 @@ async fn read_opts() -> GlobalResult<Opts> {
 		if opts.telemetry_disabled {
 			config.telemetry.disabled = true;
 		}
+
+		GlobalResult::Ok(())
 	})
-	.await?;
+	.await??;
 
 	Ok(opts)
 }

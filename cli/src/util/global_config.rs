@@ -138,27 +138,27 @@ pub async fn read_project<F: FnOnce(&ProjectMeta) -> T, T>(cb: F) -> GlobalResul
 	try_read_project(|x| Ok(cb(x))).await
 }
 
-pub async fn try_mutate_global<F: FnOnce(&mut GlobalConfig) -> GlobalResult<()>>(
+pub async fn try_mutate_global<F: FnOnce(&mut GlobalConfig) -> GlobalResult<T>, T>(
 	cb: F,
-) -> GlobalResult<()> {
+) -> GlobalResult<T> {
 	let singleton = get_or_init().await?;
 	let mut lock = singleton.lock().await;
 
 	// Mutate the config
-	cb(&mut *lock)?;
+	let res = cb(&mut *lock)?;
 
 	// Write new changes
 	write(&*lock).await?;
 
-	Ok(())
+	Ok(res)
 }
 
 /// Mutates the project meta.
 ///
 /// If the project meta does not exist, a default one will be inserted and modified.
-pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> GlobalResult<()>>(
+pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> GlobalResult<T>, T>(
 	cb: F,
-) -> GlobalResult<()> {
+) -> GlobalResult<T> {
 	let project_root = paths::project_root()?;
 	try_mutate_global(|config| {
 		let project_config = config.project_roots.entry(project_root).or_default();
@@ -168,6 +168,6 @@ pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> GlobalResult<()>>
 }
 
 /// Non-failable version of `try_mutate_project`.
-pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> ()>(cb: F) -> GlobalResult<()> {
+pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> T, T>(cb: F) -> GlobalResult<T> {
 	try_mutate_project(|x| Ok(cb(x))).await
 }

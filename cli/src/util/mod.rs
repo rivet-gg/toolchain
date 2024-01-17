@@ -1,3 +1,4 @@
+pub mod api;
 pub mod cmd;
 pub mod download;
 pub mod global_config;
