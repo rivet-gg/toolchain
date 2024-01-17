@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `rivet global-config read-project` command
 - `rivet global-config path` command to get the path to the global config
+- `--format` now supports `json-compact`
+
+## Changed
+
+- `--format json` now defaults to pretty-printed JSON
 
 ## Fixed
 
