@@ -3,13 +3,7 @@ use cli_core::rivet_api::{apis, models};
 use futures_util::{StreamExt, TryStreamExt};
 use global_error::prelude::*;
 use serde::Serialize;
-use std::{
-	env,
-	sync::{
-		atomic::{AtomicU64, AtomicUsize, Ordering},
-		Arc,
-	},
-};
+use std::{env, sync::Arc};
 use uuid::Uuid;
 
 use crate::util::{cmd, struct_fmt, term, upload};
@@ -112,57 +106,40 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 	let site_id = site_res.site_id;
 
 	{
-		let counter = Arc::new(AtomicUsize::new(0));
-		let counter_bytes = Arc::new(AtomicU64::new(0));
-		let presigned_requests = site_res.presigned_requests;
-		let total = presigned_requests.len();
-		let total_bytes = total_len as u64;
-
+		let mpb = indicatif::MultiProgress::new();
 		let files = Arc::new(files.clone());
+		let presigned_requests = site_res.presigned_requests;
+
 		futures_util::stream::iter(presigned_requests)
 			.map(Ok)
-			.try_for_each_concurrent(push_opts.concurrent_uploads, move |presigned_req| {
-				let counter = counter.clone();
-				let counter_bytes = counter_bytes.clone();
-				{
-					let files = files.clone();
-					let reqwest_client = reqwest_client.clone();
+			.try_for_each_concurrent(push_opts.concurrent_uploads, |presigned_req| {
+				let mpb = mpb.clone();
+				let files = files.clone();
+				let reqwest_client = reqwest_client.clone();
 
-					async move {
-						// Find the matching prepared file
-						let file = unwrap!(
-							files.iter().find(|f| f.prepared.path == presigned_req.path),
-							"missing prepared file"
-						);
+				async move {
+					// Find the matching prepared file
+					let file = unwrap!(
+						files.iter().find(|f| f.prepared.path == presigned_req.path),
+						"missing prepared file"
+					);
 
-						upload::upload_file(
-							&reqwest_client,
-							&presigned_req,
-							&file.absolute_path,
-							file.prepared.content_type.as_ref(),
-						)
-						.await?;
+					upload::upload_file(
+						&reqwest_client,
+						&presigned_req,
+						&file.absolute_path,
+						file.prepared.content_type.as_ref(),
+						mpb,
+					)
+					.await?;
 
-						let progress = counter.fetch_add(1, Ordering::SeqCst) + 1;
-						let progress_bytes = counter_bytes
-							.fetch_add(file.prepared.content_length as u64, Ordering::SeqCst)
-							+ file.prepared.content_length as u64;
-						eprintln!(
-							"    {}/{} files ({}/{})",
-							progress,
-							total,
-							upload::format_file_size(progress_bytes)?,
-							upload::format_file_size(total_bytes)?
-						);
-
-						GlobalResult::<()>::Ok(())
-					}
+					GlobalResult::<()>::Ok(())
 				}
 			})
 			.await?;
 	}
 
-	eprintln!();
+	eprintln!("\n");
 	let complete_res = apis::cloud_uploads_api::cloud_uploads_complete_upload(
 		&ctx.openapi_config_cloud,
 		&site_res.upload_id.to_string(),

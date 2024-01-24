@@ -5,29 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased - 2024-01-23
+
+### Changed
+
+- Improved progress indicators on file uploads
+
 ## [v1.0.0] - 2024-01-23
 
 ## [v1.0.0-rc.3] - 2024-01-19
 
-## Added
+### Added
 
 - Shorthand API endpoints can now be passed without the scheme (e.g. `api.mydomain.com` or `127.0.0.1:8080`)
 - `rivet global-config read-project` command
 - `rivet global-config path` command to get the path to the global config
 - `--format` now supports `json-compact`
 
-## Changed
+### Changed
 
 - `--format json` now defaults to pretty-printed JSON
 
-## Fixed
+### Fixed
 
 - `rivet unlink` now works even if the credentials are invalid
 - Docker image UID & GID validation no longer disabled by default
 
 ## [v1.0.0-rc.2] - 2024-01-13
 
-## Added
+### Added
 
 - `rivet exec` command to run arbitrary commands with `RIVET_API_ENDPOINT` and `RIVET_TOKEN` environment variables
 - `rivet run` command to run scripts from the `scripts` portion of `rivet.yaml` with `RIVET_API_ENDPOINT`, `RIVET_TOKEN`, and `RIVET_NAMESPACE` environment variables
@@ -37,14 +43,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `RIVET_API_ENDPOINT` and `RIVET_NAMESPACE` arg is passed to `docker build` by default
 - `RIVET_TOKEN` and `RIVET_NAMESPACE` now additionally passed to `cdn.build_command`
 
-## Changed
+### Changed
 
 - Reworked `rivet init` process to cleanly communicate next steps & unique links for the selected engine
 - Updated generated `rivet.yaml` on `rivet init` to be more concise and helpful & unique content for the selected engine
 - Update OCI bundle archival process to operate on TAR streams instead of using the host's file system to preserve ownership & permissions
 - **[BREAKING]** `rivet deploy` now requires a `--no-namespace` flag if no namespace is provided
 
-## Fixed
+### Fixed
 
 - Overriding `matchmaker.docker.image_id` getting ignored
 - `rivet config validate` now uses `--print` flag instead of a positional argument
@@ -61,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Rivet CLI
 - `sidekick generate-config` subcommand to generate a Rivet config file
 - `sidekick get-namespace-dev-token` and `sidekick
-  get-namespace-public-token` subcommands to get a Rivet token for a namespace
+get-namespace-public-token` subcommands to get a Rivet token for a namespace
 - `sidekick get-bootstrap-data` subcommand to get the initial data about
   the signed-in user
 - `sidekick get-cli-version` subcommand to get the version of the Rivet
