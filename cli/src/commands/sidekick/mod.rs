@@ -262,7 +262,14 @@ impl SubCommand {
 
 		#[cfg(target_os = "macos")]
 		{
-			let command_to_run = args.join(" ");
+			// This script will run from home, so we need top change to the
+			// project directory before running the command.
+			let current_dir = std::env::current_dir()?
+				.into_os_string()
+				.into_string()
+				.unwrap();
+			let command_to_run = format!("cd {}; {}", current_dir, args.join(" "));
+
 			let apple_script = format!(
 				"tell application \"Terminal\"
 						activate
