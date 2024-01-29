@@ -251,17 +251,18 @@ async fn main_async() -> ExitCode {
 
 			// Capture event in PostHog
 			let capture_res = util::telemetry::capture_event(
-			util::telemetry::GAME_ID.get(),
-			"$exception",
-			Some(|event: &mut async_posthog::Event| {
-				event.insert_prop("errors", format!("{}", err))?;
+				util::telemetry::GAME_ID.get(),
+				"$exception",
+				Some(|event: &mut async_posthog::Event| {
+					event.insert_prop("errors", format!("{}", err))?;
 
-				event.insert_prop("$sentry_event_id", event_id.to_string())?;
-				event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gg/issues/?project=4506447486976000&query={event_id}"))?;
+					event.insert_prop("$sentry_event_id", event_id.to_string())?;
+					event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gg/issues/?project=4506447486976000&query={event_id}"))?;
 
-				Ok(())
-			}),
-		).await;
+					Ok(())
+				}),
+			)
+			.await;
 			if let Err(err) = capture_res {
 				eprintln!("Failed to capture event in PostHog: {:?}", err);
 			}
