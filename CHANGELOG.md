@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved progress indicators on file uploads
 
+### Fixed
+
+- Docker image UID & GID validation not getting ran
+
 ## [v1.0.0] - 2024-01-23
 
 ## [v1.0.0-rc.3] - 2024-01-19
