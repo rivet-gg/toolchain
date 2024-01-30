@@ -198,73 +198,82 @@ async fn main_async() -> ExitCode {
 				}
 			}
 
-			// Capture event in Sentry
-			// TODO: Add system context
-			let event = match &err {
-				GlobalError::Internal {
-					ty,
-					message,
-					debug,
-					retry_immediately: _,
-				} => sentry::protocol::Event {
-					level: sentry::protocol::Level::Error,
-					exception: sentry::protocol::Values {
-						values: vec![sentry::protocol::Exception {
-							ty: ty.clone(),
-							value: Some(debug.clone()),
-							..Default::default()
-						}],
+			// Capture event in Sentry (only in release mode). Also, if
+			// telemetry is diabled, make sure that Sentry is also disabled.
+			let telemetry_disabled = global_config::read_project(|x| x.telemetry.disabled)
+				.await
+				.unwrap_or(false);
+
+			if !telemetry_disabled && cfg!(feature = "sentry") {
+				// TODO: Add system context
+				let event = match &err {
+					GlobalError::Internal {
+						ty,
+						message,
+						debug,
+						retry_immediately: _,
+					} => sentry::protocol::Event {
+						level: sentry::protocol::Level::Error,
+						exception: sentry::protocol::Values {
+							values: vec![sentry::protocol::Exception {
+								ty: ty.clone(),
+								value: Some(debug.clone()),
+								..Default::default()
+							}],
+						},
+						message: Some(message.clone()),
+						..Default::default()
 					},
-					message: Some(message.clone()),
-					..Default::default()
-				},
-				GlobalError::BadRequest {
-					code,
-					context,
-					metadata,
-				} => sentry::protocol::Event {
-					level: sentry::protocol::Level::Warning,
-					exception: sentry::protocol::Values {
-						values: vec![sentry::protocol::Exception {
-							ty: "BadRequest".into(),
-							value: Some(code.clone()),
-							..Default::default()
-						}],
+					GlobalError::BadRequest {
+						code,
+						context,
+						metadata,
+					} => sentry::protocol::Event {
+						level: sentry::protocol::Level::Warning,
+						exception: sentry::protocol::Values {
+							values: vec![sentry::protocol::Exception {
+								ty: "BadRequest".into(),
+								value: Some(code.clone()),
+								..Default::default()
+							}],
+						},
+						message: Some(err.message()),
+						extra: vec![
+							("context".to_string(), json!(context)),
+							(
+								"metadata".to_string(),
+								metadata
+									.as_ref()
+									.and_then(|x| {
+										serde_json::from_str::<serde_json::Value>(&x).ok()
+									})
+									.unwrap_or_else(|| serde_json::Value::Null),
+							),
+						]
+						.into_iter()
+						.collect(),
+						..Default::default()
 					},
-					message: Some(err.message()),
-					extra: vec![
-						("context".to_string(), json!(context)),
-						(
-							"metadata".to_string(),
-							metadata
-								.as_ref()
-								.and_then(|x| serde_json::from_str::<serde_json::Value>(&x).ok())
-								.unwrap_or_else(|| serde_json::Value::Null),
-						),
-					]
-					.into_iter()
-					.collect(),
-					..Default::default()
-				},
-			};
-			let event_id = sentry::capture_event(event);
+				};
+				let event_id = sentry::capture_event(event);
 
-			// Capture event in PostHog
-			let capture_res = util::telemetry::capture_event(
-				util::telemetry::GAME_ID.get(),
-				"$exception",
-				Some(|event: &mut async_posthog::Event| {
-					event.insert_prop("errors", format!("{}", err))?;
+				// Capture event in PostHog
+				let capture_res = util::telemetry::capture_event(
+					util::telemetry::GAME_ID.get(),
+					"$exception",
+					Some(|event: &mut async_posthog::Event| {
+						event.insert_prop("errors", format!("{}", err))?;
 
-					event.insert_prop("$sentry_event_id", event_id.to_string())?;
-					event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gg/issues/?project=4506447486976000&query={event_id}"))?;
+						event.insert_prop("$sentry_event_id", event_id.to_string())?;
+						event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gg/issues/?project=4506447486976000&query={event_id}"))?;
 
-					Ok(())
-				}),
-			)
-			.await;
-			if let Err(err) = capture_res {
-				eprintln!("Failed to capture event in PostHog: {:?}", err);
+						Ok(())
+					}),
+				)
+				.await;
+				if let Err(err) = capture_res {
+					eprintln!("Failed to capture event in PostHog: {:?}", err);
+				}
 			}
 
 			ExitCode::FAILURE

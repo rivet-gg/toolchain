@@ -9,6 +9,9 @@ homepage = "https://rivet.gg"
 repository = "https://github.com/rivet-gg/cli"
 build = "build.rs"
 
+[features]
+sentry = []
+
 [dependencies]
 async-posthog = { git = "https://github.com/rivet-gg/posthog-rs.git", rev = "ef4e80e" }
 async-stream = "0.3.3"
