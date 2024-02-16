@@ -6,7 +6,7 @@ use serde_json::json;
 use uuid::Uuid;
 
 use crate::{
-	commands::{cdn, config, docker, version},
+	commands::{cdn, config, docker, ns, version},
 	util::{struct_fmt, term},
 };
 
@@ -268,10 +268,6 @@ pub async fn deploy(
 
 	eprintln!();
 	term::status::success("Deployed Version", &display_name);
-	term::status::info(
-		"Version Dashboard",
-		version::dashboard_url(&ctx, &ctx.game_id, &version_id.to_string()),
-	);
 
 	// Deploy to namespace
 	if let Some(namespace) = namespace {
@@ -280,6 +276,11 @@ pub async fn deploy(
 			"Deploying to Namespace",
 			format!("{} -> {}", display_name, namespace.display_name),
 		);
+		term::status::info(
+			"Namespace Dashboard",
+			ns::dashboard_url(&ctx, &ctx.game_id, &namespace.namespace_id.to_string()),
+		);
+
 		let update_version_res =
 			apis::cloud_games_namespaces_api::cloud_games_namespaces_update_game_namespace_version(
 				&ctx.openapi_config_cloud,
