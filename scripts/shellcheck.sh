@@ -1,4 +1,4 @@
 #!/bin/sh
 
-shellcheck instal/unix.sh
+shellcheck install/unix.sh
 
