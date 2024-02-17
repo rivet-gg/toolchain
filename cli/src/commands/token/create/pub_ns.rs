@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use clap::Parser;
 use cli_core::rivet_api::apis;
 use global_error::prelude::*;
@@ -15,7 +17,10 @@ pub struct Opts {
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
 		let output = execute(ctx, self).await?;
+
 		print!("{}", output.token);
+		std::io::stdout().flush()?;
+		eprintln!();
 
 		Ok(())
 	}

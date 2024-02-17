@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Docker image UID & GID validation not getting ran
+- Lack of a newline printed by `rivet token create` causing EOL mark to appear on zsh shells
 
 ## [v1.0.0] - 2024-01-23
 
