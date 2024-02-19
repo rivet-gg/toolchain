@@ -2,7 +2,7 @@ use std::{str::FromStr, time::Duration};
 
 use console::{style, StyledObject, Term};
 use global_error::prelude::*;
-use indicatif::{ProgressBar, ProgressStyle};
+use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use tabled::{Table, Tabled};
 
 pub fn table<T>(iter: impl IntoIterator<Item = T>)
@@ -18,6 +18,12 @@ where
 
 pub fn link(msg: impl ToString) -> StyledObject<String> {
 	style(msg.to_string()).italic().underlined()
+}
+
+#[derive(Clone)]
+pub enum EitherProgressBar {
+	Single(ProgressBar),
+	Multi(MultiProgress),
 }
 
 // Must be enabled with `pb.set_draw_target(ProgressDrawTarget::stderr()))`

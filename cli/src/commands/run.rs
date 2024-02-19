@@ -41,11 +41,11 @@ impl Opts {
 
 		// Determine token
 		let token = match (self.this_machine, self.rivet_servers) {
-			(true, false) | (false, false) => cmd::RunWithRivetToken::ThisMachine,
-			(false, true) => cmd::RunWithRivetToken::ThisMachine,
-			_ => {
+			(true, true) => {
 				bail!("Cannot use both --this-machine and --rivet-servers");
 			}
+			(_, false) => cmd::RunWithRivetToken::ThisMachine,
+			(_, true) => cmd::RunWithRivetToken::RivetServers,
 		};
 
 		// Run command

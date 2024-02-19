@@ -106,14 +106,27 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 	let site_id = site_res.site_id;
 
 	{
-		let mpb = indicatif::MultiProgress::new();
 		let files = Arc::new(files.clone());
 		let presigned_requests = site_res.presigned_requests;
+
+		let pb = if presigned_requests.len() > 40 {
+			let total_size = presigned_requests
+				.iter()
+				.fold(0, |s, req| s + req.content_length) as u64;
+			let pb = term::progress_bar();
+			pb.set_style(term::pb_style_file());
+			pb.set_length(total_size);
+			pb.set_draw_target(indicatif::ProgressDrawTarget::stderr());
+
+			term::EitherProgressBar::Single(pb)
+		} else {
+			term::EitherProgressBar::Multi(indicatif::MultiProgress::new())
+		};
 
 		futures_util::stream::iter(presigned_requests)
 			.map(Ok)
 			.try_for_each_concurrent(push_opts.concurrent_uploads, |presigned_req| {
-				let mpb = mpb.clone();
+				let pb = pb.clone();
 				let files = files.clone();
 				let reqwest_client = reqwest_client.clone();
 
@@ -129,7 +142,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 						&presigned_req,
 						&file.absolute_path,
 						file.prepared.content_type.as_ref(),
-						mpb,
+						pb,
 					)
 					.await?;
 
@@ -137,6 +150,10 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 				}
 			})
 			.await?;
+
+		if let term::EitherProgressBar::Single(pb) = &pb {
+			pb.finish();
+		}
 	}
 
 	eprintln!("\n");

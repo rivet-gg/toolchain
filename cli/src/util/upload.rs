@@ -87,15 +87,17 @@ pub async fn upload_file(
 	presigned_req: &models::UploadPresignedRequest,
 	file_path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
-	mpb: indicatif::MultiProgress,
+	main_pb: term::EitherProgressBar,
 ) -> GlobalResult<()> {
 	let content_type = content_type.map(|x| x.to_string());
 	let path = presigned_req.path.clone();
 
 	let is_tty = console::Term::buffered_stderr().is_term();
 	let mut pb_added = false;
-	let pb = term::progress_bar();
-	pb.set_style(term::pb_style_file());
+	let pb = match &main_pb {
+		term::EitherProgressBar::Single(pb) => pb.clone(),
+		term::EitherProgressBar::Multi(_) => term::progress_bar(),
+	};
 
 	// Try the upload multiple times since DigitalOcean spaces is incredibly
 	// buggy and spotty internet connections may cause issues. This is
@@ -110,12 +112,8 @@ pub async fn upload_file(
 		let file_meta = file.metadata().await?;
 		let file_len = file_meta.len();
 
-		let is_multipart = presigned_req.content_length as u64 != file_len;
-		let total_size = if is_multipart {
-			presigned_req.content_length as u64
-		} else {
-			file_len
-		};
+		let total_size = presigned_req.content_length as u64;
+		let is_multipart = total_size != file_len;
 
 		let msg = if is_multipart {
 			format!("{path} {}", style("[CHUNK]").dim().blue(),)
@@ -123,21 +121,27 @@ pub async fn upload_file(
 			path.clone()
 		};
 
-		pb.reset();
-		pb.set_style(term::pb_style_file());
-		pb.set_message(msg);
-		pb.set_length(total_size);
+		// Add progress bar
+		match &main_pb {
+			term::EitherProgressBar::Single(_) => {}
+			term::EitherProgressBar::Multi(mpb) => {
+				pb.reset();
+				pb.set_style(term::pb_style_file());
+				pb.set_message(msg);
+				pb.set_length(total_size);
 
-		// Hack to fix weird bug with `MultiProgress` where it renders an empty progress bar and leaves
-		// it there
-		if !pb_added {
-			pb.set_draw_target(indicatif::ProgressDrawTarget::stderr());
-			mpb.add(pb.clone());
+				// Hack to fix weird bug with `MultiProgress` where it renders an empty progress bar and leaves
+				// it there
+				if !pb_added {
+					pb.set_draw_target(indicatif::ProgressDrawTarget::stderr());
+					mpb.add(pb.clone());
 
-			pb_added = true;
+					pb_added = true;
 
-			if !is_tty {
-				eprintln!("Uploading {path} ({})", format_file_size(total_size)?);
+					if !is_tty {
+						eprintln!("Uploading {path} ({})", format_file_size(total_size)?);
+					}
+				}
 			}
 		}
 
@@ -213,8 +217,15 @@ pub async fn upload_file(
 		}
 	};
 
-	pb.set_position(total_size);
-	pb.finish();
+	match &main_pb {
+		term::EitherProgressBar::Single(pb) => {
+			pb.set_message(format!("Uploaded {path}"));
+		}
+		term::EitherProgressBar::Multi(_) => {
+			pb.set_position(total_size);
+			pb.finish();
+		}
+	}
 
 	if !is_tty {
 		eprintln!(

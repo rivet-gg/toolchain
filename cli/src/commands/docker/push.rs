@@ -84,14 +84,14 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult
 	}
 	let build_res = unwrap!(build_res,);
 	let image_id = build_res.build_id;
-	let mpb = indicatif::MultiProgress::new();
+	let pb = term::EitherProgressBar::Multi(indicatif::MultiProgress::new());
 
 	if multipart_enabled() {
 		// Upload chunks in parallel
 		futures_util::stream::iter(build_res.image_presigned_requests.unwrap())
 			.map(|presigned_request| {
 				let reqwest_client = reqwest_client.clone();
-				let mpb = mpb.clone();
+				let pb = pb.clone();
 
 				async move {
 					upload::upload_file(
@@ -99,7 +99,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult
 						&presigned_request,
 						&push_opts.path,
 						Some(content_type),
-						mpb,
+						pb,
 					)
 					.await
 				}
@@ -114,7 +114,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult
 			&build_res.image_presigned_request.unwrap(),
 			&push_opts.path,
 			Some(content_type),
-			mpb.clone(),
+			pb,
 		)
 		.await?;
 	}
