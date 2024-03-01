@@ -74,6 +74,7 @@ pub async fn run_with_rivet(ctx: &cli_core::Ctx, opts: RunWithRivetOpts<'_>) -> 
 	if let Some(namespace) = opts.namespace {
 		envs.push(("RIVET_NAMESPACE".into(), namespace.into()));
 	}
+	envs.extend(opts.env);
 	run(&opts.command, envs).await?;
 
 	Ok(())

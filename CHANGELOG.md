@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Progress bars will consolidate to 1 if there are more than 40 files being uploaded
 
+### Fixed
+
+- `cdn.build_env` not being passed to `cdn.build_cmd`
+
 ## [v1.0.1] - 2024-01-29
 
 ### Changed
