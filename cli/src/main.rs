@@ -265,7 +265,7 @@ async fn main_async() -> ExitCode {
 						event.insert_prop("errors", format!("{}", err))?;
 
 						event.insert_prop("$sentry_event_id", event_id.to_string())?;
-						event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gg/issues/?project=4506447486976000&query={event_id}"))?;
+						event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gaming/issues/?project=4506447486976000&query={event_id}"))?;
 
 						Ok(())
 					}),
