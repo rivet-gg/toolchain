@@ -12,7 +12,7 @@ build = "build.rs"
 [dependencies]
 home = "0.5.3"
 openssl = { version = "*", features = ["vendored"] }  # Required for cross compilation, see https://github.com/sfackler/rust-openssl/issues/603#issuecomment-822619837
-rivet-api = { package = "rivet-api-cli", git = "https://github.com/rivet-gg/rivet", rev = "3d1286aad1d08aa8ac18503b689a080a65f2a6b2" }
+rivet-api = { package = "rivet-api-cli", git = "https://github.com/rivet-gg/rivet", rev = "8dfea188fdc4bef037f46580fed7f3b5fdb55a33" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.83"
 thiserror = "1.0"
