@@ -224,10 +224,10 @@ async fn archive_oci_bundle(image_tag: &str) -> GlobalResult<tempfile::TempPath>
 				.map_or(false, |x| &x == "1")
 			{
 				if uid == 0 {
-					bail!("cannot run Docker container as root user (i.e. uid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
+					bail!("cannot run Docker container as root user (i.e. uid 0) for security. see https://rivet.gg/docs/dynamic-servers/concepts/docker-root-user")
 				}
 				if gid == 0 {
-					bail!("cannot run Docker container as root group (i.e. gid 0) for security. see https://docs.docker.com/engine/reference/builder/#user")
+					bail!("cannot run Docker container as root group (i.e. gid 0) for security. see https://rivet.gg/docs/dynamic-servers/concepts/docker-root-user")
 				}
 			}
 
