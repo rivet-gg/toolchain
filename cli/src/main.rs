@@ -96,11 +96,11 @@ enum SubCommand {
 		command: cdn::SubCommand,
 	},
 
-	/// [EXPERIMENTAL] Wraps a given command and populates the Rivet development environment
+	/// Wraps a given command and populates the Rivet development environment
 	#[clap(alias = "execute")]
 	Exec(exec::Opts),
 
-	/// [EXPERIMENTAL] Runs a script defined in rivet.yaml
+	/// Runs a script defined in rivet.yaml
 	#[clap(alias = "run")]
 	Run(run::Opts),
 

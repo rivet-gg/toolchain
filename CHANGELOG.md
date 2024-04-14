@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.1.0] - Unreleased
 
+### Added
+
+- `rivet run` and `rivet exec` are no longer experimental
+
 ### Changed
 
 - Rename `--rivet-servers` to `--servers` and `--this-machine` to `--dev` for `rivet run` and `rivet exec`

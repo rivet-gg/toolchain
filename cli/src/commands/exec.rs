@@ -23,11 +23,6 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
-		term::status::warn(
-			"EXPERIMENTAL",
-			"`rivet exec` is experimental and subject to change",
-		);
-
 		// Determine token
 		let token = match (self.dev, self.server) {
 			(true, true) => {

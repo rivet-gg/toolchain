@@ -23,11 +23,6 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
-		term::status::warn(
-			"EXPERIMENTAL",
-			"`rivet run` is experimental and subject to change",
-		);
-
 		// Read script
 		let config = crate::commands::config::read_config(
 			Vec::new(),
