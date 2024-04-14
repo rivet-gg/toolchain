@@ -13,12 +13,12 @@ pub struct Opts {
 	pub namespace: Option<String>,
 
 	/// Test against your local machine to iterate quickly
-	#[clap(short = 'l', alias = "local", long)]
-	pub this_machine: bool,
+	#[clap(short = 'l', alias = "local", alias = "this-machine", long)]
+	pub dev: bool,
 
 	/// Test against Rivet servers
-	#[clap(short = 'r', alias = "remote", long)]
-	pub rivet_servers: bool,
+	#[clap(short = 'r', alias = "remote", alias = "rivet-servers", long)]
+	pub server: bool,
 }
 
 impl Opts {
@@ -40,9 +40,9 @@ impl Opts {
 		);
 
 		// Determine token
-		let token = match (self.this_machine, self.rivet_servers) {
+		let token = match (self.dev, self.server) {
 			(true, true) => {
-				bail!("Cannot use both --this-machine and --rivet-servers");
+				bail!("Cannot use both --dev and --server");
 			}
 			(_, false) => cmd::RunWithRivetToken::ThisMachine,
 			(_, true) => cmd::RunWithRivetToken::RivetServers,
