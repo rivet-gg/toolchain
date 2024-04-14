@@ -6,7 +6,7 @@ Install the prerequisites:
 
 ```bash
 cargo install cargo-dist@0.6.2
-cargo install cargo-release@0.25.0
+cargo install cargo-release@0.25.6
 ```
 
 To release, do the following:
