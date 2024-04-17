@@ -10,8 +10,8 @@ matchmaker:
     dockerfile: Dockerfile.test
 
   regions:
-    atl: {}
-    lax: {}
+    lnd-atl: {}
+    lnd-lax: {}
 
   game_modes:
     default: {}
