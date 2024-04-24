@@ -94,6 +94,10 @@ impl SubCommand {
 
 		let mut opengb_cmd = Command::new("opengb");
 
+		// Added to let OpenGB know its running as a passthrough command within Rivet. Shows more
+		// specialized help commands.
+		opengb_cmd.env("RIVET_CLI_PASSTHROUGH", "1");
+
 		// Parse env name from: rivet backend db deploy --env foo
 		if let Some(cmd) = db_command {
 			let env_name_id = &cmd.get_cmd().env_name_id;
@@ -115,6 +119,7 @@ impl SubCommand {
 				apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_list(
 					&ctx.openapi_config_cloud,
 					&project_id,
+					None,
 				)
 				.await?;
 
