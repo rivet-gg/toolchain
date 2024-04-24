@@ -148,7 +148,10 @@ pub async fn upload_file(
 		// Create a reader for the slice of the file we need to read
 		file.seek(tokio::io::SeekFrom::Start(presigned_req.byte_offset as u64))
 			.await?;
-		let mut reader_stream = ReaderStream::new(file.take(presigned_req.content_length as u64));
+		let handle = file.take(presigned_req.content_length as u64);
+
+		// Default buffer size is optimized for memory usage. Increase buffer for perf.
+		let mut reader_stream = ReaderStream::with_capacity(handle, 1024 * 1024);
 
 		let start = Instant::now();
 
