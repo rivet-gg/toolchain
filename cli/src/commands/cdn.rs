@@ -78,7 +78,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 		.fold(0, |acc, x| acc + x.prepared.content_length);
 
 	eprintln!();
-	term::status::info(
+	rivet_term::status::info(
 		"Uploading Site",
 		format!(
 			"{name} ({count} files, {size} total)",
@@ -166,7 +166,7 @@ pub async fn push(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult<Pus
 		println!("Error: {err:?}");
 	}
 	unwrap!(complete_res);
-	term::status::success("Site Upload Complete", site_id);
+	rivet_term::status::success("Site Upload Complete", site_id);
 
 	Ok(PushOutput { site_id })
 }
@@ -209,7 +209,7 @@ pub async fn build_and_push(
 	push_opts: &BuildPushOpts,
 ) -> GlobalResult<PushOutput> {
 	eprintln!();
-	term::status::info("Building Site", &push_opts.command);
+	rivet_term::status::info("Building Site", &push_opts.command);
 
 	// Parse env
 	let env = push_opts

@@ -6,7 +6,7 @@ use tokio::process::Command;
 use typed_path::{TryAsRef, UnixPath};
 use uuid::Uuid;
 
-use crate::util::{cmd, lz4, term};
+use crate::util::{cmd, lz4};
 
 use super::{BuildCompression, BuildKind};
 
@@ -16,7 +16,7 @@ pub async fn create_archive(
 	build_compression: BuildCompression,
 ) -> GlobalResult<tempfile::TempPath> {
 	eprintln!();
-	term::status::info(
+	rivet_term::status::info(
 		"Archiving Image",
 		format!("({}, {})", build_kind.as_ref(), build_compression.as_ref()),
 	);
@@ -172,7 +172,7 @@ async fn archive_oci_bundle(image_tag: &str) -> GlobalResult<tempfile::TempPath>
 			} else if let Some(uid) = dockerfile_user_int {
 				uid
 			} else {
-				term::status::warn(
+				rivet_term::status::warn(
 					"Cannot determine uid",
 					format!(
 						"{} not in passwd file, please specify a raw uid like `USER 1000:1000`",
@@ -211,7 +211,7 @@ async fn archive_oci_bundle(image_tag: &str) -> GlobalResult<tempfile::TempPath>
 			} else if let Some(gid) = dockerfile_group_int {
 				gid
 			} else {
-				term::status::warn("Cannot determine gid", format!("{} not in group file, please specify a raw uid & gid like `USER 1000:1000`", image.config.user));
+				rivet_term::status::warn("Cannot determine gid", format!("{} not in group file, please specify a raw uid & gid like `USER 1000:1000`", image.config.user));
 
 				0
 			};

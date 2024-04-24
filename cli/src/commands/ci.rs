@@ -4,10 +4,7 @@ use global_error::prelude::*;
 use std::collections::HashMap;
 use tokio::fs;
 
-use crate::{
-	commands::config,
-	util::{paths, term},
-};
+use crate::{commands::config, util::paths};
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -67,7 +64,7 @@ async fn gen_github(ctx: &cli_core::Ctx, opts: &GenerateGitHubOpts) -> GlobalRes
 	// Write workflow file
 	fs::write(&path, workflow).await?;
 
-	term::status::success("Config written", path.display());
+	rivet_term::status::success("Config written", path.display());
 
 	Ok(())
 }

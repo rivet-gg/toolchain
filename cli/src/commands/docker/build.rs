@@ -2,7 +2,7 @@ use global_error::prelude::*;
 use std::{collections::HashMap, path::Path, str::FromStr};
 use tokio::process::Command;
 
-use crate::util::{cmd, term};
+use crate::util::cmd;
 
 #[derive(strum::EnumString)]
 pub enum DockerBuildMethod {
@@ -68,7 +68,7 @@ pub async fn build_image(
 		DockerBuildMethod::Native => " (with native)",
 		DockerBuildMethod::Buildx => " (with buildx)",
 	};
-	term::status::info(
+	rivet_term::status::info(
 		"Building Image",
 		format!("{}{buildx_info}", dockerfile.display()),
 	);

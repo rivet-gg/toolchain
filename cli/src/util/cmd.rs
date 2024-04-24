@@ -1,6 +1,7 @@
-use crate::commands::token;
 use global_error::prelude::*;
 use tokio::process::Command;
+
+use crate::{commands::token, util::term};
 
 /// Runs a command in a cross-platform compatible way.
 pub async fn run(command: &str, envs: Vec<(String, String)>) -> GlobalResult<()> {
@@ -109,7 +110,10 @@ pub async fn execute_docker_cmd(
 		}
 		Err(err) => {
 			if let std::io::ErrorKind::NotFound = err.kind() {
-				bail!("Docker not installed, install at https://docs.docker.com/get-docker/")
+				bail!(
+					"Docker not installed, install at {}",
+					term::link("https://docs.docker.com/get-docker/")
+				)
 			} else {
 				Err(err.into())
 			}
@@ -135,7 +139,10 @@ pub async fn execute_docker_cmd_silent_fallible(
 		Ok(output) => Ok(output),
 		Err(err) => {
 			if let std::io::ErrorKind::NotFound = err.kind() {
-				bail!("Docker not installed, install at https://docs.docker.com/get-docker/")
+				bail!(
+					"Docker not installed, install at {}",
+					term::link("https://docs.docker.com/get-docker/")
+				)
 			} else {
 				Err(err.into())
 			}

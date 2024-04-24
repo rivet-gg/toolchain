@@ -185,7 +185,7 @@ async fn read_config(
 
 async fn fetch_namespace_id(ctx: &cli_core::Ctx, ns_name_id: &str) -> GlobalResult<String> {
 	let game_res = unwrap!(
-		apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+		apis::cloud_games_api::cloud_games_get_game_by_id(
 			&ctx.openapi_config_cloud,
 			&ctx.game_id,
 			None,

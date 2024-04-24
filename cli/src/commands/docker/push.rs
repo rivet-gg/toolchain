@@ -47,7 +47,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult
 	let content_type = "binary/octet-stream";
 
 	eprintln!();
-	term::status::info(
+	rivet_term::status::info(
 		"Uploading Image",
 		format!(
 			"{name} ({size})",
@@ -129,7 +129,7 @@ pub async fn push_tar(ctx: &cli_core::Ctx, push_opts: &PushOpts) -> GlobalResult
 		println!("Error: {err:?}");
 	}
 	unwrap!(complete_res);
-	term::status::success("Image Upload Complete", image_id);
+	rivet_term::status::success("Image Upload Complete", image_id);
 
 	Ok(PushOutput {
 		image_id: image_id.to_owned(),

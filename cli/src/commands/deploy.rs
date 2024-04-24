@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 use crate::{
 	commands::{cdn, config, docker, ns, version},
-	util::{struct_fmt, term},
+	util::struct_fmt,
 };
 
 #[derive(Parser)]
@@ -203,7 +203,7 @@ pub async fn deploy(
 	format: Option<&struct_fmt::Format>,
 ) -> GlobalResult<DeployOutput> {
 	// Fetch game data
-	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+	let game_res = apis::cloud_games_api::cloud_games_get_game_by_id(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
 		None,
@@ -235,7 +235,7 @@ pub async fn deploy(
 			.await?;
 		reserve_res.version_display_name
 	};
-	term::status::info("Deploying", &display_name);
+	rivet_term::status::info("Deploying", &display_name);
 
 	// Parse config
 	let mut rivet_config = config::read_config(overrides, namespace_name_id).await?;
@@ -267,16 +267,16 @@ pub async fn deploy(
 	let version_id = version_res.version_id;
 
 	eprintln!();
-	term::status::success("Deployed Version", &display_name);
+	rivet_term::status::success("Deployed Version", &display_name);
 
 	// Deploy to namespace
 	if let Some(namespace) = namespace {
 		eprintln!();
-		term::status::info(
+		rivet_term::status::info(
 			"Deploying to Namespace",
 			format!("{} -> {}", display_name, namespace.display_name),
 		);
-		term::status::info(
+		rivet_term::status::info(
 			"Namespace Dashboard",
 			ns::dashboard_url(&ctx, &ctx.game_id, &namespace.namespace_id.to_string()),
 		);
@@ -296,12 +296,12 @@ pub async fn deploy(
 		}
 		unwrap!(update_version_res);
 		if let (true, Some(domains)) = (has_cdn, &ctx.bootstrap.domains) {
-			term::status::success(
+			rivet_term::status::success(
 				"Deploy Succeeded",
 				version::rivet_game_url(&domains.cdn, &game_res.game.name_id, &namespace.name_id),
 			);
 		} else {
-			term::status::success("Deploy Succeeded", "");
+			rivet_term::status::success("Deploy Succeeded", "");
 		}
 	}
 

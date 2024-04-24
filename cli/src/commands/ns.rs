@@ -56,7 +56,7 @@ impl SubCommand {
 		match self {
 			SubCommand::List => {
 				let game_res = unwrap!(
-					apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					apis::cloud_games_api::cloud_games_get_game_by_id(
 						&ctx.openapi_config_cloud,
 						&ctx.game_id,
 						None,
@@ -117,7 +117,7 @@ impl SubCommand {
 			} => {
 				// Get game
 				let game_res = unwrap!(
-					apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					apis::cloud_games_api::cloud_games_get_game_by_id(
 						&ctx.openapi_config_cloud,
 						&ctx.game_id,
 						None,
@@ -138,7 +138,7 @@ impl SubCommand {
 					let ns_id = ns.namespace_id.to_string();
 					let display_name = &ns.display_name;
 
-					term::status::success("Found Existing", display_name);
+					rivet_term::status::success("Found Existing", display_name);
 
 					ns_id
 				} else {
@@ -152,12 +152,12 @@ impl SubCommand {
 					}).await);
 					let ns_id = create_res.namespace_id.to_string();
 
-					term::status::success("Created", display_name);
+					rivet_term::status::success("Created", display_name);
 
 					ns_id
 				};
 
-				term::status::info("Dashboard", dashboard_url(&ctx, &ctx.game_id, &ns_id));
+				rivet_term::status::info("Dashboard", dashboard_url(&ctx, &ctx.game_id, &ns_id));
 
 				if let Some(format) = format {
 					print_ns(ctx, format, &ns_id).await?;
@@ -179,7 +179,7 @@ impl SubCommand {
 					}
 				).await);
 
-				term::status::success("Version Set", "");
+				rivet_term::status::success("Version Set", "");
 
 				if let Some(format) = format {
 					print_ns(ctx, format, &namespace.to_string()).await?;

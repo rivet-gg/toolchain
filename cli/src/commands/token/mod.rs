@@ -5,7 +5,6 @@ pub mod create;
 
 #[derive(Parser)]
 pub enum SubCommand {
-	#[clap()]
 	Create {
 		#[clap(subcommand)]
 		command: create::SubCommand,

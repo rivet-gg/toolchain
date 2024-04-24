@@ -12,7 +12,7 @@ use tokio::fs;
 
 use crate::{
 	commands,
-	util::{global_config, os, paths, term, text, version_config::Engine},
+	util::{global_config, os, paths, text, version_config::Engine},
 };
 
 const CONFIG_UNREAL: &'static str = include_str!("../../tpl/unreal_config/config.yaml");
@@ -45,7 +45,7 @@ impl Opts {
 		// Remove legacy `.rivet` dir if exists
 		let legacy_project_meta_path = paths::project_root()?.join(".rivet");
 		if fs::metadata(&legacy_project_meta_path).await.is_ok() {
-			term::status::warn(
+			rivet_term::status::warn(
 				"Deleting legacy project metadata",
 				".rivet/ folder is moved to a global config",
 			);
@@ -62,7 +62,7 @@ impl Opts {
 
 		// Read game
 		let game_res = unwrap!(
-			apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+			apis::cloud_games_api::cloud_games_get_game_by_id(
 				&ctx.openapi_config_cloud,
 				&ctx.game_id,
 				None,
@@ -109,8 +109,10 @@ impl Opts {
 			} else if self.custom {
 				Engine::Custom
 			} else {
-				let engine = term::Prompt::new("What engine are you using?")
+				let engine = rivet_term::prompt::PromptBuilder::default()
+					.message("What engine are you using?")
 					.docs("unity, unreal, godot, html5, or custom")
+					.build()?
 					.parsed::<Engine>(term)
 					.await?;
 				engine
@@ -188,17 +190,20 @@ async fn create_config_unreal(term: &Term) -> GlobalResult<bool> {
 	.join("/");
 
 	// Read module name
-	let mut module_name_prompt = term::Prompt::new("Unreal game module name?").docs("Name of the Unreal module that holds the game code. This is usually the value of `$.Modules[0].Name` in the file `MyProject.unproject`.");
+	let mut module_name_prompt = rivet_term::prompt::PromptBuilder::default();
+	module_name_prompt.message("Unreal game module name?");
+	module_name_prompt.docs("Name of the Unreal module that holds the game code. This is usually the value of `$.Modules[0].Name` in the file `MyProject.unproject`.");
+
 	if let Some(module_name) = attempt_read_module_name(&uproject_path).await? {
-		module_name_prompt = module_name_prompt.default_value(module_name);
+		module_name_prompt.default_value(module_name);
 	}
-	let game_module = module_name_prompt.string(term).await?;
+	let game_module = module_name_prompt.build()?.string(term).await?;
 
 	// Generate Dockerfiles
 	let mut dockerfile_created = false;
 	if !fs::try_exists(&dockerignore_path).await? {
 		fs::write(&dockerignore_path, UNREAL_DOCKERIGNORE).await?;
-		term::status::success("Created .dockerignore", "");
+		rivet_term::status::success("Created .dockerignore", "");
 	}
 	if !fs::try_exists(&dockerfile_dev_path).await? {
 		fs::write(
@@ -208,7 +213,7 @@ async fn create_config_unreal(term: &Term) -> GlobalResult<bool> {
 				.replace("__GAME_MODULE__", &game_module),
 		)
 		.await?;
-		term::status::success("Created server.development.Dockerfile", "");
+		rivet_term::status::success("Created server.development.Dockerfile", "");
 		dockerfile_created = true;
 	}
 	if !fs::try_exists(&dockerfile_debug_path).await? {
@@ -219,7 +224,7 @@ async fn create_config_unreal(term: &Term) -> GlobalResult<bool> {
 				.replace("__GAME_MODULE__", &game_module),
 		)
 		.await?;
-		term::status::success("Created server.debug.Dockerfile", "");
+		rivet_term::status::success("Created server.debug.Dockerfile", "");
 		dockerfile_created = true;
 	}
 	if !fs::try_exists(&dockerfile_shipping_path).await? {
@@ -230,11 +235,11 @@ async fn create_config_unreal(term: &Term) -> GlobalResult<bool> {
 				.replace("__GAME_MODULE__", &game_module),
 		)
 		.await?;
-		term::status::success("Created server.shipping.Dockerfile", "");
+		rivet_term::status::success("Created server.shipping.Dockerfile", "");
 		dockerfile_created = true;
 	}
 	if !dockerfile_created {
-		term::status::success(
+		rivet_term::status::success(
 			"Dockerfiles already created",
 			"Your game already has server.*.Dockerfile",
 		);
@@ -248,30 +253,32 @@ async fn create_config_unreal(term: &Term) -> GlobalResult<bool> {
 		fs::write(&config_path, version_config).await?;
 
 		eprintln!();
-		term::status::success("Created rivet.yaml", "https://rivet.gg/docs/general/config");
+		rivet_term::status::success("Created rivet.yaml", "https://rivet.gg/docs/general/config");
 		created_config = true;
 
 		// Only create prod config if no default config already exists
 		if fs::try_exists(&config_prod_path).await? {
 			fs::write(&config_prod_path, CONFIG_UNREAL_PROD).await?;
-			term::status::success("Created rivet.prod.yaml", "");
+			rivet_term::status::success("Created rivet.prod.yaml", "");
 			created_config = true;
 		}
 	}
 	if !created_config {
-		term::status::success(
+		rivet_term::status::success(
 			"Version already configured",
 			"Your game is already configured with rivet.yaml",
 		);
 	}
 
 	// Install plugin
-	if term::Prompt::new("Install or upgrade Unreal Engine Rivet plugin?")
-				.docs("This plugin is used to integrate your game with Rivet. This can be done later with `rivet unreal install-plugin`")
-				.docs_url("https://github.com/rivet-gg/plugin-unreal")
-				.default_value("yes")
-				.bool(term)
-				.await?
+	if rivet_term::prompt::PromptBuilder::default()
+			.message("Install or upgrade Unreal Engine Rivet plugin?")
+			.docs("This plugin is used to integrate your game with Rivet. This can be done later with `rivet unreal install-plugin`")
+			.docs_url("https://github.com/rivet-gg/plugin-unreal")
+			.default_value("yes")
+			.build()?
+			.bool(term)
+			.await?
 		{
 			commands::engine::unreal::install_plugin().await?;
 		}
@@ -290,14 +297,14 @@ pub async fn create_config_default(engine: &Engine) -> GlobalResult<bool> {
 		fs::write(current_dir.join("rivet.yaml"), version_config).await?;
 
 		// eprintln!();
-		// term::status::success(
+		// rivet_term::status::success(
 		// 	"Created rivet.yaml",
 		// 	"https://rivet.gg/docs/general/concepts/config",
 		// );
 
 		true
 	} else {
-		// term::status::success(
+		// rivet_term::status::success(
 		// 	"Version already configured",
 		// 	"Your game is already configured with rivet.yaml",
 		// );
@@ -327,7 +334,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> GlobalRes
 	let prepare_res = prepare_res?;
 
 	// Prompt user to press enter to open browser
-	term::status::info("Link your game", "Press Enter to open your browser");
+	rivet_term::status::info("Link your game", "Press Enter to open your browser");
 	tokio::task::spawn_blocking({
 		let term = term.clone();
 		move || term.read_char()
@@ -345,7 +352,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> GlobalRes
 		)
 		.is_ok()
 	{
-		term::status::info(
+		rivet_term::status::info(
 			"Waiting for link",
 			"Select the game to link in your browser",
 		);
@@ -403,7 +410,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> GlobalRes
 	let game_id = game_cloud.game_id;
 
 	// Extract game data
-	let game_res = apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+	let game_res = apis::cloud_games_api::cloud_games_get_game_by_id(
 		&new_ctx.openapi_config_cloud,
 		&game_id.to_string(),
 		None,
@@ -418,7 +425,7 @@ async fn read_token(term: &Term, override_endpoint: Option<String>) -> GlobalRes
 	// Write the token
 	global_config::mutate_project(|x| x.tokens.cloud = Some(token)).await?;
 
-	term::status::success("Linked Game", display_name);
+	rivet_term::status::success("Linked Game", display_name);
 
 	Ok(new_ctx)
 }

@@ -3,7 +3,7 @@ use commands::{sidekick::PreExecuteHandled, *};
 use global_error::prelude::*;
 use serde_json::json;
 use std::process::ExitCode;
-use util::{global_config, os, term};
+use util::{global_config, os};
 
 mod commands;
 mod util;
@@ -142,6 +142,12 @@ enum SubCommand {
 		command: commands::global_config::SubCommand,
 	},
 
+	/// Managed OpenGB projects as well as passthrough to the OpenGB CLI
+	Backend {
+		#[clap(subcommand)]
+		command: backend::SubCommand,
+	},
+
 	/// Deprecated.
 	///
 	/// Manages identity avatars
@@ -191,10 +197,10 @@ async fn main_async() -> ExitCode {
 			// Pretty-print error
 			match &err {
 				GlobalError::Internal { ty, message, .. } => {
-					term::status::error(ty, message);
+					rivet_term::status::error(ty, message);
 				}
 				GlobalError::BadRequest { code, .. } => {
-					term::status::error(code, err.message());
+					rivet_term::status::error(code, err.message());
 				}
 			}
 
@@ -288,6 +294,23 @@ async fn main_async() -> ExitCode {
 async fn handle_opts() -> GlobalResult<()> {
 	let term = console::Term::stderr();
 
+	// Check if passthrough
+	if let Err(err) = backend::SubCommand::try_parse_from(std::env::args().skip(1)) {
+		if let clap::error::ErrorKind::UnknownArgument = err.kind() {
+			let (_, clap::error::ContextValue::String(usage)) = err
+				.context()
+				.find(|(kind, _)| matches!(kind, clap::error::ContextKind::Usage))
+				.unwrap()
+			else {
+				unreachable!();
+			};
+
+			if usage.ends_with("backend <SUBCOMMAND>") {
+				return backend::SubCommand::passthrough(&term).await;
+			}
+		}
+	}
+
 	// Read opts
 	let opts = read_opts().await?;
 
@@ -310,7 +333,7 @@ async fn handle_opts() -> GlobalResult<()> {
 		global_config::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
 			.await?;
 
-	// Sidekick sign-in can also be called before the token is valitdated
+	// Sidekick sign-in can also be called before the token is validated
 	if let SubCommand::Sidekick {
 		command,
 		inside_terminal,
@@ -324,11 +347,11 @@ async fn handle_opts() -> GlobalResult<()> {
 
 	let Some(token) = token else {
 		if !os::is_linux_and_root() {
-			term::status::error("Unauthenticated", "Run `rivet init` to authenticate");
+			rivet_term::status::error("Unauthenticated", "Run `rivet init` to authenticate");
 		} else {
 			// On Linux, the config is stored in $HOME/.config/rivet/config.yaml. When using sudo,
 			// $HOME is not the same the normal user, so it won't be able to find the config.
-			term::status::error(
+			rivet_term::status::error(
                 "Unauthenticated with sudo",
 				"Please rerun this command without sudo or run `sudo rivet init` to authenticate as root",
 			);
@@ -362,6 +385,7 @@ async fn handle_opts() -> GlobalResult<()> {
 		SubCommand::Engine { command } => command.execute(&ctx).await?,
 		SubCommand::Unreal { command } => command.execute(&ctx).await?,
 		SubCommand::CI { command } => command.execute(&ctx).await?,
+		SubCommand::Backend { command } => command.execute(&ctx).await?,
 		SubCommand::Sidekick {
 			command,
 			show_terminal,

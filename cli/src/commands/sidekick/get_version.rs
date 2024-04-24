@@ -26,7 +26,7 @@ impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<Output> {
 		// Get the game ID
 		let game_res = unwrap!(
-			rivet_api::apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+			rivet_api::apis::cloud_games_api::cloud_games_get_game_by_id(
 				&ctx.openapi_config_cloud,
 				&ctx.game_id,
 				None,
