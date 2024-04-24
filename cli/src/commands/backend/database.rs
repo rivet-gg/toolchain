@@ -28,7 +28,7 @@ impl PassthroughSubCommand {
 		}
 	}
 
-	pub fn get_cmd(&self) -> &MigrateOpts {
+	pub fn get_cmd(&self) -> &Opts {
 		match self {
 			PassthroughSubCommand::Database { command, .. } => command.get_cmd(),
 		}
@@ -37,25 +37,29 @@ impl PassthroughSubCommand {
 
 #[derive(Parser)]
 pub enum DbSubCommand {
-	Dev(MigrateOpts),
-	Status(MigrateOpts),
-	Reset(MigrateOpts),
-	Deploy(MigrateOpts),
+	Dev(Opts),
+	Status(Opts),
+	Reset(Opts),
+	Deploy(Opts),
+	Sh(Opts),
+	Url(Opts),
 }
 
 impl DbSubCommand {
-	fn get_cmd(&self) -> &MigrateOpts {
+	fn get_cmd(&self) -> &Opts {
 		match self {
 			DbSubCommand::Dev(opts) => &opts,
 			DbSubCommand::Status(opts) => &opts,
 			DbSubCommand::Reset(opts) => &opts,
 			DbSubCommand::Deploy(opts) => &opts,
+			DbSubCommand::Sh(opts) => &opts,
+			DbSubCommand::Url(opts) => &opts,
 		}
 	}
 }
 
 #[derive(Parser)]
-pub struct MigrateOpts {
+pub struct Opts {
 	/// The environment to deploy to.
 	#[clap(long = "env")]
 	pub env_name_id: String,

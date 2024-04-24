@@ -99,19 +99,18 @@ impl Opts {
 
 		// Read files for upload
 		let gen_manifest = read_gen_manifest(&path).await?;
-		let files = vec![
-			upload::prepare_upload_file(
-				&gen_manifest.bundle,
-				"bundle.js",
-				fs::metadata(&gen_manifest.bundle).await?,
-			)?,
-			// TODO: Get rid of unwrap
-			upload::prepare_upload_file(
-				gen_manifest.wasm.as_ref().unwrap(),
+		let mut files = vec![upload::prepare_upload_file(
+			&gen_manifest.bundle,
+			"bundle.js",
+			fs::metadata(&gen_manifest.bundle).await?,
+		)?];
+		if let Some(wasm) = gen_manifest.wasm.as_ref() {
+			files.push(upload::prepare_upload_file(
+				wasm,
 				"query-engine.wasm",
-				fs::metadata(gen_manifest.wasm.as_ref().unwrap()).await?,
-			)?,
-		];
+				fs::metadata(wasm).await?,
+			)?);
+		}
 		let total_len = files
 			.iter()
 			.fold(0, |acc, x| acc + x.prepared.content_length);
