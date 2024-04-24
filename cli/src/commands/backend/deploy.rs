@@ -70,88 +70,16 @@ impl Opts {
 			"Failed to build OpenGB project"
 		);
 
-		rivet_term::status::info("Provisioning databases", "");
+		super::database::provision_databases(ctx, &path, project.project_id, env.environment_id)
+			.await?;
 
-		// Structure DB names
-		let project_config = read_project_config(&path).await?;
-		let modules = project_config
-			.modules
-			.keys()
-			.map(|module_name| {
-				(
-					module_name.clone(),
-					models::EeOpengbModule {
-						db: Some(Box::new(models::EeOpengbModuleDb {
-							name: format!("module_{module_name}"),
-						})),
-					},
-				)
-			})
-			.collect::<HashMap<_, _>>();
+		let databases = global_config::try_read_project(|config| {
+			let project = unwrap!(config.opengb.projects.get(&project.project_id));
+			let env = unwrap!(project.environments.get(&env.environment_id));
 
-		apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_provision_databases(
-			&ctx.openapi_config_cloud,
-			&project_id,
-			&env_id,
-			models::EeCloudOpengbProjectsEnvsProvisionDatabasesRequest {
-				modules: modules.clone(),
-			},
-		)
-		.await?;
-
-		rivet_term::status::info("Fetching connections", "");
-
-		// Fetch remote DB URLs
-		let mut global_project_config = global_config::mutate_project(|config| {
-			config
-				.opengb
-				.projects
-				.entry(project.project_id)
-				.or_default()
-				.clone()
+			Ok(env.databases.clone())
 		})
 		.await?;
-		let env_config = global_project_config
-			.environments
-			.entry(env.environment_id)
-			.or_default();
-
-		let missing_dbs = project_config
-			.modules
-			.keys()
-			.map(|module_name| format!("module_{module_name}"))
-			.filter(|db_name| env_config.databases.get(db_name).is_none())
-			.collect::<Vec<_>>();
-
-		if !missing_dbs.is_empty() {
-			let db_urls_res = ee_cloud_opengb_projects_envs_get_db_urls(
-				&ctx.openapi_config_cloud,
-				&project_id,
-				&env_id,
-				missing_dbs,
-			)
-			.await?;
-
-			// Add missing db urls
-			env_config.databases.extend(
-				db_urls_res.databases.into_iter().map(|(db_name, db_url)| {
-					(db_name, global_config::OpenGbDatabase { url: db_url })
-				}),
-			);
-
-			// Update cache
-			global_config::mutate_project(|config| {
-				config
-					.opengb
-					.projects
-					.get_mut(&project.project_id)
-					// Was inserted in last `mutate_project` call
-					.unwrap()
-					.environments
-					.insert(env.environment_id, env_config.clone());
-			})
-			.await?;
-		}
 
 		rivet_term::status::info("Migrating databases", "");
 
@@ -160,13 +88,13 @@ impl Opts {
 		migrate_cmd.arg("db").arg("deploy");
 
 		// Insert all database urls into env
-		for (db_name, db) in &env_config.databases {
+		for (db_name, db) in databases {
 			migrate_cmd.env(format!("DATABASE_URL_{}", db_name), db.url.clone());
 		}
 
 		ensure!(
 			migrate_cmd.status().await?.success(),
-			"Failed to migrate OpenGB databases"
+			"Failed to migrate OpenGB databases",
 		);
 
 		// Read files for upload
@@ -246,6 +174,23 @@ impl Opts {
 		eprintln!("\n");
 		rivet_term::status::info("Deploying environment", &env.display_name);
 
+		// Structure DB names
+		let project_config = super::read_project_config(&path).await?;
+		let modules = project_config
+			.modules
+			.keys()
+			.map(|module_name| {
+				(
+					module_name.clone(),
+					models::EeOpengbModule {
+						db: Some(Box::new(models::EeOpengbModuleDb {
+							name: format!("module_{module_name}"),
+						})),
+					},
+				)
+			})
+			.collect::<HashMap<_, _>>();
+
 		let deploy_res =
 			apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_deploy(
 				&ctx.openapi_config_cloud,
@@ -268,16 +213,6 @@ impl Opts {
 	}
 }
 
-#[derive(Debug, Deserialize)]
-struct ProjectConfig {
-	modules: HashMap<String, serde_yaml::Value>,
-}
-
-async fn read_project_config(project_path: &PathBuf) -> GlobalResult<ProjectConfig> {
-	let project_config_str = fs::read_to_string(project_path.join("backend.yaml")).await?;
-	Ok(serde_yaml::from_str::<ProjectConfig>(&project_config_str)?)
-}
-
 #[derive(Deserialize)]
 struct GenManifest {
 	bundle: String,
@@ -287,71 +222,4 @@ struct GenManifest {
 async fn read_gen_manifest(project_path: &PathBuf) -> GlobalResult<GenManifest> {
 	let manifest_str = fs::read_to_string(project_path.join("_gen").join("manifest.json")).await?;
 	Ok(serde_json::from_str::<GenManifest>(&manifest_str)?)
-}
-
-// The OpenAPI generated client doesn't handle list query parameters correctly, have to patch it here
-pub async fn ee_cloud_opengb_projects_envs_get_db_urls(
-	configuration: &apis::configuration::Configuration,
-	project_id: &str,
-	environment_id: &str,
-	dbs: Vec<String>,
-) -> Result<
-	models::EeCloudOpengbProjectsEnvsGetDbUrlsResponse,
-	apis::Error<apis::ee_cloud_opengb_projects_envs_api::EeCloudOpengbProjectsEnvsGetDbUrlsError>,
-> {
-	let local_var_configuration = configuration;
-
-	let local_var_client = &local_var_configuration.client;
-
-	let local_var_uri_str = format!(
-		"{}/cloud/opengb/projects/{project_id}/environments/{environment_id}/db",
-		local_var_configuration.base_path,
-		project_id = apis::urlencode(project_id),
-		environment_id = apis::urlencode(environment_id)
-	);
-	let mut local_var_req_builder =
-		local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
-
-	local_var_req_builder = match "multi" {
-		"multi" => local_var_req_builder.query(
-			&dbs.into_iter()
-				.map(|p| ("dbs".to_owned(), p))
-				.collect::<Vec<_>>(),
-		),
-		_ => local_var_req_builder.query(&[(
-			"dbs",
-			&dbs.into_iter()
-				.map(|p| p.to_string())
-				.collect::<Vec<_>>()
-				.join(",")
-				.to_string(),
-		)]),
-	};
-	if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-		local_var_req_builder =
-			local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-	}
-	if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
-		local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
-	};
-
-	let local_var_req = local_var_req_builder.build()?;
-	let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-	let local_var_status = local_var_resp.status();
-	let local_var_content = local_var_resp.text().await?;
-
-	if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-		serde_json::from_str(&local_var_content).map_err(apis::Error::from)
-	} else {
-		let local_var_entity: Option<
-			apis::ee_cloud_opengb_projects_envs_api::EeCloudOpengbProjectsEnvsGetDbUrlsError,
-		> = serde_json::from_str(&local_var_content).ok();
-		let local_var_error = apis::ResponseContent {
-			status: local_var_status,
-			content: local_var_content,
-			entity: local_var_entity,
-		};
-		Err(apis::Error::ResponseError(local_var_error))
-	}
 }

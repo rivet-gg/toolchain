@@ -294,21 +294,8 @@ async fn main_async() -> ExitCode {
 async fn handle_opts() -> GlobalResult<()> {
 	let term = console::Term::stderr();
 
-	// Check if passthrough
-	if let Err(err) = backend::SubCommand::try_parse_from(std::env::args().skip(1)) {
-		if let clap::error::ErrorKind::UnknownArgument = err.kind() {
-			let (_, clap::error::ContextValue::String(usage)) = err
-				.context()
-				.find(|(kind, _)| matches!(kind, clap::error::ContextKind::Usage))
-				.unwrap()
-			else {
-				unreachable!();
-			};
-
-			if usage.ends_with("backend <SUBCOMMAND>") {
-				return backend::SubCommand::passthrough(&term).await;
-			}
-		}
+	if opengb_passthrough(&term).await? {
+		return Ok(());
 	}
 
 	// Read opts
@@ -345,22 +332,7 @@ async fn handle_opts() -> GlobalResult<()> {
 		}
 	}
 
-	let Some(token) = token else {
-		if !os::is_linux_and_root() {
-			rivet_term::status::error("Unauthenticated", "Run `rivet init` to authenticate");
-		} else {
-			// On Linux, the config is stored in $HOME/.config/rivet/config.yaml. When using sudo,
-			// $HOME is not the same the normal user, so it won't be able to find the config.
-			rivet_term::status::error(
-                "Unauthenticated with sudo",
-				"Please rerun this command without sudo or run `sudo rivet init` to authenticate as root",
-			);
-		}
-
-		bail!("rivet token not found")
-	};
-
-	let ctx = cli_core::ctx::init(api_endpoint, token).await?;
+	let ctx = build_ctx(api_endpoint, token).await?;
 
 	// Set game id for errors
 	util::telemetry::GAME_ID.set(ctx.game_id.clone())?;
@@ -423,4 +395,67 @@ async fn read_opts() -> GlobalResult<Opts> {
 	.await??;
 
 	Ok(opts)
+}
+
+async fn build_ctx(
+	api_endpoint: Option<String>,
+	token: Option<String>,
+) -> GlobalResult<cli_core::Ctx> {
+	let Some(token) = token else {
+		if !os::is_linux_and_root() {
+			rivet_term::status::error("Unauthenticated", "Run `rivet init` to authenticate");
+		} else {
+			// On Linux, the config is stored in $HOME/.config/rivet/config.yaml. When using sudo,
+			// $HOME is not the same the normal user, so it won't be able to find the config.
+			rivet_term::status::error(
+                "Unauthenticated with sudo",
+				"Please rerun this command without sudo or run `sudo rivet init` to authenticate as root",
+			);
+		}
+
+		bail!("rivet token not found")
+	};
+
+	Ok(cli_core::ctx::init(api_endpoint, token).await?)
+}
+
+async fn opengb_passthrough(term: &console::Term) -> GlobalResult<bool> {
+	// Check if OpenGB passthrough
+	if let Err(err) = backend::SubCommand::try_parse_from(std::env::args().skip(1)) {
+		if let clap::error::ErrorKind::UnknownArgument = err.kind() {
+			let (_, clap::error::ContextValue::String(usage)) = err
+				.context()
+				.find(|(kind, _)| matches!(kind, clap::error::ContextKind::Usage))
+				.unwrap()
+			else {
+				unreachable!();
+			};
+
+			if usage.ends_with("backend <SUBCOMMAND>") {
+				// Check if running a migration with --env (requires ctx)
+				let db_command = backend::database::PassthroughSubCommand::try_parse_from(
+					std::env::args().skip(1),
+				)
+				.ok();
+
+				let ctx = if db_command.is_some() {
+					// Read token
+					let (api_endpoint, token) = global_config::read_project(|x| {
+						(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+					})
+					.await?;
+
+					Some(build_ctx(api_endpoint, token).await?)
+				} else {
+					None
+				};
+
+				backend::SubCommand::passthrough(term, ctx.as_ref(), db_command).await?;
+
+				return Ok(true);
+			}
+		}
+	}
+
+	Ok(false)
 }
