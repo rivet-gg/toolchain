@@ -26,7 +26,13 @@ All URIs are relative to *https://api.rivet.gg*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AdminApi* | [**admin_login**](docs/AdminApi.md#admin_login) | **POST** /admin/login | 
-*AdminClusterApi* | [**admin_cluster_get_server_ips**](docs/AdminClusterApi.md#admin_cluster_get_server_ips) | **GET** /cluster/server_ips | 
+*AdminClustersApi* | [**admin_clusters_create**](docs/AdminClustersApi.md#admin_clusters_create) | **POST** /admin/clusters | 
+*AdminClustersApi* | [**admin_clusters_get_server_ips**](docs/AdminClustersApi.md#admin_clusters_get_server_ips) | **GET** /admin/clusters/server_ips | 
+*AdminClustersApi* | [**admin_clusters_list**](docs/AdminClustersApi.md#admin_clusters_list) | **GET** /admin/clusters | 
+*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_create**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_create) | **POST** /admin/clusters/{cluster_id}/datacenters | 
+*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_list**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_list) | **GET** /admin/clusters/{cluster_id}/datacenters | 
+*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_taint**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_taint) | **GET** /admin/clusters/{cluster_id}/datacenters/{datacenter_id}/taint | 
+*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_update**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_update) | **PATCH** /admin/clusters/{cluster_id}/datacenters/{datacenter_id} | 
 *AuthIdentityAccessTokenApi* | [**auth_identity_access_token_complete_access_token_verification**](docs/AuthIdentityAccessTokenApi.md#auth_identity_access_token_complete_access_token_verification) | **POST** /auth/identity/access-token/complete-verification | 
 *AuthIdentityEmailApi* | [**auth_identity_email_complete_email_verification**](docs/AuthIdentityEmailApi.md#auth_identity_email_complete_email_verification) | **POST** /auth/identity/email/complete-verification | 
 *AuthIdentityEmailApi* | [**auth_identity_email_start_email_verification**](docs/AuthIdentityEmailApi.md#auth_identity_email_start_email_verification) | **POST** /auth/identity/email/start-verification | 
@@ -86,7 +92,8 @@ Class | Method | HTTP request | Description
 *EeCloudGamesBillingApi* | [**ee_cloud_games_billing_get**](docs/EeCloudGamesBillingApi.md#ee_cloud_games_billing_get) | **GET** /cloud/games/{game_id}/billing | 
 *EeCloudGamesBillingApi* | [**ee_cloud_games_billing_update_plan**](docs/EeCloudGamesBillingApi.md#ee_cloud_games_billing_update_plan) | **PUT** /cloud/games/{game_id}/billing/plan | 
 *EeCloudGamesNamespacesAnalyticsApi* | [**ee_cloud_games_namespaces_analytics_get_analytics**](docs/EeCloudGamesNamespacesAnalyticsApi.md#ee_cloud_games_namespaces_analytics_get_analytics) | **GET** /cloud/games/namespaces/analytics | 
-*EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_list**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_list) | **GET** /cloud/games/{game_id}/projects | 
+*EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_get**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_get) | **GET** /cloud/games/{game_id}/project | 
+*EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_link**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_link) | **POST** /cloud/games/{game_id}/project-link | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_create_stripe_portal_session**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_create_stripe_portal_session) | **POST** /cloud/groups/{group_id}/billing/stripe-portal-session | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_get**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get) | **GET** /cloud/groups/{group_id}/billing | 
 *EeCloudOpengbApi* | [**ee_cloud_opengb_get_db_url**](docs/EeCloudOpengbApi.md#ee_cloud_opengb_get_db_url) | **GET** /cloud/opengb/db | 
@@ -96,7 +103,6 @@ Class | Method | HTTP request | Description
 *EeCloudOpengbProjectsApi* | [**ee_cloud_opengb_projects_validate**](docs/EeCloudOpengbProjectsApi.md#ee_cloud_opengb_projects_validate) | **POST** /cloud/opengb/projects/validate | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_create**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_create) | **POST** /cloud/opengb/projects/{project_id}/environments | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_delete**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_delete) | **DELETE** /cloud/opengb/projects/{project_id}/environments/{environment_id} | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_delete_secrets**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_delete_secrets) | **DELETE** /cloud/opengb/projects/{project_id}/environments/{environment_id}/secrets | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_deploy**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_deploy) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/deploy | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_get**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_get) | **GET** /cloud/opengb/projects/{project_id}/environments/{environment_id} | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_get_db_urls**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_get_db_urls) | **GET** /cloud/opengb/projects/{project_id}/environments/{environment_id}/db | 
@@ -104,7 +110,7 @@ Class | Method | HTTP request | Description
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_prepare_deploy**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_prepare_deploy) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/deploy/prepare | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_provision_databases**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_provision_databases) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/provision-databases | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_update_config**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_config) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/config | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_update_secrets**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_secrets) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/secrets | 
+*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_update_variables**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_variables) | **PATCH** /cloud/opengb/projects/{project_id}/environments/{environment_id}/variables | 
 *EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_validate**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_validate) | **POST** /cloud/opengb/projects/{project_id}/environments/validate | 
 *GroupApi* | [**group_ban_identity**](docs/GroupApi.md#group_ban_identity) | **POST** /group/groups/{group_id}/bans/{identity_id} | 
 *GroupApi* | [**group_complete_avatar_upload**](docs/GroupApi.md#group_complete_avatar_upload) | **POST** /group/groups/{group_id}/avatar-upload/{upload_id}/complete | 
@@ -188,10 +194,23 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
- - [AdminClusterGetServerIpsResponse](docs/AdminClusterGetServerIpsResponse.md)
+ - [AdminBuildDeliveryMethod](docs/AdminBuildDeliveryMethod.md)
+ - [AdminCluster](docs/AdminCluster.md)
+ - [AdminClustersCreateRequest](docs/AdminClustersCreateRequest.md)
+ - [AdminClustersCreateResponse](docs/AdminClustersCreateResponse.md)
+ - [AdminClustersDatacentersCreateRequest](docs/AdminClustersDatacentersCreateRequest.md)
+ - [AdminClustersDatacentersCreateResponse](docs/AdminClustersDatacentersCreateResponse.md)
+ - [AdminClustersDatacentersListResponse](docs/AdminClustersDatacentersListResponse.md)
+ - [AdminClustersDatacentersUpdateRequest](docs/AdminClustersDatacentersUpdateRequest.md)
+ - [AdminClustersGetServerIpsResponse](docs/AdminClustersGetServerIpsResponse.md)
+ - [AdminClustersListResponse](docs/AdminClustersListResponse.md)
+ - [AdminDatacenter](docs/AdminDatacenter.md)
+ - [AdminHardware](docs/AdminHardware.md)
  - [AdminLoginRequest](docs/AdminLoginRequest.md)
  - [AdminLoginResponse](docs/AdminLoginResponse.md)
+ - [AdminPool](docs/AdminPool.md)
  - [AdminPoolType](docs/AdminPoolType.md)
+ - [AdminProvider](docs/AdminProvider.md)
  - [AuthCompleteStatus](docs/AuthCompleteStatus.md)
  - [AuthIdentityCompleteAccessTokenVerificationRequest](docs/AuthIdentityCompleteAccessTokenVerificationRequest.md)
  - [AuthIdentityCompleteEmailVerificationRequest](docs/AuthIdentityCompleteEmailVerificationRequest.md)
@@ -365,7 +384,8 @@ Class | Method | HTTP request | Description
  - [EeCloudGamesBillingPlanConfig](docs/EeCloudGamesBillingPlanConfig.md)
  - [EeCloudGamesBillingUpdatePlanRequest](docs/EeCloudGamesBillingUpdatePlanRequest.md)
  - [EeCloudGamesNamespacesGetAnalyticsResponse](docs/EeCloudGamesNamespacesGetAnalyticsResponse.md)
- - [EeCloudGamesProjectsListResponse](docs/EeCloudGamesProjectsListResponse.md)
+ - [EeCloudGamesProjectsGetResponse](docs/EeCloudGamesProjectsGetResponse.md)
+ - [EeCloudGamesProjectsLinkRequest](docs/EeCloudGamesProjectsLinkRequest.md)
  - [EeCloudGroupsBillingCreateStripePortalSessionRequest](docs/EeCloudGroupsBillingCreateStripePortalSessionRequest.md)
  - [EeCloudGroupsBillingCreateStripePortalSessionResponse](docs/EeCloudGroupsBillingCreateStripePortalSessionResponse.md)
  - [EeCloudGroupsBillingGetBillingResponse](docs/EeCloudGroupsBillingGetBillingResponse.md)
@@ -384,7 +404,6 @@ Class | Method | HTTP request | Description
  - [EeCloudOpengbProjectsCreateResponse](docs/EeCloudOpengbProjectsCreateResponse.md)
  - [EeCloudOpengbProjectsEnvsCreateRequest](docs/EeCloudOpengbProjectsEnvsCreateRequest.md)
  - [EeCloudOpengbProjectsEnvsCreateResponse](docs/EeCloudOpengbProjectsEnvsCreateResponse.md)
- - [EeCloudOpengbProjectsEnvsDeleteSecretsRequest](docs/EeCloudOpengbProjectsEnvsDeleteSecretsRequest.md)
  - [EeCloudOpengbProjectsEnvsDeployRequest](docs/EeCloudOpengbProjectsEnvsDeployRequest.md)
  - [EeCloudOpengbProjectsEnvsDeployResponse](docs/EeCloudOpengbProjectsEnvsDeployResponse.md)
  - [EeCloudOpengbProjectsEnvsGetDbUrlsResponse](docs/EeCloudOpengbProjectsEnvsGetDbUrlsResponse.md)
@@ -394,7 +413,7 @@ Class | Method | HTTP request | Description
  - [EeCloudOpengbProjectsEnvsPrepareDeployResponse](docs/EeCloudOpengbProjectsEnvsPrepareDeployResponse.md)
  - [EeCloudOpengbProjectsEnvsProvisionDatabasesRequest](docs/EeCloudOpengbProjectsEnvsProvisionDatabasesRequest.md)
  - [EeCloudOpengbProjectsEnvsUpdateConfigRequest](docs/EeCloudOpengbProjectsEnvsUpdateConfigRequest.md)
- - [EeCloudOpengbProjectsEnvsUpdateSecretsRequest](docs/EeCloudOpengbProjectsEnvsUpdateSecretsRequest.md)
+ - [EeCloudOpengbProjectsEnvsUpdateVariablesRequest](docs/EeCloudOpengbProjectsEnvsUpdateVariablesRequest.md)
  - [EeCloudOpengbProjectsEnvsValidateRequest](docs/EeCloudOpengbProjectsEnvsValidateRequest.md)
  - [EeCloudOpengbProjectsEnvsValidateResponse](docs/EeCloudOpengbProjectsEnvsValidateResponse.md)
  - [EeCloudOpengbProjectsGetResponse](docs/EeCloudOpengbProjectsGetResponse.md)
@@ -410,6 +429,7 @@ Class | Method | HTTP request | Description
  - [EeOpengbNeonProjectConfig](docs/EeOpengbNeonProjectConfig.md)
  - [EeOpengbProject](docs/EeOpengbProject.md)
  - [EeOpengbTier](docs/EeOpengbTier.md)
+ - [EeOpengbVariable](docs/EeOpengbVariable.md)
  - [ErrorBody](docs/ErrorBody.md)
  - [GameHandle](docs/GameHandle.md)
  - [GameLeaderboardCategory](docs/GameLeaderboardCategory.md)

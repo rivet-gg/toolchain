@@ -103,15 +103,16 @@ impl SubCommand {
 			let env_name_id = &cmd.get_cmd().env_name_id;
 			let ctx = unwrap!(ctx, "must have ctx when running db command with --env");
 
-			let projects_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_list(
+			let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
 				&ctx.openapi_config_cloud,
 				&ctx.game_id,
 			)
 			.await?;
-
+	
+			// TODO: Add link to dashboard to this error message
 			let project = unwrap!(
-				projects_res.projects.first(),
-				"No OpenGB projects found for the current game. Create one on the dashboard."
+				project_res.project,
+				"no OpenGB project linked to the current game. Create one on the dashboard."
 			);
 			let project_id = project.project_id.to_string();
 

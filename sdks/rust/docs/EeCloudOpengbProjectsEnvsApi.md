@@ -6,7 +6,6 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**ee_cloud_opengb_projects_envs_create**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_create) | **POST** /cloud/opengb/projects/{project_id}/environments | 
 [**ee_cloud_opengb_projects_envs_delete**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_delete) | **DELETE** /cloud/opengb/projects/{project_id}/environments/{environment_id} | 
-[**ee_cloud_opengb_projects_envs_delete_secrets**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_delete_secrets) | **DELETE** /cloud/opengb/projects/{project_id}/environments/{environment_id}/secrets | 
 [**ee_cloud_opengb_projects_envs_deploy**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_deploy) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/deploy | 
 [**ee_cloud_opengb_projects_envs_get**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_get) | **GET** /cloud/opengb/projects/{project_id}/environments/{environment_id} | 
 [**ee_cloud_opengb_projects_envs_get_db_urls**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_get_db_urls) | **GET** /cloud/opengb/projects/{project_id}/environments/{environment_id}/db | 
@@ -14,7 +13,7 @@ Method | HTTP request | Description
 [**ee_cloud_opengb_projects_envs_prepare_deploy**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_prepare_deploy) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/deploy/prepare | 
 [**ee_cloud_opengb_projects_envs_provision_databases**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_provision_databases) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/provision-databases | 
 [**ee_cloud_opengb_projects_envs_update_config**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_config) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/config | 
-[**ee_cloud_opengb_projects_envs_update_secrets**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_secrets) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/secrets | 
+[**ee_cloud_opengb_projects_envs_update_variables**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_variables) | **PATCH** /cloud/opengb/projects/{project_id}/environments/{environment_id}/variables | 
 [**ee_cloud_opengb_projects_envs_validate**](EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_validate) | **POST** /cloud/opengb/projects/{project_id}/environments/validate | 
 
 
@@ -76,36 +75,6 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## ee_cloud_opengb_projects_envs_delete_secrets
-
-> ee_cloud_opengb_projects_envs_delete_secrets(project_id, environment_id, ee_cloud_opengb_projects_envs_delete_secrets_request)
-
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**project_id** | **uuid::Uuid** |  | [required] |
-**environment_id** | **uuid::Uuid** |  | [required] |
-**ee_cloud_opengb_projects_envs_delete_secrets_request** | [**EeCloudOpengbProjectsEnvsDeleteSecretsRequest**](EeCloudOpengbProjectsEnvsDeleteSecretsRequest.md) |  | [required] |
-
-### Return type
-
- (empty response body)
-
-### Authorization
-
-[BearerAuth](../README.md#BearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -322,10 +291,12 @@ Name | Type | Description  | Required | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## ee_cloud_opengb_projects_envs_update_secrets
+## ee_cloud_opengb_projects_envs_update_variables
 
-> ee_cloud_opengb_projects_envs_update_secrets(project_id, environment_id, ee_cloud_opengb_projects_envs_update_secrets_request)
+> ee_cloud_opengb_projects_envs_update_variables(project_id, environment_id, ee_cloud_opengb_projects_envs_update_variables_request)
 
+
+Updates environment variables for an environment.
 
 ### Parameters
 
@@ -334,7 +305,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **project_id** | **uuid::Uuid** |  | [required] |
 **environment_id** | **uuid::Uuid** |  | [required] |
-**ee_cloud_opengb_projects_envs_update_secrets_request** | [**EeCloudOpengbProjectsEnvsUpdateSecretsRequest**](EeCloudOpengbProjectsEnvsUpdateSecretsRequest.md) |  | [required] |
+**ee_cloud_opengb_projects_envs_update_variables_request** | [**EeCloudOpengbProjectsEnvsUpdateVariablesRequest**](EeCloudOpengbProjectsEnvsUpdateVariablesRequest.md) |  | [required] |
 
 ### Return type
 
