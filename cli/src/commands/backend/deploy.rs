@@ -218,7 +218,8 @@ struct GenManifest {
 	wasm: Option<String>,
 }
 
-async fn read_gen_manifest(project_path: &PathBuf) -> GlobalResult<GenManifest> {
-	let manifest_str = fs::read_to_string(project_path.join("_gen").join("manifest.json")).await?;
+async fn read_generated_manifest(project_path: &PathBuf) -> GlobalResult<GenManifest> {
+	let manifest_str =
+		fs::read_to_string(project_path.join(".opengb").join("manifest.json")).await?;
 	Ok(serde_json::from_str::<GenManifest>(&manifest_str)?)
 }

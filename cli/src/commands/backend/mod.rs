@@ -44,10 +44,7 @@ impl SubCommand {
 		ctx: Option<&cli_core::Ctx>,
 		db_command: Option<database::PassthroughSubCommand>,
 	) -> GlobalResult<()> {
-		let mut cmd = Command::new("opengb");
-		let installed = cmd.output().await?.status.success();
-
-		if !installed {
+		if which::which("opengb").is_err() {
 			// Prompt for OpenGB CLI install
 			let install = rivet_term::prompt::PromptBuilder::default()
 				.message(
@@ -64,12 +61,8 @@ impl SubCommand {
 			);
 
 			// Check if deno is installed
-			let mut cmd = Command::new("deno");
-			cmd.arg("--version");
-
-			let installed = cmd.output().await?.status.success();
 			ensure!(
-				installed,
+				which::which("deno").is_ok(),
 				"The Deno CLI tool `deno` is not installed. Install it from {}.",
 				term::link("https://docs.deno.com/runtime/manual"),
 			);
@@ -108,7 +101,7 @@ impl SubCommand {
 				&ctx.game_id,
 			)
 			.await?;
-	
+
 			// TODO: Add link to dashboard to this error message
 			let project = unwrap!(
 				project_res.project,
@@ -158,7 +151,6 @@ impl SubCommand {
 
 		// Append arguments
 		opengb_cmd.args(std::env::args().skip(2));
-		opengb_cmd.current_dir(std::path::Path::new("/home/rivet/opengb/tests/basic"));
 
 		// TODO: How does this play with the sentry task?
 		// Match the exit code of the opengb command
