@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0](https://github.com/rivet-gg/cli/compare/v1.1.0...v1.2.0) (2024-05-27)
+
+
+### Features
+
+* add opengb db command passthrough ([#216](https://github.com/rivet-gg/cli/issues/216)) ([7b78870](https://github.com/rivet-gg/cli/commit/7b788705687bd98387380e785614dbcc8c1190dd))
+* add passthrough env var ([#231](https://github.com/rivet-gg/cli/issues/231)) ([2fc3021](https://github.com/rivet-gg/cli/commit/2fc30210e63e0230f88c9a7e04b54a66bb385fab))
+* add support for sh and url db commands ([#217](https://github.com/rivet-gg/cli/issues/217)) ([bbeeaba](https://github.com/rivet-gg/cli/commit/bbeeaba7245839047c02f1f461869ab8c434e0ba))
+* Implement OpenGB related commands ([#215](https://github.com/rivet-gg/cli/issues/215)) ([ce57364](https://github.com/rivet-gg/cli/commit/ce57364d138d80ea48902733df1b3f796d51cd05))
+
+
+### Bug Fixes
+
+* add concurrency constraint to generated github action ([#226](https://github.com/rivet-gg/cli/issues/226)) ([8a62d97](https://github.com/rivet-gg/cli/commit/8a62d97bcea701983df02502f801d4ca8f403eef))
+* **backend:** check opengb and deno installation using which crate ([#237](https://github.com/rivet-gg/cli/issues/237)) ([64b3489](https://github.com/rivet-gg/cli/commit/64b3489f61206f58299cff59a5583c45b4663bac))
+* **ci:** update ci script to use json-compact instead of json ([#224](https://github.com/rivet-gg/cli/issues/224)) ([2f04ea3](https://github.com/rivet-gg/cli/commit/2f04ea3c0639065a10f4b2ecbf4cfc2bf587f353))
+* update sdks for opengb ([#233](https://github.com/rivet-gg/cli/issues/233)) ([7feb70b](https://github.com/rivet-gg/cli/commit/7feb70b2056d96ac31a69102d8a172ad6c0e0905))
+* **upload:** increase upload buffer size ([#229](https://github.com/rivet-gg/cli/issues/229)) ([28d9d93](https://github.com/rivet-gg/cli/commit/28d9d93a9e7d6df959fa2a731c7433febfbe47b0))
+
 ## [v1.1.0] - 2024-04-13
 
 ### Added
