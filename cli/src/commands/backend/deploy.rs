@@ -98,7 +98,7 @@ impl Opts {
 		);
 
 		// Read files for upload
-		let gen_manifest = read_gen_manifest(&path).await?;
+		let gen_manifest = read_generated_manifest(&path).await?;
 		let mut files = vec![upload::prepare_upload_file(
 			&gen_manifest.bundle,
 			"bundle.js",
