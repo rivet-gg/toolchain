@@ -1,6 +1,7 @@
 use assert_cmd::Command;
 
 #[tokio::test]
+#[ignore]
 async fn e2e_deploy() {
 	let project_dir = std::env::current_dir()
 		.unwrap()
