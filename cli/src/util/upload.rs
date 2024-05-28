@@ -1,5 +1,5 @@
 use std::{
-	path::{Path, PathBuf},
+	path::{Component, Path, PathBuf},
 	time::{Duration, Instant},
 };
 
@@ -34,8 +34,6 @@ pub fn format_file_size(bytes: u64) -> GlobalResult<String> {
 
 /// Lists all files in a directory and returns the data required to upload them.
 pub fn prepare_upload_dir(base_path: &Path) -> GlobalResult<Vec<UploadFile>> {
-	use std::path::Component;
-
 	let mut files = Vec::<UploadFile>::new();
 
 	// Walk files while respecting .rivet-cdn-ignore
@@ -46,39 +44,53 @@ pub fn prepare_upload_dir(base_path: &Path) -> GlobalResult<Vec<UploadFile>> {
 		.build();
 	for entry in walk {
 		let entry = entry?;
-		let file_path = entry.path();
 		let file_meta = entry.metadata()?;
 
 		if file_meta.is_file() {
-			// Convert path to Unix-style string
-			let path_str = entry
-				.path()
-				.strip_prefix(base_path)?
-				.components()
-				.filter_map(|c| match c {
-					Component::Normal(name) => name.to_str().map(str::to_string),
-					_ => None,
-				})
-				.collect::<Vec<String>>()
-				.join("/");
+			let file_path = entry.path();
 
-			// Attempt to guess the MIME type
-			let content_type = mime_guess::from_path(&file_path)
-				.first_raw()
-				.map(str::to_string);
-
-			files.push(UploadFile {
-				absolute_path: file_path.to_path_buf(),
-				prepared: models::UploadPrepareFile {
-					path: path_str,
-					content_type,
-					content_length: file_meta.len() as i64,
-				},
-			});
+			files.push(prepare_upload_file(
+				file_path,
+				file_path.strip_prefix(base_path)?,
+				file_meta,
+			)?);
 		}
 	}
 
 	Ok(files)
+}
+
+pub fn prepare_upload_file<P: AsRef<Path>, Q: AsRef<Path>>(
+	absolute_path: P,
+	upload_path: Q,
+	metadata: std::fs::Metadata,
+) -> GlobalResult<UploadFile> {
+	let absolute_path = absolute_path.as_ref();
+
+	// Convert path to Unix-style string
+	let path_str = upload_path
+		.as_ref()
+		.components()
+		.filter_map(|c| match c {
+			Component::Normal(name) => name.to_str().map(str::to_string),
+			_ => None,
+		})
+		.collect::<Vec<String>>()
+		.join("/");
+
+	// Attempt to guess the MIME type
+	let content_type = mime_guess::from_path(&absolute_path)
+		.first_raw()
+		.map(str::to_string);
+
+	Ok(UploadFile {
+		absolute_path: absolute_path.to_path_buf(),
+		prepared: models::UploadPrepareFile {
+			path: path_str,
+			content_type,
+			content_length: metadata.len() as i64,
+		},
+	})
 }
 
 /// Uploads a file to a given URL.
@@ -148,7 +160,10 @@ pub async fn upload_file(
 		// Create a reader for the slice of the file we need to read
 		file.seek(tokio::io::SeekFrom::Start(presigned_req.byte_offset as u64))
 			.await?;
-		let mut reader_stream = ReaderStream::new(file.take(presigned_req.content_length as u64));
+		let handle = file.take(presigned_req.content_length as u64);
+
+		// Default buffer size is optimized for memory usage. Increase buffer for perf.
+		let mut reader_stream = ReaderStream::with_capacity(handle, 1024 * 1024);
 
 		let start = Instant::now();
 

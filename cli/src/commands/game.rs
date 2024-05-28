@@ -23,7 +23,7 @@ impl SubCommand {
 		match self {
 			SubCommand::Get { format } => {
 				let game_res = unwrap!(
-					apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+					apis::cloud_games_api::cloud_games_get_game_by_id(
 						&ctx.openapi_config_cloud,
 						&ctx.game_id,
 						None,

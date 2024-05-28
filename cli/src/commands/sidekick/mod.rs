@@ -15,10 +15,13 @@ pub mod generate_config;
 pub mod get_bootstrap_data;
 pub mod get_cli_version;
 pub mod get_link;
+pub mod get_lobbies_link;
+pub mod get_logs_link;
 pub mod get_namespace_dev_token;
 pub mod get_namespace_pub_token;
-pub mod get_version;
+pub mod get_versions_link;
 pub mod unlink;
+pub mod util;
 pub mod wait_for_login;
 
 pub trait SideKickHandler: Serialize {
@@ -37,8 +40,12 @@ pub enum SubCommand {
 	CheckLoginState,
 	/// Get the token from the CLI
 	GetBootstrapData(get_bootstrap_data::Opts),
+	/// Get a link to the `manage versions` page
+	GetVersion(get_versions_link::Opts),
+	/// Get a link to the `logs` page
+	GetLobbies(get_lobbies_link::Opts),
 	/// Get the version of the CLI
-	GetVersion(get_version::Opts),
+	GetLogs(get_logs_link::Opts),
 	/// Deploy a version
 	Deploy(deploy::Opts),
 	/// Get the CLI version
@@ -185,6 +192,8 @@ impl SubCommand {
 			}
 			SubCommand::GetBootstrapData(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetVersion(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetLobbies(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetLogs(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::Deploy(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetNamespacePublicToken(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetNamespaceDevelopmentToken(opts) => {
@@ -268,21 +277,28 @@ impl SubCommand {
 				.into_os_string()
 				.into_string()
 				.unwrap();
-			let command_to_run = format!("cd {}; {}", current_dir, args.join(" "));
 
-			let apple_script = format!(
-				"tell application \"Terminal\"
-						activate
-						do script \"{}\"
-					end tell",
-				command_to_run
+			// Create the content for the script
+			let script_path = format!("{}/script.command", current_dir);
+			let command_to_run = format!(
+				"cd \"{}\" && {} && rm \"{}\"",
+				current_dir,
+				args.join(" "),
+				script_path
 			);
 
-			Command::new("osascript")
-				.arg("-e")
-				.arg(apple_script)
+			// Write the script content to the script file
+			std::fs::write(&script_path, format!("#!/bin/bash\n{}", command_to_run))?;
+			std::fs::set_permissions(
+				&script_path,
+				std::os::unix::fs::PermissionsExt::from_mode(0o755),
+			)?;
+
+			// Use `open` to run the script
+			std::process::Command::new("open")
+				.arg(&script_path)
 				.spawn()
-				.expect("Terminal failed to start");
+				.expect("Failed to open script");
 		}
 
 		#[cfg(target_os = "linux")]

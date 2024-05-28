@@ -1,4 +1,5 @@
 pub mod avatar;
+pub mod backend;
 pub mod cdn;
 pub mod ci;
 pub mod config;

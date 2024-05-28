@@ -1,4 +1,4 @@
-use crate::util::{cmd, term};
+use crate::util::cmd;
 use clap::Parser;
 use global_error::prelude::*;
 

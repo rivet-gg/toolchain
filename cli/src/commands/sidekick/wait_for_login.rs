@@ -74,7 +74,7 @@ impl Opts {
 
 		// Extract game data
 		let _game_res = unwrap!(
-			apis::cloud_games_games_api::cloud_games_games_get_game_by_id(
+			apis::cloud_games_api::cloud_games_get_game_by_id(
 				&new_ctx.openapi_config_cloud,
 				&game_id.to_string(),
 				None,
