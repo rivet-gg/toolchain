@@ -277,21 +277,28 @@ impl SubCommand {
 				.into_os_string()
 				.into_string()
 				.unwrap();
-			let command_to_run = format!("cd {}; {}", current_dir, args.join(" "));
 
-			let apple_script = format!(
-				"tell application \"Terminal\"
-						activate
-						do script \"{}\"
-					end tell",
-				command_to_run
+			// Create the content for the script
+			let script_path = format!("{}/script.command", current_dir);
+			let command_to_run = format!(
+				"cd \"{}\" && {} && rm \"{}\"",
+				current_dir,
+				args.join(" "),
+				script_path
 			);
 
-			Command::new("osascript")
-				.arg("-e")
-				.arg(apple_script)
+			// Write the script content to the script file
+			std::fs::write(&script_path, format!("#!/bin/bash\n{}", command_to_run))?;
+			std::fs::set_permissions(
+				&script_path,
+				std::os::unix::fs::PermissionsExt::from_mode(0o755),
+			)?;
+
+			// Use `open` to run the script
+			std::process::Command::new("open")
+				.arg(&script_path)
 				.spawn()
-				.expect("Terminal failed to start");
+				.expect("Failed to open script");
 		}
 
 		#[cfg(target_os = "linux")]
