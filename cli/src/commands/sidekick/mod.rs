@@ -15,10 +15,13 @@ pub mod generate_config;
 pub mod get_bootstrap_data;
 pub mod get_cli_version;
 pub mod get_link;
+pub mod get_lobbies_link;
+pub mod get_logs_link;
 pub mod get_namespace_dev_token;
 pub mod get_namespace_pub_token;
-pub mod get_version;
+pub mod get_versions_link;
 pub mod unlink;
+pub mod util;
 pub mod wait_for_login;
 
 pub trait SideKickHandler: Serialize {
@@ -37,8 +40,12 @@ pub enum SubCommand {
 	CheckLoginState,
 	/// Get the token from the CLI
 	GetBootstrapData(get_bootstrap_data::Opts),
+	/// Get a link to the `manage versions` page
+	GetVersion(get_versions_link::Opts),
+	/// Get a link to the `logs` page
+	GetLobbies(get_lobbies_link::Opts),
 	/// Get the version of the CLI
-	GetVersion(get_version::Opts),
+	GetLogs(get_logs_link::Opts),
 	/// Deploy a version
 	Deploy(deploy::Opts),
 	/// Get the CLI version
@@ -185,6 +192,8 @@ impl SubCommand {
 			}
 			SubCommand::GetBootstrapData(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetVersion(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetLobbies(opts) => serialize_output(opts.execute(ctx).await),
+			SubCommand::GetLogs(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::Deploy(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetNamespacePublicToken(opts) => serialize_output(opts.execute(ctx).await),
 			SubCommand::GetNamespaceDevelopmentToken(opts) => {
