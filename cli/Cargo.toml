@@ -19,7 +19,8 @@ chrono = "0.4.21"
 clap = { version = "3.2.16", features = ["derive", "env"] }
 cli-core = { path = "../core", package = "rivet-cli-core" }
 # Disable less common file formats. Preserve TOML for backwards compatibility.
-config = { version = "0.13.2", default-features = false, features = ["yaml", "toml", "json"] }
+# This is pointing to a fork that contains a fix for Byte-order marks on Windows.
+config = { git = "https://github.com/AngelOnFira/config-rs", rev = "04e61354912543e23e70b6851a3f4b03ce69471c", default-features = false, features = ["yaml", "toml", "json"] }
 console = "0.15"
 dirs = "5.0"
 fs_extra = "1.2.0"
