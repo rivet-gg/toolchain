@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/rivet-gg/cli/compare/v1.2.0...v1.3.0) (2024-05-29)
+
+
+### Features
+
+* get lobby and logs links in sidekick ([#235](https://github.com/rivet-gg/cli/issues/235)) ([7c63efd](https://github.com/rivet-gg/cli/commit/7c63efd86a2ca4a659b0df8c88b3764f904f2938))
+
+
+### Bug Fixes
+
+* prevent asking user for terminal permissions ([#236](https://github.com/rivet-gg/cli/issues/236)) ([a1a75d8](https://github.com/rivet-gg/cli/commit/a1a75d858a99ab3830ed14917a26e8f06f446c4f))
+* read_generated_manifest fn name ([#241](https://github.com/rivet-gg/cli/issues/241)) ([72970c7](https://github.com/rivet-gg/cli/commit/72970c7240f1dfa19a4fb75a9e009e8bde3799b5))
+* reading byte-order marks on Windows ([#238](https://github.com/rivet-gg/cli/issues/238)) ([e177ad4](https://github.com/rivet-gg/cli/commit/e177ad4917945f6c99b8cd2f03c35bec3ba91941))
+
+
+### Documentation
+
+* release script instructions ([#248](https://github.com/rivet-gg/cli/issues/248)) ([0d9edb3](https://github.com/rivet-gg/cli/commit/0d9edb3737989709ad9d3221d13c5471f997e6e2))
+
+
+### Continuous Integration
+
+* and release please pr ([#244](https://github.com/rivet-gg/cli/issues/244)) ([9862c5a](https://github.com/rivet-gg/cli/commit/9862c5ada4f935d64cc457d0ecd760a6d7d252b0))
+* change release-please pr labels on release ([#247](https://github.com/rivet-gg/cli/issues/247)) ([336f789](https://github.com/rivet-gg/cli/commit/336f789b3909392fe92180ba75382f12d005c8de))
+* explicitly fmt check members ([#242](https://github.com/rivet-gg/cli/issues/242)) ([f14b17e](https://github.com/rivet-gg/cli/commit/f14b17ed23a33b34f738975489a92d431dae1c59))
+* ignore failing e2e test ([#243](https://github.com/rivet-gg/cli/issues/243)) ([242e291](https://github.com/rivet-gg/cli/commit/242e291db0febec9f70632536d1da39c1293ff30))
+
+
+### Chores
+
+* Bump the cargo group across 1 directory with 4 updates ([#228](https://github.com/rivet-gg/cli/issues/228)) ([a192e35](https://github.com/rivet-gg/cli/commit/a192e35aa5d5076be10d0f3b23836cfcc28ad1b0))
+* **main:** release 1.2.0 ([555fec1](https://github.com/rivet-gg/cli/commit/555fec1a2e1dacc08bc03cbfaed733f146d06220))
+
 ## [1.2.0](https://github.com/rivet-gg/cli/compare/v1.1.0...v1.2.0) (2024-05-28)
 
 
