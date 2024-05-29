@@ -276,7 +276,7 @@ jobs:
             const taggedLabel = 'autorelease: tagged'
 
             const issues = await github.rest.search.issuesAndPullRequests({
-              q: `repo:${owner}/${repo} is:open label:"${pendingLabel}"`,
+              q: `repo:${owner}/${repo} is:merged label:"${pendingLabel}"`,
               per_page: 100
             })
 
