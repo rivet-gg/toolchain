@@ -15,6 +15,7 @@ name: Release
 
 permissions:
   contents: write
+  pull-requests: write
 
 # This task will run whenever you push a git tag that looks like a version
 # like "1.0.0", "v0.1.0-prerelease.1", "my-app/0.1.0", "releases/v1.0.0", etc.
@@ -258,3 +259,35 @@ jobs:
           body: ${{ fromJson(needs.host.outputs.val).announcement_github_body }}
           prerelease: ${{ fromJson(needs.host.outputs.val).announcement_is_prerelease }}
           artifacts: "artifacts/*"
+
+  # This step is added to manually change release-please labels so that the next
+  # release can start to be created properly.
+  update_issue_labels:
+    runs-on: ubuntu-latest
+    needs:
+      - announce
+    steps:
+      - name: Find and update issue labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo
+            const pendingLabel = 'autorelease: pending'
+            const taggedLabel = 'autorelease: tagged'
+
+            const issues = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${owner}/${repo} is:open label:"${pendingLabel}"`,
+              per_page: 100
+            })
+
+            for (const issue of issues.data.items) {
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: issue.number,
+                labels: issue.labels
+                  .map(label => label.name)
+                  .filter(labelName => labelName !== pendingLabel)
+                  .concat(taggedLabel)
+              })
+            }
