@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1](https://github.com/rivet-gg/cli/compare/v1.3.0...v1.3.1) (2024-06-10)
+
+
+### Continuous Integration
+
+* change label update to merged PRs ([#249](https://github.com/rivet-gg/cli/issues/249)) ([06a938c](https://github.com/rivet-gg/cli/commit/06a938cafedb2ed794358b0a9a370453fd2859dd))
+
+
+### Chores
+
+* fmt sdk ([#251](https://github.com/rivet-gg/cli/issues/251)) ([28eade7](https://github.com/rivet-gg/cli/commit/28eade7f45a032f08d3fb9c55ddc3b3eda3a1be5))
+* **opengb:** migrate from backend.yaml -&gt; backend.json ([#253](https://github.com/rivet-gg/cli/issues/253)) ([4b31887](https://github.com/rivet-gg/cli/commit/4b31887bd166e71958155b8cc5a75bc8246b6248))
+* **readme:** add note about openssl when building from source ([#234](https://github.com/rivet-gg/cli/issues/234)) ([a9c1b29](https://github.com/rivet-gg/cli/commit/a9c1b295a4819fb88f9be5a0e52780d5ab92bf27))
+
 ## [1.3.0](https://github.com/rivet-gg/cli/compare/v1.2.0...v1.3.0) (2024-05-29)
 
 
