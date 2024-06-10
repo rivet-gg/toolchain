@@ -61,7 +61,7 @@ iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/instal
 </details>
 
 <details>
-<summary><b>Install from GitHub</b></summary>
+<summary><b>Build from source (<code>cargo install</code>)</b></summary>
 
 
 ```sh
@@ -69,10 +69,12 @@ cargo install --git=https://github.com/rivet-gg/cli
 ```
 
 **Important** This will install the CLI as `rivet-cli` (not `rivet`).
+
+**Important** Ensure you have OpenSSL [installed and configured correctly](https://docs.rs/openssl/latest/openssl/#automatic).
 </details>
 
 <details>
-<summary><b>Build from source</b></summary>
+<summary><b>Build from source (<code>cargo build</code>)</b></summary>
 
 ```sh
 git clone https://github.com/rivet-gg/cli
@@ -81,6 +83,8 @@ cargo build
 ```
 
 The executable will be available at _target/debug/rivet-cli_.
+
+**Important** Ensure you have OpenSSL [installed and configured correctly](https://docs.rs/openssl/latest/openssl/#automatic).
 </details>
 
 ## Documentation
