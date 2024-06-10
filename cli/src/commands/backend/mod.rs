@@ -164,11 +164,11 @@ impl SubCommand {
 
 #[derive(Debug, Deserialize)]
 struct ProjectConfig {
-	modules: HashMap<String, serde_yaml::Value>,
+	modules: HashMap<String, serde_json::Value>,
 }
 
 async fn read_project_config(project_path: &PathBuf) -> GlobalResult<ProjectConfig> {
-	let config_path = project_path.join("backend.yaml");
+	let config_path = project_path.join("backend.json");
 
 	let project_config_str = match fs::read_to_string(&config_path).await {
 		Err(err) if matches!(err.kind(), std::io::ErrorKind::NotFound) => {
@@ -177,5 +177,5 @@ async fn read_project_config(project_path: &PathBuf) -> GlobalResult<ProjectConf
 		x => x?,
 	};
 
-	Ok(serde_yaml::from_str::<ProjectConfig>(&project_config_str)?)
+	Ok(serde_json::from_str::<ProjectConfig>(&project_config_str)?)
 }
