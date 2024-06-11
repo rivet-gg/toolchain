@@ -5,9 +5,12 @@ use cli_core::rivet_api::{apis, models};
 use futures_util::{StreamExt, TryStreamExt};
 use global_error::prelude::*;
 use serde::Deserialize;
-use tokio::{fs, process::Command};
+use tokio::fs;
 
-use crate::util::{global_config, paths, term, upload};
+use crate::{
+	commands::backend::{get_or_create_project, run_opengb_command, OpenGbCommandOpts},
+	util::{global_config, paths, term, upload},
+};
 
 #[derive(Parser)]
 pub struct Opts {
@@ -22,22 +25,12 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self, ctx: &cli_core::Ctx) -> GlobalResult<()> {
-		let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-		)
-		.await?;
-
-		// TODO: Add link to dashboard to this error message
-		let project = unwrap!(
-			project_res.project,
-			"no OpenGB project linked to the current game. Create one on the dashboard."
-		);
-		let project_id = project.project_id.to_string();
+		let project = get_or_create_project(ctx).await?;
+		let project_id_str = project.project_id.to_string();
 
 		let envs_res = apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_list(
 			&ctx.openapi_config_cloud,
-			&project_id,
+			&project_id_str,
 			None,
 		)
 		.await?;
@@ -52,26 +45,35 @@ impl Opts {
 		);
 		let env_id = env.environment_id.to_string();
 
-		let path = if let Some(path) = &self.path {
+		let project_path = if let Some(path) = &self.path {
 			path.clone()
 		} else {
 			paths::project_root()?
 		};
 
-		rivet_term::status::info("Building project", path.display());
+		eprintln!();
+		rivet_term::status::info("Building project", project_path.display());
 
-		let mut build_cmd = Command::new("opengb");
-		build_cmd.current_dir(&path);
-		build_cmd.arg("build");
-		build_cmd.arg("--runtime").arg("cf");
+		// Build
+		let cmd = run_opengb_command(OpenGbCommandOpts {
+			args: vec![
+				"build".into(),
+				"--runtime".into(),
+				"cloudflare-workers".into(),
+			],
+			env: Vec::new(),
+			cwd: project_path.clone(),
+		})
+		.await?;
+		ensure!(cmd.success(), "Failed to build OpenGB project");
 
-		ensure!(
-			build_cmd.status().await?.success(),
-			"Failed to build OpenGB project"
-		);
-
-		super::database::provision_databases(ctx, &path, project.project_id, env.environment_id)
-			.await?;
+		super::database::provision_databases(
+			ctx,
+			&project_path,
+			project.project_id,
+			env.environment_id,
+		)
+		.await?;
 
 		let databases = global_config::try_read_project(|config| {
 			let project = unwrap!(config.opengb.projects.get(&project.project_id));
@@ -81,30 +83,32 @@ impl Opts {
 		})
 		.await?;
 
+		eprintln!();
 		rivet_term::status::info("Migrating databases", "");
 
-		let mut migrate_cmd = Command::new("opengb");
-		migrate_cmd.current_dir(&path);
-		migrate_cmd.arg("db").arg("deploy");
-
-		// Insert all database urls into env
+		// Migrate
+		let mut migrate_env = Vec::new();
 		for (db_name, db) in databases {
-			migrate_cmd.env(format!("DATABASE_URL_{}", db_name), db.url.clone());
+			migrate_env.push((format!("DATABASE_URL_{}", db_name), db.url.clone()));
 		}
-
-		ensure!(
-			migrate_cmd.status().await?.success(),
-			"Failed to migrate OpenGB databases",
-		);
+		let migrate_cmd = run_opengb_command(OpenGbCommandOpts {
+			args: vec!["db".into(), "deploy".into()],
+			env: migrate_env,
+			cwd: project_path.clone(),
+		})
+		.await?;
+		ensure!(migrate_cmd.success(), "Failed to migrate OpenGB databases",);
 
 		// Read files for upload
-		let gen_manifest = read_generated_manifest(&path).await?;
+		let gen_manifest = read_generated_manifest(&project_path).await?;
+		let bundle_path = project_path.join(gen_manifest.bundle);
+		let wasm_path = gen_manifest.wasm.map(|x| project_path.join(x));
 		let mut files = vec![upload::prepare_upload_file(
-			&gen_manifest.bundle,
+			&bundle_path,
 			"bundle.js",
-			fs::metadata(&gen_manifest.bundle).await?,
+			fs::metadata(&bundle_path).await?,
 		)?];
-		if let Some(wasm) = gen_manifest.wasm.as_ref() {
+		if let Some(wasm) = wasm_path.as_ref() {
 			files.push(upload::prepare_upload_file(
 				wasm,
 				"query-engine.wasm",
@@ -129,7 +133,7 @@ impl Opts {
 		let prepare_res = unwrap!(
 			apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_prepare_deploy(
 				&ctx.openapi_config_cloud,
-				&project_id,
+				&project_id_str,
 				&env_id,
 				models::EeCloudOpengbProjectsEnvsPrepareDeployRequest {
 					files: files.iter().map(|f| f.prepared.clone()).collect(),
@@ -170,11 +174,11 @@ impl Opts {
 			})
 			.await?;
 
-		eprintln!("\n");
+		eprintln!();
 		rivet_term::status::info("Deploying environment", &env.display_name);
 
 		// Structure DB names
-		let project_config = super::read_project_config(&path).await?;
+		let project_config = super::read_project_config(&project_path).await?;
 		let modules = project_config
 			.modules
 			.keys()
@@ -193,7 +197,7 @@ impl Opts {
 		let deploy_res =
 			apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_deploy(
 				&ctx.openapi_config_cloud,
-				&project_id,
+				&project_id_str,
 				&env_id,
 				models::EeCloudOpengbProjectsEnvsDeployRequest {
 					modules,
