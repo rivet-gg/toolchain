@@ -1,14 +1,16 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::{collections::HashMap, io::Write, path::PathBuf};
 
 use clap::Parser;
-use cli_core::rivet_api::apis;
-use console::Term;
+use cli_core::rivet_api::{apis, models};
 use global_error::prelude::*;
 use serde::Deserialize;
+use tempfile::NamedTempFile;
 use tokio::fs;
 use tokio::process::Command;
 
 use crate::util::{global_config, paths, term};
+
+const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "ghcr.io/rivet-gg/opengb/v0.1.2";
 
 pub(crate) mod database;
 pub mod deploy;
@@ -38,128 +40,6 @@ impl SubCommand {
 			SubCommand::Any => unreachable!(),
 		}
 	}
-
-	pub async fn passthrough(
-		term: &Term,
-		ctx: Option<&cli_core::Ctx>,
-		db_command: Option<database::PassthroughSubCommand>,
-	) -> GlobalResult<()> {
-		if which::which("opengb").is_err() {
-			// Prompt for OpenGB CLI install
-			let install = rivet_term::prompt::PromptBuilder::default()
-				.message(
-					"The OpenGB CLI `opengb` is not installed. Would you like to install it now?",
-				)
-				.docs_url("https://github.com/rivet-gg/opengb")
-				.build()?
-				.bool(term)
-				.await?;
-
-			ensure!(
-				install,
-				"OpenGB CLI is required to use the `backend` passthrough command."
-			);
-
-			// Check if deno is installed
-			ensure!(
-				which::which("deno").is_ok(),
-				"The Deno CLI tool `deno` is not installed. Install it from {}.",
-				term::link("https://docs.deno.com/runtime/manual"),
-			);
-
-			// Install OpenGB CLI
-			let mut cmd = Command::new("deno");
-			cmd.arg("install");
-			cmd.arg("--allow-net");
-			cmd.arg("--allow-read");
-			cmd.arg("--allow-env");
-			cmd.arg("--allow-run");
-			cmd.arg("--allow-write");
-			cmd.arg("--name").arg("opengb");
-			cmd.arg("--force");
-			cmd.arg("https://raw.githubusercontent.com/rivet-gg/opengb/3aab9bc2abcb8105fc3af837900ce4f7a932ad17/src/cli/main.ts");
-
-			ensure!(
-				cmd.status().await?.success(),
-				"failed to install OpenGB CLI"
-			);
-		}
-
-		let mut opengb_cmd = Command::new("opengb");
-
-		// Added to let OpenGB know its running as a passthrough command within Rivet. Shows more
-		// specialized help commands.
-		opengb_cmd.env("RIVET_CLI_PASSTHROUGH", "1");
-
-		// Parse env name from: rivet backend db deploy --env foo
-		if let Some(cmd) = db_command {
-			let env_name_id = &cmd.get_cmd().env_name_id;
-			let ctx = unwrap!(ctx, "must have ctx when running db command with --env");
-
-			let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
-				&ctx.openapi_config_cloud,
-				&ctx.game_id,
-			)
-			.await?;
-
-			// TODO: Add link to dashboard to this error message
-			let project = unwrap!(
-				project_res.project,
-				"no OpenGB project linked to the current game. Create one on the dashboard."
-			);
-			let project_id = project.project_id.to_string();
-
-			let envs_res =
-				apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_list(
-					&ctx.openapi_config_cloud,
-					&project_id,
-					None,
-				)
-				.await?;
-
-			let env = unwrap!(
-				envs_res
-					.environments
-					.iter()
-					.find(|env| &env.name_id == env_name_id),
-				r#"No environment found with name id "{env_name_id}"."#,
-			);
-
-			// Read path from opengb command
-			let path = if let Some(path) = cmd.path() {
-				path.clone()
-			} else {
-				paths::project_root()?
-			};
-
-			database::provision_databases(ctx, &path, project.project_id, env.environment_id)
-				.await?;
-
-			let databases = global_config::try_read_project(|config| {
-				let project = unwrap!(config.opengb.projects.get(&project.project_id));
-				let env = unwrap!(project.environments.get(&env.environment_id));
-
-				Ok(env.databases.clone())
-			})
-			.await?;
-
-			// Insert all database urls into env
-			for (db_name, db) in databases {
-				opengb_cmd.env(format!("DATABASE_URL_{}", db_name), db.url.clone());
-			}
-		}
-
-		// Append arguments
-		opengb_cmd.args(std::env::args().skip(2));
-
-		// TODO: How does this play with the sentry task?
-		// Match the exit code of the opengb command
-		if let Some(exit_code) = opengb_cmd.status().await?.code() {
-			std::process::exit(exit_code);
-		}
-
-		Ok(())
-	}
 }
 
 #[derive(Debug, Deserialize)]
@@ -178,4 +58,153 @@ async fn read_project_config(project_path: &PathBuf) -> GlobalResult<ProjectConf
 	};
 
 	Ok(serde_json::from_str::<ProjectConfig>(&project_config_str)?)
+}
+
+/**
+* Gets or auto-creates a backend project for the game.
+*/
+pub async fn get_or_create_project(
+	ctx: &cli_core::Ctx,
+) -> GlobalResult<Box<models::EeOpengbProject>> {
+	let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+	)
+	.await?;
+
+	// TOOD: Add get or create project
+	let project = unwrap!(
+			project_res.project,
+			"No OpenGB project linked to the current game. Create one on the hub: https://hub.rivet.gg/"
+		);
+
+	Ok(project)
+}
+
+pub async fn passthrough(
+	ctx: Option<&cli_core::Ctx>,
+	db_command: Option<database::PassthroughSubCommand>,
+) -> GlobalResult<()> {
+	let mut opengb_env = vec![
+		// Added to let OpenGB know its running as a passthrough command within Rivet. Shows more
+		// specialized help commands.
+		("RIVET_CLI_PASSTHROUGH".into(), "1".into()),
+	];
+
+	// Parse env name from: rivet backend db deploy --env foo
+	if let Some(cmd) = db_command {
+		let env_name_id = &cmd.get_cmd().env_name_id;
+		let ctx = unwrap!(ctx, "must have ctx when running db command with --env");
+
+		let project = get_or_create_project(ctx).await?;
+
+		let envs_res = apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_list(
+			&ctx.openapi_config_cloud,
+			&project.project_id.to_string(),
+			None,
+		)
+		.await?;
+
+		let env = unwrap!(
+			envs_res
+				.environments
+				.iter()
+				.find(|env| &env.name_id == env_name_id),
+			r#"No environment found with name id "{env_name_id}"."#,
+		);
+
+		// Read path from opengb command
+		let path = if let Some(path) = cmd.path() {
+			path.clone()
+		} else {
+			paths::project_root()?
+		};
+
+		database::provision_databases(ctx, &path, project.project_id, env.environment_id).await?;
+
+		let databases = global_config::try_read_project(|config| {
+			let project = unwrap!(config.opengb.projects.get(&project.project_id));
+			let env = unwrap!(project.environments.get(&env.environment_id));
+
+			Ok(env.databases.clone())
+		})
+		.await?;
+
+		// Insert all database urls into env
+		for (db_name, db) in databases {
+			opengb_env.push((format!("DATABASE_URL_{}", db_name), db.url.clone()));
+		}
+	}
+
+	// Match the exit code of the opengb command
+	let cmd = run_opengb_command(OpenGbCommandOpts {
+		args: std::env::args().skip(2).collect(),
+		env: opengb_env,
+		cwd: paths::project_root()?,
+	})
+	.await?;
+	if let Some(exit_code) = cmd.code() {
+		// TODO: How does this play with the sentry task?
+		std::process::exit(exit_code);
+	}
+
+	Ok(())
+}
+
+pub struct OpenGbCommandOpts {
+	pub args: Vec<String>,
+	pub env: Vec<(String, String)>,
+	pub cwd: PathBuf,
+}
+
+pub async fn run_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<std::process::ExitStatus> {
+	let run_native = std::env::var("_RIVET_NATIVE_OPENGB")
+		.ok()
+		.map_or(false, |x| &x == "1");
+
+	// Check OpenGB installed
+	if run_native {
+		ensure!(
+			which::which("opengb").is_ok(),
+			"OpenGB is not installed. Install it from {}.",
+			term::link("https://opengb.dev/concepts/quickstart")
+		);
+	}
+
+	// Build command
+	if run_native {
+		let mut cmd = Command::new("opengb");
+		cmd.envs(opts.env);
+		cmd.current_dir(opts.cwd);
+		cmd.args(&opts.args);
+		Ok(cmd.status().await?)
+	} else {
+		let image_tag = std::env::var("_RIVET_OPENGB_IMAGE")
+			.ok()
+			.unwrap_or_else(|| DEFAULT_OPENGB_DOCKER_TAG.to_string());
+
+		// Build env file
+		let mut env_file = NamedTempFile::new().expect("Failed to create temp file");
+		for (k, v) in std::env::vars() {
+			writeln!(env_file, "{k}={v}")?;
+		}
+		if std::env::var("DATABASE_URL").is_err() {
+			writeln!(env_file, "DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/postgres?sslmode=disable")?;
+		}
+		for (k, v) in opts.env {
+			writeln!(env_file, "{k}={v}")?;
+		}
+
+		let mut cmd = Command::new("docker");
+		cmd.arg("run").arg("-it");
+		cmd.arg("--init");
+		cmd.arg("--env-file").arg(env_file.path());
+		cmd.arg("--add-host=host.docker.internal:host-gateway");
+		cmd.arg("--publish=6420:6420");
+		cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
+		cmd.arg("--workdir=/backend");
+		cmd.arg(image_tag);
+		cmd.args(&opts.args);
+		Ok(cmd.status().await?)
+	}
 }

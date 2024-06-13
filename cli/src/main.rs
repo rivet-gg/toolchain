@@ -294,7 +294,7 @@ async fn main_async() -> ExitCode {
 async fn handle_opts() -> GlobalResult<()> {
 	let term = console::Term::stderr();
 
-	if opengb_passthrough(&term).await? {
+	if opengb_passthrough().await? {
 		return Ok(());
 	}
 
@@ -419,7 +419,7 @@ async fn build_ctx(
 	Ok(cli_core::ctx::init(api_endpoint, token).await?)
 }
 
-async fn opengb_passthrough(term: &console::Term) -> GlobalResult<bool> {
+async fn opengb_passthrough() -> GlobalResult<bool> {
 	// Check if OpenGB passthrough
 	if let Err(err) = backend::SubCommand::try_parse_from(std::env::args().skip(1)) {
 		if let clap::error::ErrorKind::UnknownArgument = err.kind() {
@@ -450,7 +450,7 @@ async fn opengb_passthrough(term: &console::Term) -> GlobalResult<bool> {
 					None
 				};
 
-				backend::SubCommand::passthrough(term, ctx.as_ref(), db_command).await?;
+				backend::passthrough(ctx.as_ref(), db_command).await?;
 
 				return Ok(true);
 			}
