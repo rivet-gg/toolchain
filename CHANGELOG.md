@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2](https://github.com/rivet-gg/cli/compare/v1.3.1...v1.3.2) (2024-06-13)
+
+
+### Features
+
+* run opengb using docker by default ([#254](https://github.com/rivet-gg/cli/issues/254)) ([598ce8d](https://github.com/rivet-gg/cli/commit/598ce8da485ac035a834ab74bae33701b34af226))
+
+
+### Chores
+
+* release 1.3.2 ([50bd2be](https://github.com/rivet-gg/cli/commit/50bd2be003cf8561f5d444a6abd611e3f1078af5))
+
 ## [1.3.1](https://github.com/rivet-gg/cli/compare/v1.3.0...v1.3.1) (2024-06-10)
 
 
