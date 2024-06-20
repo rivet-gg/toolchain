@@ -11,7 +11,7 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct EeCloudGamesProjectsGetResponse {
 	#[serde(rename = "project", skip_serializing_if = "Option::is_none")]
-	pub project: Option<Box<crate::models::EeOpengbProject>>,
+	pub project: Option<Box<crate::models::EeBackendProject>>,
 }
 
 impl EeCloudGamesProjectsGetResponse {

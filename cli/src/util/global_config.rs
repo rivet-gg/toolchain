@@ -90,12 +90,7 @@ pub struct OpenGbProject {
 #[derive(Default, Clone, Serialize, Deserialize)]
 pub struct OpenGbEnv {
 	#[serde(default)]
-	pub databases: HashMap<String, OpenGbDatabase>,
-}
-
-#[derive(Serialize, Clone, Deserialize)]
-pub struct OpenGbDatabase {
-	pub url: String,
+	pub url: Option<String>,
 }
 
 static SINGLETON: OnceCell<Mutex<GlobalConfig>> = OnceCell::const_new();

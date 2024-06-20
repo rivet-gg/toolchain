@@ -27,12 +27,13 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AdminApi* | [**admin_login**](docs/AdminApi.md#admin_login) | **POST** /admin/login | 
 *AdminClustersApi* | [**admin_clusters_create**](docs/AdminClustersApi.md#admin_clusters_create) | **POST** /admin/clusters | 
-*AdminClustersApi* | [**admin_clusters_get_server_ips**](docs/AdminClustersApi.md#admin_clusters_get_server_ips) | **GET** /admin/clusters/server_ips | 
 *AdminClustersApi* | [**admin_clusters_list**](docs/AdminClustersApi.md#admin_clusters_list) | **GET** /admin/clusters | 
 *AdminClustersDatacentersApi* | [**admin_clusters_datacenters_create**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_create) | **POST** /admin/clusters/{cluster_id}/datacenters | 
 *AdminClustersDatacentersApi* | [**admin_clusters_datacenters_list**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_list) | **GET** /admin/clusters/{cluster_id}/datacenters | 
-*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_taint**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_taint) | **GET** /admin/clusters/{cluster_id}/datacenters/{datacenter_id}/taint | 
 *AdminClustersDatacentersApi* | [**admin_clusters_datacenters_update**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_update) | **PATCH** /admin/clusters/{cluster_id}/datacenters/{datacenter_id} | 
+*AdminClustersServersApi* | [**admin_clusters_servers_destroy**](docs/AdminClustersServersApi.md#admin_clusters_servers_destroy) | **POST** /admin/clusters/{cluster_id}/servers/destroy | 
+*AdminClustersServersApi* | [**admin_clusters_servers_list**](docs/AdminClustersServersApi.md#admin_clusters_servers_list) | **GET** /admin/clusters/{cluster_id}/servers | 
+*AdminClustersServersApi* | [**admin_clusters_servers_taint**](docs/AdminClustersServersApi.md#admin_clusters_servers_taint) | **POST** /admin/clusters/{cluster_id}/servers/taint | 
 *AuthIdentityAccessTokenApi* | [**auth_identity_access_token_complete_access_token_verification**](docs/AuthIdentityAccessTokenApi.md#auth_identity_access_token_complete_access_token_verification) | **POST** /auth/identity/access-token/complete-verification | 
 *AuthIdentityEmailApi* | [**auth_identity_email_complete_email_verification**](docs/AuthIdentityEmailApi.md#auth_identity_email_complete_email_verification) | **POST** /auth/identity/email/complete-verification | 
 *AuthIdentityEmailApi* | [**auth_identity_email_start_email_verification**](docs/AuthIdentityEmailApi.md#auth_identity_email_start_email_verification) | **POST** /auth/identity/email/start-verification | 
@@ -89,6 +90,24 @@ Class | Method | HTTP request | Description
 *CloudLogsApi* | [**cloud_logs_get_ray_perf_logs**](docs/CloudLogsApi.md#cloud_logs_get_ray_perf_logs) | **GET** /cloud/rays/{ray_id}/perf | 
 *CloudTiersApi* | [**cloud_tiers_get_region_tiers**](docs/CloudTiersApi.md#cloud_tiers_get_region_tiers) | **GET** /cloud/region-tiers | 
 *CloudUploadsApi* | [**cloud_uploads_complete_upload**](docs/CloudUploadsApi.md#cloud_uploads_complete_upload) | **POST** /cloud/uploads/{upload_id}/complete | 
+*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_create**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_create) | **POST** /cloud/backend/projects | 
+*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_get**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_get) | **GET** /cloud/backend/projects/{project_id} | 
+*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_list**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_list) | **GET** /cloud/backend/projects | 
+*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_validate**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_validate) | **POST** /cloud/backend/projects/validate | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_create**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_create) | **POST** /cloud/backend/projects/{project_id}/environments | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_delete**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_delete) | **DELETE** /cloud/backend/projects/{project_id}/environments/{environment_id} | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_deploy**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_deploy) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/deploy | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id} | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_config**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_config) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/config | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_db_url**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_db_url) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/db | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_events**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_events) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/events | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_variables**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_variables) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/variables | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_list**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_list) | **GET** /cloud/backend/projects/{project_id}/environments | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_prepare_deploy**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_prepare_deploy) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/deploy/prepare | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_provision_database**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_provision_database) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/provision-database | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_update_config**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_update_config) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/config | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_update_variables**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_update_variables) | **PATCH** /cloud/backend/projects/{project_id}/environments/{environment_id}/variables | 
+*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_validate**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_validate) | **POST** /cloud/backend/projects/{project_id}/environments/validate | 
 *EeCloudGamesBillingApi* | [**ee_cloud_games_billing_get**](docs/EeCloudGamesBillingApi.md#ee_cloud_games_billing_get) | **GET** /cloud/games/{game_id}/billing | 
 *EeCloudGamesBillingApi* | [**ee_cloud_games_billing_update_plan**](docs/EeCloudGamesBillingApi.md#ee_cloud_games_billing_update_plan) | **PUT** /cloud/games/{game_id}/billing/plan | 
 *EeCloudGamesNamespacesAnalyticsApi* | [**ee_cloud_games_namespaces_analytics_get_analytics**](docs/EeCloudGamesNamespacesAnalyticsApi.md#ee_cloud_games_namespaces_analytics_get_analytics) | **GET** /cloud/games/namespaces/analytics | 
@@ -96,22 +115,6 @@ Class | Method | HTTP request | Description
 *EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_link**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_link) | **POST** /cloud/games/{game_id}/project-link | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_create_stripe_portal_session**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_create_stripe_portal_session) | **POST** /cloud/groups/{group_id}/billing/stripe-portal-session | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_get**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get) | **GET** /cloud/groups/{group_id}/billing | 
-*EeCloudOpengbApi* | [**ee_cloud_opengb_get_db_url**](docs/EeCloudOpengbApi.md#ee_cloud_opengb_get_db_url) | **GET** /cloud/opengb/db | 
-*EeCloudOpengbProjectsApi* | [**ee_cloud_opengb_projects_create**](docs/EeCloudOpengbProjectsApi.md#ee_cloud_opengb_projects_create) | **POST** /cloud/opengb/projects | 
-*EeCloudOpengbProjectsApi* | [**ee_cloud_opengb_projects_get**](docs/EeCloudOpengbProjectsApi.md#ee_cloud_opengb_projects_get) | **GET** /cloud/opengb/projects/{project_id} | 
-*EeCloudOpengbProjectsApi* | [**ee_cloud_opengb_projects_list**](docs/EeCloudOpengbProjectsApi.md#ee_cloud_opengb_projects_list) | **GET** /cloud/opengb/projects | 
-*EeCloudOpengbProjectsApi* | [**ee_cloud_opengb_projects_validate**](docs/EeCloudOpengbProjectsApi.md#ee_cloud_opengb_projects_validate) | **POST** /cloud/opengb/projects/validate | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_create**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_create) | **POST** /cloud/opengb/projects/{project_id}/environments | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_delete**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_delete) | **DELETE** /cloud/opengb/projects/{project_id}/environments/{environment_id} | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_deploy**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_deploy) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/deploy | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_get**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_get) | **GET** /cloud/opengb/projects/{project_id}/environments/{environment_id} | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_get_db_urls**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_get_db_urls) | **GET** /cloud/opengb/projects/{project_id}/environments/{environment_id}/db | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_list**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_list) | **GET** /cloud/opengb/projects/{project_id}/environments | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_prepare_deploy**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_prepare_deploy) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/deploy/prepare | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_provision_databases**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_provision_databases) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/provision-databases | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_update_config**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_config) | **POST** /cloud/opengb/projects/{project_id}/environments/{environment_id}/config | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_update_variables**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_update_variables) | **PATCH** /cloud/opengb/projects/{project_id}/environments/{environment_id}/variables | 
-*EeCloudOpengbProjectsEnvsApi* | [**ee_cloud_opengb_projects_envs_validate**](docs/EeCloudOpengbProjectsEnvsApi.md#ee_cloud_opengb_projects_envs_validate) | **POST** /cloud/opengb/projects/{project_id}/environments/validate | 
 *GroupApi* | [**group_ban_identity**](docs/GroupApi.md#group_ban_identity) | **POST** /group/groups/{group_id}/bans/{identity_id} | 
 *GroupApi* | [**group_complete_avatar_upload**](docs/GroupApi.md#group_complete_avatar_upload) | **POST** /group/groups/{group_id}/avatar-upload/{upload_id}/complete | 
 *GroupApi* | [**group_create**](docs/GroupApi.md#group_create) | **POST** /group/groups | 
@@ -186,31 +189,30 @@ Class | Method | HTTP request | Description
 *MatchmakerPlayersApi* | [**matchmaker_players_get_statistics**](docs/MatchmakerPlayersApi.md#matchmaker_players_get_statistics) | **GET** /matchmaker/players/statistics | 
 *MatchmakerRegionsApi* | [**matchmaker_regions_list**](docs/MatchmakerRegionsApi.md#matchmaker_regions_list) | **GET** /matchmaker/regions | 
 *PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /portal/games/{game_name_id}/profile | 
-*PortalNotificationsApi* | [**portal_notifications_register_notifications**](docs/PortalNotificationsApi.md#portal_notifications_register_notifications) | **POST** /portal/notifications/register | 
-*PortalNotificationsApi* | [**portal_notifications_unregister_notifications**](docs/PortalNotificationsApi.md#portal_notifications_unregister_notifications) | **DELETE** /portal/notifications/register | 
 *ProvisionDatacentersApi* | [**provision_datacenters_get_tls**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_tls) | **GET** /datacenters/{datacenter_id}/tls | 
 *ProvisionServersApi* | [**provision_servers_get_info**](docs/ProvisionServersApi.md#provision_servers_get_info) | **GET** /servers/{ip} | 
 
 
 ## Documentation For Models
 
- - [AdminBuildDeliveryMethod](docs/AdminBuildDeliveryMethod.md)
- - [AdminCluster](docs/AdminCluster.md)
- - [AdminClustersCreateRequest](docs/AdminClustersCreateRequest.md)
- - [AdminClustersCreateResponse](docs/AdminClustersCreateResponse.md)
- - [AdminClustersDatacentersCreateRequest](docs/AdminClustersDatacentersCreateRequest.md)
- - [AdminClustersDatacentersCreateResponse](docs/AdminClustersDatacentersCreateResponse.md)
- - [AdminClustersDatacentersListResponse](docs/AdminClustersDatacentersListResponse.md)
- - [AdminClustersDatacentersUpdateRequest](docs/AdminClustersDatacentersUpdateRequest.md)
- - [AdminClustersGetServerIpsResponse](docs/AdminClustersGetServerIpsResponse.md)
- - [AdminClustersListResponse](docs/AdminClustersListResponse.md)
- - [AdminDatacenter](docs/AdminDatacenter.md)
- - [AdminHardware](docs/AdminHardware.md)
+ - [AdminClustersBuildDeliveryMethod](docs/AdminClustersBuildDeliveryMethod.md)
+ - [AdminClustersCluster](docs/AdminClustersCluster.md)
+ - [AdminClustersCreateClusterRequest](docs/AdminClustersCreateClusterRequest.md)
+ - [AdminClustersCreateClusterResponse](docs/AdminClustersCreateClusterResponse.md)
+ - [AdminClustersCreateDatacenterRequest](docs/AdminClustersCreateDatacenterRequest.md)
+ - [AdminClustersCreateDatacenterResponse](docs/AdminClustersCreateDatacenterResponse.md)
+ - [AdminClustersDatacenter](docs/AdminClustersDatacenter.md)
+ - [AdminClustersHardware](docs/AdminClustersHardware.md)
+ - [AdminClustersListClustersResponse](docs/AdminClustersListClustersResponse.md)
+ - [AdminClustersListDatacentersResponse](docs/AdminClustersListDatacentersResponse.md)
+ - [AdminClustersListServersResponse](docs/AdminClustersListServersResponse.md)
+ - [AdminClustersPool](docs/AdminClustersPool.md)
+ - [AdminClustersPoolType](docs/AdminClustersPoolType.md)
+ - [AdminClustersProvider](docs/AdminClustersProvider.md)
+ - [AdminClustersServer](docs/AdminClustersServer.md)
+ - [AdminClustersUpdateDatacenterRequest](docs/AdminClustersUpdateDatacenterRequest.md)
  - [AdminLoginRequest](docs/AdminLoginRequest.md)
  - [AdminLoginResponse](docs/AdminLoginResponse.md)
- - [AdminPool](docs/AdminPool.md)
- - [AdminPoolType](docs/AdminPoolType.md)
- - [AdminProvider](docs/AdminProvider.md)
  - [AuthCompleteStatus](docs/AuthCompleteStatus.md)
  - [AuthIdentityCompleteAccessTokenVerificationRequest](docs/AuthIdentityCompleteAccessTokenVerificationRequest.md)
  - [AuthIdentityCompleteEmailVerificationRequest](docs/AuthIdentityCompleteEmailVerificationRequest.md)
@@ -327,6 +329,7 @@ Class | Method | HTTP request | Description
  - [CloudRegionTierExpenses](docs/CloudRegionTierExpenses.md)
  - [CloudSvcMetrics](docs/CloudSvcMetrics.md)
  - [CloudSvcPerf](docs/CloudSvcPerf.md)
+ - [CloudUniversalRegion](docs/CloudUniversalRegion.md)
  - [CloudValidateGroupRequest](docs/CloudValidateGroupRequest.md)
  - [CloudValidateGroupResponse](docs/CloudValidateGroupResponse.md)
  - [CloudVersionCdnConfig](docs/CloudVersionCdnConfig.md)
@@ -370,10 +373,38 @@ Class | Method | HTTP request | Description
  - [CloudVersionMatchmakerPortRange](docs/CloudVersionMatchmakerPortRange.md)
  - [CloudVersionMatchmakerProxyKind](docs/CloudVersionMatchmakerProxyKind.md)
  - [CloudVersionSummary](docs/CloudVersionSummary.md)
+ - [EeBackendEnvironment](docs/EeBackendEnvironment.md)
+ - [EeBackendNeonProjectConfig](docs/EeBackendNeonProjectConfig.md)
+ - [EeBackendProject](docs/EeBackendProject.md)
+ - [EeBackendTier](docs/EeBackendTier.md)
+ - [EeBackendUpdateVariable](docs/EeBackendUpdateVariable.md)
+ - [EeBackendVariable](docs/EeBackendVariable.md)
  - [EeCloudAnalyticsVariantQuery](docs/EeCloudAnalyticsVariantQuery.md)
  - [EeCloudAvgPlayDurationByGameModeDataSet](docs/EeCloudAvgPlayDurationByGameModeDataSet.md)
  - [EeCloudAvgPlayDurationByRegionDataSet](docs/EeCloudAvgPlayDurationByRegionDataSet.md)
  - [EeCloudAvgPlayDurationDataSet](docs/EeCloudAvgPlayDurationDataSet.md)
+ - [EeCloudBackendProjectsCreateRequest](docs/EeCloudBackendProjectsCreateRequest.md)
+ - [EeCloudBackendProjectsCreateResponse](docs/EeCloudBackendProjectsCreateResponse.md)
+ - [EeCloudBackendProjectsEnvsCreateRequest](docs/EeCloudBackendProjectsEnvsCreateRequest.md)
+ - [EeCloudBackendProjectsEnvsCreateResponse](docs/EeCloudBackendProjectsEnvsCreateResponse.md)
+ - [EeCloudBackendProjectsEnvsDeployRequest](docs/EeCloudBackendProjectsEnvsDeployRequest.md)
+ - [EeCloudBackendProjectsEnvsDeployResponse](docs/EeCloudBackendProjectsEnvsDeployResponse.md)
+ - [EeCloudBackendProjectsEnvsGetConfigResponse](docs/EeCloudBackendProjectsEnvsGetConfigResponse.md)
+ - [EeCloudBackendProjectsEnvsGetDbUrlResponse](docs/EeCloudBackendProjectsEnvsGetDbUrlResponse.md)
+ - [EeCloudBackendProjectsEnvsGetEventsResponse](docs/EeCloudBackendProjectsEnvsGetEventsResponse.md)
+ - [EeCloudBackendProjectsEnvsGetResponse](docs/EeCloudBackendProjectsEnvsGetResponse.md)
+ - [EeCloudBackendProjectsEnvsGetVariablesResponse](docs/EeCloudBackendProjectsEnvsGetVariablesResponse.md)
+ - [EeCloudBackendProjectsEnvsListResponse](docs/EeCloudBackendProjectsEnvsListResponse.md)
+ - [EeCloudBackendProjectsEnvsPrepareDeployRequest](docs/EeCloudBackendProjectsEnvsPrepareDeployRequest.md)
+ - [EeCloudBackendProjectsEnvsPrepareDeployResponse](docs/EeCloudBackendProjectsEnvsPrepareDeployResponse.md)
+ - [EeCloudBackendProjectsEnvsUpdateConfigRequest](docs/EeCloudBackendProjectsEnvsUpdateConfigRequest.md)
+ - [EeCloudBackendProjectsEnvsUpdateVariablesRequest](docs/EeCloudBackendProjectsEnvsUpdateVariablesRequest.md)
+ - [EeCloudBackendProjectsEnvsValidateRequest](docs/EeCloudBackendProjectsEnvsValidateRequest.md)
+ - [EeCloudBackendProjectsEnvsValidateResponse](docs/EeCloudBackendProjectsEnvsValidateResponse.md)
+ - [EeCloudBackendProjectsGetResponse](docs/EeCloudBackendProjectsGetResponse.md)
+ - [EeCloudBackendProjectsListResponse](docs/EeCloudBackendProjectsListResponse.md)
+ - [EeCloudBackendProjectsValidateRequest](docs/EeCloudBackendProjectsValidateRequest.md)
+ - [EeCloudBackendProjectsValidateResponse](docs/EeCloudBackendProjectsValidateResponse.md)
  - [EeCloudDestroyedLobbiesByExitCodeDataSet](docs/EeCloudDestroyedLobbiesByExitCodeDataSet.md)
  - [EeCloudDestroyedLobbiesByFailureDataSet](docs/EeCloudDestroyedLobbiesByFailureDataSet.md)
  - [EeCloudFailedLobbiesDataSet](docs/EeCloudFailedLobbiesDataSet.md)
@@ -399,37 +430,9 @@ Class | Method | HTTP request | Description
  - [EeCloudNamespaceAnalyticsDataSet](docs/EeCloudNamespaceAnalyticsDataSet.md)
  - [EeCloudNewLobbiesPerSecondDataSet](docs/EeCloudNewLobbiesPerSecondDataSet.md)
  - [EeCloudNewPlayersPerSecondDataSet](docs/EeCloudNewPlayersPerSecondDataSet.md)
- - [EeCloudOpengbGetDbUrlResponse](docs/EeCloudOpengbGetDbUrlResponse.md)
- - [EeCloudOpengbProjectsCreateRequest](docs/EeCloudOpengbProjectsCreateRequest.md)
- - [EeCloudOpengbProjectsCreateResponse](docs/EeCloudOpengbProjectsCreateResponse.md)
- - [EeCloudOpengbProjectsEnvsCreateRequest](docs/EeCloudOpengbProjectsEnvsCreateRequest.md)
- - [EeCloudOpengbProjectsEnvsCreateResponse](docs/EeCloudOpengbProjectsEnvsCreateResponse.md)
- - [EeCloudOpengbProjectsEnvsDeployRequest](docs/EeCloudOpengbProjectsEnvsDeployRequest.md)
- - [EeCloudOpengbProjectsEnvsDeployResponse](docs/EeCloudOpengbProjectsEnvsDeployResponse.md)
- - [EeCloudOpengbProjectsEnvsGetDbUrlsResponse](docs/EeCloudOpengbProjectsEnvsGetDbUrlsResponse.md)
- - [EeCloudOpengbProjectsEnvsGetResponse](docs/EeCloudOpengbProjectsEnvsGetResponse.md)
- - [EeCloudOpengbProjectsEnvsListResponse](docs/EeCloudOpengbProjectsEnvsListResponse.md)
- - [EeCloudOpengbProjectsEnvsPrepareDeployRequest](docs/EeCloudOpengbProjectsEnvsPrepareDeployRequest.md)
- - [EeCloudOpengbProjectsEnvsPrepareDeployResponse](docs/EeCloudOpengbProjectsEnvsPrepareDeployResponse.md)
- - [EeCloudOpengbProjectsEnvsProvisionDatabasesRequest](docs/EeCloudOpengbProjectsEnvsProvisionDatabasesRequest.md)
- - [EeCloudOpengbProjectsEnvsUpdateConfigRequest](docs/EeCloudOpengbProjectsEnvsUpdateConfigRequest.md)
- - [EeCloudOpengbProjectsEnvsUpdateVariablesRequest](docs/EeCloudOpengbProjectsEnvsUpdateVariablesRequest.md)
- - [EeCloudOpengbProjectsEnvsValidateRequest](docs/EeCloudOpengbProjectsEnvsValidateRequest.md)
- - [EeCloudOpengbProjectsEnvsValidateResponse](docs/EeCloudOpengbProjectsEnvsValidateResponse.md)
- - [EeCloudOpengbProjectsGetResponse](docs/EeCloudOpengbProjectsGetResponse.md)
- - [EeCloudOpengbProjectsListResponse](docs/EeCloudOpengbProjectsListResponse.md)
- - [EeCloudOpengbProjectsValidateRequest](docs/EeCloudOpengbProjectsValidateRequest.md)
- - [EeCloudOpengbProjectsValidateResponse](docs/EeCloudOpengbProjectsValidateResponse.md)
  - [EeCloudPlayerCountByGameModeDataSet](docs/EeCloudPlayerCountByGameModeDataSet.md)
  - [EeCloudPlayerCountByRegionDataSet](docs/EeCloudPlayerCountByRegionDataSet.md)
  - [EeCloudPlayerCountDataSet](docs/EeCloudPlayerCountDataSet.md)
- - [EeOpengbEnvironment](docs/EeOpengbEnvironment.md)
- - [EeOpengbModule](docs/EeOpengbModule.md)
- - [EeOpengbModuleDb](docs/EeOpengbModuleDb.md)
- - [EeOpengbNeonProjectConfig](docs/EeOpengbNeonProjectConfig.md)
- - [EeOpengbProject](docs/EeOpengbProject.md)
- - [EeOpengbTier](docs/EeOpengbTier.md)
- - [EeOpengbVariable](docs/EeOpengbVariable.md)
  - [ErrorBody](docs/ErrorBody.md)
  - [GameHandle](docs/GameHandle.md)
  - [GameLeaderboardCategory](docs/GameLeaderboardCategory.md)
@@ -552,7 +555,6 @@ Class | Method | HTTP request | Description
  - [PortalNotificationRegisterFirebaseService](docs/PortalNotificationRegisterFirebaseService.md)
  - [PortalNotificationRegisterService](docs/PortalNotificationRegisterService.md)
  - [PortalNotificationUnregisterService](docs/PortalNotificationUnregisterService.md)
- - [PortalRegisterNotificationsRequest](docs/PortalRegisterNotificationsRequest.md)
  - [ProvisionDatacentersGetTlsResponse](docs/ProvisionDatacentersGetTlsResponse.md)
  - [ProvisionServersGetInfoResponse](docs/ProvisionServersGetInfoResponse.md)
  - [UploadPrepareFile](docs/UploadPrepareFile.md)

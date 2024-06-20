@@ -31,10 +31,10 @@ impl Opts {
 
 		rivet_term::status::info("Creating environment", &self.display_name);
 
-		apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_create(
+		apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_create(
 			&ctx.openapi_config_cloud,
 			project.project_id.to_string().as_str(),
-			models::EeCloudOpengbProjectsEnvsCreateRequest {
+			models::EeCloudBackendProjectsEnvsCreateRequest {
 				display_name: self.display_name.clone(),
 				name_id: self.name_id.clone(),
 				tier: self.tier.into(),
@@ -56,11 +56,11 @@ enum Tier {
 	Dedicated,
 }
 
-impl From<Tier> for models::EeOpengbTier {
+impl From<Tier> for models::EeBackendTier {
 	fn from(value: Tier) -> Self {
 		match value {
-			Tier::Shared => models::EeOpengbTier::Shared,
-			Tier::Dedicated => models::EeOpengbTier::Dedicated,
+			Tier::Shared => models::EeBackendTier::Shared,
+			Tier::Dedicated => models::EeBackendTier::Dedicated,
 		}
 	}
 }

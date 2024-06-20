@@ -18,11 +18,18 @@ pub struct CloudBootstrapDomains {
 	pub job: String,
 	#[serde(rename = "main")]
 	pub main: String,
+	#[serde(rename = "opengb", skip_serializing_if = "Option::is_none")]
+	pub opengb: Option<String>,
 }
 
 impl CloudBootstrapDomains {
 	/// Domains that host parts of Rivet
 	pub fn new(cdn: String, job: String, main: String) -> CloudBootstrapDomains {
-		CloudBootstrapDomains { cdn, job, main }
+		CloudBootstrapDomains {
+			cdn,
+			job,
+			main,
+			opengb: None,
+		}
 	}
 }

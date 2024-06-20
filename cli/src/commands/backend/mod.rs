@@ -3,9 +3,7 @@ use std::{collections::HashMap, io::Write, path::PathBuf};
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
 use global_error::prelude::*;
-use serde::Deserialize;
 use tempfile::NamedTempFile;
-use tokio::fs;
 use tokio::process::Command;
 
 use crate::util::{global_config, paths, term};
@@ -41,31 +39,12 @@ impl SubCommand {
 		}
 	}
 }
-
-#[derive(Debug, Deserialize)]
-struct ProjectConfig {
-	modules: HashMap<String, serde_json::Value>,
-}
-
-async fn read_project_config(project_path: &PathBuf) -> GlobalResult<ProjectConfig> {
-	let config_path = project_path.join("backend.json");
-
-	let project_config_str = match fs::read_to_string(&config_path).await {
-		Err(err) if matches!(err.kind(), std::io::ErrorKind::NotFound) => {
-			bail!("file not found: {}", config_path.display());
-		}
-		x => x?,
-	};
-
-	Ok(serde_json::from_str::<ProjectConfig>(&project_config_str)?)
-}
-
 /**
 * Gets or auto-creates a backend project for the game.
 */
 pub async fn get_or_create_project(
 	ctx: &cli_core::Ctx,
-) -> GlobalResult<Box<models::EeOpengbProject>> {
+) -> GlobalResult<Box<models::EeBackendProject>> {
 	let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
@@ -85,11 +64,11 @@ pub async fn passthrough(
 	ctx: Option<&cli_core::Ctx>,
 	db_command: Option<database::PassthroughSubCommand>,
 ) -> GlobalResult<()> {
-	let mut opengb_env = vec![
-		// Added to let OpenGB know its running as a passthrough command within Rivet. Shows more
-		// specialized help commands.
-		("RIVET_CLI_PASSTHROUGH".into(), "1".into()),
-	];
+	let mut opengb_env = HashMap::new();
+
+	// Added to let OpenGB know its running as a passthrough command within Rivet. Shows more
+	// specialized help commands.
+	opengb_env.insert("RIVET_CLI_PASSTHROUGH".to_string(), "1".to_string());
 
 	// Parse env name from: rivet backend db deploy --env foo
 	if let Some(cmd) = db_command {
@@ -98,12 +77,13 @@ pub async fn passthrough(
 
 		let project = get_or_create_project(ctx).await?;
 
-		let envs_res = apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_list(
-			&ctx.openapi_config_cloud,
-			&project.project_id.to_string(),
-			None,
-		)
-		.await?;
+		let envs_res =
+			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_list(
+				&ctx.openapi_config_cloud,
+				&project.project_id.to_string(),
+				None,
+			)
+			.await?;
 
 		let env = unwrap!(
 			envs_res
@@ -113,27 +93,21 @@ pub async fn passthrough(
 			r#"No environment found with name id "{env_name_id}"."#,
 		);
 
-		// Read path from opengb command
-		let path = if let Some(path) = cmd.path() {
-			path.clone()
-		} else {
-			paths::project_root()?
-		};
+		database::provision_database(ctx, project.project_id, env.environment_id).await?;
 
-		database::provision_databases(ctx, &path, project.project_id, env.environment_id).await?;
-
-		let databases = global_config::try_read_project(|config| {
+		let db_url = global_config::try_read_project(|config| {
 			let project = unwrap!(config.opengb.projects.get(&project.project_id));
 			let env = unwrap!(project.environments.get(&env.environment_id));
 
-			Ok(env.databases.clone())
+			Ok(env.url.clone())
 		})
 		.await?;
 
 		// Insert all database urls into env
-		for (db_name, db) in databases {
-			opengb_env.push((format!("DATABASE_URL_{}", db_name), db.url.clone()));
-		}
+		opengb_env.insert(
+			"DATABASE_URL".to_string(),
+			unwrap!(db_url, "no db url for env"),
+		);
 	}
 
 	// Match the exit code of the opengb command
@@ -153,7 +127,7 @@ pub async fn passthrough(
 
 pub struct OpenGbCommandOpts {
 	pub args: Vec<String>,
-	pub env: Vec<(String, String)>,
+	pub env: HashMap<String, String>,
 	pub cwd: PathBuf,
 }
 

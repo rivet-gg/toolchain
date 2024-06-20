@@ -28,12 +28,13 @@ impl Opts {
 		let project = get_or_create_project(ctx).await?;
 		let project_id_str = project.project_id.to_string();
 
-		let envs_res = apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_list(
-			&ctx.openapi_config_cloud,
-			&project_id_str,
-			None,
-		)
-		.await?;
+		let envs_res =
+			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_list(
+				&ctx.openapi_config_cloud,
+				&project_id_str,
+				None,
+			)
+			.await?;
 
 		let env = unwrap!(
 			envs_res
@@ -61,25 +62,19 @@ impl Opts {
 				"--runtime".into(),
 				"cloudflare-workers".into(),
 			],
-			env: Vec::new(),
+			env: HashMap::new(),
 			cwd: project_path.clone(),
 		})
 		.await?;
 		ensure!(cmd.success(), "Failed to build OpenGB project");
 
-		super::database::provision_databases(
-			ctx,
-			&project_path,
-			project.project_id,
-			env.environment_id,
-		)
-		.await?;
+		super::database::provision_database(ctx, project.project_id, env.environment_id).await?;
 
-		let databases = global_config::try_read_project(|config| {
+		let db_url = global_config::try_read_project(|config| {
 			let project = unwrap!(config.opengb.projects.get(&project.project_id));
 			let env = unwrap!(project.environments.get(&env.environment_id));
 
-			Ok(env.databases.clone())
+			Ok(env.url.clone())
 		})
 		.await?;
 
@@ -87,17 +82,19 @@ impl Opts {
 		rivet_term::status::info("Migrating databases", "");
 
 		// Migrate
-		let mut migrate_env = Vec::new();
-		for (db_name, db) in databases {
-			migrate_env.push((format!("DATABASE_URL_{}", db_name), db.url.clone()));
-		}
+		let mut migrate_env = HashMap::new();
+		migrate_env.insert(
+			"DATABASE_URL".to_string(),
+			unwrap!(db_url, "no db url for env"),
+		);
+
 		let migrate_cmd = run_opengb_command(OpenGbCommandOpts {
 			args: vec!["db".into(), "deploy".into()],
 			env: migrate_env,
 			cwd: project_path.clone(),
 		})
 		.await?;
-		ensure!(migrate_cmd.success(), "Failed to migrate OpenGB databases",);
+		ensure!(migrate_cmd.success(), "Failed to migrate OpenGB databases");
 
 		// Read files for upload
 		let gen_manifest = read_generated_manifest(&project_path).await?;
@@ -131,11 +128,11 @@ impl Opts {
 		);
 
 		let prepare_res = unwrap!(
-			apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_prepare_deploy(
+			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_prepare_deploy(
 				&ctx.openapi_config_cloud,
 				&project_id_str,
 				&env_id,
-				models::EeCloudOpengbProjectsEnvsPrepareDeployRequest {
+				models::EeCloudBackendProjectsEnvsPrepareDeployRequest {
 					files: files.iter().map(|f| f.prepared.clone()).collect(),
 				},
 			)
@@ -177,30 +174,12 @@ impl Opts {
 		eprintln!();
 		rivet_term::status::info("Deploying environment", &env.display_name);
 
-		// Structure DB names
-		let project_config = super::read_project_config(&project_path).await?;
-		let modules = project_config
-			.modules
-			.keys()
-			.map(|module_name| {
-				(
-					module_name.clone(),
-					models::EeOpengbModule {
-						db: Some(Box::new(models::EeOpengbModuleDb {
-							name: format!("module_{module_name}"),
-						})),
-					},
-				)
-			})
-			.collect::<HashMap<_, _>>();
-
 		let deploy_res =
-			apis::ee_cloud_opengb_projects_envs_api::ee_cloud_opengb_projects_envs_deploy(
+			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_deploy(
 				&ctx.openapi_config_cloud,
 				&project_id_str,
 				&env_id,
-				models::EeCloudOpengbProjectsEnvsDeployRequest {
-					modules,
+				models::EeCloudBackendProjectsEnvsDeployRequest {
 					upload_id: prepare_res.upload_id,
 				},
 			)
