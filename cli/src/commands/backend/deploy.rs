@@ -21,6 +21,10 @@ pub struct Opts {
 	/// The location of the OpenGB project.
 	#[clap(long)]
 	path: Option<std::path::PathBuf>,
+
+	/// Skip the migration step.
+	#[clap(long)]
+	skip_migrate: bool,
 }
 
 impl Opts {
@@ -60,7 +64,7 @@ impl Opts {
 			args: vec![
 				"build".into(),
 				"--runtime".into(),
-				"cloudflare-workers".into(),
+				"cloudflare-workers-platforms".into(),
 			],
 			env: HashMap::new(),
 			cwd: project_path.clone(),
@@ -78,23 +82,25 @@ impl Opts {
 		})
 		.await?;
 
-		eprintln!();
-		rivet_term::status::info("Migrating databases", "");
+		if !self.skip_migrate {
+			eprintln!();
+			rivet_term::status::info("Migrating databases", "");
 
-		// Migrate
-		let mut migrate_env = HashMap::new();
-		migrate_env.insert(
-			"DATABASE_URL".to_string(),
-			unwrap!(db_url, "no db url for env"),
-		);
+			// Migrate
+			let mut migrate_env = HashMap::new();
+			migrate_env.insert(
+				"DATABASE_URL".to_string(),
+				unwrap!(db_url, "no db url for env"),
+			);
 
-		let migrate_cmd = run_opengb_command(OpenGbCommandOpts {
-			args: vec!["db".into(), "deploy".into()],
-			env: migrate_env,
-			cwd: project_path.clone(),
-		})
-		.await?;
-		ensure!(migrate_cmd.success(), "Failed to migrate OpenGB databases");
+			let migrate_cmd = run_opengb_command(OpenGbCommandOpts {
+				args: vec!["db".into(), "deploy".into()],
+				env: migrate_env,
+				cwd: project_path.clone(),
+			})
+			.await?;
+			ensure!(migrate_cmd.success(), "Failed to migrate OpenGB databases");
+		}
 
 		// Read files for upload
 		let gen_manifest = read_generated_manifest(&project_path).await?;
