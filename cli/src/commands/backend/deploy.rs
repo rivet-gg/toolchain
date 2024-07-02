@@ -64,7 +64,7 @@ impl Opts {
 			args: vec![
 				"build".into(),
 				"--runtime".into(),
-				"cloudflare-workers-platforms".into(),
+				"cloudflare-workers".into(),
 			],
 			env: HashMap::new(),
 			cwd: project_path.clone(),
