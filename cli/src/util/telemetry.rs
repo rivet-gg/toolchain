@@ -36,7 +36,7 @@ pub async fn wait_all() {
 }
 
 // This API key is safe to hardcode. It will not change and is intended to be public.
-const POSTHOG_API_KEY: &str = "phc_P6XQOd4QdSPhvgSj7ywfwhvZolwgdkfa6G7ytcqNLTU";
+const POSTHOG_API_KEY: &str = "phc_6kfTNEAVw7rn1LA51cO3D69FefbKupSWFaM7OUgEpEo";
 
 fn build_client() -> async_posthog::Client {
 	async_posthog::client(POSTHOG_API_KEY)
