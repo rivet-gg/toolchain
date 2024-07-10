@@ -339,7 +339,7 @@ dependencies = [
 [[package]]
 name = "config"
 version = "0.14.0"
-source = "git+https://github.com/AngelOnFira/config-rs?rev=04e61354912543e23e70b6851a3f4b03ce69471c#04e61354912543e23e70b6851a3f4b03ce69471c"
+source = "git+https://github.com/rivet-gg/config-rs?rev=0f3c89b4770276e8db72ce962974a9a72c59c97a#0f3c89b4770276e8db72ce962974a9a72c59c97a"
 dependencies = [
  "encoding_rs_io",
  "lazy_static",
