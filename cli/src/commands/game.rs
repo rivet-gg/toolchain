@@ -41,7 +41,12 @@ impl SubCommand {
 				Ok(())
 			}
 			SubCommand::View => {
-				eprintln!("{}", term::link(dashboard_url(&ctx, &ctx.game_id)));
+				let url = dashboard_url(&ctx, &ctx.game_id);
+				eprintln!("Opening {}", term::link(url));
+
+				if webbrowser::open(&url).is_err() {
+					eprintln!("Failed to open URL in browser.");
+				}
 
 				Ok(())
 			}
