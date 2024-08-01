@@ -9,6 +9,7 @@ use crate::util::{
 	struct_fmt::{self, Format},
 };
 
+pub mod backend_dev;
 pub mod backend_gen_sdk;
 pub mod deploy;
 pub mod generate_config;
@@ -62,6 +63,7 @@ pub enum SubCommand {
 	GetNamespaceDevelopmentToken(get_namespace_dev_token::Opts),
 	/// Generate config
 	GenerateConfig(generate_config::Opts),
+	BackendDev(backend_dev::Opts),
 	BackendGenerateSdk(backend_gen_sdk::Opts),
 	/// Unlink current game
 	Unlink(unlink::Opts),
@@ -89,8 +91,14 @@ impl SubCommand {
 	pub async fn pre_execute(
 		&self,
 		token: &Option<String>,
+		show_terminal: bool,
 		inside_terminal: bool,
 	) -> GlobalResult<PreExecuteHandled> {
+		if show_terminal {
+			SubCommand::show_terminal().await?;
+			return Ok(PreExecuteHandled::Yes);
+		}
+
 		let mut handled = PreExecuteHandled::Yes;
 		let response = match self {
 			SubCommand::ShowTerm(opts) => serialize_output(opts.execute().await),
@@ -99,6 +107,7 @@ impl SubCommand {
 			SubCommand::CheckLoginState => serialize_output(self.validate_token(&token)),
 			SubCommand::GetCliVersion(opts) => serialize_output(opts.execute().await),
 			SubCommand::GenerateConfig(opts) => serialize_output(opts.execute().await),
+			SubCommand::BackendDev(opts) => serialize_output(opts.execute().await),
 			SubCommand::BackendGenerateSdk(opts) => serialize_output(opts.execute().await),
 			_ => {
 				// If the command is anything else, we need to check if a token
@@ -136,7 +145,7 @@ impl SubCommand {
 		inside_terminal: bool,
 	) -> GlobalResult<()> {
 		if show_terminal {
-			SubCommand::show_terminal(ctx).await?;
+			SubCommand::show_terminal().await?;
 			return Ok(());
 		}
 
@@ -151,6 +160,7 @@ impl SubCommand {
 			| SubCommand::CheckLoginState
 			| SubCommand::WaitForLogin(_)
 			| SubCommand::GenerateConfig(_)
+			| SubCommand::BackendDev(_)
 			| SubCommand::BackendGenerateSdk(_)
 			| SubCommand::GetCliVersion(_) => {
 				unreachable!("This command should be handled before this")
@@ -203,7 +213,10 @@ impl SubCommand {
 		Ok(())
 	}
 
-	pub async fn show_terminal(_ctx: &cli_core::Ctx) -> GlobalResult<()> {
+	/**
+	 * Reads the raw env vars and spawns a new terminal for the given command.
+	 */
+	pub async fn show_terminal() -> GlobalResult<()> {
 		// TODO(forest): The code doesn't handle the case where the binary
 		// path or the arguments contain special characters that might need
 		// to be escaped or quoted.

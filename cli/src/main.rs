@@ -323,11 +323,15 @@ async fn handle_opts() -> GlobalResult<()> {
 	// Sidekick sign-in can also be called before the token is validated
 	if let SubCommand::Sidekick {
 		command,
+		show_terminal,
 		inside_terminal,
 		..
 	} = &opts.command
 	{
-		if let Ok(PreExecuteHandled::Yes) = command.pre_execute(&token, *inside_terminal).await {
+		if let Ok(PreExecuteHandled::Yes) = command
+			.pre_execute(&token, *show_terminal, *inside_terminal)
+			.await
+		{
 			return Ok(());
 		}
 	}
