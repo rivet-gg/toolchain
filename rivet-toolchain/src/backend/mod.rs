@@ -95,17 +95,48 @@ pub async fn spawn_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<u32> 
 
 /// Gets or auto-creates a backend project for the game.
 pub async fn get_or_create_project(ctx: &Ctx) -> GlobalResult<Box<models::EeBackendProject>> {
+	// Get the project
 	let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id,
 	)
 	.await?;
 
-	// TODO: Add get or create project
-	let project = unwrap!(
-			project_res.project,
-			"No OpenGB project linked to the current game. Create one on the hub: https://hub.rivet.gg/"
-		);
+	if let Some(project) = project_res.project {
+		Ok(project)
+	} else {
+		// Get game in order to determine team & project name
+		let models::CloudGamesGetGameByIdResponse { game, .. } =
+			apis::cloud_games_api::cloud_games_get_game_by_id(
+				&ctx.openapi_config_cloud,
+				&ctx.game_id,
+				None,
+			)
+			.await?;
 
-	Ok(project)
+		// Create project
+		let display_name = format!("{:.15}-backend", game.display_name);
+		let models::EeCloudBackendProjectsCreateResponse { project, .. } =
+			apis::ee_cloud_backend_projects_api::ee_cloud_backend_projects_create(
+				&ctx.openapi_config_cloud,
+				models::EeCloudBackendProjectsCreateRequest {
+					developer_group_id: game.developer_group_id,
+					display_name,
+					game_id: Some(game.game_id),
+				},
+			)
+			.await?;
+
+		// Link to game
+		apis::ee_cloud_games_projects_api::ee_cloud_games_projects_link(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id,
+			models::EeCloudGamesProjectsLinkRequest {
+				project_id: project.project_id,
+			},
+		)
+		.await?;
+
+		Ok(project)
+	}
 }

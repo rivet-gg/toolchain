@@ -13,13 +13,16 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct EeCloudBackendProjectsCreateResponse {
+    #[serde(rename = "project")]
+    pub project: Box<crate::models::EeBackendProject>,
     #[serde(rename = "project_id")]
     pub project_id: uuid::Uuid,
 }
 
 impl EeCloudBackendProjectsCreateResponse {
-    pub fn new(project_id: uuid::Uuid) -> EeCloudBackendProjectsCreateResponse {
+    pub fn new(project: crate::models::EeBackendProject, project_id: uuid::Uuid) -> EeCloudBackendProjectsCreateResponse {
         EeCloudBackendProjectsCreateResponse {
+            project: Box::new(project),
             project_id,
         }
     }

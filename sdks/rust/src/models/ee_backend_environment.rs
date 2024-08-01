@@ -19,6 +19,8 @@ pub struct EeBackendEnvironment {
     /// Represent a resource's readable display name.
     #[serde(rename = "display_name")]
     pub display_name: String,
+    #[serde(rename = "endpoint")]
+    pub endpoint: String,
     #[serde(rename = "environment_id")]
     pub environment_id: uuid::Uuid,
     /// A human readable short identifier used to references resources. Different than a `uuid` because this is intended to be human readable. Different than `DisplayName` because this should not include special characters and be short.
@@ -29,10 +31,11 @@ pub struct EeBackendEnvironment {
 }
 
 impl EeBackendEnvironment {
-    pub fn new(create_ts: String, display_name: String, environment_id: uuid::Uuid, name_id: String, tier: crate::models::EeBackendTier) -> EeBackendEnvironment {
+    pub fn new(create_ts: String, display_name: String, endpoint: String, environment_id: uuid::Uuid, name_id: String, tier: crate::models::EeBackendTier) -> EeBackendEnvironment {
         EeBackendEnvironment {
             create_ts,
             display_name,
+            endpoint,
             environment_id,
             name_id,
             tier,

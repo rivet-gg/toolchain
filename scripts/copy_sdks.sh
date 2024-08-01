@@ -1,5 +1,6 @@
 #!/bin/sh
+set -euf
 
 mkdir -p ./sdks/rust
 rm -rf ./sdks/rust
-cp -r ../rivet-ee/sdks/full/rust ./sdks
+cp -r $EE_REPO_PATH/sdks/full/rust ./sdks

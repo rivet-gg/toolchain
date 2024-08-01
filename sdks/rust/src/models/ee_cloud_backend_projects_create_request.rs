@@ -18,6 +18,8 @@ pub struct EeCloudBackendProjectsCreateRequest {
     /// Represent a resource's readable display name.
     #[serde(rename = "display_name")]
     pub display_name: String,
+    #[serde(rename = "game_id", skip_serializing_if = "Option::is_none")]
+    pub game_id: Option<uuid::Uuid>,
 }
 
 impl EeCloudBackendProjectsCreateRequest {
@@ -25,6 +27,7 @@ impl EeCloudBackendProjectsCreateRequest {
         EeCloudBackendProjectsCreateRequest {
             developer_group_id,
             display_name,
+            game_id: None,
         }
     }
 }
