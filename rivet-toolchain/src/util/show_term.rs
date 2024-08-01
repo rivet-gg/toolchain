@@ -96,6 +96,8 @@ pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
 
 	#[cfg(target_os = "linux")]
 	let child: Child = {
+		let mut args = args.to_vec();
+
 		// TODO(forest): For Linux, the code is trying to find an
 		// available terminal emulator from a predefined list and
 		// then run the command in it. However, the way to run a
@@ -159,7 +161,7 @@ pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
 					.arg("-c")
 					.args(&args)
 					.spawn()
-					.expect("Terminal emulator failed to start");
+					.expect("Terminal emulator failed to start")
 			}
 			None => {
 				panic!("No terminal emulator found");
