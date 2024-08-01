@@ -60,14 +60,10 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	let mut update_variables = HashMap::<String, _>::new();
 	// if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
 	// TODO: pull this from the server
-	let public_endpoint = format!(
-		"https://{}--{}.backend.nathan16.gameinc.io",
-		project.name_id, env.name_id
-	);
 	update_variables.insert(
 		"OPENGB_PUBLIC_ENDPOINT".to_string(),
 		models::EeBackendUpdateVariable {
-			text: Some(public_endpoint),
+			text: Some(env.endpoint.clone()),
 			..Default::default()
 		},
 	);

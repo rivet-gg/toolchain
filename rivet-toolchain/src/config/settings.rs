@@ -46,34 +46,52 @@ pub struct BackendSdkConfig {
 	pub path: Option<String>,
 }
 
-#[derive(Default, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct BackendDevConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	/// Backend ocnfig to use when running backend config.
-	#[serde(default = "BackendDevConfig::config_path")]
+	#[serde(default = "BackendDevConfig::default_config_path")]
 	pub config_path: String,
 }
 
+impl Default for BackendDevConfig {
+	fn default() -> Self {
+		Self {
+			command_environment: HashMap::new(),
+			config_path: Self::default_config_path(),
+		}
+	}
+}
+
 impl BackendDevConfig {
-	fn config_path() -> String {
+	fn default_config_path() -> String {
 		"backend.dev.json".to_string()
 	}
 }
 
-#[derive(Default, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct BackendDeployConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	/// Backend ocnfig to use when running backend config.
-	#[serde(default = "BackendDeployConfig::config_path")]
+	#[serde(default = "BackendDeployConfig::default_config_path")]
 	pub config_path: String,
 }
 
+impl Default for BackendDeployConfig {
+	fn default() -> Self {
+		Self {
+			command_environment: HashMap::new(),
+			config_path: Self::default_config_path(),
+		}
+	}
+}
+
 impl BackendDeployConfig {
-	fn config_path() -> String {
+	fn default_config_path() -> String {
 		"backend.json".into()
 	}
 }
