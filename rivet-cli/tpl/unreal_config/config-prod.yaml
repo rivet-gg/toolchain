@@ -1,8 +1,0 @@
-# Overrides configuration parameters for the production environment.
-#
-# See `rivet.yaml` for the main config.
-
-# Use the shipping builds instead of debug builds
-matchmaker:
-  docker:
-    dockerfile: server.shipping.Dockerfile

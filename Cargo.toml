@@ -1,7 +1,6 @@
 [workspace]
 members = [
-    "rivet-toolchain-core",
-    "rivet-cli",
+    "rivet-toolchain",
 ]
 
 # Config for 'cargo dist'
