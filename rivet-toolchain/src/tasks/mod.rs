@@ -9,6 +9,7 @@ pub mod get_bootstrap_data;
 pub mod get_hub_link;
 pub mod get_settings_paths;
 pub mod open;
+pub mod show_term;
 pub mod start_device_link;
 pub mod unlink;
 pub mod wait_for_login;
@@ -84,6 +85,7 @@ gen_run_task!(
 	get_bootstrap_data::Task,
 	get_hub_link::Task,
 	open::Task,
+	show_term::Task,
 	start_device_link::Task,
 	unlink::Task,
 	wait_for_login::Task,

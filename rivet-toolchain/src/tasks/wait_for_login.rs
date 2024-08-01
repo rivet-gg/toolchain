@@ -11,9 +11,7 @@ pub struct Input {
 }
 
 #[derive(Serialize)]
-pub struct Output {
-	pub output: String,
-}
+pub struct Output {}
 
 pub struct Task;
 
@@ -64,8 +62,6 @@ impl super::Task for Task {
 
 		config::meta::insert_project(input.api_endpoint, token).await?;
 
-		Ok(Output {
-			output: "Token saved".to_string(),
-		})
+		Ok(Output {})
 	}
 }

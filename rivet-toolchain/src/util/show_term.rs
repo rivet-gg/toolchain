@@ -77,9 +77,12 @@ pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
 		// Write the script content to the script file
 		let command_to_run = format!(
 			"cd \"{}\" && {} && rm \"{}\"",
-			current_dir,
-			args.join(" "),
-			script_path.display()
+			shell_escape(&current_dir),
+			args.iter()
+				.map(|x| shell_escape(x))
+				.collect::<Vec<_>>()
+				.join(" "),
+			shell_escape(&script_path.display().to_string()),
 		);
 		std::fs::write(&script_path, format!("#!/bin/bash\n{}", command_to_run))?;
 		std::fs::set_permissions(
@@ -156,7 +159,7 @@ pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
 					.args(terminal.prompt_str)
 					// We pass everything to a shell manually so that we can
 					// pass an entire string of the rest of the commands.
-					// This is more consistant across terminals on linux.
+					// This is more consistent across terminals on linux.
 					.arg(shell)
 					.arg("-c")
 					.args(&args)
@@ -170,6 +173,26 @@ pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
 	};
 
 	Ok(child)
+}
+
+fn shell_escape(s: &str) -> String {
+	if s.is_empty() {
+		return String::from("''");
+	}
+	if !s.contains(|c: char| c.is_whitespace() || "[]{}()*;'\"\\|<>~&^$?!`".contains(c)) {
+		return s.to_string();
+	}
+	let mut result = String::with_capacity(s.len() + 2);
+	result.push('\'');
+	for c in s.chars() {
+		if c == '\'' {
+			result.push_str("'\\''");
+		} else {
+			result.push(c);
+		}
+	}
+	result.push('\'');
+	result
 }
 
 #[cfg(target_os = "linux")]
