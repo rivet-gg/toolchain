@@ -9,6 +9,7 @@ use crate::util::{
 	struct_fmt::{self, Format},
 };
 
+pub mod backend_gen_sdk;
 pub mod deploy;
 pub mod generate_config;
 pub mod get_bootstrap_data;
@@ -61,6 +62,7 @@ pub enum SubCommand {
 	GetNamespaceDevelopmentToken(get_namespace_dev_token::Opts),
 	/// Generate config
 	GenerateConfig(generate_config::Opts),
+	BackendGenerateSdk(backend_gen_sdk::Opts),
 	/// Unlink current game
 	Unlink(unlink::Opts),
 }
@@ -97,6 +99,7 @@ impl SubCommand {
 			SubCommand::CheckLoginState => serialize_output(self.validate_token(&token)),
 			SubCommand::GetCliVersion(opts) => serialize_output(opts.execute().await),
 			SubCommand::GenerateConfig(opts) => serialize_output(opts.execute().await),
+			SubCommand::BackendGenerateSdk(opts) => serialize_output(opts.execute().await),
 			_ => {
 				// If the command is anything else, we need to check if a token
 				// has already been provided. If not, we need to print an error
@@ -148,6 +151,7 @@ impl SubCommand {
 			| SubCommand::CheckLoginState
 			| SubCommand::WaitForLogin(_)
 			| SubCommand::GenerateConfig(_)
+			| SubCommand::BackendGenerateSdk(_)
 			| SubCommand::GetCliVersion(_) => {
 				unreachable!("This command should be handled before this")
 			}

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, io::Write, path::PathBuf};
+use std::{collections::HashMap, io::Write, path::PathBuf, str::FromStr};
 
 use clap::Parser;
 use cli_core::rivet_api::{apis, models};
@@ -131,13 +131,38 @@ pub struct OpenGbCommandOpts {
 	pub cwd: PathBuf,
 }
 
-pub async fn run_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<std::process::ExitStatus> {
-	let run_native = std::env::var("_RIVET_NATIVE_OPENGB")
-		.ok()
-		.map_or(false, |x| &x == "1");
+#[derive(PartialEq)]
+pub enum OpenGbTarget {
+	Native,
+	Docker,
+}
+
+impl Default for OpenGbTarget {
+	fn default() -> Self {
+		Self::Docker
+	}
+}
+impl FromStr for OpenGbTarget {
+	type Err = GlobalError;
+
+	fn from_str(s: &str) -> GlobalResult<Self> {
+		match s {
+			"native" => Ok(Self::Native),
+			"docker" => Ok(Self::Docker),
+			_ => bail!("unknown opengb target: {s}"),
+		}
+	}
+}
+
+pub fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Command> {
+	let opengb_target = if let Ok(x) = std::env::var("RIVET_OPENGB_TARGET") {
+		OpenGbTarget::from_str(&x)?
+	} else {
+		OpenGbTarget::default()
+	};
 
 	// Check OpenGB installed
-	if run_native {
+	if opengb_target == OpenGbTarget::Native {
 		ensure!(
 			which::which("opengb").is_ok(),
 			"OpenGB is not installed. Install it from {}.",
@@ -146,39 +171,46 @@ pub async fn run_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<std::pr
 	}
 
 	// Build command
-	if run_native {
-		let mut cmd = Command::new("opengb");
-		cmd.envs(opts.env);
-		cmd.current_dir(opts.cwd);
-		cmd.args(&opts.args);
-		Ok(cmd.status().await?)
-	} else {
-		let image_tag = std::env::var("_RIVET_OPENGB_IMAGE")
-			.ok()
-			.unwrap_or_else(|| DEFAULT_OPENGB_DOCKER_TAG.to_string());
+	match opengb_target {
+		OpenGbTarget::Native => {
+			let mut cmd = Command::new("opengb");
+			cmd.envs(opts.env);
+			cmd.current_dir(opts.cwd);
+			cmd.args(&opts.args);
+			Ok(cmd)
+		}
+		OpenGbTarget::Docker => {
+			let image_tag = std::env::var("RIVET_OPENGB_DOCKER_IMAGE")
+				.ok()
+				.unwrap_or_else(|| DEFAULT_OPENGB_DOCKER_TAG.to_string());
 
-		// Build env file
-		let mut env_file = NamedTempFile::new().expect("Failed to create temp file");
-		for (k, v) in std::env::vars() {
-			writeln!(env_file, "{k}={v}")?;
-		}
-		if std::env::var("DATABASE_URL").is_err() {
-			writeln!(env_file, "DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/postgres?sslmode=disable")?;
-		}
-		for (k, v) in opts.env {
-			writeln!(env_file, "{k}={v}")?;
-		}
+			// Build env file
+			let mut env_file = NamedTempFile::new().expect("Failed to create temp file");
+			for (k, v) in std::env::vars() {
+				writeln!(env_file, "{k}={v}")?;
+			}
+			if std::env::var("DATABASE_URL").is_err() {
+				writeln!(env_file, "DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/postgres?sslmode=disable")?;
+			}
+			for (k, v) in opts.env {
+				writeln!(env_file, "{k}={v}")?;
+			}
 
-		let mut cmd = Command::new("docker");
-		cmd.arg("run").arg("-it");
-		cmd.arg("--init");
-		cmd.arg("--env-file").arg(env_file.path());
-		cmd.arg("--add-host=host.docker.internal:host-gateway");
-		cmd.arg("--publish=6420:6420");
-		cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
-		cmd.arg("--workdir=/backend");
-		cmd.arg(image_tag);
-		cmd.args(&opts.args);
-		Ok(cmd.status().await?)
+			let mut cmd = Command::new("docker");
+			cmd.arg("run").arg("-it");
+			cmd.arg("--init");
+			cmd.arg("--env-file").arg(env_file.path());
+			cmd.arg("--add-host=host.docker.internal:host-gateway");
+			cmd.arg("--publish=6420:6420");
+			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
+			cmd.arg("--workdir=/backend");
+			cmd.arg(image_tag);
+			cmd.args(&opts.args);
+			Ok(cmd)
+		}
 	}
+}
+
+pub async fn run_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<std::process::ExitStatus> {
+	Ok(build_opengb_command(opts)?.status().await?)
 }
