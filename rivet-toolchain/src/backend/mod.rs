@@ -5,7 +5,7 @@ use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, io::Write, path::PathBuf};
 use tempfile::NamedTempFile;
-use tokio::{process::Command};
+use tokio::process::Command;
 
 use crate::{
 	config,
@@ -15,6 +15,7 @@ use crate::{
 
 const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "ghcr.io/rivet-gg/opengb/v0.1.2";
 pub struct OpenGbCommandOpts {
+	pub config_path: String,
 	pub args: Vec<String>,
 	pub env: HashMap<String, String>,
 	pub cwd: PathBuf,
@@ -45,6 +46,7 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 	match runtime {
 		OpenGbRuntime::Native => {
 			let mut cmd = shell_cmd("opengb");
+			cmd.arg("--path").arg(opts.config_path);
 			cmd.args(opts.args);
 			cmd.envs(opts.env);
 			cmd.current_dir(opts.cwd);
@@ -71,6 +73,9 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
 			cmd.arg("--workdir=/backend");
 			cmd.arg(image_tag);
+			cmd.arg("--");
+			cmd.arg("--path");
+			cmd.arg(opts.config_path);
 			cmd.args(&opts.args);
 			Ok(cmd)
 		}
@@ -96,7 +101,7 @@ pub async fn get_or_create_project(ctx: &Ctx) -> GlobalResult<Box<models::EeBack
 	)
 	.await?;
 
-	// TOOD: Add get or create project
+	// TODO: Add get or create project
 	let project = unwrap!(
 			project_res.project,
 			"No OpenGB project linked to the current game. Create one on the hub: https://hub.rivet.gg/"

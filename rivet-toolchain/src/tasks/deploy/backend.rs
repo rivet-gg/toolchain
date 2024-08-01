@@ -118,15 +118,16 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	task.log_stdout(format!("[Building Project] {}", project_path.display()));
 
 	// Build
-	let cmd_env = config::settings::try_read(|settings| {
+	let (cmd_env, config_path) = config::settings::try_read(|settings| {
 		let mut env = settings.backend.command_environment.clone();
 		env.extend(settings.backend.deploy.command_environment.clone());
-		Ok(env)
+		Ok((env, settings.backend.deploy.config_path.clone()))
 	})
 	.await?;
 	let cmd = backend::run_opengb_command(
 		task.clone(),
 		backend::OpenGbCommandOpts {
+			config_path: config_path.clone(),
 			args: vec![
 				"build".into(),
 				"--db-driver".into(),
@@ -170,6 +171,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		let migrate_cmd = backend::run_opengb_command(
 			task.clone(),
 			backend::OpenGbCommandOpts {
+				config_path,
 				args: vec!["db".into(), "deploy".into()],
 				env: migrate_env,
 				cwd: project_path.clone(),

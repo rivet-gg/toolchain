@@ -51,6 +51,15 @@ pub struct BackendDevConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
+	/// Backend ocnfig to use when running backend config.
+	#[serde(default = "BackendDevConfig::config_path")]
+	pub config_path: String,
+}
+
+impl BackendDevConfig {
+	fn config_path() -> String {
+		"backend.dev.json".to_string()
+	}
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
@@ -58,6 +67,15 @@ pub struct BackendDeployConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
+	/// Backend ocnfig to use when running backend config.
+	#[serde(default = "BackendDeployConfig::config_path")]
+	pub config_path: String,
+}
+
+impl BackendDeployConfig {
+	fn config_path() -> String {
+		"backend.json".into()
+	}
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
