@@ -4,6 +4,7 @@ mod log;
 use global_error::prelude::*;
 use serde::Deserialize;
 use std::path::Path;
+use tempfile::TempDir;
 use tokio::{
 	fs::OpenOptions,
 	sync::{broadcast, mpsc},
@@ -15,12 +16,27 @@ pub use ctx::TaskCtx;
 
 use crate::tasks::Task;
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct RunConfig {
 	/// Path to file that will abort this task if exists.
 	pub abort_path: String,
 	/// Path to file to output events.
 	pub output_path: String,
+}
+
+impl RunConfig {
+	/// Creates a new config with paths in a temp dir.
+	pub fn with_temp_dir() -> GlobalResult<(Self, TempDir)> {
+		let temp_dir = tempfile::tempdir()?;
+
+		Ok((
+			Self {
+				abort_path: temp_dir.path().join("abort").display().to_string(),
+				output_path: temp_dir.path().join("output").display().to_string(),
+			},
+			temp_dir,
+		))
+	}
 }
 
 /// Executes a future that can be aborted by touching a file.

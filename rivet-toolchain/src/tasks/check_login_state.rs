@@ -8,7 +8,7 @@ pub struct Input {}
 
 #[derive(Serialize)]
 pub struct Output {
-	logged_in: bool,
+	pub logged_in: bool,
 }
 
 pub struct Task;
