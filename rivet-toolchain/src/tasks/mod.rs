@@ -1,3 +1,4 @@
+pub mod backend_choose_local_port;
 pub mod backend_dev;
 pub mod backend_sdk_gen;
 pub mod check_login_state;
@@ -72,6 +73,7 @@ macro_rules! gen_run_task {
 }
 
 gen_run_task!(
+	backend_choose_local_port::Task,
 	backend_dev::Task,
 	backend_sdk_gen::Task,
 	check_login_state::Task,

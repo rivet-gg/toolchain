@@ -5,6 +5,7 @@ use crate::{backend, config, util::task::TaskCtx};
 
 #[derive(Deserialize)]
 pub struct Input {
+	pub port: u16,
 	pub cwd: String,
 }
 
@@ -30,6 +31,7 @@ impl super::Task for Task {
 			Ok(env)
 		})
 		.await?;
+		cmd_env.insert("OPENGB_PORT".into(), input.port.to_string());
 		cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
 		let exit_code = backend::run_opengb_command(
 			task.clone(),

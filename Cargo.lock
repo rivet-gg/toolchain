@@ -1649,6 +1649,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "da544ee218f0d287a911e9c99a39a8c9bc8fcad3cb8db5959940044ecfc67265"
 
 [[package]]
+name = "portpicker"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be97d76faf1bfab666e1375477b23fde79eccf0276e9b63b92a39d676a889ba9"
+dependencies = [
+ "rand",
+]
+
+[[package]]
 name = "posthog-core"
 version = "0.1.0"
 source = "git+https://github.com/rivet-gg/posthog-rs.git?rev=ef4e80e#ef4e80e57747ea7204794bce9a103bfeccefabf1"
@@ -1997,6 +2006,7 @@ dependencies = [
  "nix 0.27.1",
  "open",
  "openssl",
+ "portpicker",
  "rand",
  "regex",
  "reqwest 0.11.27",
