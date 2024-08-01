@@ -3,6 +3,7 @@ pub mod cmd;
 pub mod download;
 pub mod global_config;
 pub mod lz4;
+pub mod show_term;
 pub mod os;
 pub mod paths;
 pub mod struct_fmt;
