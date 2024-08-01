@@ -3,9 +3,9 @@ pub mod database;
 use global_error::prelude::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fs::File, io::Write, path::PathBuf, str::FromStr};
+use std::{collections::HashMap, io::Write, path::PathBuf};
 use tempfile::NamedTempFile;
-use tokio::{fs, process::Command, signal};
+use tokio::{process::Command};
 
 use crate::{
 	config,

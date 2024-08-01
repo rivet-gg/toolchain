@@ -1,5 +1,5 @@
 use global_error::prelude::*;
-use std::{collections::HashMap, path::Path};
+use std::{path::Path};
 use uuid::Uuid;
 
 use crate::{
@@ -7,7 +7,7 @@ use crate::{
 	ctx::Ctx,
 	util::{
 		cmd::{self, shell_cmd},
-		docker::{self, generate_unique_image_tag, BuildCompression, BuildKind},
+		docker::{self, generate_unique_image_tag, BuildCompression},
 		task::TaskCtx,
 	},
 };

@@ -114,7 +114,7 @@ pub async fn upload_file(
 	// especially important since we have files that we need to batch upload, so
 	// one failing request is bad.
 	let mut attempts = 0;
-	let (upload_time, total_size) = 'upload: loop {
+	let (_upload_time, _total_size) = 'upload: loop {
 		// let pb = pb.clone();
 
 		// Read file
@@ -125,7 +125,7 @@ pub async fn upload_file(
 		let total_size = presigned_req.content_length as u64;
 		let is_multipart = total_size != file_len;
 
-		let msg = if is_multipart {
+		let _msg = if is_multipart {
 			format!("{path} {}", style("[CHUNK]").dim().blue(),)
 		} else {
 			path.clone()
@@ -202,8 +202,8 @@ pub async fn upload_file(
 			} else {
 				attempts += 1;
 
-				let status = res.status();
-				let body_text = unwrap!(res.text().await);
+				let _status = res.status();
+				let _body_text = unwrap!(res.text().await);
 
 				// pb.set_style(term::pb_style_error());
 				// pb.set_message(format!(

@@ -1,6 +1,6 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, path::Path, str::FromStr};
+use std::{collections::HashMap, path::Path};
 
 use crate::{
 	config,

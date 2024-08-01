@@ -7,7 +7,9 @@ use crate::{config, util::task::TaskCtx};
 pub struct Input {}
 
 #[derive(Serialize)]
-pub struct Output {}
+pub struct Output {
+	logged_in: bool,
+}
 
 pub struct Task;
 
@@ -19,12 +21,8 @@ impl super::Task for Task {
 		"check_login_state"
 	}
 
-	async fn run(task: TaskCtx, input: Input) -> GlobalResult<Output> {
-		let has_token = config::global::read_project(|x| x.tokens.cloud.is_some()).await?;
-		if !has_token {
-			bail!("No Rivet token found, please do the sign in process");
-		}
-
-		Ok(Output {})
+	async fn run(_task: TaskCtx, _input: Input) -> GlobalResult<Output> {
+		let logged_in = config::meta::has_project().await?;
+		Ok(Output { logged_in })
 	}
 }

@@ -1,2 +1,2 @@
-pub mod global;
+pub mod meta;
 pub mod settings;

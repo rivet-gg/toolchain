@@ -18,6 +18,7 @@ pub type TaskCtx = Arc<TaskCtxInner>;
 /// context outside of a CLI.
 pub struct TaskCtxInner {
 	log_tx: mpsc::UnboundedSender<LogEvent>,
+	#[allow(dead_code)]
 	shutdown_rx: broadcast::Receiver<()>,
 }
 

@@ -23,7 +23,7 @@ impl super::Task for Task {
 		"get_hub_link"
 	}
 
-	async fn run(task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
 		bail!("todo")
 	}
 }

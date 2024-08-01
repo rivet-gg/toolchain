@@ -6,6 +6,7 @@ use crate::{config, ctx, util::task::TaskCtx};
 
 #[derive(Deserialize)]
 pub struct Input {
+	pub api_endpoint: String,
 	pub device_link_token: String,
 }
 
@@ -24,16 +25,9 @@ impl super::Task for Task {
 		"wait_for_login"
 	}
 
-	async fn run(task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
-		let (api_endpoint, _token) = config::global::read_project(|x| {
-			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
-		})
-		.await?;
-
+	async fn run(_task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
 		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
-			base_path: api_endpoint
-				.clone()
-				.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string()),
+			base_path: input.api_endpoint.clone(),
 			user_agent: Some(ctx::user_agent()),
 			..Default::default()
 		};
@@ -54,7 +48,7 @@ impl super::Task for Task {
 			}
 		};
 
-		let new_ctx = crate::ctx::init(api_endpoint, token.clone()).await?;
+		let new_ctx = crate::ctx::init(input.api_endpoint.clone(), token.clone()).await?;
 
 		let inspect_res =
 			apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await?;
@@ -68,7 +62,7 @@ impl super::Task for Task {
 		)
 		.await?;
 
-		config::global::mutate_project(|x| x.tokens.cloud = Some(token)).await?;
+		config::meta::insert_project(input.api_endpoint, token).await?;
 
 		Ok(Output {
 			output: "Token saved".to_string(),

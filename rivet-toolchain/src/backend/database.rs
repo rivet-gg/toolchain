@@ -20,7 +20,7 @@ pub async fn provision_database(
 	.await?;
 
 	// Fetch remote DB URL
-	let mut global_project_config = config::global::mutate_project(|config| {
+	let mut global_project_config = config::meta::mutate_project(|config| {
 		config
 			.opengb
 			.projects
@@ -49,7 +49,7 @@ pub async fn provision_database(
 		env_config.url = db_url_res.url;
 
 		// Update cache
-		config::global::try_mutate_project(|config| {
+		config::meta::try_mutate_project(|config| {
 			// Was inserted in last `mutate_project` call
 			let project = unwrap!(config.opengb.projects.get_mut(&project_id));
 

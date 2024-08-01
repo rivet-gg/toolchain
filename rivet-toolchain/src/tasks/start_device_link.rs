@@ -2,10 +2,12 @@ use global_error::prelude::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, ctx, util::task::TaskCtx};
+use crate::{ctx, util::task::TaskCtx};
 
 #[derive(Deserialize)]
-pub struct Input {}
+pub struct Input {
+	pub api_endpoint: String,
+}
 
 #[derive(Serialize)]
 pub struct Output {
@@ -23,16 +25,9 @@ impl super::Task for Task {
 		"start_device_link"
 	}
 
-	async fn run(task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
-		let (api_endpoint, _token) = config::global::read_project(|x| {
-			(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
-		})
-		.await?;
-
+	async fn run(_task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
 		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
-			base_path: api_endpoint
-				.clone()
-				.unwrap_or_else(|| ctx::DEFAULT_API_ENDPOINT.to_string()),
+			base_path: input.api_endpoint,
 			user_agent: Some(ctx::user_agent()),
 			..Default::default()
 		};

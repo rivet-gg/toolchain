@@ -6,4 +6,3 @@ pub mod net;
 pub mod os;
 pub mod show_term;
 pub mod task;
-pub mod telemetry;

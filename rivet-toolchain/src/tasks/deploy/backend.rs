@@ -11,8 +11,6 @@ use tokio::fs;
 
 use crate::{backend, config, ctx::Ctx, util::net::upload, util::task::TaskCtx};
 
-const OPENGB_NO_MINIFY: bool = false;
-
 pub struct DeployOpts {
 	/// The environment to deploy to.
 	pub environment_id: String,
@@ -44,7 +42,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	task.log_stdout(format!("[Building Project] {}", project_path.display()));
 
 	// Build
-	let mut cmd_env = config::settings::try_read(|settings| {
+	let cmd_env = config::settings::try_read(|settings| {
 		let mut env = settings.backend.command_environment.clone();
 		env.extend(settings.backend.deploy.command_environment.clone());
 		Ok(env)
@@ -75,7 +73,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	)
 	.await?;
 
-	let db_url = config::global::try_read_project(|config| {
+	let db_url = config::meta::try_read_project(|config| {
 		let project = unwrap!(config.opengb.projects.get(&project.project_id));
 		let env = unwrap!(project.environments.get(&env.environment_id));
 

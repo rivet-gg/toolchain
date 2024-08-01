@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::util::task::TaskCtx;
+use crate::{config, util::task::TaskCtx};
 
 // use crate::commands;
 
@@ -21,9 +21,8 @@ impl super::Task for Task {
 		"unlink"
 	}
 
-	async fn run(task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
-		todo!()
-		// commands::unlink::unlink().await?;
-		// Ok(Output {})
+	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+		config::meta::delete_project().await?;
+		Ok(Output {})
 	}
 }

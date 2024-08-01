@@ -1,7 +1,6 @@
 use std::{collections::HashMap, path::PathBuf};
 
 use global_error::prelude::*;
-use rivet_api::models;
 use serde::{Deserialize, Serialize};
 use tokio::{
 	fs,
@@ -13,66 +12,38 @@ use crate::paths;
 
 /// Configuration stored globally on the file system.
 #[derive(Default, Serialize, Deserialize)]
-pub struct GlobalConfig {
+pub struct Meta {
 	/// Store project meta by the absolute path to the project.
-	pub project_roots: HashMap<PathBuf, ProjectMeta>,
+	pub projects: HashMap<PathBuf, ProjectMeta>,
 }
 
-/// Config stored in .rivet/config.json. Used to store persistent data.
-#[derive(Default, Serialize, Deserialize)]
+/// Config stored in .rivet/meta.json. Used to store persistent data, such as tokens & cache.
+#[derive(Serialize, Deserialize)]
 pub struct ProjectMeta {
-	#[serde(default)]
 	pub cluster: Cluster,
-	#[serde(default)]
-	pub telemetry: Telemetry,
-	#[serde(default)]
 	pub tokens: Tokens,
-	#[serde(default)]
 	pub opengb: OpenGb,
+}
+
+impl ProjectMeta {
+	fn new(api_endpoint: String, cloud_token: String) -> Self {
+		ProjectMeta {
+			cluster: Cluster { api_endpoint },
+			tokens: Tokens { cloud: cloud_token },
+			opengb: OpenGb::default(),
+		}
+	}
 }
 
 #[derive(Default, Serialize, Deserialize)]
 pub struct Cluster {
-	#[serde(default)]
-	pub api_endpoint: Option<String>,
+	pub api_endpoint: String,
 }
 
-#[derive(Default, Serialize, Deserialize)]
-pub struct Telemetry {
-	#[serde(default)]
-	pub disabled: bool,
-}
-
-#[derive(Default, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Tokens {
 	/// Cloud token used to authenticate all API requests.
-	///
-	/// If none provided, will be prompted for token on `rivet init`.
-	#[serde(default)]
-	pub cloud: Option<String>,
-
-	/// List of cached public namespace tokens.
-	#[serde(default)]
-	pub public_namespace: Vec<PublicNamespaceToken>,
-
-	/// List of cached development tokens. Before creating a new token, this list will be checked
-	/// for an existing token.
-	#[serde(default)]
-	pub development: Vec<DevelopmentToken>,
-}
-
-#[derive(Default, Serialize, Deserialize)]
-pub struct PublicNamespaceToken {
-	pub namespace_name_id: String,
-	pub token: String,
-}
-
-#[derive(Default, Serialize, Deserialize)]
-pub struct DevelopmentToken {
-	pub namespace_name_id: String,
-	pub hostname: String,
-	pub ports: HashMap<String, models::CloudMatchmakerDevelopmentPort>,
-	pub token: String,
+	pub cloud: String,
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -93,19 +64,19 @@ pub struct OpenGbEnv {
 	pub url: Option<String>,
 }
 
-static SINGLETON: OnceCell<Mutex<GlobalConfig>> = OnceCell::const_new();
+static SINGLETON: OnceCell<Mutex<Meta>> = OnceCell::const_new();
 
 /// Gets the global config instance.
 ///
 /// Use `read` to read properties from the config.
-async fn get_or_init() -> GlobalResult<&'static Mutex<GlobalConfig>> {
+async fn get_or_init() -> GlobalResult<&'static Mutex<Meta>> {
 	SINGLETON
 		.get_or_try_init::<GlobalError, _, _>(|| async {
-			let path = paths::global_config_file()?;
+			let path = paths::meta_config_file()?;
 
 			let config = match fs::read_to_string(&path).await {
 				Ok(config) => serde_json::from_str(&config).map_err(Into::<GlobalError>::into)?,
-				Err(err) if err.kind() == std::io::ErrorKind::NotFound => GlobalConfig::default(),
+				Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
 				Err(err) => return Err(err.into()),
 			};
 
@@ -117,17 +88,15 @@ async fn get_or_init() -> GlobalResult<&'static Mutex<GlobalConfig>> {
 /// Writes the config to the file system.
 ///
 /// Use `mutate` to make changes to the config publicly.
-async fn write(config: &GlobalConfig) -> GlobalResult<()> {
-	fs::create_dir_all(paths::global_config_dir()?).await?;
-	fs::write(paths::global_config_file()?, serde_json::to_string(config)?).await?;
+async fn write(config: &Meta) -> GlobalResult<()> {
+	fs::create_dir_all(paths::user_config_dir()?).await?;
+	fs::write(paths::meta_config_file()?, serde_json::to_string(config)?).await?;
 
 	Ok(())
 }
 
 /// Reads from the global config.
-pub async fn try_read_global<F: FnOnce(&GlobalConfig) -> GlobalResult<T>, T>(
-	cb: F,
-) -> GlobalResult<T> {
+pub async fn try_read_global<F: FnOnce(&Meta) -> GlobalResult<T>, T>(cb: F) -> GlobalResult<T> {
 	let singleton = get_or_init().await?;
 	let mut lock = singleton.lock().await;
 
@@ -145,10 +114,10 @@ pub async fn try_read_project<F: FnOnce(&ProjectMeta) -> GlobalResult<T>, T>(
 ) -> GlobalResult<T> {
 	let project_root = paths::project_root()?;
 	try_read_global(|config| {
-		if let Some(project_config) = config.project_roots.get(&project_root) {
+		if let Some(project_config) = config.projects.get(&project_root) {
 			cb(project_config)
 		} else {
-			cb(&ProjectMeta::default())
+			bail!("project not initiated")
 		}
 	})
 	.await
@@ -159,7 +128,7 @@ pub async fn read_project<F: FnOnce(&ProjectMeta) -> T, T>(cb: F) -> GlobalResul
 	try_read_project(|x| Ok(cb(x))).await
 }
 
-pub async fn try_mutate_global<F: FnOnce(&mut GlobalConfig) -> GlobalResult<T>, T>(
+pub async fn try_mutate_global<F: FnOnce(&mut Meta) -> GlobalResult<T>, T>(
 	cb: F,
 ) -> GlobalResult<T> {
 	let singleton = get_or_init().await?;
@@ -182,7 +151,10 @@ pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> GlobalResult<T>, 
 ) -> GlobalResult<T> {
 	let project_root = paths::project_root()?;
 	try_mutate_global(|config| {
-		let project_config = config.project_roots.entry(project_root).or_default();
+		let project_config = unwrap!(
+			config.projects.get_mut(&project_root),
+			"project meta does not exist"
+		);
 		cb(project_config)
 	})
 	.await
@@ -191,4 +163,30 @@ pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> GlobalResult<T>, 
 /// Non-failable version of `try_mutate_project`.
 pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> T, T>(cb: F) -> GlobalResult<T> {
 	try_mutate_project(|x| Ok(cb(x))).await
+}
+
+pub async fn has_project() -> GlobalResult<bool> {
+	let project_root = paths::project_root()?;
+	let has_project = try_read_global(|meta| Ok(meta.projects.contains_key(&project_root))).await?;
+	Ok(has_project)
+}
+
+pub async fn insert_project(api_endpoint: String, cloud_token: String) -> GlobalResult<()> {
+	let project_root = paths::project_root()?;
+	try_mutate_global(|meta| {
+		Ok(meta
+			.projects
+			.insert(project_root, ProjectMeta::new(api_endpoint, cloud_token)))
+	})
+	.await?;
+	Ok(())
+}
+
+pub async fn delete_project() -> GlobalResult<()> {
+	let project_root = paths::project_root()?;
+	try_mutate_global(|x| {
+		x.projects.remove(&project_root);
+		Ok(())
+	})
+	.await
 }

@@ -23,7 +23,7 @@ impl super::Task for Task {
 		"get_bootstrap_data"
 	}
 
-	async fn run(task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
 		let ctx = crate::ctx::load().await?;
 		Ok(Output {
 			token: ctx.access_token.clone(),

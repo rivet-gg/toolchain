@@ -1,8 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 
-use crate::{paths, util::task::TaskCtx};
+use crate::{util::task::TaskCtx};
 
 #[derive(Deserialize)]
 pub struct Input {

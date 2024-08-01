@@ -14,8 +14,6 @@ pub use ctx::TaskCtx;
 
 use crate::tasks::Task;
 
-use self::log::LogEvent;
-
 pub struct RunConfig {
 	/// Path to file that will abort this task if exists.
 	pub abort_path: String,
@@ -24,7 +22,7 @@ pub struct RunConfig {
 }
 
 /// Executes a future that can be aborted by touching a file.
-pub async fn run_task<T>(run_config: RunConfig, input: T::Input) -> GlobalResult<Option<T::Output>>
+pub async fn run_task<T>(run_config: RunConfig, input: T::Input) -> GlobalResult<T::Output>
 where
 	T: Task,
 {
@@ -43,9 +41,9 @@ where
 
 	// Wait for task or abort
 	let output = tokio::select! {
-		result = T::run(task_ctx.clone(), input) => result.map(Some),
+		result = T::run(task_ctx.clone(), input) => result,
 		_ = wait_for_abort(&run_config.abort_path) => {
-			Ok(None)
+			Err(err_code!(ERROR, error = "Task aborted"))
 		},
 	};
 
