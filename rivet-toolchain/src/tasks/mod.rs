@@ -2,6 +2,7 @@ pub mod backend_choose_local_port;
 pub mod backend_dev;
 pub mod backend_sdk_gen;
 pub mod check_login_state;
+pub mod check_system_requirements;
 pub mod deploy;
 pub mod exec_command;
 pub mod get_bootstrap_data;
@@ -77,6 +78,7 @@ gen_run_task!(
 	backend_dev::Task,
 	backend_sdk_gen::Task,
 	check_login_state::Task,
+	check_system_requirements::Task,
 	deploy::Task,
 	exec_command::Task,
 	get_bootstrap_data::Task,
