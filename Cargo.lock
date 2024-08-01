@@ -1945,8 +1945,8 @@ dependencies = [
  "rand",
  "regex",
  "reqwest",
- "rivet-cli-core",
  "rivet-term",
+ "rivet-toolchain-core",
  "sentry",
  "serde",
  "serde_json",
@@ -1970,22 +1970,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rivet-cli-core"
-version = "0.0.1"
-dependencies = [
- "anyhow",
- "home",
- "openssl",
- "rivet-api-ee",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
- "tower",
- "vergen",
-]
-
-[[package]]
 name = "rivet-term"
 version = "0.1.0"
 source = "git+https://github.com/rivet-gg/rivet-term.git?rev=f70f76f63eba12e535e53db1b436d5297edf979a#f70f76f63eba12e535e53db1b436d5297edf979a"
@@ -1999,8 +1983,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "rivet-toolchain"
-version = "0.1.0"
+name = "rivet-toolchain-core"
+version = "0.0.1"
+dependencies = [
+ "anyhow",
+ "home",
+ "openssl",
+ "rivet-api-ee",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tower",
+ "vergen",
+]
 
 [[package]]
 name = "rustc-demangle"
