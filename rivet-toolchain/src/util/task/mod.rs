@@ -19,20 +19,32 @@ use crate::tasks::Task;
 #[derive(Deserialize, Clone)]
 pub struct RunConfig {
 	/// Path to file that will abort this task if exists.
-	pub abort_path: String,
+	///
+	/// If none provided, the task will not be abortable.
+	pub abort_path: Option<String>,
+
 	/// Path to file to output events.
-	pub output_path: String,
+	///
+	/// If none provided, will be logged to standard output.
+	pub output_path: Option<String>,
 }
 
 impl RunConfig {
+	pub fn empty() -> Self {
+		RunConfig {
+			abort_path: None,
+			output_path: None,
+		}
+	}
+
 	/// Creates a new config with paths in a temp dir.
 	pub fn with_temp_dir() -> GlobalResult<(Self, TempDir)> {
 		let temp_dir = tempfile::tempdir()?;
 
 		Ok((
 			Self {
-				abort_path: temp_dir.path().join("abort").display().to_string(),
-				output_path: temp_dir.path().join("output").display().to_string(),
+				abort_path: Some(temp_dir.path().join("abort").display().to_string()),
+				output_path: Some(temp_dir.path().join("output").display().to_string()),
 			},
 			temp_dir,
 		))
@@ -47,11 +59,17 @@ where
 	let (log_tx, log_rx) = mpsc::unbounded_channel::<log::LogEvent>();
 	let (shutdown_tx, shutdown_rx) = broadcast::channel(1);
 
-	let output_file = OpenOptions::new()
-		.create(true)
-		.append(true)
-		.open(run_config.output_path)
-		.await?;
+	let output_file = if let Some(output_path) = run_config.output_path {
+		Some(
+			OpenOptions::new()
+				.create(true)
+				.append(true)
+				.open(output_path)
+				.await?,
+		)
+	} else {
+		None
+	};
 
 	task::spawn(log::log_writer(log_rx, output_file));
 
@@ -60,7 +78,7 @@ where
 	// Wait for task or abort
 	let output = tokio::select! {
 		result = T::run(task_ctx.clone(), input) => result,
-		_ = wait_for_abort(&run_config.abort_path) => {
+		_ = wait_for_abort(run_config.abort_path.clone()) => {
 			Err(err_code!(ERROR, error = "Task aborted"))
 		},
 	};
@@ -74,9 +92,14 @@ where
 const POLL_ABORT_INTERVAL: Duration = Duration::from_millis(250);
 
 /// Waits for file to exist before completing.
-async fn wait_for_abort(path: &str) {
+async fn wait_for_abort(path: Option<String>) {
+	let Some(path) = path else {
+		// Wait forever, since this task is not abortable.
+		return std::future::pending::<()>().await;
+	};
+
 	// HACK: Use file watcher
-	let path = Path::new(path);
+	let path = Path::new(&path);
 	loop {
 		// TODO: Do this async
 		if path.exists() {

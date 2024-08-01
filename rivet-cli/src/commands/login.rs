@@ -13,7 +13,7 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> GlobalResult<()> {
-		let (run_config, _temp_dir) = RunConfig::with_temp_dir()?;
+		let run_config = RunConfig::empty();
 
 		// Check if linked
 		let output =
