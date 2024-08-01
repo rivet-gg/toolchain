@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "core",
-    "cli",
+    "cli", "toolchain",
 ]
 
 # Config for 'cargo dist'

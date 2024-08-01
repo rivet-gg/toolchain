@@ -12,6 +12,7 @@ use crate::util::{
 pub mod backend_dev;
 pub mod backend_gen_sdk;
 pub mod deploy;
+pub mod exec_command;
 pub mod generate_config;
 pub mod get_bootstrap_data;
 pub mod get_cli_version;
@@ -21,6 +22,7 @@ pub mod get_logs_link;
 pub mod get_namespace_dev_token;
 pub mod get_namespace_pub_token;
 pub mod get_versions_link;
+pub mod kill_process;
 pub mod show_term;
 pub mod unlink;
 pub mod util;
@@ -39,6 +41,12 @@ pub enum SubCommand {
 	///
 	/// Prefer using the `--show-terminal` flag for Rivet-specific commands.
 	ShowTerm(show_term::Opts),
+	/// Executes a command and writes stdout and stderr to separate files.
+	///
+	/// Used to run commands in game engiens that don't support piping stdout & stderr.
+	ExecCommand(exec_command::Opts),
+	/// Sends a SIGINT to a given PID.
+	KillProcess(kill_process::Opts),
 	/// Get the link for the user to sign in
 	GetLink(get_link::Opts),
 	/// Long poll the server to check if the user has signed in
@@ -102,6 +110,8 @@ impl SubCommand {
 		let mut handled = PreExecuteHandled::Yes;
 		let response = match self {
 			SubCommand::ShowTerm(opts) => serialize_output(opts.execute().await),
+			SubCommand::ExecCommand(opts) => serialize_output(opts.execute().await),
+			SubCommand::KillProcess(opts) => serialize_output(opts.execute().await),
 			SubCommand::GetLink(opts) => serialize_output(opts.execute().await),
 			SubCommand::WaitForLogin(opts) => serialize_output(opts.execute().await),
 			SubCommand::CheckLoginState => serialize_output(self.validate_token(&token)),
@@ -156,6 +166,8 @@ impl SubCommand {
 
 		let response = match self {
 			SubCommand::ShowTerm(_)
+			| SubCommand::ExecCommand(_)
+			| SubCommand::KillProcess(_)
 			| SubCommand::GetLink(_)
 			| SubCommand::CheckLoginState
 			| SubCommand::WaitForLogin(_)

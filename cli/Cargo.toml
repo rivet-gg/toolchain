@@ -13,6 +13,8 @@ build = "build.rs"
 sentry = []
 
 [dependencies]
+# Disable less common file formats. Preserve TOML for backwards compatibility.
+# This is pointing to a fork that contains a fix for Byte-order marks on Windows.
 async-posthog = { git = "https://github.com/rivet-gg/posthog-rs.git", rev = "ef4e80e" }
 async-stream = "0.3.3"
 chrono = "0.4.21"
@@ -21,7 +23,9 @@ cli-core = { path = "../core", package = "rivet-cli-core" }
 # Disable less common file formats. Preserve TOML for backwards compatibility.
 # This is pointing to a fork that contains a fix for Byte-order marks on Windows.
 config = { git = "https://github.com/rivet-gg/config-rs", rev = "0f3c89b4770276e8db72ce962974a9a72c59c97a", default-features = false, features = ["yaml", "toml", "json"] }
+cli-toolchain = { path = "../core", package = "rivet-toolchain" }
 console = "0.15"
+ctrlc = { version = "3.2", features = ["termination"] }
 dirs = "5.0"
 fs_extra = "1.2.0"
 futures-util = "0.3"
@@ -45,7 +49,7 @@ tabled = "0.8.0"
 tar = "0.4.40"
 tempfile = "3.2"
 term_size = "0.3.2"
-tokio = { version = "1.27", default-features = false, features = ["fs", "macros", "process", "rt"] }
+tokio = { version = "1.27", default-features = false, features = ["fs", "macros", "process", "rt", "signal"] }
 tokio-util = { version = "0.7", default-features = false, features = ["io-util"] }
 typed-path = "0.7.0"
 url = "2.5.0"
@@ -55,7 +59,10 @@ which = "5.0.0"
 zip = "0.5"
 
 [target.'cfg(unix)'.dependencies]
-nix = { version = "0.27", default-features = false, features = ["user"] }
+nix = { version = "0.27", default-features = false, features = ["user", "signal"] }
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3.9", features = ["processthreadsapi", "winnt"] }
 
 [dev-dependencies]
 assert_cmd = "2.0"
