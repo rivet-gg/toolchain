@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## ee_cloud_games_billing_get
 
-> crate::models::EeCloudGamesBillingGetResponse ee_cloud_games_billing_get(game_id)
+> crate::models::EeCloudGamesBillingGetResponse ee_cloud_games_billing_get(game_id, watch_index)
 
 
 ### Parameters
@@ -20,6 +20,7 @@ Method | HTTP request | Description
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **game_id** | **uuid::Uuid** |  | [required] |
+**watch_index** | Option<**String**> |  |  |
 
 ### Return type
 

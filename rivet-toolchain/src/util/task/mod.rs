@@ -2,6 +2,7 @@ mod ctx;
 mod log;
 
 use global_error::prelude::*;
+use serde::Deserialize;
 use std::path::Path;
 use tokio::{
 	fs::OpenOptions,
@@ -14,6 +15,7 @@ pub use ctx::TaskCtx;
 
 use crate::tasks::Task;
 
+#[derive(Deserialize)]
 pub struct RunConfig {
 	/// Path to file that will abort this task if exists.
 	pub abort_path: String,

@@ -14,7 +14,7 @@ repository = "https://github.com/rivet-gg/cli"
 async-posthog = { git = "https://github.com/rivet-gg/posthog-rs.git", rev = "ef4e80e" }
 async-stream = "0.3.3"
 chrono = "0.4.21"
-config = { version = "0.14", default-features = false, features = ["json", "async"] }
+config = { git = "https://github.com/rivet-gg/config-rs", rev = "0f3c89b4770276e8db72ce962974a9a72c59c97a", default-features = false, features = ["json", "async"] }
 console = "0.15"
 ctrlc = { version = "3.2", features = ["termination"] }
 dirs = "5.0"

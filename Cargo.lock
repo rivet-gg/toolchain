@@ -312,10 +312,10 @@ dependencies = [
 [[package]]
 name = "config"
 version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7328b20597b53c2454f0b1919720c25c7339051c02b72b7e05409e00b14132be"
+source = "git+https://github.com/rivet-gg/config-rs?rev=0f3c89b4770276e8db72ce962974a9a72c59c97a#0f3c89b4770276e8db72ce962974a9a72c59c97a"
 dependencies = [
  "async-trait",
+ "encoding_rs_io",
  "lazy_static",
  "nom",
  "pathdiff",
@@ -503,6 +503,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b45de904aa0b010bce2ab45264d0631681847fa7b6f2eaa7dab7619943bc4f59"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "encoding_rs_io"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1cc3c5651fb62ab8aa3103998dade57efdd028544bd300516baa31840c252a83"
+dependencies = [
+ "encoding_rs",
 ]
 
 [[package]]

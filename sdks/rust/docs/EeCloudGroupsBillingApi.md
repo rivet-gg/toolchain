@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**ee_cloud_groups_billing_create_stripe_portal_session**](EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_create_stripe_portal_session) | **POST** /cloud/groups/{group_id}/billing/stripe-portal-session | 
 [**ee_cloud_groups_billing_get**](EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get) | **GET** /cloud/groups/{group_id}/billing | 
+[**ee_cloud_groups_billing_get_usage**](EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get_usage) | **GET** /cloud/groups/{group_id}/billing/usage | 
 
 
 
@@ -54,6 +55,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**crate::models::EeCloudGroupsBillingGetBillingResponse**](EeCloudGroupsBillingGetBillingResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## ee_cloud_groups_billing_get_usage
+
+> crate::models::EeCloudGroupsBillingGetBillingUsageResponse ee_cloud_groups_billing_get_usage(group_id, query_start_ts, query_end_ts)
+
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**group_id** | **uuid::Uuid** |  | [required] |
+**query_start_ts** | Option<**String**> |  |  |
+**query_end_ts** | Option<**String**> |  |  |
+
+### Return type
+
+[**crate::models::EeCloudGroupsBillingGetBillingUsageResponse**](EeCloudGroupsBillingGetBillingUsageResponse.md)
 
 ### Authorization
 

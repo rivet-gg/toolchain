@@ -9,7 +9,7 @@ use uuid::Uuid;
 use crate::{
 	config,
 	ctx::Ctx,
-	util::{net::upload, task::TaskCtx},
+	util::{net::upload, task::TaskCtx, term},
 };
 
 use super::{BuildCompression, BuildKind};
@@ -85,22 +85,24 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	}
 	let build_res = unwrap!(build_res,);
 	let image_id = build_res.build_id;
-	// let pb = term::EitherProgressBar::Multi(indicatif::MultiProgress::new());
+	let pb = term::EitherProgressBar::Multi(term::multi_progress_bar(task.clone()));
 
 	if multipart_enabled {
 		// Upload chunks in parallel
 		futures_util::stream::iter(build_res.image_presigned_requests.unwrap())
 			.map(|presigned_request| {
+				let task = task.clone();
 				let reqwest_client = reqwest_client.clone();
-				// let pb = pb.clone();
+				let pb = pb.clone();
 
 				async move {
 					upload::upload_file(
+						task.clone(),
 						&reqwest_client,
 						&presigned_request,
 						&push_opts.path,
 						Some(content_type),
-						// pb,
+						pb,
 					)
 					.await
 				}
@@ -111,11 +113,12 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	} else {
 		// Upload file
 		upload::upload_file(
+			task.clone(),
 			&reqwest_client,
 			&build_res.image_presigned_request.unwrap(),
 			&push_opts.path,
 			Some(content_type),
-			// pb,
+			pb,
 		)
 		.await?;
 	}

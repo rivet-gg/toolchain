@@ -82,6 +82,7 @@ Class | Method | HTTP request | Description
 *CloudGamesNamespacesLogsApi* | [**cloud_games_namespaces_logs_get_namespace_lobby**](docs/CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_get_namespace_lobby) | **GET** /cloud/games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
 *CloudGamesNamespacesLogsApi* | [**cloud_games_namespaces_logs_list_namespace_lobbies**](docs/CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_list_namespace_lobbies) | **GET** /cloud/games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
 *CloudGamesTokensApi* | [**cloud_games_tokens_create_cloud_token**](docs/CloudGamesTokensApi.md#cloud_games_tokens_create_cloud_token) | **POST** /cloud/games/{game_id}/tokens/cloud | 
+*CloudGamesTokensApi* | [**cloud_games_tokens_create_service_token**](docs/CloudGamesTokensApi.md#cloud_games_tokens_create_service_token) | **POST** /cloud/games/{game_id}/tokens/service | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_create_game_version**](docs/CloudGamesVersionsApi.md#cloud_games_versions_create_game_version) | **POST** /cloud/games/{game_id}/versions | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_get_game_version_by_id**](docs/CloudGamesVersionsApi.md#cloud_games_versions_get_game_version_by_id) | **GET** /cloud/games/{game_id}/versions/{version_id} | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_reserve_version_name**](docs/CloudGamesVersionsApi.md#cloud_games_versions_reserve_version_name) | **POST** /cloud/games/{game_id}/versions/reserve-name | 
@@ -115,6 +116,7 @@ Class | Method | HTTP request | Description
 *EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_link**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_link) | **POST** /cloud/games/{game_id}/project-link | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_create_stripe_portal_session**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_create_stripe_portal_session) | **POST** /cloud/groups/{group_id}/billing/stripe-portal-session | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_get**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get) | **GET** /cloud/groups/{group_id}/billing | 
+*EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_get_usage**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get_usage) | **GET** /cloud/groups/{group_id}/billing/usage | 
 *GroupApi* | [**group_ban_identity**](docs/GroupApi.md#group_ban_identity) | **POST** /group/groups/{group_id}/bans/{identity_id} | 
 *GroupApi* | [**group_complete_avatar_upload**](docs/GroupApi.md#group_complete_avatar_upload) | **POST** /group/groups/{group_id}/avatar-upload/{upload_id}/complete | 
 *GroupApi* | [**group_create**](docs/GroupApi.md#group_create) | **POST** /group/groups | 
@@ -191,6 +193,9 @@ Class | Method | HTTP request | Description
 *PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /portal/games/{game_name_id}/profile | 
 *ProvisionDatacentersApi* | [**provision_datacenters_get_tls**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_tls) | **GET** /datacenters/{datacenter_id}/tls | 
 *ProvisionServersApi* | [**provision_servers_get_info**](docs/ProvisionServersApi.md#provision_servers_get_info) | **GET** /servers/{ip} | 
+*ServersServersApi* | [**servers_servers_create**](docs/ServersServersApi.md#servers_servers_create) | **POST** /servers/servers | 
+*ServersServersApi* | [**servers_servers_destroy**](docs/ServersServersApi.md#servers_servers_destroy) | **DELETE** /servers/servers/{server_id} | 
+*ServersServersApi* | [**servers_servers_get**](docs/ServersServersApi.md#servers_servers_get) | **GET** /servers/servers/{server_id} | 
 
 
 ## Documentation For Models
@@ -208,6 +213,7 @@ Class | Method | HTTP request | Description
  - [AdminClustersListServersResponse](docs/AdminClustersListServersResponse.md)
  - [AdminClustersPool](docs/AdminClustersPool.md)
  - [AdminClustersPoolType](docs/AdminClustersPoolType.md)
+ - [AdminClustersPoolUpdate](docs/AdminClustersPoolUpdate.md)
  - [AdminClustersProvider](docs/AdminClustersProvider.md)
  - [AdminClustersServer](docs/AdminClustersServer.md)
  - [AdminClustersUpdateDatacenterRequest](docs/AdminClustersUpdateDatacenterRequest.md)
@@ -261,6 +267,7 @@ Class | Method | HTTP request | Description
  - [CloudGamesCreateGameResponse](docs/CloudGamesCreateGameResponse.md)
  - [CloudGamesCreateGameVersionRequest](docs/CloudGamesCreateGameVersionRequest.md)
  - [CloudGamesCreateGameVersionResponse](docs/CloudGamesCreateGameVersionResponse.md)
+ - [CloudGamesCreateServiceTokenResponse](docs/CloudGamesCreateServiceTokenResponse.md)
  - [CloudGamesDeleteMatchmakerLobbyResponse](docs/CloudGamesDeleteMatchmakerLobbyResponse.md)
  - [CloudGamesExportLobbyLogsRequest](docs/CloudGamesExportLobbyLogsRequest.md)
  - [CloudGamesExportLobbyLogsResponse](docs/CloudGamesExportLobbyLogsResponse.md)
@@ -379,6 +386,11 @@ Class | Method | HTTP request | Description
  - [EeBackendTier](docs/EeBackendTier.md)
  - [EeBackendUpdateVariable](docs/EeBackendUpdateVariable.md)
  - [EeBackendVariable](docs/EeBackendVariable.md)
+ - [EeBillingGameUsage](docs/EeBillingGameUsage.md)
+ - [EeBillingGroup](docs/EeBillingGroup.md)
+ - [EeBillingPlan](docs/EeBillingPlan.md)
+ - [EeBillingRegionUsage](docs/EeBillingRegionUsage.md)
+ - [EeBillingSubscription](docs/EeBillingSubscription.md)
  - [EeCloudAnalyticsVariantQuery](docs/EeCloudAnalyticsVariantQuery.md)
  - [EeCloudAvgPlayDurationByGameModeDataSet](docs/EeCloudAvgPlayDurationByGameModeDataSet.md)
  - [EeCloudAvgPlayDurationByRegionDataSet](docs/EeCloudAvgPlayDurationByRegionDataSet.md)
@@ -408,11 +420,7 @@ Class | Method | HTTP request | Description
  - [EeCloudDestroyedLobbiesByExitCodeDataSet](docs/EeCloudDestroyedLobbiesByExitCodeDataSet.md)
  - [EeCloudDestroyedLobbiesByFailureDataSet](docs/EeCloudDestroyedLobbiesByFailureDataSet.md)
  - [EeCloudFailedLobbiesDataSet](docs/EeCloudFailedLobbiesDataSet.md)
- - [EeCloudGamesBillingDynamicServersCapacityRegion](docs/EeCloudGamesBillingDynamicServersCapacityRegion.md)
- - [EeCloudGamesBillingDynamicServersCapacityRegionConfig](docs/EeCloudGamesBillingDynamicServersCapacityRegionConfig.md)
  - [EeCloudGamesBillingGetResponse](docs/EeCloudGamesBillingGetResponse.md)
- - [EeCloudGamesBillingPlan](docs/EeCloudGamesBillingPlan.md)
- - [EeCloudGamesBillingPlanConfig](docs/EeCloudGamesBillingPlanConfig.md)
  - [EeCloudGamesBillingUpdatePlanRequest](docs/EeCloudGamesBillingUpdatePlanRequest.md)
  - [EeCloudGamesNamespacesGetAnalyticsResponse](docs/EeCloudGamesNamespacesGetAnalyticsResponse.md)
  - [EeCloudGamesProjectsGetResponse](docs/EeCloudGamesProjectsGetResponse.md)
@@ -420,7 +428,7 @@ Class | Method | HTTP request | Description
  - [EeCloudGroupsBillingCreateStripePortalSessionRequest](docs/EeCloudGroupsBillingCreateStripePortalSessionRequest.md)
  - [EeCloudGroupsBillingCreateStripePortalSessionResponse](docs/EeCloudGroupsBillingCreateStripePortalSessionResponse.md)
  - [EeCloudGroupsBillingGetBillingResponse](docs/EeCloudGroupsBillingGetBillingResponse.md)
- - [EeCloudGroupsBillingGroup](docs/EeCloudGroupsBillingGroup.md)
+ - [EeCloudGroupsBillingGetBillingUsageResponse](docs/EeCloudGroupsBillingGetBillingUsageResponse.md)
  - [EeCloudGroupsBillingStripePortalSessionIntent](docs/EeCloudGroupsBillingStripePortalSessionIntent.md)
  - [EeCloudLobbyCountByGameModeDataSet](docs/EeCloudLobbyCountByGameModeDataSet.md)
  - [EeCloudLobbyCountByRegionDataSet](docs/EeCloudLobbyCountByRegionDataSet.md)
@@ -557,6 +565,19 @@ Class | Method | HTTP request | Description
  - [PortalNotificationUnregisterService](docs/PortalNotificationUnregisterService.md)
  - [ProvisionDatacentersGetTlsResponse](docs/ProvisionDatacentersGetTlsResponse.md)
  - [ProvisionServersGetInfoResponse](docs/ProvisionServersGetInfoResponse.md)
+ - [ServersCreateServerNetworkRequest](docs/ServersCreateServerNetworkRequest.md)
+ - [ServersCreateServerPortRequest](docs/ServersCreateServerPortRequest.md)
+ - [ServersCreateServerRequest](docs/ServersCreateServerRequest.md)
+ - [ServersCreateServerResponse](docs/ServersCreateServerResponse.md)
+ - [ServersDestroyServerResponse](docs/ServersDestroyServerResponse.md)
+ - [ServersGetServerResponse](docs/ServersGetServerResponse.md)
+ - [ServersNetwork](docs/ServersNetwork.md)
+ - [ServersNetworkMode](docs/ServersNetworkMode.md)
+ - [ServersPort](docs/ServersPort.md)
+ - [ServersPortProtocol](docs/ServersPortProtocol.md)
+ - [ServersPortRouting](docs/ServersPortRouting.md)
+ - [ServersResources](docs/ServersResources.md)
+ - [ServersServer](docs/ServersServer.md)
  - [UploadPrepareFile](docs/UploadPrepareFile.md)
  - [UploadPresignedRequest](docs/UploadPresignedRequest.md)
  - [ValidationError](docs/ValidationError.md)

@@ -61,8 +61,10 @@ impl super::Task for Task {
 				&ctx,
 				task.clone(),
 				backend::DeployOpts {
+					game_id: ctx.game_id.clone(),
 					environment_id: input.environment_id.clone(),
 					project_path: input.cwd.clone(),
+					// TODO:
 					skip_migrate: true,
 				},
 			)

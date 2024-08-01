@@ -9,9 +9,17 @@ use std::{
 };
 use tokio::fs;
 
-use crate::{backend, config, ctx::Ctx, util::net::upload, util::task::TaskCtx};
+use crate::{
+	backend, config,
+	ctx::Ctx,
+	util::task::TaskCtx,
+	util::{net::upload, term},
+};
 
 pub struct DeployOpts {
+	/// Game ID being deployed to.
+	pub game_id: String,
+
 	/// The environment to deploy to.
 	pub environment_id: String,
 
@@ -38,6 +46,74 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	)
 	.await?
 	.environment;
+
+	// TODO: re-apply both service token and endpoint if endpoint diff than one that's deployed
+	task.log_stdout(format!("[Fetching Environment Variables]"));
+	// let variables =
+	// 	apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_get_variables(
+	// 		&ctx.openapi_config_cloud,
+	// 		&project_id_str,
+	// 		&environment_id_str,
+	// 	)
+	// 	.await?
+	// 	.variables;
+	let mut update_variables = HashMap::<String, _>::new();
+	// if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
+	// TODO: pull this from the server
+	let public_endpoint = format!(
+		"https://{}--{}.backend.nathan16.gameinc.io",
+		project.name_id, env.name_id
+	);
+	update_variables.insert(
+		"OPENGB_PUBLIC_ENDPOINT".to_string(),
+		models::EeBackendUpdateVariable {
+			text: Some(public_endpoint),
+			..Default::default()
+		},
+	);
+	// }
+	// if !variables.contains_key("RIVET_API_ENDPOINT") {
+	update_variables.insert(
+		"RIVET_API_ENDPOINT".to_string(),
+		models::EeBackendUpdateVariable {
+			text: Some(ctx.api_endpoint.clone()),
+			..Default::default()
+		},
+	);
+	// }
+	// if !variables.contains_key("RIVET_SERVICE_TOKEN") {
+	let service_token = apis::cloud_games_tokens_api::cloud_games_tokens_create_service_token(
+		&ctx.openapi_config_cloud,
+		&opts.game_id,
+	)
+	.await?;
+	update_variables.insert(
+		"RIVET_SERVICE_TOKEN".to_string(),
+		models::EeBackendUpdateVariable {
+			secret: Some(service_token.token),
+			..Default::default()
+		},
+	);
+	// }
+	// if !update_variables.is_empty() {
+	task.log_stdout(format!(
+		"[Updating Environment Variables] {}",
+		update_variables
+			.keys()
+			.cloned()
+			.collect::<Vec<_>>()
+			.join(", ")
+	));
+	apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_update_variables(
+		&ctx.openapi_config_cloud,
+		&project_id_str,
+		&environment_id_str,
+		models::EeCloudBackendProjectsEnvsUpdateVariablesRequest {
+			variables: update_variables,
+		},
+	)
+	.await?;
+	// }
 
 	task.log_stdout(format!("[Building Project] {}", project_path.display()));
 
@@ -144,12 +220,13 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 
 	// Upload files
 	let reqwest_client = Arc::new(reqwest::Client::new());
-	// let pb = term::EitherProgressBar::Multi(indicatif::MultiProgress::new());
+	let pb = term::EitherProgressBar::Multi(term::multi_progress_bar(task.clone()));
 
 	futures_util::stream::iter(prepare_res.presigned_requests)
 		.map(Ok)
 		.try_for_each_concurrent(8, |presigned_req| {
-			// let pb = pb.clone();
+			let task = task.clone();
+			let pb = pb.clone();
 			let files = files.clone();
 			let reqwest_client = reqwest_client.clone();
 
@@ -161,11 +238,12 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 				);
 
 				upload::upload_file(
+					task.clone(),
 					&reqwest_client,
 					&presigned_req,
 					&file.absolute_path,
 					file.prepared.content_type.as_ref(),
-					// pb,
+					pb,
 				)
 				.await?;
 

@@ -1,5 +1,5 @@
 use global_error::prelude::*;
-use std::{path::Path};
+use std::path::Path;
 use uuid::Uuid;
 
 use crate::{
