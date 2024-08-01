@@ -5,6 +5,8 @@ pub mod deploy;
 pub mod exec_command;
 pub mod get_bootstrap_data;
 pub mod get_hub_link;
+pub mod get_settings_paths;
+pub mod open;
 pub mod start_device_link;
 pub mod unlink;
 pub mod wait_for_login;
@@ -76,8 +78,10 @@ gen_run_task!(
 	deploy::Task,
 	exec_command::Task,
 	get_bootstrap_data::Task,
-	start_device_link::Task,
 	get_hub_link::Task,
+	open::Task,
+	start_device_link::Task,
 	unlink::Task,
 	wait_for_login::Task,
+	get_settings_paths::Task,
 );

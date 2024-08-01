@@ -7,6 +7,7 @@ use tokio::fs;
 use uuid::Uuid;
 
 use crate::{
+	config,
 	ctx::Ctx,
 	util::{net::upload, task::TaskCtx},
 };
@@ -34,6 +35,9 @@ pub struct PushOutput {
 }
 
 pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalResult<PushOutput> {
+	let multipart_enabled =
+		config::settings::try_read(|x| Ok(!x.net.disable_upload_multipart)).await?;
+
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
 	// Inspect the image
@@ -72,7 +76,7 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 				BuildCompression::None => models::CloudGamesBuildCompression::None,
 				BuildCompression::Lz4 => models::CloudGamesBuildCompression::Lz4,
 			}),
-			multipart_upload: Some(multipart_enabled()),
+			multipart_upload: Some(multipart_enabled),
 		},
 	)
 	.await;
@@ -83,7 +87,7 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	let image_id = build_res.build_id;
 	// let pb = term::EitherProgressBar::Multi(indicatif::MultiProgress::new());
 
-	if multipart_enabled() {
+	if multipart_enabled {
 		// Upload chunks in parallel
 		futures_util::stream::iter(build_res.image_presigned_requests.unwrap())
 			.map(|presigned_request| {
@@ -130,10 +134,4 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	Ok(PushOutput {
 		image_id: image_id.to_owned(),
 	})
-}
-
-fn multipart_enabled() -> bool {
-	!std::env::var("_RIVET_UPLOAD_DISABLE_MULTIPART")
-		.ok()
-		.map_or(false, |x| &x == "1")
 }

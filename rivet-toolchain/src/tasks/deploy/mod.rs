@@ -79,9 +79,6 @@ impl super::Task for Task {
 				game_server::DeployOpts {
 					display_name: display_name.clone(),
 					build_dir: input.cwd.clone(),
-					build_args: None,
-					dockerfile: Some("Dockerfile".into()),
-					image: None,
 				},
 			)
 			.await?;

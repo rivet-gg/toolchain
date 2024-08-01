@@ -3,11 +3,10 @@ pub mod build;
 pub mod push;
 pub mod users;
 
-use global_error::prelude::*;
-use std::str::FromStr;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Copy, Clone, strum::EnumString, strum::AsRefStr)]
+#[derive(Copy, Clone, Serialize, Deserialize, strum::AsRefStr)]
 pub enum BuildCompression {
 	/// No compression.
 	#[strum(serialize = "none")]
@@ -18,30 +17,16 @@ pub enum BuildCompression {
 	Lz4,
 }
 
-impl Default for BuildCompression {
-	fn default() -> Self {
-		Self::Lz4
-	}
-}
-
 impl BuildCompression {
-	pub async fn from_env(kind: &BuildKind) -> GlobalResult<BuildCompression> {
-		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_BUILD_COMPRESSION")
-			.ok()
-			.and_then(|x| BuildCompression::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
-			Ok(match kind {
-				BuildKind::DockerImage => BuildCompression::None,
-				BuildKind::OciBundle => BuildCompression::Lz4,
-			})
+	pub fn default_from_build_kind(build_kind: BuildKind) -> Self {
+		match build_kind {
+			BuildKind::DockerImage => BuildCompression::None,
+			BuildKind::OciBundle => BuildCompression::Lz4,
 		}
 	}
 }
 
-#[derive(Copy, Clone, strum::EnumString, strum::AsRefStr)]
+#[derive(Copy, Clone, Serialize, Deserialize, strum::AsRefStr)]
 pub enum BuildKind {
 	/// Legacy option. Docker image archive output from `docker save`. Slower lobby start
 	/// times.
@@ -57,20 +42,6 @@ pub enum BuildKind {
 impl Default for BuildKind {
 	fn default() -> Self {
 		Self::OciBundle
-	}
-}
-
-impl BuildKind {
-	pub async fn from_env() -> GlobalResult<BuildKind> {
-		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_BUILD_KIND")
-			.ok()
-			.and_then(|x| BuildKind::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
-			Ok(BuildKind::OciBundle)
-		}
 	}
 }
 

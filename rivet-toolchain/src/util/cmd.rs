@@ -113,7 +113,7 @@ pub fn shell_cmd_std(cmd: &str) -> std::process::Command {
 			// Load rc file
 			.arg("-i")
 			.arg("-c")
-			// Will accpet the cmd & all following args
+			// Will accept the cmd & all following args
 			.arg("\"$@\"")
 			// This arg is ignored
 			.arg("noop")

@@ -1,7 +1,9 @@
 use global_error::prelude::*;
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, path::Path, str::FromStr};
 
 use crate::{
+	config,
 	ctx::Ctx,
 	util::{
 		cmd::{self, shell_cmd},
@@ -9,14 +11,12 @@ use crate::{
 	},
 };
 
-#[derive(strum::EnumString)]
+#[derive(PartialEq, Serialize, Deserialize, Clone)]
 pub enum DockerBuildMethod {
 	/// Create & use a Buildx builder on this machine. Required for cross-platform compliation.
-	#[strum(serialize = "buildx")]
 	Buildx,
 
 	/// Use the native Docker build command. Only used if Buildx is not available.
-	#[strum(serialize = "native")]
 	Native,
 }
 
@@ -29,12 +29,10 @@ impl Default for DockerBuildMethod {
 impl DockerBuildMethod {
 	pub async fn from_env(task: TaskCtx) -> GlobalResult<Self> {
 		// Determine build method from env
-		if let Some(method) = std::env::var("_RIVET_DOCKER_BUILD_METHOD")
-			.ok()
-			.and_then(|x| DockerBuildMethod::from_str(&x).ok())
-		{
-			Ok(method)
-		} else {
+		let build_method =
+			config::settings::try_read(|x| Ok(x.game_server.deploy.build_method.clone())).await?;
+
+		if build_method == DockerBuildMethod::Buildx {
 			// Validate that Buildx is installed
 			let mut buildx_version_cmd = shell_cmd("docker");
 			buildx_version_cmd.args(&["buildx", "version"]);
@@ -47,6 +45,8 @@ impl DockerBuildMethod {
 				task.log_stderr("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
 				Ok(DockerBuildMethod::Native)
 			}
+		} else {
+			Ok(build_method)
 		}
 	}
 }

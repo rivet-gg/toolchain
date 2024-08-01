@@ -14,6 +14,7 @@ repository = "https://github.com/rivet-gg/cli"
 async-posthog = { git = "https://github.com/rivet-gg/posthog-rs.git", rev = "ef4e80e" }
 async-stream = "0.3.3"
 chrono = "0.4.21"
+config = { version = "0.14", default-features = false, features = ["json", "async"] }
 console = "0.15"
 ctrlc = { version = "3.2", features = ["termination"] }
 dirs = "5.0"
@@ -26,6 +27,7 @@ ignore = "0.4"
 indicatif = "0.17"
 lz4 = "1.24"
 mime_guess = "2.0"
+open = "5.3.0"
 openssl = { version = "*", features = ["vendored"] }  # Required for cross compilation, see https://github.com/sfackler/rust-openssl/issues/603#issuecomment-822619837
 rand = "0.8"
 regex = "1.10"

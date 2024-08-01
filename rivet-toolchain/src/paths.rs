@@ -12,3 +12,11 @@ pub fn global_config_dir() -> GlobalResult<PathBuf> {
 pub fn global_config_file() -> GlobalResult<PathBuf> {
 	Ok(global_config_dir()?.join("config.json"))
 }
+
+pub fn user_settings_config_file() -> GlobalResult<PathBuf> {
+	Ok(global_config_dir()?.join("settings.json"))
+}
+
+pub fn project_settings_config_file() -> GlobalResult<PathBuf> {
+	Ok(project_root()?.join(".rivet").join("settings.json"))
+}

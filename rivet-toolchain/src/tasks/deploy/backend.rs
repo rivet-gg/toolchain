@@ -44,14 +44,15 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	task.log_stdout(format!("[Building Project] {}", project_path.display()));
 
 	// Build
-	let mut cmd_env = HashMap::new();
-	if OPENGB_NO_MINIFY {
-		cmd_env.insert("_OPENGB_ESBUILD_NO_MINIFY".into(), "1".into());
-	}
+	let mut cmd_env = config::settings::try_read(|settings| {
+		let mut env = settings.backend.command_environment.clone();
+		env.extend(settings.backend.deploy.command_environment.clone());
+		Ok(env)
+	})
+	.await?;
 	let cmd = backend::run_opengb_command(
 		task.clone(),
 		backend::OpenGbCommandOpts {
-			opengb_target: backend::OpenGbTarget::Native,
 			args: vec![
 				"build".into(),
 				"--db-driver".into(),
@@ -95,7 +96,6 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		let migrate_cmd = backend::run_opengb_command(
 			task.clone(),
 			backend::OpenGbCommandOpts {
-				opengb_target: backend::OpenGbTarget::Native,
 				args: vec!["db".into(), "deploy".into()],
 				env: migrate_env,
 				cwd: project_path.clone(),
