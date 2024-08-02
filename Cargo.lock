@@ -2147,6 +2147,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "rivet-toolchain-ffi"
+version = "0.1.0"
+dependencies = [
+ "rivet-toolchain",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"

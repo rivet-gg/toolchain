@@ -9,8 +9,16 @@ in
 		buildInputs = with pkgs; [
 			cacert
 
-			pkgs.latest.rustChannels.stable.rust
-            rust-script
+			# pkgs.latest.rustChannels.stable.rust
+      (pkgs.latest.rustChannels.stable.rust.override {
+       extensions = [ "rust-src" "rust-std" ];
+       targets = [
+         "x86_64-unknown-linux-gnu"
+         "x86_64-pc-windows-msvc"
+         "x86_64-apple-darwin"
+         "aarch64-apple-darwin"
+       ];
+     })
 			pkg-config
 			perl
 
