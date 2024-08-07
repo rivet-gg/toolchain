@@ -1,5 +1,5 @@
 use clap::Parser;
-use global_error::prelude::*;
+use std::process::ExitCode;
 use toolchain::{
 	tasks::{check_login_state, start_device_link, wait_for_login, RunConfig},
 	util::task::run_task,
@@ -12,39 +12,60 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> GlobalResult<()> {
+	pub async fn execute(&self) -> ExitCode {
 		let run_config = RunConfig::empty();
 
 		// Check if linked
-		let output =
-			run_task::<check_login_state::Task>(run_config.clone(), check_login_state::Input {})
-				.await?;
-		if output.logged_in {
-			eprintln!("Already logged in. Sign out with `rivet unlink`.");
-			return Ok(());
+		match run_task::<check_login_state::Task>(run_config.clone(), check_login_state::Input {})
+			.await
+		{
+			Ok(output) => {
+				if output.logged_in {
+					eprintln!("Already logged in. Sign out with `rivet unlink`.");
+					return ExitCode::SUCCESS;
+				}
+			}
+			Err(e) => {
+				eprintln!("Error checking login state: {}", e);
+				return ExitCode::from(1);
+			}
 		}
 
 		// Start device link
-		let output = run_task::<start_device_link::Task>(
+		let device_link_output = match run_task::<start_device_link::Task>(
 			run_config.clone(),
 			start_device_link::Input {
 				api_endpoint: self.api_endpoint.clone(),
 			},
 		)
-		.await?;
-		eprintln!("{}", output.device_link_url);
+		.await
+		{
+			Ok(output) => output,
+			Err(e) => {
+				eprintln!("Error starting device link: {}", e);
+				return ExitCode::from(2);
+			}
+		};
+		eprintln!("{}", device_link_output.device_link_url);
 
 		// Wait for finish
-		run_task::<wait_for_login::Task>(
+		match run_task::<wait_for_login::Task>(
 			run_config.clone(),
 			wait_for_login::Input {
 				api_endpoint: self.api_endpoint.clone(),
-				device_link_token: output.device_link_token,
+				device_link_token: device_link_output.device_link_token,
 			},
 		)
-		.await?;
-		eprintln!("Logged in");
-
-		Ok(())
+		.await
+		{
+			Ok(_) => {
+				eprintln!("Logged in");
+				ExitCode::SUCCESS
+			}
+			Err(e) => {
+				eprintln!("Error waiting for login: {}", e);
+				ExitCode::from(3)
+			}
+		}
 	}
 }

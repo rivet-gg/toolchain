@@ -1,5 +1,5 @@
 use clap::Parser;
-use global_error::prelude::*;
+use std::process::ExitCode;
 
 /// EXPERIMENTAL
 #[derive(Parser)]
@@ -8,7 +8,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self) -> GlobalResult<()> {
+	pub async fn execute(&self) -> ExitCode {
 		match self {
 			SubCommand::Run(opts) => opts.execute().await,
 		}
@@ -26,10 +26,23 @@ pub struct RunOpts {
 }
 
 impl RunOpts {
-	pub async fn execute(&self) -> GlobalResult<()> {
-		let run_config = serde_json::from_str(&self.run_config)?;
-		let output = toolchain::tasks::run_task_json(run_config, &self.name, &self.input).await;
-		println!("{output}");
-		Ok(())
+	pub async fn execute(&self) -> ExitCode {
+		match serde_json::from_str(&self.run_config) {
+			Ok(run_config) => {
+				let result =
+					toolchain::tasks::run_task_json(run_config, &self.name, &self.input).await;
+				println!("{}", result.output);
+
+				if result.success {
+					ExitCode::SUCCESS
+				} else {
+					ExitCode::FAILURE
+				}
+			}
+			Err(e) => {
+				eprintln!("Error parsing run_config: {}", e);
+				ExitCode::from(2)
+			}
+		}
 	}
 }

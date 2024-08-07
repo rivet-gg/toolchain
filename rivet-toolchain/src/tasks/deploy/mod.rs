@@ -9,10 +9,10 @@ use crate::util::task::TaskCtx;
 
 #[derive(Deserialize)]
 pub struct Input {
-	cwd: String,
-	environment_id: String,
-	game_server: bool,
-	backend: bool,
+	pub cwd: String,
+	pub environment_id: String,
+	pub game_server: bool,
+	pub backend: bool,
 }
 
 #[derive(Serialize)]

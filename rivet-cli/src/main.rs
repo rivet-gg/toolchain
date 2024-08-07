@@ -1,7 +1,7 @@
 pub mod commands;
 
 use clap::Parser;
-use global_error::GlobalResult;
+use std::process::ExitCode;
 
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
@@ -11,9 +11,7 @@ struct Cli {
 }
 
 #[tokio::main]
-async fn main() -> GlobalResult<()> {
+async fn main() -> ExitCode {
 	let cli = Cli::parse();
-	cli.command.execute().await?;
-	Ok(())
+	cli.command.execute().await
 }
-
