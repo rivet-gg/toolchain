@@ -1,3 +1,5 @@
+pub mod config;
+pub mod deploy;
 pub mod login;
 pub mod logout;
 pub mod task;

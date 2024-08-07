@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{util::task::TaskCtx};
+use crate::util::task::TaskCtx;
 
 #[derive(Deserialize)]
 pub struct Input {

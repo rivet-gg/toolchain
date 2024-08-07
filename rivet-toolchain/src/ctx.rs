@@ -85,4 +85,3 @@ pub async fn init(api_endpoint: String, cloud_token: String) -> GlobalResult<Ctx
 		openapi_config_cloud,
 	}))
 }
-
