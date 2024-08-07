@@ -46,7 +46,7 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 	match runtime {
 		OpenGbRuntime::Native => {
 			let mut cmd = shell_cmd("opengb");
-			cmd.arg("--path").arg(opts.config_path);
+			cmd.arg("--project").arg(opts.config_path);
 			cmd.args(opts.args);
 			cmd.envs(opts.env);
 			cmd.current_dir(opts.cwd);
@@ -74,7 +74,7 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 			cmd.arg("--workdir=/backend");
 			cmd.arg(image_tag);
 			cmd.arg("--");
-			cmd.arg("--path");
+			cmd.arg("--project");
 			cmd.arg(opts.config_path);
 			cmd.args(&opts.args);
 			Ok(cmd)
