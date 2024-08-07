@@ -2088,6 +2088,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "global-error",
+ "open",
  "rivet-toolchain",
  "serde_json",
  "tokio",
