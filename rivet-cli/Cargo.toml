@@ -2,6 +2,7 @@
 name = "rivet-cli"
 version = "2.0.0-rc.1"
 edition = "2021"
+repository = "https://github.com/rivet-gg/cli"
 
 [[bin]]
 name = "rivet"
