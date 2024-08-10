@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-rc.2](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.1...v2.0.0-rc.2) (2024-08-10)
+
+
+### Continuous Integration
+
+* fix cargo-dist ([#300](https://github.com/rivet-gg/cli/issues/300)) ([ef5edc6](https://github.com/rivet-gg/cli/commit/ef5edc61f1d212357d7790107365a464eb2886fb))
+
+
+### Chores
+
+* release 2.0.0-rc.2 ([6dc6edf](https://github.com/rivet-gg/cli/commit/6dc6edff3670bd50e85543082b3130196a6a1e20))
+
 ## [2.0.0-rc.1](https://github.com/rivet-gg/cli/compare/v1.3.4...v2.0.0-rc.1) (2024-08-09)
 
 
