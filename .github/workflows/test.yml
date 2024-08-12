@@ -45,8 +45,8 @@ jobs:
       - name: Run cargo fmt
         run: |
           nix-shell --run "
-            cargo fmt --check --manifest-path core/Cargo.toml && 
-            cargo fmt --check --manifest-path cli/Cargo.toml
+            cargo fmt --check --manifest-path rivet-toolchain-ffi/Cargo.toml && 
+            cargo fmt --check --manifest-path rivet-cli/Cargo.toml
           "
 
       - name: Run cargo test
