@@ -13,7 +13,7 @@ pub fn run_task(run_config: String, name: String, input_json: String) -> String 
 			multithreaded: task_config.prefer_multithreaded,
 		},
 	);
-	output_json
+	output_json.output
 }
 
 const FORCE_MULTI_THREAD: bool = true;
