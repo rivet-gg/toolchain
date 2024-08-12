@@ -78,7 +78,6 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
 			cmd.arg("--workdir=/backend");
 			cmd.arg(image_tag);
-			cmd.arg("--");
 			cmd.arg("--project");
 			cmd.arg(opts.config_path);
 			cmd.args(&opts.args);
