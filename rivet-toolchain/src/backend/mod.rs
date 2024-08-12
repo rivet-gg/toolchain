@@ -60,6 +60,10 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 			for (k, v) in opts.env {
 				writeln!(env_file, "{k}={v}")?;
 			}
+			// Make sure the file is properly flushed, and doesn't get deleted
+			// after the NamedTempFile goes out of scope
+			env_file.flush()?;
+			let (env_file, env_file_path) = env_file.keep()?;
 
 			let mut cmd = shell_cmd("docker");
 			cmd.arg("run");
@@ -67,7 +71,7 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 			cmd.arg("--tty");
 			cmd.arg("--quiet");
 			cmd.arg("--init");
-			cmd.arg("--env-file").arg(env_file.path());
+			cmd.arg("--env-file").arg(env_file_path);
 			cmd.arg("--add-host=host.docker.internal:host-gateway");
 			cmd.arg("--publish=6420:6420");
 			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
