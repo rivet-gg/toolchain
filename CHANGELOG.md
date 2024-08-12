@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-rc.3](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.2...v2.0.0-rc.3) (2024-08-12)
+
+
+### Bug Fixes
+
+* clean opengb container after run ([#307](https://github.com/rivet-gg/cli/issues/307)) ([e98fd16](https://github.com/rivet-gg/cli/commit/e98fd16917bfdc669297adcf519a45525c7af227))
+* compilation errors ([#306](https://github.com/rivet-gg/cli/issues/306)) ([647b087](https://github.com/rivet-gg/cli/commit/647b087ba8de1bcc7942310bce67c49c6f51c275))
+* envfile race condition ([#305](https://github.com/rivet-gg/cli/issues/305)) ([8fda7e2](https://github.com/rivet-gg/cli/commit/8fda7e2b6799c992948932b9173f19b0582ce468))
+* pass arguments to opengb in docker correctly ([#309](https://github.com/rivet-gg/cli/issues/309)) ([281ad54](https://github.com/rivet-gg/cli/commit/281ad54c071bdf1fdc0225b3376ceaadba68f32e))
+* update opengb docker tag ([#311](https://github.com/rivet-gg/cli/issues/311)) ([ae4b4f6](https://github.com/rivet-gg/cli/commit/ae4b4f69bd87cda30b9f22d5d7b077b5515005f0))
+
+
+### Continuous Integration
+
+* update format check ([#308](https://github.com/rivet-gg/cli/issues/308)) ([7d2d208](https://github.com/rivet-gg/cli/commit/7d2d208b334a444f05b1dafa1179de606b254ef5))
+
+
+### Chores
+
+* release 2.0.0-rc.3 ([e0f72b5](https://github.com/rivet-gg/cli/commit/e0f72b5a33706201ba46f676d26d112701dc51d9))
+
 ## [2.0.0-rc.2](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.1...v2.0.0-rc.2) (2024-08-10)
 
 
