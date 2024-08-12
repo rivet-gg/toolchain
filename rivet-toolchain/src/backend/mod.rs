@@ -67,6 +67,7 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 
 			let mut cmd = shell_cmd("docker");
 			cmd.arg("run");
+			cmd.arg("--rm");
 			cmd.arg("--interactive");
 			cmd.arg("--tty");
 			cmd.arg("--quiet");
