@@ -2077,7 +2077,7 @@ dependencies = [
 
 [[package]]
 name = "rivet-cli"
-version = "2.0.0-rc.2"
+version = "2.0.0-rc.3"
 dependencies = [
  "clap",
  "global-error",
