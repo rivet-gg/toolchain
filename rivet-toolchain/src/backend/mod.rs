@@ -13,7 +13,7 @@ use crate::{
 	Ctx,
 };
 
-const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "ghcr.io/rivet-gg/opengb/v0.1.2";
+const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "ghcr.io/rivet-gg/opengb:main";
 pub struct OpenGbCommandOpts {
 	pub config_path: String,
 	pub args: Vec<String>,
