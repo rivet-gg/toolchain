@@ -15,6 +15,8 @@ use crate::{
 use super::{BuildCompression, BuildKind};
 
 pub struct PushOpts {
+	pub env_id: Uuid,
+
 	/// Path to already created tar.
 	pub path: PathBuf,
 
@@ -43,6 +45,9 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
+	let game_id_str = ctx.game_id.to_string();
+	let env_id_str = push_opts.env_id.to_string();
+
 	// Inspect the image
 	let image_file_meta = fs::metadata(&push_opts.path).await?;
 	ensure!(image_file_meta.len() > 0, "docker image archive is empty");
@@ -62,7 +67,8 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 
 	let build_res = apis::servers_builds_api::servers_builds_prepare_build(
 		&ctx.openapi_config_cloud,
-		&ctx.game_id,
+		&game_id_str,
+		&env_id_str,
 		models::ServersCreateBuildRequest {
 			name: display_name.clone(),
 			image_tag: push_opts.docker_tag.clone(),
@@ -128,7 +134,8 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 
 	let complete_res = apis::servers_builds_api::servers_builds_complete_build(
 		&ctx.openapi_config_cloud,
-		&ctx.game_id,
+		&game_id_str,
+		&env_id_str,
 		&build_res.build.to_string(),
 	)
 	.await;
@@ -139,7 +146,8 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 
 	let complete_res = apis::servers_builds_api::servers_builds_patch_tags(
 		&ctx.openapi_config_cloud,
-		&ctx.game_id,
+		&game_id_str,
+		&env_id_str,
 		&build_res.build.to_string(),
 		models::ServersPatchBuildTagsRequest {
 			tags: Some(serde_json::to_value(&push_opts.tags)?),

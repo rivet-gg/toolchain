@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
 
-use crate::{backend, util::task::TaskCtx};
+use crate::{backend, game::TEMPEnvironment, util::task::TaskCtx};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -52,11 +52,11 @@ impl super::Task for Task {
 				let ctx = ctx.clone();
 				async move {
 					let backend = backend::get_or_create_backend(&ctx, env.id).await?;
-					(env.id, backend)
+					GlobalResult::Ok((env.id, backend))
 				}
 			})
 			.buffer_unordered(4)
-			.try_collect::<HashMap<String, models::EeBackendBackend>>()
+			.try_collect::<HashMap<Uuid, models::EeBackendBackend>>()
 			.await?;
 
 		Ok(Output {

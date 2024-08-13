@@ -1,6 +1,7 @@
 pub mod backend;
 pub mod config;
 pub mod ctx;
+pub mod game;
 pub mod paths;
 pub mod tasks;
 pub mod util;

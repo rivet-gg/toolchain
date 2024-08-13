@@ -1,5 +1,5 @@
 use global_error::prelude::*;
-use rivet_api::{apis, models};
+use rivet_api::apis;
 use serde::Serialize;
 use std::{collections::HashMap, path::Path};
 use uuid::Uuid;
@@ -68,9 +68,9 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	//
 	// Indicates the latest build to use for this environment. Used if not providing a client-side
 	// version.
-	let version_key = format!("rivet/{}/version", opts.environment.slug);
-	let active_key = format!("rivet/{}/active", opts.environment.slug);
-	let latest_key = format!("rivet/{}/latest", opts.environment.slug);
+	let version_key = format!("rivet/{}/version", opts.env.slug);
+	let active_key = format!("rivet/{}/active", opts.env.slug);
+	let latest_key = format!("rivet/{}/latest", opts.env.slug);
 	let tags = HashMap::from([
 		(version_key.clone(), version_name.clone()),
 		(active_key.clone(), "true".to_string()),
@@ -84,9 +84,10 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			ctx,
 			task.clone(),
 			&PushOpts {
+				env_id: opts.env.id,
 				name: Some(version_name.to_string()),
 				tags,
-				exclusive_tags: exclusive_tags,
+				exclusive_tags,
 				docker_tag: docker_image.clone(),
 			},
 		)
@@ -105,6 +106,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			task.clone(),
 			&Path::new(&opts.build_dir),
 			&BuildPushOpts {
+				env_id: opts.env.id,
 				tags,
 				exclusive_tags,
 				dockerfile: dockerfile.clone(),
@@ -133,6 +135,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 }
 
 pub struct BuildPushOpts {
+	pub env_id: Uuid,
 	pub name: Option<String>,
 	pub tags: HashMap<String, String>,
 	pub exclusive_tags: Vec<String>,
@@ -178,6 +181,7 @@ pub async fn build_and_push(
 		ctx,
 		task.clone(),
 		&docker::push::PushOpts {
+			env_id: push_opts.env_id,
 			path: build_output.path.to_owned(),
 			tags: push_opts.tags.clone(),
 			exclusive_tags: push_opts.exclusive_tags.clone(),
@@ -191,6 +195,7 @@ pub async fn build_and_push(
 }
 
 pub struct PushOpts {
+	pub env_id: Uuid,
 	pub name: Option<String>,
 	pub tags: HashMap<String, String>,
 	pub exclusive_tags: Vec<String>,
@@ -237,6 +242,7 @@ pub async fn push(
 		ctx,
 		task.clone(),
 		&docker::push::PushOpts {
+			env_id: push_opts.env_id,
 			path: archive_path.to_owned(),
 			tags: push_opts.tags.clone(),
 			exclusive_tags: push_opts.exclusive_tags.clone(),

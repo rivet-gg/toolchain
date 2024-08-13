@@ -33,9 +33,9 @@ impl Opts {
 
 		// Find environment
 		let environment = match bootstrap_data
-			.backend_environments
+			.envs
 			.iter()
-			.find(|env| env.name_id == self.environment)
+			.find(|env| env.slug == self.environment)
 		{
 			Some(env) => env,
 			None => {
@@ -43,8 +43,8 @@ impl Opts {
 					"Environment '{}' not found. Available environments:",
 					self.environment
 				);
-				for env in &bootstrap_data.backend_environments {
-					eprintln!("- {}", env.name_id);
+				for env in &bootstrap_data.envs {
+					eprintln!("- {}", env.slug);
 				}
 				return ExitCode::FAILURE;
 			}
@@ -57,7 +57,7 @@ impl Opts {
 					.unwrap_or_default()
 					.to_string_lossy()
 					.to_string(),
-				environment_id: environment.environment_id,
+				environment_id: environment.id,
 				game_server: !self.only_backend,
 				backend: !self.only_game_server,
 			},

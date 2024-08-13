@@ -220,7 +220,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		})
 		.await?;
 
-	task.log_stdout(format!("[Deploying Environment] {}", opts.env.display_name));
+	task.log_stdout(format!("[Deploying Environment] {}", opts.env.name));
 
 	let deploy_res = apis::ee_backend_api::ee_backend_deploy(
 		&ctx.openapi_config_cloud,
