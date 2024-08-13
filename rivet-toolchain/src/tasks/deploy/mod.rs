@@ -2,7 +2,6 @@ mod backend;
 mod game_server;
 
 use global_error::prelude::*;
-use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -42,31 +41,14 @@ impl super::Task for Task {
 
 		let ctx = crate::ctx::load().await?;
 
-		// Get the environment
-		let backend_project = crate::backend::get_or_create_project(&ctx).await?;
-		let backend_environments =
-			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_list(
-				&ctx.openapi_config_cloud,
-				&backend_project.project_id.to_string(),
-				None,
-			)
-			.await?;
-		let backend_environment = unwrap!(
-			backend_environments
-				.environments
-				.into_iter()
-				.find(|x| x.environment_id == input.environment_id),
-			"backend not found"
-		);
+		let env = crate::game::get_env(&ctx, input.environment_id).await?;
 
 		if input.backend {
-			// Backend
 			backend::deploy(
 				&ctx,
 				task.clone(),
 				backend::DeployOpts {
-					game_id: ctx.game_id.clone(),
-					environment_id: input.environment_id.clone(),
+					env: env.clone(),
 					project_path: input.cwd.clone(),
 					// TODO:
 					skip_migrate: true,
@@ -76,14 +58,15 @@ impl super::Task for Task {
 		}
 
 		let game_server = if input.game_server {
+			// TODO: Add support for configuring in project config.
+			// Should support multiple dockerfiles and passing from args/env.
+
 			// Game server
-			// TODO: Add reading from rivet.json or some sort of build config to read this data. This should
-			// support multiple dockerfiles and passing from args/env.
 			let deploy = game_server::deploy(
 				&ctx,
 				task.clone(),
 				game_server::DeployOpts {
-					backend_environment,
+					env: env.clone(),
 					build_dir: input.cwd.clone(),
 				},
 			)
@@ -94,7 +77,6 @@ impl super::Task for Task {
 			None
 		};
 
-		// Finish
 		task.log_stdout(format!("[Deploy Finished]"));
 
 		Ok(Output { game_server })

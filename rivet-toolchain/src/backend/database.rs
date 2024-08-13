@@ -4,57 +4,38 @@ use uuid::Uuid;
 
 use crate::{config, ctx::Ctx, util::task::TaskCtx};
 
-pub async fn provision_database(
-	task: TaskCtx,
-	ctx: &Ctx,
-	project_id: Uuid,
-	env_id: Uuid,
-) -> GlobalResult<()> {
+pub async fn provision_database(task: TaskCtx, ctx: &Ctx, env_id: Uuid) -> GlobalResult<()> {
 	task.log_stdout("[Provisioning Database]");
 
-	apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_provision_database(
+	apis::ee_backend_api::ee_backend_provision_database(
 		&ctx.openapi_config_cloud,
-		&project_id.to_string(),
+		&ctx.game_id.to_string(),
 		&env_id.to_string(),
 	)
 	.await?;
 
 	// Fetch remote DB URL
-	let mut global_project_config = config::meta::mutate_project(|config| {
-		config
-			.opengb
-			.projects
-			.entry(project_id)
-			.or_default()
-			.clone()
+	let mut env_config = config::meta::mutate_project(|config| {
+		config.environments.entry(env_id).or_default().clone()
 	})
 	.await?;
-	let env_config = global_project_config
-		.environments
-		.entry(env_id)
-		.or_default();
 
-	if env_config.url.is_none() {
+	if env_config.backend.db_url.is_none() {
 		task.log_stdout("[Fetching Connection]");
 
-		let db_url_res =
-			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_get_db_url(
-				&ctx.openapi_config_cloud,
-				&project_id.to_string(),
-				&env_id.to_string(),
-			)
-			.await?;
+		let db_url_res = apis::ee_backend_api::ee_backend_get_db_url(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id.to_string(),
+			&env_id.to_string(),
+		)
+		.await?;
 
 		// Add missing db url
-		env_config.url = db_url_res.url;
+		env_config.backend.db_url = db_url_res.url;
 
 		// Update cache
 		config::meta::try_mutate_project(|config| {
-			// Was inserted in last `mutate_project` call
-			let project = unwrap!(config.opengb.projects.get_mut(&project_id));
-
-			project.environments.insert(env_id, env_config.clone());
-
+			config.environments.insert(env_id, env_config.clone());
 			Ok(())
 		})
 		.await?;

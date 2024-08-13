@@ -7,6 +7,7 @@ use uuid::Uuid;
 use crate::{
 	config,
 	ctx::Ctx,
+	game::TEMPEnvironment,
 	util::{
 		cmd::{self, shell_cmd},
 		docker::{self, generate_unique_image_tag, BuildCompression},
@@ -15,7 +16,7 @@ use crate::{
 };
 
 pub struct DeployOpts {
-	pub backend_environment: models::EeBackendEnvironment,
+	pub env: TEMPEnvironment,
 	pub build_dir: String,
 	// pub build_args: Option<HashMap<String, String>>,
 	// pub dockerfile: Option<String>,
@@ -67,9 +68,9 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	//
 	// Indicates the latest build to use for this environment. Used if not providing a client-side
 	// version.
-	let version_key = format!("rivet/{}/version", opts.backend_environment.name_id);
-	let active_key = format!("rivet/{}/active", opts.backend_environment.name_id);
-	let latest_key = format!("rivet/{}/latest", opts.backend_environment.name_id);
+	let version_key = format!("rivet/{}/version", opts.environment.slug);
+	let active_key = format!("rivet/{}/active", opts.environment.slug);
+	let latest_key = format!("rivet/{}/latest", opts.environment.slug);
 	let tags = HashMap::from([
 		(version_key.clone(), version_name.clone()),
 		(active_key.clone(), "true".to_string()),

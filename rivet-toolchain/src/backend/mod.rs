@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, io::Write, path::PathBuf};
 use tempfile::NamedTempFile;
 use tokio::process::Command;
+use uuid::Uuid;
 
 use crate::{
 	config,
@@ -98,49 +99,43 @@ pub async fn spawn_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<u32> 
 }
 
 /// Gets or auto-creates a backend project for the game.
-pub async fn get_or_create_project(ctx: &Ctx) -> GlobalResult<Box<models::EeBackendProject>> {
+pub async fn get_or_create_backend(
+	ctx: &Ctx,
+	env_id: Uuid,
+) -> GlobalResult<models::EeBackendBackend> {
 	// Get the project
-	let project_res = apis::ee_cloud_games_projects_api::ee_cloud_games_projects_get(
+	let backend_res = apis::ee_backend_api::ee_backend_get(
 		&ctx.openapi_config_cloud,
-		&ctx.game_id,
+		&ctx.game_id.to_string(),
+		&env_id.to_string(),
+		None,
+	)
+	.await;
+
+	let backend = match backend_res {
+		Err(apis::Error::ResponseError(apis::ResponseContent {
+			entity:
+				Some(apis::ee_backend_api::EeBackendGetError::Status400(models::ErrorBody {
+					code, ..
+				})),
+			..
+		})) if code == "BACKEND_NOT_FOUND" => create_backend(ctx, env_id).await?,
+		x => *x?.backend,
+	};
+
+	Ok(backend)
+}
+
+async fn create_backend(ctx: &Ctx, env_id: Uuid) -> GlobalResult<models::EeBackendBackend> {
+	let res = apis::ee_backend_api::ee_backend_create(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id.to_string(),
+		&env_id.to_string(),
+		models::EeBackendCreateRequest {
+			tier: models::EeBackendTier::Shared,
+		},
 	)
 	.await?;
 
-	if let Some(project) = project_res.project {
-		Ok(project)
-	} else {
-		// Get game in order to determine team & project name
-		let models::CloudGamesGetGameByIdResponse { game, .. } =
-			apis::cloud_games_api::cloud_games_get_game_by_id(
-				&ctx.openapi_config_cloud,
-				&ctx.game_id,
-				None,
-			)
-			.await?;
-
-		// Create project
-		let display_name = format!("{:.15}-backend", game.display_name);
-		let models::EeCloudBackendProjectsCreateResponse { project, .. } =
-			apis::ee_cloud_backend_projects_api::ee_cloud_backend_projects_create(
-				&ctx.openapi_config_cloud,
-				models::EeCloudBackendProjectsCreateRequest {
-					developer_group_id: game.developer_group_id,
-					display_name,
-					game_id: Some(game.game_id),
-				},
-			)
-			.await?;
-
-		// Link to game
-		apis::ee_cloud_games_projects_api::ee_cloud_games_projects_link(
-			&ctx.openapi_config_cloud,
-			&ctx.game_id,
-			models::EeCloudGamesProjectsLinkRequest {
-				project_id: project.project_id,
-			},
-		)
-		.await?;
-
-		Ok(project)
-	}
+	Ok(*res.backend)
 }

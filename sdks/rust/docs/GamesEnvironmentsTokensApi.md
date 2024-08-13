@@ -1,19 +1,19 @@
-# \ServersLogsApi
+# \GamesEnvironmentsTokensApi
 
 All URIs are relative to *https://api.rivet.gg*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**servers_logs_get_server_logs**](ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id}/logs | 
+[**games_environments_tokens_create_service_token**](GamesEnvironmentsTokensApi.md#games_environments_tokens_create_service_token) | **POST** /games/{game_id}/environments/{environment_id}/tokens/service | 
 
 
 
-## servers_logs_get_server_logs
+## games_environments_tokens_create_service_token
 
-> crate::models::ServersGetServerLogsResponse servers_logs_get_server_logs(game_id, environment_id, server_id, stream, watch_index)
+> crate::models::GamesEnvironmentsCreateServiceTokenResponse games_environments_tokens_create_service_token(game_id, environment_id)
 
 
-Returns the logs for a given server.
+Creates a new environment service token.
 
 ### Parameters
 
@@ -22,13 +22,10 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **game_id** | **uuid::Uuid** |  | [required] |
 **environment_id** | **uuid::Uuid** |  | [required] |
-**server_id** | **uuid::Uuid** |  | [required] |
-**stream** | [**ServersLogStream**](.md) |  | [required] |
-**watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::ServersGetServerLogsResponse**](ServersGetServerLogsResponse.md)
+[**crate::models::GamesEnvironmentsCreateServiceTokenResponse**](GamesEnvironmentsCreateServiceTokenResponse.md)
 
 ### Authorization
 

@@ -22,7 +22,7 @@ pub struct Meta {
 pub struct ProjectMeta {
 	pub cluster: Cluster,
 	pub tokens: Tokens,
-	pub opengb: OpenGb,
+	pub environments: HashMap<Uuid, Environment>,
 }
 
 impl ProjectMeta {
@@ -30,7 +30,7 @@ impl ProjectMeta {
 		ProjectMeta {
 			cluster: Cluster { api_endpoint },
 			tokens: Tokens { cloud: cloud_token },
-			opengb: OpenGb::default(),
+			environments: HashMap::new(),
 		}
 	}
 }
@@ -46,22 +46,16 @@ pub struct Tokens {
 	pub cloud: String,
 }
 
-#[derive(Default, Serialize, Deserialize)]
-pub struct OpenGb {
+#[derive(Default, Clone, Serialize, Deserialize)]
+pub struct Environment {
 	#[serde(default)]
-	pub projects: HashMap<Uuid, OpenGbProject>,
+	pub backend: Backend,
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
-pub struct OpenGbProject {
+pub struct Backend {
 	#[serde(default)]
-	pub environments: HashMap<Uuid, OpenGbEnv>,
-}
-
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct OpenGbEnv {
-	#[serde(default)]
-	pub url: Option<String>,
+	pub db_url: Option<String>,
 }
 
 static SINGLETON: OnceCell<Mutex<Meta>> = OnceCell::const_new();

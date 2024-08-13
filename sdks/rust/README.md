@@ -82,7 +82,6 @@ Class | Method | HTTP request | Description
 *CloudGamesNamespacesLogsApi* | [**cloud_games_namespaces_logs_get_namespace_lobby**](docs/CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_get_namespace_lobby) | **GET** /cloud/games/{game_id}/namespaces/{namespace_id}/logs/lobbies/{lobby_id} | 
 *CloudGamesNamespacesLogsApi* | [**cloud_games_namespaces_logs_list_namespace_lobbies**](docs/CloudGamesNamespacesLogsApi.md#cloud_games_namespaces_logs_list_namespace_lobbies) | **GET** /cloud/games/{game_id}/namespaces/{namespace_id}/logs/lobbies | 
 *CloudGamesTokensApi* | [**cloud_games_tokens_create_cloud_token**](docs/CloudGamesTokensApi.md#cloud_games_tokens_create_cloud_token) | **POST** /cloud/games/{game_id}/tokens/cloud | 
-*CloudGamesTokensApi* | [**cloud_games_tokens_create_service_token**](docs/CloudGamesTokensApi.md#cloud_games_tokens_create_service_token) | **POST** /cloud/games/{game_id}/tokens/service | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_create_game_version**](docs/CloudGamesVersionsApi.md#cloud_games_versions_create_game_version) | **POST** /cloud/games/{game_id}/versions | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_get_game_version_by_id**](docs/CloudGamesVersionsApi.md#cloud_games_versions_get_game_version_by_id) | **GET** /cloud/games/{game_id}/versions/{version_id} | 
 *CloudGamesVersionsApi* | [**cloud_games_versions_reserve_version_name**](docs/CloudGamesVersionsApi.md#cloud_games_versions_reserve_version_name) | **POST** /cloud/games/{game_id}/versions/reserve-name | 
@@ -91,32 +90,22 @@ Class | Method | HTTP request | Description
 *CloudLogsApi* | [**cloud_logs_get_ray_perf_logs**](docs/CloudLogsApi.md#cloud_logs_get_ray_perf_logs) | **GET** /cloud/rays/{ray_id}/perf | 
 *CloudTiersApi* | [**cloud_tiers_get_region_tiers**](docs/CloudTiersApi.md#cloud_tiers_get_region_tiers) | **GET** /cloud/region-tiers | 
 *CloudUploadsApi* | [**cloud_uploads_complete_upload**](docs/CloudUploadsApi.md#cloud_uploads_complete_upload) | **POST** /cloud/uploads/{upload_id}/complete | 
-*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_create**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_create) | **POST** /cloud/backend/projects | 
-*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_get**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_get) | **GET** /cloud/backend/projects/{project_id} | 
-*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_list**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_list) | **GET** /cloud/backend/projects | 
-*EeCloudBackendProjectsApi* | [**ee_cloud_backend_projects_validate**](docs/EeCloudBackendProjectsApi.md#ee_cloud_backend_projects_validate) | **POST** /cloud/backend/projects/validate | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_create**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_create) | **POST** /cloud/backend/projects/{project_id}/environments | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_delete**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_delete) | **DELETE** /cloud/backend/projects/{project_id}/environments/{environment_id} | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_deploy**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_deploy) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/deploy | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id} | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_config**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_config) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/config | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_db_url**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_db_url) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/db | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_events**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_events) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/events | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_get_variables**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_get_variables) | **GET** /cloud/backend/projects/{project_id}/environments/{environment_id}/variables | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_list**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_list) | **GET** /cloud/backend/projects/{project_id}/environments | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_prepare_deploy**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_prepare_deploy) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/deploy/prepare | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_provision_database**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_provision_database) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/provision-database | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_update_config**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_update_config) | **POST** /cloud/backend/projects/{project_id}/environments/{environment_id}/config | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_update_variables**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_update_variables) | **PATCH** /cloud/backend/projects/{project_id}/environments/{environment_id}/variables | 
-*EeCloudBackendProjectsEnvsApi* | [**ee_cloud_backend_projects_envs_validate**](docs/EeCloudBackendProjectsEnvsApi.md#ee_cloud_backend_projects_envs_validate) | **POST** /cloud/backend/projects/{project_id}/environments/validate | 
+*EeBackendApi* | [**ee_backend_create**](docs/EeBackendApi.md#ee_backend_create) | **POST** /games/{game_id}/environments/{environment_id}/backend | 
+*EeBackendApi* | [**ee_backend_deploy**](docs/EeBackendApi.md#ee_backend_deploy) | **POST** /games/{game_id}/environments/{environment_id}/backend/deploy | 
+*EeBackendApi* | [**ee_backend_get**](docs/EeBackendApi.md#ee_backend_get) | **GET** /games/{game_id}/environments/{environment_id}/backend | 
+*EeBackendApi* | [**ee_backend_get_db_url**](docs/EeBackendApi.md#ee_backend_get_db_url) | **GET** /games/{game_id}/environments/{environment_id}/backend/db | 
+*EeBackendApi* | [**ee_backend_get_events**](docs/EeBackendApi.md#ee_backend_get_events) | **GET** /games/{game_id}/environments/{environment_id}/backend/events | 
+*EeBackendApi* | [**ee_backend_get_variables**](docs/EeBackendApi.md#ee_backend_get_variables) | **GET** /games/{game_id}/environments/{environment_id}/backend/variables | 
+*EeBackendApi* | [**ee_backend_prepare_deploy**](docs/EeBackendApi.md#ee_backend_prepare_deploy) | **POST** /games/{game_id}/environments/{environment_id}/backend/deploy/prepare | 
+*EeBackendApi* | [**ee_backend_provision_database**](docs/EeBackendApi.md#ee_backend_provision_database) | **POST** /games/{game_id}/environments/{environment_id}/backend/provision-database | 
+*EeBackendApi* | [**ee_backend_update_variables**](docs/EeBackendApi.md#ee_backend_update_variables) | **PATCH** /games/{game_id}/environments/{environment_id}/backend/variables | 
 *EeCloudGamesBillingApi* | [**ee_cloud_games_billing_get**](docs/EeCloudGamesBillingApi.md#ee_cloud_games_billing_get) | **GET** /cloud/games/{game_id}/billing | 
 *EeCloudGamesBillingApi* | [**ee_cloud_games_billing_update_plan**](docs/EeCloudGamesBillingApi.md#ee_cloud_games_billing_update_plan) | **PUT** /cloud/games/{game_id}/billing/plan | 
 *EeCloudGamesNamespacesAnalyticsApi* | [**ee_cloud_games_namespaces_analytics_get_analytics**](docs/EeCloudGamesNamespacesAnalyticsApi.md#ee_cloud_games_namespaces_analytics_get_analytics) | **GET** /cloud/games/namespaces/analytics | 
-*EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_get**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_get) | **GET** /cloud/games/{game_id}/project | 
-*EeCloudGamesProjectsApi* | [**ee_cloud_games_projects_link**](docs/EeCloudGamesProjectsApi.md#ee_cloud_games_projects_link) | **POST** /cloud/games/{game_id}/project-link | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_create_stripe_portal_session**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_create_stripe_portal_session) | **POST** /cloud/groups/{group_id}/billing/stripe-portal-session | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_get**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get) | **GET** /cloud/groups/{group_id}/billing | 
 *EeCloudGroupsBillingApi* | [**ee_cloud_groups_billing_get_usage**](docs/EeCloudGroupsBillingApi.md#ee_cloud_groups_billing_get_usage) | **GET** /cloud/groups/{group_id}/billing/usage | 
+*GamesEnvironmentsTokensApi* | [**games_environments_tokens_create_service_token**](docs/GamesEnvironmentsTokensApi.md#games_environments_tokens_create_service_token) | **POST** /games/{game_id}/environments/{environment_id}/tokens/service | 
 *GroupApi* | [**group_ban_identity**](docs/GroupApi.md#group_ban_identity) | **POST** /group/groups/{group_id}/bans/{identity_id} | 
 *GroupApi* | [**group_complete_avatar_upload**](docs/GroupApi.md#group_complete_avatar_upload) | **POST** /group/groups/{group_id}/avatar-upload/{upload_id}/complete | 
 *GroupApi* | [**group_create**](docs/GroupApi.md#group_create) | **POST** /group/groups | 
@@ -193,16 +182,16 @@ Class | Method | HTTP request | Description
 *PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /portal/games/{game_name_id}/profile | 
 *ProvisionDatacentersApi* | [**provision_datacenters_get_tls**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_tls) | **GET** /datacenters/{datacenter_id}/tls | 
 *ProvisionServersApi* | [**provision_servers_get_info**](docs/ProvisionServersApi.md#provision_servers_get_info) | **GET** /servers/{ip} | 
-*ServersApi* | [**servers_create**](docs/ServersApi.md#servers_create) | **POST** /games/{game_id}/servers | 
-*ServersApi* | [**servers_destroy**](docs/ServersApi.md#servers_destroy) | **DELETE** /games/{game_id}/servers/{server_id} | 
-*ServersApi* | [**servers_get**](docs/ServersApi.md#servers_get) | **GET** /games/{game_id}/servers/{server_id} | 
-*ServersApi* | [**servers_list**](docs/ServersApi.md#servers_list) | **GET** /games/{game_id}/servers | 
-*ServersBuildsApi* | [**servers_builds_complete_build**](docs/ServersBuildsApi.md#servers_builds_complete_build) | **POST** /games/{game_id}/builds/{build_id}/complete | 
-*ServersBuildsApi* | [**servers_builds_get_build**](docs/ServersBuildsApi.md#servers_builds_get_build) | **GET** /games/{game_id}/builds/{build_id} | 
-*ServersBuildsApi* | [**servers_builds_list_builds**](docs/ServersBuildsApi.md#servers_builds_list_builds) | **GET** /games/{game_id}/builds | 
-*ServersBuildsApi* | [**servers_builds_patch_tags**](docs/ServersBuildsApi.md#servers_builds_patch_tags) | **PATCH** /games/{game_id}/builds/{build_id}/tags | 
-*ServersBuildsApi* | [**servers_builds_prepare_build**](docs/ServersBuildsApi.md#servers_builds_prepare_build) | **POST** /games/{game_id}/builds/prepare | 
-*ServersLogsApi* | [**servers_logs_get_server_logs**](docs/ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /games/{game_id}/servers/{server_id}/logs | 
+*ServersApi* | [**servers_create**](docs/ServersApi.md#servers_create) | **POST** /games/{game_id}/environments/{environment_id}/servers | 
+*ServersApi* | [**servers_destroy**](docs/ServersApi.md#servers_destroy) | **DELETE** /games/{game_id}/environments/{environment_id}/servers/{server_id} | 
+*ServersApi* | [**servers_get**](docs/ServersApi.md#servers_get) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id} | 
+*ServersApi* | [**servers_list**](docs/ServersApi.md#servers_list) | **GET** /games/{game_id}/environments/{environment_id}/servers | 
+*ServersBuildsApi* | [**servers_builds_complete_build**](docs/ServersBuildsApi.md#servers_builds_complete_build) | **POST** /games/{game_id}/environments/{environment_id}/builds/{build_id}/complete | 
+*ServersBuildsApi* | [**servers_builds_get_build**](docs/ServersBuildsApi.md#servers_builds_get_build) | **GET** /games/{game_id}/environments/{environment_id}/builds/{build_id} | 
+*ServersBuildsApi* | [**servers_builds_list_builds**](docs/ServersBuildsApi.md#servers_builds_list_builds) | **GET** /games/{game_id}/environments/{environment_id}/builds | 
+*ServersBuildsApi* | [**servers_builds_patch_tags**](docs/ServersBuildsApi.md#servers_builds_patch_tags) | **PATCH** /games/{game_id}/environments/{environment_id}/builds/{build_id}/tags | 
+*ServersBuildsApi* | [**servers_builds_prepare_build**](docs/ServersBuildsApi.md#servers_builds_prepare_build) | **POST** /games/{game_id}/environments/{environment_id}/builds/prepare | 
+*ServersLogsApi* | [**servers_logs_get_server_logs**](docs/ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id}/logs | 
 
 
 ## Documentation For Models
@@ -274,7 +263,6 @@ Class | Method | HTTP request | Description
  - [CloudGamesCreateGameResponse](docs/CloudGamesCreateGameResponse.md)
  - [CloudGamesCreateGameVersionRequest](docs/CloudGamesCreateGameVersionRequest.md)
  - [CloudGamesCreateGameVersionResponse](docs/CloudGamesCreateGameVersionResponse.md)
- - [CloudGamesCreateServiceTokenResponse](docs/CloudGamesCreateServiceTokenResponse.md)
  - [CloudGamesDeleteMatchmakerLobbyResponse](docs/CloudGamesDeleteMatchmakerLobbyResponse.md)
  - [CloudGamesExportLobbyLogsRequest](docs/CloudGamesExportLobbyLogsRequest.md)
  - [CloudGamesExportLobbyLogsResponse](docs/CloudGamesExportLobbyLogsResponse.md)
@@ -387,11 +375,21 @@ Class | Method | HTTP request | Description
  - [CloudVersionMatchmakerPortRange](docs/CloudVersionMatchmakerPortRange.md)
  - [CloudVersionMatchmakerProxyKind](docs/CloudVersionMatchmakerProxyKind.md)
  - [CloudVersionSummary](docs/CloudVersionSummary.md)
- - [EeBackendEnvironment](docs/EeBackendEnvironment.md)
+ - [EeBackendBackend](docs/EeBackendBackend.md)
+ - [EeBackendCreateRequest](docs/EeBackendCreateRequest.md)
+ - [EeBackendCreateResponse](docs/EeBackendCreateResponse.md)
+ - [EeBackendDeployRequest](docs/EeBackendDeployRequest.md)
+ - [EeBackendDeployResponse](docs/EeBackendDeployResponse.md)
+ - [EeBackendGetDbUrlResponse](docs/EeBackendGetDbUrlResponse.md)
+ - [EeBackendGetEventsResponse](docs/EeBackendGetEventsResponse.md)
+ - [EeBackendGetResponse](docs/EeBackendGetResponse.md)
+ - [EeBackendGetVariablesResponse](docs/EeBackendGetVariablesResponse.md)
  - [EeBackendNeonProjectConfig](docs/EeBackendNeonProjectConfig.md)
- - [EeBackendProject](docs/EeBackendProject.md)
+ - [EeBackendPrepareDeployRequest](docs/EeBackendPrepareDeployRequest.md)
+ - [EeBackendPrepareDeployResponse](docs/EeBackendPrepareDeployResponse.md)
  - [EeBackendTier](docs/EeBackendTier.md)
  - [EeBackendUpdateVariable](docs/EeBackendUpdateVariable.md)
+ - [EeBackendUpdateVariablesRequest](docs/EeBackendUpdateVariablesRequest.md)
  - [EeBackendVariable](docs/EeBackendVariable.md)
  - [EeBillingGameUsage](docs/EeBillingGameUsage.md)
  - [EeBillingGroup](docs/EeBillingGroup.md)
@@ -402,36 +400,12 @@ Class | Method | HTTP request | Description
  - [EeCloudAvgPlayDurationByGameModeDataSet](docs/EeCloudAvgPlayDurationByGameModeDataSet.md)
  - [EeCloudAvgPlayDurationByRegionDataSet](docs/EeCloudAvgPlayDurationByRegionDataSet.md)
  - [EeCloudAvgPlayDurationDataSet](docs/EeCloudAvgPlayDurationDataSet.md)
- - [EeCloudBackendProjectsCreateRequest](docs/EeCloudBackendProjectsCreateRequest.md)
- - [EeCloudBackendProjectsCreateResponse](docs/EeCloudBackendProjectsCreateResponse.md)
- - [EeCloudBackendProjectsEnvsCreateRequest](docs/EeCloudBackendProjectsEnvsCreateRequest.md)
- - [EeCloudBackendProjectsEnvsCreateResponse](docs/EeCloudBackendProjectsEnvsCreateResponse.md)
- - [EeCloudBackendProjectsEnvsDeployRequest](docs/EeCloudBackendProjectsEnvsDeployRequest.md)
- - [EeCloudBackendProjectsEnvsDeployResponse](docs/EeCloudBackendProjectsEnvsDeployResponse.md)
- - [EeCloudBackendProjectsEnvsGetConfigResponse](docs/EeCloudBackendProjectsEnvsGetConfigResponse.md)
- - [EeCloudBackendProjectsEnvsGetDbUrlResponse](docs/EeCloudBackendProjectsEnvsGetDbUrlResponse.md)
- - [EeCloudBackendProjectsEnvsGetEventsResponse](docs/EeCloudBackendProjectsEnvsGetEventsResponse.md)
- - [EeCloudBackendProjectsEnvsGetResponse](docs/EeCloudBackendProjectsEnvsGetResponse.md)
- - [EeCloudBackendProjectsEnvsGetVariablesResponse](docs/EeCloudBackendProjectsEnvsGetVariablesResponse.md)
- - [EeCloudBackendProjectsEnvsListResponse](docs/EeCloudBackendProjectsEnvsListResponse.md)
- - [EeCloudBackendProjectsEnvsPrepareDeployRequest](docs/EeCloudBackendProjectsEnvsPrepareDeployRequest.md)
- - [EeCloudBackendProjectsEnvsPrepareDeployResponse](docs/EeCloudBackendProjectsEnvsPrepareDeployResponse.md)
- - [EeCloudBackendProjectsEnvsUpdateConfigRequest](docs/EeCloudBackendProjectsEnvsUpdateConfigRequest.md)
- - [EeCloudBackendProjectsEnvsUpdateVariablesRequest](docs/EeCloudBackendProjectsEnvsUpdateVariablesRequest.md)
- - [EeCloudBackendProjectsEnvsValidateRequest](docs/EeCloudBackendProjectsEnvsValidateRequest.md)
- - [EeCloudBackendProjectsEnvsValidateResponse](docs/EeCloudBackendProjectsEnvsValidateResponse.md)
- - [EeCloudBackendProjectsGetResponse](docs/EeCloudBackendProjectsGetResponse.md)
- - [EeCloudBackendProjectsListResponse](docs/EeCloudBackendProjectsListResponse.md)
- - [EeCloudBackendProjectsValidateRequest](docs/EeCloudBackendProjectsValidateRequest.md)
- - [EeCloudBackendProjectsValidateResponse](docs/EeCloudBackendProjectsValidateResponse.md)
  - [EeCloudDestroyedLobbiesByExitCodeDataSet](docs/EeCloudDestroyedLobbiesByExitCodeDataSet.md)
  - [EeCloudDestroyedLobbiesByFailureDataSet](docs/EeCloudDestroyedLobbiesByFailureDataSet.md)
  - [EeCloudFailedLobbiesDataSet](docs/EeCloudFailedLobbiesDataSet.md)
  - [EeCloudGamesBillingGetResponse](docs/EeCloudGamesBillingGetResponse.md)
  - [EeCloudGamesBillingUpdatePlanRequest](docs/EeCloudGamesBillingUpdatePlanRequest.md)
  - [EeCloudGamesNamespacesGetAnalyticsResponse](docs/EeCloudGamesNamespacesGetAnalyticsResponse.md)
- - [EeCloudGamesProjectsGetResponse](docs/EeCloudGamesProjectsGetResponse.md)
- - [EeCloudGamesProjectsLinkRequest](docs/EeCloudGamesProjectsLinkRequest.md)
  - [EeCloudGroupsBillingCreateStripePortalSessionRequest](docs/EeCloudGroupsBillingCreateStripePortalSessionRequest.md)
  - [EeCloudGroupsBillingCreateStripePortalSessionResponse](docs/EeCloudGroupsBillingCreateStripePortalSessionResponse.md)
  - [EeCloudGroupsBillingGetBillingResponse](docs/EeCloudGroupsBillingGetBillingResponse.md)
@@ -460,6 +434,7 @@ Class | Method | HTTP request | Description
  - [GameStatSortingMethod](docs/GameStatSortingMethod.md)
  - [GameStatSummary](docs/GameStatSummary.md)
  - [GameSummary](docs/GameSummary.md)
+ - [GamesEnvironmentsCreateServiceTokenResponse](docs/GamesEnvironmentsCreateServiceTokenResponse.md)
  - [GeoCoord](docs/GeoCoord.md)
  - [GeoDistance](docs/GeoDistance.md)
  - [GlobalEventNotification](docs/GlobalEventNotification.md)
@@ -581,9 +556,11 @@ Class | Method | HTTP request | Description
  - [ServersCreateServerPortRequest](docs/ServersCreateServerPortRequest.md)
  - [ServersCreateServerRequest](docs/ServersCreateServerRequest.md)
  - [ServersCreateServerResponse](docs/ServersCreateServerResponse.md)
+ - [ServersCreateServerRuntimeRequest](docs/ServersCreateServerRuntimeRequest.md)
  - [ServersGetBuildResponse](docs/ServersGetBuildResponse.md)
  - [ServersGetServerLogsResponse](docs/ServersGetServerLogsResponse.md)
  - [ServersGetServerResponse](docs/ServersGetServerResponse.md)
+ - [ServersLifecycle](docs/ServersLifecycle.md)
  - [ServersListBuildsResponse](docs/ServersListBuildsResponse.md)
  - [ServersListServersResponse](docs/ServersListServersResponse.md)
  - [ServersLogStream](docs/ServersLogStream.md)
@@ -594,6 +571,7 @@ Class | Method | HTTP request | Description
  - [ServersPortProtocol](docs/ServersPortProtocol.md)
  - [ServersPortRouting](docs/ServersPortRouting.md)
  - [ServersResources](docs/ServersResources.md)
+ - [ServersRuntime](docs/ServersRuntime.md)
  - [ServersServer](docs/ServersServer.md)
  - [UploadPrepareFile](docs/UploadPrepareFile.md)
  - [UploadPresignedRequest](docs/UploadPresignedRequest.md)

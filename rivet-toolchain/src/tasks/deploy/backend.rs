@@ -8,21 +8,17 @@ use std::{
 	sync::Arc,
 };
 use tokio::fs;
-use uuid::Uuid;
 
 use crate::{
 	backend, config,
 	ctx::Ctx,
+	game::TEMPEnvironment,
 	util::task::TaskCtx,
 	util::{net::upload, term},
 };
 
 pub struct DeployOpts {
-	/// Game ID being deployed to.
-	pub game_id: String,
-
-	/// The environment to deploy to.
-	pub environment_id: Uuid,
+	pub env: TEMPEnvironment,
 
 	/// The location of the OpenGB project.
 	pub project_path: String,
@@ -34,19 +30,10 @@ pub struct DeployOpts {
 pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<()> {
 	task.log_stdout("[Deploying Backend]");
 
-	let project = backend::get_or_create_project(ctx).await?;
-	let project_id_str = project.project_id.to_string();
-	let environment_id_str = opts.environment_id.to_string();
+	let backend = backend::get_or_create_backend(ctx, opts.env.id).await?;
+	let game_id_str = ctx.game_id.to_string();
+	let env_id_str = opts.env.id.to_string();
 	let project_path = PathBuf::from(opts.project_path.clone());
-
-	let env = apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_get(
-		&ctx.openapi_config_cloud,
-		&project_id_str,
-		&environment_id_str,
-		None,
-	)
-	.await?
-	.environment;
 
 	// Build
 	task.log_stdout(format!("[Building Project] {}", project_path.display()));
@@ -74,19 +61,11 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	.await?;
 	ensure!(cmd == 0, "Failed to build OpenGB project");
 
-	backend::database::provision_database(
-		task.clone(),
-		ctx,
-		project.project_id,
-		env.environment_id,
-	)
-	.await?;
+	backend::database::provision_database(task.clone(), ctx, opts.env.id).await?;
 
 	let db_url = config::meta::try_read_project(|config| {
-		let project = unwrap!(config.opengb.projects.get(&project.project_id));
-		let env = unwrap!(project.environments.get(&env.environment_id));
-
-		Ok(env.url.clone())
+		let env_config = unwrap!(config.environments.get(&opts.env.id));
+		Ok(env_config.backend.db_url.clone())
 	})
 	.await?;
 
@@ -135,26 +114,25 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 
 	task.log_stdout(format!(
 		"[Uploading Environment] {name} ({count} files, {size} total)",
-		name = &env.display_name,
+		name = &opts.env.name,
 		count = files.len(),
 		size = upload::format_file_size(total_len as u64)?,
 	));
 
 	task.log_stdout(format!("[Fetching Environment Variables]"));
-	let variables =
-		apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_get_variables(
-			&ctx.openapi_config_cloud,
-			&project_id_str,
-			&environment_id_str,
-		)
-		.await?
-		.variables;
+	let variables = apis::ee_backend_api::ee_backend_get_variables(
+		&ctx.openapi_config_cloud,
+		&game_id_str,
+		&env_id_str,
+	)
+	.await?
+	.variables;
 	let mut update_variables = HashMap::<String, _>::new();
 	if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
 		update_variables.insert(
 			"OPENGB_PUBLIC_ENDPOINT".to_string(),
 			models::EeBackendUpdateVariable {
-				text: Some(env.endpoint.clone()),
+				text: Some(backend.endpoint.clone()),
 				..Default::default()
 			},
 		);
@@ -170,11 +148,13 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	}
 	if !variables.contains_key("RIVET_SERVICE_TOKEN") {
 		task.log_stdout(format!("[Creating Service Token]"));
-		let service_token = apis::cloud_games_tokens_api::cloud_games_tokens_create_service_token(
-			&ctx.openapi_config_cloud,
-			&opts.game_id,
-		)
-		.await?;
+		let service_token =
+			apis::games_environments_tokens_api::games_environments_tokens_create_service_token(
+				&ctx.openapi_config_cloud,
+				&game_id_str,
+				&opts.env.id.to_string(),
+			)
+			.await?;
 		update_variables.insert(
 			"RIVET_SERVICE_TOKEN".to_string(),
 			models::EeBackendUpdateVariable {
@@ -195,11 +175,11 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	}
 
 	let prepare_res = unwrap!(
-		apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_prepare_deploy(
+		apis::ee_backend_api::ee_backend_prepare_deploy(
 			&ctx.openapi_config_cloud,
-			&project_id_str,
-			&environment_id_str,
-			models::EeCloudBackendProjectsEnvsPrepareDeployRequest {
+			&game_id_str,
+			&env_id_str,
+			models::EeBackendPrepareDeployRequest {
 				files: files.iter().map(|f| f.prepared.clone()).collect(),
 			},
 		)
@@ -240,19 +220,18 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		})
 		.await?;
 
-	task.log_stdout(format!("[Deploying Environment] {}", env.display_name));
+	task.log_stdout(format!("[Deploying Environment] {}", opts.env.display_name));
 
-	let deploy_res =
-		apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_deploy(
-			&ctx.openapi_config_cloud,
-			&project_id_str,
-			&environment_id_str,
-			models::EeCloudBackendProjectsEnvsDeployRequest {
-				upload_id: prepare_res.upload_id,
-				variables: Some(update_variables),
-			},
-		)
-		.await?;
+	let deploy_res = apis::ee_backend_api::ee_backend_deploy(
+		&ctx.openapi_config_cloud,
+		&game_id_str,
+		&env_id_str,
+		models::EeBackendDeployRequest {
+			upload_id: prepare_res.upload_id,
+			variables: Some(update_variables),
+		},
+	)
+	.await?;
 
 	task.log_stdout(format!("[Done] OpenGB API available at {}", deploy_res.url));
 

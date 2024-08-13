@@ -1,6 +1,9 @@
+use futures_util::stream::{StreamExt, TryStreamExt};
 use global_error::prelude::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use uuid::Uuid;
 
 use crate::{backend, util::task::TaskCtx};
 
@@ -12,8 +15,8 @@ pub struct Output {
 	pub token: String,
 	pub api_endpoint: String,
 	pub game_id: String,
-	pub backend_project: models::EeBackendProject,
-	pub backend_environments: Vec<models::EeBackendEnvironment>,
+	pub envs: Vec<TEMPEnvironment>,
+	pub backends: HashMap<Uuid, models::EeBackendBackend>,
 }
 
 pub struct Task;
@@ -29,23 +32,39 @@ impl super::Task for Task {
 	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
 		let ctx = crate::ctx::load().await?;
 
+		// HACK: Map ns to temporary env data structure
 		// Get or create backend project
-		let backend_project = backend::get_or_create_project(&ctx).await?;
-		let backend_environments =
-			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_list(
-				&ctx.openapi_config_cloud,
-				&backend_project.project_id.to_string(),
-				None,
-			)
-			.await?
-			.environments;
+		let envs = apis::cloud_games_api::cloud_games_get_game_by_id(
+			&ctx.openapi_config_cloud,
+			&ctx.game_id.to_string(),
+			None,
+		)
+		.await?
+		.game
+		.namespaces
+		.into_iter()
+		.map(crate::game::TEMPEnvironment::from)
+		.collect::<Vec<_>>();
+
+		// Get all backends in parallel
+		let backends = futures_util::stream::iter(envs.iter())
+			.map(|env| {
+				let ctx = ctx.clone();
+				async move {
+					let backend = backend::get_or_create_backend(&ctx, env.id).await?;
+					(env.id, backend)
+				}
+			})
+			.buffer_unordered(4)
+			.try_collect::<HashMap<String, models::EeBackendBackend>>()
+			.await?;
 
 		Ok(Output {
 			token: ctx.access_token.clone(),
 			api_endpoint: ctx.api_endpoint.clone(),
 			game_id: ctx.game_id.clone(),
-			backend_project: *backend_project,
-			backend_environments,
+			envs,
+			backends,
 		})
 	}
 }
