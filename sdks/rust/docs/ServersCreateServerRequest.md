@@ -5,9 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **arguments** | Option<**Vec<String>**> |  | [optional]
-**datacenter** | **String** | The name ID of the datacenter | 
+**datacenter** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
 **environment** | Option<**::std::collections::HashMap<String, String>**> |  | [optional]
-**image_id** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
+**image** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
 **kill_timeout** | Option<**i64**> | The duration to wait for in milliseconds before killing the server. This should be set to a safe default, and can be overridden during a DELETE request if needed. | [optional]
 **network** | [**crate::models::ServersCreateServerNetworkRequest**](ServersCreateServerNetworkRequest.md) |  | 
 **resources** | [**crate::models::ServersResources**](ServersResources.md) |  | 

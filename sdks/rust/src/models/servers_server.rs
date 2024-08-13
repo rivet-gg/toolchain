@@ -15,20 +15,22 @@
 pub struct ServersServer {
     #[serde(rename = "arguments", skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<String>>,
-    #[serde(rename = "cluster_id")]
-    pub cluster_id: uuid::Uuid,
-    #[serde(rename = "create_ts")]
-    pub create_ts: i64,
-    #[serde(rename = "datacenter_id")]
-    pub datacenter_id: uuid::Uuid,
-    #[serde(rename = "destroy_ts", skip_serializing_if = "Option::is_none")]
-    pub destroy_ts: Option<i64>,
+    #[serde(rename = "cluster")]
+    pub cluster: uuid::Uuid,
+    #[serde(rename = "created_at")]
+    pub created_at: i64,
+    #[serde(rename = "datacenter")]
+    pub datacenter: uuid::Uuid,
+    #[serde(rename = "destroyed_at", skip_serializing_if = "Option::is_none")]
+    pub destroyed_at: Option<i64>,
     #[serde(rename = "environment", skip_serializing_if = "Option::is_none")]
     pub environment: Option<::std::collections::HashMap<String, String>>,
-    #[serde(rename = "game_id")]
-    pub game_id: uuid::Uuid,
-    #[serde(rename = "image_id")]
-    pub image_id: uuid::Uuid,
+    #[serde(rename = "game")]
+    pub game: uuid::Uuid,
+    #[serde(rename = "id")]
+    pub id: uuid::Uuid,
+    #[serde(rename = "image")]
+    pub image: uuid::Uuid,
     /// The duration to wait for in milliseconds before killing the server. This should be set to a safe default, and can be overridden during a DELETE request if needed.
     #[serde(rename = "kill_timeout", skip_serializing_if = "Option::is_none")]
     pub kill_timeout: Option<i64>,
@@ -36,30 +38,28 @@ pub struct ServersServer {
     pub network: Box<crate::models::ServersNetwork>,
     #[serde(rename = "resources")]
     pub resources: Box<crate::models::ServersResources>,
-    #[serde(rename = "server_id")]
-    pub server_id: uuid::Uuid,
-    #[serde(rename = "start_ts", skip_serializing_if = "Option::is_none")]
-    pub start_ts: Option<i64>,
+    #[serde(rename = "started_at", skip_serializing_if = "Option::is_none")]
+    pub started_at: Option<i64>,
     #[serde(rename = "tags", deserialize_with = "Option::deserialize")]
     pub tags: Option<serde_json::Value>,
 }
 
 impl ServersServer {
-    pub fn new(cluster_id: uuid::Uuid, create_ts: i64, datacenter_id: uuid::Uuid, game_id: uuid::Uuid, image_id: uuid::Uuid, network: crate::models::ServersNetwork, resources: crate::models::ServersResources, server_id: uuid::Uuid, tags: Option<serde_json::Value>) -> ServersServer {
+    pub fn new(cluster: uuid::Uuid, created_at: i64, datacenter: uuid::Uuid, game: uuid::Uuid, id: uuid::Uuid, image: uuid::Uuid, network: crate::models::ServersNetwork, resources: crate::models::ServersResources, tags: Option<serde_json::Value>) -> ServersServer {
         ServersServer {
             arguments: None,
-            cluster_id,
-            create_ts,
-            datacenter_id,
-            destroy_ts: None,
+            cluster,
+            created_at,
+            datacenter,
+            destroyed_at: None,
             environment: None,
-            game_id,
-            image_id,
+            game,
+            id,
+            image,
             kill_timeout: None,
             network: Box::new(network),
             resources: Box::new(resources),
-            server_id,
-            start_ts: None,
+            started_at: None,
             tags,
         }
     }

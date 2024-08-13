@@ -4,20 +4,21 @@ mod game_server;
 use global_error::prelude::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::util::task::TaskCtx;
 
 #[derive(Deserialize)]
 pub struct Input {
 	pub cwd: String,
-	pub environment_id: String,
+	pub environment_id: Uuid,
 	pub game_server: bool,
 	pub backend: bool,
 }
 
 #[derive(Serialize)]
 pub struct Output {
-	version: String,
+	game_server: Option<game_server::DeployOutput>,
 }
 
 pub struct Task;
@@ -41,19 +42,22 @@ impl super::Task for Task {
 
 		let ctx = crate::ctx::load().await?;
 
-		// TODO: this will return an empty string if not deploying a game server, need to handle
-		// this more gracefully
-		let mut version = String::new();
-
-		// Reserve image name
-		let reserve_res =
-			apis::cloud_games_versions_api::cloud_games_versions_reserve_version_name(
+		// Get the environment
+		let backend_project = crate::backend::get_or_create_project(&ctx).await?;
+		let backend_environments =
+			apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_list(
 				&ctx.openapi_config_cloud,
-				&ctx.game_id,
+				&backend_project.project_id.to_string(),
+				None,
 			)
 			.await?;
-		let display_name = reserve_res.version_display_name;
-		task.log_stdout(format!("[Starting Deploy] {display_name}"));
+		let backend_environment = unwrap!(
+			backend_environments
+				.environments
+				.into_iter()
+				.find(|x| x.environment_id == input.environment_id),
+			"backend not found"
+		);
 
 		if input.backend {
 			// Backend
@@ -71,7 +75,7 @@ impl super::Task for Task {
 			.await?;
 		}
 
-		if input.game_server {
+		let game_server = if input.game_server {
 			// Game server
 			// TODO: Add reading from rivet.json or some sort of build config to read this data. This should
 			// support multiple dockerfiles and passing from args/env.
@@ -79,19 +83,20 @@ impl super::Task for Task {
 				&ctx,
 				task.clone(),
 				game_server::DeployOpts {
-					display_name: display_name.clone(),
+					backend_environment,
 					build_dir: input.cwd.clone(),
 				},
 			)
 			.await?;
 
-			// TODO: Move this to the version name tag when ready
-			version = deploy.image_id.to_string();
-		}
+			Some(deploy)
+		} else {
+			None
+		};
 
 		// Finish
-		task.log_stdout(format!("[Deploy Finished] {display_name}"));
+		task.log_stdout(format!("[Deploy Finished]"));
 
-		Ok(Output { version })
+		Ok(Output { game_server })
 	}
 }

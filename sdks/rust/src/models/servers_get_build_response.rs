@@ -12,15 +12,15 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct ServersDestroyServerResponse {
-    #[serde(rename = "server_id")]
-    pub server_id: uuid::Uuid,
+pub struct ServersGetBuildResponse {
+    #[serde(rename = "build")]
+    pub build: Box<crate::models::ServersBuild>,
 }
 
-impl ServersDestroyServerResponse {
-    pub fn new(server_id: uuid::Uuid) -> ServersDestroyServerResponse {
-        ServersDestroyServerResponse {
-            server_id,
+impl ServersGetBuildResponse {
+    pub fn new(build: crate::models::ServersBuild) -> ServersGetBuildResponse {
+        ServersGetBuildResponse {
+            build: Box::new(build),
         }
     }
 }

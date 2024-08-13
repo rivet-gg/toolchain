@@ -15,13 +15,12 @@
 pub struct ServersCreateServerRequest {
     #[serde(rename = "arguments", skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<String>>,
-    /// The name ID of the datacenter
     #[serde(rename = "datacenter")]
-    pub datacenter: String,
+    pub datacenter: uuid::Uuid,
     #[serde(rename = "environment", skip_serializing_if = "Option::is_none")]
     pub environment: Option<::std::collections::HashMap<String, String>>,
-    #[serde(rename = "image_id")]
-    pub image_id: uuid::Uuid,
+    #[serde(rename = "image")]
+    pub image: uuid::Uuid,
     /// The duration to wait for in milliseconds before killing the server. This should be set to a safe default, and can be overridden during a DELETE request if needed.
     #[serde(rename = "kill_timeout", skip_serializing_if = "Option::is_none")]
     pub kill_timeout: Option<i64>,
@@ -37,12 +36,12 @@ pub struct ServersCreateServerRequest {
 }
 
 impl ServersCreateServerRequest {
-    pub fn new(datacenter: String, image_id: uuid::Uuid, network: crate::models::ServersCreateServerNetworkRequest, resources: crate::models::ServersResources, tags: Option<serde_json::Value>) -> ServersCreateServerRequest {
+    pub fn new(datacenter: uuid::Uuid, image: uuid::Uuid, network: crate::models::ServersCreateServerNetworkRequest, resources: crate::models::ServersResources, tags: Option<serde_json::Value>) -> ServersCreateServerRequest {
         ServersCreateServerRequest {
             arguments: None,
             datacenter,
             environment: None,
-            image_id,
+            image,
             kill_timeout: None,
             network: Box::new(network),
             resources: Box::new(resources),

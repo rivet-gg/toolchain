@@ -8,6 +8,7 @@ use std::{
 	sync::Arc,
 };
 use tokio::fs;
+use uuid::Uuid;
 
 use crate::{
 	backend, config,
@@ -21,7 +22,7 @@ pub struct DeployOpts {
 	pub game_id: String,
 
 	/// The environment to deploy to.
-	pub environment_id: String,
+	pub environment_id: Uuid,
 
 	/// The location of the OpenGB project.
 	pub project_path: String,

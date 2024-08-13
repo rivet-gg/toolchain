@@ -1,5 +1,7 @@
 use global_error::prelude::*;
-use std::path::Path;
+use rivet_api::{apis, models};
+use serde::Serialize;
+use std::{collections::HashMap, path::Path};
 use uuid::Uuid;
 
 use crate::{
@@ -13,15 +15,17 @@ use crate::{
 };
 
 pub struct DeployOpts {
-	pub display_name: String,
+	pub backend_environment: models::EeBackendEnvironment,
 	pub build_dir: String,
 	// pub build_args: Option<HashMap<String, String>>,
 	// pub dockerfile: Option<String>,
 	// pub image: Option<String>,
 }
 
+#[derive(Serialize)]
 pub struct DeployOutput {
 	pub image_id: Uuid,
+	pub version_name: String,
 }
 
 /// Builds image if not specified and returns the image ID.
@@ -37,13 +41,52 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 
 	let deploy_config = config::settings::try_read(|x| Ok(x.game_server.deploy.clone())).await?;
 
+	// Reserve image name
+	let reserve_res = apis::cloud_games_versions_api::cloud_games_versions_reserve_version_name(
+		&ctx.openapi_config_cloud,
+		&ctx.game_id,
+	)
+	.await?;
+	let version_name = reserve_res.version_display_name;
+
+	// Build tags
+	//
+	// ## version
+	//
+	// Unique ident for this build. Used for figuring out which server to start when
+	// passing dynamic version from client.
+	//
+	// ## active
+	//
+	// If this build can be used to start a new server. Remove this tag to disable client-side
+	// joining this version.
+	//
+	// This is not exclusive.
+	//
+	// ## latest
+	//
+	// Indicates the latest build to use for this environment. Used if not providing a client-side
+	// version.
+	let version_key = format!("rivet/{}/version", opts.backend_environment.name_id);
+	let active_key = format!("rivet/{}/active", opts.backend_environment.name_id);
+	let latest_key = format!("rivet/{}/latest", opts.backend_environment.name_id);
+	let tags = HashMap::from([
+		(version_key.clone(), version_name.clone()),
+		(active_key.clone(), "true".to_string()),
+		(latest_key.clone(), "true".to_string()),
+	]);
+	let exclusive_tags = vec![version_key.clone(), latest_key.clone()];
+
+	// Deploy Docker image
 	let image_id = if let Some(docker_image) = deploy_config.docker_image.as_ref() {
 		let push_output = push(
 			ctx,
 			task.clone(),
 			&PushOpts {
-				tag: docker_image.clone(),
-				name: Some(opts.display_name.to_string()),
+				name: Some(version_name.to_string()),
+				tags,
+				exclusive_tags: exclusive_tags,
+				docker_tag: docker_image.clone(),
 			},
 		)
 		.await?;
@@ -61,8 +104,10 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			task.clone(),
 			&Path::new(&opts.build_dir),
 			&BuildPushOpts {
+				tags,
+				exclusive_tags,
 				dockerfile: dockerfile.clone(),
-				name: Some(opts.display_name.clone()),
+				name: Some(version_name.clone()),
 				build_args: Some(
 					deploy_config
 						.build_args
@@ -80,15 +125,19 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		push_output.image_id
 	};
 
-	Ok(DeployOutput { image_id })
+	Ok(DeployOutput {
+		image_id,
+		version_name,
+	})
 }
 
 pub struct BuildPushOpts {
+	pub name: Option<String>,
+	pub tags: HashMap<String, String>,
+	pub exclusive_tags: Vec<String>,
+
 	/// Path to Dockerfile
 	pub dockerfile: String,
-
-	/// Name of the image
-	pub name: Option<String>,
 
 	/// Docker build args
 	pub build_args: Option<Vec<String>>,
@@ -129,7 +178,9 @@ pub async fn build_and_push(
 		task.clone(),
 		&docker::push::PushOpts {
 			path: build_output.path.to_owned(),
-			tag: build_output.tag,
+			tags: push_opts.tags.clone(),
+			exclusive_tags: push_opts.exclusive_tags.clone(),
+			docker_tag: build_output.tag,
 			name: push_opts.name.clone(),
 			kind: build_kind,
 			compression: build_compression,
@@ -139,8 +190,11 @@ pub async fn build_and_push(
 }
 
 pub struct PushOpts {
-	pub tag: String,
 	pub name: Option<String>,
+	pub tags: HashMap<String, String>,
+	pub exclusive_tags: Vec<String>,
+
+	pub docker_tag: String,
 }
 
 /// Push an image that's already built.
@@ -165,7 +219,7 @@ pub async fn push(
 	tag_cmd
 		.arg("image")
 		.arg("tag")
-		.arg(&push_opts.tag)
+		.arg(&push_opts.docker_tag)
 		.arg(&unique_image_tag);
 	cmd::execute_docker_cmd_silent(tag_cmd, "failed to tag Docker image").await?;
 
@@ -183,7 +237,9 @@ pub async fn push(
 		task.clone(),
 		&docker::push::PushOpts {
 			path: archive_path.to_owned(),
-			tag: unique_image_tag,
+			tags: push_opts.tags.clone(),
+			exclusive_tags: push_opts.exclusive_tags.clone(),
+			docker_tag: unique_image_tag,
 			name: push_opts.name.clone(),
 			kind: build_kind,
 			compression: build_compression,

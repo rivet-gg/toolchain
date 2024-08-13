@@ -57,7 +57,7 @@ impl Opts {
 					.unwrap_or_default()
 					.to_string_lossy()
 					.to_string(),
-				environment_id: environment.environment_id.to_string(),
+				environment_id: environment.environment_id,
 				game_server: !self.only_backend,
 				backend: !self.only_game_server,
 			},

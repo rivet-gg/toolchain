@@ -69,12 +69,12 @@ pub enum ServersListError {
 
 
 /// Create a new dynamic server.
-pub async fn servers_create(configuration: &configuration::Configuration, servers_create_server_request: crate::models::ServersCreateServerRequest) -> Result<crate::models::ServersCreateServerResponse, Error<ServersCreateError>> {
+pub async fn servers_create(configuration: &configuration::Configuration, game_id: &str, servers_create_server_request: crate::models::ServersCreateServerRequest) -> Result<crate::models::ServersCreateServerResponse, Error<ServersCreateError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/servers", local_var_configuration.base_path);
+    let local_var_uri_str = format!("{}/games/{game_id}/servers", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
@@ -101,12 +101,12 @@ pub async fn servers_create(configuration: &configuration::Configuration, server
 }
 
 /// Destroy a dynamic server.
-pub async fn servers_destroy(configuration: &configuration::Configuration, server_id: &str, override_kill_timeout: Option<i64>) -> Result<crate::models::ServersDestroyServerResponse, Error<ServersDestroyError>> {
+pub async fn servers_destroy(configuration: &configuration::Configuration, game_id: &str, server_id: &str, override_kill_timeout: Option<i64>) -> Result<serde_json::Value, Error<ServersDestroyError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/servers/{server_id}", local_var_configuration.base_path, server_id=crate::apis::urlencode(server_id));
+    let local_var_uri_str = format!("{}/games/{game_id}/servers/{server_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), server_id=crate::apis::urlencode(server_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
 
     if let Some(ref local_var_str) = override_kill_timeout {
@@ -135,12 +135,12 @@ pub async fn servers_destroy(configuration: &configuration::Configuration, serve
 }
 
 /// Gets a dynamic server.
-pub async fn servers_get(configuration: &configuration::Configuration, server_id: &str) -> Result<crate::models::ServersGetServerResponse, Error<ServersGetError>> {
+pub async fn servers_get(configuration: &configuration::Configuration, game_id: &str, server_id: &str) -> Result<crate::models::ServersGetServerResponse, Error<ServersGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/servers/{server_id}", local_var_configuration.base_path, server_id=crate::apis::urlencode(server_id));
+    let local_var_uri_str = format!("{}/games/{game_id}/servers/{server_id}", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), server_id=crate::apis::urlencode(server_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
@@ -166,19 +166,19 @@ pub async fn servers_get(configuration: &configuration::Configuration, server_id
 }
 
 /// Lists all servers associated with the token used. Can be filtered by tags in the query string.
-pub async fn servers_list(configuration: &configuration::Configuration, tags: Option<&str>, game_id: Option<&str>) -> Result<crate::models::ServersListServersResponse, Error<ServersListError>> {
+pub async fn servers_list(configuration: &configuration::Configuration, game_id: &str, tags_json: Option<&str>, game: Option<&str>) -> Result<crate::models::ServersListServersResponse, Error<ServersListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/servers", local_var_configuration.base_path);
+    let local_var_uri_str = format!("{}/games/{game_id}/servers", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    if let Some(ref local_var_str) = tags {
-        local_var_req_builder = local_var_req_builder.query(&[("tags", &local_var_str.to_string())]);
+    if let Some(ref local_var_str) = tags_json {
+        local_var_req_builder = local_var_req_builder.query(&[("tags_json", &local_var_str.to_string())]);
     }
-    if let Some(ref local_var_str) = game_id {
-        local_var_req_builder = local_var_req_builder.query(&[("game_id", &local_var_str.to_string())]);
+    if let Some(ref local_var_str) = game {
+        local_var_req_builder = local_var_req_builder.query(&[("game", &local_var_str.to_string())]);
     }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());

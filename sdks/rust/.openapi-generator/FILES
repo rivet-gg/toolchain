@@ -414,6 +414,7 @@ docs/ProvisionDatacentersGetTlsResponse.md
 docs/ProvisionServersApi.md
 docs/ProvisionServersGetInfoResponse.md
 docs/ServersApi.md
+docs/ServersBuild.md
 docs/ServersBuildCompression.md
 docs/ServersBuildKind.md
 docs/ServersBuildsApi.md
@@ -423,7 +424,7 @@ docs/ServersCreateServerNetworkRequest.md
 docs/ServersCreateServerPortRequest.md
 docs/ServersCreateServerRequest.md
 docs/ServersCreateServerResponse.md
-docs/ServersDestroyServerResponse.md
+docs/ServersGetBuildResponse.md
 docs/ServersGetServerLogsResponse.md
 docs/ServersGetServerResponse.md
 docs/ServersListBuildsResponse.md
@@ -432,6 +433,7 @@ docs/ServersLogStream.md
 docs/ServersLogsApi.md
 docs/ServersNetwork.md
 docs/ServersNetworkMode.md
+docs/ServersPatchBuildTagsRequest.md
 docs/ServersPort.md
 docs/ServersPortProtocol.md
 docs/ServersPortRouting.md
@@ -859,6 +861,7 @@ src/models/portal_notification_register_service.rs
 src/models/portal_notification_unregister_service.rs
 src/models/provision_datacenters_get_tls_response.rs
 src/models/provision_servers_get_info_response.rs
+src/models/servers_build.rs
 src/models/servers_build_compression.rs
 src/models/servers_build_kind.rs
 src/models/servers_create_build_request.rs
@@ -867,7 +870,7 @@ src/models/servers_create_server_network_request.rs
 src/models/servers_create_server_port_request.rs
 src/models/servers_create_server_request.rs
 src/models/servers_create_server_response.rs
-src/models/servers_destroy_server_response.rs
+src/models/servers_get_build_response.rs
 src/models/servers_get_server_logs_response.rs
 src/models/servers_get_server_response.rs
 src/models/servers_list_builds_response.rs
@@ -875,6 +878,7 @@ src/models/servers_list_servers_response.rs
 src/models/servers_log_stream.rs
 src/models/servers_network.rs
 src/models/servers_network_mode.rs
+src/models/servers_patch_build_tags_request.rs
 src/models/servers_port.rs
 src/models/servers_port_protocol.rs
 src/models/servers_port_routing.rs

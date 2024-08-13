@@ -15,11 +15,11 @@
 pub struct ServersListBuildsResponse {
     /// A list of builds for the game associated with the token.
     #[serde(rename = "builds")]
-    pub builds: Vec<crate::models::CloudBuildSummary>,
+    pub builds: Vec<crate::models::ServersBuild>,
 }
 
 impl ServersListBuildsResponse {
-    pub fn new(builds: Vec<crate::models::CloudBuildSummary>) -> ServersListBuildsResponse {
+    pub fn new(builds: Vec<crate::models::ServersBuild>) -> ServersListBuildsResponse {
         ServersListBuildsResponse {
             builds,
         }

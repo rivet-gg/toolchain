@@ -193,14 +193,16 @@ Class | Method | HTTP request | Description
 *PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /portal/games/{game_name_id}/profile | 
 *ProvisionDatacentersApi* | [**provision_datacenters_get_tls**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_tls) | **GET** /datacenters/{datacenter_id}/tls | 
 *ProvisionServersApi* | [**provision_servers_get_info**](docs/ProvisionServersApi.md#provision_servers_get_info) | **GET** /servers/{ip} | 
-*ServersApi* | [**servers_create**](docs/ServersApi.md#servers_create) | **POST** /servers | 
-*ServersApi* | [**servers_destroy**](docs/ServersApi.md#servers_destroy) | **DELETE** /servers/{server_id} | 
-*ServersApi* | [**servers_get**](docs/ServersApi.md#servers_get) | **GET** /servers/{server_id} | 
-*ServersApi* | [**servers_list**](docs/ServersApi.md#servers_list) | **GET** /servers | 
-*ServersBuildsApi* | [**servers_builds_complete_build**](docs/ServersBuildsApi.md#servers_builds_complete_build) | **POST** /servers/uploads/{upload_id}/complete | 
-*ServersBuildsApi* | [**servers_builds_list_builds**](docs/ServersBuildsApi.md#servers_builds_list_builds) | **GET** /servers/builds | 
-*ServersBuildsApi* | [**servers_builds_prepare_build**](docs/ServersBuildsApi.md#servers_builds_prepare_build) | **POST** /servers/builds | 
-*ServersLogsApi* | [**servers_logs_get_server_logs**](docs/ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /servers/{server_id}/logs | 
+*ServersApi* | [**servers_create**](docs/ServersApi.md#servers_create) | **POST** /games/{game_id}/servers | 
+*ServersApi* | [**servers_destroy**](docs/ServersApi.md#servers_destroy) | **DELETE** /games/{game_id}/servers/{server_id} | 
+*ServersApi* | [**servers_get**](docs/ServersApi.md#servers_get) | **GET** /games/{game_id}/servers/{server_id} | 
+*ServersApi* | [**servers_list**](docs/ServersApi.md#servers_list) | **GET** /games/{game_id}/servers | 
+*ServersBuildsApi* | [**servers_builds_complete_build**](docs/ServersBuildsApi.md#servers_builds_complete_build) | **POST** /games/{game_id}/builds/{build_id}/complete | 
+*ServersBuildsApi* | [**servers_builds_get_build**](docs/ServersBuildsApi.md#servers_builds_get_build) | **GET** /games/{game_id}/builds/{build_id} | 
+*ServersBuildsApi* | [**servers_builds_list_builds**](docs/ServersBuildsApi.md#servers_builds_list_builds) | **GET** /games/{game_id}/builds | 
+*ServersBuildsApi* | [**servers_builds_patch_tags**](docs/ServersBuildsApi.md#servers_builds_patch_tags) | **PATCH** /games/{game_id}/builds/{build_id}/tags | 
+*ServersBuildsApi* | [**servers_builds_prepare_build**](docs/ServersBuildsApi.md#servers_builds_prepare_build) | **POST** /games/{game_id}/builds/prepare | 
+*ServersLogsApi* | [**servers_logs_get_server_logs**](docs/ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /games/{game_id}/servers/{server_id}/logs | 
 
 
 ## Documentation For Models
@@ -570,6 +572,7 @@ Class | Method | HTTP request | Description
  - [PortalNotificationUnregisterService](docs/PortalNotificationUnregisterService.md)
  - [ProvisionDatacentersGetTlsResponse](docs/ProvisionDatacentersGetTlsResponse.md)
  - [ProvisionServersGetInfoResponse](docs/ProvisionServersGetInfoResponse.md)
+ - [ServersBuild](docs/ServersBuild.md)
  - [ServersBuildCompression](docs/ServersBuildCompression.md)
  - [ServersBuildKind](docs/ServersBuildKind.md)
  - [ServersCreateBuildRequest](docs/ServersCreateBuildRequest.md)
@@ -578,7 +581,7 @@ Class | Method | HTTP request | Description
  - [ServersCreateServerPortRequest](docs/ServersCreateServerPortRequest.md)
  - [ServersCreateServerRequest](docs/ServersCreateServerRequest.md)
  - [ServersCreateServerResponse](docs/ServersCreateServerResponse.md)
- - [ServersDestroyServerResponse](docs/ServersDestroyServerResponse.md)
+ - [ServersGetBuildResponse](docs/ServersGetBuildResponse.md)
  - [ServersGetServerLogsResponse](docs/ServersGetServerLogsResponse.md)
  - [ServersGetServerResponse](docs/ServersGetServerResponse.md)
  - [ServersListBuildsResponse](docs/ServersListBuildsResponse.md)
@@ -586,6 +589,7 @@ Class | Method | HTTP request | Description
  - [ServersLogStream](docs/ServersLogStream.md)
  - [ServersNetwork](docs/ServersNetwork.md)
  - [ServersNetworkMode](docs/ServersNetworkMode.md)
+ - [ServersPatchBuildTagsRequest](docs/ServersPatchBuildTagsRequest.md)
  - [ServersPort](docs/ServersPort.md)
  - [ServersPortProtocol](docs/ServersPortProtocol.md)
  - [ServersPortRouting](docs/ServersPortRouting.md)

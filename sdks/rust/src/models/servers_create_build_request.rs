@@ -15,9 +15,6 @@
 pub struct ServersCreateBuildRequest {
     #[serde(rename = "compression", skip_serializing_if = "Option::is_none")]
     pub compression: Option<crate::models::ServersBuildCompression>,
-    /// Represent a resource's readable display name.
-    #[serde(rename = "display_name")]
-    pub display_name: String,
     #[serde(rename = "image_file")]
     pub image_file: Box<crate::models::UploadPrepareFile>,
     /// A tag given to the game build.
@@ -27,20 +24,19 @@ pub struct ServersCreateBuildRequest {
     pub kind: Option<crate::models::ServersBuildKind>,
     #[serde(rename = "multipart_upload", skip_serializing_if = "Option::is_none")]
     pub multipart_upload: Option<bool>,
-    #[serde(rename = "tags", deserialize_with = "Option::deserialize")]
-    pub tags: Option<serde_json::Value>,
+    #[serde(rename = "name")]
+    pub name: String,
 }
 
 impl ServersCreateBuildRequest {
-    pub fn new(display_name: String, image_file: crate::models::UploadPrepareFile, image_tag: String, tags: Option<serde_json::Value>) -> ServersCreateBuildRequest {
+    pub fn new(image_file: crate::models::UploadPrepareFile, image_tag: String, name: String) -> ServersCreateBuildRequest {
         ServersCreateBuildRequest {
             compression: None,
-            display_name,
             image_file: Box::new(image_file),
             image_tag,
             kind: None,
             multipart_upload: None,
-            tags,
+            name,
         }
     }
 }

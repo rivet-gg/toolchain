@@ -13,23 +13,20 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ServersCreateBuildResponse {
-    #[serde(rename = "build_id")]
-    pub build_id: uuid::Uuid,
+    #[serde(rename = "build")]
+    pub build: uuid::Uuid,
     #[serde(rename = "image_presigned_request", skip_serializing_if = "Option::is_none")]
     pub image_presigned_request: Option<Box<crate::models::UploadPresignedRequest>>,
     #[serde(rename = "image_presigned_requests", skip_serializing_if = "Option::is_none")]
     pub image_presigned_requests: Option<Vec<crate::models::UploadPresignedRequest>>,
-    #[serde(rename = "upload_id")]
-    pub upload_id: uuid::Uuid,
 }
 
 impl ServersCreateBuildResponse {
-    pub fn new(build_id: uuid::Uuid, upload_id: uuid::Uuid) -> ServersCreateBuildResponse {
+    pub fn new(build: uuid::Uuid) -> ServersCreateBuildResponse {
         ServersCreateBuildResponse {
-            build_id,
+            build,
             image_presigned_request: None,
             image_presigned_requests: None,
-            upload_id,
         }
     }
 }
