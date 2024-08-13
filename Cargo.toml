@@ -1,4 +1,5 @@
 [workspace]
+resolver = "2"
 members = [ "rivet-cli",
     "rivet-toolchain", "rivet-toolchain-ffi",
 ]
