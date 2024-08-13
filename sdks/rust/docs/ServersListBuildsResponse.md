@@ -1,11 +1,10 @@
-# AdminClustersServer
+# ServersListBuildsResponse
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**public_ip** | Option<**String**> |  | [optional]
-**server_id** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
+**builds** | [**Vec<crate::models::CloudBuildSummary>**](CloudBuildSummary.md) | A list of builds for the game associated with the token. | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

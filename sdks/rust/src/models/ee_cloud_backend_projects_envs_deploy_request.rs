@@ -15,12 +15,15 @@
 pub struct EeCloudBackendProjectsEnvsDeployRequest {
     #[serde(rename = "upload_id")]
     pub upload_id: uuid::Uuid,
+    #[serde(rename = "variables", skip_serializing_if = "Option::is_none")]
+    pub variables: Option<::std::collections::HashMap<String, crate::models::EeBackendUpdateVariable>>,
 }
 
 impl EeCloudBackendProjectsEnvsDeployRequest {
     pub fn new(upload_id: uuid::Uuid) -> EeCloudBackendProjectsEnvsDeployRequest {
         EeCloudBackendProjectsEnvsDeployRequest {
             upload_id,
+            variables: None,
         }
     }
 }
