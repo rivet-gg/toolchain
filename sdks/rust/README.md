@@ -193,9 +193,14 @@ Class | Method | HTTP request | Description
 *PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /portal/games/{game_name_id}/profile | 
 *ProvisionDatacentersApi* | [**provision_datacenters_get_tls**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_tls) | **GET** /datacenters/{datacenter_id}/tls | 
 *ProvisionServersApi* | [**provision_servers_get_info**](docs/ProvisionServersApi.md#provision_servers_get_info) | **GET** /servers/{ip} | 
-*ServersServersApi* | [**servers_servers_create**](docs/ServersServersApi.md#servers_servers_create) | **POST** /servers/servers | 
-*ServersServersApi* | [**servers_servers_destroy**](docs/ServersServersApi.md#servers_servers_destroy) | **DELETE** /servers/servers/{server_id} | 
-*ServersServersApi* | [**servers_servers_get**](docs/ServersServersApi.md#servers_servers_get) | **GET** /servers/servers/{server_id} | 
+*ServersApi* | [**servers_create**](docs/ServersApi.md#servers_create) | **POST** /servers | 
+*ServersApi* | [**servers_destroy**](docs/ServersApi.md#servers_destroy) | **DELETE** /servers/{server_id} | 
+*ServersApi* | [**servers_get**](docs/ServersApi.md#servers_get) | **GET** /servers/{server_id} | 
+*ServersApi* | [**servers_list**](docs/ServersApi.md#servers_list) | **GET** /servers | 
+*ServersBuildsApi* | [**servers_builds_complete_build**](docs/ServersBuildsApi.md#servers_builds_complete_build) | **POST** /servers/uploads/{upload_id}/complete | 
+*ServersBuildsApi* | [**servers_builds_list_builds**](docs/ServersBuildsApi.md#servers_builds_list_builds) | **GET** /servers/builds | 
+*ServersBuildsApi* | [**servers_builds_prepare_build**](docs/ServersBuildsApi.md#servers_builds_prepare_build) | **POST** /servers/builds | 
+*ServersLogsApi* | [**servers_logs_get_server_logs**](docs/ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /servers/{server_id}/logs | 
 
 
 ## Documentation For Models
@@ -565,12 +570,20 @@ Class | Method | HTTP request | Description
  - [PortalNotificationUnregisterService](docs/PortalNotificationUnregisterService.md)
  - [ProvisionDatacentersGetTlsResponse](docs/ProvisionDatacentersGetTlsResponse.md)
  - [ProvisionServersGetInfoResponse](docs/ProvisionServersGetInfoResponse.md)
+ - [ServersBuildCompression](docs/ServersBuildCompression.md)
+ - [ServersBuildKind](docs/ServersBuildKind.md)
+ - [ServersCreateBuildRequest](docs/ServersCreateBuildRequest.md)
+ - [ServersCreateBuildResponse](docs/ServersCreateBuildResponse.md)
  - [ServersCreateServerNetworkRequest](docs/ServersCreateServerNetworkRequest.md)
  - [ServersCreateServerPortRequest](docs/ServersCreateServerPortRequest.md)
  - [ServersCreateServerRequest](docs/ServersCreateServerRequest.md)
  - [ServersCreateServerResponse](docs/ServersCreateServerResponse.md)
  - [ServersDestroyServerResponse](docs/ServersDestroyServerResponse.md)
+ - [ServersGetServerLogsResponse](docs/ServersGetServerLogsResponse.md)
  - [ServersGetServerResponse](docs/ServersGetServerResponse.md)
+ - [ServersListBuildsResponse](docs/ServersListBuildsResponse.md)
+ - [ServersListServersResponse](docs/ServersListServersResponse.md)
+ - [ServersLogStream](docs/ServersLogStream.md)
  - [ServersNetwork](docs/ServersNetwork.md)
  - [ServersNetworkMode](docs/ServersNetworkMode.md)
  - [ServersPort](docs/ServersPort.md)

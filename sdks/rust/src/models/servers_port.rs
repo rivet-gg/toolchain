@@ -13,6 +13,8 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ServersPort {
+    #[serde(rename = "internal_port", skip_serializing_if = "Option::is_none")]
+    pub internal_port: Option<i32>,
     #[serde(rename = "protocol")]
     pub protocol: crate::models::ServersPortProtocol,
     #[serde(rename = "public_hostname", skip_serializing_if = "Option::is_none")]
@@ -21,18 +23,16 @@ pub struct ServersPort {
     pub public_port: Option<i32>,
     #[serde(rename = "routing")]
     pub routing: Box<crate::models::ServersPortRouting>,
-    #[serde(rename = "server_port", skip_serializing_if = "Option::is_none")]
-    pub server_port: Option<i32>,
 }
 
 impl ServersPort {
     pub fn new(protocol: crate::models::ServersPortProtocol, routing: crate::models::ServersPortRouting) -> ServersPort {
         ServersPort {
+            internal_port: None,
             protocol,
             public_hostname: None,
             public_port: None,
             routing: Box::new(routing),
-            server_port: None,
         }
     }
 }

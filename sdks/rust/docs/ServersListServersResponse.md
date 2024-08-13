@@ -1,11 +1,10 @@
-# AdminClustersServer
+# ServersListServersResponse
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**public_ip** | Option<**String**> |  | [optional]
-**server_id** | [**uuid::Uuid**](uuid::Uuid.md) |  | 
+**servers** | [**Vec<crate::models::ServersServer>**](ServersServer.md) | A list of servers for the game associated with the token. | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

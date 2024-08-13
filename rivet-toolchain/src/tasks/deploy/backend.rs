@@ -47,73 +47,8 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	.await?
 	.environment;
 
-	// TODO: re-apply both service token and endpoint if endpoint diff than one that's deployed
-	task.log_stdout(format!("[Fetching Environment Variables]"));
-	// let variables =
-	// 	apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_get_variables(
-	// 		&ctx.openapi_config_cloud,
-	// 		&project_id_str,
-	// 		&environment_id_str,
-	// 	)
-	// 	.await?
-	// 	.variables;
-	let mut update_variables = HashMap::<String, _>::new();
-	// if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
-	// TODO: pull this from the server
-	update_variables.insert(
-		"OPENGB_PUBLIC_ENDPOINT".to_string(),
-		models::EeBackendUpdateVariable {
-			text: Some(env.endpoint.clone()),
-			..Default::default()
-		},
-	);
-	// }
-	// if !variables.contains_key("RIVET_API_ENDPOINT") {
-	update_variables.insert(
-		"RIVET_API_ENDPOINT".to_string(),
-		models::EeBackendUpdateVariable {
-			text: Some(ctx.api_endpoint.clone()),
-			..Default::default()
-		},
-	);
-	// }
-	// if !variables.contains_key("RIVET_SERVICE_TOKEN") {
-	let service_token = apis::cloud_games_tokens_api::cloud_games_tokens_create_service_token(
-		&ctx.openapi_config_cloud,
-		&opts.game_id,
-	)
-	.await?;
-	update_variables.insert(
-		"RIVET_SERVICE_TOKEN".to_string(),
-		models::EeBackendUpdateVariable {
-			secret: Some(service_token.token),
-			..Default::default()
-		},
-	);
-	// }
-	// if !update_variables.is_empty() {
-	task.log_stdout(format!(
-		"[Updating Environment Variables] {}",
-		update_variables
-			.keys()
-			.cloned()
-			.collect::<Vec<_>>()
-			.join(", ")
-	));
-	apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_update_variables(
-		&ctx.openapi_config_cloud,
-		&project_id_str,
-		&environment_id_str,
-		models::EeCloudBackendProjectsEnvsUpdateVariablesRequest {
-			variables: update_variables,
-		},
-	)
-	.await?;
-	// }
-
-	task.log_stdout(format!("[Building Project] {}", project_path.display()));
-
 	// Build
+	task.log_stdout(format!("[Building Project] {}", project_path.display()));
 	let (cmd_env, config_path) = config::settings::try_read(|settings| {
 		let mut env = settings.backend.command_environment.clone();
 		env.extend(settings.backend.deploy.command_environment.clone());
@@ -204,6 +139,60 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		size = upload::format_file_size(total_len as u64)?,
 	));
 
+	task.log_stdout(format!("[Fetching Environment Variables]"));
+	let variables =
+		apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_get_variables(
+			&ctx.openapi_config_cloud,
+			&project_id_str,
+			&environment_id_str,
+		)
+		.await?
+		.variables;
+	let mut update_variables = HashMap::<String, _>::new();
+	if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
+		update_variables.insert(
+			"OPENGB_PUBLIC_ENDPOINT".to_string(),
+			models::EeBackendUpdateVariable {
+				text: Some(env.endpoint.clone()),
+				..Default::default()
+			},
+		);
+	}
+	if !variables.contains_key("RIVET_API_ENDPOINT") {
+		update_variables.insert(
+			"RIVET_API_ENDPOINT".to_string(),
+			models::EeBackendUpdateVariable {
+				text: Some(ctx.api_endpoint.clone()),
+				..Default::default()
+			},
+		);
+	}
+	if !variables.contains_key("RIVET_SERVICE_TOKEN") {
+		task.log_stdout(format!("[Creating Service Token]"));
+		let service_token = apis::cloud_games_tokens_api::cloud_games_tokens_create_service_token(
+			&ctx.openapi_config_cloud,
+			&opts.game_id,
+		)
+		.await?;
+		update_variables.insert(
+			"RIVET_SERVICE_TOKEN".to_string(),
+			models::EeBackendUpdateVariable {
+				secret: Some(service_token.token),
+				..Default::default()
+			},
+		);
+	}
+	if !update_variables.is_empty() {
+		task.log_stdout(format!(
+			"[Updating Variables] {}",
+			update_variables
+				.keys()
+				.cloned()
+				.collect::<Vec<_>>()
+				.join(", ")
+		));
+	}
+
 	let prepare_res = unwrap!(
 		apis::ee_cloud_backend_projects_envs_api::ee_cloud_backend_projects_envs_prepare_deploy(
 			&ctx.openapi_config_cloud,
@@ -259,6 +248,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			&environment_id_str,
 			models::EeCloudBackendProjectsEnvsDeployRequest {
 				upload_id: prepare_res.upload_id,
+				variables: Some(update_variables),
 			},
 		)
 		.await?;
