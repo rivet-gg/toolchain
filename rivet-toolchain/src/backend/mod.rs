@@ -131,9 +131,7 @@ async fn create_backend(ctx: &Ctx, env_id: Uuid) -> GlobalResult<models::EeBacke
 		&ctx.openapi_config_cloud,
 		&ctx.game_id.to_string(),
 		&env_id.to_string(),
-		models::EeBackendCreateRequest {
-			tier: models::EeBackendTier::Shared,
-		},
+		serde_json::Value::default(),
 	)
 	.await?;
 

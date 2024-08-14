@@ -376,7 +376,6 @@ Class | Method | HTTP request | Description
  - [CloudVersionMatchmakerProxyKind](docs/CloudVersionMatchmakerProxyKind.md)
  - [CloudVersionSummary](docs/CloudVersionSummary.md)
  - [EeBackendBackend](docs/EeBackendBackend.md)
- - [EeBackendCreateRequest](docs/EeBackendCreateRequest.md)
  - [EeBackendCreateResponse](docs/EeBackendCreateResponse.md)
  - [EeBackendDeployRequest](docs/EeBackendDeployRequest.md)
  - [EeBackendDeployResponse](docs/EeBackendDeployResponse.md)

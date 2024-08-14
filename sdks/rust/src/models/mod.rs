@@ -358,8 +358,6 @@ pub mod cloud_version_summary;
 pub use self::cloud_version_summary::CloudVersionSummary;
 pub mod ee_backend_backend;
 pub use self::ee_backend_backend::EeBackendBackend;
-pub mod ee_backend_create_request;
-pub use self::ee_backend_create_request::EeBackendCreateRequest;
 pub mod ee_backend_create_response;
 pub use self::ee_backend_create_response::EeBackendCreateResponse;
 pub mod ee_backend_deploy_request;

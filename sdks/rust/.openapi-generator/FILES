@@ -208,7 +208,6 @@ docs/CloudVersionMatchmakerProxyKind.md
 docs/CloudVersionSummary.md
 docs/EeBackendApi.md
 docs/EeBackendBackend.md
-docs/EeBackendCreateRequest.md
 docs/EeBackendCreateResponse.md
 docs/EeBackendDeployRequest.md
 docs/EeBackendDeployResponse.md
@@ -662,7 +661,6 @@ src/models/cloud_version_matchmaker_port_range.rs
 src/models/cloud_version_matchmaker_proxy_kind.rs
 src/models/cloud_version_summary.rs
 src/models/ee_backend_backend.rs
-src/models/ee_backend_create_request.rs
 src/models/ee_backend_create_response.rs
 src/models/ee_backend_deploy_request.rs
 src/models/ee_backend_deploy_response.rs

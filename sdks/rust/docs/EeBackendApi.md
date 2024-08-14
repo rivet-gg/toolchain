@@ -18,7 +18,7 @@ Method | HTTP request | Description
 
 ## ee_backend_create
 
-> crate::models::EeBackendCreateResponse ee_backend_create(game_id, environment_id, ee_backend_create_request)
+> crate::models::EeBackendCreateResponse ee_backend_create(game_id, environment_id, body)
 
 
 Creates a new backend environment.
@@ -30,7 +30,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **game_id** | **uuid::Uuid** |  | [required] |
 **environment_id** | **uuid::Uuid** |  | [required] |
-**ee_backend_create_request** | [**EeBackendCreateRequest**](EeBackendCreateRequest.md) |  | [required] |
+**body** | **serde_json::Value** |  | [required] |
 
 ### Return type
 
