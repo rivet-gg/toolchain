@@ -146,6 +146,24 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			},
 		);
 	}
+	if !variables.contains_key("RIVET_GAME_ID") {
+		update_variables.insert(
+			"RIVET_GAME_ID".to_string(),
+			models::EeBackendUpdateVariable {
+				text: Some(game_id_str.clone()),
+				..Default::default()
+			},
+		);
+	}
+	if !variables.contains_key("RIVET_ENVIRONMENT_ID") {
+		update_variables.insert(
+			"RIVET_ENVIRONMENT_ID".to_string(),
+			models::EeBackendUpdateVariable {
+				text: Some(env_id_str.clone()),
+				..Default::default()
+			},
+		);
+	}
 	if !variables.contains_key("RIVET_SERVICE_TOKEN") {
 		task.log_stdout(format!("[Creating Service Token]"));
 		let service_token =
