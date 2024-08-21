@@ -45,7 +45,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	.await?;
 	let cmd = backend::run_opengb_command(
 		task.clone(),
-		backend::OpenGbCommandOpts {
+		backend::BackendCommandOpts {
 			config_path: config_path.clone(),
 			args: vec![
 				"build".into(),
@@ -81,7 +81,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 
 		let migrate_cmd = backend::run_opengb_command(
 			task.clone(),
-			backend::OpenGbCommandOpts {
+			backend::BackendCommandOpts {
 				config_path,
 				args: vec!["db".into(), "deploy".into()],
 				env: migrate_env,
@@ -251,7 +251,10 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	)
 	.await?;
 
-	task.log_stdout(format!("[Done] OpenGB API available at {}", deploy_res.url));
+	task.log_stdout(format!(
+		"[Done] Backend API available at {}",
+		deploy_res.url
+	));
 
 	Ok(())
 }

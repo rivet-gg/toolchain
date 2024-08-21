@@ -15,7 +15,8 @@ use crate::{
 };
 
 const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "ghcr.io/rivet-gg/opengb:main";
-pub struct OpenGbCommandOpts {
+
+pub struct BackendCommandOpts {
 	pub config_path: String,
 	pub args: Vec<String>,
 	pub env: HashMap<String, String>,
@@ -34,7 +35,7 @@ impl Default for OpenGbRuntime {
 	}
 }
 
-pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Command> {
+pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Command> {
 	let (runtime, image_tag) = config::settings::try_read(|settings| {
 		Ok((
 			settings.backend.opengb_runtime.clone(),
@@ -87,13 +88,13 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 	}
 }
 
-pub async fn run_opengb_command(task: TaskCtx, opts: OpenGbCommandOpts) -> GlobalResult<i32> {
+pub async fn run_opengb_command(task: TaskCtx, opts: BackendCommandOpts) -> GlobalResult<i32> {
 	let cmd = build_opengb_command(opts).await?;
 	let exit_code = task.spawn_cmd(cmd).await?;
 	Ok(exit_code.code().unwrap_or(0))
 }
 
-pub async fn spawn_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<u32> {
+pub async fn spawn_opengb_command(opts: BackendCommandOpts) -> GlobalResult<u32> {
 	let child = build_opengb_command(opts).await?.spawn()?;
 	Ok(unwrap!(child.id(), "child already exited"))
 }
