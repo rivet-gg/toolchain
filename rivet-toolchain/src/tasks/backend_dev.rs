@@ -40,6 +40,7 @@ impl super::Task for Task {
 				args: vec!["dev".into(), "--force-deploy-migrations".into()],
 				env: cmd_env,
 				cwd: input.cwd.into(),
+				ports: vec![(input.port, input.port)],
 			},
 		)
 		.await?;
