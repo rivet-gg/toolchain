@@ -22,6 +22,7 @@ pub struct BackendCommandOpts {
 	pub env: HashMap<String, String>,
 	pub cwd: PathBuf,
 	pub ports: Vec<(u16, u16)>,
+	pub tty: bool,
 }
 
 #[derive(PartialEq, Serialize, Deserialize, Clone)]
@@ -82,12 +83,16 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			cmd.arg(image_tag);
 			cmd.arg("--project");
 			cmd.arg(opts.config_path);
-			cmd.args(&opts.args);
+
+			if opts.tty {
+				cmd.arg("--tty");
+			}
 
 			for (host_port, container_port) in opts.ports {
 				cmd.arg(format!("--publish={}:{}", host_port, container_port));
 			}
 
+			cmd.args(&opts.args);
 			Ok(cmd)
 		}
 	}

@@ -56,6 +56,8 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			],
 			env: cmd_env,
 			cwd: project_path.clone(),
+			ports: vec![],
+			tty: false,
 		},
 	)
 	.await?;
@@ -86,6 +88,8 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 				args: vec!["db".into(), "deploy".into()],
 				env: migrate_env,
 				cwd: project_path.clone(),
+				ports: vec![],
+				tty: false,
 			},
 		)
 		.await?;
