@@ -3,6 +3,7 @@ pub mod database;
 use global_error::prelude::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use std::{collections::HashMap, io::Write, path::PathBuf};
 use tempfile::NamedTempFile;
 use tokio::process::Command;
@@ -142,9 +143,7 @@ async fn create_backend(ctx: &Ctx, env_id: Uuid) -> GlobalResult<models::EeBacke
 		&ctx.openapi_config_cloud,
 		&ctx.game_id.to_string(),
 		&env_id.to_string(),
-		models::EeBackendCreateRequest {
-			tier: models::EeBackendTier::Shared,
-		},
+		json!({}),
 	)
 	.await?;
 
