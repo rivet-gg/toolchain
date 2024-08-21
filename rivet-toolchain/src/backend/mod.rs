@@ -15,7 +15,8 @@ use crate::{
 	Ctx,
 };
 
-const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "rivetgg/opengb:2.0.0-rc.1";
+const DEFAULT_OPENGB_DOCKER_TAG: &'static str =
+	"rivetgg/opengb:a3cd72c02f9248344a999805f267f556f1a6fcae";
 
 pub struct BackendCommandOpts {
 	pub config_path: String,
