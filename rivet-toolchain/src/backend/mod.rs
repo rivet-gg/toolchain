@@ -23,7 +23,6 @@ pub struct BackendCommandOpts {
 	pub env: HashMap<String, String>,
 	pub cwd: PathBuf,
 	pub ports: Vec<(u16, u16)>,
-	pub tty: bool,
 }
 
 #[derive(PartialEq, Serialize, Deserialize, Clone)]
@@ -68,7 +67,7 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			// Make sure the file is properly flushed, and doesn't get deleted
 			// after the NamedTempFile goes out of scope
 			env_file.flush()?;
-			let (env_file, env_file_path) = env_file.keep()?;
+			let (_env_file, env_file_path) = env_file.keep()?;
 
 			let mut cmd = shell_cmd("docker");
 			cmd.arg("run");
@@ -78,20 +77,18 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			cmd.arg("--init");
 			cmd.arg("--env-file").arg(env_file_path);
 			cmd.arg("--add-host=host.docker.internal:host-gateway");
-			cmd.arg("--publish=6420:6420");
+			// Mount the project
 			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
+			// Mount Postgres volume for bundled Postgres server
+			cmd.arg("--volume=opengb_postgres:/var/lib/postgresql/data");
 			cmd.arg("--workdir=/backend");
-			cmd.arg(image_tag);
-			cmd.arg("--project");
-			cmd.arg(opts.config_path);
-
-			if opts.tty {
-				cmd.arg("--tty");
-			}
-
 			for (host_port, container_port) in opts.ports {
 				cmd.arg(format!("--publish={}:{}", host_port, container_port));
 			}
+			cmd.arg(image_tag);
+
+			cmd.arg("--project");
+			cmd.arg(opts.config_path);
 
 			cmd.args(&opts.args);
 			Ok(cmd)

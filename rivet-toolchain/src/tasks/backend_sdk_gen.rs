@@ -59,7 +59,6 @@ impl super::Task for Task {
 				env: cmd_env,
 				cwd: input.cwd.into(),
 				ports: vec![],
-				tty: false,
 			},
 		)
 		.await?;
