@@ -15,6 +15,10 @@ use crate::{
 	},
 };
 
+const VERSION_BUILD_TAG: &str = "version";
+const ENABLED_BUILD_TAG: &str = "enabled";
+const CURRENT_BUILD_TAG: &str = "current";
+
 pub struct DeployOpts {
 	pub env: TEMPEnvironment,
 	pub build_dir: String,
@@ -68,15 +72,12 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	//
 	// Indicates the latest build to use for this environment. Used if not providing a client-side
 	// version.
-	let version_key = format!("rivet/{}/version", opts.env.slug);
-	let active_key = format!("rivet/{}/active", opts.env.slug);
-	let latest_key = format!("rivet/{}/latest", opts.env.slug);
 	let tags = HashMap::from([
-		(version_key.clone(), version_name.clone()),
-		(active_key.clone(), "true".to_string()),
-		(latest_key.clone(), "true".to_string()),
+		(VERSION_BUILD_TAG.to_string(), version_name.clone()),
+		(ENABLED_BUILD_TAG.to_string(), "true".to_string()),
+		(CURRENT_BUILD_TAG.to_string(), "true".to_string()),
 	]);
-	let exclusive_tags = vec![version_key.clone(), latest_key.clone()];
+	let exclusive_tags = vec![VERSION_BUILD_TAG.to_string(), CURRENT_BUILD_TAG.to_string()];
 
 	// Deploy Docker image
 	let image_id = if let Some(docker_image) = deploy_config.docker_image.as_ref() {

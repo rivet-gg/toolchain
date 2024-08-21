@@ -64,7 +64,7 @@ pub async fn build_opengb_command(opts: OpenGbCommandOpts) -> GlobalResult<Comma
 			// Make sure the file is properly flushed, and doesn't get deleted
 			// after the NamedTempFile goes out of scope
 			env_file.flush()?;
-			let (_env_file, env_file_path) = env_file.keep()?;
+			let (env_file, env_file_path) = env_file.keep()?;
 
 			let mut cmd = shell_cmd("docker");
 			cmd.arg("run");
