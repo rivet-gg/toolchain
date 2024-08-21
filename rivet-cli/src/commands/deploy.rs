@@ -12,6 +12,8 @@ pub struct Opts {
 	only_game_server: bool,
 	#[clap(long, conflicts_with = "only_game_server")]
 	only_backend: bool,
+	#[clap(long)]
+	backend_skip_migrate: bool,
 }
 
 impl Opts {
@@ -60,6 +62,7 @@ impl Opts {
 				environment_id: environment.id,
 				game_server: !self.only_backend,
 				backend: !self.only_game_server,
+				backend_skip_migrate: self.backend_skip_migrate,
 			},
 		)
 		.await

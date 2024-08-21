@@ -13,6 +13,8 @@ pub struct Input {
 	pub environment_id: Uuid,
 	pub game_server: bool,
 	pub backend: bool,
+	#[serde(default)]
+	pub backend_skip_migrate: bool,
 }
 
 #[derive(Serialize)]
@@ -50,8 +52,7 @@ impl super::Task for Task {
 				backend::DeployOpts {
 					env: env.clone(),
 					project_path: input.cwd.clone(),
-					// TODO:
-					skip_migrate: true,
+					skip_migrate: input.backend_skip_migrate,
 				},
 			)
 			.await?;
