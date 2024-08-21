@@ -71,7 +71,6 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			cmd.arg("run");
 			cmd.arg("--rm");
 			cmd.arg("--interactive");
-			cmd.arg("--tty");
 			cmd.arg("--quiet");
 			cmd.arg("--init");
 			cmd.arg("--env-file").arg(env_file_path);
