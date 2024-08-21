@@ -10,6 +10,7 @@ use crate::{
 };
 
 #[derive(Default, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Settings {
 	#[serde(default)]
 	pub backend: BackendConfig,
@@ -20,6 +21,7 @@ pub struct Settings {
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct BackendConfig {
 	/// Env vars to pass to all OpenGB commands.
 	#[serde(default)]
@@ -38,6 +40,7 @@ pub struct BackendConfig {
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct BackendSdkConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
@@ -47,6 +50,7 @@ pub struct BackendSdkConfig {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct BackendDevConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
@@ -72,6 +76,7 @@ impl BackendDevConfig {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct BackendDeployConfig {
 	/// Env vars to pass to the deploy OpenGB commands.
 	#[serde(default)]
@@ -97,12 +102,14 @@ impl BackendDeployConfig {
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct GameServerConfig {
 	#[serde(default)]
 	pub deploy: GameServerDeployConfig,
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct GameServerDeployConfig {
 	#[serde(default)]
 	pub dockerfile_path: Option<String>,
@@ -122,6 +129,7 @@ pub struct GameServerDeployConfig {
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct NetConfig {
 	#[serde(default)]
 	pub disable_upload_multipart: bool,
