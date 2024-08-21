@@ -57,7 +57,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			env: cmd_env,
 			cwd: project_path.clone(),
 			ports: vec![],
-			mount_postgres: false,
+			enable_postgres: false,
 		},
 	)
 	.await?;
@@ -89,7 +89,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 				env: migrate_env,
 				cwd: project_path.clone(),
 				ports: vec![],
-				mount_postgres: false,
+				enable_postgres: false,
 			},
 		)
 		.await?;
@@ -124,13 +124,13 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	));
 
 	task.log_stdout(format!("[Fetching Environment Variables]"));
-	let variables = apis::ee_backend_api::ee_backend_get_variables(
-		&ctx.openapi_config_cloud,
-		&game_id_str,
-		&env_id_str,
-	)
-	.await?
-	.variables;
+	// let variables = apis::ee_backend_api::ee_backend_get_variables(
+	// 	&ctx.openapi_config_cloud,
+	// 	&game_id_str,
+	// 	&env_id_str,
+	// )
+	// .await?
+	// .variables;
 	let mut update_variables = HashMap::<String, _>::new();
 	// if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
 	update_variables.insert(

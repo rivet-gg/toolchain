@@ -15,7 +15,7 @@ use crate::{
 	Ctx,
 };
 
-const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "ghcr.io/rivet-gg/opengb:main";
+const DEFAULT_OPENGB_DOCKER_TAG: &'static str = "rivetgg/opengb:2.0.0-rc.1";
 
 pub struct BackendCommandOpts {
 	pub config_path: String,
@@ -23,7 +23,7 @@ pub struct BackendCommandOpts {
 	pub env: HashMap<String, String>,
 	pub cwd: PathBuf,
 	pub ports: Vec<(u16, u16)>,
-	pub mount_postgres: bool,
+	pub enable_postgres: bool,
 }
 
 #[derive(PartialEq, Serialize, Deserialize, Clone)]
@@ -65,6 +65,7 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			for (k, v) in opts.env {
 				writeln!(env_file, "{k}={v}")?;
 			}
+
 			// Make sure the file is properly flushed, and doesn't get deleted
 			// after the NamedTempFile goes out of scope
 			env_file.flush()?;
@@ -81,7 +82,7 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			// Mount the project
 			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
 			// Mount Postgres volume for bundled Postgres server
-			if opts.mount_postgres {
+			if opts.enable_postgres {
 				cmd.arg("--volume=opengb_postgres:/var/lib/postgresql/data");
 			}
 			cmd.arg("--workdir=/backend");

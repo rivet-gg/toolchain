@@ -59,7 +59,7 @@ impl super::Task for Task {
 				env: cmd_env,
 				cwd: input.cwd.into(),
 				ports: vec![],
-				mount_postgres: false,
+				enable_postgres: false,
 			},
 		)
 		.await?;
