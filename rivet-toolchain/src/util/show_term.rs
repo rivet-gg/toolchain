@@ -53,6 +53,9 @@ pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
 	#[cfg(target_os = "windows")]
 	let child: Child = Command::new("cmd.exe")
 		.arg("/C")
+		.arg("start")
+		.arg("cmd.exe")
+		.arg("/K")
 		.args(args)
 		.spawn()
 		.expect("cmd.exe failed to start");

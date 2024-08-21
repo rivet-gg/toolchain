@@ -21,11 +21,13 @@ pub struct RunConfig {
 	/// Path to file that will abort this task if exists.
 	///
 	/// If none provided, the task will not be abortable.
+	#[serde(default)]
 	pub abort_path: Option<String>,
 
 	/// Path to file to output events.
 	///
 	/// If none provided, will be logged to standard output.
+	#[serde(default)]
 	pub output_path: Option<String>,
 }
 
