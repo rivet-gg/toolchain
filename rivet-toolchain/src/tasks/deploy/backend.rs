@@ -128,59 +128,59 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	.await?
 	.variables;
 	let mut update_variables = HashMap::<String, _>::new();
-	if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
-		update_variables.insert(
-			"OPENGB_PUBLIC_ENDPOINT".to_string(),
-			models::EeBackendUpdateVariable {
-				text: Some(backend.endpoint.clone()),
-				..Default::default()
-			},
-		);
-	}
-	if !variables.contains_key("RIVET_API_ENDPOINT") {
-		update_variables.insert(
-			"RIVET_API_ENDPOINT".to_string(),
-			models::EeBackendUpdateVariable {
-				text: Some(ctx.api_endpoint.clone()),
-				..Default::default()
-			},
-		);
-	}
-	if !variables.contains_key("RIVET_GAME_ID") {
-		update_variables.insert(
-			"RIVET_GAME_ID".to_string(),
-			models::EeBackendUpdateVariable {
-				text: Some(game_id_str.clone()),
-				..Default::default()
-			},
-		);
-	}
-	if !variables.contains_key("RIVET_ENVIRONMENT_ID") {
-		update_variables.insert(
-			"RIVET_ENVIRONMENT_ID".to_string(),
-			models::EeBackendUpdateVariable {
-				text: Some(env_id_str.clone()),
-				..Default::default()
-			},
-		);
-	}
-	if !variables.contains_key("RIVET_SERVICE_TOKEN") {
-		task.log_stdout(format!("[Creating Service Token]"));
-		let service_token =
-			apis::games_environments_tokens_api::games_environments_tokens_create_service_token(
-				&ctx.openapi_config_cloud,
-				&game_id_str,
-				&opts.env.id.to_string(),
-			)
-			.await?;
-		update_variables.insert(
-			"RIVET_SERVICE_TOKEN".to_string(),
-			models::EeBackendUpdateVariable {
-				secret: Some(service_token.token),
-				..Default::default()
-			},
-		);
-	}
+	// if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
+	update_variables.insert(
+		"OPENGB_PUBLIC_ENDPOINT".to_string(),
+		models::EeBackendUpdateVariable {
+			text: Some(backend.endpoint.clone()),
+			..Default::default()
+		},
+	);
+	// }
+	// if !variables.contains_key("RIVET_API_ENDPOINT") {
+	update_variables.insert(
+		"RIVET_API_ENDPOINT".to_string(),
+		models::EeBackendUpdateVariable {
+			text: Some(ctx.api_endpoint.clone()),
+			..Default::default()
+		},
+	);
+	// }
+	// if !variables.contains_key("RIVET_GAME_ID") {
+	update_variables.insert(
+		"RIVET_GAME_ID".to_string(),
+		models::EeBackendUpdateVariable {
+			text: Some(game_id_str.clone()),
+			..Default::default()
+		},
+	);
+	// }
+	// if !variables.contains_key("RIVET_ENVIRONMENT_ID") {
+	update_variables.insert(
+		"RIVET_ENVIRONMENT_ID".to_string(),
+		models::EeBackendUpdateVariable {
+			text: Some(env_id_str.clone()),
+			..Default::default()
+		},
+	);
+	// }
+	// if !variables.contains_key("RIVET_SERVICE_TOKEN") {
+	task.log_stdout(format!("[Creating Service Token]"));
+	let service_token =
+		apis::games_environments_tokens_api::games_environments_tokens_create_service_token(
+			&ctx.openapi_config_cloud,
+			&game_id_str,
+			&opts.env.id.to_string(),
+		)
+		.await?;
+	update_variables.insert(
+		"RIVET_SERVICE_TOKEN".to_string(),
+		models::EeBackendUpdateVariable {
+			secret: Some(service_token.token),
+			..Default::default()
+		},
+	);
+	// }
 	if !update_variables.is_empty() {
 		task.log_stdout(format!(
 			"[Updating Variables] {}",

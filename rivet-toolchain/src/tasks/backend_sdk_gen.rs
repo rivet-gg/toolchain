@@ -47,7 +47,7 @@ impl super::Task for Task {
 
 		let exit_code = backend::run_opengb_command(
 			task.clone(),
-			backend::OpenGbCommandOpts {
+			backend::BackendCommandOpts {
 				config_path,
 				args: vec![
 					"sdk".into(),

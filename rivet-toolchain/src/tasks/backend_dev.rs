@@ -35,7 +35,7 @@ impl super::Task for Task {
 		cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
 		let exit_code = backend::run_opengb_command(
 			task.clone(),
-			backend::OpenGbCommandOpts {
+			backend::BackendCommandOpts {
 				config_path,
 				args: vec!["dev".into(), "--force-deploy-migrations".into()],
 				env: cmd_env,
