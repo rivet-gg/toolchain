@@ -1,8 +1,10 @@
 use anyhow::Result;
-use vergen::{vergen, Config};
+use vergen_git2::{Emitter, Git2Builder};
 
 fn main() -> Result<()> {
-	let mut config = Config::default();
-	*config.git_mut().sha_kind_mut() = vergen::ShaKind::Both;
-	vergen(config)
+	Emitter::default()
+		.add_instructions(&Git2Builder::default().sha(true).build()?)?
+		.emit()?;
+
+	Ok(())
 }

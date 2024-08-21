@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install osxcross
+RUN git config --global --add safe.directory '*'
 RUN git clone https://github.com/tpoechtrager/osxcross /root/osxcross
 WORKDIR /root/osxcross
 RUN wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
@@ -67,33 +68,33 @@ set -e
 # ls /root/osxcross/target/bin
 # exit 1
 echo "Building for x86 Linux..."
-# cargo build --target x86_64-unknown-linux-gnu
-# echo "Building for x86 Windows..."
-# cargo build --target x86_64-pc-windows-gnu
+cargo build --target x86_64-unknown-linux-gnu
+echo "Building for x86 Windows..."
+cargo build --target x86_64-pc-windows-gnu
 echo "Building for x86 macOS..."
 cargo build --target x86_64-apple-darwin
-# echo "Building for ARM macOS..."
-# cargo build --target aarch64-apple-darwin
+echo "Building for ARM macOS..."
+cargo build --target aarch64-apple-darwin
 '
 
-# docker run -it --rm -v "$(pwd)":/app rust-cross-compiler /bin/sh -c '
-# set -e
-# echo "Building for x86 Linux..."
-# cargo build --target x86_64-unknown-linux-gnu --release
-# echo "Building for x86 Windows..."
-# cargo build --target x86_64-pc-windows-gnu --release
-# echo "Building for x86 macOS..."
-# cargo build --target x86_64-apple-darwin --release
-# echo "Building for ARM macOS..."
-# cargo build --target aarch64-apple-darwin --release
-# '
+docker run -it --rm -v "$(pwd)":/app rust-cross-compiler /bin/sh -c '
+set -e
+echo "Building for x86 Linux..."
+cargo build --target x86_64-unknown-linux-gnu --release
+echo "Building for x86 Windows..."
+cargo build --target x86_64-pc-windows-gnu --release
+echo "Building for x86 macOS..."
+cargo build --target x86_64-apple-darwin --release
+echo "Building for ARM macOS..."
+cargo build --target aarch64-apple-darwin --release
+'
 
 echo "Build process completed."
 echo "Built libraries can be found at:"
-# echo "x86 Linux:   target/x86_64-unknown-linux-gnu/release/"
-# echo "x86 Windows: target/x86_64-pc-windows-gnu/release/"
-# echo "x86 macOS:   target/x86_64-apple-darwin/release/"
-# echo "ARM macOS:   target/aarch64-apple-darwin/release/"
+echo "x86 Linux:   target/x86_64-unknown-linux-gnu/release/"
+echo "x86 Windows: target/x86_64-pc-windows-gnu/release/"
+echo "x86 macOS:   target/x86_64-apple-darwin/release/"
+echo "ARM macOS:   target/aarch64-apple-darwin/release/"
 echo "x86 Linux:   target/x86_64-unknown-linux-gnu/debug/"
 echo "x86 Windows: target/x86_64-pc-windows-gnu/debug/"
 echo "x86 macOS:   target/x86_64-apple-darwin/debug/"

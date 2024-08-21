@@ -1,15 +1,17 @@
 use global_error::prelude::*;
 use rivet_api::apis;
 use std::{env, sync::Arc};
+use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
 
 use crate::config;
 
-pub const VERSION: &str = concat!(
-	env!("VERGEN_BUILD_SEMVER"),
-	" (",
-	env!("VERGEN_GIT_SHA_SHORT"),
-	")"
-);
+pub const VERSION: &str = {
+    const MAJOR: u32 = pkg_version_major!();
+	const MINOR: u32 = pkg_version_minor!();
+	const PATCH: u32 = pkg_version_patch!();
+    const GIT_SHA: &str = env!("VERGEN_GIT_SHA");
+    const_format::formatcp!("{MAJOR}.{MINOR}.{PATCH} ({GIT_SHA})")
+};
 
 pub fn user_agent() -> String {
 	format!("CLI/{VERSION}")
