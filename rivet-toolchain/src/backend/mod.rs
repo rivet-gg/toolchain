@@ -23,6 +23,7 @@ pub struct BackendCommandOpts {
 	pub env: HashMap<String, String>,
 	pub cwd: PathBuf,
 	pub ports: Vec<(u16, u16)>,
+	pub mount_postgres: bool,
 }
 
 #[derive(PartialEq, Serialize, Deserialize, Clone)]
@@ -80,7 +81,9 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 			// Mount the project
 			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
 			// Mount Postgres volume for bundled Postgres server
-			cmd.arg("--volume=opengb_postgres:/var/lib/postgresql/data");
+			if opts.mount_postgres {
+				cmd.arg("--volume=opengb_postgres:/var/lib/postgresql/data");
+			}
 			cmd.arg("--workdir=/backend");
 			for (host_port, container_port) in opts.ports {
 				cmd.arg(format!("--publish={}:{}", host_port, container_port));

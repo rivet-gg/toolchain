@@ -57,6 +57,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			env: cmd_env,
 			cwd: project_path.clone(),
 			ports: vec![],
+			mount_postgres: false,
 		},
 	)
 	.await?;
@@ -88,6 +89,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 				env: migrate_env,
 				cwd: project_path.clone(),
 				ports: vec![],
+				mount_postgres: false,
 			},
 		)
 		.await?;

@@ -32,6 +32,7 @@ impl super::Task for Task {
 		})
 		.await?;
 		cmd_env.insert("OPENGB_PORT".into(), input.port.to_string());
+		cmd_env.insert("OPENGB_HOSTNAME".into(), "0.0.0.0".to_string());
 		cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
 		let exit_code = backend::run_opengb_command(
 			task.clone(),
@@ -41,6 +42,7 @@ impl super::Task for Task {
 				env: cmd_env,
 				cwd: input.cwd.into(),
 				ports: vec![(input.port, input.port)],
+				mount_postgres: true,
 			},
 		)
 		.await?;
