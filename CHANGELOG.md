@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-rc.4](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.3...v2.0.0-rc.4) (2024-08-22)
+
+
+### Features
+
+* **deploy:** deploy with tags ([#304](https://github.com/rivet-gg/cli/issues/304)) ([ffac4a9](https://github.com/rivet-gg/cli/commit/ffac4a9e85e6bbf38727f9b0be98615da37035e2))
+* reduce cli binary size ([#332](https://github.com/rivet-gg/cli/issues/332)) ([a9ea424](https://github.com/rivet-gg/cli/commit/a9ea42459d84b442aeac6c2f631cb116be7829a0))
+
+
+### Bug Fixes
+
+* add tty only for backend ([#326](https://github.com/rivet-gg/cli/issues/326)) ([b2f0ba0](https://github.com/rivet-gg/cli/commit/b2f0ba0ed80662cf1e6f3ab247369577eeca941a))
+* **backend:** add postgres mounts for bundled postgres ([#330](https://github.com/rivet-gg/cli/issues/330)) ([85cc352](https://github.com/rivet-gg/cli/commit/85cc35200ea044e9aabf1a9525f41344f755d156))
+* build ffi script ([#320](https://github.com/rivet-gg/cli/issues/320)) ([3714ca0](https://github.com/rivet-gg/cli/commit/3714ca0ff2d5f6ab0cef0cde4c8d7f601d1a9045))
+* **deploy:** update environment variables inline with deploy ([#298](https://github.com/rivet-gg/cli/issues/298)) ([65ee4cf](https://github.com/rivet-gg/cli/commit/65ee4cf74920e42be29101332d2fd3758f956534))
+* only publish port for backend ([#323](https://github.com/rivet-gg/cli/issues/323)) ([ab3fc3e](https://github.com/rivet-gg/cli/commit/ab3fc3eb5fc8672b202a6258b0ac93cd258288c1))
+* remove tty for docker runs ([#322](https://github.com/rivet-gg/cli/issues/322)) ([3b52607](https://github.com/rivet-gg/cli/commit/3b52607b60b1370a6173c30c85ca7537ba0990c7))
+
+
+### Chores
+
+* always set env vars ([#328](https://github.com/rivet-gg/cli/issues/328)) ([202244a](https://github.com/rivet-gg/cli/commit/202244a026feb3ad563473dcba6f67406595d30e))
+* **backend:** add postgres mount for container ([#329](https://github.com/rivet-gg/cli/issues/329)) ([58ef34a](https://github.com/rivet-gg/cli/commit/58ef34abd0869d020c66dda8aed46eeab02a7a53))
+* clean warnings ([#312](https://github.com/rivet-gg/cli/issues/312)) ([1208299](https://github.com/rivet-gg/cli/commit/1208299f61ac3ddc336d0770e7de96c3ce36a45e))
+* disable unneeded api calls on deploy ([#333](https://github.com/rivet-gg/cli/issues/333)) ([243306a](https://github.com/rivet-gg/cli/commit/243306acdf40869ef2fa7f10a076f8b8fa354de7))
+* expose game id & env id to backend ([#317](https://github.com/rivet-gg/cli/issues/317)) ([ff00497](https://github.com/rivet-gg/cli/commit/ff00497cf95c8839b5e748fe36e8f75da8be2345))
+* fix show_term on windows ([#335](https://github.com/rivet-gg/cli/issues/335)) ([08be0ef](https://github.com/rivet-gg/cli/commit/08be0ef9966c66e582d7b51896cf8e1a433695ce))
+* re-enable backend migrations ([#324](https://github.com/rivet-gg/cli/issues/324)) ([b9596c8](https://github.com/rivet-gg/cli/commit/b9596c8a3d7743f8ad72315c62e61722341ef099))
+* release 2.0.0-rc.4 ([0aa270b](https://github.com/rivet-gg/cli/commit/0aa270b94dd80ea0b9721f24c001c81abbd6444e))
+* rename opengb -&gt; backend in output ([#325](https://github.com/rivet-gg/cli/issues/325)) ([09bf73c](https://github.com/rivet-gg/cli/commit/09bf73ca5152061b543cb275fdcacd39b1c35b63))
+* **settings:** disallow unknown props ([#316](https://github.com/rivet-gg/cli/issues/316)) ([d81d7a6](https://github.com/rivet-gg/cli/commit/d81d7a6ad1df655d263b65c3ab9f2111c7f375f7))
+* update api ([#314](https://github.com/rivet-gg/cli/issues/314)) ([87255d4](https://github.com/rivet-gg/cli/commit/87255d40730b8cc2d5c926ed85a2b5e49c78decb))
+* update build tags ([#318](https://github.com/rivet-gg/cli/issues/318)) ([48ae79f](https://github.com/rivet-gg/cli/commit/48ae79f220022e70a911627451fc4ebdced98e44))
+* update env & backend apis ([#313](https://github.com/rivet-gg/cli/issues/313)) ([0204f9f](https://github.com/rivet-gg/cli/commit/0204f9fd6a6d50a107878f362b05d370c76eeef8))
+* update opengb ([#334](https://github.com/rivet-gg/cli/issues/334)) ([d30fbba](https://github.com/rivet-gg/cli/commit/d30fbba326bc44699912966c9f909cf2cd715a68))
+* update sdks ([#327](https://github.com/rivet-gg/cli/issues/327)) ([8f43c6b](https://github.com/rivet-gg/cli/commit/8f43c6b77f5261381dd352f77af8029d8ef309f1))
+* update sdks ([#336](https://github.com/rivet-gg/cli/issues/336)) ([6cc7542](https://github.com/rivet-gg/cli/commit/6cc754201ed6fd0f6e6d89745c9d3e98a80828b0))
+
 ## [2.0.0-rc.3](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.2...v2.0.0-rc.3) (2024-08-12)
 
 
