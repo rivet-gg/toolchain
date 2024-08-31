@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-rc.5](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.4...v2.0.0-rc.5) (2024-08-31)
+
+
+### Chores
+
+* add portable deno installation ([#341](https://github.com/rivet-gg/cli/issues/341)) ([2d526f4](https://github.com/rivet-gg/cli/commit/2d526f4a9f687e73d4695a3442edcd2584cc4aae))
+* release 2.0.0-rc.5 ([613daa1](https://github.com/rivet-gg/cli/commit/613daa153c7a6784de7b6255123ec7a6716a4281))
+* remove duplicate build script ([#342](https://github.com/rivet-gg/cli/issues/342)) ([da947e2](https://github.com/rivet-gg/cli/commit/da947e2d1fe72888b2602218ba54f858d059a5a8))
+* set msrv for crates ([#338](https://github.com/rivet-gg/cli/issues/338)) ([48f4b82](https://github.com/rivet-gg/cli/commit/48f4b82a54002170bfaa256ff38a881f4e5b0281))
+* update migrate command on deploy ([#344](https://github.com/rivet-gg/cli/issues/344)) ([c2d90e2](https://github.com/rivet-gg/cli/commit/c2d90e2435e5db1ded2dae450e8740e05b460a2c))
+* update opengb build flag ([#340](https://github.com/rivet-gg/cli/issues/340)) ([75f6105](https://github.com/rivet-gg/cli/commit/75f610568144ff10a20c5659d7068d4695e9c80e))
+
 ## [2.0.0-rc.4](https://github.com/rivet-gg/cli/compare/v2.0.0-rc.3...v2.0.0-rc.4) (2024-08-22)
 
 
