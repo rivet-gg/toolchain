@@ -64,21 +64,6 @@ EOF
 
 docker run -it --rm -v "$(pwd)":/app rust-cross-compiler /bin/sh -c '
 set -e
-# echo "which"
-# ls /root/osxcross/target/bin
-# exit 1
-echo "Building for x86 Linux..."
-cargo build --target x86_64-unknown-linux-gnu
-echo "Building for x86 Windows..."
-cargo build --target x86_64-pc-windows-gnu
-echo "Building for x86 macOS..."
-cargo build --target x86_64-apple-darwin
-echo "Building for ARM macOS..."
-cargo build --target aarch64-apple-darwin
-'
-
-docker run -it --rm -v "$(pwd)":/app rust-cross-compiler /bin/sh -c '
-set -e
 echo "Building for x86 Linux..."
 cargo build --target x86_64-unknown-linux-gnu --release
 echo "Building for x86 Windows..."
