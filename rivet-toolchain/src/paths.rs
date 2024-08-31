@@ -5,6 +5,10 @@ pub fn project_root() -> GlobalResult<PathBuf> {
 	Ok(env::current_dir()?)
 }
 
+pub fn data_dir() -> GlobalResult<PathBuf> {
+	Ok(unwrap!(dirs::data_dir()).join("rivet"))
+}
+
 pub fn user_config_dir() -> GlobalResult<PathBuf> {
 	Ok(unwrap!(dirs::config_dir()).join("rivet"))
 }

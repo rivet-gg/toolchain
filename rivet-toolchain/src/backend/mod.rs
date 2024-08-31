@@ -2,10 +2,8 @@ pub mod database;
 
 use global_error::prelude::*;
 use rivet_api::{apis, models};
-use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::{collections::HashMap, io::Write, path::PathBuf};
-use tempfile::NamedTempFile;
+use std::{collections::HashMap, path::PathBuf};
 use tokio::process::Command;
 use uuid::Uuid;
 
@@ -15,8 +13,10 @@ use crate::{
 	Ctx,
 };
 
-const DEFAULT_OPENGB_DOCKER_TAG: &'static str =
-	"rivetgg/opengb:a3cd72c02f9248344a999805f267f556f1a6fcae";
+const OPENGB_DEFAULT_URL: &'static str =
+	"https://raw.githubusercontent.com/rivet-gg/opengb/c9dac1786bd00d3494c3a91a8162f080ff2ebd0a";
+const OPENGB_DENO_CONFIG_PATH: &'static str = "/deno.jsonc";
+const OPENGB_CLI_MAIN_PATH: &'static str = "/packages/cli/main.ts";
 
 pub struct BackendCommandOpts {
 	pub config_path: String,
@@ -27,78 +27,54 @@ pub struct BackendCommandOpts {
 	pub enable_postgres: bool,
 }
 
-#[derive(PartialEq, Serialize, Deserialize, Clone)]
-pub enum OpenGbRuntime {
-	Native,
-	Docker,
-}
-
-impl Default for OpenGbRuntime {
-	fn default() -> Self {
-		Self::Docker
-	}
+async fn base_url() -> GlobalResult<String> {
+	let base_url = config::settings::try_read(|x| Ok(x.backend.opengb_url.clone()))
+		.await?
+		.unwrap_or_else(|| OPENGB_DEFAULT_URL.to_string());
+	let base_url = base_url.trim_end_matches('/').to_string();
+	Ok(base_url)
 }
 
 pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Command> {
-	let (runtime, image_tag) = config::settings::try_read(|settings| {
-		Ok((
-			settings.backend.opengb_runtime.clone(),
-			settings.backend.opengb_docker_image.clone(),
-		))
-	})
-	.await?;
+	let base_url = base_url().await?;
 
-	// Build command
-	match runtime {
-		OpenGbRuntime::Native => {
-			let mut cmd = shell_cmd("opengb");
-			cmd.arg("--project").arg(opts.config_path);
-			cmd.args(opts.args);
-			cmd.envs(opts.env);
-			cmd.current_dir(opts.cwd);
-			Ok(cmd)
-		}
-		OpenGbRuntime::Docker => {
-			let image_tag = image_tag.unwrap_or_else(|| DEFAULT_OPENGB_DOCKER_TAG.to_string());
+	// Download config from remote if needed.
+	//
+	// Deno does not support pulling config from URL.
+	let deno_config_path = if base_url.starts_with("http://") || base_url.starts_with("https://") {
+		let temp_dir = tempfile::tempdir()?.into_path();
+		let deno_config_path = temp_dir.join("deno.jsonc");
+		let deno_config_url = format!("{base_url}{OPENGB_DENO_CONFIG_PATH}");
+		let response = reqwest::get(&deno_config_url).await?.error_for_status()?;
+		let deno_config_content = response.text().await?;
+		tokio::fs::write(&deno_config_path, deno_config_content).await?;
+		deno_config_path.to_str().unwrap().to_string()
+	} else {
+		format!("{base_url}{OPENGB_DENO_CONFIG_PATH}")
+	};
 
-			// Build env file
-			let mut env_file = NamedTempFile::new().expect("Failed to create temp file");
-			for (k, v) in opts.env {
-				writeln!(env_file, "{k}={v}")?;
-			}
-
-			// Make sure the file is properly flushed, and doesn't get deleted
-			// after the NamedTempFile goes out of scope
-			env_file.flush()?;
-			let (_env_file, env_file_path) = env_file.keep()?;
-
-			let mut cmd = shell_cmd("docker");
-			cmd.arg("run");
-			cmd.arg("--rm");
-			cmd.arg("--interactive");
-			cmd.arg("--quiet");
-			cmd.arg("--init");
-			cmd.arg("--env-file").arg(env_file_path);
-			cmd.arg("--add-host=host.docker.internal:host-gateway");
-			// Mount the project
-			cmd.arg(format!("--volume={}:/backend", opts.cwd.display()));
-			// Mount Postgres volume for bundled Postgres server
-			if opts.enable_postgres {
-				cmd.arg("--volume=opengb_postgres:/var/lib/postgresql/data");
-			}
-			cmd.arg("--workdir=/backend");
-			for (host_port, container_port) in opts.ports {
-				cmd.arg(format!("--publish={}:{}", host_port, container_port));
-			}
-			cmd.arg(image_tag);
-
-			cmd.arg("--project");
-			cmd.arg(opts.config_path);
-
-			cmd.args(&opts.args);
-			Ok(cmd)
-		}
-	}
+	// Run OpenGB
+	let mut cmd = shell_cmd("deno");
+	cmd.args(&[
+		"run",
+		"--quiet",
+		"--no-check",
+		"--allow-net",
+		"--allow-read",
+		"--allow-env",
+		"--allow-run",
+		"--allow-write",
+		"--allow-sys",
+		"--config",
+		&deno_config_path,
+		&format!("{base_url}{OPENGB_CLI_MAIN_PATH}"),
+		"--project",
+		&opts.config_path,
+	]);
+	cmd.args(opts.args);
+	cmd.envs(opts.env);
+	cmd.current_dir(opts.cwd);
+	Ok(cmd)
 }
 
 pub async fn run_opengb_command(task: TaskCtx, opts: BackendCommandOpts) -> GlobalResult<i32> {

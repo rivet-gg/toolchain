@@ -4,7 +4,6 @@ use std::collections::HashMap;
 use tokio::sync::{Mutex, OnceCell};
 
 use crate::{
-	backend::OpenGbRuntime,
 	paths,
 	util::docker::{build::DockerBuildMethod, BuildCompression, BuildKind},
 };
@@ -27,9 +26,7 @@ pub struct BackendConfig {
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	#[serde(default)]
-	pub opengb_runtime: OpenGbRuntime,
-	#[serde(default)]
-	pub opengb_docker_image: Option<String>,
+	pub opengb_url: Option<String>,
 
 	#[serde(default)]
 	pub sdk: BackendSdkConfig,

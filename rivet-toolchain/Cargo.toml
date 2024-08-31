@@ -55,6 +55,7 @@ which = "5.0.0"
 zip = "0.5"
 const_format = "0.2.32"
 pkg-version = "1.0.0"
+fd-lock = "4.0.2"
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }

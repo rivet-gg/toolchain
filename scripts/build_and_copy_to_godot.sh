@@ -1,5 +1,9 @@
 #!/bin/sh
 
-# macOS
+echo "WARNING: Only implemented for macOS x86"
+
+VERSION="v2.0.0-rc.4"
+
 cargo build
-cp target/debug/rivet ../plugin-godot/addons/rivet/cli/rivet_x86_apple
+cp target/debug/rivet "/Users/nathan/.rivet/${VERSION}/bin/rivet-cli-aarch64-mac"
+
