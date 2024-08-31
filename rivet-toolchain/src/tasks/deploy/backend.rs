@@ -49,6 +49,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			config_path: config_path.clone(),
 			args: vec![
 				"build".into(),
+				"--no-migrate".into(),
 				"--db-driver".into(),
 				"neon-serverless".into(),
 				"--runtime".into(),
@@ -85,7 +86,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 			task.clone(),
 			backend::BackendCommandOpts {
 				config_path,
-				args: vec!["db".into(), "deploy".into()],
+				args: vec!["db".into(), "migrate".into(), "apply".into()],
 				env: migrate_env,
 				cwd: project_path.clone(),
 				ports: vec![],
