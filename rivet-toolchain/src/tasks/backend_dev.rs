@@ -38,7 +38,7 @@ impl super::Task for Task {
 			task.clone(),
 			backend::BackendCommandOpts {
 				config_path,
-				args: vec!["dev".into(), "--force-deploy-migrations".into()],
+				args: vec!["dev".into(), "--non-interactive".into()],
 				env: cmd_env,
 				cwd: input.cwd.into(),
 				ports: vec![(input.port, input.port)],
