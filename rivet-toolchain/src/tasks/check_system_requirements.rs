@@ -2,7 +2,7 @@ use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-use crate::util::{cmd::shell_cmd, task::TaskCtx};
+use crate::util::{cmd::shell_cmd, task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -21,7 +21,7 @@ pub struct RequirementError {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -29,7 +29,7 @@ impl super::Task for Task {
 		"check_system_requirements"
 	}
 
-	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
 		let mut errors = Vec::new();
 
 		// Docker

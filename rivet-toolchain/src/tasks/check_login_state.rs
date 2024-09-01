@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, util::task::TaskCtx};
+use crate::{config, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -13,7 +13,7 @@ pub struct Output {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -21,7 +21,7 @@ impl super::Task for Task {
 		"check_login_state"
 	}
 
-	async fn run(_task: TaskCtx, _input: Input) -> GlobalResult<Output> {
+	async fn run(_task: task::TaskCtx, _input: Input) -> GlobalResult<Output> {
 		let logged_in = config::meta::has_project().await?;
 		Ok(Output { logged_in })
 	}

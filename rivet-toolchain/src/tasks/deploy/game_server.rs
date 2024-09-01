@@ -6,12 +6,12 @@ use uuid::Uuid;
 
 use crate::{
 	config,
-	ctx::Ctx,
 	game::TEMPEnvironment,
+	toolchain_ctx::ToolchainCtx,
 	util::{
 		cmd::{self, shell_cmd},
 		docker::{self, generate_unique_image_tag, BuildCompression},
-		task::TaskCtx,
+		task,
 	},
 };
 
@@ -41,8 +41,12 @@ pub struct DeployOutput {
 /// - `image` Upload a prebuilt image
 ///
 /// If none are true, `None` is returned.
-pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<DeployOutput> {
-	task.log_stdout("[Deploying Game Server]");
+pub async fn deploy(
+	ctx: &ToolchainCtx,
+	task: task::TaskCtx,
+	opts: DeployOpts,
+) -> GlobalResult<DeployOutput> {
+	task.log("[Deploying Game Server]");
 
 	let deploy_config = config::settings::try_read(|x| Ok(x.game_server.deploy.clone())).await?;
 
@@ -94,7 +98,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		)
 		.await?;
 
-		task.log_stdout(format!("[Created Build] {}", push_output.image_id));
+		task.log(format!("[Created Build] {}", push_output.image_id));
 
 		push_output.image_id
 	} else {
@@ -124,7 +128,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		)
 		.await?;
 
-		task.log_stdout(format!("[Created Build] {}", push_output.image_id));
+		task.log(format!("[Created Build] {}", push_output.image_id));
 
 		push_output.image_id
 	};
@@ -150,8 +154,8 @@ pub struct BuildPushOpts {
 
 /// Build and push a Dockerfile.
 pub async fn build_and_push(
-	ctx: &Ctx,
-	task: TaskCtx,
+	ctx: &ToolchainCtx,
+	task: task::TaskCtx,
 	current_dir: &Path,
 	push_opts: &BuildPushOpts,
 ) -> GlobalResult<docker::push::PushOutput> {
@@ -206,8 +210,8 @@ pub struct PushOpts {
 
 /// Push an image that's already built.
 pub async fn push(
-	ctx: &Ctx,
-	task: TaskCtx,
+	ctx: &ToolchainCtx,
+	task: task::TaskCtx,
 	push_opts: &PushOpts,
 ) -> GlobalResult<docker::push::PushOutput> {
 	let (build_kind, build_compression) = config::settings::try_read(|x| {

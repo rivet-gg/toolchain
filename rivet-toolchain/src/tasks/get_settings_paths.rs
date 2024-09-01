@@ -2,7 +2,7 @@ use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
-use crate::{paths, util::task::TaskCtx};
+use crate::{paths, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -15,7 +15,7 @@ pub struct Output {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -23,7 +23,7 @@ impl super::Task for Task {
 		"get_settings_path"
 	}
 
-	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
 		Ok(Output {
 			project_path: paths::project_settings_config_file()?,
 			user_path: paths::user_settings_config_file()?,

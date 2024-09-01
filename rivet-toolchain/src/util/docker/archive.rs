@@ -9,20 +9,19 @@ use crate::{
 	config,
 	util::{
 		cmd::{self, shell_cmd, shell_cmd_std},
-		lz4,
-		task::TaskCtx,
+		lz4, task,
 	},
 };
 
 use super::{BuildCompression, BuildKind};
 
 pub async fn create_archive(
-	task: TaskCtx,
+	task: task::TaskCtx,
 	image_tag: &str,
 	build_kind: BuildKind,
 	build_compression: BuildCompression,
 ) -> GlobalResult<tempfile::TempPath> {
-	task.log_stdout(format!(
+	task.log(format!(
 		"[Archiving Image] {} {}",
 		build_kind.as_ref(),
 		build_compression.as_ref()
@@ -41,7 +40,10 @@ pub async fn create_archive(
 }
 
 /// Save Docker image
-async fn archive_docker_image(task: TaskCtx, image_tag: &str) -> GlobalResult<tempfile::TempPath> {
+async fn archive_docker_image(
+	task: task::TaskCtx,
+	image_tag: &str,
+) -> GlobalResult<tempfile::TempPath> {
 	let build_tar_path = tempfile::NamedTempFile::new()?.into_temp_path();
 
 	let mut build_cmd = shell_cmd("docker");
@@ -63,7 +65,10 @@ async fn archive_docker_image(task: TaskCtx, image_tag: &str) -> GlobalResult<te
 /// This entire operation works by manipulating TAR files without touching the
 /// host's file system in order to preserve file permissions & ownership on
 /// Windows.
-async fn archive_oci_bundle(task: TaskCtx, image_tag: &str) -> GlobalResult<tempfile::TempPath> {
+async fn archive_oci_bundle(
+	task: task::TaskCtx,
+	image_tag: &str,
+) -> GlobalResult<tempfile::TempPath> {
 	// Create OCI bundle
 	let oci_bundle_tar_file = tempfile::NamedTempFile::new()?;
 	let mut oci_bundle_archive = tar::Builder::new(oci_bundle_tar_file);
@@ -179,7 +184,7 @@ async fn archive_oci_bundle(task: TaskCtx, image_tag: &str) -> GlobalResult<temp
 			} else if let Some(uid) = dockerfile_user_int {
 				uid
 			} else {
-				task.log_stderr(format!("Warning: Cannot determin uid {} not in passwd file. Please specify a raw uid like `USER 1000:1000`.", image.config.user));
+				task.log(format!("Warning: Cannot determin uid {} not in passwd file. Please specify a raw uid like `USER 1000:1000`.", image.config.user));
 				0
 			};
 
@@ -212,7 +217,7 @@ async fn archive_oci_bundle(task: TaskCtx, image_tag: &str) -> GlobalResult<temp
 			} else if let Some(gid) = dockerfile_group_int {
 				gid
 			} else {
-				task.log_stderr(format!("Warning: Cannot determine gid. {} not in group file, please specify a raw uid & gid like `USER 1000:1000`", image.config.user));
+				task.log(format!("Warning: Cannot determine gid. {} not in group file, please specify a raw uid & gid like `USER 1000:1000`", image.config.user));
 
 				0
 			};

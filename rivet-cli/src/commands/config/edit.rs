@@ -1,10 +1,9 @@
 use clap::Parser;
 use std::fs;
 use std::process::ExitCode;
-use toolchain::{
-	tasks::{get_settings_paths, RunConfig},
-	util::task::run_task,
-};
+use toolchain::tasks::get_settings_paths;
+
+use crate::util::task::{run_task, TaskOutputStyle};
 
 #[derive(Parser)]
 pub struct Opts {
@@ -20,19 +19,19 @@ enum SubCommand {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::default();
-
 		// Get settings paths
-		let settings_paths =
-			match run_task::<get_settings_paths::Task>(run_config, get_settings_paths::Input {})
-				.await
-			{
-				Ok(output) => output,
-				Err(e) => {
-					eprintln!("Error getting settings paths: {}", e);
-					return ExitCode::FAILURE;
-				}
-			};
+		let settings_paths = match run_task::<get_settings_paths::Task>(
+			TaskOutputStyle::None,
+			get_settings_paths::Input {},
+		)
+		.await
+		{
+			Ok(output) => output,
+			Err(e) => {
+				eprintln!("Error getting settings paths: {}", e);
+				return ExitCode::FAILURE;
+			}
+		};
 
 		let path = match self.subcommand {
 			SubCommand::User => settings_paths.user_path,

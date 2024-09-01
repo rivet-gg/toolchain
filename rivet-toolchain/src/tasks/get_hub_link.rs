@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::tasks::TaskCtx;
+use crate::util::task;
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -15,7 +15,7 @@ pub struct Output {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -23,7 +23,7 @@ impl super::Task for Task {
 		"get_hub_link"
 	}
 
-	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
 		bail!("todo")
 	}
 }

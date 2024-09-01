@@ -2,7 +2,7 @@ use global_error::prelude::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, ctx, util::task::TaskCtx};
+use crate::{config, toolchain_ctx, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -15,7 +15,7 @@ pub struct Output {}
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -23,10 +23,10 @@ impl super::Task for Task {
 		"wait_for_login"
 	}
 
-	async fn run(_task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
 		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 			base_path: input.api_endpoint.clone(),
-			user_agent: Some(ctx::user_agent()),
+			user_agent: Some(toolchain_ctx::user_agent()),
 			..Default::default()
 		};
 
@@ -46,7 +46,7 @@ impl super::Task for Task {
 			}
 		};
 
-		let new_ctx = crate::ctx::init(input.api_endpoint.clone(), token.clone()).await?;
+		let new_ctx = crate::toolchain_ctx::init(input.api_endpoint.clone(), token.clone()).await?;
 
 		let inspect_res =
 			apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await?;

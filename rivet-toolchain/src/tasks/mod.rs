@@ -14,7 +14,7 @@ pub mod start_device_link;
 pub mod unlink;
 pub mod wait_for_login;
 
-gen_run_task!(
+crate::task_registry!(
 	backend_choose_local_port::Task,
 	backend_dev::Task,
 	backend_sdk_gen::Task,

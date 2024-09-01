@@ -10,7 +10,7 @@ pub fn run_task(run_config: String, name: String, input_json: String) {
 	block_on(
 		async move { toolchain::tasks::run_task_json(run_config, &name_inner, &input_json).await },
 		BlockOnOpts {
-			multithreaded: task_config.prefer_multithreaded,
+			multithreaded: false,
 		},
 	);
 }

@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{util, util::task::TaskCtx};
+use crate::{util, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -14,7 +14,7 @@ pub struct Output {}
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -22,7 +22,7 @@ impl super::Task for Task {
 		"show_term"
 	}
 
-	async fn run(_task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
 		let mut command = Vec::new();
 		command.push(input.command);
 		command.extend(input.args);

@@ -1,18 +1,15 @@
 use clap::Parser;
 use std::process::ExitCode;
-use toolchain::{
-	tasks::{unlink, RunConfig},
-	util::task::run_task,
-};
+use toolchain::tasks::unlink;
+
+use crate::util::task::{run_task, TaskOutputStyle};
 
 #[derive(Parser)]
 pub struct Opts {}
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::default();
-
-		match run_task::<unlink::Task>(run_config.clone(), unlink::Input {}).await {
+		match run_task::<unlink::Task>(TaskOutputStyle::None, unlink::Input {}).await {
 			Ok(_) => {
 				eprintln!("Logged out");
 				ExitCode::SUCCESS

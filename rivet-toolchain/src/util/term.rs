@@ -2,7 +2,7 @@ use console::{style, StyledObject};
 use indicatif::{MultiProgress, ProgressBar, ProgressDrawTarget, ProgressStyle};
 use std::{fmt, io, time::Duration};
 
-use super::task::TaskCtx;
+use crate::util::task;
 
 pub fn link(msg: impl ToString) -> StyledObject<String> {
 	style(msg.to_string()).italic().underlined()
@@ -14,13 +14,13 @@ pub enum EitherProgressBar {
 	Multi(MultiProgress),
 }
 
-pub fn multi_progress_bar(task: TaskCtx) -> MultiProgress {
+pub fn multi_progress_bar(task: task::TaskCtx) -> MultiProgress {
 	let pb = MultiProgress::new();
 	pb.set_draw_target(get_pb_draw_target(task));
 	pb
 }
 
-pub fn progress_bar(task: TaskCtx) -> ProgressBar {
+pub fn progress_bar(task: task::TaskCtx) -> ProgressBar {
 	// Don't draw the first iteration until the pb is styled
 	let pb = ProgressBar::hidden();
 	pb.set_style(pb_style_file(false));
@@ -63,12 +63,12 @@ pub fn pb_style_error() -> ProgressStyle {
 		.expect("invalid progress bar style")
 }
 
-pub fn get_pb_draw_target(task: TaskCtx) -> ProgressDrawTarget {
+pub fn get_pb_draw_target(task: task::TaskCtx) -> ProgressDrawTarget {
 	indicatif::ProgressDrawTarget::term_like(Box::new(TaskDrawTarget::new(task)))
 }
 
 pub struct TaskDrawTarget {
-	task: TaskCtx,
+	task: task::TaskCtx,
 }
 
 impl fmt::Debug for TaskDrawTarget {
@@ -78,7 +78,7 @@ impl fmt::Debug for TaskDrawTarget {
 }
 
 impl TaskDrawTarget {
-	pub fn new(task: TaskCtx) -> TaskDrawTarget {
+	pub fn new(task: task::TaskCtx) -> TaskDrawTarget {
 		TaskDrawTarget { task }
 	}
 }
@@ -107,7 +107,7 @@ impl indicatif::TermLike for TaskDrawTarget {
 	fn write_line(&self, s: &str) -> io::Result<()> {
 		let s = s.trim();
 		if !s.is_empty() {
-			self.task.log_stdout(s);
+			self.task.log(s);
 		}
 		Ok(())
 	}
@@ -115,7 +115,7 @@ impl indicatif::TermLike for TaskDrawTarget {
 	fn write_str(&self, s: &str) -> io::Result<()> {
 		let s = s.trim();
 		if !s.is_empty() {
-			self.task.log_stdout(s);
+			self.task.log(s);
 		}
 		Ok(())
 	}

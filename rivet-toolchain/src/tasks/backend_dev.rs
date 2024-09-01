@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{backend, config, util::task::TaskCtx};
+use crate::{backend, config, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -16,7 +16,7 @@ pub struct Output {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -24,7 +24,7 @@ impl super::Task for Task {
 		"backend_dev"
 	}
 
-	async fn run(task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
 		let (mut cmd_env, config_path) = config::settings::try_read(|settings| {
 			let mut env = settings.backend.command_environment.clone();
 			env.extend(settings.backend.dev.command_environment.clone());

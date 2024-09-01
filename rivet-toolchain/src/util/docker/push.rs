@@ -8,8 +8,8 @@ use uuid::Uuid;
 
 use crate::{
 	config,
-	ctx::Ctx,
-	util::{net::upload, task::TaskCtx, term},
+	toolchain_ctx::ToolchainCtx,
+	util::{net::upload, task, term},
 };
 
 use super::{BuildCompression, BuildKind};
@@ -39,7 +39,11 @@ pub struct PushOutput {
 	pub image_id: Uuid,
 }
 
-pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalResult<PushOutput> {
+pub async fn push_tar(
+	ctx: &ToolchainCtx,
+	task: task::TaskCtx,
+	push_opts: &PushOpts,
+) -> GlobalResult<PushOutput> {
 	let multipart_enabled =
 		config::settings::try_read(|x| Ok(!x.net.disable_upload_multipart)).await?;
 
@@ -59,7 +63,7 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 		.unwrap_or_else(|| push_opts.docker_tag.clone());
 	let content_type = "binary/octet-stream";
 
-	task.log_stdout(format!(
+	task.log(format!(
 		"[Uploading Image] {name} ({size})",
 		name = display_name,
 		size = upload::format_file_size(image_file_meta.len())?
@@ -90,7 +94,7 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	)
 	.await;
 	if let Err(err) = build_res.as_ref() {
-		task.log_stderr(format!("{err:?}"))
+		task.log(format!("{err:?}"))
 	}
 	let build_res = unwrap!(build_res,);
 	let image_id = build_res.build;
@@ -140,7 +144,7 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	)
 	.await;
 	if let Err(err) = complete_res.as_ref() {
-		task.log_stderr(format!("{err:?}"));
+		task.log(format!("{err:?}"));
 	}
 	unwrap!(complete_res);
 
@@ -156,11 +160,11 @@ pub async fn push_tar(ctx: &Ctx, task: TaskCtx, push_opts: &PushOpts) -> GlobalR
 	)
 	.await;
 	if let Err(err) = complete_res.as_ref() {
-		task.log_stderr(format!("{err:?}"));
+		task.log(format!("{err:?}"));
 	}
 	unwrap!(complete_res);
 
-	task.log_stdout(format!("[Image Upload Complete] {image_id}"));
+	task.log(format!("[Image Upload Complete] {image_id}"));
 
 	Ok(PushOutput {
 		image_id: image_id.to_owned(),

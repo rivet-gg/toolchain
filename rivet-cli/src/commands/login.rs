@@ -1,9 +1,8 @@
 use clap::Parser;
 use std::process::ExitCode;
-use toolchain::{
-	tasks::{check_login_state, start_device_link, wait_for_login, RunConfig},
-	util::task::run_task,
-};
+use toolchain::tasks::{check_login_state, start_device_link, wait_for_login};
+
+use crate::util::task::{run_task, TaskOutputStyle};
 
 #[derive(Parser)]
 pub struct Opts {
@@ -13,11 +12,12 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::default();
-
 		// Check if linked
-		match run_task::<check_login_state::Task>(run_config.clone(), check_login_state::Input {})
-			.await
+		match run_task::<check_login_state::Task>(
+			TaskOutputStyle::None,
+			check_login_state::Input {},
+		)
+		.await
 		{
 			Ok(output) => {
 				if output.logged_in {
@@ -33,7 +33,7 @@ impl Opts {
 
 		// Start device link
 		let device_link_output = match run_task::<start_device_link::Task>(
-			run_config.clone(),
+			TaskOutputStyle::None,
 			start_device_link::Input {
 				api_endpoint: self.api_endpoint.clone(),
 			},
@@ -50,7 +50,7 @@ impl Opts {
 
 		// Wait for finish
 		match run_task::<wait_for_login::Task>(
-			run_config.clone(),
+			TaskOutputStyle::None,
 			wait_for_login::Input {
 				api_endpoint: self.api_endpoint.clone(),
 				device_link_token: device_link_output.device_link_token,

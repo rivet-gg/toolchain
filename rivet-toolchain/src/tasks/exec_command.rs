@@ -1,7 +1,7 @@
 use global_error::prelude::*;
 use serde::{Deserialize, Serialize};
 
-use crate::util::{cmd::shell_cmd, task::TaskCtx};
+use crate::util::{cmd::shell_cmd, task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -17,7 +17,7 @@ pub struct Output {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -25,7 +25,7 @@ impl super::Task for Task {
 		"exec_command"
 	}
 
-	async fn run(task: TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
 		let mut cmd = shell_cmd(&input.cmd);
 		cmd.args(&input.args).current_dir(input.cwd);
 		let exit_code = task.spawn_cmd(cmd).await?;

@@ -1,10 +1,14 @@
 use global_error::prelude::*;
 use tokio::process::Command;
 
-use crate::util::task::TaskCtx;
+use crate::util::task;
 
 /// Runs a command in a cross-platform compatible way.
-pub async fn run(task: TaskCtx, command: &str, envs: Vec<(String, String)>) -> GlobalResult<()> {
+pub async fn run(
+	task: task::TaskCtx,
+	command: &str,
+	envs: Vec<(String, String)>,
+) -> GlobalResult<()> {
 	if cfg!(unix) {
 		let mut cmd = Command::new("/bin/sh");
 		cmd.envs(envs).arg("-c").arg(command);
@@ -24,7 +28,7 @@ pub async fn run(task: TaskCtx, command: &str, envs: Vec<(String, String)>) -> G
 
 /// Run a Docker command with full output.
 pub async fn execute_docker_cmd(
-	task: TaskCtx,
+	task: task::TaskCtx,
 	command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
 ) -> GlobalResult<()> {

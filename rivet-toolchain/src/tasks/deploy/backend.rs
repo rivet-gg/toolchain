@@ -11,10 +11,9 @@ use tokio::fs;
 
 use crate::{
 	backend, config,
-	ctx::Ctx,
 	game::TEMPEnvironment,
-	util::task::TaskCtx,
-	util::{net::upload, term},
+	toolchain_ctx::ToolchainCtx,
+	util::{net::upload, task, term},
 };
 
 pub struct DeployOpts {
@@ -27,8 +26,8 @@ pub struct DeployOpts {
 	pub skip_migrate: bool,
 }
 
-pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<()> {
-	task.log_stdout("[Deploying Backend]");
+pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -> GlobalResult<()> {
+	task.log("[Deploying Backend]");
 
 	let backend = backend::get_or_create_backend(ctx, opts.env.id).await?;
 	let game_id_str = ctx.game_id.to_string();
@@ -36,7 +35,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	let project_path = PathBuf::from(opts.project_path.clone());
 
 	// Build
-	task.log_stdout(format!("[Building Project] {}", project_path.display()));
+	task.log(format!("[Building Project] {}", project_path.display()));
 	let (cmd_env, config_path) = config::settings::try_read(|settings| {
 		let mut env = settings.backend.command_environment.clone();
 		env.extend(settings.backend.deploy.command_environment.clone());
@@ -73,7 +72,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	.await?;
 
 	if !opts.skip_migrate {
-		task.log_stdout("[Migrating Database]");
+		task.log("[Migrating Database]");
 
 		// Migrate
 		let mut migrate_env = HashMap::new();
@@ -117,14 +116,14 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		.iter()
 		.fold(0, |acc, x| acc + x.prepared.content_length);
 
-	task.log_stdout(format!(
+	task.log(format!(
 		"[Uploading Environment] {name} ({count} files, {size} total)",
 		name = &opts.env.name,
 		count = files.len(),
 		size = upload::format_file_size(total_len as u64)?,
 	));
 
-	task.log_stdout(format!("[Fetching Environment Variables]"));
+	task.log(format!("[Fetching Environment Variables]"));
 	// let variables = apis::ee_backend_api::ee_backend_get_variables(
 	// 	&ctx.openapi_config_cloud,
 	// 	&game_id_str,
@@ -170,7 +169,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	);
 	// }
 	// if !variables.contains_key("RIVET_SERVICE_TOKEN") {
-	task.log_stdout(format!("[Creating Service Token]"));
+	task.log(format!("[Creating Service Token]"));
 	let service_token =
 		apis::games_environments_tokens_api::games_environments_tokens_create_service_token(
 			&ctx.openapi_config_cloud,
@@ -187,7 +186,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	);
 	// }
 	if !update_variables.is_empty() {
-		task.log_stdout(format!(
+		task.log(format!(
 			"[Updating Variables] {}",
 			update_variables
 				.keys()
@@ -243,7 +242,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 		})
 		.await?;
 
-	task.log_stdout(format!("[Deploying Environment] {}", opts.env.name));
+	task.log(format!("[Deploying Environment] {}", opts.env.name));
 
 	let deploy_res = apis::ee_backend_api::ee_backend_deploy(
 		&ctx.openapi_config_cloud,
@@ -256,7 +255,7 @@ pub async fn deploy(ctx: &Ctx, task: TaskCtx, opts: DeployOpts) -> GlobalResult<
 	)
 	.await?;
 
-	task.log_stdout(format!(
+	task.log(format!(
 		"[Done] Backend API available at {}",
 		deploy_res.url
 	));

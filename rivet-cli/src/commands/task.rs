@@ -18,8 +18,6 @@ impl SubCommand {
 #[derive(Parser)]
 pub struct RunOpts {
 	#[clap(long)]
-	run_config: String,
-	#[clap(long)]
 	name: String,
 	#[clap(long)]
 	input: String,
@@ -27,20 +25,23 @@ pub struct RunOpts {
 
 impl RunOpts {
 	pub async fn execute(&self) -> ExitCode {
-		match serde_json::from_str(&self.run_config) {
-			Ok(run_config) => {
-				let result =
-					toolchain::tasks::run_task_json(run_config, &self.name, &self.input).await;
-
-				if result.success {
+		let result = crate::util::task::run_task_json(
+			crate::util::task::TaskOutputStyle::Json,
+			&self.name,
+			&self.input,
+		)
+		.await;
+		match result {
+			Ok(res) => {
+				if res.success {
 					ExitCode::SUCCESS
 				} else {
 					ExitCode::FAILURE
 				}
 			}
-			Err(e) => {
-				eprintln!("Error parsing run_config: {}", e);
-				ExitCode::from(2)
+			Err(err) => {
+				eprintln!("error running task: {err:?}");
+				ExitCode::FAILURE
 			}
 		}
 	}

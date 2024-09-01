@@ -1,4 +1,5 @@
 use global_error::prelude::*;
+use serde::Serialize;
 use std::{process::Stdio, sync::Arc};
 use tokio::{
 	io::{AsyncBufReadExt, BufReader},
@@ -6,7 +7,15 @@ use tokio::{
 	sync::{broadcast, mpsc},
 };
 
-use super::output::OutputEvent;
+#[derive(Serialize)]
+pub enum TaskEvent {
+	#[serde(rename = "log")]
+	Log(String),
+	#[serde(rename = "result")]
+	Result {
+		result: Box<serde_json::value::RawValue>,
+	},
+}
 
 // HACK: Tokio bug drops the channel using the native `UnboundedSender::clone`, so we have to use
 // `Arc`.
@@ -17,14 +26,14 @@ pub type TaskCtx = Arc<TaskCtxInner>;
 /// Allows us to store separate log files for different tasks that are running in a headless
 /// context outside of a CLI.
 pub struct TaskCtxInner {
-	log_tx: mpsc::UnboundedSender<OutputEvent>,
+	log_tx: mpsc::UnboundedSender<TaskEvent>,
 	#[allow(dead_code)]
 	shutdown_rx: broadcast::Receiver<()>,
 }
 
 impl TaskCtxInner {
 	pub fn new(
-		log_tx: mpsc::UnboundedSender<OutputEvent>,
+		log_tx: mpsc::UnboundedSender<TaskEvent>,
 		shutdown_rx: broadcast::Receiver<()>,
 	) -> Arc<Self> {
 		Arc::new(Self {
@@ -33,25 +42,21 @@ impl TaskCtxInner {
 		})
 	}
 
-	pub fn log_stdout(&self, message: impl ToString) {
-		let _ = self.log_tx.send(OutputEvent::Stdout(message.to_string()));
+	pub fn log(&self, message: impl ToString) {
+		let _ = self.log_tx.send(TaskEvent::Log(message.to_string()));
 	}
 
-	pub fn log_stderr(&self, message: impl ToString) {
-		let _ = self.log_tx.send(OutputEvent::Stderr(message.to_string()));
-	}
-
-	pub fn log_output(&self, output: &GlobalResult<impl serde::Serialize>) -> GlobalResult<()> {
-		let output_serialize = output.as_ref().map_err(|x| x.to_string());
-		let output_json = serde_json::to_string(&output_serialize)?;
-		let output_raw_value = serde_json::value::RawValue::from_string(output_json)?;
+	pub fn result(&self, result: &GlobalResult<impl serde::Serialize>) -> GlobalResult<()> {
+		let result_serialized = result.as_ref().map_err(|x| x.to_string());
+		let result_josn = serde_json::to_string(&result_serialized)?;
+		let result_raw_value = serde_json::value::RawValue::from_string(result_josn)?;
 		ensure!(
 			self.log_tx
-				.send(OutputEvent::Output {
-					result: output_raw_value
+				.send(TaskEvent::Result {
+					result: result_raw_value
 				})
 				.is_ok(),
-			"failed to write output"
+			"failed to write result"
 		);
 		Ok(())
 	}
@@ -85,13 +90,13 @@ impl TaskCtxInner {
 		// Spawn tasks to handle stdout and stderr
 		tokio::spawn(async move {
 			while let Ok(Some(line)) = stdout_reader.next_line().await {
-				stdout_logger.log_stdout(line);
+				stdout_logger.log(line);
 			}
 		});
 
 		tokio::spawn(async move {
 			while let Ok(Some(line)) = stderr_reader.next_line().await {
-				stderr_logger.log_stderr(line);
+				stderr_logger.log(line);
 			}
 		});
 

@@ -2,10 +2,14 @@ use global_error::prelude::*;
 use rivet_api::apis;
 use uuid::Uuid;
 
-use crate::{config, ctx::Ctx, util::task::TaskCtx};
+use crate::{config, toolchain_ctx::ToolchainCtx, util::task};
 
-pub async fn provision_database(task: TaskCtx, ctx: &Ctx, env_id: Uuid) -> GlobalResult<()> {
-	task.log_stdout("[Provisioning Database]");
+pub async fn provision_database(
+	task: task::TaskCtx,
+	ctx: &ToolchainCtx,
+	env_id: Uuid,
+) -> GlobalResult<()> {
+	task.log("[Provisioning Database]");
 
 	apis::ee_backend_api::ee_backend_provision_database(
 		&ctx.openapi_config_cloud,
@@ -21,7 +25,7 @@ pub async fn provision_database(task: TaskCtx, ctx: &Ctx, env_id: Uuid) -> Globa
 	.await?;
 
 	if env_config.backend.db_url.is_none() {
-		task.log_stdout("[Fetching Connection]");
+		task.log("[Fetching Connection]");
 
 		let db_url_res = apis::ee_backend_api::ee_backend_get_db_url(
 			&ctx.openapi_config_cloud,

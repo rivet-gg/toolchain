@@ -1,23 +1,23 @@
 use global_error::prelude::*;
+use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
 use rivet_api::apis;
 use std::{env, sync::Arc};
-use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
 
 use crate::config;
 
 pub const VERSION: &str = {
-    const MAJOR: u32 = pkg_version_major!();
+	const MAJOR: u32 = pkg_version_major!();
 	const MINOR: u32 = pkg_version_minor!();
 	const PATCH: u32 = pkg_version_patch!();
-    const GIT_SHA: &str = env!("VERGEN_GIT_SHA");
-    const_format::formatcp!("{MAJOR}.{MINOR}.{PATCH} ({GIT_SHA})")
+	const GIT_SHA: &str = env!("VERGEN_GIT_SHA");
+	const_format::formatcp!("{MAJOR}.{MINOR}.{PATCH} ({GIT_SHA})")
 };
 
 pub fn user_agent() -> String {
 	format!("CLI/{VERSION}")
 }
 
-pub type Ctx = Arc<CtxInner>;
+pub type ToolchainCtx = Arc<CtxInner>;
 
 pub struct CtxInner {
 	pub api_endpoint: String,
@@ -30,14 +30,14 @@ pub struct CtxInner {
 	pub openapi_config_cloud: apis::configuration::Configuration,
 }
 
-pub async fn load() -> GlobalResult<Ctx> {
+pub async fn load() -> GlobalResult<ToolchainCtx> {
 	let (api_endpoint, token) =
 		config::meta::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
 			.await?;
 	init(api_endpoint, token).await
 }
 
-pub async fn init(api_endpoint: String, cloud_token: String) -> GlobalResult<Ctx> {
+pub async fn init(api_endpoint: String, cloud_token: String) -> GlobalResult<ToolchainCtx> {
 	// Disable connection pooling to fix "connection closed before message completed"
 	//
 	// See https://github.com/hyperium/hyper/issues/2136#issuecomment-861826148

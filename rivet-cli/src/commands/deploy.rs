@@ -1,9 +1,8 @@
 use clap::Parser;
 use std::process::ExitCode;
-use toolchain::{
-	tasks::{deploy, get_bootstrap_data, RunConfig},
-	util::task::run_task,
-};
+use toolchain::tasks::{deploy, get_bootstrap_data};
+
+use crate::util::task::{run_task, TaskOutputStyle};
 
 #[derive(Parser)]
 pub struct Opts {
@@ -18,10 +17,8 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::default();
-
 		let bootstrap_data = match run_task::<get_bootstrap_data::Task>(
-			run_config.clone(),
+			TaskOutputStyle::None,
 			get_bootstrap_data::Input {},
 		)
 		.await
@@ -53,7 +50,7 @@ impl Opts {
 		};
 
 		match run_task::<deploy::Task>(
-			run_config,
+			TaskOutputStyle::Plain,
 			deploy::Input {
 				cwd: std::env::current_dir()
 					.unwrap_or_default()
@@ -67,10 +64,7 @@ impl Opts {
 		)
 		.await
 		{
-			Ok(_) => {
-				println!("Deployment completed successfully.");
-				ExitCode::SUCCESS
-			}
+			Ok(_) => ExitCode::SUCCESS,
 			Err(e) => {
 				eprintln!("Error during deployment: {e}");
 				ExitCode::FAILURE

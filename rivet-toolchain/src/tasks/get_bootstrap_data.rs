@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use uuid::Uuid;
 
-use crate::{backend, game::TEMPEnvironment, util::task::TaskCtx};
+use crate::{backend, game::TEMPEnvironment, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -21,7 +21,7 @@ pub struct Output {
 
 pub struct Task;
 
-impl super::Task for Task {
+impl task::Task for Task {
 	type Input = Input;
 	type Output = Output;
 
@@ -29,8 +29,8 @@ impl super::Task for Task {
 		"get_bootstrap_data"
 	}
 
-	async fn run(_task: TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
-		let ctx = crate::ctx::load().await?;
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+		let ctx = crate::toolchain_ctx::load().await?;
 
 		// HACK: Map ns to temporary env data structure
 		// Get or create backend project

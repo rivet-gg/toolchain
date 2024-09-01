@@ -9,12 +9,12 @@ use uuid::Uuid;
 
 use crate::{
 	config,
-	util::{cmd::shell_cmd, task::TaskCtx},
-	Ctx,
+	util::{cmd::shell_cmd, task},
+	ToolchainCtx,
 };
 
 const OPENGB_DEFAULT_URL: &'static str =
-	"https://raw.githubusercontent.com/rivet-gg/opengb/c9dac1786bd00d3494c3a91a8162f080ff2ebd0a";
+	"https://raw.githubusercontent.com/rivet-gg/opengb/f2abbb4355b460646f79ac8ac98b778e31fed593";
 const OPENGB_DENO_CONFIG_PATH: &'static str = "/deno.jsonc";
 const OPENGB_CLI_MAIN_PATH: &'static str = "/packages/cli/main.ts";
 
@@ -77,7 +77,10 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 	Ok(cmd)
 }
 
-pub async fn run_opengb_command(task: TaskCtx, opts: BackendCommandOpts) -> GlobalResult<i32> {
+pub async fn run_opengb_command(
+	task: task::TaskCtx,
+	opts: BackendCommandOpts,
+) -> GlobalResult<i32> {
 	let cmd = build_opengb_command(opts).await?;
 	let exit_code = task.spawn_cmd(cmd).await?;
 	Ok(exit_code.code().unwrap_or(0))
@@ -90,7 +93,7 @@ pub async fn spawn_opengb_command(opts: BackendCommandOpts) -> GlobalResult<u32>
 
 /// Gets or auto-creates a backend project for the game.
 pub async fn get_or_create_backend(
-	ctx: &Ctx,
+	ctx: &ToolchainCtx,
 	env_id: Uuid,
 ) -> GlobalResult<models::EeBackendBackend> {
 	// Get the project
@@ -116,7 +119,10 @@ pub async fn get_or_create_backend(
 	Ok(backend)
 }
 
-async fn create_backend(ctx: &Ctx, env_id: Uuid) -> GlobalResult<models::EeBackendBackend> {
+async fn create_backend(
+	ctx: &ToolchainCtx,
+	env_id: Uuid,
+) -> GlobalResult<models::EeBackendBackend> {
 	let res = apis::ee_backend_api::ee_backend_create(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id.to_string(),

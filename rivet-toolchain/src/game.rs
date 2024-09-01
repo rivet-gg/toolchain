@@ -3,7 +3,7 @@ use rivet_api::{apis, models};
 use serde::Serialize;
 use uuid::Uuid;
 
-use crate::ctx::Ctx;
+use crate::toolchain_ctx::ToolchainCtx;
 
 // TODO: Replace this with a production API
 #[derive(Clone, Debug, Serialize)]
@@ -36,7 +36,7 @@ impl From<models::CloudNamespaceFull> for TEMPEnvironment {
 	}
 }
 
-pub async fn get_env(ctx: &Ctx, env_id: Uuid) -> GlobalResult<TEMPEnvironment> {
+pub async fn get_env(ctx: &ToolchainCtx, env_id: Uuid) -> GlobalResult<TEMPEnvironment> {
 	let res = apis::cloud_games_namespaces_api::cloud_games_namespaces_get_game_namespace_by_id(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id.to_string(),

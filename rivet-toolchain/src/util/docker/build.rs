@@ -4,10 +4,10 @@ use std::{collections::HashMap, path::Path};
 
 use crate::{
 	config,
-	ctx::Ctx,
+	toolchain_ctx::ToolchainCtx,
 	util::{
 		cmd::{self, shell_cmd},
-		task::TaskCtx,
+		task,
 	},
 };
 
@@ -27,7 +27,7 @@ impl Default for DockerBuildMethod {
 }
 
 impl DockerBuildMethod {
-	pub async fn from_env(task: TaskCtx) -> GlobalResult<Self> {
+	pub async fn from_env(task: task::TaskCtx) -> GlobalResult<Self> {
 		// Determine build method from env
 		let build_method =
 			config::settings::try_read(|x| Ok(x.game_server.deploy.build_method.clone())).await?;
@@ -42,7 +42,7 @@ impl DockerBuildMethod {
 			if buildx_version.status.success() {
 				Ok(DockerBuildMethod::Buildx)
 			} else {
-				task.log_stderr("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
+				task.log("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
 				Ok(DockerBuildMethod::Native)
 			}
 		} else {
@@ -58,8 +58,8 @@ pub struct BuildImageOutput {
 
 /// Builds an image and archives it to a path.
 pub async fn build_image(
-	ctx: &Ctx,
-	task: TaskCtx,
+	ctx: &ToolchainCtx,
+	task: task::TaskCtx,
 	current_dir: &Path,
 	dockerfile: &Path,
 	build_kind: super::BuildKind,
@@ -72,7 +72,7 @@ pub async fn build_image(
 		DockerBuildMethod::Native => " (with native)",
 		DockerBuildMethod::Buildx => " (with buildx)",
 	};
-	task.log_stdout(format!(
+	task.log(format!(
 		"[Building Image] {}{buildx_info}",
 		dockerfile.display()
 	));

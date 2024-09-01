@@ -13,7 +13,7 @@ use tokio::{
 };
 use tokio_util::io::ReaderStream;
 
-use crate::util::{task::TaskCtx, term};
+use crate::util::{task, term};
 
 /// Prepared file that will be uploaded to S3.
 #[derive(Clone)]
@@ -95,7 +95,7 @@ pub fn prepare_upload_file<P: AsRef<Path>, Q: AsRef<Path>>(
 
 /// Uploads a file to a given URL.
 pub async fn upload_file(
-	task: TaskCtx,
+	task: task::TaskCtx,
 	reqwest_client: &reqwest::Client,
 	presigned_req: &models::UploadPresignedRequest,
 	file_path: impl AsRef<Path>,
@@ -151,7 +151,7 @@ pub async fn upload_file(
 					pb_added = true;
 
 					if !is_tty {
-						task.log_stderr(format!(
+						task.log(format!(
 							"Uploading {path} ({})",
 							format_file_size(total_size)?
 						));
@@ -224,7 +224,7 @@ pub async fn upload_file(
 				));
 
 				if !is_tty {
-					task.log_stderr(
+					task.log(
 						"Error uploading {path} [{status}] (attempt #{attempts}): {body_text:?}",
 					);
 				}
@@ -246,7 +246,7 @@ pub async fn upload_file(
 	}
 
 	if !is_tty {
-		task.log_stderr(format!(
+		task.log(format!(
 			"Finished uploading {path} ({:.3}s)",
 			upload_time.as_secs_f64()
 		));
