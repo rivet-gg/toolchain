@@ -1,4 +1,3 @@
-use futures_util::stream::{StreamExt, TryStreamExt};
 use global_error::prelude::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
@@ -46,18 +45,25 @@ impl task::Task for Task {
 		.map(crate::game::TEMPEnvironment::from)
 		.collect::<Vec<_>>();
 
-		// Get all backends in parallel
-		let backends = futures_util::stream::iter(envs.iter())
-			.map(|env| {
-				let ctx = ctx.clone();
-				async move {
-					let backend = backend::get_or_create_backend(&ctx, env.id).await?;
-					GlobalResult::Ok((env.id, backend))
-				}
-			})
-			.buffer_unordered(4)
-			.try_collect::<HashMap<Uuid, models::EeBackendBackend>>()
-			.await?;
+		let mut backends = HashMap::new();
+		for env in &envs {
+			let backend = backend::get_or_create_backend(&ctx, env.id).await?;
+			backends.insert(env.id, backend);
+		}
+
+		// TODO: This causes a weird compilation error in gdext
+		// // Get all backends in parallel
+		// let backends = futures_util::stream::iter(envs.iter())
+		// 	.map(|env| {
+		// 		let ctx = ctx.clone();
+		// 		async move {
+		// 			let backend = backend::get_or_create_backend(&ctx, env.id).await?;
+		// 			GlobalResult::Ok((env.id, backend))
+		// 		}
+		// 	})
+		// 	.buffer_unordered(4)
+		// 	.try_collect::<HashMap<Uuid, models::EeBackendBackend>>()
+		// 	.await?;
 
 		Ok(Output {
 			token: ctx.access_token.clone(),
