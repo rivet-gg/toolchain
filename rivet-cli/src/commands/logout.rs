@@ -10,7 +10,7 @@ pub struct Opts {}
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::empty();
+		let run_config = RunConfig::default();
 
 		match run_task::<unlink::Task>(run_config.clone(), unlink::Input {}).await {
 			Ok(_) => {

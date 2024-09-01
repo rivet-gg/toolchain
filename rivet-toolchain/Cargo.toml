@@ -35,7 +35,7 @@ reqwest = { version = "0.11", features = ["stream", "blocking"] }
 rivet-api = { package = "rivet-api-ee", path = "../sdks/rust" }
 sentry = "0.32"
 serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+serde_json = { version = "1.0", features = ["raw_value"] }
 strum = { version = "0.24", features = ["derive"] }
 sysinfo = "0.30.0"
 portpicker = "0.1"

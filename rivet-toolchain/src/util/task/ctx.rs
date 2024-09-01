@@ -6,7 +6,7 @@ use tokio::{
 	sync::{broadcast, mpsc},
 };
 
-use super::log::LogEvent;
+use super::output::OutputEvent;
 
 // HACK: Tokio bug drops the channel using the native `UnboundedSender::clone`, so we have to use
 // `Arc`.
@@ -17,14 +17,14 @@ pub type TaskCtx = Arc<TaskCtxInner>;
 /// Allows us to store separate log files for different tasks that are running in a headless
 /// context outside of a CLI.
 pub struct TaskCtxInner {
-	log_tx: mpsc::UnboundedSender<LogEvent>,
+	log_tx: mpsc::UnboundedSender<OutputEvent>,
 	#[allow(dead_code)]
 	shutdown_rx: broadcast::Receiver<()>,
 }
 
 impl TaskCtxInner {
 	pub fn new(
-		log_tx: mpsc::UnboundedSender<LogEvent>,
+		log_tx: mpsc::UnboundedSender<OutputEvent>,
 		shutdown_rx: broadcast::Receiver<()>,
 	) -> Arc<Self> {
 		Arc::new(Self {
@@ -34,11 +34,26 @@ impl TaskCtxInner {
 	}
 
 	pub fn log_stdout(&self, message: impl ToString) {
-		let _ = self.log_tx.send(LogEvent::Stdout(message.to_string()));
+		let _ = self.log_tx.send(OutputEvent::Stdout(message.to_string()));
 	}
 
 	pub fn log_stderr(&self, message: impl ToString) {
-		let _ = self.log_tx.send(LogEvent::Stderr(message.to_string()));
+		let _ = self.log_tx.send(OutputEvent::Stderr(message.to_string()));
+	}
+
+	pub fn log_output(&self, output: &GlobalResult<impl serde::Serialize>) -> GlobalResult<()> {
+		let output_serialize = output.as_ref().map_err(|x| x.to_string());
+		let output_json = serde_json::to_string(&output_serialize)?;
+		let output_raw_value = serde_json::value::RawValue::from_string(output_json)?;
+		ensure!(
+			self.log_tx
+				.send(OutputEvent::Output {
+					result: output_raw_value
+				})
+				.is_ok(),
+			"failed to write output"
+		);
+		Ok(())
 	}
 
 	pub async fn spawn_cmd(

@@ -20,7 +20,7 @@ enum SubCommand {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::empty();
+		let run_config = RunConfig::default();
 
 		// Get settings paths
 		let settings_paths =

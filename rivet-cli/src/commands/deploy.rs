@@ -18,7 +18,7 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::empty();
+		let run_config = RunConfig::default();
 
 		let bootstrap_data = match run_task::<get_bootstrap_data::Task>(
 			run_config.clone(),

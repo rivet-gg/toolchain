@@ -1,22 +1,21 @@
 mod ctx;
-mod log;
+pub mod output;
 
 use global_error::prelude::*;
 use serde::Deserialize;
 use std::path::Path;
-use tempfile::TempDir;
 use tokio::{
-	fs::OpenOptions,
 	sync::{broadcast, mpsc},
 	task,
 	time::Duration,
 };
 
 pub use ctx::TaskCtx;
+pub use output::OutputEvent;
 
 use crate::tasks::Task;
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Default)]
 pub struct RunConfig {
 	/// Path to file that will abort this task if exists.
 	///
@@ -29,27 +28,21 @@ pub struct RunConfig {
 	/// If none provided, will be logged to standard output.
 	#[serde(default)]
 	pub output_path: Option<String>,
+
+	/// How output is printed.
+	#[serde(default)]
+	pub output_style: OutputStyle,
 }
 
-impl RunConfig {
-	pub fn empty() -> Self {
-		RunConfig {
-			abort_path: None,
-			output_path: None,
-		}
-	}
+#[derive(Deserialize, Copy, Clone)]
+pub enum OutputStyle {
+	Json,
+	Plain,
+}
 
-	/// Creates a new config with paths in a temp dir.
-	pub fn with_temp_dir() -> GlobalResult<(Self, TempDir)> {
-		let temp_dir = tempfile::tempdir()?;
-
-		Ok((
-			Self {
-				abort_path: Some(temp_dir.path().join("abort").display().to_string()),
-				output_path: Some(temp_dir.path().join("output").display().to_string()),
-			},
-			temp_dir,
-		))
+impl Default for OutputStyle {
+	fn default() -> Self {
+		Self::Json
 	}
 }
 
@@ -58,26 +51,32 @@ pub async fn run_task<T>(run_config: RunConfig, input: T::Input) -> GlobalResult
 where
 	T: Task,
 {
-	let (log_tx, log_rx) = mpsc::unbounded_channel::<log::LogEvent>();
+	let (output_tx, output_rx) = mpsc::unbounded_channel::<output::OutputEvent>();
 	let (shutdown_tx, shutdown_rx) = broadcast::channel(1);
 
+	// Open output file
 	let output_file = if let Some(output_path) = run_config.output_path {
-		Some(
-			OpenOptions::new()
+		Some(tokio::task::block_in_place(|| {
+			std::fs::OpenOptions::new()
 				.create(true)
 				.append(true)
 				.open(output_path)
-				.await?,
-		)
+		})?)
 	} else {
 		None
 	};
 
-	task::spawn(log::log_writer(log_rx, output_file));
+	// Start writer
+	let output_writer_task = task::spawn(output::output_writer(
+		output_rx,
+		output_file,
+		run_config.output_style,
+	));
 
-	let task_ctx = ctx::TaskCtxInner::new(log_tx, shutdown_rx);
+	// Create context
+	let task_ctx = ctx::TaskCtxInner::new(output_tx, shutdown_rx);
 
-	// Wait for task or abort
+	// RUn task or wait for abort
 	let output = tokio::select! {
 		result = T::run(task_ctx.clone(), input) => result,
 		_ = wait_for_abort(run_config.abort_path.clone()) => {
@@ -85,8 +84,22 @@ where
 		},
 	};
 
+	// Write output to log
+	task_ctx.log_output(&output)?;
+
 	// Shutdown
 	shutdown_tx.send(())?;
+
+	// Drop context since this holds a ref to output_tx
+	drop(task_ctx);
+
+	// Wait for task to finish
+	match output_writer_task.await {
+		Ok(_) => {}
+		Err(err) => {
+			eprintln!("Task failed: {err:?}");
+		}
+	}
 
 	output
 }

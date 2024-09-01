@@ -13,7 +13,7 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let run_config = RunConfig::empty();
+		let run_config = RunConfig::default();
 
 		// Check if linked
 		match run_task::<check_login_state::Task>(run_config.clone(), check_login_state::Input {})

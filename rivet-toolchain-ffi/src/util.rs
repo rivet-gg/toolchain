@@ -3,20 +3,19 @@ use std::future::Future;
 use tokio::time::Duration;
 use toolchain::tasks::RunConfig;
 
-pub fn run_task(run_config: String, name: String, input_json: String) -> String {
+pub fn run_task(run_config: String, name: String, input_json: String) {
 	let run_config = serde_json::from_str::<RunConfig>(&run_config).unwrap();
 	let task_config = toolchain::tasks::get_task_config(&name);
 	let name_inner = name.clone();
-	let output_json = block_on(
+	block_on(
 		async move { toolchain::tasks::run_task_json(run_config, &name_inner, &input_json).await },
 		BlockOnOpts {
 			multithreaded: task_config.prefer_multithreaded,
 		},
 	);
-	output_json.output
 }
 
-const FORCE_MULTI_THREAD: bool = true;
+const FORCE_MULTI_THREAD: bool = false;
 
 struct BlockOnOpts {
 	multithreaded: bool,

@@ -31,7 +31,6 @@ impl RunOpts {
 			Ok(run_config) => {
 				let result =
 					toolchain::tasks::run_task_json(run_config, &self.name, &self.input).await;
-				println!("{}", result.output);
 
 				if result.success {
 					ExitCode::SUCCESS
