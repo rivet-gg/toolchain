@@ -1,7 +1,14 @@
 use global_error::prelude::*;
 use tokio::process::Command;
+#[cfg(windows)]
+use std::os::windows::process::CommandExt;
 
 use crate::util::task;
+
+#[cfg(windows)]
+mod creation_flags {
+	pub const CREATE_NO_WINDOW: u32 = 0x08000000;
+}
 
 /// Runs a command in a cross-platform compatible way.
 pub async fn run(
@@ -102,12 +109,16 @@ pub fn shell_cmd(cmd: &str) -> Command {
 }
 
 pub fn shell_cmd_std(cmd: &str) -> std::process::Command {
-	if cfg!(windows) {
-		// Use native command on Windows
-		std::process::Command::new(cmd)
-	} else {
+	#[cfg(windows)]
+	{
+		let mut cmd = std::process::Command::new(cmd);
+		cmd.creation_flags(creation_flags::CREATE_NO_WINDOW);
+		cmd
+	}
+	
+	#[cfg(not(windows))]
+	{
 		// Load the user's profile & shell on Linux in order to ensure we have the correct $PATH
-
 		let shell = std::env::var("SHELL").unwrap_or_else(|_| String::from("/bin/sh"));
 
 		let mut shell_cmd = std::process::Command::new(&shell);

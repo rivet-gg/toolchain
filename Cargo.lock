@@ -1937,7 +1937,6 @@ dependencies = [
  "vergen-git2",
  "webbrowser",
  "which",
- "winapi",
  "zip",
 ]
 
