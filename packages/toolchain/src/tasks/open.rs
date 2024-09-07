@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::util::task;
@@ -21,7 +21,7 @@ impl task::Task for Task {
 		"open"
 	}
 
-	async fn run(_task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		open::that_detached(input.path)?;
 		Ok(Output {})
 	}

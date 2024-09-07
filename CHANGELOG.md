@@ -440,7 +440,7 @@ get-namespace-public-token` subcommands to get a Rivet token for a namespace
 
 - Cleaner unauthenticated error
 - Changed `sidekick` to a more modular architecture
-- Changed error handling in CLI to use `GlobalResult` from main repo instead of
+- Changed error handling in CLI to use `Result` from main repo instead of
   `anyhow`
 - Unix install script can now take the environment variable `BIN_DIR` to specify
   the installation directory, preventing the need for sudo in certain cases

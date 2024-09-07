@@ -1,5 +1,5 @@
+use anyhow::*;
 use fd_lock::RwLock;
-use global_error::prelude::*;
 use reqwest;
 use std::fs::{self, File};
 use std::io::{BufReader, Write};
@@ -17,7 +17,7 @@ pub struct DenoExecutable {
 pub async fn get_or_download_executable(
 	version: &str,
 	data_dir: &PathBuf,
-) -> GlobalResult<DenoExecutable> {
+) -> Result<DenoExecutable> {
 	let executable_name = if cfg!(windows) { "deno.exe" } else { "deno" };
 	let executable_path = data_dir.join("deno").join(version).join(executable_name);
 
@@ -31,8 +31,8 @@ pub async fn get_or_download_executable(
 	// Lock file
 	eprintln!("[Deno] Waiting for download lockfile");
 	let lock_path = data_dir.join("deno_download.lock");
-	let mut lock = tokio::task::block_in_place(|| {
-		GlobalResult::Ok(RwLock::new(std::fs::File::create(lock_path)?))
+	let mut lock = tokio::task::block_in_place(|| -> Result<_> {
+		Result::Ok(RwLock::new(std::fs::File::create(lock_path)?))
 	})?;
 	let _writer = tokio::task::block_in_place(|| lock.write())?;
 

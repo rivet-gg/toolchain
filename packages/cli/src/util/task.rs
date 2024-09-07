@@ -1,4 +1,4 @@
-use global_error::*;
+use anyhow::*;
 use std::io::Write;
 use tokio::{
 	sync::{broadcast, mpsc},
@@ -6,7 +6,7 @@ use tokio::{
 };
 use toolchain::util::task::{self, TaskEvent};
 
-pub async fn run_task<T>(output_style: TaskOutputStyle, input: T::Input) -> GlobalResult<T::Output>
+pub async fn run_task<T>(output_style: TaskOutputStyle, input: T::Input) -> Result<T::Output>
 where
 	T: task::Task,
 {
@@ -23,7 +23,7 @@ where
 
 	// Wait for logger to shut down
 	match event_join_handle.await {
-		Ok(_) => {}
+		Result::Ok(_) => {}
 		Err(err) => eprintln!("error waiting for event handle: {err:?}"),
 	};
 
@@ -34,7 +34,7 @@ pub async fn run_task_json(
 	output_style: TaskOutputStyle,
 	name: &str,
 	input_json: &str,
-) -> GlobalResult<task::RunTaskJsonOutput> {
+) -> Result<task::RunTaskJsonOutput> {
 	let (run_config, handles) = task::RunConfig::build();
 
 	// Spawn aborter
@@ -48,7 +48,7 @@ pub async fn run_task_json(
 
 	// Wait for logger to shut down
 	match event_join_handle.await {
-		Ok(_) => {}
+		Result::Ok(_) => {}
 		Err(err) => eprintln!("error waiting for event handle: {err:?}"),
 	};
 
@@ -60,7 +60,7 @@ async fn abort_handler(abort_tx: mpsc::Sender<()>, mut shutdown_rx: broadcast::R
 	tokio::select! {
 		result = tokio::signal::ctrl_c() => {
 			match result {
-				Ok(_) => {}
+				Result::Ok(_) => {}
 				Err(err) => {
 					eprintln!("error waiting for ctrl c: {err:?}");
 				}

@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use regex::Regex;
 use url::Url;
 
@@ -8,10 +8,10 @@ use url::Url;
 ///
 /// * api.staging2.gameinc.io -> https://api.staging2.gameinc.io
 /// * 127.0.0.1:8080 -> http://127.0.0.1:8080
-pub fn normalize_api_endpoint(endpoint: &str) -> GlobalResult<String> {
+pub fn normalize_api_endpoint(endpoint: &str) -> Result<String> {
 	// Attempt to parse URL
 	let url = match Url::parse(endpoint) {
-		Ok(url) => url,
+		Result::Ok(url) => url,
 		Err(url::ParseError::RelativeUrlWithoutBase) => {
 			// No scheme was provided, determine if to use HTTP or HTTPS based on if the URL is
 			// localhost.
@@ -24,7 +24,7 @@ pub fn normalize_api_endpoint(endpoint: &str) -> GlobalResult<String> {
 
 			// Attempt to parse endpoint
 			match url::Url::parse(format!("{proto}://{endpoint}").as_str()) {
-				Ok(url) => url,
+				Result::Ok(url) => url,
 				Err(_) => {
 					bail!("failed to parse endpoint: {}", endpoint)
 				}

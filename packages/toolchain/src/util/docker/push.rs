@@ -1,5 +1,5 @@
+use anyhow::*;
 use futures_util::stream::{StreamExt, TryStreamExt};
-use global_error::prelude::*;
 use rivet_api::{apis, models};
 use serde::Serialize;
 use std::{collections::HashMap, path::PathBuf, sync::Arc};
@@ -43,7 +43,7 @@ pub async fn push_tar(
 	ctx: &ToolchainCtx,
 	task: task::TaskCtx,
 	push_opts: &PushOpts,
-) -> GlobalResult<PushOutput> {
+) -> Result<PushOutput> {
 	let multipart_enabled =
 		config::settings::try_read(|x| Ok(!x.net.disable_upload_multipart)).await?;
 
@@ -96,7 +96,7 @@ pub async fn push_tar(
 	if let Err(err) = build_res.as_ref() {
 		task.log(format!("{err:?}"))
 	}
-	let build_res = unwrap!(build_res,);
+	let build_res = build_res.context("build_res")?;
 	let image_id = build_res.build;
 	let pb = term::EitherProgressBar::Multi(term::multi_progress_bar(task.clone()));
 
@@ -146,7 +146,7 @@ pub async fn push_tar(
 	if let Err(err) = complete_res.as_ref() {
 		task.log(format!("{err:?}"));
 	}
-	unwrap!(complete_res);
+	complete_res.context("complete_res")?;
 
 	let complete_res = apis::servers_builds_api::servers_builds_patch_tags(
 		&ctx.openapi_config_cloud,
@@ -162,7 +162,7 @@ pub async fn push_tar(
 	if let Err(err) = complete_res.as_ref() {
 		task.log(format!("{err:?}"));
 	}
-	unwrap!(complete_res);
+	complete_res.context("complete_res")?;
 
 	task.log(format!("[Image Upload Complete] {image_id}"));
 

@@ -1,5 +1,5 @@
 use futures_util::{StreamExt, TryStreamExt};
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::{apis, models};
 use serde::Deserialize;
 use std::{
@@ -26,7 +26,7 @@ pub struct DeployOpts {
 	pub skip_migrate: bool,
 }
 
-pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -> GlobalResult<()> {
+pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -> Result<()> {
 	// task.log("[Deploying Backend]");
 	//
 	// let backend = backend::get_or_create_backend(ctx, opts.env.id).await?;
@@ -237,7 +237,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 	// 			)
 	// 			.await?;
 	//
-	// 			GlobalResult::<()>::Ok(())
+	// 			Result::<()>::Ok(())
 	// 		}
 	// 	})
 	// 	.await?;
@@ -271,7 +271,7 @@ struct GenManifest {
 	wasm: Option<String>,
 }
 
-async fn read_generated_manifest(project_path: &Path) -> GlobalResult<GenManifest> {
+async fn read_generated_manifest(project_path: &Path) -> Result<GenManifest> {
 	let manifest_str =
 		fs::read_to_string(project_path.join(".opengb").join("manifest.json")).await?;
 	Ok(serde_json::from_str::<GenManifest>(&manifest_str)?)

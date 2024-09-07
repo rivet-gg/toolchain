@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
@@ -29,7 +29,7 @@ impl task::Task for Task {
 		"check_system_requirements"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		let mut errors = Vec::new();
 
 		// Docker
@@ -39,7 +39,7 @@ impl task::Task for Task {
 		)
 		.await
 		{
-			Ok(Ok(output)) => {
+			Result::Ok(Result::Ok(output)) => {
 				if !output.status.success() {
 					if output.status.code() == Some(127) {
 						errors.push(errors::docker_not_found());
@@ -59,10 +59,10 @@ impl task::Task for Task {
 					}
 				}
 			}
-			Ok(Err(err)) if err.kind() == std::io::ErrorKind::NotFound => {
+			Result::Ok(Err(err)) if err.kind() == std::io::ErrorKind::NotFound => {
 				errors.push(errors::docker_not_found())
 			}
-			Ok(Err(err)) => {
+			Result::Ok(Err(err)) => {
 				errors.push(RequirementError {
 					title: "Docker Command Error".into(),
 					body: err.to_string(),

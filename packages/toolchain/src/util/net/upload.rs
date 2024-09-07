@@ -1,12 +1,11 @@
+use anyhow::*;
+use console::style;
+use futures_util::stream::StreamExt;
+use rivet_api::models;
 use std::{
 	path::{Component, Path, PathBuf},
 	time::{Duration, Instant},
 };
-
-use console::style;
-use futures_util::stream::StreamExt;
-use global_error::prelude::*;
-use rivet_api::models;
 use tokio::{
 	fs::File,
 	io::{AsyncReadExt, AsyncSeekExt},
@@ -22,18 +21,21 @@ pub struct UploadFile {
 	pub prepared: models::UploadPrepareFile,
 }
 
-pub fn format_file_size(bytes: u64) -> GlobalResult<String> {
+pub fn format_file_size(bytes: u64) -> Result<String> {
 	use humansize::FileSize;
 
 	let size = format!(
 		"{}",
-		unwrap!(bytes.file_size(humansize::file_size_opts::BINARY).ok())
+		bytes
+			.file_size(humansize::file_size_opts::BINARY)
+			.ok()
+			.context("bytes.file_size(...)")?
 	);
 	Ok(size)
 }
 
 /// Lists all files in a directory and returns the data required to upload them.
-pub fn prepare_upload_dir(base_path: &Path) -> GlobalResult<Vec<UploadFile>> {
+pub fn prepare_upload_dir(base_path: &Path) -> Result<Vec<UploadFile>> {
 	let mut files = Vec::<UploadFile>::new();
 
 	// Walk files while respecting .rivet-cdn-ignore
@@ -64,7 +66,7 @@ pub fn prepare_upload_file<P: AsRef<Path>, Q: AsRef<Path>>(
 	absolute_path: P,
 	upload_path: Q,
 	metadata: std::fs::Metadata,
-) -> GlobalResult<UploadFile> {
+) -> Result<UploadFile> {
 	let absolute_path = absolute_path.as_ref();
 
 	// Convert path to Unix-style string
@@ -101,7 +103,7 @@ pub async fn upload_file(
 	file_path: impl AsRef<Path>,
 	content_type: Option<impl ToString>,
 	main_pb: term::EitherProgressBar,
-) -> GlobalResult<()> {
+) -> Result<()> {
 	let content_type = content_type.map(|x| x.to_string());
 	let path = presigned_req.path.clone();
 
@@ -174,7 +176,7 @@ pub async fn upload_file(
 		let pb2 = pb.clone();
 		let async_stream = async_stream::stream! {
 			while let Some(chunk) = reader_stream.next().await {
-				if let Ok(chunk) = &chunk {
+				if let Result::Ok(chunk) = &chunk {
 					pb2.inc(chunk.len() as u64);
 				}
 
@@ -199,16 +201,16 @@ pub async fn upload_file(
 			if attempts > 4 {
 				let response_status = res.status();
 				let response_text = res.text().await?;
-				let text = format!(
+				bail!(
 					"failed to upload file: {}\n{:?}",
-					response_status, response_text
+					response_status,
+					response_text
 				);
-				bail!(&text);
 			} else {
 				attempts += 1;
 
 				let status = res.status();
-				let body_text = unwrap!(res.text().await);
+				let body_text = res.text().await.context("res.text()")?;
 
 				pb.set_style(term::pb_style_error());
 				pb.set_message(format!(

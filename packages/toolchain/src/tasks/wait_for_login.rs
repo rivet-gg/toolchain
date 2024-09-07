@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 
@@ -23,7 +23,7 @@ impl task::Task for Task {
 		"wait_for_login"
 	}
 
-	async fn run(_task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 			base_path: input.api_endpoint.clone(),
 			user_agent: Some(toolchain_ctx::user_agent()),
@@ -51,7 +51,11 @@ impl task::Task for Task {
 		let inspect_res =
 			apis::cloud_auth_api::cloud_auth_inspect(&new_ctx.openapi_config_cloud).await?;
 
-		let game_id = unwrap!(inspect_res.agent.game_cloud, "no game cloud token found").game_id;
+		let game_id = inspect_res
+			.agent
+			.game_cloud
+			.context("no game cloud token found")?
+			.game_id;
 
 		let _game_res = apis::cloud_games_api::cloud_games_get_game_by_id(
 			&new_ctx.openapi_config_cloud,

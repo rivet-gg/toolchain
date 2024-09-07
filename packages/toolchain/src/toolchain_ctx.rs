@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
 use rivet_api::apis;
 use std::{env, sync::Arc};
@@ -30,14 +30,14 @@ pub struct CtxInner {
 	pub openapi_config_cloud: apis::configuration::Configuration,
 }
 
-pub async fn load() -> GlobalResult<ToolchainCtx> {
+pub async fn load() -> Result<ToolchainCtx> {
 	let (api_endpoint, token) =
 		config::meta::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
 			.await?;
 	init(api_endpoint, token).await
 }
 
-pub async fn init(api_endpoint: String, cloud_token: String) -> GlobalResult<ToolchainCtx> {
+pub async fn init(api_endpoint: String, cloud_token: String) -> Result<ToolchainCtx> {
 	// Disable connection pooling to fix "connection closed before message completed"
 	//
 	// See https://github.com/hyperium/hyper/issues/2136#issuecomment-861826148
@@ -60,16 +60,18 @@ pub async fn init(api_endpoint: String, cloud_token: String) -> GlobalResult<Too
 		rivet_api::models::CloudBootstrapResponse,
 	) = tokio::try_join!(
 		async {
-			GlobalResult::Ok(unwrap!(
-				apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud).await,
-				"inspect failed"
-			))
+			Result::Ok(
+				apis::cloud_auth_api::cloud_auth_inspect(&openapi_config_cloud)
+					.await
+					.context("inspect failed")?,
+			)
 		},
 		async {
-			GlobalResult::Ok(unwrap!(
-				apis::cloud_api::cloud_bootstrap(&openapi_config_cloud).await,
-				"bootstrap failed"
-			))
+			Result::Ok(
+				apis::cloud_api::cloud_bootstrap(&openapi_config_cloud)
+					.await
+					.context("bootstrap failed")?,
+			)
 		}
 	)?;
 

@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use std::process::{Child, Command};
 
 #[cfg(target_os = "linux")]
@@ -49,7 +49,7 @@ const TERMINALS: [Terminal; 7] = [
 	},
 ];
 
-pub async fn show_term(args: &[String]) -> GlobalResult<Child> {
+pub async fn show_term(args: &[String]) -> Result<Child> {
 	#[cfg(target_os = "windows")]
 	let child: Child = Command::new("cmd.exe")
 		.arg("/C")

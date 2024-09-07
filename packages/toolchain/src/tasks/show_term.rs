@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{util, util::task};
@@ -22,7 +22,7 @@ impl task::Task for Task {
 		"show_term"
 	}
 
-	async fn run(_task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		let mut command = Vec::new();
 		command.push(input.command);
 		command.extend(input.args);

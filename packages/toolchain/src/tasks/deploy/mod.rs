@@ -1,7 +1,7 @@
 mod backend;
 mod game_server;
 
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -32,7 +32,7 @@ impl task::Task for Task {
 		"deploy"
 	}
 
-	async fn run(task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		// Deploy the backend before the game server in order to ensure that new APIs are exposed
 		// before the new game server is deployed.
 

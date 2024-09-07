@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 
@@ -25,7 +25,7 @@ impl task::Task for Task {
 		"start_device_link"
 	}
 
-	async fn run(_task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		let openapi_config_cloud_unauthed = apis::configuration::Configuration {
 			base_path: input.api_endpoint,
 			user_agent: Some(toolchain_ctx::user_agent()),

@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::apis;
 use uuid::Uuid;
 
@@ -8,7 +8,7 @@ pub async fn provision_database(
 	task: task::TaskCtx,
 	ctx: &ToolchainCtx,
 	env_id: Uuid,
-) -> GlobalResult<()> {
+) -> Result<()> {
 	task.log("[Provisioning Database]");
 
 	apis::ee_backend_api::ee_backend_provision_database(

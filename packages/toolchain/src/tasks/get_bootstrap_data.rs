@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -28,7 +28,7 @@ impl task::Task for Task {
 		"get_bootstrap_data"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		let ctx = crate::toolchain_ctx::load().await?;
 
 		// HACK: Map ns to temporary env data structure
@@ -58,7 +58,7 @@ impl task::Task for Task {
 		// 		let ctx = ctx.clone();
 		// 		async move {
 		// 			let backend = backend::get_or_create_backend(&ctx, env.id).await?;
-		// 			GlobalResult::Ok((env.id, backend))
+		// 			Result::Ok((env.id, backend))
 		// 		}
 		// 	})
 		// 	.buffer_unordered(4)

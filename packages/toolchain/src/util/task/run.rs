@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use tokio::sync::{broadcast, mpsc};
 
 use super::{Task, TaskCtxInner, TaskEvent};
@@ -41,7 +41,7 @@ impl RunConfig {
 	}
 }
 
-pub async fn run_task<T>(run_config: RunConfig, input: T::Input) -> GlobalResult<T::Output>
+pub async fn run_task<T>(run_config: RunConfig, input: T::Input) -> Result<T::Output>
 where
 	T: Task,
 {
@@ -71,7 +71,7 @@ where
 			// Shutdown
 			shutdown_tx.send(())?;
 
-			Err(err_code!(ERROR, error = "Task aborted"))
+			Err(anyhow!("task aborted"))
 		},
 	}
 }

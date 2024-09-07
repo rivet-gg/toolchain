@@ -1,7 +1,7 @@
-use global_error::prelude::*;
-use tokio::process::Command;
+use anyhow::*;
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
+use tokio::process::Command;
 
 use crate::util::task;
 
@@ -11,11 +11,7 @@ mod creation_flags {
 }
 
 /// Runs a command in a cross-platform compatible way.
-pub async fn run(
-	task: task::TaskCtx,
-	command: &str,
-	envs: Vec<(String, String)>,
-) -> GlobalResult<()> {
+pub async fn run(task: task::TaskCtx, command: &str, envs: Vec<(String, String)>) -> Result<()> {
 	if cfg!(unix) {
 		let mut cmd = Command::new("/bin/sh");
 		cmd.envs(envs).arg("-c").arg(command);
@@ -38,9 +34,9 @@ pub async fn execute_docker_cmd(
 	task: task::TaskCtx,
 	command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
-) -> GlobalResult<()> {
+) -> Result<()> {
 	match task.spawn_cmd(command).await {
-		Ok(status) => {
+		Result::Ok(status) => {
 			if !status.success() {
 				bail!(
 					"{error_message} ({})\n\nValidate that Docker is installed and running.",
@@ -65,7 +61,7 @@ pub async fn execute_docker_cmd(
 pub async fn execute_docker_cmd_silent(
 	command: tokio::process::Command,
 	error_message: impl std::fmt::Display,
-) -> GlobalResult<std::process::Output> {
+) -> Result<std::process::Output> {
 	let output = execute_docker_cmd_silent_fallible(command).await?;
 	error_for_output_failure(&output, error_message)?;
 	Ok(output)
@@ -74,9 +70,9 @@ pub async fn execute_docker_cmd_silent(
 /// Run a Docker command without output and ignore failures.
 pub async fn execute_docker_cmd_silent_fallible(
 	mut command: tokio::process::Command,
-) -> GlobalResult<std::process::Output> {
+) -> Result<std::process::Output> {
 	match command.output().await {
-		Ok(output) => Ok(output),
+		Result::Ok(output) => Ok(output),
 		Err(err) => {
 			if let std::io::ErrorKind::NotFound = err.kind() {
 				bail!("Docker not installed, install at https://docs.docker.com/get-docker/")
@@ -91,7 +87,7 @@ pub async fn execute_docker_cmd_silent_fallible(
 pub fn error_for_output_failure(
 	output: &std::process::Output,
 	error_message: impl std::fmt::Display,
-) -> GlobalResult<()> {
+) -> Result<()> {
 	if !output.status.success() {
 		bail!(
 			"{error_message} ({})\n\nstdout:\n{}\n\nstderr:\n{}",
@@ -115,7 +111,7 @@ pub fn shell_cmd_std(cmd: &str) -> std::process::Command {
 		cmd.creation_flags(creation_flags::CREATE_NO_WINDOW);
 		cmd
 	}
-	
+
 	#[cfg(not(windows))]
 	{
 		// Load the user's profile & shell on Linux in order to ensure we have the correct $PATH

@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{config, util::task};
@@ -21,7 +21,7 @@ impl task::Task for Task {
 		"check_login_state"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Input) -> GlobalResult<Output> {
+	async fn run(_task: task::TaskCtx, _input: Input) -> Result<Output> {
 		let logged_in = config::meta::has_project().await?;
 		Ok(Output { logged_in })
 	}

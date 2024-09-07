@@ -1,6 +1,6 @@
 // See https://github.com/moby/sys/blob/c0711cde08c8fa33857a2c28721659267f49b5e2/user/user.go
 
-use global_error::prelude::*;
+use anyhow::*;
 
 // MARK: passwd
 #[derive(Debug)]
@@ -12,7 +12,7 @@ pub struct User {
 	pub shell: String,
 }
 
-pub fn read_passwd_file(passwd_file: &str) -> GlobalResult<Vec<User>> {
+pub fn read_passwd_file(passwd_file: &str) -> Result<Vec<User>> {
 	let mut users = Vec::new();
 	for line in passwd_file.lines() {
 		if let Some(user) = parse_passwd_line(&line) {
@@ -49,7 +49,7 @@ pub struct Group {
 	pub user_list: Vec<String>,
 }
 
-pub fn read_group_file(group_file: &str) -> GlobalResult<Vec<Group>> {
+pub fn read_group_file(group_file: &str) -> Result<Vec<Group>> {
 	let mut groups = Vec::new();
 	for line in group_file.lines() {
 		if let Some(group) = parse_group_line(&line) {

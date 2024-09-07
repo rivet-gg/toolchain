@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{backend, config, util::task};
@@ -27,7 +27,7 @@ impl task::Task for Task {
 		"backend_sdk_gen"
 	}
 
-	async fn run(task: task::TaskCtx, input: Input) -> GlobalResult<Output> {
+	async fn run(task: task::TaskCtx, input: Input) -> Result<Output> {
 		// let (mut cmd_env, sdk_settings, config_path) = config::settings::try_read(|settings| {
 		// 	let mut env = settings.backend.command_environment.clone();
 		// 	env.extend(settings.backend.sdk.command_environment.clone());

@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use tokio::sync::{Mutex, OnceCell};
@@ -134,9 +134,9 @@ pub struct NetConfig {
 
 static SINGLETON: OnceCell<Mutex<Settings>> = OnceCell::const_new();
 
-async fn read() -> GlobalResult<&'static Mutex<Settings>> {
+async fn read() -> Result<&'static Mutex<Settings>> {
 	let config = SINGLETON
-		.get_or_try_init::<GlobalError, _, _>(|| async {
+		.get_or_try_init::<anyhow::Error, _, _>(|| async {
 			let mut config_builder =
 				config::ConfigBuilder::<config::builder::AsyncState>::default();
 
@@ -149,9 +149,10 @@ async fn read() -> GlobalResult<&'static Mutex<Settings>> {
 					.add_source(config::File::from(paths::project_settings_config_file()?));
 			}
 
-			let config = unwrap!(config_builder.build().await, "find config");
-			let config_deserialized =
-				unwrap!(config.try_deserialize::<Settings>(), "deserialize config");
+			let config = config_builder.build().await.context("find config")?;
+			let config_deserialized = config
+				.try_deserialize::<Settings>()
+				.context("deserialize config")?;
 
 			Result::Ok(Mutex::new(config_deserialized))
 		})
@@ -159,7 +160,7 @@ async fn read() -> GlobalResult<&'static Mutex<Settings>> {
 	Ok(config)
 }
 
-pub async fn try_read<F: FnOnce(&Settings) -> GlobalResult<T>, T>(cb: F) -> GlobalResult<T> {
+pub async fn try_read<F: FnOnce(&Settings) -> Result<T>, T>(cb: F) -> Result<T> {
 	let singleton = read().await?;
 	let mut lock = singleton.lock().await;
 

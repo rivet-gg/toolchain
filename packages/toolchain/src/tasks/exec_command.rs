@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::util::{cmd::shell_cmd, task};
@@ -25,7 +25,7 @@ impl task::Task for Task {
 		"exec_command"
 	}
 
-	async fn run(task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		let mut cmd = shell_cmd(&input.cmd);
 		cmd.args(&input.args).current_dir(input.cwd);
 		let exit_code = task.spawn_cmd(cmd).await?;

@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::Serialize;
 use std::{process::Stdio, sync::Arc};
 use tokio::{
@@ -46,10 +46,10 @@ impl TaskCtxInner {
 		let _ = self.log_tx.send(TaskEvent::Log(message.to_string()));
 	}
 
-	pub fn result(&self, result: &GlobalResult<impl serde::Serialize>) -> GlobalResult<()> {
+	pub fn result(&self, result: &Result<impl serde::Serialize>) -> Result<()> {
 		let result_serialized = result.as_ref().map_err(|x| x.to_string());
-		let result_josn = serde_json::to_string(&result_serialized)?;
-		let result_raw_value = serde_json::value::RawValue::from_string(result_josn)?;
+		let result_json = serde_json::to_string(&result_serialized)?;
+		let result_raw_value = serde_json::value::RawValue::from_string(result_json)?;
 		ensure!(
 			self.log_tx
 				.send(TaskEvent::Result {
@@ -61,10 +61,7 @@ impl TaskCtxInner {
 		Ok(())
 	}
 
-	pub async fn spawn_cmd(
-		self: &Arc<Self>,
-		mut cmd: Command,
-	) -> GlobalResult<std::process::ExitStatus> {
+	pub async fn spawn_cmd(self: &Arc<Self>, mut cmd: Command) -> Result<std::process::ExitStatus> {
 		// Required in case this task is cancelled
 		cmd.kill_on_drop(true);
 
@@ -89,13 +86,13 @@ impl TaskCtxInner {
 
 		// Spawn tasks to handle stdout and stderr
 		tokio::spawn(async move {
-			while let Ok(Some(line)) = stdout_reader.next_line().await {
+			while let Result::Ok(Some(line)) = stdout_reader.next_line().await {
 				stdout_logger.log(line);
 			}
 		});
 
 		tokio::spawn(async move {
-			while let Ok(Some(line)) = stderr_reader.next_line().await {
+			while let Result::Ok(Some(line)) = stderr_reader.next_line().await {
 				stderr_logger.log(line);
 			}
 		});

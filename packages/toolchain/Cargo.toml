@@ -20,7 +20,6 @@ ctrlc = { version = "3.2", features = ["termination"] }
 dirs = "5.0"
 fs_extra = "1.2.0"
 futures-util = "0.3"
-global-error = {  git = "https://github.com/rivet-gg/rivet.git", rev = "52dcc94990b9ac06e7f420f22a43170ad12324b8" }
 home = "0.5.3"
 humansize = "1.1"
 ignore = "0.4"
@@ -56,6 +55,7 @@ const_format = "0.2.32"
 pkg-version = "1.0.0"
 fd-lock = "4.0.2"
 include_dir = "0.7.4"
+anyhow = "1.0"
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }

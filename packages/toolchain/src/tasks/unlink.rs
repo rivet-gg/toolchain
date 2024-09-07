@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{config, util::task};
@@ -19,7 +19,7 @@ impl task::Task for Task {
 		"unlink"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		config::meta::delete_project().await?;
 		Ok(Output {})
 	}

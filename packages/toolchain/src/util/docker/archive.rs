@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::Deserialize;
 use serde_json::json;
 use std::{io::Read, path::Path};
@@ -20,7 +20,7 @@ pub async fn create_archive(
 	image_tag: &str,
 	build_kind: BuildKind,
 	build_compression: BuildCompression,
-) -> GlobalResult<tempfile::TempPath> {
+) -> Result<tempfile::TempPath> {
 	task.log(format!(
 		"[Archiving Image] {} {}",
 		build_kind.as_ref(),
@@ -40,10 +40,7 @@ pub async fn create_archive(
 }
 
 /// Save Docker image
-async fn archive_docker_image(
-	task: task::TaskCtx,
-	image_tag: &str,
-) -> GlobalResult<tempfile::TempPath> {
+async fn archive_docker_image(task: task::TaskCtx, image_tag: &str) -> Result<tempfile::TempPath> {
 	let build_tar_path = tempfile::NamedTempFile::new()?.into_temp_path();
 
 	let mut build_cmd = shell_cmd("docker");
@@ -65,10 +62,7 @@ async fn archive_docker_image(
 /// This entire operation works by manipulating TAR files without touching the
 /// host's file system in order to preserve file permissions & ownership on
 /// Windows.
-async fn archive_oci_bundle(
-	task: task::TaskCtx,
-	image_tag: &str,
-) -> GlobalResult<tempfile::TempPath> {
+async fn archive_oci_bundle(task: task::TaskCtx, image_tag: &str) -> Result<tempfile::TempPath> {
 	// Create OCI bundle
 	let oci_bundle_tar_file = tempfile::NamedTempFile::new()?;
 	let mut oci_bundle_archive = tar::Builder::new(oci_bundle_tar_file);
@@ -81,9 +75,9 @@ async fn archive_oci_bundle(
 			passwd_file,
 			group_file,
 		},
-	) = tokio::task::spawn_blocking(move || {
+	) = tokio::task::spawn_blocking(move || -> Result<_> {
 		let output = copy_container_to_rootfs(&mut oci_bundle_archive, &image_tag_clone)?;
-		GlobalResult::Ok((oci_bundle_archive, output))
+		Result::Ok((oci_bundle_archive, output))
 	})
 	.await??;
 
@@ -113,7 +107,7 @@ async fn archive_oci_bundle(
 		inspect_cmd.arg("image").arg("inspect").arg(&image_tag);
 		let inspect_output = cmd::execute_docker_cmd_silent_fallible(inspect_cmd).await?;
 		let image = serde_json::from_slice::<Vec<DockerImage>>(&inspect_output.stdout)?;
-		let image = unwrap!(image.into_iter().next(), "no image");
+		let image = image.into_iter().next().context("no image")?;
 
 		// Read config
 		let mut config = serde_json::from_slice::<serde_json::Value>(include_bytes!(
@@ -184,7 +178,7 @@ async fn archive_oci_bundle(
 			} else if let Some(uid) = dockerfile_user_int {
 				uid
 			} else {
-				task.log(format!("Warning: Cannot determin uid {} not in passwd file. Please specify a raw uid like `USER 1000:1000`.", image.config.user));
+				task.log(format!("Warning: Cannot determine uid {} not in passwd file. Please specify a raw uid like `USER 1000:1000`.", image.config.user));
 				0
 			};
 
@@ -280,7 +274,7 @@ struct CopyContainerToRootFsOutput {
 fn copy_container_to_rootfs(
 	oci_bundle_archive: &mut tar::Builder<tempfile::NamedTempFile>,
 	image_tag: &str,
-) -> GlobalResult<CopyContainerToRootFsOutput> {
+) -> Result<CopyContainerToRootFsOutput> {
 	let container_name = format!("rivet-game-{}", Uuid::new_v4());
 
 	// Files that we need to scrape from the bundle for metadata
@@ -315,7 +309,7 @@ fn copy_container_to_rootfs(
 	let root_path = UnixPath::new("rootfs");
 
 	// Read TAR stream and copy in to OCI bundle
-	let rootfs_stream = unwrap!(cp_child.stdout.take());
+	let rootfs_stream = cp_child.stdout.take().context("cp_child.stdout.take()")?;
 	let mut archive = tar::Archive::new(rootfs_stream);
 	for entry in archive.entries()? {
 		let mut entry = entry?;
@@ -329,17 +323,19 @@ fn copy_container_to_rootfs(
 		let old_path = UnixPath::new(old_path_bytes.as_ref() as &[u8]);
 		let old_path_relative = old_path.strip_prefix("/")?;
 		let new_path = root_path.join(old_path_relative);
-		let new_path_std = unwrap!(
-			new_path.try_as_ref(),
+		let new_path_std = new_path.try_as_ref().context(format!(
 			"failed to convert unix path to os path: {new_path:?}"
-		);
+		))?;
 
 		// Read any files that we need to scrape for metadata
 		//
 		// We return the data we read to memory so we can write it to the OCI
 		// bundle archive. If we tried to run `read_to_string` on the entry
 		// again, it would return nothing.
-		let read_data = match unwrap!(old_path.to_str(), "failed to match old_path as str") {
+		let read_data = match old_path
+			.to_str()
+			.context("failed to match old_path as str")?
+		{
 			"/etc/passwd" => {
 				let mut s = String::new();
 				entry.read_to_string(&mut s)?;
@@ -371,10 +367,9 @@ fn copy_container_to_rootfs(
 				if old_link.is_absolute() {
 					let old_link_relative = old_link.strip_prefix("/")?;
 					let new_link = root_path.join(old_link_relative);
-					let new_link_std = unwrap!(
-						new_link.try_as_ref(),
+					let new_link_std = new_link.try_as_ref().context(format!(
 						"failed to convert unix path to os path: {new_link:?}"
-					);
+					))?;
 
 					// We have to use `append_link` because it allows us to pass long
 					// paths.
@@ -420,7 +415,7 @@ fn copy_container_to_rootfs(
 		String::from_utf8_lossy(rm_cmd.stderr.as_slice())
 	);
 
-	GlobalResult::Ok(CopyContainerToRootFsOutput {
+	Result::Ok(CopyContainerToRootFsOutput {
 		passwd_file,
 		group_file,
 	})
@@ -429,7 +424,7 @@ fn copy_container_to_rootfs(
 async fn compress_archive(
 	build_tar_path: &Path,
 	compression: BuildCompression,
-) -> GlobalResult<tempfile::TempPath> {
+) -> Result<tempfile::TempPath> {
 	// Compress the bundle
 	let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
 	let build_tar_compressed_path = build_tar_compressed_file.into_temp_path();

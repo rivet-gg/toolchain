@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, path::Path};
 
@@ -27,7 +27,7 @@ impl Default for DockerBuildMethod {
 }
 
 impl DockerBuildMethod {
-	pub async fn from_env(task: task::TaskCtx) -> GlobalResult<Self> {
+	pub async fn from_env(task: task::TaskCtx) -> Result<Self> {
 		// Determine build method from env
 		let build_method =
 			config::settings::try_read(|x| Ok(x.game_server.deploy.build_method.clone())).await?;
@@ -65,7 +65,7 @@ pub async fn build_image(
 	build_kind: super::BuildKind,
 	build_compression: super::BuildCompression,
 	build_args: Option<&[String]>,
-) -> GlobalResult<BuildImageOutput> {
+) -> Result<BuildImageOutput> {
 	let build_method = DockerBuildMethod::from_env(task.clone()).await?;
 
 	let buildx_info = match build_method {
@@ -81,7 +81,9 @@ pub async fn build_image(
 	let mut build_arg_flags = HashMap::<String, String>::new();
 	if let Some(build_args) = build_args {
 		for item in build_args {
-			let (k, v) = unwrap!(item.split_once('='), "Build arg missing '=': {item}");
+			let (k, v) = item
+				.split_once('=')
+				.context("Build arg missing '=': {item}")?;
 			ensure!(
 				!k.starts_with("RIVET_"),
 				"Build arg must not start with 'RIVET_': {k}"

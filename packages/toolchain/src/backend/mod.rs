@@ -1,7 +1,7 @@
 pub mod database;
 pub mod embed;
 
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::{apis, models};
 use serde::Serialize;
 use serde_json::json;
@@ -26,7 +26,7 @@ pub struct BackendCommandOpts {
 	pub env: HashMap<String, String>,
 }
 
-async fn base_url() -> GlobalResult<String> {
+async fn base_url() -> Result<String> {
 	// Attempt to read from user or default
 	let base_url = if let Some(url) =
 		config::settings::try_read(|x| Ok(x.backend.opengb_url.clone())).await?
@@ -40,7 +40,7 @@ async fn base_url() -> GlobalResult<String> {
 	Ok(base_url)
 }
 
-pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Command> {
+pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
 	let base_url = base_url().await?;
 
 	// Download config from remote if needed.
@@ -113,13 +113,13 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 pub async fn run_opengb_command_from_task(
 	task: task::TaskCtx,
 	opts: BackendCommandOpts,
-) -> GlobalResult<i32> {
+) -> Result<i32> {
 	let cmd = build_opengb_command(opts).await?;
 	let exit_code = task.spawn_cmd(cmd).await?;
 	Ok(exit_code.code().unwrap_or(0))
 }
 
-pub async fn run_opengb_command(opts: BackendCommandOpts) -> GlobalResult<i32> {
+pub async fn run_opengb_command(opts: BackendCommandOpts) -> Result<i32> {
 	let mut cmd = build_opengb_command(opts).await?;
 	let exit_code = cmd.status().await?;
 	Ok(exit_code.code().unwrap_or(0))
@@ -130,7 +130,7 @@ pub async fn run_opengb_command_passthrough(
 	opts: &impl Serialize,
 ) -> ExitCode {
 	let opts_json = match serde_json::to_value(opts) {
-		Ok(x) => x,
+		Result::Ok(x) => x,
 		Err(err) => {
 			eprintln!("Serialize failed");
 			return ExitCode::FAILURE;
@@ -144,7 +144,7 @@ pub async fn run_opengb_command_passthrough(
 	})
 	.await
 	{
-		Ok(x) => x,
+		Result::Ok(x) => x,
 		Err(err) => {
 			eprintln!("Error building command: {err:?}");
 			return ExitCode::FAILURE;
@@ -152,7 +152,7 @@ pub async fn run_opengb_command_passthrough(
 	};
 
 	let exit_code = match cmd.status().await {
-		Ok(x) => x,
+		Result::Ok(x) => x,
 		Err(err) => {
 			eprintln!("Error running command: {err:?}");
 			return ExitCode::FAILURE;
@@ -166,16 +166,16 @@ pub async fn run_opengb_command_passthrough(
 	}
 }
 
-pub async fn spawn_opengb_command(opts: BackendCommandOpts) -> GlobalResult<u32> {
+pub async fn spawn_opengb_command(opts: BackendCommandOpts) -> Result<u32> {
 	let child = build_opengb_command(opts).await?.spawn()?;
-	Ok(unwrap!(child.id(), "child already exited"))
+	Ok(child.id().context("child already exited")?)
 }
 
 /// Gets or auto-creates a backend project for the game.
 pub async fn get_or_create_backend(
 	ctx: &ToolchainCtx,
 	env_id: Uuid,
-) -> GlobalResult<models::EeBackendBackend> {
+) -> Result<models::EeBackendBackend> {
 	// Get the project
 	let backend_res = apis::ee_backend_api::ee_backend_get(
 		&ctx.openapi_config_cloud,
@@ -199,10 +199,7 @@ pub async fn get_or_create_backend(
 	Ok(backend)
 }
 
-async fn create_backend(
-	ctx: &ToolchainCtx,
-	env_id: Uuid,
-) -> GlobalResult<models::EeBackendBackend> {
+async fn create_backend(ctx: &ToolchainCtx, env_id: Uuid) -> Result<models::EeBackendBackend> {
 	let res = apis::ee_backend_api::ee_backend_create(
 		&ctx.openapi_config_cloud,
 		&ctx.game_id.to_string(),

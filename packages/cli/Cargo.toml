@@ -11,12 +11,12 @@ path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.5.9", features = ["derive"] }
-global-error = {  git = "https://github.com/rivet-gg/rivet.git", rev = "52dcc94990b9ac06e7f420f22a43170ad12324b8" }
 toolchain = { version = "0.1.0", path = "../toolchain", package = "rivet-toolchain" }
 tokio = { version = "1.38.1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.120"
 open = "5.3.0"
+anyhow = "1.0"
 
 [build-dependencies]
 anyhow = "1.0"

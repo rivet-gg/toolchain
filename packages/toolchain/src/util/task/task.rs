@@ -1,4 +1,4 @@
-use global_error::*;
+use anyhow::*;
 use serde::{de::DeserializeOwned, Serialize};
 use std::future::Future;
 
@@ -9,5 +9,5 @@ pub trait Task {
 	type Output: Serialize;
 
 	fn name() -> &'static str;
-	fn run(ctx: TaskCtx, input: Self::Input) -> impl Future<Output = GlobalResult<Self::Output>>;
+	fn run(ctx: TaskCtx, input: Self::Input) -> impl Future<Output = Result<Self::Output>>;
 }

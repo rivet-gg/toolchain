@@ -1,4 +1,4 @@
-use global_error::*;
+use anyhow::*;
 use include_dir::{include_dir, Dir};
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
@@ -11,7 +11,7 @@ const DENO_LOCKFILE: &'static str = include_str!("../../../../deno.lock");
 
 /// Return a path for the backend. If one does not exist, the backend dir will automatically be
 /// extracted.
-pub async fn backend_dir() -> GlobalResult<PathBuf> {
+pub async fn backend_dir() -> Result<PathBuf> {
 	// Generate a hash of the included backend directory
 	let mut hasher = DefaultHasher::new();
 	for file in BACKEND_DIR.files() {

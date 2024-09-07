@@ -16,7 +16,7 @@ use std::time::Duration;
 
 
 #[tokio::main]
-async fn main() -> GlobalResult<()> {
+async fn main() -> Result<()> {
     // Defines a regex to find URLs
     let url_re = Regex::new(r"https?://[\w/\.\-_]+")?;
     
@@ -26,7 +26,7 @@ async fn main() -> GlobalResult<()> {
     Ok(())
 }
 
-async fn walk_dir(url_re: &Regex, dir: &str) -> GlobalResult<()> {
+async fn walk_dir(url_re: &Regex, dir: &str) -> Result<()> {
     // Walks through current directory and its subdirectories
     for entry in WalkDir::new(dir)
         .into_iter()
@@ -56,7 +56,7 @@ async fn walk_dir(url_re: &Regex, dir: &str) -> GlobalResult<()> {
     Ok(())
 }
 
-async fn check_link(url: &str) -> GlobalResult<StatusCode> {
+async fn check_link(url: &str) -> Result<StatusCode> {
     let client = reqwest::Client::new();
     let response = client.get(url).timeout(Duration::from_secs(5)).send().await?;
     Ok(response.status())

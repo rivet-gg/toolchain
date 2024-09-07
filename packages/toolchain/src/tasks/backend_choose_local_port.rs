@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::util::task;
@@ -21,8 +21,8 @@ impl task::Task for Task {
 		"backend_choose_local_port"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
-		let port = unwrap!(portpicker::pick_unused_port(), "no free ports");
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
+		let port = portpicker::pick_unused_port().context("no free ports")?;
 		Ok(Output { port })
 	}
 }

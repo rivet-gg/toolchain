@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use rivet_api::apis;
 use serde::Serialize;
 use std::{collections::HashMap, path::Path};
@@ -45,7 +45,7 @@ pub async fn deploy(
 	ctx: &ToolchainCtx,
 	task: task::TaskCtx,
 	opts: DeployOpts,
-) -> GlobalResult<DeployOutput> {
+) -> Result<DeployOutput> {
 	task.log("[Deploying Game Server]");
 
 	let deploy_config = config::settings::try_read(|x| Ok(x.game_server.deploy.clone())).await?;
@@ -158,7 +158,7 @@ pub async fn build_and_push(
 	task: task::TaskCtx,
 	current_dir: &Path,
 	push_opts: &BuildPushOpts,
-) -> GlobalResult<docker::push::PushOutput> {
+) -> Result<docker::push::PushOutput> {
 	let (build_kind, build_compression) = config::settings::try_read(|x| {
 		Ok((
 			x.game_server.deploy.build_kind.clone(),
@@ -213,7 +213,7 @@ pub async fn push(
 	ctx: &ToolchainCtx,
 	task: task::TaskCtx,
 	push_opts: &PushOpts,
-) -> GlobalResult<docker::push::PushOutput> {
+) -> Result<docker::push::PushOutput> {
 	let (build_kind, build_compression) = config::settings::try_read(|x| {
 		Ok((
 			x.game_server.deploy.build_kind.clone(),

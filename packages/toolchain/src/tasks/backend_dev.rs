@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{backend, config, util::task};
@@ -24,7 +24,7 @@ impl task::Task for Task {
 		"backend_dev"
 	}
 
-	async fn run(task: task::TaskCtx, input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
 		// let (mut cmd_env, config_path) = config::settings::try_read(|settings| {
 		// 	let mut env = settings.backend.command_environment.clone();
 		// 	env.extend(settings.backend.dev.command_environment.clone());

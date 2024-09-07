@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -23,7 +23,7 @@ impl task::Task for Task {
 		"get_settings_path"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		Ok(Output {
 			project_path: paths::project_settings_config_file()?,
 			user_path: paths::user_settings_config_file()?,

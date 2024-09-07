@@ -1,4 +1,4 @@
-use global_error::prelude::*;
+use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::util::task;
@@ -23,7 +23,7 @@ impl task::Task for Task {
 		"get_hub_link"
 	}
 
-	async fn run(_task: task::TaskCtx, _input: Self::Input) -> GlobalResult<Self::Output> {
+	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		bail!("todo")
 	}
 }
