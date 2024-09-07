@@ -1,4 +1,5 @@
 pub mod database;
+pub mod embed;
 
 use global_error::prelude::*;
 use rivet_api::{apis, models};
@@ -13,8 +14,6 @@ use crate::{
 	ToolchainCtx,
 };
 
-const OPENGB_DEFAULT_URL: &'static str =
-	"https://raw.githubusercontent.com/rivet-gg/opengb/f2abbb4355b460646f79ac8ac98b778e31fed593";
 const OPENGB_DENO_CONFIG_PATH: &'static str = "/deno.jsonc";
 const OPENGB_CLI_MAIN_PATH: &'static str = "/packages/cli/main.ts";
 
@@ -28,9 +27,15 @@ pub struct BackendCommandOpts {
 }
 
 async fn base_url() -> GlobalResult<String> {
-	let base_url = config::settings::try_read(|x| Ok(x.backend.opengb_url.clone()))
-		.await?
-		.unwrap_or_else(|| OPENGB_DEFAULT_URL.to_string());
+	// Attempt to read from user or default
+	let base_url = if let Some(url) =
+		config::settings::try_read(|x| Ok(x.backend.opengb_url.clone())).await?
+	{
+		url
+	} else {
+		embed::backend_dir().await?.display().to_string()
+	};
+
 	let base_url = base_url.trim_end_matches('/').to_string();
 	Ok(base_url)
 }
@@ -53,8 +58,15 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 		format!("{base_url}{OPENGB_DENO_CONFIG_PATH}")
 	};
 
+	// Get Deno executable
+	let deno = crate::util::deno::get_or_download_executable(
+		crate::util::deno::DEFAULT_VERSION,
+		&crate::paths::data_dir()?,
+	)
+	.await?;
+
 	// Run OpenGB
-	let mut cmd = shell_cmd("deno");
+	let mut cmd = shell_cmd(&deno.executable_path.display().to_string());
 	cmd.args(&[
 		"run",
 		"--quiet",

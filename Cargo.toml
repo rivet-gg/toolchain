@@ -1,9 +1,9 @@
 [workspace]
 resolver = "2"
-members = [ 
-    "packages/cli",
-    "packages/toolchain",
-    "packages/toolchain-ffi",
+members = [
+  "packages/cli",
+  "packages/toolchain",
+  "packages/toolchain-ffi",
 ]
 
 # Config for 'cargo dist'
