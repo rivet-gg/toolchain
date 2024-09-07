@@ -67,8 +67,8 @@ export async function executeCommand(command: Command) {
 		await init.execute(command.init);
 	} else if ("lint" in command) {
 		await lint.execute(command.lint);
-	} else if ("sdk" in command) {
-		await sdk.execute(command.sdk);
+	} else if ("sdkGenerate" in command) {
+		await sdkGenerate.execute(command.sdkGenerate);
 	} else if ("test" in command) {
 		await test.execute(command.test);
 	} else if ("dbInstanceStart" in command) {
@@ -77,8 +77,12 @@ export async function executeCommand(command: Command) {
 		await dbInstanceStatus.execute(command.dbInstanceStatus);
 	} else if ("dbInstanceStop" in command) {
 		await dbInstanceStop.execute(command.dbInstanceStop);
+	} else if ("dbMigrateApply" in command) {
+		await dbMigrateApply.execute(command.dbMigrateApply);
 	} else if ("dbMigrateDrop" in command) {
 		await dbMigrateDrop.execute(command.dbMigrateDrop);
+	} else if ("dbMigrateGenerate" in command) {
+		await dbMigrateGenerate.execute(command.dbMigrateGenerate);
 	} else if ("dbMigratePush" in command) {
 		await dbMigratePush.execute(command.dbMigratePush);
 	} else if ("dbReset" in command) {
