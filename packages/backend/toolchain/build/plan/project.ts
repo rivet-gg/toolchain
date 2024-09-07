@@ -373,7 +373,7 @@ export async function planProjectBuild(
 
 		// Run apply in parallel since it's non-interactive
 		for (const module of applyMigrations) {
-			const migrations = await glob.glob(resolve(module.path, "db", "migrations", "*", "*.sql"));
+			const migrations = await glob.glob(resolve(module.path, "db", "migrations", "*.sql"));
 			buildStep(buildState, {
 				id: `module.${module.name}.migrate.apply`,
 				name: "Migrate Database",
