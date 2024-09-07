@@ -1,0 +1,17 @@
+{
+    "deno.enable": true,
+    "grammarly.selectors": [
+        {
+            "language": "mdx",
+            "scheme": "file"
+        }
+    ],
+    "cSpell.enableFiletypes": [
+        "mdx"
+    ],
+    "cSpell.words": [
+        "botting",
+        "opengb",
+        "Supabase"
+    ]
+}

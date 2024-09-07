@@ -1,9 +1,9 @@
 [workspace]
 resolver = "2"
 members = [ 
-    "rivet-cli",
-    "rivet-toolchain",
-    "rivet-toolchain-ffi",
+    "packages/cli",
+    "packages/toolchain",
+    "packages/toolchain-ffi",
 ]
 
 # Config for 'cargo dist'
