@@ -5,7 +5,7 @@ use std::hash::{Hash, Hasher};
 use std::path::PathBuf;
 use tokio::fs;
 
-const BACKEND_DIR: Dir = include_dir!("packages/backend/");
+const BACKEND_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../backend");
 const DENO_CONFIG: &'static str = include_str!("../../../../deno.jsonc");
 const DENO_LOCKFILE: &'static str = include_str!("../../../../deno.lock");
 
