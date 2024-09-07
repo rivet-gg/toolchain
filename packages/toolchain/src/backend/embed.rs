@@ -6,8 +6,6 @@ use std::path::PathBuf;
 use tokio::fs;
 
 const BACKEND_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../backend");
-const DENO_CONFIG: &'static str = include_str!("../../../../deno.jsonc");
-const DENO_LOCKFILE: &'static str = include_str!("../../../../deno.lock");
 
 /// Return a path for the backend. If one does not exist, the backend dir will automatically be
 /// extracted.
@@ -28,8 +26,6 @@ pub async fn backend_dir() -> Result<PathBuf> {
 	if !backend_dir.exists() {
 		fs::create_dir_all(&backend_dir).await?;
 		tokio::task::block_in_place(|| BACKEND_DIR.extract(&backend_dir))?;
-		fs::write(backend_dir.join("deno.jsonc"), DENO_CONFIG).await?;
-		fs::write(backend_dir.join("deno.lock"), DENO_LOCKFILE).await?;
 	}
 
 	Ok(backend_dir)

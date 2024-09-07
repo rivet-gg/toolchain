@@ -16,10 +16,6 @@ use crate::{
 	ToolchainCtx,
 };
 
-const OPENGB_DENO_CONFIG_PATH: &'static str = "/deno.jsonc";
-const OPENGB_DENO_LOCK_PATH: &'static str = "/deno.lock";
-const OPENGB_CLI_MAIN_PATH: &'static str = "/cli/main.ts";
-
 pub struct BackendCommandOpts {
 	pub command: &'static str,
 	pub opts: serde_json::Value,
@@ -29,7 +25,7 @@ pub struct BackendCommandOpts {
 async fn base_url() -> Result<String> {
 	// Attempt to read from user or default
 	let base_url = if let Some(url) =
-		config::settings::try_read(|x| Ok(x.backend.opengb_url.clone())).await?
+		config::settings::try_read(|x| Ok(x.backend.backend_source_path.clone())).await?
 	{
 		url
 	} else {
@@ -42,36 +38,6 @@ async fn base_url() -> Result<String> {
 
 pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
 	let base_url = base_url().await?;
-
-	// Download config from remote if needed.
-	//
-	// Deno does not support pulling config from URL.
-	let (deno_config_path, deno_lock_path) =
-		if base_url.starts_with("http://") || base_url.starts_with("https://") {
-			let temp_dir = tempfile::tempdir()?.into_path();
-
-			let deno_config_path = temp_dir.join("deno.jsonc");
-			let deno_config_url = format!("{base_url}{OPENGB_DENO_CONFIG_PATH}");
-			let response = reqwest::get(&deno_config_url).await?.error_for_status()?;
-			let deno_config_content = response.text().await?;
-			tokio::fs::write(&deno_config_path, deno_config_content).await?;
-
-			let deno_lock_path = temp_dir.join("deno.jsonc");
-			let deno_lock_url = format!("{base_url}{OPENGB_DENO_LOCK_PATH}");
-			let response = reqwest::get(&deno_lock_url).await?.error_for_status()?;
-			let deno_lock_content = response.text().await?;
-			tokio::fs::write(&deno_lock_path, deno_lock_content).await?;
-
-			(
-				deno_config_path.to_str().unwrap().to_string(),
-				deno_lock_path.to_str().unwrap().to_string(),
-			)
-		} else {
-			(
-				format!("{base_url}{OPENGB_DENO_CONFIG_PATH}"),
-				format!("{base_url}{OPENGB_DENO_LOCK_PATH}"),
-			)
-		};
 
 	// Get Deno executable
 	let deno = crate::util::deno::get_or_download_executable(
@@ -98,10 +64,10 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
 		"--allow-write",
 		"--allow-sys",
 		"--config",
-		&deno_config_path,
+		&format!("{base_url}/deno.jsonc"),
 		"--lock",
-		&deno_lock_path,
-		&format!("{base_url}{OPENGB_CLI_MAIN_PATH}"),
+		&format!("{base_url}/deno.lock"),
+		&format!("{base_url}/cli/main.ts"),
 		"--command",
 		backend_cmd,
 	]);

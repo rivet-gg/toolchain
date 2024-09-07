@@ -22,11 +22,11 @@ pub struct Settings {
 #[derive(Default, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct BackendConfig {
-	/// Env vars to pass to all OpenGB commands.
+	/// Env vars to pass to all backend commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	#[serde(default)]
-	pub opengb_url: Option<String>,
+	pub backend_source_path: Option<String>,
 
 	#[serde(default)]
 	pub sdk: BackendSdkConfig,
@@ -39,7 +39,7 @@ pub struct BackendConfig {
 #[derive(Default, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct BackendSdkConfig {
-	/// Env vars to pass to the deploy OpenGB commands.
+	/// Env vars to pass to the deploy backend commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	#[serde(default)]
@@ -49,7 +49,7 @@ pub struct BackendSdkConfig {
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct BackendDevConfig {
-	/// Env vars to pass to the deploy OpenGB commands.
+	/// Env vars to pass to the deploy backend commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	/// Backend ocnfig to use when running backend config.
@@ -75,7 +75,7 @@ impl BackendDevConfig {
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct BackendDeployConfig {
-	/// Env vars to pass to the deploy OpenGB commands.
+	/// Env vars to pass to the deploy backend commands.
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	/// Backend ocnfig to use when running backend config.
