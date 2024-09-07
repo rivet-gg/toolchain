@@ -3,6 +3,7 @@ pub mod embed;
 
 use global_error::prelude::*;
 use rivet_api::{apis, models};
+use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::process::ExitCode;
@@ -124,14 +125,32 @@ pub async fn run_opengb_command(opts: BackendCommandOpts) -> GlobalResult<i32> {
 	Ok(exit_code.code().unwrap_or(0))
 }
 
-pub async fn run_opengb_command_passthrough(opts: BackendCommandOpts) -> ExitCode {
-	let mut cmd = match build_opengb_command(opts).await {
+pub async fn run_opengb_command_passthrough(
+	command: &'static str,
+	opts: &impl Serialize,
+) -> ExitCode {
+	let opts_json = match serde_json::to_value(opts) {
+		Ok(x) => x,
+		Err(err) => {
+			eprintln!("Serialize failed");
+			return ExitCode::FAILURE;
+		}
+	};
+
+	let mut cmd = match build_opengb_command(BackendCommandOpts {
+		command,
+		opts: opts_json,
+		env: HashMap::new(),
+	})
+	.await
+	{
 		Ok(x) => x,
 		Err(err) => {
 			eprintln!("Error building command: {err:?}");
 			return ExitCode::FAILURE;
 		}
 	};
+
 	let exit_code = match cmd.status().await {
 		Ok(x) => x,
 		Err(err) => {
@@ -139,6 +158,7 @@ pub async fn run_opengb_command_passthrough(opts: BackendCommandOpts) -> ExitCod
 			return ExitCode::FAILURE;
 		}
 	};
+
 	if exit_code.success() {
 		ExitCode::SUCCESS
 	} else {
