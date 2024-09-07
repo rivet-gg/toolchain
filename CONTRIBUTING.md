@@ -30,3 +30,15 @@ If something goes wrong with a deploy:
     git push -u origin :refs/tags/vx.x.x
     ```
 
+## Developing Backend
+
+To iterate faster on the backend without requiring rebuilding the toolchain for every change, run `rivet config edit user` and add this to your config, where `/path/to/toolchain` is the path to this repository:
+
+```json
+{
+  "backend": {
+    "backend_source_path": "/path/to/toolchain/packages/backend/"
+  }
+}
+```
+

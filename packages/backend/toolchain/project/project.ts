@@ -314,7 +314,7 @@ export const MANIFEST_PATH = "manifest.json";
 export const META_PATH = "meta.json";
 export const OPEN_API_PATH = "openapi.json";
 export const CACHE_PATH = "cache.json";
-export const RUNTIME_PATH = "runtime";
+export const PACKAGES_PATH = "packages";
 export const SDK_PATH = "sdk";
 export const DRIZZLE_ORM_REEXPORT = "drizzle_orm_reexport.ts";
 
@@ -322,16 +322,17 @@ export function projectGenPath(project: Project, ...pathSegments: string[]): str
 	return resolve(project.path, ".opengb", ...pathSegments);
 }
 
-export function genRuntimeModPath(project: Project): string {
-	return projectGenPath(project, "runtime", "packages", "runtime", "mod.ts");
+/** Path where the archive for the backend packages source code are extracted. */
+export function genPackagesPath(project: Project): string {
+	return projectGenPath(project, PACKAGES_PATH, "runtime", "mod.ts");
 }
 
 export function genRuntimePostgresPath(project: Project): string {
-	return projectGenPath(project, "runtime", "packages", "runtime", "postgres.ts");
+	return projectGenPath(project, PACKAGES_PATH, "runtime", "postgres.ts");
 }
 
 export function genRuntimeActorPath(project: Project): string {
-	return projectGenPath(project, "runtime", "packages", "runtime", "actor", "actor.ts");
+	return projectGenPath(project, PACKAGES_PATH, "runtime", "actor", "actor.ts");
 }
 
 export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): string {

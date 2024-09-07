@@ -70,6 +70,7 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 			dialect: "postgresql",
 			migrations: {
 				table: "migrations",
+				schema: `schema_${module.db.schema}`,
 				prefix: "unix",
 			},
 			dbCredentials: {

@@ -15,8 +15,8 @@
 		"docker:build": "docker build -t opengb -f cli.Dockerfile .",
 
 		// Generates schema
-		"artifacts:build": "deno task format && deno task artifacts:build:runtime && deno task artifacts:build:dynamic && deno task artifacts:build:drizzle",
-		"artifacts:build:runtime": "deno run --allow-env --allow-read --allow-write scripts/artifacts/build_runtime_archive.ts",
+		"artifacts:build": "deno task format && deno task artifacts:build:packages && deno task artifacts:build:dynamic && deno task artifacts:build:drizzle",
+		"artifacts:build:packages": "deno run --allow-env --allow-read --allow-write scripts/artifacts/build_packages_archive.ts",
 		"artifacts:build:dynamic": "deno run --allow-env --allow-read --allow-write scripts/artifacts/build_dynamic_archive.ts",
 		"artifacts:build:drizzle": "deno run --node-modules-dir --allow-env --allow-read --allow-write scripts/artifacts/build_drizzle.ts",
 

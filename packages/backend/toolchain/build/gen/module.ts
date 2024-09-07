@@ -13,9 +13,10 @@ import {
 	genDependencyCaseConversionMapPath,
 	genDependencyTypedefPath,
 	genModulePublicExternal,
-	genRuntimeModPath,
+	genPackagesPath,
 	projectGenPath,
 	RUNTIME_CONFIG_PATH,
+	PACKAGES_PATH,
 } from "../../project/project.ts";
 import { camelify } from "../../../case_conversion/mod.ts";
 import { BuildOpts } from "../mod.ts";
@@ -27,9 +28,9 @@ export async function compileModuleHelper(
 ) {
 	const helper = new GeneratedCodeBuilder(moduleHelperGen(project, module), 3);
 
-	const runtimePath = helper.relative(genRuntimeModPath(project));
+	const runtimePath = helper.relative(genPackagesPath(project));
 	const reexportPath = helper.relative(
-		projectGenPath(project, "runtime", "packages", "runtime", "export_to_module.ts"),
+		projectGenPath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
 	);
 	const dependencyCaseConversionMapPath = helper.relative(genDependencyCaseConversionMapPath(project));
 	const actorCaseConversionMapPath = helper.relative(genActorCaseConversionMapPath(project));

@@ -12,7 +12,6 @@ if (!commandJson) {
 
 try {
 	const command = JSON.parse(commandJson);
-	console.log('validating', command);
 	const validatedCommand = commandSchema.parse(command);
 	await executeCommand(validatedCommand);
 } catch (error) {

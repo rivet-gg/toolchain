@@ -10,10 +10,10 @@ import { generateEntrypoint } from "../entrypoint.ts";
 import { generateOpenApi } from "../openapi.ts";
 import { UnreachableError, UserError } from "../../error/mod.ts";
 import { generateMeta } from "../meta.ts";
-import { BUNDLE_PATH, ENTRYPOINT_PATH, MANIFEST_PATH, projectGenPath, RUNTIME_PATH } from "../../project/project.ts";
+import { BUNDLE_PATH, ENTRYPOINT_PATH, MANIFEST_PATH, projectGenPath, PACKAGES_PATH } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
-import runtimeArchive from "../../../artifacts/runtime_archive.json" with { type: "json" };
+import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
 import { nodeModulesPolyfillPlugin } from "npm:esbuild-plugins-node-modules-polyfill@1.6.4";
 
 // Must match version in `esbuild_deno_loader`
@@ -32,13 +32,13 @@ export async function planProjectBuild(
 
 	// TODO: Add way to compare runtime artifacts (or let this be handled by the cache version and never rerun?)
 	buildStep(buildState, {
-		id: `project.generate.runtime`,
+		id: `project.generate.inflate_packages`,
 		name: "Generate",
-		description: "runtime/",
+		description: "packages/",
 		async build({ signal }) {
 			// Writes a copy of the OpenGB runtime bundled with the CLI to the project.
-			const inflateRuntimePath = projectGenPath(project, RUNTIME_PATH);
-			await inflateArchive(runtimeArchive, inflateRuntimePath, "string", signal);
+			const inflatePackagesPath = projectGenPath(project, PACKAGES_PATH);
+			await inflateArchive(packagesArchive, inflatePackagesPath, "string", signal);
 		},
 	});
 
