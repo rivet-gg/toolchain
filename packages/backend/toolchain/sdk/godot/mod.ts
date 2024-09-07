@@ -4,7 +4,7 @@ import * as glob from "glob";
 import { resolve } from "@std/path";
 import { GeneratedCodeBuilder, Lang } from "../../build/gen/code_builder.ts";
 import { Project } from "../../project/mod.ts";
-import dynamicArchive from "../../../../artifacts/dynamic_archive.json" with { type: "json" };
+import dynamicArchive from "../../../artifacts/dynamic_archive.json" with { type: "json" };
 import dedent from "dedent";
 import { autoGenHeader } from "../../build/misc.ts";
 

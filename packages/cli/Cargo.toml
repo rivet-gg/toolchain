@@ -14,5 +14,6 @@ clap = { version = "4.5.9", features = ["derive"] }
 global-error = {  git = "https://github.com/rivet-gg/rivet.git", rev = "22baf31efa3ffcdad65ecc72ce25425ab61b9c6f" }
 toolchain = { version = "0.1.0", path = "../toolchain", package = "rivet-toolchain" }
 tokio = { version = "1.38.1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.120"
 open = "5.3.0"

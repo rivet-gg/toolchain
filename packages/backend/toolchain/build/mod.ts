@@ -9,32 +9,32 @@ import { ensurePostgresRunning } from "../postgres/mod.ts";
  * Which format to use for building.
  */
 export enum Format {
-	Native,
-	Bundled,
+	Native = "native",
+	Bundled = "bundled",
 }
 
 /**
  * Which runtime to target when building.
  */
 export enum Runtime {
-	Deno,
-	CloudflareWorkersPlatforms,
+	Deno = "deno",
+	CloudflareWorkersPlatforms = "cloudflare_workers_platforms",
 }
 
 /**
  * Which DB driver to use for the runtime.
  */
 export enum DbDriver {
-	NodePostgres,
-	NeonServerless,
-	CloudflareHyperdrive,
+	NodePostgres = "node_postgres",
+	NeonServerless = "neon_serverless",
+	CloudflareHyperdrive = "cloudflare_hyperdrive",
 }
 
 export enum MigrateMode {
-	Dev,
-	Generate,
-	GenerateAndApply,
-	Apply,
+	Dev = "dev",
+	Generate = "generate",
+	GenerateAndApply = "generate_and_apply",
+	Apply = "apply",
 }
 
 /**

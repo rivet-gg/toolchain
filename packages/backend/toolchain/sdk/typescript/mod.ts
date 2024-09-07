@@ -3,7 +3,7 @@ import { exists } from "@std/fs";
 import { resolve } from "@std/path";
 import { GeneratedCodeBuilder } from "../../build/gen/code_builder.ts";
 import { Project } from "../../project/mod.ts";
-import dynamicArchive from "../../../../artifacts/dynamic_archive.json" with { type: "json" };
+import dynamicArchive from "../../../artifacts/dynamic_archive.json" with { type: "json" };
 
 export async function generateTypescriptAddons(project: Project, sdkGenPath: string) {
 	await generateTsConfig(sdkGenPath);

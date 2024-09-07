@@ -8,7 +8,7 @@ import { buildArtifacts, projectRoot} from "./util.ts";
 await buildArtifacts({
 	rootPath: projectRoot(),
 	patterns: [
-		"packages/{runtime,case_conversion,path_resolver}/**/*.ts",
+		"{runtime,case_conversion,path_resolver}/**/*.ts",
 	],
 	outputPath: resolve(projectRoot(), "artifacts", "runtime_archive.json"),
 	encode: "string",

@@ -13,7 +13,7 @@ import { generateMeta } from "../meta.ts";
 import { BUNDLE_PATH, ENTRYPOINT_PATH, MANIFEST_PATH, projectGenPath, RUNTIME_PATH } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
-import runtimeArchive from "../../../../artifacts/runtime_archive.json" with { type: "json" };
+import runtimeArchive from "../../../artifacts/runtime_archive.json" with { type: "json" };
 import { nodeModulesPolyfillPlugin } from "npm:esbuild-plugins-node-modules-polyfill@1.6.4";
 
 // Must match version in `esbuild_deno_loader`

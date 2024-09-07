@@ -10,9 +10,9 @@ import { DEFAULT_PACKAGE_NAME as UNITY_DEFAULT_PACKAGE_NAME, generateUnityAddons
 import { generateGodot } from "./godot/mod.ts";
 
 export enum SdkTarget {
-	TypeScript,
-	Unity,
-	Godot,
+	TypeScript = "typescript",
+	Unity = "unity",
+	Godot = "godot",
 }
 
 interface Generator {

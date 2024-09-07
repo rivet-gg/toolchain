@@ -4,26 +4,25 @@ pub mod embed;
 use global_error::prelude::*;
 use rivet_api::{apis, models};
 use serde_json::json;
-use std::{collections::HashMap, path::PathBuf};
+use std::collections::HashMap;
+use std::process::ExitCode;
 use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
-	config,
+	config, paths,
 	util::{cmd::shell_cmd, task},
 	ToolchainCtx,
 };
 
 const OPENGB_DENO_CONFIG_PATH: &'static str = "/deno.jsonc";
-const OPENGB_CLI_MAIN_PATH: &'static str = "/packages/cli/main.ts";
+const OPENGB_DENO_LOCK_PATH: &'static str = "/deno.lock";
+const OPENGB_CLI_MAIN_PATH: &'static str = "/cli/main.ts";
 
 pub struct BackendCommandOpts {
-	pub config_path: String,
-	pub args: Vec<String>,
+	pub command: &'static str,
+	pub opts: serde_json::Value,
 	pub env: HashMap<String, String>,
-	pub cwd: PathBuf,
-	pub ports: Vec<(u16, u16)>,
-	pub enable_postgres: bool,
 }
 
 async fn base_url() -> GlobalResult<String> {
@@ -46,17 +45,32 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 	// Download config from remote if needed.
 	//
 	// Deno does not support pulling config from URL.
-	let deno_config_path = if base_url.starts_with("http://") || base_url.starts_with("https://") {
-		let temp_dir = tempfile::tempdir()?.into_path();
-		let deno_config_path = temp_dir.join("deno.jsonc");
-		let deno_config_url = format!("{base_url}{OPENGB_DENO_CONFIG_PATH}");
-		let response = reqwest::get(&deno_config_url).await?.error_for_status()?;
-		let deno_config_content = response.text().await?;
-		tokio::fs::write(&deno_config_path, deno_config_content).await?;
-		deno_config_path.to_str().unwrap().to_string()
-	} else {
-		format!("{base_url}{OPENGB_DENO_CONFIG_PATH}")
-	};
+	let (deno_config_path, deno_lock_path) =
+		if base_url.starts_with("http://") || base_url.starts_with("https://") {
+			let temp_dir = tempfile::tempdir()?.into_path();
+
+			let deno_config_path = temp_dir.join("deno.jsonc");
+			let deno_config_url = format!("{base_url}{OPENGB_DENO_CONFIG_PATH}");
+			let response = reqwest::get(&deno_config_url).await?.error_for_status()?;
+			let deno_config_content = response.text().await?;
+			tokio::fs::write(&deno_config_path, deno_config_content).await?;
+
+			let deno_lock_path = temp_dir.join("deno.jsonc");
+			let deno_lock_url = format!("{base_url}{OPENGB_DENO_LOCK_PATH}");
+			let response = reqwest::get(&deno_lock_url).await?.error_for_status()?;
+			let deno_lock_content = response.text().await?;
+			tokio::fs::write(&deno_lock_path, deno_lock_content).await?;
+
+			(
+				deno_config_path.to_str().unwrap().to_string(),
+				deno_lock_path.to_str().unwrap().to_string(),
+			)
+		} else {
+			(
+				format!("{base_url}{OPENGB_DENO_CONFIG_PATH}"),
+				format!("{base_url}{OPENGB_DENO_LOCK_PATH}"),
+			)
+		};
 
 	// Get Deno executable
 	let deno = crate::util::deno::get_or_download_executable(
@@ -64,6 +78,11 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 		&crate::paths::data_dir()?,
 	)
 	.await?;
+
+	// Serialize command
+	let backend_cmd = &serde_json::to_string(&json!({
+		opts.command: opts.opts
+	}))?;
 
 	// Run OpenGB
 	let mut cmd = shell_cmd(&deno.executable_path.display().to_string());
@@ -79,23 +98,52 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> GlobalResult<Comm
 		"--allow-sys",
 		"--config",
 		&deno_config_path,
+		"--lock",
+		&deno_lock_path,
 		&format!("{base_url}{OPENGB_CLI_MAIN_PATH}"),
-		"--project",
-		&opts.config_path,
+		"--command",
+		backend_cmd,
 	]);
-	cmd.args(opts.args);
 	cmd.envs(opts.env);
-	cmd.current_dir(opts.cwd);
+	cmd.current_dir(paths::project_root()?);
 	Ok(cmd)
 }
 
-pub async fn run_opengb_command(
+pub async fn run_opengb_command_from_task(
 	task: task::TaskCtx,
 	opts: BackendCommandOpts,
 ) -> GlobalResult<i32> {
 	let cmd = build_opengb_command(opts).await?;
 	let exit_code = task.spawn_cmd(cmd).await?;
 	Ok(exit_code.code().unwrap_or(0))
+}
+
+pub async fn run_opengb_command(opts: BackendCommandOpts) -> GlobalResult<i32> {
+	let mut cmd = build_opengb_command(opts).await?;
+	let exit_code = cmd.status().await?;
+	Ok(exit_code.code().unwrap_or(0))
+}
+
+pub async fn run_opengb_command_passthrough(opts: BackendCommandOpts) -> ExitCode {
+	let mut cmd = match build_opengb_command(opts).await {
+		Ok(x) => x,
+		Err(err) => {
+			eprintln!("Error building command: {err:?}");
+			return ExitCode::FAILURE;
+		}
+	};
+	let exit_code = match cmd.status().await {
+		Ok(x) => x,
+		Err(err) => {
+			eprintln!("Error running command: {err:?}");
+			return ExitCode::FAILURE;
+		}
+	};
+	if exit_code.success() {
+		ExitCode::SUCCESS
+	} else {
+		ExitCode::FAILURE
+	}
 }
 
 pub async fn spawn_opengb_command(opts: BackendCommandOpts) -> GlobalResult<u32> {

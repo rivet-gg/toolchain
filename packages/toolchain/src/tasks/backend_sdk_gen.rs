@@ -28,45 +28,47 @@ impl task::Task for Task {
 	}
 
 	async fn run(task: task::TaskCtx, input: Input) -> GlobalResult<Output> {
-		let (mut cmd_env, sdk_settings, config_path) = config::settings::try_read(|settings| {
-			let mut env = settings.backend.command_environment.clone();
-			env.extend(settings.backend.sdk.command_environment.clone());
-			Ok((
-				env,
-				settings.backend.sdk.clone(),
-				settings.backend.deploy.config_path.clone(),
-			))
-		})
-		.await?;
+		// let (mut cmd_env, sdk_settings, config_path) = config::settings::try_read(|settings| {
+		// 	let mut env = settings.backend.command_environment.clone();
+		// 	env.extend(settings.backend.sdk.command_environment.clone());
+		// 	Ok((
+		// 		env,
+		// 		settings.backend.sdk.clone(),
+		// 		settings.backend.deploy.config_path.clone(),
+		// 	))
+		// })
+		// .await?;
+		//
+		// let sdk_path = sdk_settings
+		// 	.path
+		// 	.unwrap_or_else(|| input.fallback_sdk_path.clone());
+		//
+		// cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
+		//
+		// let exit_code = backend::run_opengb_command_from_task(
+		// 	task.clone(),
+		// 	backend::BackendCommandOpts {
+		// 		config_path,
+		// 		args: vec![
+		// 			"sdk".into(),
+		// 			"generate".into(),
+		// 			"--output".into(),
+		// 			sdk_path.clone(),
+		// 			input.target,
+		// 		],
+		// 		env: cmd_env,
+		// 		cwd: input.cwd.into(),
+		// 		ports: vec![],
+		// 		enable_postgres: false,
+		// 	},
+		// )
+		// .await?;
+		//
+		// Ok(Output {
+		// 	exit_code,
+		// 	sdk_path,
+		// })
 
-		let sdk_path = sdk_settings
-			.path
-			.unwrap_or_else(|| input.fallback_sdk_path.clone());
-
-		cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
-
-		let exit_code = backend::run_opengb_command(
-			task.clone(),
-			backend::BackendCommandOpts {
-				config_path,
-				args: vec![
-					"sdk".into(),
-					"generate".into(),
-					"--output".into(),
-					sdk_path.clone(),
-					input.target,
-				],
-				env: cmd_env,
-				cwd: input.cwd.into(),
-				ports: vec![],
-				enable_postgres: false,
-			},
-		)
-		.await?;
-
-		Ok(Output {
-			exit_code,
-			sdk_path,
-		})
+		todo!()
 	}
 }

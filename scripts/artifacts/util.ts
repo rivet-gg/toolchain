@@ -9,7 +9,7 @@ export function projectRoot() {
 	const dirname = import.meta.dirname;
 	if (!dirname) throw new Error("Missing dirname");
 
-	return resolve(dirname, "..", "..");
+	return resolve(dirname, "..", "..", "packages", "backend");
 }
 
 /**

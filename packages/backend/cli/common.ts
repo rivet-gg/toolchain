@@ -1,9 +1,12 @@
+import { z } from "zod";
 import { loadProject, Project } from "../toolchain/project/mod.ts";
 
-export interface GlobalOpts extends Record<string, unknown> {
+export const globalOptsSchema = z.object({
 	/** Path to the project root or project config. */
-	project?: string;
-}
+	project: z.string().optional(),
+}).catchall(z.unknown());
+
+export type GlobalOpts = z.infer<typeof globalOptsSchema>;
 
 export async function initProject(opts: GlobalOpts): Promise<Project> {
 	const project = await loadProject({ project: opts.project });

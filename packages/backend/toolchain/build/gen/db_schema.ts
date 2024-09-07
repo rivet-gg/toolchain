@@ -1,7 +1,7 @@
 import { dbSchemaHelperPath, DRIZZLE_ORM_REEXPORT, Module, Project, projectGenPath } from "../../project/mod.ts";
 import { GeneratedCodeBuilder } from "./mod.ts";
 import { InternalError } from "../../error/mod.ts";
-import drizzleOrmArtifact from "../../../../artifacts/drizzle_orm.json" with { type: "json" };
+import drizzleOrmArtifact from "../../../artifacts/drizzle_orm.json" with { type: "json" };
 import { DRIZZLE_ORM_PACKAGE, DRIZZLE_ORM_PACKAGE_NPM } from "../../drizzle_consts.ts";
 
 export interface DbSchemaHelperOpts {

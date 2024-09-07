@@ -1,6 +1,6 @@
-pub mod backend;
 pub mod config;
 pub mod deploy;
+pub mod dev;
 pub mod login;
 pub mod logout;
 pub mod task;
@@ -13,10 +13,7 @@ pub enum SubCommand {
 	Login(login::Opts),
 	Logout(logout::Opts),
 	Deploy(deploy::Opts),
-	Backend {
-		#[clap(subcommand)]
-		subcommand: backend::SubCommand,
-	},
+	Dev(dev::Opts),
 	Config {
 		#[clap(subcommand)]
 		subcommand: config::SubCommand,
@@ -33,7 +30,7 @@ impl SubCommand {
 			SubCommand::Login(opts) => opts.execute().await,
 			SubCommand::Logout(opts) => opts.execute().await,
 			SubCommand::Deploy(opts) => opts.execute().await,
-			SubCommand::Backend { subcommand } => subcommand.execute().await,
+			SubCommand::Dev(opts) => opts.execute().await,
 			SubCommand::Config { subcommand } => subcommand.execute().await,
 			SubCommand::Task { subcommand } => subcommand.execute().await,
 		}

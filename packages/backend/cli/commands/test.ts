@@ -1,112 +1,107 @@
+import { z } from "zod";
 import { resolve } from "@std/path";
-import { Command } from "@cliffy/command";
 import * as glob from "glob";
-import { GlobalOpts } from "../common.ts";
-import { build, DbDriver, Format, Runtime } from "../../toolchain/build/mod.ts";
+import { globalOptsSchema } from "../common.ts";
+import { build, DbDriver, Format, MigrateMode, Runtime } from "../../toolchain/build/mod.ts";
 import { watch } from "../../toolchain/watch/mod.ts";
 import { Project } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
 import { info } from "../../toolchain/term/status.ts";
-import { convertMigrateMode, migrateMode } from "./../util.ts";
+import { migrateModeSchema } from "./../util.ts";
 import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
 
-// TODO: https://github.com/rivet-gg/opengb-engine/issues/86
-export const testCommand = new Command<GlobalOpts>()
-	.description("Run tests")
-	.type("migrate-mode", migrateMode)
-	.arguments("[modules...:string]")
-	.option("--no-build", "Don't build source files")
-	.option("--no-check", "Don't check source files before running")
-	.option("--strict-schemas", "Strictly validate schemas", { default: false })
-	.option("--no-migrate", "Disable migrations")
-	.option(
-		"--migrate-mode <mode:migrate-mode>",
-		"Configure how migrations are ran",
-		{ default: "dev" },
-	)
-	.option("-w, --watch", "Automatically rerun tests on changes")
-	.option("--filter <name:string>", "Filter tests by name")
-	.action(
-		async (opts, ...modulesFilter: string[]) => {
-			await watch({
-				loadProjectOpts: opts,
-				disableWatch: !opts.watch,
-				fn: async (project: Project, signal: AbortSignal) => {
-					await ensurePostgresRunning(project);
+export const optsSchema = z.object({
+	build: z.boolean().default(true),
+	check: z.boolean().default(true),
+	strictSchemas: z.boolean().default(false),
+	migrate: z.boolean().default(true),
+	migrateMode: migrateModeSchema.default(MigrateMode.Dev),
+	watch: z.boolean().default(false),
+	filter: z.string().optional(),
+	modulesFilter: z.array(z.string()),
+}).merge(globalOptsSchema);
 
-					// Build project
-					if (opts.build) {
-						await build(project, {
-							runtime: Runtime.Deno,
-							format: Format.Native,
-							dbDriver: DbDriver.NodePostgres,
-							strictSchemas: opts.strictSchemas,
-							// This gets ran on `deno test`
-							skipDenoCheck: true,
-							migrate: opts.migrate
-								? {
-									mode: convertMigrateMode(opts.migrateMode),
-								}
-								: undefined,
-							signal,
-						});
-					}
+type Opts = z.infer<typeof optsSchema>;
 
-					// Determine args
-					const args = [
-						"--allow-env",
-						"--allow-net",
-						"--allow-read",
-					];
-					if (opts.check) args.push("--check");
-					if (opts.filter) args.push(`--filter=${opts.filter}`);
+export async function execute(opts: Opts) {
+	await watch({
+		loadProjectOpts: opts,
+		disableWatch: !opts.watch,
+		fn: async (project: Project, signal: AbortSignal) => {
+			await ensurePostgresRunning(project);
 
-					// Find test scripts
-					const testingModules = [];
-					for (const module of project.modules.values()) {
-						// Filter modules
-						if (modulesFilter.length == 0) {
-							// Only test local modules
-							if (module.registry.isExternal) continue;
-						} else {
-							// Only test specified modules. This allows for testing remote modules.
-							if (!modulesFilter.includes(module.name)) continue;
+			// Build project
+			if (opts.build) {
+				await build(project, {
+					runtime: Runtime.Deno,
+					format: Format.Native,
+					dbDriver: DbDriver.NodePostgres,
+					strictSchemas: opts.strictSchemas,
+					// This gets ran on `deno test`
+					skipDenoCheck: true,
+					migrate: opts.migrate
+						? {
+							mode: opts.migrateMode,
 						}
+						: undefined,
+					signal,
+				});
+			}
 
-						testingModules.push(module.name);
+			// Determine args
+			const args = [
+				"--allow-env",
+				"--allow-net",
+				"--allow-read",
+			];
+			if (opts.check) args.push("--check");
+			if (opts.filter) args.push(`--filter=${opts.filter}`);
 
-						// Test all modules or filter module tests
-						const testPaths = (await glob.glob("*.ts", {
-							cwd: resolve(module.path, "tests"),
-						}))
-							.map((path) => resolve(module.path, "tests", path));
-						args.push(...testPaths);
-					}
+			// Find test scripts
+			const testingModules = [];
+			for (const module of project.modules.values()) {
+				// Filter modules
+				if (opts.modulesFilter.length == 0) {
+					// Only test local modules
+					if (module.registry.isExternal) continue;
+				} else {
+					// Only test specified modules. This allows for testing remote modules.
+					if (!opts.modulesFilter.includes(module.name)) continue;
+				}
 
-					if (testingModules.length == 0) {
-						info("Finished", "No modules to test");
-						return;
-					}
+				testingModules.push(module.name);
 
-					// Run tests
-					info("Testing", testingModules.join(", "));
-					const cmd = await new Deno.Command("deno", {
-						args: [
-							"test",
-							...args,
-						],
-						stdout: "inherit",
-						stderr: "inherit",
-						signal,
-						env: {
-							"DATABASE_URL": await getDefaultDatabaseUrl(project),
-							// Force color for test logs
-							"OPENGB_TERM_COLOR": Deno.env.get("OPENGB_TERM_COLOR") ?? "always",
-						},
-					})
-						.output();
-					if (!cmd.success) throw new UserError("Tests failed.");
+				// Test all modules or filter module tests
+				const testPaths = (await glob.glob("*.ts", {
+					cwd: resolve(module.path, "tests"),
+				}))
+					.map((path) => resolve(module.path, "tests", path));
+				args.push(...testPaths);
+			}
+
+			if (testingModules.length == 0) {
+				info("Finished", "No modules to test");
+				return;
+			}
+
+			// Run tests
+			info("Testing", testingModules.join(", "));
+			const cmd = await new Deno.Command("deno", {
+				args: [
+					"test",
+					...args,
+				],
+				stdout: "inherit",
+				stderr: "inherit",
+				signal,
+				env: {
+					"DATABASE_URL": await getDefaultDatabaseUrl(project),
+					// Force color for test logs
+					"OPENGB_TERM_COLOR": Deno.env.get("OPENGB_TERM_COLOR") ?? "always",
 				},
-			});
+			})
+				.output();
+			if (!cmd.success) throw new UserError("Tests failed.");
 		},
-	);
+	});
+}
