@@ -2,6 +2,7 @@
 name = "rivet-cli"
 version = "2.0.0-rc.4"
 edition = "2021"
+license = "Apache-2.0"
 rust-version = "1.75"
 repository = "https://github.com/rivet-gg/cli"
 

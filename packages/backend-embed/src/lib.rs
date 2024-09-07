@@ -9,7 +9,7 @@ const BACKEND_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../backend");
 
 /// Return a path for the backend. If one does not exist, the backend dir will automatically be
 /// extracted.
-pub async fn backend_dir() -> Result<PathBuf> {
+pub async fn backend_dir(data_dir: &PathBuf) -> Result<PathBuf> {
 	// Generate a hash of the included backend directory
 	let mut hasher = DefaultHasher::new();
 	for file in BACKEND_DIR.files() {
@@ -18,9 +18,7 @@ pub async fn backend_dir() -> Result<PathBuf> {
 	let backend_hash = format!("{:x}", hasher.finish());
 
 	// Create path to backend base don hash
-	let backend_dir = crate::paths::data_dir()?
-		.join("backend")
-		.join(format!("{backend_hash}"));
+	let backend_dir = data_dir.join("backend").join(format!("{backend_hash}"));
 
 	// Write backend if does not exist
 	if !backend_dir.exists() {

@@ -9,6 +9,10 @@ use zip::ZipArchive;
 // Mirror new Deno versions with `./scripts/deno/mirror_release.ts`
 pub const DEFAULT_VERSION: &'static str = "1.46.1";
 
+pub async fn get_or_download_default_executable(data_dir: &PathBuf) -> Result<DenoExecutable> {
+	get_or_download_executable(DEFAULT_VERSION, data_dir).await
+}
+
 pub struct DenoExecutable {
 	pub executable_path: PathBuf,
 	pub fresh_download: bool,

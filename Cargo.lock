@@ -1833,6 +1833,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "rivet-backend-embed"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "include_dir",
+ "rivet-deno-embed",
+ "tempfile",
+ "tokio",
+]
+
+[[package]]
 name = "rivet-cli"
 version = "2.0.0-rc.4"
 dependencies = [
@@ -1844,6 +1855,18 @@ dependencies = [
  "serde_json",
  "tokio",
  "vergen-git2",
+]
+
+[[package]]
+name = "rivet-deno-embed"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "fd-lock",
+ "reqwest",
+ "tempfile",
+ "tokio",
+ "zip",
 ]
 
 [[package]]
@@ -1859,13 +1882,11 @@ dependencies = [
  "const_format",
  "ctrlc",
  "dirs",
- "fd-lock",
  "fs_extra",
  "futures-util",
  "home",
  "humansize",
  "ignore",
- "include_dir",
  "indicatif",
  "lz4",
  "mime_guess",
@@ -1877,6 +1898,8 @@ dependencies = [
  "regex",
  "reqwest",
  "rivet-api-ee",
+ "rivet-backend-embed",
+ "rivet-deno-embed",
  "sentry",
  "serde",
  "serde_json",

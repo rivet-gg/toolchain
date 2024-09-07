@@ -1,5 +1,4 @@
 pub mod database;
-pub mod embed;
 
 use anyhow::*;
 use rivet_api::{apis, models};
@@ -29,7 +28,10 @@ async fn base_url() -> Result<String> {
 	{
 		url
 	} else {
-		embed::backend_dir().await?.display().to_string()
+		rivet_backend_embed::backend_dir(&paths::data_dir()?)
+			.await?
+			.display()
+			.to_string()
 	};
 
 	let base_url = base_url.trim_end_matches('/').to_string();
@@ -40,11 +42,8 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
 	let base_url = base_url().await?;
 
 	// Get Deno executable
-	let deno = crate::util::deno::get_or_download_executable(
-		crate::util::deno::DEFAULT_VERSION,
-		&crate::paths::data_dir()?,
-	)
-	.await?;
+	let deno =
+		rivet_deno_embed::get_or_download_default_executable(&crate::paths::data_dir()?).await?;
 
 	// Serialize command
 	let backend_cmd = &serde_json::to_string(&json!({

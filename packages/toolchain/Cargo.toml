@@ -3,7 +3,7 @@ name = "rivet-toolchain"
 version = "0.1.0"
 edition = "2021"
 build = "build.rs"
-license = "MIT"
+license = "Apache-2.0"
 rust-version = "1.75"
 description = "Managed game servers, matchmaking, and DDoS mitigation that lets you focus on building your game."
 homepage = "https://rivet.gg"
@@ -53,9 +53,9 @@ which = "5.0.0"
 zip = "0.5"
 const_format = "0.2.32"
 pkg-version = "1.0.0"
-fd-lock = "4.0.2"
-include_dir = "0.7.4"
 anyhow = "1.0"
+rivet-deno-embed = { path = "../deno-embed" }
+rivet-backend-embed = { path = "../backend-embed" }
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }

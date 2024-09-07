@@ -7,4 +7,3 @@ pub mod os;
 pub mod show_term;
 pub mod task;
 pub mod term;
-pub mod deno;
