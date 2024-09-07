@@ -26,7 +26,7 @@ pub struct BackendConfig {
 	#[serde(default)]
 	pub command_environment: HashMap<String, String>,
 	#[serde(default)]
-	pub backend_source_path: Option<String>,
+	pub source_path: Option<String>,
 
 	#[serde(default)]
 	pub sdk: BackendSdkConfig,

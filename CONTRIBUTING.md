@@ -1,6 +1,8 @@
 # Contributing
 
-## Publishing Versions
+## Versions
+
+### Publishing Versions
 
 Install the prerequisites:
 
@@ -18,7 +20,7 @@ To release, do the following:
 
 To create a prerelease version, append `rc` like: `x.x.x-rc.x`. `cargo-dist` will automatically flag this as a prerelease on GitHub.
 
-## Retracting a version
+### Retracting a version
 
 If something goes wrong with a deploy:
 
@@ -32,13 +34,39 @@ If something goes wrong with a deploy:
 
 ## Developing Backend
 
+### Iterating Faster
+
 To iterate faster on the backend without requiring rebuilding the toolchain for every change, run `rivet config edit user` and add this to your config, where `/path/to/toolchain` is the path to this repository:
 
 ```json
 {
   "backend": {
-    "backend_source_path": "/path/to/toolchain/packages/backend/"
+    "source_path": "/path/to/toolchain/packages/backend/"
   }
 }
 ```
+
+## Implementation Notes
+
+### Backend Package
+
+The backend package is a TypeScript package located at `packages/backend/`. This contains:
+
+- `packages/backend/toolchain/` – Library to manage the backend in development
+- `packages/backend/cli/` – JSON CLI interface to the toolchain
+- `packages/backend/runtime/` – Runtime code used to by the backend at runtime
+
+### Backend Artifacts
+
+Backend artifacts are files that are required to be generated for the backend to run.
+
+Artifacts are automatically generated on Cargo build in `packages/backend-embed/build.rs`. Under the hood, this calls the `scripts/backend/build_artifacts.ts` script.
+
+### Embedding Deno
+
+Deno is automatically downloaded and installed to a temporary path in `packages/deno-embed`. This is used both at runtime for the toolchain and any build scripts that depend on Deno.
+
+### Embedding Backend
+
+The backend is embedded using `include_dir`. This is automatically inflated to the data dir at runtime. The backend path can be overridden using the `backend.source_path` setting.
 

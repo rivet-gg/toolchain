@@ -24,7 +24,7 @@ pub struct BackendCommandOpts {
 async fn base_url() -> Result<String> {
 	// Attempt to read from user or default
 	let base_url = if let Some(url) =
-		config::settings::try_read(|x| Ok(x.backend.backend_source_path.clone())).await?
+		config::settings::try_read(|x| Ok(x.backend.source_path.clone())).await?
 	{
 		url
 	} else {
