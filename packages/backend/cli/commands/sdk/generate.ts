@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { globalOptsSchema, initProject } from "../common.ts";
-import { generateSdk } from "../../toolchain/sdk/generate.ts";
-import { SdkTarget } from "../../toolchain/sdk/generate.ts";
-import { build, DbDriver, Format, Runtime } from "../../toolchain/build/mod.ts";
+import { globalOptsSchema, initProject } from "../../common.ts";
+import { generateSdk } from "../../../toolchain/sdk/generate.ts";
+import { SdkTarget } from "../../../toolchain/sdk/generate.ts";
+import { build, DbDriver, Format, Runtime } from "../../../toolchain/build/mod.ts";
 
 export const optsSchema = z.object({
 	target: z.enum([SdkTarget.TypeScript, SdkTarget.Unity, SdkTarget.Godot]),

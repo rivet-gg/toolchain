@@ -1,14 +1,14 @@
 import { z } from "zod";
 import * as build from "./commands/build.ts";
 import * as clean from "./commands/clean.ts";
-import * as configShow from "./commands/config_show.ts";
-import * as createModule from "./commands/create_module.ts";
-import * as createTest from "./commands/create_test.ts";
+import * as configShow from "./commands/config/show.ts";
+import * as createModule from "./commands/create/module.ts";
+import * as createTest from "./commands/create/test.ts";
 import * as dev from "./commands/dev.ts";
 import * as format from "./commands/format.ts";
 import * as init from "./commands/init.ts";
 import * as lint from "./commands/lint.ts";
-import * as sdk from "./commands/sdk.ts";
+import * as sdkGenerate from "./commands/sdk/generate.ts";
 import * as test from "./commands/test.ts";
 import * as dbInstanceStart from "./commands/db/instance/start.ts";
 import * as dbInstanceStatus from "./commands/db/instance/status.ts";
@@ -32,7 +32,7 @@ export const commandSchema = z.union([
 	z.object({ format: format.optsSchema }),
 	z.object({ init: init.optsSchema }),
 	z.object({ lint: lint.optsSchema }),
-	z.object({ sdk: sdk.optsSchema }),
+	z.object({ sdkGenerate: sdkGenerate.optsSchema }),
 	z.object({ test: test.optsSchema }),
 	z.object({ dbInstanceStart: dbInstanceStart.optsSchema }),
 	z.object({ dbInstanceStatus: dbInstanceStatus.optsSchema }),

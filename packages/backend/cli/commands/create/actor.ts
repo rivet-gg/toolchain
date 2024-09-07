@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { templateActor } from "../../toolchain/template/actor.ts";
-import { Casing } from "../../toolchain/types/identifiers/defs.ts";
-import { validateIdentifier } from "../../toolchain/types/identifiers/mod.ts";
-import { globalOptsSchema, initProject } from "../common.ts";
+import { templateActor } from "../../../toolchain/template/actor.ts";
+import { Casing } from "../../../toolchain/types/identifiers/defs.ts";
+import { validateIdentifier } from "../../../toolchain/types/identifiers/mod.ts";
+import { globalOptsSchema, initProject } from "../../common.ts";
 
 export const optsSchema = z.object({
 	module: z.string(),

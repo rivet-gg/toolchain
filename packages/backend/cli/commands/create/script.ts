@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { templateScript } from "../../toolchain/template/script.ts";
-import { Casing } from "../../toolchain/types/identifiers/defs.ts";
-import { validateIdentifier } from "../../toolchain/types/identifiers/mod.ts";
-import { globalOptsSchema, initProject } from "../common.ts";
+import { templateScript } from "../../../toolchain/template/script.ts";
+import { Casing } from "../../../toolchain/types/identifiers/defs.ts";
+import { validateIdentifier } from "../../../toolchain/types/identifiers/mod.ts";
+import { globalOptsSchema, initProject } from "../../common.ts";
 
 export const optsSchema = z.object({
 	module: z.string(),

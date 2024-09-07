@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { globalOptsSchema } from "../common.ts";
-import { readConfig } from "../../toolchain/config/project.ts";
-import { loadProjectConfigPath } from "../../toolchain/project/mod.ts";
+import { globalOptsSchema } from "../../common.ts";
+import { readConfig } from "../../../toolchain/config/project.ts";
+import { loadProjectConfigPath } from "../../../toolchain/project/mod.ts";
 
 export const optsSchema = z.object({}).merge(globalOptsSchema);
 

@@ -97,7 +97,7 @@ pub async fn run_opengb_command_passthrough(
 	let opts_json = match serde_json::to_value(opts) {
 		Result::Ok(x) => x,
 		Err(err) => {
-			eprintln!("Serialize failed");
+			eprintln!("Serialize failed: {err:?}");
 			return ExitCode::FAILURE;
 		}
 	};
