@@ -32,9 +32,24 @@ If something goes wrong with a deploy:
     git push -u origin :refs/tags/vx.x.x
     ```
 
-## Developing Backend
+## Developing
 
-### Iterating Faster
+### Run CLI
+
+```sh
+cargo build
+./target/debug/rivet --help
+```
+
+### Install CLI Globally
+
+To install the 
+
+```sh
+cargo install --path packages/cli --debug
+```
+
+### Edit Backend Without Rebuild
 
 To iterate faster on the backend without requiring rebuilding the toolchain for every change, run `rivet config edit user` and add this to your config, where `/path/to/toolchain` is the path to this repository:
 
@@ -45,6 +60,8 @@ To iterate faster on the backend without requiring rebuilding the toolchain for 
   }
 }
 ```
+
+This will direct the toolchain to use the raw source code for the backend instead of the embedded backend source code that requires a rebuild.
 
 ## Implementation Notes
 

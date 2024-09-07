@@ -347,8 +347,7 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
 
 	return projectGenPath(
 		project,
-		"runtime",
-		"packages",
+    PACKAGES_PATH,
 		"runtime",
 		"actor",
 		"drivers",
