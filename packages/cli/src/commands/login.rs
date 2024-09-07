@@ -4,6 +4,7 @@ use toolchain::tasks::{check_login_state, start_device_link, wait_for_login};
 
 use crate::util::task::{run_task, TaskOutputStyle};
 
+/// Login to a game
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(long, default_value = "https://api.rivet.gg")]

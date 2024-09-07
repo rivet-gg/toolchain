@@ -1,18 +1,18 @@
-pub mod edit;
+pub mod generate;
 
 use clap::Subcommand;
 use std::process::ExitCode;
 
-/// Manage Rivet configuration
+/// Manage the Rivet SDK
 #[derive(Subcommand)]
 pub enum SubCommand {
-	Edit(edit::Opts),
+	Generate(generate::Opts),
 }
 
 impl SubCommand {
 	pub async fn execute(&self) -> ExitCode {
-		match self {
-			SubCommand::Edit(opts) => opts.execute().await,
-		}
+		match &self {
+			SubCommand::Generate(opts) => opts.execute().await,
+        }
 	}
 }

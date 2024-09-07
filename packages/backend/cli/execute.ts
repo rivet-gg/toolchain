@@ -13,7 +13,9 @@ import * as test from "./commands/test.ts";
 import * as dbInstanceStart from "./commands/db/instance/start.ts";
 import * as dbInstanceStatus from "./commands/db/instance/status.ts";
 import * as dbInstanceStop from "./commands/db/instance/stop.ts";
+import * as dbMigrateApply from "./commands/db/migrate/apply.ts";
 import * as dbMigrateDrop from "./commands/db/migrate/drop.ts";
+import * as dbMigrateGenerate from "./commands/db/migrate/generate.ts";
 import * as dbMigratePush from "./commands/db/migrate/push.ts";
 import * as dbReset from "./commands/db/reset.ts";
 import * as dbSh from "./commands/db/sh.ts";
@@ -35,7 +37,9 @@ export const commandSchema = z.union([
 	z.object({ dbInstanceStart: dbInstanceStart.optsSchema }),
 	z.object({ dbInstanceStatus: dbInstanceStatus.optsSchema }),
 	z.object({ dbInstanceStop: dbInstanceStop.optsSchema }),
+	z.object({ dbMigrateApply: dbMigrateApply.optsSchema }),
 	z.object({ dbMigrateDrop: dbMigrateDrop.optsSchema }),
+	z.object({ dbMigrateGenerate: dbMigrateGenerate.optsSchema }),
 	z.object({ dbMigratePush: dbMigratePush.optsSchema }),
 	z.object({ dbReset: dbReset.optsSchema }),
 	z.object({ dbSh: dbSh.optsSchema }),

@@ -4,6 +4,7 @@ use toolchain::tasks::unlink;
 
 use crate::util::task::{run_task, TaskOutputStyle};
 
+/// Logout from a game
 #[derive(Parser)]
 pub struct Opts {}
 

@@ -17,3 +17,15 @@ tokio = { version = "1.38.1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.120"
 open = "5.3.0"
+
+[build-dependencies]
+anyhow = "1.0"
+
+[build-dependencies.vergen-git2]
+version = "1.0.0"
+features = [
+  "build",
+  "cargo",
+  "rustc"
+]
+

@@ -5,6 +5,7 @@ pub mod stop;
 use clap::Subcommand;
 use std::process::ExitCode;
 
+/// Manage the development database
 #[derive(Subcommand)]
 pub enum SubCommand {
 	Start(start::Opts),

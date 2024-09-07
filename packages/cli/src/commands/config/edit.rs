@@ -5,6 +5,7 @@ use toolchain::tasks::get_settings_paths;
 
 use crate::util::task::{run_task, TaskOutputStyle};
 
+/// Open configuration in code editor
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(subcommand)]

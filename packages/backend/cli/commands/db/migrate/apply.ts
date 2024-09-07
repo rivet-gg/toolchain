@@ -3,7 +3,7 @@ import { globalOptsSchema, initProject } from "../../../common.ts";
 import { migrateApply } from "../../../../toolchain/migrate/apply.ts";
 import { resolveModules } from "../../../util.ts";
 
-const optsSchema = z.object({
+export const optsSchema = z.object({
 	modules: z.array(z.string()).default([]),
 }).merge(globalOptsSchema);
 

@@ -3,6 +3,7 @@ use serde::Serialize;
 use std::process::ExitCode;
 use toolchain::backend::run_opengb_command_passthrough;
 
+/// Create a new test for a module
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Opts {
@@ -17,3 +18,4 @@ impl Opts {
 		run_opengb_command_passthrough("createTest", self).await
 	}
 }
+

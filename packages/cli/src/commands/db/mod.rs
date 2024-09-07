@@ -1,12 +1,13 @@
+pub mod instance;
+pub mod migrate;
 pub mod reset;
 pub mod sh;
 pub mod url;
-pub mod migrate;
-pub mod instance;
 
 use clap::Subcommand;
 use std::process::ExitCode;
 
+/// Manage Postgres database
 #[derive(Subcommand)]
 pub enum SubCommand {
 	Reset(reset::Opts),
@@ -28,8 +29,8 @@ impl SubCommand {
 			SubCommand::Reset(opts) => opts.execute().await,
 			SubCommand::Sh(opts) => opts.execute().await,
 			SubCommand::Url(opts) => opts.execute().await,
-			SubCommand::Migrate { subcommand} => subcommand.execute().await,
-			SubCommand::Instance { subcommand} => subcommand.execute().await,
+			SubCommand::Migrate { subcommand } => subcommand.execute().await,
+			SubCommand::Instance { subcommand } => subcommand.execute().await,
 		}
 	}
 }

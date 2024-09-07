@@ -3,6 +3,7 @@ use serde::Serialize;
 use std::process::ExitCode;
 use toolchain::backend::run_opengb_command_passthrough;
 
+/// Remove artifacts that Rivet generates
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Opts {}

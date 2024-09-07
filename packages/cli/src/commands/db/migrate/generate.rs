@@ -3,13 +3,16 @@ use serde::Serialize;
 use std::process::ExitCode;
 use toolchain::backend::run_opengb_command_passthrough;
 
-/// Print database URL
+/// Generate migrations for a module
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Opts {}
+pub struct Opts {
+	#[clap(long, default_value = "[]")]
+	pub modules: Vec<String>,
+}
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		run_opengb_command_passthrough("dbUrl", self).await
+		run_opengb_command_passthrough("dbMigrateGenerate", self).await
 	}
 }
