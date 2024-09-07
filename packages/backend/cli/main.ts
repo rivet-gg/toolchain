@@ -1,24 +1,39 @@
 import { parseArgs } from "@std/cli/parse-args";
 import { executeCommand } from "./execute.ts";
 import { commandSchema } from "./execute.ts";
+import { runShutdown } from "../toolchain/utils/shutdown_handler.ts";
+import { printError, UserError } from "../toolchain/error/mod.ts";
 
-const args = parseArgs(Deno.args);
-const commandJson = args["command"];
-
-if (!commandJson) {
-	console.error("Missing --command argument");
-	Deno.exit(1);
-}
-
+let exitCode = 0;
 try {
-	const command = JSON.parse(commandJson);
-	const validatedCommand = commandSchema.parse(command);
-	await executeCommand(validatedCommand);
-} catch (error) {
-	if (error instanceof SyntaxError) {
-		console.error("Invalid JSON in --command argument");
-	} else {
-		console.error("Invalid command:", error);
+	// Parse flags
+	const args = parseArgs(Deno.args);
+	const commandJson = args["command"];
+	if (!commandJson) {
+		throw new UserError("Missing --command argument");
 	}
-	Deno.exit(1);
+
+	// Parse coman
+	let command;
+	try {
+		command = JSON.parse(commandJson);
+	} catch (cause) {
+		throw new UserError("Invalid command JSON", { cause });
+	}
+
+	// Validate command
+	let validatedCommand = commandSchema.safeParse(command);
+	if (!validatedCommand.success) {
+		throw new UserError("Command violates schema", { details: JSON.stringify(validatedCommand.error, null, 2) });
+	}
+
+	// Execute command
+	await executeCommand(validatedCommand.data);
+} catch (err) {
+	printError(err);
+	exitCode = 1;
+} finally {
+	runShutdown();
 }
+
+Deno.exit(exitCode);
