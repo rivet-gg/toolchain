@@ -6,6 +6,7 @@ use toolchain::backend::run_opengb_command_passthrough;
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Opts {
+	pub modules_filter: Vec<String>,
 	#[clap(long, default_value = "true")]
 	pub build: bool,
 	#[clap(long, default_value = "true")]
@@ -20,8 +21,6 @@ pub struct Opts {
 	pub watch: bool,
 	#[clap(long)]
 	pub filter: Option<String>,
-	#[clap(long)]
-	pub modules_filter: Vec<String>,
 }
 
 impl Opts {
