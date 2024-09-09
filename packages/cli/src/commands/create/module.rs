@@ -7,7 +7,7 @@ use toolchain::backend::run_opengb_command_passthrough;
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Opts {
-	#[clap(long)]
+	#[clap(index = 1)]
 	pub module: String,
 }
 
@@ -16,4 +16,3 @@ impl Opts {
 		run_opengb_command_passthrough("createModule", self).await
 	}
 }
-

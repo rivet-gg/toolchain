@@ -7,9 +7,9 @@ use toolchain::backend::run_opengb_command_passthrough;
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Opts {
-	#[clap(long)]
+	#[clap(index = 1)]
 	pub module: String,
-	#[clap(long)]
+	#[clap(index = 2)]
 	pub test: String,
 }
 
@@ -18,4 +18,3 @@ impl Opts {
 		run_opengb_command_passthrough("createTest", self).await
 	}
 }
-
