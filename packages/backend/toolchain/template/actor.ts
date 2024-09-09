@@ -61,7 +61,7 @@ interface MyRpcResponse {
 }
 
 export class Actor extends ActorBase<Input, State> {
-	public initialize(_input: Input) {
+	public initialize(_input: Input): State {
     throw new Error("Unimplemented: ${moduleName}.${actorName}.initialize");
 	}
 

@@ -4,7 +4,7 @@ import { listSourceFiles } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
 
 export const optsSchema = globalOptsSchema.extend({
-	check: z.boolean().optional(),
+	check: z.boolean().nullable(),
 });
 
 type Opts = z.infer<typeof optsSchema>;

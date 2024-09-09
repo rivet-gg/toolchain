@@ -6,13 +6,13 @@ import { Project } from "../../toolchain/project/mod.ts";
 import { migrateModeSchema } from "../util.ts";
 
 export const optsSchema = z.object({
-	watch: z.boolean().default(false).optional(),
-	runtime: z.enum([Runtime.Deno, Runtime.CloudflareWorkersPlatforms]).default(Runtime.Deno).optional(),
-	outputFormat: z.enum([Format.Native, Format.Bundled]).optional(),
-	dbDriver: z.enum([DbDriver.NodePostgres, DbDriver.NeonServerless, DbDriver.CloudflareHyperdrive]).optional(),
-	migrate: z.boolean().default(true).optional(),
-	migrateMode: migrateModeSchema.default(MigrateMode.Generate).optional(),
-	strictSchemas: z.boolean().default(true).optional(),
+	watch: z.boolean().default(false).nullable(),
+	runtime: z.enum([Runtime.Deno, Runtime.CloudflareWorkersPlatforms]).default(Runtime.Deno).nullable(),
+	outputFormat: z.enum([Format.Native, Format.Bundled]).nullable(),
+	dbDriver: z.enum([DbDriver.NodePostgres, DbDriver.NeonServerless, DbDriver.CloudflareHyperdrive]).nullable(),
+	migrate: z.boolean().default(true).nullable(),
+	migrateMode: migrateModeSchema.default(MigrateMode.Generate).nullable(),
+	strictSchemas: z.boolean().default(true).nullable(),
 }).merge(globalOptsSchema);
 
 type Opts = z.infer<typeof optsSchema>;

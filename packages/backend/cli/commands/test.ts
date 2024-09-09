@@ -17,7 +17,7 @@ export const optsSchema = z.object({
 	migrate: z.boolean().default(true),
 	migrateMode: migrateModeSchema.default(MigrateMode.Dev),
 	watch: z.boolean().default(false),
-	filter: z.string().optional(),
+	filter: z.string().nullable(),
 	modulesFilter: z.array(z.string()),
 }).merge(globalOptsSchema);
 
@@ -59,6 +59,7 @@ export async function execute(opts: Opts) {
 
 			// Find test scripts
 			const testingModules = [];
+			let totalTestFiles = 0;
 			for (const module of project.modules.values()) {
 				// Filter modules
 				if (opts.modulesFilter.length == 0) {
@@ -76,12 +77,19 @@ export async function execute(opts: Opts) {
 					cwd: resolve(module.path, "tests"),
 				}))
 					.map((path) => resolve(module.path, "tests", path));
+				totalTestFiles += testPaths.length;
 				args.push(...testPaths);
 			}
 
 			if (testingModules.length == 0) {
 				info("Finished", "No modules to test");
 				return;
+			}
+
+			if (totalTestFiles == 0) {
+				throw new UserError("No test files", {
+          suggest: "See 'rivet create test --help' to create a test."
+        });
 			}
 
 			// Run tests

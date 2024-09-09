@@ -7,7 +7,7 @@ import { z } from "zod";
 
 export const optsSchema = z.object({
 	moduleName: z.string(),
-	registry: z.string().optional(),
+	registry: z.string().nullable(),
 }).merge(globalOptsSchema);
 
 type Opts = z.infer<typeof optsSchema>;
