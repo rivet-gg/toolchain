@@ -65,26 +65,20 @@ iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/instal
 
 
 ```sh
-cargo install --git=https://github.com/rivet-gg/cli
+cargo install --git=https://github.com/rivet-gg/toolchain rivet-cli
 ```
-
-**Important** This will install the CLI as `rivet-cli` (not `rivet`).
-
-**Important** Ensure you have OpenSSL [installed and configured correctly](https://docs.rs/openssl/latest/openssl/#automatic).
 </details>
 
 <details>
 <summary><b>Build from source (<code>cargo build</code>)</b></summary>
 
 ```sh
-git clone https://github.com/rivet-gg/cli
-cd cli
+git clone https://github.com/rivet-gg/toolchain
+cd packages/cli
 cargo build
 ```
 
-The executable will be available at _target/debug/rivet-cli_.
-
-**Important** Ensure you have OpenSSL [installed and configured correctly](https://docs.rs/openssl/latest/openssl/#automatic).
+The executable will be available at _target/debug/rivet_.
 </details>
 
 ## Documentation
@@ -94,25 +88,24 @@ All commands in the Rivet CLI are documented with the `--help` flag.
 ```
 $ rivet --help
 
-USAGE:
-    rivet [OPTIONS] <SUBCOMMAND>
+Usage: rivet <COMMAND>
 
-OPTIONS:
-        --api-url <API_URL>            [env: RIVET_CLOUD_API_URL=]
-        --token <CLOUD_TOKEN>    [env: RIVET_TOKEN=]
-    -h, --help                         Print help information
-    -V, --version                      Print version information
+Commands:
+  init     Login to a game
+  login    Login to a game
+  logout   Logout from a game
+  dev      Run the development server
+  deploy   Build & upload the game server & backend
+  config   Manage Rivet configuration
+  clean    Remove artifacts that Rivet generates
+  create   Add functionality to backend
+  db       Manage Postgres database
+  sdk      Manage the Rivet SDK
+  backend  Manage the backend
+  module
+  help     Print this message or the help of the given subcommand(s)
 
-SUBCOMMANDS:
-    dashboard    Opens the dashboard for this game
-    deploy       Alias of `rivet version deploy`
-    engine       Run engine-specific commands
-    game         Manages the game
-    help         Print this message or the help of the given subcommand(s)
-    image        Manages builds for Serverless Lobbies
-    init         Guided setup for this project
-    namespace    Manages namespaces
-    site         Manages sites for the CDN
-    token        Manages tokens
-    version      Manages versions
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
 ```
