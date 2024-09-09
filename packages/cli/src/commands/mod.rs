@@ -1,15 +1,16 @@
 pub mod backend;
-pub mod init;
-pub mod dev;
 pub mod clean;
 pub mod config;
 pub mod create;
 pub mod db;
 pub mod deploy;
+pub mod dev;
+pub mod init;
 pub mod login;
 pub mod logout;
 pub mod module;
 pub mod sdk;
+pub mod task;
 
 use clap::Parser;
 use std::process::ExitCode;
@@ -46,6 +47,10 @@ pub enum SubCommand {
 		#[clap(subcommand)]
 		subcommand: module::SubCommand,
 	},
+	Task {
+		#[clap(subcommand)]
+		subcommand: task::SubCommand,
+	},
 }
 
 impl SubCommand {
@@ -60,9 +65,10 @@ impl SubCommand {
 			SubCommand::Clean(opts) => opts.execute().await,
 			SubCommand::Create { subcommand } => subcommand.execute().await,
 			SubCommand::Db { subcommand } => subcommand.execute().await,
-			SubCommand::Sdk { subcommand} => subcommand.execute().await,
+			SubCommand::Sdk { subcommand } => subcommand.execute().await,
 			SubCommand::Backend { subcommand } => subcommand.execute().await,
 			SubCommand::Module { subcommand } => subcommand.execute().await,
+			SubCommand::Task { subcommand } => subcommand.execute().await,
 		}
 	}
 }

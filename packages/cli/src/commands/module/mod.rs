@@ -5,6 +5,7 @@ pub mod test;
 use clap::Subcommand;
 use std::process::ExitCode;
 
+/// Manage backend modules
 #[derive(Subcommand)]
 pub enum SubCommand {
 	Format(format::Opts),

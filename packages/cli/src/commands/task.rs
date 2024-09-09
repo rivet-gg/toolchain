@@ -3,6 +3,7 @@ use std::process::ExitCode;
 
 /// EXPERIMENTAL
 #[derive(Parser)]
+#[clap(hide = true)]
 pub enum SubCommand {
 	Run(RunOpts),
 }
