@@ -2,7 +2,9 @@ import { z } from "zod";
 import * as build from "./commands/build.ts";
 import * as clean from "./commands/clean.ts";
 import * as configShow from "./commands/config/show.ts";
+import * as createActor from "./commands/create/actor.ts";
 import * as createModule from "./commands/create/module.ts";
+import * as createScript from "./commands/create/script.ts";
 import * as createTest from "./commands/create/test.ts";
 import * as dev from "./commands/dev.ts";
 import * as format from "./commands/format.ts";
@@ -26,7 +28,9 @@ export const commandSchema = z.union([
 	z.object({ build: build.optsSchema }),
 	z.object({ clean: clean.optsSchema }),
 	z.object({ configShow: configShow.optsSchema }),
+	z.object({ createActor: createActor.optsSchema }),
 	z.object({ createModule: createModule.optsSchema }),
+	z.object({ createScript: createScript.optsSchema }),
 	z.object({ createTest: createTest.optsSchema }),
 	z.object({ dev: dev.optsSchema }),
 	z.object({ format: format.optsSchema }),
@@ -55,8 +59,12 @@ export async function executeCommand(command: Command) {
 		await clean.execute(command.clean);
 	} else if ("configShow" in command) {
 		await configShow.execute(command.configShow);
+	} else if ("createActor" in command) {
+		await createActor.execute(command.createActor);
 	} else if ("createModule" in command) {
 		await createModule.execute(command.createModule);
+	} else if ("createScript" in command) {
+		await createScript.execute(command.createScript);
 	} else if ("createTest" in command) {
 		await createTest.execute(command.createTest);
 	} else if ("dev" in command) {
