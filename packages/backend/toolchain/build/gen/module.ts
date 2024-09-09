@@ -14,9 +14,9 @@ import {
 	genDependencyTypedefPath,
 	genModulePublicExternal,
 	genPackagesPath,
+	PACKAGES_PATH,
 	projectGenPath,
 	RUNTIME_CONFIG_PATH,
-	PACKAGES_PATH,
 } from "../../project/project.ts";
 import { camelify } from "../../../case_conversion/mod.ts";
 import { BuildOpts } from "../mod.ts";
@@ -36,7 +36,10 @@ export async function compileModuleHelper(
 	const actorCaseConversionMapPath = helper.relative(genActorCaseConversionMapPath(project));
 	const runtimeConfigPath = helper.relative(projectGenPath(project, RUNTIME_CONFIG_PATH));
 
-	// Import block
+	// Import & re-export runtime files
+	//
+	// All runtime imports must be placed before any other generated files in
+	// order to prevent `Cannot access 'xxxx' before initialization`.
 	helper.chunk.withNewlinesPerChunk(1)
 		.append`
 			import {
@@ -48,11 +51,16 @@ export async function compileModuleHelper(
 				RouteContext as RouteContextInner,
 				Runtime,
 			} from ${JSON.stringify(runtimePath)};
+			import { ActorDriver } from ${JSON.stringify(helper.relative(genRuntimeActorDriverPath(project, opts.runtime)))};
+			export * from ${JSON.stringify(reexportPath)};
+    `;
+
+	// Import & re-export generated files
+	helper.chunk.withNewlinesPerChunk(1)
+		.append`
 			import config from ${JSON.stringify(runtimeConfigPath)};
 			import { dependencyCaseConversionMap } from ${JSON.stringify(dependencyCaseConversionMapPath)};
 			import { actorCaseConversionMap } from ${JSON.stringify(actorCaseConversionMapPath)};
-			import { ActorDriver } from ${JSON.stringify(helper.relative(genRuntimeActorDriverPath(project, opts.runtime)))};
-			export * from ${JSON.stringify(reexportPath)};
 		`;
 
 	// Gen blocks
