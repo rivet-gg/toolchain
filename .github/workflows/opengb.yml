@@ -67,3 +67,39 @@ jobs:
           VERBOSE: true
         run: cd opengb && deno task test:registry
 
+      - name: Upload Meta
+        uses: actions/upload-artifact@v4
+        with:
+          name: meta
+          path: opengb-modules/tests/basic/.opengb/meta.json
+
+  upload-meta:
+    runs-on: ubuntu-20.04
+    needs: [test-core, test-project, test-modules]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: "1.44.1"
+
+      - name: Read registry ref from JSON
+        id: read-ref
+        run: echo "OPENGB_MODULES_REF=$(jq -r '.' opengb/src/project/registry_default_rev.json)" >> $GITHUB_ENV
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: meta
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.CF_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CF_SECRET_ACCESS_KEY }}
+          aws-region: auto
+
+      - name: Upload Meta
+        run: aws s3api put-object --bucket opengb-meta --key backend/${OPENGB_MODULES_REF}/index.json --body meta.json
