@@ -42,8 +42,7 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
 	let base_url = base_url().await?;
 
 	// Get Deno executable
-	let deno =
-		rivet_deno_embed::get_or_download_default_executable(&crate::paths::data_dir()?).await?;
+	let deno = rivet_deno_embed::get_or_download_executable(&crate::paths::data_dir()?).await?;
 
 	// Serialize command
 	let backend_cmd = &serde_json::to_string(&json!({

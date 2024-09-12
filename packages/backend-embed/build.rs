@@ -7,7 +7,7 @@ async fn main() -> Result<()> {
 	// Install Deno
 	let temp_dir = tempfile::tempdir().unwrap();
 	let data_dir = temp_dir.path().to_path_buf();
-	let deno = rivet_deno_embed::get_or_download_default_executable(&data_dir).await?;
+	let deno = rivet_deno_embed::get_or_download_executable(&data_dir).await?;
 
 	// Get path to artifacts path
 	let manifest_dir = std::env::var("CARGO_MANIFEST_DIR")?;
