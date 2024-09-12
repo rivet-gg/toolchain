@@ -20,7 +20,7 @@ use crate::{
 pub struct DeployOpts {
 	pub env: TEMPEnvironment,
 
-	/// The location of the OpenGB project.
+	/// The location of the project.
 	pub project_path: String,
 
 	/// Skip the migration step.
@@ -43,7 +43,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 		Ok((env, settings.backend.deploy.config_path.clone()))
 	})
 	.await?;
-	let cmd = backend::run_opengb_command_from_task(
+	let cmd = backend::run_backend_command_from_task(
 		task.clone(),
 		backend::BackendCommandOpts {
 			command: "build",
@@ -82,7 +82,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 			db_url.context("no db url for env")?,
 		);
 
-		let migrate_cmd = backend::run_opengb_command_from_task(
+		let migrate_cmd = backend::run_backend_command_from_task(
 			task.clone(),
 			backend::BackendCommandOpts {
 				command: "dbMigrateApply",
@@ -93,7 +93,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 			},
 		)
 		.await?;
-		ensure!(migrate_cmd == 0, "Failed to migrate OpenGB databases");
+		ensure!(migrate_cmd == 0, "Failed to migrate databases");
 	}
 
 	// Read files for upload
@@ -132,9 +132,9 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 	// .await?
 	// .variables;
 	let mut update_variables = HashMap::<String, _>::new();
-	// if !variables.contains_key("OPENGB_PUBLIC_ENDPOINT") {
+	// if !variables.contains_key("BACKEND_PUBLIC_ENDPOINT") {
 	update_variables.insert(
-		"OPENGB_PUBLIC_ENDPOINT".to_string(),
+		"BACKEND_PUBLIC_ENDPOINT".to_string(),
 		models::EeBackendUpdateVariable {
 			text: Some(backend.endpoint.clone()),
 			..Default::default()
@@ -269,7 +269,12 @@ struct GenManifest {
 }
 
 async fn read_generated_manifest(project_path: &Path) -> Result<GenManifest> {
-	let manifest_str =
-		fs::read_to_string(project_path.join(".opengb").join("manifest.json")).await?;
+	let manifest_str = fs::read_to_string(
+		project_path
+			.join(".rivet")
+			.join("backend")
+			.join("manifest.json"),
+	)
+	.await?;
 	Ok(serde_json::from_str::<GenManifest>(&manifest_str)?)
 }

@@ -8,9 +8,10 @@ import { addShutdownHandler } from "../utils/shutdown_handler.ts";
 import { getClient, getDatabaseUrl, Manager, setup } from "./manager.ts";
 import { createManager } from "./manager.ts";
 import { Settings } from "./settings.ts";
+import { projectGenPath } from "../project/mod.ts";
 
 export const DEFAULT_VERSION = "16.4.0";
-export const DEFAULT_DATABASE = "opengb";
+export const DEFAULT_DATABASE = "rivet-backend";
 
 /**
  * Holds the manager that was created.
@@ -28,7 +29,7 @@ const ENSURE_RUNNING_ONCE = createOnce<void>();
 const DEFAULT_CLIENT = createOnce<PostgresClient>();
 
 export function postgresEnabled(): boolean {
-	return !Deno.env.has("DATABASE_URL") && !Deno.env.has("OPENGB_DONT_START_POSTGRES");
+	return !Deno.env.has("DATABASE_URL") && !Deno.env.has("BACKEND_DONT_START_POSTGRES");
 }
 
 /**
@@ -61,7 +62,7 @@ export async function ensurePostgresRunning(project: Project) {
 }
 
 function defaultSettings(project: Project): Settings {
-	const postgresRoot = resolve(project.path, ".opengb", "postgres");
+	const postgresRoot = projectGenPath(project, "postgres");
 
 	const stateFile = resolve(postgresRoot, "manager_state.json");
 	const passwordFile = resolve(postgresRoot, ".pgpass");

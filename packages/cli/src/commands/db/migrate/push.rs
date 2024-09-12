@@ -1,7 +1,7 @@
 use clap::Parser;
 use serde::Serialize;
 use std::process::ExitCode;
-use toolchain::backend::run_opengb_command_passthrough;
+use toolchain::backend::run_backend_command_passthrough;
 
 /// Push a schema to the database without migrations
 #[derive(Parser, Serialize)]
@@ -12,6 +12,6 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		run_opengb_command_passthrough("dbMigratePush", self).await
+		run_backend_command_passthrough("dbMigratePush", self).await
 	}
 }

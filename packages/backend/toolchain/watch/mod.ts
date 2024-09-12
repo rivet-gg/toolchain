@@ -166,7 +166,7 @@ function shouldPathTriggerRebuild(path: string) {
 	const pathSplit = path.split(SEPARATOR);
 
 	// Ignore generated files
-	if (pathSplit.includes(".opengb")) return false;
+	if (pathSplit.includes(".rivet")) return false;
 	if (pathSplit[pathSplit.length - 1]?.endsWith(".gen.ts")) return false;
 
 	// Ignore database migrations generated as a side effect

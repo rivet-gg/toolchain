@@ -73,7 +73,7 @@ function validatePath(
 
 export interface Module {
 	/**
-	 * The path to the cloned module in the project's .opengb directory.
+	 * The path to the cloned module in the project's .rivet/modules/ directory.
 	 *
 	 * This path can be modified and will be discarded on the next codegen.
 	 */

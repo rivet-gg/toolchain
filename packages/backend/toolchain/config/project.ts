@@ -112,7 +112,7 @@ export async function readConfig(projectConfigPath: string, extendedFromPaths: s
 	if (!await exists(projectConfigPath, { isFile: true })) {
 		throw new UserError("Backend project does not exist.", {
 			details: `${projectConfigPath} does not exist.`,
-			suggest: "Run `opengb init` to create a project.",
+			suggest: "Run `rivet init` to create a project.",
 			path: projectConfigPath,
 		});
 	}

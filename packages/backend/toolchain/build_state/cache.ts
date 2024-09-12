@@ -6,7 +6,7 @@ import { verbose } from "../term/status.ts";
 import { crypto } from "@std/crypto";
 import { encodeHex } from "@std/encoding/hex";
 
-// TODO: Replace this with the OpenGB version instead since it means we'll change . We need to compile this in the build artifacts.
+// TODO: Replace this with the hash of the backend folder in order to auto-invalidate cache on update.
 export const CACHE_VERSION = 6;
 
 export interface Cache {

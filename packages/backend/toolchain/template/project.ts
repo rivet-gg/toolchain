@@ -22,7 +22,4 @@ export async function templateProject(rootPath: string) {
 		resolve(rootPath, "backend.json"),
 		JSON.stringify(defaultBackend, null, "\t"),
 	);
-
-	// Create modules directory
-	await Deno.mkdir(resolve(rootPath, "modules"), { recursive: true });
 }

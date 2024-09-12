@@ -39,7 +39,7 @@ export class ActorProxy {
 		);
 
 		const start = performance.now();
-		if (this.runtime.env.get("_OPENGB_LOG_ACTOR_BODY") == "1") {
+		if (this.runtime.env.get("_BACKEND_LOG_ACTOR_BODY") == "1") {
 			ctx.log.debug("create actor", ...spreadObjectToLogEntries("input", input));
 		} else {
 			ctx.log.debug("create actor");
@@ -63,7 +63,7 @@ export class ActorProxy {
 		);
 
 		const start = performance.now();
-		if (this.runtime.env.get("_OPENGB_LOG_ACTOR_BODY") == "1") {
+		if (this.runtime.env.get("_BACKEND_LOG_ACTOR_BODY") == "1") {
 			ctx.log.debug("actor request", ["instance", instanceName], ...spreadObjectToLogEntries("request", request));
 		} else {
 			ctx.log.debug("actor request", ["instance", instanceName]);
@@ -79,7 +79,7 @@ export class ActorProxy {
 		}) as Response;
 
 		const duration = Math.ceil(performance.now() - start);
-		if (this.runtime.env.get("_OPENGB_LOG_ACTOR_BODY") == "1") {
+		if (this.runtime.env.get("_BACKEND_LOG_ACTOR_BODY") == "1") {
 			ctx.log.debug(
 				"actor response",
 				...(duration > 0 ? [["duration", `${duration}ms`] as LogEntry] : []),
@@ -103,7 +103,7 @@ export class ActorProxy {
 		);
 
 		const start = performance.now();
-		if (this.runtime.env.get("_OPENGB_LOG_ACTOR_BODY") == "1") {
+		if (this.runtime.env.get("_BACKEND_LOG_ACTOR_BODY") == "1") {
 			ctx.log.debug(
 				"actor request",
 				["instance", instanceName],
@@ -125,7 +125,7 @@ export class ActorProxy {
 		}) as Response;
 
 		const duration = Math.ceil(performance.now() - start);
-		if (this.runtime.env.get("_OPENGB_LOG_ACTOR_BODY") == "1") {
+		if (this.runtime.env.get("_BACKEND_LOG_ACTOR_BODY") == "1") {
 			ctx.log.debug(
 				"actor response",
 				...(duration > 0 ? [["duration", `${duration}ms`] as LogEntry] : []),

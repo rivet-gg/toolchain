@@ -49,7 +49,7 @@ export interface BuildOpts {
 	/** If true, don't run `deno check` on the generated code. */
 	skipDenoCheck: boolean;
 	/** If true, generate the SDK. */
-  sdk?: {},
+  sdk?: Record<never, never>,
 	/** If exists, run database migrations. */
 	migrate?: {
 		mode: MigrateMode;

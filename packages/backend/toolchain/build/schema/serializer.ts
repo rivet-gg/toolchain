@@ -11,7 +11,7 @@ import {
 import { z } from "zod";
 import { AnySchemaElement, is, s, SchemaElementOptions } from "./schema.ts";
 
-const OPENGB_SCHEMA_TYPESCRIPT_LIB_FILE = "__OPENGB_INTERNALS___THIS_FILE_IS_NOT_REAL__internal_types.d.ts";
+const BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE = "__BACKEND_INTERNALS___THIS_FILE_IS_NOT_REAL__internal_types.d.ts";
 
 function generateSerializableTypeSchema(
 	type: Type<any>,
@@ -34,7 +34,7 @@ function generateSerializableTypeSchema(
 
 	// built in types, check if it's a built in type (comes with our internal types)
 	if (
-		symbolDeclartion?.getSourceFile().getFilePath().includes(OPENGB_SCHEMA_TYPESCRIPT_LIB_FILE)
+		symbolDeclartion?.getSourceFile().getFilePath().includes(BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE)
 	) {
 		if (type.getText() === "Date") {
 			// don't serialize Date from typescript
@@ -277,7 +277,7 @@ interface Date {}
 		? project.addSourceFileAtPath(opts.path)
 		: project.createSourceFile("mod.ts", opts.code);
 
-	project.createSourceFile(OPENGB_SCHEMA_TYPESCRIPT_LIB_FILE, tsLib);
+	project.createSourceFile(BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE, tsLib);
 
 	const path = "path" in opts ? opts.path : "mod.ts";
 

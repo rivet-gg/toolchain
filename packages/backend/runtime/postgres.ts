@@ -87,7 +87,7 @@ export class Postgres {
 			const pool = this.getOrCreatePgPool(env, config);
 			const drizzleInstance = config.db.drizzleFn(pool, {
 				schema: module.db.drizzleSchema,
-				logger: env.get("_OPENGB_LOG_SQL_QUERIES") == "1" ? new DrizzleLogger() : undefined,
+				logger: env.get("_BACKEND_LOG_SQL_QUERIES") == "1" ? new DrizzleLogger() : undefined,
 			});
 			this.drizzleClients.set(module.db.schemaName, drizzleInstance);
 			return drizzleInstance as Database<T>;

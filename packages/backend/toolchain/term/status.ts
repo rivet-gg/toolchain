@@ -2,9 +2,9 @@
 
 import * as colors from "@std/fmt/colors";
 
-// Override colors to respect OpenGB env.
-if (Deno.env.get("OPENGB_TERM_COLOR") === "never") colors.setColorEnabled(false);
-else if (Deno.env.get("OPENGB_TERM_COLOR") === "always") colors.setColorEnabled(true);
+// Override colors package config to respect backend env.
+if (Deno.env.get("BACKEND_TERM_COLOR") === "never") colors.setColorEnabled(false);
+else if (Deno.env.get("BACKEND_TERM_COLOR") === "always") colors.setColorEnabled(true);
 
 export function verbose(msg: string, data = "") {
 	if (Deno.env.get("VERBOSE")) console.error(`${colors.bold(colors.gray(msg))} ${data}`);

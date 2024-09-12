@@ -49,7 +49,7 @@ export async function generateOpenApi(project: Project) {
 	let document = generator.generateDocument({
 		openapi: "3.1.0",
 		info: {
-			title: "Open Game Backend",
+			title: "Rivet SDK",
 			version: "1.0.0",
 		},
 		servers: [
@@ -58,12 +58,7 @@ export async function generateOpenApi(project: Project) {
 				"url": DEFAULT_SERVER,
 			},
 		],
-		tags: [
-			{
-				name: "Open Game Backend",
-				description: "Open Game Backend",
-			},
-		],
+		tags: [],
 	});
 
 	// Remove uses of complex OpenAPI types that are usually buggy in OpenAPI

@@ -219,7 +219,7 @@ export function errorToLogEntries(base: string, error: unknown): LogEntry[] {
 function formatStackTrace(stackTrace: string): string {
 	const regex = /at (.+?)$/gm;
 	const matches = [...stackTrace.matchAll(regex)];
-	// Reverse array since the OpenGB stack goes from top level -> bottom level
+	// Reverse array since the stack goes from top level -> bottom level
 	matches.reverse();
 	return matches
 		.map((match) => match[1]!.trim())

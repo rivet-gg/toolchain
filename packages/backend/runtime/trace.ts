@@ -147,14 +147,14 @@ export function newTrace(entryType: TraceEntryType, runtime: BuildRuntime = Buil
 		type: entryType,
 	};
 
-	// Read managed opengb ray id from request header (set by cloudflare)
+	// Read managed ray id from request header (set by cloudflare)
 	let rayId: string;
 	if (runtime == BuildRuntime.Cloudflare && "httpRequest" in entry) {
-		const rayIdHeader = (entry.httpRequest as TraceEntryTypeHttpRequest).headers["x-opengb-ray-id"];
+		const rayIdHeader = (entry.httpRequest as TraceEntryTypeHttpRequest).headers["x-backend-ray-id"];
 		if (rayIdHeader) {
 			rayId = rayIdHeader;
 		} else {
-			log("warn", "no x-opengb-ray-id header found");
+			log("warn", "no x-backend-ray-id header found");
 			// Generate random ray ID
 			rayId = crypto.randomUUID();
 		}

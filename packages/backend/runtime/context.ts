@@ -121,7 +121,7 @@ export class Context<Params extends ContextParams> {
 
 		// Log start
 		const scriptStart = performance.now();
-		if (this.internalRuntime.env.get("_OPENGB_LOG_SCRIPT_BODY") == "1") {
+		if (this.internalRuntime.env.get("_BACKEND_LOG_SCRIPT_BODY") == "1") {
 			ctx.log.debug("script request", ...spreadObjectToLogEntries("request", request));
 		} else {
 			ctx.log.debug("script request");
@@ -136,7 +136,7 @@ export class Context<Params extends ContextParams> {
 		// actions performed inside of the request:
 		// https://developers.cloudflare.com/workers/runtime-apis/performance/
 		const duration = Math.ceil(performance.now() - scriptStart);
-		if (this.internalRuntime.env.get("_OPENGB_LOG_SCRIPT_BODY") == "1") {
+		if (this.internalRuntime.env.get("_BACKEND_LOG_SCRIPT_BODY") == "1") {
 			ctx.log.debug(
 				"script response",
 				...(duration > 0 ? [["duration", `${duration}ms`] as LogEntry] : []),

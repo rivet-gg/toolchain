@@ -1,4 +1,4 @@
 #!/bin/sh
 
-npx source-map-cli resolve .opengb/output.js $1 $2
+npx source-map-cli resolve .rivet/backend/output.js $1 $2
 

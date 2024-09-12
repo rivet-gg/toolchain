@@ -187,7 +187,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 interface FetchAndResolveModuleOutput {
 	/**
-	 * Path the module was copied to in .opengb.
+	 * Path the module was copied to in .rivet/modules/.
 	 */
 	path: string;
 
@@ -251,7 +251,8 @@ export async function fetchAndResolveModule(
 		// local registry, we don't want conflicting generated files.
 		path = resolve(
 			projectRoot,
-			".opengb",
+			".rivet",
+      "modules",
 			"external_modules",
 			moduleName,
 		);
@@ -318,8 +319,12 @@ export const PACKAGES_PATH = "packages";
 export const SDK_PATH = "sdk";
 export const DRIZZLE_ORM_REEXPORT = "drizzle_orm_reexport.ts";
 
+export function projectGenPathRaw(projectPath: string, ...pathSegments: string[]): string {
+	return resolve(projectPath, ".rivet", "modules", ...pathSegments);
+}
+
 export function projectGenPath(project: Project, ...pathSegments: string[]): string {
-	return resolve(project.path, ".opengb", ...pathSegments);
+  return projectGenPathRaw(project.path, ...pathSegments);
 }
 
 /** Path where the archive for the backend packages source code are extracted. */
@@ -422,7 +427,7 @@ export async function listSourceFiles(
 		// Skip non-local files
 		if (opts.localOnly && module.registry.isExternal) continue;
 
-		const moduleFiles = (await glob.glob("**/*.ts", { cwd: module.path, ignore: ".opengb/**" }))
+		const moduleFiles = (await glob.glob("**/*.ts", { cwd: module.path, ignore: ".rivet/**" }))
 			.map((x) => resolve(module.path, x));
 		files.push(...moduleFiles);
 	}

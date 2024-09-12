@@ -107,7 +107,7 @@ export async function execute(opts: Opts) {
 				env: {
 					"DATABASE_URL": await getDefaultDatabaseUrl(project),
 					// Force color for test logs
-					"OPENGB_TERM_COLOR": Deno.env.get("OPENGB_TERM_COLOR") ?? "always",
+					"BACKEND_TERM_COLOR": Deno.env.get("BACKEND_TERM_COLOR") ?? "always",
 				},
 			})
 				.output();

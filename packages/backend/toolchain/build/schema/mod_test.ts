@@ -496,7 +496,7 @@ Deno.test.ignore("schema serializer should handle imported types (users.create)"
 	// for this purpose I'm going to use the create.ts file from the users module
 	// if you're going to use this test in the future, make sure to update the path (if needed)
 	const serializer = createSchemaSerializer({
-		path: resolve(Deno.cwd() + "./../opengb-modules/modules/users/scripts/create.ts"),
+		path: resolve(Deno.cwd() + "./../modules/modules/users/scripts/create.ts"),
 	});
 	assertEquals(
 		serializer.serialize("Response"),
@@ -516,7 +516,7 @@ Deno.test.ignore("schema serializer should handle imported types (auth config)",
 	// for this purpose I'm going to use the create.ts file from the users module
 	// if you're going to use this test in the future, make sure to update the path (if needed)
 	const serializer = createSchemaSerializer({
-		path: resolve(Deno.cwd() + "./../opengb-modules/modules/auth/config.ts"),
+		path: resolve(Deno.cwd() + "./../modules/modules/auth/config.ts"),
 	});
 	assertEquals(
 		serializer.serialize("Config"),

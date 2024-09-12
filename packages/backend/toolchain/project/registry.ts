@@ -5,6 +5,7 @@ import { progress, warn } from "../term/status.ts";
 import { UnreachableError, UserError } from "../error/mod.ts";
 import { CommandError } from "../error/mod.ts";
 import registryDefaultReg from "./registry_default_rev.json" with { type: "json" };
+import { projectGenPathRaw } from "./mod.ts";
 
 export interface Registry {
 	path: string;
@@ -14,7 +15,7 @@ export interface Registry {
 	/**
 	 * If the source code for this registry does not belong to this project.
 	 *
-	 * If true, modules will be copied to the .opengb dir and will be read-only.
+	 * If true, modules will be copied to the .rivet/modules dir and will be read-only.
 	 *
 	 * If this is true, the module should be treated as read-only and should not
 	 * be tested, formatted, linted, and generate migrations.
@@ -56,8 +57,8 @@ export async function loadDefaultRegistry(projectRoot: string, signal?: AbortSig
 		{
 			git: {
 				url: {
-					https: "https://github.com/rivet-gg/opengb-modules.git",
-					ssh: "git@github.com:rivet-gg/opengb-modules.git",
+					https: "https://github.com/rivet-gg/modules.git",
+					ssh: "git@github.com:rivet-gg/modules.git",
 				},
 				rev: registryDefaultReg,
 				directory: "./modules",
@@ -100,7 +101,7 @@ async function resolveRegistryGit(
 ): Promise<ResolveRegistryOutput> {
 	const projectConfigPath = resolve(projectRoot, "backend.json");
 
-	const repoPath = resolve(projectRoot, ".opengb", "git_registries", name);
+	const repoPath = projectGenPathRaw(projectRoot, "git_registries", name);
 	const gitRef = resolveGitRef(config);
 
 	// Clone repo if needed

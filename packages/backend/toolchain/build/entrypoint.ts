@@ -12,7 +12,7 @@ import {
 import { dbSchemaPath } from "../project/module.ts";
 import { UnreachableError } from "../error/mod.ts";
 import { BuildOpts, DbDriver, Runtime, runtimeToString } from "./mod.ts";
-import { DRIZZLE_KIT_VERSION, DRIZZLE_ORM_PACKAGE, DRIZZLE_ORM_VERSION, PG_PACKAGE } from "../drizzle_consts.ts";
+import { DRIZZLE_ORM_PACKAGE, DRIZZLE_ORM_VERSION, PG_PACKAGE } from "../drizzle_consts.ts";
 import { GeneratedCodeBuilder } from "./gen/mod.ts";
 import { convertSerializedSchemaToZodExpression } from "./schema/mod.ts";
 

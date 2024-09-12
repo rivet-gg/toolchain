@@ -2,7 +2,7 @@ use anyhow::*;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-	backend::{self, build_opengb_command_raw},
+	backend::{self, build_backend_command_raw},
 	config::{self, meta},
 	paths,
 	util::{
@@ -61,12 +61,12 @@ impl task::Task for Task {
 							Ok((env, settings.backend.dev.config_path.clone()))
 						})
 						.await?;
-					cmd_env.insert("OPENGB_PORT".into(), port.to_string());
-					cmd_env.insert("OPENGB_HOSTNAME".into(), "0.0.0.0".to_string());
-					cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
+					cmd_env.insert("BACKEND_PORT".into(), port.to_string());
+					cmd_env.insert("BACKEND_HOSTNAME".into(), "0.0.0.0".to_string());
+					cmd_env.insert("BACKEND_TERM_COLOR".into(), "never".into());
 
 					// Build command
-					let cmd = build_opengb_command_raw(backend::BackendCommandOpts {
+					let cmd = build_backend_command_raw(backend::BackendCommandOpts {
 						command: "dev",
 						opts: serde_json::json!({
 							"project": config_path,

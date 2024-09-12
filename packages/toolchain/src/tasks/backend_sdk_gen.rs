@@ -44,9 +44,9 @@ impl task::Task for Task {
 			.path
 			.unwrap_or_else(|| input.fallback_sdk_path.clone());
 
-		cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
+		cmd_env.insert("BACKEND_TERM_COLOR".into(), "never".into());
 
-		let exit_code = backend::run_opengb_command_from_task(
+		let exit_code = backend::run_backend_command_from_task(
 			task.clone(),
 			backend::BackendCommandOpts {
 				command: "sdkGenerate",

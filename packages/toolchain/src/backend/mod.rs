@@ -50,7 +50,7 @@ pub struct CommandRaw {
 	pub current_dir: PathBuf,
 }
 
-pub async fn build_opengb_command_raw(opts: BackendCommandOpts) -> Result<CommandRaw> {
+pub async fn build_backend_command_raw(opts: BackendCommandOpts) -> Result<CommandRaw> {
 	let base_url = base_url().await?;
 
 	// Get Deno executable
@@ -61,7 +61,7 @@ pub async fn build_opengb_command_raw(opts: BackendCommandOpts) -> Result<Comman
 		opts.command: opts.opts
 	}))?;
 
-	// Run OpenGB
+	// Run backend
 	Ok(CommandRaw {
 		command: deno.executable_path,
 		args: vec![
@@ -87,8 +87,8 @@ pub async fn build_opengb_command_raw(opts: BackendCommandOpts) -> Result<Comman
 	})
 }
 
-pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
-	let cmd_raw = build_opengb_command_raw(opts).await?;
+pub async fn build_backend_command(opts: BackendCommandOpts) -> Result<Command> {
+	let cmd_raw = build_backend_command_raw(opts).await?;
 	let mut cmd = Command::new(cmd_raw.command);
 	cmd.args(cmd_raw.args)
 		.envs(cmd_raw.envs)
@@ -96,22 +96,16 @@ pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
 	Ok(cmd)
 }
 
-pub async fn run_opengb_command_from_task(
+pub async fn run_backend_command_from_task(
 	task: task::TaskCtx,
 	opts: BackendCommandOpts,
 ) -> Result<i32> {
-	let cmd = build_opengb_command(opts).await?;
+	let cmd = build_backend_command(opts).await?;
 	let exit_code = task.spawn_cmd(cmd).await?;
 	Ok(exit_code.code().unwrap_or(0))
 }
 
-pub async fn run_opengb_command(opts: BackendCommandOpts) -> Result<i32> {
-	let mut cmd = build_opengb_command(opts).await?;
-	let exit_code = cmd.status().await?;
-	Ok(exit_code.code().unwrap_or(0))
-}
-
-pub async fn run_opengb_command_passthrough(
+pub async fn run_backend_command_passthrough(
 	command: &'static str,
 	opts: &impl Serialize,
 ) -> ExitCode {
@@ -123,7 +117,7 @@ pub async fn run_opengb_command_passthrough(
 		}
 	};
 
-	let mut cmd = match build_opengb_command(BackendCommandOpts {
+	let mut cmd = match build_backend_command(BackendCommandOpts {
 		command,
 		opts: opts_json,
 		env: HashMap::new(),
@@ -150,11 +144,6 @@ pub async fn run_opengb_command_passthrough(
 	} else {
 		ExitCode::FAILURE
 	}
-}
-
-pub async fn spawn_opengb_command(opts: BackendCommandOpts) -> Result<u32> {
-	let child = build_opengb_command(opts).await?.spawn()?;
-	Ok(child.id().context("child already exited")?)
 }
 
 /// Gets or auto-creates a backend project for the game.

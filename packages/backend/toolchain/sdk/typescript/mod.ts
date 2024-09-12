@@ -39,11 +39,11 @@ async function generatePackageJson(sdkGenPath: string) {
 	await Deno.writeTextFile(
 		resolve(sdkGenPath, "package.json"),
 		JSON.stringify({
-			"name": "opengb-sdk",
+			"name": "rivet-sdk",
 			"version": "1.0.0",
 			"repository": {
 				"type": "git",
-				"url": "https://github.com/rivet-gg/opengb.git",
+				"url": "https://github.com/rivet-gg/rivet.git",
 			},
 			"main": "./dist/index.js",
 			"typings": "./dist/index.d.ts",
