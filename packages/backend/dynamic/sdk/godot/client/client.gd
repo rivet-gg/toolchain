@@ -1,12 +1,12 @@
 extends Node
-class_name BackendClient
+class_name RivetClient
 ## Low-level API used to build HTTP requests to the backend.
 
 const _ApiRequest := preload("request.gd")
 
-var configuration: BackendConfiguration
+var configuration: RivetConfiguration
 
-func _init(configuration: BackendConfiguration):
+func _init(configuration: RivetConfiguration):
 	self.configuration = configuration
 
 ## Builds the headers for a request
@@ -24,7 +24,7 @@ func _build_url(path: String) -> String:
 ## Creates a request
 func build_request(method: HTTPClient.Method, path: String, body: Dictionary) -> _ApiRequest:
 	if !self.is_inside_tree():
-		push_error("BackendClient node not added to tree, cannot make http requests")
+		push_error("RivetClient node not added to tree, cannot make http requests")
 
 	var url := self._build_url(path)
 	var body_json := JSON.stringify(body)

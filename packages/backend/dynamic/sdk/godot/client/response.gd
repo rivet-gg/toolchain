@@ -1,5 +1,5 @@
 extends RefCounted
-class_name BackendResponse
+class_name RivetResponse
 ## A response from the server. Contains the result, response code, headers, and body.
 ## The body is a dictionary of the JSON response.
 
@@ -66,7 +66,7 @@ func is_error() -> bool:
 	return !self.is_ok()
 
 func _to_string() -> String:
-	return "BackendResponse [Result: %s, HTTP: %s, Response: %s, Body: %s]" % [
+	return "RivetResponse [Result: %s, HTTP: %s, Response: %s, Body: %s]" % [
 		Result.keys()[result],
 		http_status,
 		response_code,

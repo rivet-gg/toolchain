@@ -1,13 +1,13 @@
-class_name BackendLogger
+class_name RivetLogger
 
 static func log(args):
-	print("[Backend] ", args)
+	print("[Rivet] ", args)
 
 static func warning(args):
-	print("[Backend] ", args)
-	push_warning("[Backend] ", args)
+	print("[Rivet] ", args)
+	push_warning("[Rivet] ", args)
 
 static func error(args):
-	print("[Backend] ", args)
-	push_error("[Backend] ", args)
+	print("[Rivet] ", args)
+	push_error("[Rivet] ", args)
 

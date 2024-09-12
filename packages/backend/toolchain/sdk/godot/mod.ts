@@ -103,17 +103,17 @@ export async function copyBase(sdkGenPath: string) {
 }
 
 export async function generateBackendAndModules(project: Project, sdkGenPath: string) {
-	const apiBuilder = new GeneratedCodeBuilder(resolve(sdkGenPath, "backend.gd"), 2, Lang.GDScript);
+	const apiBuilder = new GeneratedCodeBuilder(resolve(sdkGenPath, "rivet.gd"), 2, Lang.GDScript);
 
 	apiBuilder.append`
 		extends Node
-		class_name BackendSingleton
-		# API for interacting with the backend.
+		class_name RivetSingleton
+		# API for interacting with modules.
 
 		const _Client = preload("client/client.gd")
 		const _Configuration = preload("client/configuration.gd")
 
-		## Client used to connect o the backend.
+		## Client used to connect to the backend.
 		var client: _Client
 
 		## Configuration for how to connect to the backend.
@@ -134,7 +134,7 @@ export async function generateBackendAndModules(project: Project, sdkGenPath: st
 
 	for (const mod of project.modules.values()) {
 		const moduleNamePascal = pascalify(mod.name);
-		const className = `Backend${moduleNamePascal}`;
+		const className = `Rivet${moduleNamePascal}`;
 
 		// Create module api class
 		const moduleApiBuilder = new GeneratedCodeBuilder(
@@ -163,9 +163,9 @@ export async function generateBackendAndModules(project: Project, sdkGenPath: st
 		moduleApiBuilder.append`
 			const _ApiResponse := preload("../client/response.gd")
 
-			var _client: BackendClient
+			var _client: RivetClient
 
-			func _init(client: BackendClient):
+			func _init(client: RivetClient):
 				self._client = client
 		`;
 
@@ -195,7 +195,7 @@ export async function generateBackendAndModules(project: Project, sdkGenPath: st
 
 			scripts.append`
 				${scriptDocs}
-				func ${escapedScriptName}(body: Dictionary = {}) -> BackendRequest:
+				func ${escapedScriptName}(body: Dictionary = {}) -> RivetRequest:
 					return self._client.build_request(HTTPClient.METHOD_POST, "${path}", body)
 			`;
 		}
