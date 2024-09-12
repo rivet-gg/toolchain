@@ -1994,6 +1994,7 @@ dependencies = [
 name = "rivet-toolchain-ffi"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
  "rivet-toolchain",
  "serde_json",
  "tokio",
