@@ -8,11 +8,11 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0"
 include_dir = "0.7.4"
-tokio = "1.27"
+tokio = { version = "1.27", features = ["fs", "rt-multi-thread"] }
 
 [build-dependencies]
 anyhow = "1.0"
-rivet-deno-embed = { path = "../deno-embed" }
+sha2 = "0.10.8"
 tempfile = "3.2"
-tokio = "1.27"
+walkdir = "2.5.0"
 

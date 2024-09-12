@@ -43,6 +43,7 @@ pub async fn init(api_endpoint: String, cloud_token: String) -> Result<Toolchain
 	//
 	// See https://github.com/hyperium/hyper/issues/2136#issuecomment-861826148
 	let client = reqwest::Client::builder()
+		.no_proxy()
 		.pool_max_idle_per_host(0)
 		.build()?;
 
