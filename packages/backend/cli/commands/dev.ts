@@ -4,7 +4,7 @@ import { build, DbDriver, Format, MigrateMode, Runtime } from "../../toolchain/b
 import { watch } from "../../toolchain/watch/mod.ts";
 import { Project } from "../../toolchain/project/mod.ts";
 import { InternalError } from "../../toolchain/error/mod.ts";
-import { ENTRYPOINT_PATH, projectGenPath } from "../../toolchain/project/project.ts";
+import { ENTRYPOINT_PATH, projectCachePath } from "../../toolchain/project/project.ts";
 import { migrateModeSchema } from "./../util.ts";
 import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
 
@@ -56,7 +56,7 @@ export async function execute(opts: Opts) {
 			if (opts.check) args.push("--check");
 
 			// Run entrypoint
-			const entrypointPath = projectGenPath(project, ENTRYPOINT_PATH);
+			const entrypointPath = projectCachePath(project, ENTRYPOINT_PATH);
 			const cmd = await new Deno.Command("deno", {
 				args: [
 					"run",

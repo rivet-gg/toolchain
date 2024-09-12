@@ -7,7 +7,7 @@ import { ModuleConfig } from "../config/module.ts";
 import { Script } from "./script.ts";
 import { Actor } from "./actor.ts";
 import { Route } from "./route.ts";
-import { Project, projectGenPath } from "./project.ts";
+import { Project, projectCachePath } from "./project.ts";
 import { Registry } from "./registry.ts";
 import { validateIdentifier } from "../types/identifiers/mod.ts";
 import { Casing } from "../types/identifiers/defs.ts";
@@ -73,7 +73,7 @@ function validatePath(
 
 export interface Module {
 	/**
-	 * The path to the cloned module in the project's .rivet/modules/ directory.
+	 * The path to the cloned module in the project's cache dir.
 	 *
 	 * This path can be modified and will be discarded on the next codegen.
 	 */
@@ -431,7 +431,7 @@ export function moduleHelperGen(
 }
 
 export function moduleGenPath(project: Project, module: Module, ...pathSegments: string[]): string {
-	return projectGenPath(project, "modules", module.name, ...pathSegments);
+	return projectCachePath(project, "modules", module.name, ...pathSegments);
 }
 
 export function dbSchemaHelperPath(

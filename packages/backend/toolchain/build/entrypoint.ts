@@ -5,7 +5,7 @@ import {
 	genDependencyCaseConversionMapPath,
 	genRuntimeModPath,
 	GITIGNORE_PATH,
-	projectGenPath,
+	projectCachePath,
 	RUNTIME_CONFIG_PATH,
 	PACKAGES_PATH,
 } from "../project/project.ts";
@@ -19,8 +19,8 @@ import { convertSerializedSchemaToZodExpression } from "./schema/mod.ts";
 export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 	const runtimeModPath = genRuntimeModPath(project);
 
-	const entrypoint = new GeneratedCodeBuilder(projectGenPath(project, ENTRYPOINT_PATH), 2);
-	const config = new GeneratedCodeBuilder(projectGenPath(project, RUNTIME_CONFIG_PATH), 2);
+	const entrypoint = new GeneratedCodeBuilder(projectCachePath(project, ENTRYPOINT_PATH), 2);
+	const config = new GeneratedCodeBuilder(projectCachePath(project, RUNTIME_CONFIG_PATH), 2);
 
 	// Generate module configs
 	const [modImports, modConfig] = generateModImports(project, entrypoint.path!);
@@ -106,14 +106,14 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 				import type { ActorsSnake, ActorsCamel } from "./actors.d.ts";
 				import config from "./runtime_config.ts";
 				import { handleRequest } from ${
-			JSON.stringify(entrypoint.relative(projectGenPath(project, PACKAGES_PATH, "runtime", "server.ts")))
+			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "runtime", "server.ts")))
 		};
 				import { ActorDriver } from ${JSON.stringify(entrypoint.relative(actorDriverPath))};
 				import { PathResolver } from ${
-			JSON.stringify(entrypoint.relative(projectGenPath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
+			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
 		};
 				import { log } from ${
-			JSON.stringify(entrypoint.relative(projectGenPath(project, PACKAGES_PATH, "runtime", "logger.ts")))
+			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "runtime", "logger.ts")))
 		};
 			`;
 
@@ -159,8 +159,8 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			).finished;
 		`;
 	} else if (opts.runtime == Runtime.CloudflareWorkersPlatforms) {
-		const serverTsPath = projectGenPath(project, PACKAGES_PATH, "runtime", "server.ts");
-		const errorTsPath = projectGenPath(project, PACKAGES_PATH, "runtime", "error.ts");
+		const serverTsPath = projectCachePath(project, PACKAGES_PATH, "runtime", "server.ts");
+		const errorTsPath = projectCachePath(project, PACKAGES_PATH, "runtime", "error.ts");
 
 		entrypoint.chunk.withNewlinesPerChunk(1)
 			.append`
@@ -181,7 +181,7 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			JSON.stringify(entrypoint.relative(actorDriverPath))
 		};
 				import { PathResolver } from ${
-			JSON.stringify(entrypoint.relative(projectGenPath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
+			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
 		};
 			`;
 
@@ -249,7 +249,7 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 	await entrypoint.write();
 
 	await Deno.writeTextFile(
-		projectGenPath(project, GITIGNORE_PATH),
+		projectCachePath(project, GITIGNORE_PATH),
 		".",
 	);
 }

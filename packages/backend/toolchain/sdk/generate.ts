@@ -2,7 +2,7 @@ import { move } from "@std/fs";
 import { resolve } from "@std/path";
 import { CommandError, UnreachableError } from "../error/mod.ts";
 import { Project } from "../project/mod.ts";
-import { projectGenPath, SDK_PATH } from "../project/project.ts";
+import { projectCachePath, SDK_PATH } from "../project/project.ts";
 import { progress, success } from "../term/status.ts";
 
 import { generateTypescriptAddons } from "./typescript/mod.ts";
@@ -54,7 +54,7 @@ export async function generateSdk(
   sdk: SdkConfig
 ) {
 	const targetString = targetToString(sdk.target);
-	const sdkGenPath = resolve(projectGenPath(project, SDK_PATH), targetString);
+	const sdkGenPath = resolve(projectCachePath(project, SDK_PATH), targetString);
 
 	// Clear artifacts
 	try {
@@ -72,43 +72,24 @@ export async function generateSdk(
 
 	if (config.generator != "manual") {
 		// Run using deno when in docker
-		if (Deno.env.has("RUNNING_IN_DOCKER")) {
-			buildOutput = await new Deno.Command("deno", {
-				args: [
-					"run",
-					"-A",
-					"npm:@openapitools/openapi-generator-cli@2.13.4",
-					"generate",
-					"-i",
-					`${project.path}/.rivet/modules/openapi.json`,
-					"-g",
-					config.generator,
-					"-o",
-					`${project.path}/.rivet/modules/sdk/${targetString}`,
-					"--additional-properties=" +
-					Object.entries(config.options).map(([key, value]) => `${key}=${value}`).join(","),
-				],
-			}).output();
-		} else {
-			buildOutput = await new Deno.Command("docker", {
-				args: [
-					"run",
-					"--rm",
-					"-v",
-					`${project.path}:/local`,
-					"openapitools/openapi-generator-cli:v7.6.0",
-					"generate",
-					"-i",
-					"/local/.rivet/modules/openapi.json",
-					"-g",
-					config.generator,
-					"-o",
-					`/local/.rivet/modules/sdk/${targetString}`,
-					"--additional-properties=" +
-					Object.entries(config.options).map(([key, value]) => `${key}=${value}`).join(","),
-				],
-			}).output();
-		}
+    buildOutput = await new Deno.Command("docker", {
+      args: [
+        "run",
+        "--rm",
+        "-v",
+        `${project.cachePath}:/local`,
+        "openapitools/openapi-generator-cli:v7.6.0",
+        "generate",
+        "-i",
+        "/local/openapi.json",
+        "-g",
+        config.generator,
+        "-o",
+        `/local/sdk/${targetString}`,
+        "--additional-properties=" +
+        Object.entries(config.options).map(([key, value]) => `${key}=${value}`).join(","),
+      ],
+    }).output();
 
 		if (!buildOutput.success) {
 			throw new CommandError("Failed to generate OpenAPI SDK.", { commandOutput: buildOutput });

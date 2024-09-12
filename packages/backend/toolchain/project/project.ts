@@ -1,6 +1,7 @@
 import { assert } from "@std/assert";
 import { copy, emptyDir, exists } from "@std/fs";
-import { dirname, resolve } from "@std/path";
+import { dirname, resolve, normalize, isAbsolute } from "@std/path";
+import { dir } from "@cross/dir";
 import * as glob from "glob";
 import { readConfig as readProjectConfig } from "../config/project.ts";
 import { ProjectConfig } from "../config/project.ts";
@@ -20,6 +21,7 @@ import { verbose } from "../term/status.ts";
 
 export interface Project {
 	path: string;
+  cachePath: string;
 	configPath: string;
 	config: ProjectConfig;
 	registries: Map<string, Registry>;
@@ -178,6 +180,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 	return {
 		path: projectRoot,
+    cachePath: await computeProjectCachePath(projectRoot),
 		configPath: projectConfigPath,
 		config: projectConfig,
 		registries,
@@ -187,7 +190,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 interface FetchAndResolveModuleOutput {
 	/**
-	 * Path the module was copied to in .rivet/modules/.
+	 * Path the module was copied to in cache dir.
 	 */
 	path: string;
 
@@ -250,9 +253,7 @@ export async function fetchAndResolveModule(
 		// original module. For example. if multiple projects are using the same
 		// local registry, we don't want conflicting generated files.
 		path = resolve(
-			projectRoot,
-			".rivet",
-      "modules",
+      await computeProjectCachePath(projectRoot),
 			"external_modules",
 			moduleName,
 		);
@@ -319,25 +320,55 @@ export const PACKAGES_PATH = "packages";
 export const SDK_PATH = "sdk";
 export const DRIZZLE_ORM_REEXPORT = "drizzle_orm_reexport.ts";
 
-export function projectGenPathRaw(projectPath: string, ...pathSegments: string[]): string {
-	return resolve(projectPath, ".rivet", "modules", ...pathSegments);
+/**
+ * Returns the absolute path to the project cache dir.
+ *
+ * This is done by hashing the absolute path of the project and returning a path in the user's cache dir.
+ *
+ * We do this instead of storing in the project dir (e.g. under `.cache`):
+ * - Prevent accidentally committing cache to git if cache was in the project dir.
+ * - Triggering reloads on file watchers
+ * - Prevent fringe errors when mounting with systems like WSL
+ */
+export async function computeProjectCachePath(projectPath: string): Promise<string> {
+	// Assert project path is absolute
+	assert(isAbsolute(projectPath), "Project path must be absolute");
+
+	// Normalize project path
+	const normalizedPath = normalize(projectPath);
+
+	// Hash project path using md5
+  const encoder = new TextEncoder();
+  const data = encoder.encode(normalizedPath);
+  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+  // Build path
+  const cachePath = await dir("cache");
+	const path = resolve(cachePath, "rivet", "backend", hashHex);
+
+  // Create dir
+  await Deno.mkdir(path, { recursive: true });
+
+  return path;
 }
 
-export function projectGenPath(project: Project, ...pathSegments: string[]): string {
-  return projectGenPathRaw(project.path, ...pathSegments);
+export function projectCachePath(project: Project, ...pathSegments: string[]): string {
+  return resolve(project.cachePath, ...pathSegments);
 }
 
 /** Path where the archive for the backend packages source code are extracted. */
 export function genRuntimeModPath(project: Project): string {
-	return projectGenPath(project, PACKAGES_PATH, "runtime", "mod.ts");
+	return projectCachePath(project, PACKAGES_PATH, "runtime", "mod.ts");
 }
 
 export function genRuntimePostgresPath(project: Project): string {
-	return projectGenPath(project, PACKAGES_PATH, "runtime", "postgres.ts");
+	return projectCachePath(project, PACKAGES_PATH, "runtime", "postgres.ts");
 }
 
 export function genRuntimeActorPath(project: Project): string {
-	return projectGenPath(project, PACKAGES_PATH, "runtime", "actor", "actor.ts");
+	return projectCachePath(project, PACKAGES_PATH, "runtime", "actor", "actor.ts");
 }
 
 export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): string {
@@ -350,7 +381,7 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
 		throw new UnreachableError(runtime);
 	}
 
-	return projectGenPath(
+	return projectCachePath(
 		project,
     PACKAGES_PATH,
 		"runtime",
@@ -362,21 +393,21 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
 }
 
 export function genDependencyTypedefPath(project: Project): string {
-	return projectGenPath(project, "dependencies.d.ts");
+	return projectCachePath(project, "dependencies.d.ts");
 }
 export function genDependencyCaseConversionMapPath(project: Project): string {
-	return projectGenPath(project, "dependencyCaseConversion.ts");
+	return projectCachePath(project, "dependencyCaseConversion.ts");
 }
 
 export function genActorTypedefPath(project: Project): string {
-	return projectGenPath(project, "actors.d.ts");
+	return projectCachePath(project, "actors.d.ts");
 }
 export function genActorCaseConversionMapPath(project: Project): string {
-	return projectGenPath(project, "actorCaseConversion.ts");
+	return projectCachePath(project, "actorCaseConversion.ts");
 }
 
 function genPublicUtilsFolder(project: Project): string {
-	return projectGenPath(project, "public");
+	return projectCachePath(project, "public");
 }
 
 /**
@@ -399,7 +430,7 @@ export function genModulePublicExternal(project: Project, module: Module): strin
 }
 
 function genDependenciesFolder(project: Project): string {
-	return projectGenPath(project, "dependencies");
+	return projectCachePath(project, "dependencies");
 }
 
 export function genModuleDependenciesPath(project: Project, module: Module): string {
@@ -427,7 +458,7 @@ export async function listSourceFiles(
 		// Skip non-local files
 		if (opts.localOnly && module.registry.isExternal) continue;
 
-		const moduleFiles = (await glob.glob("**/*.ts", { cwd: module.path, ignore: ".rivet/**" }))
+		const moduleFiles = (await glob.glob("**/*.ts", { cwd: module.path }))
 			.map((x) => resolve(module.path, x));
 		files.push(...moduleFiles);
 	}
@@ -444,7 +475,7 @@ export async function cleanProject(project: Project) {
 
 	// Delete project files
   verbose("Removing project gen path");
-	await Deno.remove(projectGenPath(project), { recursive: true });
+	await Deno.remove(projectCachePath(project), { recursive: true });
 }
 
 export function getDefaultRegistry(project: Project): Registry | undefined {

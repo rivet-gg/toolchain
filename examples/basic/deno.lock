@@ -2,9 +2,15 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "jsr:@std/path": "jsr:@std/path@1.0.4",
       "npm:@cloudflare/workers-types": "npm:@cloudflare/workers-types@4.20240821.1",
       "npm:drizzle-orm@0.33.0": "npm:drizzle-orm@0.33.0_pg@8.12.0",
       "npm:pg@8.12.0": "npm:pg@8.12.0"
+    },
+    "jsr": {
+      "@std/path@1.0.4": {
+        "integrity": "48dd5d8389bcfcd619338a01bdf862cb7799933390146a54ae59356a0acc7105"
+      }
     },
     "npm": {
       "@cloudflare/workers-types@4.20240821.1": {

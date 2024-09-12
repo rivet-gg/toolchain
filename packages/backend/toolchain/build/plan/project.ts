@@ -1,7 +1,7 @@
 import { BuildState, buildStep, waitForBuildPromises } from "../../build_state/mod.ts";
 import * as glob from "glob";
 import { relative, resolve } from "@std/path";
-import { Project, projectGenPathRaw } from "../../project/mod.ts";
+import { Project } from "../../project/mod.ts";
 import { BuildOpts, Format, MigrateMode, Runtime } from "../mod.ts";
 import { planModuleBuild } from "./module.ts";
 import { compileTypeHelpers } from "../gen/mod.ts";
@@ -10,7 +10,7 @@ import { generateEntrypoint } from "../entrypoint.ts";
 import { generateOpenApi } from "../openapi.ts";
 import { UnreachableError, UserError } from "../../error/mod.ts";
 import { generateMeta } from "../meta.ts";
-import { BUNDLE_PATH, ENTRYPOINT_PATH, MANIFEST_PATH, projectGenPath, PACKAGES_PATH } from "../../project/project.ts";
+import { BUNDLE_PATH, ENTRYPOINT_PATH, MANIFEST_PATH, projectCachePath, PACKAGES_PATH } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
 import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
@@ -38,7 +38,7 @@ export async function planProjectBuild(
 		description: "packages/",
 		async build({ signal }) {
 			// Writes a copy of the backend runtime bundled with the CLI to the project.
-			const inflatePackagesPath = projectGenPath(project, PACKAGES_PATH);
+			const inflatePackagesPath = projectCachePath(project, PACKAGES_PATH);
 			await inflateArchive(packagesArchive, inflatePackagesPath, "string", signal);
 		},
 	});
@@ -135,7 +135,7 @@ export async function planProjectBuild(
 			name: "Bundle",
 			description: "bundle.js",
 			async build({ signal }) {
-				const bundledFile = projectGenPath(project, BUNDLE_PATH);
+				const bundledFile = projectCachePath(project, BUNDLE_PATH);
 
 				// See Cloudflare Wrangler implementation:
 				//
@@ -143,7 +143,7 @@ export async function planProjectBuild(
 				const analyzeResult = Deno.env.get("_BACKEND_ESBUILD_META") == "1";
 				const noMinify = Deno.env.get("_BACKEND_ESBUILD_NO_MINIFY") == "1";
 				const result = await esbuild.build({
-					entryPoints: [projectGenPath(project, ENTRYPOINT_PATH)],
+					entryPoints: [projectCachePath(project, ENTRYPOINT_PATH)],
 					outfile: bundledFile,
 					format: "esm",
 					sourcemap: true,
@@ -257,7 +257,7 @@ export async function planProjectBuild(
 					signal.throwIfAborted();
 
 					await Deno.writeTextFile(
-						projectGenPath(project, MANIFEST_PATH),
+						projectCachePath(project, MANIFEST_PATH),
 						JSON.stringify(manifest),
 					);
 				}
@@ -275,7 +275,7 @@ export async function planProjectBuild(
 			description: "entrypoint.ts",
 			async build() {
 				const checkOutput = await new Deno.Command("deno", {
-					args: ["check", "--quiet", projectGenPathRaw(project.path, "entrypoint.ts")],
+					args: ["check", "--quiet", projectCachePath(project, "entrypoint.ts")],
 					signal,
 				}).output();
 				if (!checkOutput.success) {

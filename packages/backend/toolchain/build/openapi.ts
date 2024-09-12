@@ -1,5 +1,5 @@
 import { Project } from "../project/mod.ts";
-import { OPEN_API_PATH, projectGenPath } from "../project/project.ts";
+import { OPEN_API_PATH, projectCachePath } from "../project/project.ts";
 import { OpenApiGeneratorV31, OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { convertSerializedSchemaToZod } from "./schema/mod.ts";
 
@@ -66,7 +66,7 @@ export async function generateOpenApi(project: Project) {
 	document = flattenOpenAPIConfig(document);
 
 	await Deno.writeTextFile(
-		projectGenPath(project, OPEN_API_PATH),
+		projectCachePath(project, OPEN_API_PATH),
 		JSON.stringify(document, null, 4),
 	);
 }

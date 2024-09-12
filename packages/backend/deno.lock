@@ -3,6 +3,11 @@
   "packages": {
     "specifiers": {
       "jsr:@bartlomieju/postgres@^0.17.2": "jsr:@bartlomieju/postgres@0.17.2",
+      "jsr:@cross/deepmerge@^1.0.0": "jsr:@cross/deepmerge@1.0.0",
+      "jsr:@cross/dir@^1.1.0": "jsr:@cross/dir@1.1.0",
+      "jsr:@cross/env@^1.0.0": "jsr:@cross/env@1.0.2",
+      "jsr:@cross/runtime@^1.0.0": "jsr:@cross/runtime@1.1.0",
+      "jsr:@cross/utils@^0.7.0": "jsr:@cross/utils@0.7.1",
       "jsr:@david/code-block-writer@^13": "jsr:@david/code-block-writer@13.0.2",
       "jsr:@luca/esbuild-deno-loader@^0.10.3": "jsr:@luca/esbuild-deno-loader@0.10.3",
       "jsr:@rivet-gg/esbuild-deno-loader@0.10.3-fork.2": "jsr:@rivet-gg/esbuild-deno-loader@0.10.3-fork.2",
@@ -61,6 +66,33 @@
           "jsr:@std/fmt@0.213.1",
           "jsr:@std/io@0.213.1",
           "jsr:@std/path@0.213.1"
+        ]
+      },
+      "@cross/deepmerge@1.0.0": {
+        "integrity": "1e1318a74e31ba1959b9aa0acae8bd417b806f74ffd25ac07c90e12f83ad6b1d"
+      },
+      "@cross/dir@1.1.0": {
+        "integrity": "41eb779daf160f53bc33ef91f593f332fffc52ec9b81f87178db564718534e59",
+        "dependencies": [
+          "jsr:@cross/env@^1.0.0",
+          "jsr:@cross/runtime@^1.0.0",
+          "jsr:@cross/utils@^0.7.0"
+        ]
+      },
+      "@cross/env@1.0.2": {
+        "integrity": "28501ad1043c218a5b00fe5db27ec62c01ab16371bbe1b9d738496f0a7c5eeb8",
+        "dependencies": [
+          "jsr:@cross/deepmerge@^1.0.0",
+          "jsr:@cross/runtime@^1.0.0"
+        ]
+      },
+      "@cross/runtime@1.1.0": {
+        "integrity": "f35a3b768a9de125277329483b684062ffc9ee86f4449cb8b3d614adcad64ffb"
+      },
+      "@cross/utils@0.7.1": {
+        "integrity": "6cc50ad31b0904364188c43d10e3d4888d817a3d415528b014c27deb8a35564e",
+        "dependencies": [
+          "jsr:@cross/runtime@^1.0.0"
         ]
       },
       "@david/code-block-writer@13.0.2": {
@@ -1070,6 +1102,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@bartlomieju/postgres@^0.17.2",
+      "jsr:@cross/dir@^1.1.0",
       "jsr:@luca/esbuild-deno-loader@^0.10.3",
       "jsr:@std/assert@^1.0.3",
       "jsr:@std/async@^1.0.4",

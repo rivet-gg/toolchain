@@ -8,7 +8,7 @@ import { addShutdownHandler } from "../utils/shutdown_handler.ts";
 import { getClient, getDatabaseUrl, Manager, setup } from "./manager.ts";
 import { createManager } from "./manager.ts";
 import { Settings } from "./settings.ts";
-import { projectGenPath } from "../project/mod.ts";
+import { projectCachePath } from "../project/mod.ts";
 
 export const DEFAULT_VERSION = "16.4.0";
 export const DEFAULT_DATABASE = "rivet-backend";
@@ -62,7 +62,7 @@ export async function ensurePostgresRunning(project: Project) {
 }
 
 function defaultSettings(project: Project): Settings {
-	const postgresRoot = projectGenPath(project, "postgres");
+	const postgresRoot = projectCachePath(project, "postgres");
 
 	const stateFile = resolve(postgresRoot, "manager_state.json");
 	const passwordFile = resolve(postgresRoot, ".pgpass");

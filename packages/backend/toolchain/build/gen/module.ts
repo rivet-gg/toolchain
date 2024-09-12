@@ -15,7 +15,7 @@ import {
 	genModulePublicExternal,
 	genRuntimeModPath,
 	PACKAGES_PATH,
-	projectGenPath,
+	projectCachePath,
 	RUNTIME_CONFIG_PATH,
 } from "../../project/project.ts";
 import { camelify } from "../../../case_conversion/mod.ts";
@@ -30,11 +30,11 @@ export async function compileModuleHelper(
 
 	const runtimePath = helper.relative(genRuntimeModPath(project));
 	const reexportPath = helper.relative(
-		projectGenPath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
+		projectCachePath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
 	);
 	const dependencyCaseConversionMapPath = helper.relative(genDependencyCaseConversionMapPath(project));
 	const actorCaseConversionMapPath = helper.relative(genActorCaseConversionMapPath(project));
-	const runtimeConfigPath = helper.relative(projectGenPath(project, RUNTIME_CONFIG_PATH));
+	const runtimeConfigPath = helper.relative(projectCachePath(project, RUNTIME_CONFIG_PATH));
 
 	// Import & re-export runtime files
 	//
@@ -177,7 +177,7 @@ function genModule(
 	// Database
 	if (module.db) {
 		helper.append`
-    export * as Query from ${JSON.stringify(helper.relative(projectGenPath(project, DRIZZLE_ORM_REEXPORT)))};
+    export * as Query from ${JSON.stringify(helper.relative(projectCachePath(project, DRIZZLE_ORM_REEXPORT)))};
     export * as Database from "./db/schema.ts";
     `;
 		helper.append`

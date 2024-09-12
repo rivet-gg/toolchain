@@ -5,7 +5,7 @@ import { progress, warn } from "../term/status.ts";
 import { UnreachableError, UserError } from "../error/mod.ts";
 import { CommandError } from "../error/mod.ts";
 import registryDefaultReg from "./registry_default_rev.json" with { type: "json" };
-import { projectGenPathRaw } from "./mod.ts";
+import { computeProjectCachePath } from "./mod.ts";
 
 export interface Registry {
 	path: string;
@@ -15,7 +15,7 @@ export interface Registry {
 	/**
 	 * If the source code for this registry does not belong to this project.
 	 *
-	 * If true, modules will be copied to the .rivet/modules dir and will be read-only.
+	 * If true, modules will be copied to the project cache dir and will be read-only.
 	 *
 	 * If this is true, the module should be treated as read-only and should not
 	 * be tested, formatted, linted, and generate migrations.
@@ -101,7 +101,7 @@ async function resolveRegistryGit(
 ): Promise<ResolveRegistryOutput> {
 	const projectConfigPath = resolve(projectRoot, "backend.json");
 
-	const repoPath = projectGenPathRaw(projectRoot, "git_registries", name);
+	const repoPath = resolve(await computeProjectCachePath(projectRoot), "git_registries", name);
 	const gitRef = resolveGitRef(config);
 
 	// Clone repo if needed

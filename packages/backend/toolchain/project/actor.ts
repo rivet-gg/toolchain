@@ -1,5 +1,5 @@
 import { Module } from "./module.ts";
-import { Project, projectGenPath } from "./project.ts";
+import { Project, projectCachePath } from "./project.ts";
 import { ActorConfig } from "../config/module.ts";
 
 export interface Actor {
@@ -14,7 +14,7 @@ export function actorGenPath(
 	module: Module,
 	actor: Actor,
 ): string {
-	return projectGenPath(
+	return projectCachePath(
 		project,
 		"modules",
 		module.name,
