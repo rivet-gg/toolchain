@@ -14,6 +14,8 @@ pub struct Opts {
 	#[clap(long, default_value = "false")]
 	pub strict_schemas: bool,
 	#[clap(long, default_value = "true")]
+	pub sdk: bool,
+	#[clap(long, default_value = "true")]
 	pub migrate: bool,
 	#[clap(long, default_value = "dev")]
 	pub migrate_mode: String,

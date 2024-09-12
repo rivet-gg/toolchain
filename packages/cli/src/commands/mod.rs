@@ -9,7 +9,6 @@ pub mod init;
 pub mod login;
 pub mod logout;
 pub mod module;
-pub mod sdk;
 pub mod task;
 
 use clap::Parser;
@@ -34,10 +33,6 @@ pub enum SubCommand {
 	Db {
 		#[clap(subcommand)]
 		subcommand: db::SubCommand,
-	},
-	Sdk {
-		#[clap(subcommand)]
-		subcommand: sdk::SubCommand,
 	},
 	Backend {
 		#[clap(subcommand)]
@@ -65,7 +60,6 @@ impl SubCommand {
 			SubCommand::Clean(opts) => opts.execute().await,
 			SubCommand::Create { subcommand } => subcommand.execute().await,
 			SubCommand::Db { subcommand } => subcommand.execute().await,
-			SubCommand::Sdk { subcommand } => subcommand.execute().await,
 			SubCommand::Backend { subcommand } => subcommand.execute().await,
 			SubCommand::Module { subcommand } => subcommand.execute().await,
 			SubCommand::Task { subcommand } => subcommand.execute().await,

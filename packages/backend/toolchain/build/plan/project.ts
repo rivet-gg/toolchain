@@ -22,6 +22,7 @@ import { denoPlugins } from "jsr:@luca/esbuild-deno-loader@^0.10.3";
 import { migratePush } from "../../migrate/push.ts";
 import { migrateApply } from "../../migrate/apply.ts";
 import { migrateGenerate } from "../../migrate/generate.ts";
+import { generateSdk } from "../../sdk/generate.ts";
 
 export async function planProjectBuild(
 	buildState: BuildState,
@@ -111,6 +112,22 @@ export async function planProjectBuild(
 			await generateMeta(project);
 		},
 	});
+
+  // Wait for openapi.json before generating SDK
+  await waitForBuildPromises(buildState);
+
+  if (opts.sdk && project.config.sdks) {
+    for (const sdk of project.config.sdks) {
+      buildStep(buildState, {
+        id: `project.generate.sdk`,
+        name: "Generate",
+        description: sdk.output,
+        async build() {
+          await generateSdk(project, sdk);
+        },
+      });
+    }
+  }
 
 	if (opts.format == Format.Bundled) {
 		buildStep(buildState, {
@@ -247,8 +264,6 @@ export async function planProjectBuild(
 			},
 		});
 	}
-
-	// TODO: SDKs
 
 	await waitForBuildPromises(buildState);
 

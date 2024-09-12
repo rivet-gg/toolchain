@@ -34,11 +34,20 @@ If something goes wrong with a deploy:
 
 ## Developing
 
-### Run CLI
+### Run CLI in Example Project
+
+This is useful for manually testing if commands work.
 
 ```sh
-cargo build
-./target/debug/rivet --help
+cd examples/basic
+cargo run --bin rivet -- <COMMAND>
+```
+
+To run without rebuilding:
+
+```sh
+cd examples/basic
+../../target/debug/rivet <COMMAND>
 ```
 
 ### Install CLI Globally
@@ -49,7 +58,7 @@ To install the
 cargo install --path packages/cli --debug
 ```
 
-### Edit Backend Without Rebuild
+### Edit Backend Without Rebuilding Rust Toolchain
 
 To iterate faster on the backend without requiring rebuilding the toolchain for every change, run `rivet config edit user` and add this to your config, where `/path/to/toolchain` is the path to this repository:
 
@@ -62,6 +71,10 @@ To iterate faster on the backend without requiring rebuilding the toolchain for 
 ```
 
 This will direct the toolchain to use the raw source code for the backend instead of the embedded backend source code that requires a rebuild.
+
+### Backend Helper Deno Tasks
+
+See `packages/backend/deno.jsonc` for extra scripts for the backend.
 
 ## Implementation Notes
 

@@ -10,7 +10,6 @@ import * as dev from "./commands/dev.ts";
 import * as format from "./commands/format.ts";
 import * as init from "./commands/init.ts";
 import * as lint from "./commands/lint.ts";
-import * as sdkGenerate from "./commands/sdk/generate.ts";
 import * as test from "./commands/test.ts";
 import * as dbInstanceStart from "./commands/db/instance/start.ts";
 import * as dbInstanceStatus from "./commands/db/instance/status.ts";
@@ -36,7 +35,6 @@ export const commandSchema = z.union([
 	z.object({ format: format.optsSchema }),
 	z.object({ init: init.optsSchema }),
 	z.object({ lint: lint.optsSchema }),
-	z.object({ sdkGenerate: sdkGenerate.optsSchema }),
 	z.object({ test: test.optsSchema }),
 	z.object({ dbInstanceStart: dbInstanceStart.optsSchema }),
 	z.object({ dbInstanceStatus: dbInstanceStatus.optsSchema }),
@@ -75,8 +73,6 @@ export async function executeCommand(command: Command) {
 		await init.execute(command.init);
 	} else if ("lint" in command) {
 		await lint.execute(command.lint);
-	} else if ("sdkGenerate" in command) {
-		await sdkGenerate.execute(command.sdkGenerate);
 	} else if ("test" in command) {
 		await test.execute(command.test);
 	} else if ("dbInstanceStart" in command) {

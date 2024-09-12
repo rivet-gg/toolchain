@@ -4,6 +4,7 @@ import { isAbsolute } from "@std/path";
 import { z } from "zod";
 import { UserError, ValidationError } from "../error/mod.ts";
 import { loadProjectConfigPath } from "../project/mod.ts";
+import { SdkTarget } from "../sdk/generate.ts";
 
 const RegistryGitUrlConfigSchema = z.union([z.string(), z.object({ https: z.string(), ssh: z.string() })]).describe(
 	"The URL to the git repository. If both HTTPS and SSH URL are provided, they will both be tried and use the one that works",
@@ -44,6 +45,11 @@ const RuntimeConfigSchema = z.object({
 	cors: CorsConfigSchema.optional(),
 });
 
+const SdkConfigSchema = z.object({
+	target: z.enum([SdkTarget.TypeScript, SdkTarget.Unity, SdkTarget.Godot]),
+	output: z.string().default("./sdk"),
+});
+
 const ProjectRouteConfigSchema = z.object({
 	pathPrefix: z.string().optional().describe("The path prefix for all routes in this module."),
 });
@@ -67,6 +73,7 @@ export const ProjectConfigSchema = z.object({
 	registries: z.record(RegistryConfigSchema).default(() => ({})),
 	modules: z.record(ProjectModuleConfigSchema).default(() => ({})),
 	runtime: RuntimeConfigSchema.optional(),
+  sdks: z.array(SdkConfigSchema).optional(),
 });
 
 export type ProjectConfig = z.infer<typeof ProjectConfigSchema>;
@@ -83,6 +90,8 @@ export type ProjectModuleConfig = z.infer<typeof ProjectModuleConfigSchema>;
 export type ProjectRouteConfig = z.infer<typeof ProjectRouteConfigSchema>;
 
 export type RuntimeConfig = z.infer<typeof RuntimeConfigSchema>;
+
+export type SdkConfig = z.infer<typeof SdkConfigSchema>;
 
 export type CorsConfig = z.infer<typeof CorsConfigSchema>;
 

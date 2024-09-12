@@ -8,6 +8,7 @@ import { progress, success } from "../term/status.ts";
 import { generateTypescriptAddons } from "./typescript/mod.ts";
 import { DEFAULT_PACKAGE_NAME as UNITY_DEFAULT_PACKAGE_NAME, generateUnityAddons } from "./unity/mod.ts";
 import { generateGodot } from "./godot/mod.ts";
+import { SdkConfig } from "../config/project.ts";
 
 export enum SdkTarget {
 	TypeScript = "typescript",
@@ -50,10 +51,9 @@ const GENERATORS: Record<SdkTarget, Generator> = {
 
 export async function generateSdk(
 	project: Project,
-	target: SdkTarget,
-	output: string,
+  sdk: SdkConfig
 ) {
-	const targetString = targetToString(target);
+	const targetString = targetToString(sdk.target);
 	const sdkGenPath = resolve(projectGenPath(project, SDK_PATH), targetString);
 
 	// Clear artifacts
@@ -67,7 +67,7 @@ export async function generateSdk(
 
 	progress("Building SDK", targetString);
 
-	const config = GENERATORS[target]!;
+	const config = GENERATORS[sdk.target]!;
 	let buildOutput;
 
 	if (config.generator != "manual") {
@@ -116,16 +116,18 @@ export async function generateSdk(
 	}
 
 	let sdkCopyPath = sdkGenPath;
-	if (target == SdkTarget.TypeScript) {
+	if (sdk.target == SdkTarget.TypeScript) {
 		await generateTypescriptAddons(project, sdkGenPath);
-	} else if (target == SdkTarget.Unity) {
+	} else if (sdk.target == SdkTarget.Unity) {
 		await generateUnityAddons(project, sdkGenPath);
 		sdkCopyPath = resolve(sdkGenPath, "src", UNITY_DEFAULT_PACKAGE_NAME);
-	} else if (target == SdkTarget.Godot) {
+	} else if (sdk.target == SdkTarget.Godot) {
 		await generateGodot(project, sdkGenPath);
-	}
+	} else {
+    throw new UnreachableError(sdk.target);
+  }
 
-	await move(sdkCopyPath, output, { overwrite: true });
+	await move(sdkCopyPath, sdk.output, { overwrite: true });
 
 	success("Success");
 }

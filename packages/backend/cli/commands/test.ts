@@ -14,6 +14,7 @@ export const optsSchema = z.object({
 	build: z.boolean().default(true),
 	check: z.boolean().default(true),
 	strictSchemas: z.boolean().default(false),
+	sdk: z.boolean().default(true),
 	migrate: z.boolean().default(true),
 	migrateMode: migrateModeSchema.default(MigrateMode.Dev),
 	watch: z.boolean().default(false),
@@ -39,6 +40,7 @@ export async function execute(opts: Opts) {
 					strictSchemas: opts.strictSchemas,
 					// This gets ran on `deno test`
 					skipDenoCheck: true,
+          sdk: opts.sdk ? {} : undefined,
 					migrate: opts.migrate
 						? {
 							mode: opts.migrateMode,

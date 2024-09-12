@@ -1,42 +1,15 @@
 {
 	"tasks": {
-		// Runs the CLI
-		"cli:run": "deno task artifacts:build && deno task cli:run:dirty",
-		"cli:run:dirty": "deno run -A --check packages/cli/main.ts --project tests/basic",
-
-		// Specific CLI tasks
-		"cli:run:build": "deno task cli:run build",
-		"cli:run:clean_build": "deno task artifacts:build && deno task cli:run:dirty clean && deno task cli:run build",
-
-		// Installs the CLI on the local machine
-		"cli:install": "deno task artifacts:build && deno install --allow-net --allow-read --allow-env --allow-run --allow-write --allow-sys --name opengb --force --config deno.jsonc packages/cli/main.ts",
-
-		// Build Dockerfile
-		"docker:build": "docker build -t opengb -f cli.Dockerfile .",
-
-		// Generates schema
-		"artifacts:build": "deno task format && deno task artifacts:build:packages && deno task artifacts:build:dynamic && deno task artifacts:build:drizzle",
-		"artifacts:build:packages": "deno run --allow-env --allow-read --allow-write scripts/artifacts/build_packages_archive.ts",
-		"artifacts:build:dynamic": "deno run --allow-env --allow-read --allow-write scripts/artifacts/build_dynamic_archive.ts",
-		"artifacts:build:drizzle": "deno run --node-modules-dir --allow-env --allow-read --allow-write scripts/artifacts/build_drizzle.ts",
-
 		// Format
-		"format": "deno fmt packages/",
-		"format:check": "deno fmt --check packages/",
+		"format": "deno fmt .",
+		"format:check": "deno fmt --check .",
 
-		// Check
-		"check": "deno task artifacts:build && deno check packages/**/*.ts",
-		"check:dirty": "deno check packages/**/*.ts",
+		"check": "deno check toolchain/**/*.ts runtime/**/*.ts",
 
-		// Lint
-		"lint": "deno task artifacts:build && deno lint packages/",
-		"lint:dirty": "deno lint packages/",
-		"lint:fix": "deno task artifacts:build && deno lint --fix packages/",
+		"lint": "deno lint toolchain/**/*.ts runtime/**/*.ts",
+		"lint:fix": "deno lint toolchain/**/*.ts runtime/**/*.ts",
 
-		// Runs tests
-		"test:core": "deno task artifacts:build && deno test -A packages/",
-		"test:project": "deno task cli:run test --strict-schemas --force-deploy-migrations",
-		"test:registry": "deno task artifacts:build && deno run -A --check packages/cli/main.ts --path ../opengb-modules/tests/basic test --strict-schemas --force-deploy-migrations"
+		"test:core": "deno test -A ."
 	},
 	"lint": {
 		"include": ["packages/"],

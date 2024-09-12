@@ -10,6 +10,7 @@ export const optsSchema = z.object({
 	runtime: z.enum([Runtime.Deno, Runtime.CloudflareWorkersPlatforms]).default(Runtime.Deno),
 	outputFormat: z.enum([Format.Native, Format.Bundled]),
 	dbDriver: z.enum([DbDriver.NodePostgres, DbDriver.NeonServerless, DbDriver.CloudflareHyperdrive]),
+	sdk: z.boolean().default(true),
 	migrate: z.boolean().default(true),
 	migrateMode: migrateModeSchema.default(MigrateMode.Generate),
 	strictSchemas: z.boolean().default(true),
@@ -58,6 +59,7 @@ export async function execute(opts: Opts) {
 				dbDriver: opts.dbDriver!,
 				strictSchemas: opts.strictSchemas,
 				skipDenoCheck: false,
+        sdk: opts.sdk ? {} : undefined,
 				migrate: opts.migrate
 					? {
 						mode: opts.migrateMode,
