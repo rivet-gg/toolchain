@@ -2,9 +2,12 @@
 /* eslint-disable */
 export * from './FooActorRequest';
 export * from './FooActorResponse';
+export * from './FooCallSelfRequest';
 export * from './FooCallSelfResponse';
 export * from './FooCallSelfResponseResponse';
+export * from './FooCreateEntryRequest';
 export * from './FooCreateEntryResponse';
+export * from './FooPingRequest';
 export * from './FooPingResponse';
 export * from './FriendsAcceptRequestRequest';
 export * from './FriendsAcceptRequestResponse';
@@ -49,8 +52,9 @@ export * from './TokensValidateRequest';
 export * from './TokensValidateResponse';
 export * from './TokensExtendRequest';
 export * from './TokensExtendResponse';
-export * from './FooPingRequest';
-export * from './FooCreateEntryRequest';
-export * from './FooCallSelfRequest';
 export * from './ConfigTestReadConfigRequest';
 export * from './ConfigTestReadConfigResponse';
+export * from './RivetCallRequest';
+export * from './RivetCallResponse';
+export * from './RivetFetchConfigRequest';
+export * from './RivetFetchConfigResponse';

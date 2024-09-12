@@ -26,6 +26,7 @@ import {
  * @interface UsersFetchResponse
  */
 export interface UsersFetchResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {Array<UsersFetchResponseUsersInner>}
@@ -52,6 +53,7 @@ export function UsersFetchResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
+            ...json,
         'users': ((json['users'] as Array<any>).map(UsersFetchResponseUsersInnerFromJSON)),
     };
 }
@@ -62,6 +64,7 @@ export function UsersFetchResponseToJSON(value?: UsersFetchResponse | null): any
     }
     return {
         
+            ...value,
         'users': ((value['users'] as Array<any>).map(UsersFetchResponseUsersInnerToJSON)),
     };
 }

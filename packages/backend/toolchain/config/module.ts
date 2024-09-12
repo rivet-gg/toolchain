@@ -95,10 +95,15 @@ export const ModuleSchema = z.object({
 	routes: z.record(RouteConfigSchema).optional().describe("The routes associated with this module."),
 	errors: z.record(ErrorConfigSchema).describe("The errors associated with this module."),
 	dependencies: z.record(DependencyConfigSchema).optional().describe("The dependencies of this module."),
-	defaultConfig: z.unknown().optional().describe("Default user config."),
+	defaultConfig: z.record(z.unknown()).optional().describe("Default user config."),
 });
 
 export type ModuleConfig = z.infer<typeof ModuleSchema>;
+
+export type IndexedModuleConfig = Pick<
+	z.infer<typeof ModuleSchema>,
+	"name" | "icon" | "description" | "status" | "defaultConfig" | "dependencies" | "tags"
+>;
 
 export type ModuleStatus = Exclude<z.infer<typeof ModuleSchema>["status"], undefined>;
 

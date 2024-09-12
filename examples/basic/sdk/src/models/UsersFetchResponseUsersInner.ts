@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface UsersFetchResponseUsersInner
  */
 export interface UsersFetchResponseUsersInner {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -66,6 +67,7 @@ export function UsersFetchResponseUsersInnerFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
+            ...json,
         'id': json['id'],
         'username': json['username'],
         'createdAt': json['createdAt'],
@@ -79,6 +81,7 @@ export function UsersFetchResponseUsersInnerToJSON(value?: UsersFetchResponseUse
     }
     return {
         
+            ...value,
         'id': value['id'],
         'username': value['username'],
         'createdAt': value['createdAt'],

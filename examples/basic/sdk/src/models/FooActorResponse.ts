@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FooActorResponse
  */
 export interface FooActorResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {number}
@@ -45,6 +46,7 @@ export function FooActorResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
+            ...json,
         'pongs': json['pongs'],
     };
 }
@@ -55,6 +57,7 @@ export function FooActorResponseToJSON(value?: FooActorResponse | null): any {
     }
     return {
         
+            ...value,
         'pongs': value['pongs'],
     };
 }

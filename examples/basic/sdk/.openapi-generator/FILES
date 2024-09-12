@@ -8,9 +8,12 @@ src/apis/index.ts
 src/index.ts
 src/models/FooActorRequest.ts
 src/models/FooActorResponse.ts
+src/models/FooCallSelfRequest.ts
 src/models/FooCallSelfResponse.ts
 src/models/FooCallSelfResponseResponse.ts
+src/models/FooCreateEntryRequest.ts
 src/models/FooCreateEntryResponse.ts
+src/models/FooPingRequest.ts
 src/models/FooPingResponse.ts
 src/models/FriendsAcceptRequestRequest.ts
 src/models/FriendsAcceptRequestResponse.ts

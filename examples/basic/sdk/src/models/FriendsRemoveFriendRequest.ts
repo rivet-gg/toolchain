@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FriendsRemoveFriendRequest
  */
 export interface FriendsRemoveFriendRequest {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -52,6 +53,7 @@ export function FriendsRemoveFriendRequestFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+            ...json,
         'userToken': json['userToken'],
         'targetUserId': json['targetUserId'],
     };
@@ -63,6 +65,7 @@ export function FriendsRemoveFriendRequestToJSON(value?: FriendsRemoveFriendRequ
     }
     return {
         
+            ...value,
         'userToken': value['userToken'],
         'targetUserId': value['targetUserId'],
     };

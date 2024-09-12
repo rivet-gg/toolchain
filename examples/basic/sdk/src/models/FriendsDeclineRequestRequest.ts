@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FriendsDeclineRequestRequest
  */
 export interface FriendsDeclineRequestRequest {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -52,6 +53,7 @@ export function FriendsDeclineRequestRequestFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
+            ...json,
         'userToken': json['userToken'],
         'friendRequestId': json['friendRequestId'],
     };
@@ -63,6 +65,7 @@ export function FriendsDeclineRequestRequestToJSON(value?: FriendsDeclineRequest
     }
     return {
         
+            ...value,
         'userToken': value['userToken'],
         'friendRequestId': value['friendRequestId'],
     };

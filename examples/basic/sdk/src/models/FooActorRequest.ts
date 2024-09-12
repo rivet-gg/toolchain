@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FooActorRequest
  */
 export interface FooActorRequest {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -44,6 +45,7 @@ export function FooActorRequestFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
+            ...json,
         'id': json['id'] == null ? undefined : json['id'],
     };
 }
@@ -54,6 +56,7 @@ export function FooActorRequestToJSON(value?: FooActorRequest | null): any {
     }
     return {
         
+            ...value,
         'id': value['id'],
     };
 }

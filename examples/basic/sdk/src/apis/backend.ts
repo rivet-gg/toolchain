@@ -16,6 +16,8 @@ import { ConfigTest } from "./modules/config_test";
 
 import { Friends } from "./modules/friends";
 
+import { Rivet } from "./modules/rivet";
+
 export class Backend extends runtime.BaseAPI {
   constructor(config: runtime.ConfigurationParameters) {
     super(new runtime.Configuration(config));
@@ -55,5 +57,11 @@ export class Backend extends runtime.BaseAPI {
 
   public get friends(): Friends {
     return this._friends ??= new Friends(this.configuration);
+  }
+
+  protected _rivet: Rivet | undefined;
+
+  public get rivet(): Rivet {
+    return this._rivet ??= new Rivet(this.configuration);
   }
 }

@@ -11,7 +11,7 @@ import {
 import { z } from "zod";
 import { AnySchemaElement, is, s, SchemaElementOptions } from "./schema.ts";
 
-const BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE = "__BACKEND_INTERNALS___THIS_FILE_IS_NOT_REAL__internal_types.d.ts";
+export const BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE = "__BACKEND_INTERNALS___THIS_FILE_IS_NOT_REAL__internal_types.d.ts";
 
 function generateSerializableTypeSchema(
 	type: Type<any>,
@@ -19,6 +19,13 @@ function generateSerializableTypeSchema(
 ): AnySchemaElement {
 	const symbol = type.getSymbol();
 	const symbolDeclartion = symbol?.getDeclarations()[0];
+
+	if (type.isUnknown()) {
+		if (modifiers.isOptional) {
+			return s.optional(s.unknown());
+		}
+		return s.unknown();
+	}
 
 	// modifiers come first
 	if (modifiers.isOptional) {
@@ -41,7 +48,6 @@ function generateSerializableTypeSchema(
 			return s.date();
 		}
 	}
-
 	// primitives first
 	if (type.isUndefined()) {
 		return s.undefined();
@@ -128,7 +134,7 @@ function generateSerializableTypeSchema(
 	return s.unknown();
 }
 
-const DEFAULT_COMPILER_OPTIONS = {
+export const DEFAULT_COMPILER_OPTIONS = {
 	allowJs: true,
 	esModuleInterop: true,
 	experimentalDecorators: false,
@@ -150,33 +156,29 @@ function generateSerializableDeclarationSchema(
 		Node.isClassDeclaration(declaration)
 	) {
 		const heriatageClauses = declaration.getHeritageClauses();
-		const heriatageClausesSchemas = heriatageClauses.map((clause) => {
+		const heriatageClausesSchemas = heriatageClauses.flatMap((clause) => {
 			return clause.getTypeNodes().map((typeNode) => {
 				return generateSerializableTypeSchema(typeNode.getType()!);
 			});
-		}).flat();
-
-		const props = declaration.getProperties().map((prop) => {
-			return [
-				prop.getName(),
-				generateSerializableTypeSchema(prop.getType()!, {
-					isOptional: prop.hasQuestionToken(),
-				}),
-			];
 		});
 
-		return s.object({
-			...Object.fromEntries(props),
-			...heriatageClausesSchemas.reduce((acc, schema) => {
-				if (is("object", schema)) {
-					return {
-						...acc,
-						...schema.properties,
-					};
-				}
-				return acc;
-			}, {}),
-		});
+		const schema = generateSerializableTypeSchema(declaration.getType());
+		if (is("object", schema)) {
+			return {
+				...schema,
+				properties: {
+					...heriatageClausesSchemas.reduce((acc, schema) => {
+						if (is("object", schema)) {
+							Object.assign(acc, schema.properties);
+						}
+						return acc;
+					}, {}),
+					...schema.properties,
+				},
+			};
+		}
+
+		return schema;
 	}
 	if (Node.isTypeAliasDeclaration(declaration)) {
 		const type = declaration.getType();
@@ -185,6 +187,12 @@ function generateSerializableDeclarationSchema(
 
 	return s.unknown();
 }
+
+// This is a stripped down version of the typescript lib
+// that only contains the types we want to serialize.
+// This is to avoid serializing the entire typescript lib which
+// is huge and contains a lot of types we don't need.
+const tsLib = Deno.readTextFileSync(import.meta.dirname + "/schema_ts_lib.ts");
 
 export function createSchemaSerializer(
 	opts: { path: string } | { code: string },

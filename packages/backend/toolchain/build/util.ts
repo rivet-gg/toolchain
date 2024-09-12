@@ -1,6 +1,7 @@
 import { dirname, resolve } from "@std/path";
 import { emptyDir } from "@std/fs";
 import { UnreachableError } from "../error/mod.ts";
+import { decodeBase64 } from "@std/encoding";
 
 /**
  * Extract a JSON archive built by the src/artifacts/* scripts.
@@ -22,9 +23,7 @@ export async function inflateArchive(
 		await Deno.mkdir(dirname(absPath), { recursive: true });
 
 		if (encode == "base64") {
-			const decodedData = atob(value);
-			const uint8Array = new Uint8Array(decodedData.length).map((_, i) => decodedData.charCodeAt(i));
-			await Deno.writeFile(absPath, uint8Array);
+			await Deno.writeFile(absPath, decodeBase64(value));
 		} else if (encode == "string") {
 			await Deno.writeTextFile(absPath, value);
 		} else {

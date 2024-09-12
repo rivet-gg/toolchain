@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FriendsSendRequestResponseFriendRequest
  */
 export interface FriendsSendRequestResponseFriendRequest {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -48,13 +49,13 @@ export interface FriendsSendRequestResponseFriendRequest {
      * @type {string}
      * @memberof FriendsSendRequestResponseFriendRequest
      */
-    declinedAt: string | null;
+    declinedAt: string;
     /**
      * 
      * @type {string}
      * @memberof FriendsSendRequestResponseFriendRequest
      */
-    acceptedAt: string | null;
+    acceptedAt: string;
 }
 
 /**
@@ -80,6 +81,7 @@ export function FriendsSendRequestResponseFriendRequestFromJSONTyped(json: any, 
     }
     return {
         
+            ...json,
         'id': json['id'],
         'senderUserId': json['senderUserId'],
         'targetUserId': json['targetUserId'],
@@ -95,6 +97,7 @@ export function FriendsSendRequestResponseFriendRequestToJSON(value?: FriendsSen
     }
     return {
         
+            ...value,
         'id': value['id'],
         'senderUserId': value['senderUserId'],
         'targetUserId': value['targetUserId'],

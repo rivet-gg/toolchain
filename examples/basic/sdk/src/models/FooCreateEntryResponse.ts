@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FooCreateEntryResponse
  */
 export interface FooCreateEntryResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -45,6 +46,7 @@ export function FooCreateEntryResponseFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
+            ...json,
         'id': json['id'],
     };
 }
@@ -55,6 +57,7 @@ export function FooCreateEntryResponseToJSON(value?: FooCreateEntryResponse | nu
     }
     return {
         
+            ...value,
         'id': value['id'],
     };
 }

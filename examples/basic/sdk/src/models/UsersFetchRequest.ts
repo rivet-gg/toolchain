@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface UsersFetchRequest
  */
 export interface UsersFetchRequest {
+    [key: string]: any | any;
     /**
      * 
      * @type {Array<string>}
@@ -45,6 +46,7 @@ export function UsersFetchRequestFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
+            ...json,
         'userIds': json['userIds'],
     };
 }
@@ -55,6 +57,7 @@ export function UsersFetchRequestToJSON(value?: UsersFetchRequest | null): any {
     }
     return {
         
+            ...value,
         'userIds': value['userIds'],
     };
 }

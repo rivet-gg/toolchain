@@ -26,6 +26,7 @@ import {
  * @interface UsersAuthenticateTokenResponse
  */
 export interface UsersAuthenticateTokenResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -58,6 +59,7 @@ export function UsersAuthenticateTokenResponseFromJSONTyped(json: any, ignoreDis
     }
     return {
         
+            ...json,
         'userId': json['userId'],
         'user': json['user'] == null ? undefined : UsersFetchResponseUsersInnerFromJSON(json['user']),
     };
@@ -69,6 +71,7 @@ export function UsersAuthenticateTokenResponseToJSON(value?: UsersAuthenticateTo
     }
     return {
         
+            ...value,
         'userId': value['userId'],
         'user': UsersFetchResponseUsersInnerToJSON(value['user']),
     };

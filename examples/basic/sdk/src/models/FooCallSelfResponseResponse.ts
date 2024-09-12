@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FooCallSelfResponseResponse
  */
 export interface FooCallSelfResponseResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -45,6 +46,7 @@ export function FooCallSelfResponseResponseFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
+            ...json,
         'pong': json['pong'],
     };
 }
@@ -55,6 +57,7 @@ export function FooCallSelfResponseResponseToJSON(value?: FooCallSelfResponseRes
     }
     return {
         
+            ...value,
         'pong': value['pong'],
     };
 }

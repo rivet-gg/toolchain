@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface UsersAuthenticateTokenRequest
  */
 export interface UsersAuthenticateTokenRequest {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -51,6 +52,7 @@ export function UsersAuthenticateTokenRequestFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
+            ...json,
         'userToken': json['userToken'],
         'fetchUser': json['fetchUser'] == null ? undefined : json['fetchUser'],
     };
@@ -62,6 +64,7 @@ export function UsersAuthenticateTokenRequestToJSON(value?: UsersAuthenticateTok
     }
     return {
         
+            ...value,
         'userToken': value['userToken'],
         'fetchUser': value['fetchUser'],
     };

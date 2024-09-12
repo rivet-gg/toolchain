@@ -26,6 +26,7 @@ import {
  * @interface FooCallSelfResponse
  */
 export interface FooCallSelfResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {FooCallSelfResponseResponse}
@@ -52,6 +53,7 @@ export function FooCallSelfResponseFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+            ...json,
         'response': FooCallSelfResponseResponseFromJSON(json['response']),
     };
 }
@@ -62,6 +64,7 @@ export function FooCallSelfResponseToJSON(value?: FooCallSelfResponse | null): a
     }
     return {
         
+            ...value,
         'response': FooCallSelfResponseResponseToJSON(value['response']),
     };
 }

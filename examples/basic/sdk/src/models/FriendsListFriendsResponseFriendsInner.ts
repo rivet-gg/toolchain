@@ -19,6 +19,7 @@ import { mapValues } from '../runtime';
  * @interface FriendsListFriendsResponseFriendsInner
  */
 export interface FriendsListFriendsResponseFriendsInner {
+    [key: string]: any | any;
     /**
      * 
      * @type {string}
@@ -59,6 +60,7 @@ export function FriendsListFriendsResponseFriendsInnerFromJSONTyped(json: any, i
     }
     return {
         
+            ...json,
         'userIdA': json['userIdA'],
         'userIdB': json['userIdB'],
         'createdAt': json['createdAt'],
@@ -71,6 +73,7 @@ export function FriendsListFriendsResponseFriendsInnerToJSON(value?: FriendsList
     }
     return {
         
+            ...value,
         'userIdA': value['userIdA'],
         'userIdB': value['userIdB'],
         'createdAt': value['createdAt'],

@@ -26,6 +26,7 @@ import {
  * @interface FriendsSendRequestResponse
  */
 export interface FriendsSendRequestResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {FriendsSendRequestResponseFriendRequest}
@@ -52,6 +53,7 @@ export function FriendsSendRequestResponseFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+            ...json,
         'friendRequest': FriendsSendRequestResponseFriendRequestFromJSON(json['friendRequest']),
     };
 }
@@ -62,6 +64,7 @@ export function FriendsSendRequestResponseToJSON(value?: FriendsSendRequestRespo
     }
     return {
         
+            ...value,
         'friendRequest': FriendsSendRequestResponseFriendRequestToJSON(value['friendRequest']),
     };
 }

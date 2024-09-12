@@ -26,6 +26,7 @@ import {
  * @interface FriendsListOutgoingFriendRequestsResponse
  */
 export interface FriendsListOutgoingFriendRequestsResponse {
+    [key: string]: any | any;
     /**
      * 
      * @type {Array<FriendsSendRequestResponseFriendRequest>}
@@ -52,6 +53,7 @@ export function FriendsListOutgoingFriendRequestsResponseFromJSONTyped(json: any
     }
     return {
         
+            ...json,
         'friendRequests': ((json['friendRequests'] as Array<any>).map(FriendsSendRequestResponseFriendRequestFromJSON)),
     };
 }
@@ -62,6 +64,7 @@ export function FriendsListOutgoingFriendRequestsResponseToJSON(value?: FriendsL
     }
     return {
         
+            ...value,
         'friendRequests': ((value['friendRequests'] as Array<any>).map(FriendsSendRequestResponseFriendRequestToJSON)),
     };
 }

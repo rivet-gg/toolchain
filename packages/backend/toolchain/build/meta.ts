@@ -1,9 +1,9 @@
-import { ModuleConfig, ScriptConfig } from "../config/module.ts";
+import { camelify, pascalify } from "../../case_conversion/mod.ts";
+import type { IndexedModuleConfig, ModuleConfig, ScriptConfig } from "../config/module.ts";
 import { ProjectConfig } from "../config/project.ts";
 import { RegistryConfig } from "../config/project.ts";
 import { hasUserConfigSchema, Project } from "../project/mod.ts";
 import { META_PATH, projectCachePath } from "../project/project.ts";
-import { camelify, pascalify } from "../../case_conversion/mod.ts";
 import { AnySchemaElement } from "./schema/mod.ts";
 
 export interface ProjectMeta {
@@ -17,6 +17,7 @@ export interface RegistryMeta {
 	name: string;
 	config: RegistryConfig;
 	isExternal: boolean;
+	modules: Record<string, IndexedModuleConfig>;
 }
 
 export interface ModuleMeta {
@@ -58,6 +59,7 @@ export async function generateMeta(project: Project) {
 			path: registry.path,
 			name: name,
 			config: registry.config,
+			modules: registry.modules,
 			isExternal: registry.isExternal,
 		}]),
 	);

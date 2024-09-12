@@ -1,7 +1,10 @@
 {
-  "sdks": [
-    { "target": "typescript", "output": "sdk" }
-  ],
+	"sdks": [
+		{
+			"target": "typescript",
+			"output": "sdk"
+		}
+	],
 	"registries": {
 		"local": {
 			"local": {
@@ -10,9 +13,9 @@
 		}
 	},
 	"modules": {
-    "users": {},
-    "rate_limit": {},
-    "tokens": {},
+		"users": {},
+		"rate_limit": {},
+		"tokens": {},
 		"foo": {
 			"registry": "local"
 		},
@@ -23,6 +26,15 @@
 				"bar": 1234
 			}
 		},
-		"friends": {}
+		"friends": {},
+		"rivet": {
+			"config": {
+				"apiEndpoint": "https://api.rivet.gg",
+				"apiEndpointVariable": "RIVET_API_ENDPOINT",
+				"serviceTokenVariable": "RIVET_SERVICE_TOKEN",
+				"gameIdVariable": "RIVET_GAME_ID",
+				"environmentIdVariable": "RIVET_ENVIRONMENT_ID"
+			}
+		}
 	}
 }

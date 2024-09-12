@@ -9,6 +9,7 @@
       "jsr:@cross/runtime@^1.0.0": "jsr:@cross/runtime@1.1.0",
       "jsr:@cross/utils@^0.7.0": "jsr:@cross/utils@0.7.1",
       "jsr:@david/code-block-writer@^13": "jsr:@david/code-block-writer@13.0.2",
+      "jsr:@hono/hono@^4.6.1": "jsr:@hono/hono@4.6.1",
       "jsr:@luca/esbuild-deno-loader@^0.10.3": "jsr:@luca/esbuild-deno-loader@0.10.3",
       "jsr:@rivet-gg/esbuild-deno-loader@0.10.3-fork.2": "jsr:@rivet-gg/esbuild-deno-loader@0.10.3-fork.2",
       "jsr:@std/assert@^0.213.1": "jsr:@std/assert@0.213.1",
@@ -49,6 +50,7 @@
       "npm:esbuild@0.20.2": "npm:esbuild@0.20.2",
       "npm:esbuild@^0.21.5": "npm:esbuild@0.21.5",
       "npm:glob@^11.0.0": "npm:glob@11.0.0",
+      "npm:nanoevents@^9.0.0": "npm:nanoevents@9.0.0",
       "npm:tar": "npm:tar@7.4.3",
       "npm:typescript-json-schema@^0.62.0": "npm:typescript-json-schema@0.62.0_typescript@5.1.6",
       "npm:zod-validation-error@^3.3.1": "npm:zod-validation-error@3.3.1_zod@3.23.8",
@@ -97,6 +99,9 @@
       },
       "@david/code-block-writer@13.0.2": {
         "integrity": "14dd3baaafa3a2dea8bf7dfbcddeccaa13e583da2d21d666c01dc6d681cd74ad"
+      },
+      "@hono/hono@4.6.1": {
+        "integrity": "993704e3a2fa8e965c2fa46c57fc038bd277e781a982d3bf0fb278f6671b195f"
       },
       "@luca/esbuild-deno-loader@0.10.3": {
         "integrity": "32fc93f7e7f78060234fd5929a740668aab1c742b808c6048b57f9aaea514921",
@@ -823,6 +828,10 @@
           "ufo": "ufo@1.5.4"
         }
       },
+      "nanoevents@9.0.0": {
+        "integrity": "sha512-X8pU7IOpgKXVLPxYUI55ymXc8XuBE+uypfEyEFBtHkD1EX9KavYTVc+vXZHFyHKzA1TaZoVDqklLdQBBrxIuAw==",
+        "dependencies": {}
+      },
       "once@1.4.0": {
         "integrity": "sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==",
         "dependencies": {
@@ -1103,6 +1112,7 @@
     "dependencies": [
       "jsr:@bartlomieju/postgres@^0.17.2",
       "jsr:@cross/dir@^1.1.0",
+      "jsr:@hono/hono@^4.6.1",
       "jsr:@luca/esbuild-deno-loader@^0.10.3",
       "jsr:@std/assert@^1.0.3",
       "jsr:@std/async@^1.0.4",
@@ -1119,6 +1129,7 @@
       "npm:dedent@^1.5.3",
       "npm:esbuild@^0.21.5",
       "npm:glob@^11.0.0",
+      "npm:nanoevents@^9.0.0",
       "npm:typescript-json-schema@^0.62.0",
       "npm:zod-validation-error@^3.3.1",
       "npm:zod@^3.23.8"

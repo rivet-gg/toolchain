@@ -1,28 +1,29 @@
 import { BuildState, buildStep } from "../../build_state/mod.ts";
-import { assertExists } from "@std/assert";
-import { resolve } from "@std/path";
 import { configPath, Module, Project } from "../../project/mod.ts";
 import { compileModuleHelper } from "../gen/mod.ts";
 import { compileModuleConfigSchema } from "../module_config_schema.ts";
 import { planScriptBuild } from "./script.ts";
 import { BuildOpts } from "../mod.ts";
-import { publicPath } from "../../project/module.ts";
+import { hasUserConfigSchema, publicPath } from "../../project/module.ts";
+import { getSourceFileDependencies } from "../schema/mod.ts";
+import { assertExists } from "@std/assert";
+import { resolve } from "@std/path";
 import { compileDbSchemaHelper } from "../gen/db_schema.ts";
 
-export async function planModuleBuild(
+export async function planModuleParse(
 	buildState: BuildState,
 	project: Project,
 	module: Module,
 	opts: BuildOpts,
 ) {
+	const configDeps = await hasUserConfigSchema(module) ? getSourceFileDependencies(configPath(module)) : [];
 	buildStep(buildState, {
 		id: `module.${module.name}.parse`,
 		name: "Parse",
 		description: `config.ts`,
 		module,
 		condition: {
-			// TODO: use tjs.getProgramFiles() to get the dependent files?
-			files: opts.strictSchemas ? [configPath(module)] : [],
+			files: opts.strictSchemas ? [configPath(module), ...configDeps] : [],
 			expressions: {
 				strictSchemas: opts.strictSchemas,
 			},
@@ -47,7 +48,14 @@ export async function planModuleBuild(
 			buildState.cache.persist.moduleConfigSchemas[module.name] = module.userConfigSchema;
 		},
 	});
+}
 
+export async function planModuleBuild(
+	buildState: BuildState,
+	project: Project,
+	module: Module,
+	opts: BuildOpts,
+) {
 	buildStep(buildState, {
 		id: `module.${module.name}.generate`,
 		name: "Generate",
