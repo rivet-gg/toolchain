@@ -26,6 +26,10 @@ pub struct ProjectMeta {
 	/// Key is the key in the `ProcessManager` config.
 	#[serde(default)]
 	pub processes: HashMap<String, ProcessState>,
+
+	/// Port which the dev server is running on for plugins.
+	#[serde(default)]
+	pub backend_dev_port: Option<u16>,
 }
 
 impl ProjectMeta {
@@ -35,6 +39,7 @@ impl ProjectMeta {
 			tokens: Tokens { cloud: cloud_token },
 			environments: HashMap::new(),
 			processes: HashMap::new(),
+			backend_dev_port: None,
 		}
 	}
 }

@@ -15,6 +15,8 @@ pub enum TaskEvent {
 	Result {
 		result: Box<serde_json::value::RawValue>,
 	},
+	#[serde(rename = "set_backend_port")]
+	SetBackendPort { port: u16 },
 }
 
 // HACK: Tokio bug drops the channel using the native `UnboundedSender::clone`, so we have to use
@@ -59,6 +61,15 @@ impl TaskCtxInner {
 			"failed to write result"
 		);
 		Ok(())
+	}
+
+	pub fn event(&self, event: TaskEvent) {
+		if matches!(event, TaskEvent::Log(_) | TaskEvent::Result { .. }) {
+			eprintln!("don't directly call event with logs or results, use .log() or .result()");
+			return;
+		}
+
+		let _ = self.log_tx.send(event);
 	}
 
 	pub async fn spawn_cmd(self: &Arc<Self>, mut cmd: Command) -> Result<std::process::ExitStatus> {

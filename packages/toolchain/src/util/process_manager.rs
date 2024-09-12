@@ -1,6 +1,8 @@
 use anyhow::*;
 use rivet_process_supervisor_shared as shared;
+use serde::{Deserialize, Serialize};
 use std::{
+	future::Future,
 	path::PathBuf,
 	process::{Command, Stdio},
 	time::{Duration, Instant},
@@ -11,13 +13,23 @@ use uuid::Uuid;
 
 use crate::{config, util::task::TaskCtx};
 
+#[derive(Serialize, Deserialize, PartialEq, Eq)]
+pub enum StartMode {
+	StartOrHook,
+	HookOnly,
+}
+
 pub struct StartOpts {
 	pub task: TaskCtx,
+	pub base_data_dir: PathBuf,
+	pub start_mode: StartMode,
+}
+
+pub struct CommandOpts {
 	pub command: String,
 	pub args: Vec<String>,
 	pub envs: Vec<(String, String)>,
 	pub current_dir: String,
-	pub base_data_dir: PathBuf,
 }
 
 /// Manages the state of a process that's detached from the parent.
@@ -30,17 +42,18 @@ pub struct ProcessManager {
 }
 
 impl ProcessManager {
-	pub async fn start(
+	pub async fn start<CommandFut>(
 		&self,
 		StartOpts {
 			task,
-			command,
-			args,
-			envs,
-			current_dir,
 			base_data_dir,
+			start_mode,
 		}: StartOpts,
-	) -> Result<Option<i32>> {
+		command_builder: impl FnOnce() -> CommandFut,
+	) -> Result<Option<i32>>
+	where
+		CommandFut: Future<Output = Result<CommandOpts>>,
+	{
 		// Check if existing process exists
 		//
 		// Preserving the process ID in settings serves a few purposes:
@@ -67,28 +80,45 @@ impl ProcessManager {
 		let process_id = if let Some(process_id) = process_id {
 			process_id
 		} else {
-			// Set process ID before starting to prevent race condition
-			let process_id = Uuid::new_v4();
-			self.mutate_state(&base_data_dir, |meta| meta.process_id = Some(process_id))
-				.await?;
+			match start_mode {
+				StartMode::StartOrHook => {
+					// Build command
+					//
+					// Do this before assigning process id in case the builder fails
+					let command_opts = command_builder().await?;
 
-			// Create data directory if it doesn't exist
-			let process_data_dir = process_data_dir(process_id, &base_data_dir)?;
-			std::fs::create_dir_all(&process_data_dir)?;
+					// Set process ID before starting to prevent race condition
+					let process_id = Uuid::new_v4();
+					self.mutate_state(&base_data_dir, |meta| meta.process_id = Some(process_id))
+						.await?;
 
-			// Spawn orphan
-			let process_supervisor_path =
-				rivet_process_supervisor_embed::get_executable(&base_data_dir)?;
-			spawn_orphaned_process(
-				process_supervisor_path,
-				process_data_dir,
-				&current_dir,
-				&command,
-				&args.iter().map(|s| s.as_str()).collect::<Vec<_>>(),
-				&envs,
-			)?;
+					// Create data directory if it doesn't exist
+					let process_data_dir = process_data_dir(process_id, &base_data_dir)?;
+					std::fs::create_dir_all(&process_data_dir)?;
 
-			process_id
+					// Spawn orphan
+					let process_supervisor_path =
+						rivet_process_supervisor_embed::get_executable(&base_data_dir)?;
+					spawn_orphaned_process(
+						process_supervisor_path,
+						process_data_dir,
+						&command_opts.current_dir,
+						&command_opts.command,
+						&command_opts
+							.args
+							.iter()
+							.map(|s| s.as_str())
+							.collect::<Vec<_>>(),
+						&command_opts.envs,
+					)?;
+
+					process_id
+				}
+				StartMode::HookOnly => {
+					// Don't start new process
+					return Ok(None);
+				}
+			}
 		};
 
 		// Wait for process to exit
@@ -485,52 +515,63 @@ fn spawn_orphaned_process(
 
 	#[cfg(target_family = "unix")]
 	{
-		use nix::{
-			sys::wait::{waitpid, WaitStatus},
-			unistd::{fork, ForkResult},
-		};
-		use std::os::unix::process::CommandExt;
+		Command::new(&process_supervisor_path)
+			.args(&supervisor_args)
+			.envs(envs.iter().cloned())
+			.stdin(Stdio::null())
+			.stdout(Stdio::null())
+			.stderr(Stdio::null())
+			.spawn()?;
 
-		match unsafe { fork() }.context("process first fork failed")? {
-			ForkResult::Parent { child } => {
-				// Ensure that the child process spawned successfully
-				match waitpid(child, None).context("waitpid failed")? {
-					WaitStatus::Exited(_, 0) => Ok(()),
-					WaitStatus::Exited(_, status) => {
-						bail!("Child process exited with status {}", status)
-					}
-					_ => bail!("Unexpected wait status for child process"),
-				}
-			}
-			ForkResult::Child => {
-				// Child process
-				match unsafe { fork() } {
-					Result::Ok(ForkResult::Parent { .. }) => {
-						// Exit the intermediate child
-						std::process::exit(0);
-					}
-					Result::Ok(ForkResult::Child) => {
-						// Exit immediately on fail in order to not leak process
-						let err = Command::new(&process_supervisor_path)
-							.args(&supervisor_args)
-							.envs(envs.iter().cloned())
-							.stdin(Stdio::null())
-							.stdout(Stdio::null())
-							.stderr(Stdio::null())
-							.exec();
-						eprintln!("exec failed: {err:?}");
-						std::process::exit(1);
-					}
-					Err(err) => {
-						// Exit immediately in order to not leak child process.
-						//
-						// The first fork doesn't need to exit on error since it
-						eprintln!("process second fork failed: {err:?}");
-						std::process::exit(1);
-					}
-				}
-			}
-		}
+		Ok(())
+
+		// TODO: This is the correct way to oprhan a process. Use the process manager instead.
+		// use nix::{
+		// 	sys::wait::{waitpid, WaitStatus},
+		// 	unistd::{fork, ForkResult},
+		// };
+		// use std::os::unix::process::CommandExt;
+		//
+		// match unsafe { fork() }.context("process first fork failed")? {
+		// 	ForkResult::Parent { child } => {
+		// 		// Ensure that the child process spawned successfully
+		// 		match waitpid(child, None).context("waitpid failed")? {
+		// 			WaitStatus::Exited(_, 0) => Ok(()),
+		// 			WaitStatus::Exited(_, status) => {
+		// 				bail!("Child process exited with status {}", status)
+		// 			}
+		// 			_ => bail!("Unexpected wait status for child process"),
+		// 		}
+		// 	}
+		// 	ForkResult::Child => {
+		// 		// Child process
+		// 		match unsafe { fork() } {
+		// 			Result::Ok(ForkResult::Parent { .. }) => {
+		// 				// Exit the intermediate child
+		// 				std::process::exit(0);
+		// 			}
+		// 			Result::Ok(ForkResult::Child) => {
+		// 				// Exit immediately on fail in order to not leak process
+		// 				let err = Command::new(&process_supervisor_path)
+		// 					.args(&supervisor_args)
+		// 					.envs(envs.iter().cloned())
+		// 					.stdin(Stdio::null())
+		// 					.stdout(Stdio::null())
+		// 					.stderr(Stdio::null())
+		// 					.exec();
+		// 				eprintln!("exec failed: {err:?}");
+		// 				std::process::exit(1);
+		// 			}
+		// 			Err(err) => {
+		// 				// Exit immediately in order to not leak child process.
+		// 				//
+		// 				// The first fork doesn't need to exit on error since it
+		// 				eprintln!("process second fork failed: {err:?}");
+		// 				std::process::exit(1);
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
 
 	#[cfg(target_os = "windows")]

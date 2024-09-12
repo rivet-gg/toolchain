@@ -115,6 +115,7 @@ fn print_event(
 					eprintln!("failed to serialize output: {err:?}");
 				}
 			}
+			_ => {}
 		},
 		TaskOutputStyle::PlainNoResult => match event {
 			TaskEvent::Log(x) => {
@@ -122,7 +123,7 @@ fn print_event(
 					eprintln!("failed to write output: {err:?}");
 				}
 			}
-			TaskEvent::Result { .. } => {}
+			_ => {}
 		},
 	}
 }

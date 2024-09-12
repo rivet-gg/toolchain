@@ -1,4 +1,3 @@
-pub mod backend_choose_local_port;
 pub mod backend_sdk_gen;
 pub mod backend_start;
 pub mod backend_stop;
@@ -18,7 +17,6 @@ pub mod unlink;
 pub mod wait_for_login;
 
 crate::task_registry!(
-	backend_choose_local_port::Task,
 	backend_sdk_gen::Task,
 	backend_start::Task,
 	backend_stop::Task,
@@ -27,6 +25,7 @@ crate::task_registry!(
 	deploy::Task,
 	exec_command::Task,
 	game_server_start::Task,
+	game_server_stop::Task,
 	get_bootstrap_data::Task,
 	get_hub_link::Task,
 	get_settings_paths::Task,
