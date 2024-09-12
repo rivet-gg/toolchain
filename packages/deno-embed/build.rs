@@ -9,7 +9,11 @@ const DENO_VERSION: &str = "1.46.3";
 const USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-	let target = env::var("TARGET")?;
+	for (key, value) in std::env::vars() {
+		println!("{}: {}", key, value);
+	}
+
+	let target = env::var("OVERRIDE_TARGET").unwrap_or_else(|_| env::var("TARGET").unwrap());
 	let out_dir = env::var("OUT_DIR")?;
 	let cache_dir = get_cache_dir()?;
 
@@ -47,13 +51,24 @@ fn find_matching_asset<'a>(
 	target: &str,
 ) -> Result<&'a Value, Box<dyn std::error::Error>> {
 	let assets = release_data["assets"].as_array().ok_or("No assets found")?;
+	let deno_target = map_rust_target_to_deno(target);
 	assets
 		.iter()
 		.find(|asset| {
 			let name = asset["name"].as_str().unwrap();
-			name.contains(target)
+			name == deno_target
 		})
-		.ok_or_else(|| "No matching asset found for the target".into())
+		.ok_or_else(|| format!("No matching asset found for the target: {}", deno_target).into())
+}
+
+fn map_rust_target_to_deno(target: &str) -> &'static str {
+	match target {
+		"x86_64-unknown-linux-gnu" => "deno-x86_64-unknown-linux-gnu.zip",
+		"x86_64-pc-windows-gnu" => "deno-x86_64-pc-windows-msvc.zip",
+		"x86_64-apple-darwin" => "deno-x86_64-apple-darwin.zip",
+		"aarch64-apple-darwin" => "deno-aarch64-apple-darwin.zip",
+		_ => panic!("Unsupported target: {}. Set OVERRIDE_TARGET if needed.", target),
+	}
 }
 
 fn download_binary_if_needed(
