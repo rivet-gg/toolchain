@@ -59,19 +59,25 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 	// Load registries
 	const registries = new Map();
 
-	for (const [registryName, registryConfig] of Object.entries(projectConfig.registries)) {
-		const registry = await loadRegistry(
-			projectRoot,
-			registryName,
-			registryConfig,
-			signal,
-		);
-		registries.set(registryName, registry);
+	if (projectConfig.registries) {
+		for (const [registryName, registryConfig] of Object.entries(projectConfig.registries)) {
+			const registry = await loadRegistry(
+				projectRoot,
+				registryName,
+				registryConfig,
+				signal,
+			);
+			registries.set(registryName, registry);
+		}
 	}
 
 	if (!registries.has("default")) {
 		const defaultRegistry = await loadDefaultRegistry(projectRoot, signal);
 		registries.set("default", defaultRegistry);
+	}
+	if (!registries.has("local")) {
+		const localRegistry = await loadDefaultRegistry(projectRoot, signal);
+		registries.set("local", localRegistry);
 	}
 
 	// Validate local registry

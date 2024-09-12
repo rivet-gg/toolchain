@@ -6,13 +6,6 @@ export async function templateProject(rootPath: string) {
 
 	// Create rivet.json
 	const defaultBackend: ProjectConfig = {
-		registries: {
-			local: {
-				local: {
-					directory: "modules",
-				},
-			},
-		},
 		modules: {
 			rate_limit: {},
 			tokens: {},

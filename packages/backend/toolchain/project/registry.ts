@@ -1,6 +1,6 @@
-import { emptyDir, exists } from "@std/fs";
+import { emptyDir, exists, walk } from "@std/fs";
 import { resolve } from "@std/path";
-import { RegistryConfig, RegistryConfigGit, RegistryConfigLocal } from "../config/project.ts";
+import { RegistryConfig, RegistryConfigGit, RegistryConfigLocal, RegistryGitRef } from "../config/project.ts";
 import { progress, warn } from "../term/status.ts";
 import { UnreachableError, UserError } from "../error/mod.ts";
 import { CommandError } from "../error/mod.ts";
@@ -37,6 +37,17 @@ export async function loadRegistry(
 		output = await resolveRegistryLocal(projectRoot, name, config.local);
 	} else if ("git" in config) {
 		output = await resolveRegistryGit(projectRoot, name, config.git, signal);
+	} else if ("github" in config) {
+		const gitConfig: RegistryConfigGit = {
+			...config.github,
+			url: {
+				https: `https://github.com/${config.github}.git`,
+				ssh: `git@github.com:${config.github}.git`,
+			},
+			directory: config.github.directory,
+		};
+
+		output = await resolveRegistryGit(projectRoot, name, gitConfig, signal);
 	} else {
 		// Unknown project config
 		throw new UnreachableError(config);
@@ -55,13 +66,23 @@ export async function loadDefaultRegistry(projectRoot: string, signal?: AbortSig
 		projectRoot,
 		"default",
 		{
-			git: {
-				url: {
-					https: "https://github.com/rivet-gg/modules.git",
-					ssh: "git@github.com:rivet-gg/modules.git",
-				},
+			github: {
+				repository: "rivet-gg/modules",
 				rev: registryDefaultReg,
 				directory: "./modules",
+			},
+		},
+		signal,
+	);
+}
+
+export async function loadLocalRegistry(projectRoot: string, signal?: AbortSignal): Promise<Registry> {
+	return await loadRegistry(
+		projectRoot,
+		"local",
+		{
+			local: {
+				directory: "./modules"
 			},
 		},
 		signal,

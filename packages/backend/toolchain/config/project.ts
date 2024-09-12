@@ -10,10 +10,11 @@ const RegistryGitUrlConfigSchema = z.union([z.string(), z.object({ https: z.stri
 	"The URL to the git repository. If both HTTPS and SSH URL are provided, they will both be tried and use the one that works",
 );
 
-const RegistryGitCommonConfigSchema = z.object({
-	url: RegistryGitUrlConfigSchema,
-	directory: z.string().optional(),
-});
+const RegistryGitRefSchema = z.union([
+	z.object({ branch: z.string() }),
+	z.object({ tag: z.string() }),
+	z.object({ rev: z.string() }),
+]);
 
 const RegistryLocalConfigSchema = z.object({
 	local: z.object({
@@ -25,16 +26,23 @@ const RegistryLocalConfigSchema = z.object({
 });
 
 const RegistryGitConfigSchema = z.object({
-	git: z.union([
-		RegistryGitCommonConfigSchema.merge(z.object({ branch: z.string() })),
-		RegistryGitCommonConfigSchema.merge(z.object({ tag: z.string() })),
-		RegistryGitCommonConfigSchema.merge(z.object({ rev: z.string() })),
-	]),
+	git: z.object({
+		url: RegistryGitUrlConfigSchema,
+		directory: z.string().optional(),
+	}).and(RegistryGitRefSchema)
+});
+
+const RegistryGitHubConfigSchema = z.object({
+	github: z.object({
+		repository: RegistryGitUrlConfigSchema,
+		directory: z.string().optional(),
+	}).and(RegistryGitRefSchema)
 });
 
 const RegistryConfigSchema = z.union([
 	RegistryLocalConfigSchema,
 	RegistryGitConfigSchema,
+	RegistryGitHubConfigSchema,
 ]);
 
 const CorsConfigSchema = z.object({
@@ -70,10 +78,10 @@ const ProjectModuleConfigSchema = z.object({
 
 export const ProjectConfigSchema = z.object({
 	extends: z.string().optional().describe("Extends a different project config."),
-	registries: z.record(RegistryConfigSchema).default(() => ({})),
-	modules: z.record(ProjectModuleConfigSchema).default(() => ({})),
+	registries: z.record(RegistryConfigSchema).optional(),
+	modules: z.record(ProjectModuleConfigSchema),
 	runtime: RuntimeConfigSchema.optional(),
-  sdks: z.array(SdkConfigSchema).optional(),
+	sdks: z.array(SdkConfigSchema).optional(),
 });
 
 export type ProjectConfig = z.infer<typeof ProjectConfigSchema>;
@@ -82,8 +90,10 @@ export type RegistryConfig = z.infer<typeof RegistryConfigSchema>;
 export type RegistryConfigLocal = z.infer<typeof RegistryLocalConfigSchema>["local"];
 
 export type RegistryConfigGit = z.infer<typeof RegistryGitConfigSchema>["git"];
+export type RegistryConfigGitHub = z.infer<typeof RegistryGitHubConfigSchema>["github"];
 
 export type RegistryConfigGitUrl = z.infer<typeof RegistryGitUrlConfigSchema>;
+export type RegistryGitRef = z.infer<typeof RegistryGitRefSchema>;
 
 export type ProjectModuleConfig = z.infer<typeof ProjectModuleConfigSchema>;
 
