@@ -1,4 +1,3 @@
-pub mod backend_sdk_gen;
 pub mod backend_start;
 pub mod backend_stop;
 pub mod check_login_state;
@@ -17,7 +16,6 @@ pub mod unlink;
 pub mod wait_for_login;
 
 crate::task_registry!(
-	backend_sdk_gen::Task,
 	backend_start::Task,
 	backend_stop::Task,
 	check_login_state::Task,
