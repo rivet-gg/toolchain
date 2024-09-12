@@ -137,6 +137,7 @@ export async function readConfig(projectConfigPath: string, extendedFromPaths: s
 			...extendedFromPaths,
 		]);
 		config = {
+      sdks: childConfig.sdks ?? baseConfig.sdks,
 			registries: Object.assign({}, baseConfig.registries ?? {}, childConfig.registries ?? {}),
 			modules: Object.assign({}, baseConfig.modules ?? {}, childConfig.modules ?? {}),
 			runtime: Object.assign({}, baseConfig.runtime ?? {}, childConfig.runtime ?? {}),
