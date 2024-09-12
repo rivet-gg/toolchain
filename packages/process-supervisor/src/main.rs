@@ -1,20 +1,20 @@
+use lazy_static::lazy_static;
 use rivet_process_supervisor_shared as shared;
 use std::{
-    thread,
 	fs::File,
 	io::Write,
 	path::Path,
 	process::{Child, Command, Stdio},
-	sync::{mpsc, atomic::{Ordering, AtomicBool}, Arc},
+	sync::{
+		atomic::{AtomicBool, Ordering},
+		Arc,
+	},
 	time::Duration,
 };
 use thiserror::Error;
-use signal_hook::{iterator::Signals};
 
 #[derive(Error, Debug)]
 enum ManagerError {
-	#[error("Invalid number of arguments")]
-	InvalidArguments,
 	#[error("Data directory does not exist: {0}")]
 	DataDirNotFound(String),
 	#[error("Failed to create file: {0}")]
@@ -27,6 +27,10 @@ enum ManagerError {
 	RegisterSignalHookError(std::io::Error),
 	#[error("Failed to send signal: {0}")]
 	SignalError(String),
+}
+
+lazy_static! {
+	static ref HAS_RECEIVED_SIGTERM: Arc<AtomicBool> = Arc::new(AtomicBool::new(false));
 }
 
 fn main() {
@@ -56,9 +60,14 @@ fn main() {
 	}
 }
 
-fn run_process(data_dir: &str, current_dir: &str, command: &str, command_args: &[String]) -> Result<i32, ManagerError> {
+fn run_process(
+	data_dir: &str,
+	current_dir: &str,
+	command: &str,
+	command_args: &[String],
+) -> Result<i32, ManagerError> {
 	// Set up signal handling
-	let term = setup_signal_handling()?;
+	setup_signal_handling()?;
 
 	// Assert that the data directory exists
 	if !Path::new(data_dir).is_dir() {
@@ -92,8 +101,11 @@ fn run_process(data_dir: &str, current_dir: &str, command: &str, command_args: &
 
 	// Wait for either the child to exit or a signal to be received
 	let exit_code = loop {
-		if term.load(Ordering::Relaxed){
-            write_to_file(&Path::new(data_dir).join(shared::paths::CHILD_TERMINATING), "")?;
+		if HAS_RECEIVED_SIGTERM.load(Ordering::Relaxed) {
+			write_to_file(
+				&Path::new(data_dir).join(shared::paths::CHILD_TERMINATING),
+				"",
+			)?;
 			terminate_child(&mut child)?;
 		}
 
@@ -103,7 +115,7 @@ fn run_process(data_dir: &str, current_dir: &str, command: &str, command_args: &
 			Err(e) => return Err(ManagerError::CommandExecutionError(e)),
 		}
 
-        std::thread::sleep(Duration::from_millis(100));
+		std::thread::sleep(Duration::from_millis(100));
 	};
 
 	// Write exit code to file
@@ -122,37 +134,40 @@ fn write_to_file(path: &Path, content: &str) -> Result<(), ManagerError> {
 }
 
 #[cfg(unix)]
-fn setup_signal_handling() -> Result<Arc<AtomicBool>, ManagerError> {
-	let term = Arc::new(AtomicBool::new(false));
-	signal_hook::flag::register(signal_hook::consts::SIGTERM, Arc::clone(&term))
-		.map_err(ManagerError::RegisterSignalHookError)?;
-	Ok(term)
+fn setup_signal_handling() -> Result<(), ManagerError> {
+	signal_hook::flag::register(signal_hook::consts::SIGTERM, HAS_RECEIVED_SIGTERM.clone())
+		.map(|_| ())
+		.map_err(ManagerError::RegisterSignalHookError)
 }
 
 #[cfg(windows)]
-fn setup_signal_handling() -> Result<Arc<AtomicBool>, ManagerError> {
-	use std::sync::Mutex;
-	use windows::Win32::System::Console::{SetConsoleCtrlHandler, PHANDLER_ROUTINE};
-
-	let term = Arc::new(AtomicBool::new(false));
-	let term_clone = Arc::clone(&term);
+fn setup_signal_handling() -> Result<(), ManagerError> {
+	use windows::Win32::Foundation::BOOL;
+	use windows::Win32::System::Console::SetConsoleCtrlHandler;
 
 	unsafe {
-		SetConsoleCtrlHandler(Some(ctrl_handler), true)
-			.map_err(|e| ManagerError::RegisterSignalHookError(std::io::Error::new(std::io::ErrorKind::Other, e)))?;
+		if !SetConsoleCtrlHandler(Some(ctrl_handler), BOOL::from(true)).as_bool() {
+			return Err(ManagerError::RegisterSignalHookError(std::io::Error::new(
+				std::io::ErrorKind::Other,
+				"Failed to set console control handler",
+			)));
+		}
 	}
 
-	extern "system" fn ctrl_handler(_: u32) -> i32 {
-		term_clone.store(true, Ordering::Relaxed);
-		1
+	unsafe extern "system" fn ctrl_handler(_: u32) -> BOOL {
+		HAS_RECEIVED_SIGTERM.store(true, Ordering::Relaxed);
+		BOOL::from(true)
 	}
 
-	Ok(term)
+	Ok(())
 }
 
 #[cfg(unix)]
 fn terminate_child(child: &mut Child) -> Result<(), ManagerError> {
-	use nix::{sys::signal::{kill, Signal}, unistd::Pid};
+	use nix::{
+		sys::signal::{kill, Signal},
+		unistd::Pid,
+	};
 
 	let pid = Pid::from_raw(child.id() as i32);
 	kill(pid, Signal::SIGTERM).map_err(|e| ManagerError::SignalError(e.to_string()))
@@ -160,10 +175,14 @@ fn terminate_child(child: &mut Child) -> Result<(), ManagerError> {
 
 #[cfg(windows)]
 fn terminate_child(child: &mut Child) -> Result<(), ManagerError> {
-	use windows::Win32::System::Console::{GenerateConsoleCtrlEvent, CTRL_BREAK_EVENT};
+	use windows::Win32::System::Console::{GenerateConsoleCtrlEvent, CTRL_C_EVENT};
 
 	unsafe {
-		GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, child.id())
-			.map_err(|e| ManagerError::SignalError(e.to_string()))
+		if !GenerateConsoleCtrlEvent(CTRL_C_EVENT, child.id() as u32).as_bool() {
+			return Err(ManagerError::SignalError(
+				"Failed to generate console control event".to_string(),
+			));
+		}
 	}
+	Ok(())
 }

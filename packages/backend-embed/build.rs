@@ -4,10 +4,6 @@ use std::process::Command;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-	// Install Deno
-	let temp_dir = tempfile::tempdir().unwrap();
-	let data_dir = temp_dir.path().to_path_buf();
-
 	// Get path to artifacts path
 	let manifest_dir = std::env::var("CARGO_MANIFEST_DIR")?;
 	let mut script_path = PathBuf::from(manifest_dir);

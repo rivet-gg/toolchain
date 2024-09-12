@@ -58,11 +58,14 @@ rivet-deno-embed = { path = "../deno-embed" }
 rivet-backend-embed = { path = "../backend-embed" }
 rivet-process-supervisor-shared = { path = "../process-supervisor-shared" }
 rivet-process-supervisor-embed = { path = "../process-supervisor-embed" }
-signal-hook = { version = "0.3.17", default-features = false }
 lazy_static = "1.5.0"
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }
+signal-hook = { version = "0.3.17", default-features = false }
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.48", features = ["Win32_Foundation", "Win32_System_Threading"] }
 
 [dev-dependencies]
 assert_cmd = "2.0"

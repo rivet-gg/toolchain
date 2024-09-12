@@ -369,7 +369,7 @@ async fn kill_process(
 
 		unsafe {
 			// Open the process
-			let process_handle: HANDLE = OpenProcess(PROCESS_TERMINATE, false, pid as u32);
+			let process_handle: HANDLE = OpenProcess(PROCESS_TERMINATE, false, pid as u32)?;
 			if process_handle.is_invalid() {
 				return Ok(false);
 			}
@@ -431,7 +431,12 @@ async fn is_pid_running(pid: i32) -> Result<bool> {
 			};
 
 			unsafe {
-				let handle: HANDLE = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+				let handle: HANDLE =
+					match OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid as u32) {
+						Result::Ok(handle) => handle,
+						Err(_) => return Ok(false), // Process doesn't exist or we don't have permission
+					};
+
 				if handle.is_invalid() {
 					Ok(false)
 				} else {
@@ -483,7 +488,13 @@ async fn wait_pid_exit(pid: i32) -> Result<()> {
 			System::Threading::{OpenProcess, WaitForSingleObject, INFINITE, PROCESS_SYNCHRONIZE},
 		};
 
-		let handle = unsafe { OpenProcess(PROCESS_SYNCHRONIZE, false, pid as u32) };
+		let handle = unsafe {
+			match OpenProcess(PROCESS_SYNCHRONIZE, false, pid as u32) {
+				Result::Ok(handle) => handle,
+				Err(_) => return Err(anyhow!("Failed to open process handle")),
+			}
+		};
+
 		if handle.is_invalid() {
 			return Err(anyhow!("Failed to open process handle"));
 		}
@@ -577,15 +588,13 @@ fn spawn_orphaned_process(
 	#[cfg(target_os = "windows")]
 	{
 		use std::os::windows::process::CommandExt;
+		use windows::Win32::System::Threading::{CREATE_NEW_PROCESS_GROUP, DETACHED_PROCESS};
 
 		// Windows implementation remains the same
 		Command::new(&process_supervisor_path)
 			.args(&supervisor_args)
-			.envs(envs)
-			.creation_flags(
-				winapi::um::winbase::CREATE_NEW_PROCESS_GROUP
-					| winapi::um::winbase::DETACHED_PROCESS,
-			)
+			.envs(envs.iter().cloned())
+			.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0)
 			.stdin(Stdio::null())
 			.stdout(Stdio::null())
 			.stderr(Stdio::null())
