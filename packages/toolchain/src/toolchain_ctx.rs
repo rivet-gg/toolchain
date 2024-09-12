@@ -3,7 +3,7 @@ use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
 use rivet_api::apis;
 use std::{env, sync::Arc};
 
-use crate::config;
+use crate::{config, paths};
 
 pub const VERSION: &str = {
 	const MAJOR: u32 = pkg_version_major!();
@@ -31,9 +31,10 @@ pub struct CtxInner {
 }
 
 pub async fn load() -> Result<ToolchainCtx> {
-	let (api_endpoint, token) =
-		config::meta::read_project(|x| (x.cluster.api_endpoint.clone(), x.tokens.cloud.clone()))
-			.await?;
+	let (api_endpoint, token) = config::meta::read_project(&paths::data_dir()?, |x| {
+		(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+	})
+	.await?;
 	init(api_endpoint, token).await
 }
 

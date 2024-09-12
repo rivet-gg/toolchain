@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
   "packages/backend-embed",
-  "packages/cli", "packages/deno-embed",
+  "packages/cli", "packages/process-supervisor", "packages/process-supervisor-embed", "packages/process-supervisor-shared", "packages/deno-embed",
   "packages/toolchain",
   "packages/toolchain-ffi",
 ]
@@ -31,3 +31,12 @@ debug = true
 split-debuginfo = "packed"
 opt-level = "s"
 lto = true
+
+# Profile used to build embedded binaries that need to be as lightweight as possible
+[profile.embed]
+inherits = "release"
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

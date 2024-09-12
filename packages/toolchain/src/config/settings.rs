@@ -1,7 +1,9 @@
 use anyhow::*;
+use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use tokio::sync::{Mutex, OnceCell};
+use std::path::PathBuf;
+use tokio::sync::Mutex;
 
 use crate::{
 	paths,
@@ -132,40 +134,56 @@ pub struct NetConfig {
 	pub disable_upload_multipart: bool,
 }
 
-static SINGLETON: OnceCell<Mutex<Settings>> = OnceCell::const_new();
-
-async fn read() -> Result<&'static Mutex<Settings>> {
-	let config = SINGLETON
-		.get_or_try_init::<anyhow::Error, _, _>(|| async {
-			let mut config_builder =
-				config::ConfigBuilder::<config::builder::AsyncState>::default();
-
-			if paths::user_settings_config_file()?.exists() {
-				config_builder = config_builder
-					.add_source(config::File::from(paths::user_settings_config_file()?));
-			}
-			if paths::project_settings_config_file()?.exists() {
-				config_builder = config_builder
-					.add_source(config::File::from(paths::project_settings_config_file()?));
-			}
-
-			let config = config_builder.build().await.context("find config")?;
-			let config_deserialized = config
-				.try_deserialize::<Settings>()
-				.context("deserialize config")?;
-
-			Result::Ok(Mutex::new(config_deserialized))
-		})
-		.await?;
-	Ok(config)
+lazy_static! {
+	static ref GLOBAL_SETTINGS: Mutex<HashMap<PathBuf, Settings>> = Mutex::new(HashMap::new());
 }
 
-pub async fn try_read<F: FnOnce(&Settings) -> Result<T>, T>(cb: F) -> Result<T> {
-	let singleton = read().await?;
-	let mut lock = singleton.lock().await;
+async fn get_or_init<F, T>(data_dir: &PathBuf, cb: F) -> Result<T>
+where
+	F: FnOnce(&mut Settings) -> Result<T>,
+{
+	let mut global_settings = GLOBAL_SETTINGS.lock().await;
 
-	// Fetch value
-	let value = cb(&mut *lock)?;
+	if !global_settings.contains_key(data_dir) {
+		let mut config_builder = config::ConfigBuilder::<config::builder::AsyncState>::default();
 
-	Ok(value)
+		if paths::user_settings_config_file(data_dir)?.exists() {
+			config_builder = config_builder.add_source(config::File::from(
+				paths::user_settings_config_file(data_dir)?,
+			));
+		}
+		if paths::project_settings_config_file()?.exists() {
+			config_builder = config_builder.add_source(config::File::from(
+				paths::project_settings_config_file()?,
+			));
+		}
+
+		let config = config_builder.build().await.context("find config")?;
+		let mut settings = config
+			.try_deserialize::<Settings>()
+			.context("deserialize config")?;
+
+		let result = cb(&mut settings)?;
+		global_settings.insert(data_dir.clone(), settings);
+		Ok(result)
+	} else {
+		let settings = global_settings
+			.get_mut(data_dir)
+			.context("global_settings[data_dir]")?;
+		cb(settings)
+	}
+}
+
+pub async fn try_read<F, T>(data_dir: &PathBuf, cb: F) -> Result<T>
+where
+	F: FnOnce(&Settings) -> Result<T>,
+{
+	get_or_init(data_dir, |settings| cb(settings)).await
+}
+
+pub async fn try_mutate<F, T>(data_dir: &PathBuf, cb: F) -> Result<T>
+where
+	F: FnOnce(&mut Settings) -> Result<T>,
+{
+	get_or_init(data_dir, cb).await
 }

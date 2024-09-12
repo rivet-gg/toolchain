@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, path::Path};
 
 use crate::{
-	config,
+	config, paths,
 	toolchain_ctx::ToolchainCtx,
 	util::{
 		cmd::{self, shell_cmd},
@@ -29,8 +29,10 @@ impl Default for DockerBuildMethod {
 impl DockerBuildMethod {
 	pub async fn from_env(task: task::TaskCtx) -> Result<Self> {
 		// Determine build method from env
-		let build_method =
-			config::settings::try_read(|x| Ok(x.game_server.deploy.build_method.clone())).await?;
+		let build_method = config::settings::try_read(&paths::data_dir()?, |x| {
+			Ok(x.game_server.deploy.build_method.clone())
+		})
+		.await?;
 
 		if build_method == DockerBuildMethod::Buildx {
 			// Validate that Buildx is installed

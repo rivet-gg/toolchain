@@ -1,7 +1,7 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{backend, config, util::task};
+use crate::{backend, config, paths, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -28,16 +28,17 @@ impl task::Task for Task {
 	}
 
 	async fn run(task: task::TaskCtx, input: Input) -> Result<Output> {
-		let (mut cmd_env, sdk_settings, config_path) = config::settings::try_read(|settings| {
-			let mut env = settings.backend.command_environment.clone();
-			env.extend(settings.backend.sdk.command_environment.clone());
-			Ok((
-				env,
-				settings.backend.sdk.clone(),
-				settings.backend.deploy.config_path.clone(),
-			))
-		})
-		.await?;
+		let (mut cmd_env, sdk_settings, config_path) =
+			config::settings::try_read(&paths::data_dir()?, |settings| {
+				let mut env = settings.backend.command_environment.clone();
+				env.extend(settings.backend.sdk.command_environment.clone());
+				Ok((
+					env,
+					settings.backend.sdk.clone(),
+					settings.backend.deploy.config_path.clone(),
+				))
+			})
+			.await?;
 
 		let sdk_path = sdk_settings
 			.path

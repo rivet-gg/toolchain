@@ -2,7 +2,7 @@ use anyhow::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, toolchain_ctx, util::task};
+use crate::{config, paths, toolchain_ctx, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -64,7 +64,7 @@ impl task::Task for Task {
 		)
 		.await?;
 
-		config::meta::insert_project(input.api_endpoint, token).await?;
+		config::meta::insert_project(&paths::data_dir()?, input.api_endpoint, token).await?;
 
 		Ok(Output {})
 	}

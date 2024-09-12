@@ -1,0 +1,44 @@
+use anyhow::*;
+use serde::{Deserialize, Serialize};
+
+use crate::{
+	paths,
+	util::{process_manager::StartOpts, task},
+};
+
+#[derive(Deserialize)]
+pub struct Input {
+	pub cmd: String,
+	pub args: Vec<String>,
+	pub cwd: String,
+}
+
+#[derive(Serialize)]
+pub struct Output {
+	exit_code: Option<i32>,
+}
+
+pub struct Task;
+
+impl task::Task for Task {
+	type Input = Input;
+	type Output = Output;
+
+	fn name() -> &'static str {
+		"game_server_start"
+	}
+
+	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
+		let exit_code = crate::game_server::PROCESS_MANAGER
+			.start(StartOpts {
+				task: task.clone(),
+				command: input.cmd,
+				args: input.args,
+				envs: Vec::new(),
+				current_dir: input.cwd,
+				base_data_dir: paths::data_dir()?,
+			})
+			.await?;
+		Ok(Output { exit_code })
+	}
+}

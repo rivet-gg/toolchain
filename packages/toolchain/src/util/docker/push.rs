@@ -7,7 +7,7 @@ use tokio::fs;
 use uuid::Uuid;
 
 use crate::{
-	config,
+	config, paths,
 	toolchain_ctx::ToolchainCtx,
 	util::{net::upload, task, term},
 };
@@ -45,7 +45,8 @@ pub async fn push_tar(
 	push_opts: &PushOpts,
 ) -> Result<PushOutput> {
 	let multipart_enabled =
-		config::settings::try_read(|x| Ok(!x.net.disable_upload_multipart)).await?;
+		config::settings::try_read(&paths::data_dir()?, |x| Ok(!x.net.disable_upload_multipart))
+			.await?;
 
 	let reqwest_client = Arc::new(reqwest::Client::new());
 

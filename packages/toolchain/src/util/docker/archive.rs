@@ -6,7 +6,7 @@ use typed_path::{TryAsRef, UnixPath};
 use uuid::Uuid;
 
 use crate::{
-	config,
+	config, paths,
 	util::{
 		cmd::{self, shell_cmd, shell_cmd_std},
 		lz4, task,
@@ -219,8 +219,10 @@ async fn archive_oci_bundle(task: task::TaskCtx, image_tag: &str) -> Result<temp
 			// Validate not running as root
 			//
 			// See Kubernetes implementation https://github.com/kubernetes/kubernetes/blob/cea1d4e20b4a7886d8ff65f34c6d4f95efcb4742/pkg/kubelet/kuberuntime/security_context_others.go#L44C4-L44C4
-			let allow_root =
-				config::settings::try_read(|x| Ok(x.game_server.deploy.allow_root)).await?;
+			let allow_root = config::settings::try_read(&paths::data_dir()?, |x| {
+				Ok(x.game_server.deploy.allow_root)
+			})
+			.await?;
 			if !allow_root {
 				if uid == 0 {
 					bail!("cannot run Docker container as root user (i.e. uid 0) for security. see https://rivet.gg/docs/dynamic-servers/concepts/docker-root-user")

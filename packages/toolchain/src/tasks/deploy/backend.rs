@@ -12,6 +12,7 @@ use tokio::fs;
 use crate::{
 	backend, config,
 	game::TEMPEnvironment,
+	paths,
 	toolchain_ctx::ToolchainCtx,
 	util::{net::upload, task, term},
 };
@@ -36,7 +37,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 
 	// Build
 	task.log(format!("[Building Project] {}", project_path.display()));
-	let (cmd_env, config_path) = config::settings::try_read(|settings| {
+	let (cmd_env, config_path) = config::settings::try_read(&paths::data_dir()?, |settings| {
 		let mut env = settings.backend.command_environment.clone();
 		env.extend(settings.backend.deploy.command_environment.clone());
 		Ok((env, settings.backend.deploy.config_path.clone()))
@@ -60,7 +61,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 
 	backend::database::provision_database(task.clone(), ctx, opts.env.id).await?;
 
-	let db_url = config::meta::try_read_project(|config| {
+	let db_url = config::meta::try_read_project(&paths::data_dir()?, |config| {
 		let env_config = config
 			.environments
 			.get(&opts.env.id)

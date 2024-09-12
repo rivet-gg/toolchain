@@ -87,3 +87,12 @@ Deno is automatically downloaded and installed to a temporary path in `packages/
 
 The backend is embedded using `include_dir`. This is automatically inflated to the data dir at runtime. The backend path can be overridden using the `backend.source_path` setting.
 
+### Task Architecture
+
+Tasks are structured in a way where the applciation can make a request and receive a stream of events in response until the task completes.
+
+This allows for a simpler architecture by:
+
+- Allowing CLI commands to map nicely to tasks
+- Allow a clean callback format for FFIs
+

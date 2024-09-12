@@ -4,15 +4,19 @@ use anyhow::*;
 use rivet_api::{apis, models};
 use serde::Serialize;
 use serde_json::json;
-use std::collections::HashMap;
-use std::process::ExitCode;
+use std::{collections::HashMap, path::PathBuf, process::ExitCode, time::Duration};
 use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
 	config, paths,
-	util::{cmd::shell_cmd, task},
+	util::{process_manager::ProcessManager, task},
 	ToolchainCtx,
+};
+
+pub const PROCESS_MANAGER_DEV: ProcessManager = ProcessManager {
+	key: "backend_dev",
+	kill_grace: Duration::from_secs(2),
 };
 
 pub struct BackendCommandOpts {
@@ -24,7 +28,8 @@ pub struct BackendCommandOpts {
 async fn base_url() -> Result<String> {
 	// Attempt to read from user or default
 	let base_url = if let Some(url) =
-		config::settings::try_read(|x| Ok(x.backend.source_path.clone())).await?
+		config::settings::try_read(&paths::data_dir()?, |x| Ok(x.backend.source_path.clone()))
+			.await?
 	{
 		url
 	} else {
@@ -38,39 +43,56 @@ async fn base_url() -> Result<String> {
 	Ok(base_url)
 }
 
-pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
+pub struct CommandRaw {
+	pub command: PathBuf,
+	pub args: Vec<String>,
+	pub envs: HashMap<String, String>,
+	pub current_dir: PathBuf,
+}
+
+pub async fn build_opengb_command_raw(opts: BackendCommandOpts) -> Result<CommandRaw> {
 	let base_url = base_url().await?;
 
 	// Get Deno executable
 	let deno = rivet_deno_embed::get_or_download_executable(&crate::paths::data_dir()?).await?;
 
 	// Serialize command
-	let backend_cmd = &serde_json::to_string(&json!({
+	let backend_cmd = serde_json::to_string(&json!({
 		opts.command: opts.opts
 	}))?;
 
 	// Run OpenGB
-	let mut cmd = shell_cmd(&deno.executable_path.display().to_string());
-	cmd.args(&[
-		"run",
-		"--quiet",
-		"--no-check",
-		"--allow-net",
-		"--allow-read",
-		"--allow-env",
-		"--allow-run",
-		"--allow-write",
-		"--allow-sys",
-		"--config",
-		&format!("{base_url}/deno.jsonc"),
-		"--lock",
-		&format!("{base_url}/deno.lock"),
-		&format!("{base_url}/cli/main.ts"),
-		"--command",
-		backend_cmd,
-	]);
-	cmd.envs(opts.env);
-	cmd.current_dir(paths::project_root()?);
+	Ok(CommandRaw {
+		command: deno.executable_path,
+		args: vec![
+			"run".into(),
+			"--quiet".into(),
+			"--no-check".into(),
+			"--allow-net".into(),
+			"--allow-read".into(),
+			"--allow-env".into(),
+			"--allow-run".into(),
+			"--allow-write".into(),
+			"--allow-sys".into(),
+			"--config".into(),
+			format!("{base_url}/deno.jsonc"),
+			"--lock".into(),
+			format!("{base_url}/deno.lock"),
+			format!("{base_url}/cli/main.ts"),
+			"--command".into(),
+			backend_cmd,
+		],
+		envs: opts.env,
+		current_dir: paths::project_root()?,
+	})
+}
+
+pub async fn build_opengb_command(opts: BackendCommandOpts) -> Result<Command> {
+	let cmd_raw = build_opengb_command_raw(opts).await?;
+	let mut cmd = Command::new(cmd_raw.command);
+	cmd.args(cmd_raw.args)
+		.envs(cmd_raw.envs)
+		.current_dir(cmd_raw.current_dir);
 	Ok(cmd)
 }
 

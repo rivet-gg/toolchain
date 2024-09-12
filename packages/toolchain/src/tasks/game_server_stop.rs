@@ -1,6 +1,5 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
 
 use crate::{paths, util::task};
 
@@ -8,10 +7,7 @@ use crate::{paths, util::task};
 pub struct Input {}
 
 #[derive(Serialize)]
-pub struct Output {
-	pub project_path: PathBuf,
-	pub user_path: PathBuf,
-}
+pub struct Output {}
 
 pub struct Task;
 
@@ -20,13 +16,13 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"get_settings_path"
+		"game_server_stop"
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
-		Ok(Output {
-			project_path: paths::project_settings_config_file()?,
-			user_path: paths::user_settings_config_file(&paths::data_dir()?)?,
-		})
+		crate::game_server::PROCESS_MANAGER
+			.stop(&paths::data_dir()?)
+			.await?;
+		Ok(Output {})
 	}
 }

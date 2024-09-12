@@ -7,6 +7,7 @@ use uuid::Uuid;
 use crate::{
 	config,
 	game::TEMPEnvironment,
+	paths,
 	toolchain_ctx::ToolchainCtx,
 	util::{
 		cmd::{self, shell_cmd},
@@ -48,7 +49,9 @@ pub async fn deploy(
 ) -> Result<DeployOutput> {
 	task.log("[Deploying Game Server]");
 
-	let deploy_config = config::settings::try_read(|x| Ok(x.game_server.deploy.clone())).await?;
+	let deploy_config =
+		config::settings::try_read(&paths::data_dir()?, |x| Ok(x.game_server.deploy.clone()))
+			.await?;
 
 	// Reserve image name
 	let reserve_res = apis::cloud_games_versions_api::cloud_games_versions_reserve_version_name(
@@ -159,7 +162,7 @@ pub async fn build_and_push(
 	current_dir: &Path,
 	push_opts: &BuildPushOpts,
 ) -> Result<docker::push::PushOutput> {
-	let (build_kind, build_compression) = config::settings::try_read(|x| {
+	let (build_kind, build_compression) = config::settings::try_read(&paths::data_dir()?, |x| {
 		Ok((
 			x.game_server.deploy.build_kind.clone(),
 			x.game_server.deploy.build_compression.clone(),
@@ -214,7 +217,7 @@ pub async fn push(
 	task: task::TaskCtx,
 	push_opts: &PushOpts,
 ) -> Result<docker::push::PushOutput> {
-	let (build_kind, build_compression) = config::settings::try_read(|x| {
+	let (build_kind, build_compression) = config::settings::try_read(&paths::data_dir()?, |x| {
 		Ok((
 			x.game_server.deploy.build_kind.clone(),
 			x.game_server.deploy.build_compression.clone(),

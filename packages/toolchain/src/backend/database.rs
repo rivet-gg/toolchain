@@ -2,7 +2,7 @@ use anyhow::*;
 use rivet_api::apis;
 use uuid::Uuid;
 
-use crate::{config, toolchain_ctx::ToolchainCtx, util::task};
+use crate::{config, paths, toolchain_ctx::ToolchainCtx, util::task};
 
 pub async fn provision_database(
 	task: task::TaskCtx,
@@ -19,7 +19,7 @@ pub async fn provision_database(
 	.await?;
 
 	// Fetch remote DB URL
-	let mut env_config = config::meta::mutate_project(|config| {
+	let mut env_config = config::meta::mutate_project(&paths::data_dir()?, |config| {
 		config.environments.entry(env_id).or_default().clone()
 	})
 	.await?;
@@ -38,7 +38,7 @@ pub async fn provision_database(
 		env_config.backend.db_url = db_url_res.url;
 
 		// Update cache
-		config::meta::try_mutate_project(|config| {
+		config::meta::try_mutate_project(&paths::data_dir()?, |config| {
 			config.environments.insert(env_id, env_config.clone());
 			Ok(())
 		})

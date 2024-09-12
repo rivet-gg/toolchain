@@ -1,0 +1,13 @@
+[package]
+name = "rivet-process-supervisor"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "rivet-process-supervisor"
+
+[dependencies]
+nix = { version = "0.29.0", features = ["process", "signal"], default-features = false }
+rivet-process-supervisor-shared = { path = "../process-supervisor-shared" }
+signal-hook = { version = "0.3.17", features = ["iterator"], default-features = false }
+thiserror = "1.0.63"
