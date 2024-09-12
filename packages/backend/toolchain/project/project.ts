@@ -323,7 +323,7 @@ export function projectGenPath(project: Project, ...pathSegments: string[]): str
 }
 
 /** Path where the archive for the backend packages source code are extracted. */
-export function genPackagesPath(project: Project): string {
+export function genRuntimeModPath(project: Project): string {
 	return projectGenPath(project, PACKAGES_PATH, "runtime", "mod.ts");
 }
 

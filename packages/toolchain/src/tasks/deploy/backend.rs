@@ -48,16 +48,18 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 		backend::BackendCommandOpts {
 			command: "build",
 			opts: serde_json::json!({
-				"project": config_path,
-				"migrate": false,
-				"dbDriver": "neon_serverless",
+				"watch": false,
 				"runtime": "cloudflare_workers_platforms",
+				"outputFormat": "bundled",
+				"dbDriver": "neon_serverless",
+				"migrate": false,
+				"project": config_path,
 			}),
 			env: cmd_env,
 		},
 	)
 	.await?;
-	ensure!(cmd == 0, "Failed to build OpenGB project");
+	ensure!(cmd == 0, "Failed to build backend project");
 
 	backend::database::provision_database(task.clone(), ctx, opts.env.id).await?;
 

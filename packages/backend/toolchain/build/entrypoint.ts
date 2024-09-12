@@ -3,7 +3,7 @@ import { genActorCaseConversionMapPath, genRuntimeActorDriverPath, Project } fro
 import {
 	ENTRYPOINT_PATH,
 	genDependencyCaseConversionMapPath,
-	genPackagesPath,
+	genRuntimeModPath,
 	GITIGNORE_PATH,
 	projectGenPath,
 	RUNTIME_CONFIG_PATH,
@@ -12,12 +12,12 @@ import {
 import { dbSchemaPath } from "../project/module.ts";
 import { UnreachableError } from "../error/mod.ts";
 import { BuildOpts, DbDriver, Runtime, runtimeToString } from "./mod.ts";
-import { DRIZZLE_KIT_VERSION, DRIZZLE_ORM_PACKAGE, PG_PACKAGE } from "../drizzle_consts.ts";
+import { DRIZZLE_KIT_VERSION, DRIZZLE_ORM_PACKAGE, DRIZZLE_ORM_VERSION, PG_PACKAGE } from "../drizzle_consts.ts";
 import { GeneratedCodeBuilder } from "./gen/mod.ts";
 import { convertSerializedSchemaToZodExpression } from "./schema/mod.ts";
 
 export async function generateEntrypoint(project: Project, opts: BuildOpts) {
-	const packagesPath = genPackagesPath(project);
+	const runtimeModPath = genRuntimeModPath(project);
 
 	const entrypoint = new GeneratedCodeBuilder(projectGenPath(project, ENTRYPOINT_PATH), 2);
 	const config = new GeneratedCodeBuilder(projectGenPath(project, RUNTIME_CONFIG_PATH), 2);
@@ -46,7 +46,7 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			// These versions need to be pinned because Neon relies on using
 			// \`instanceof\`, so the dependencies must be exactly the same.
 			import * as neon from "https://esm.sh/@neondatabase/serverless@0.9.3";
-			import { drizzle } from "https://esm.sh/drizzle-orm@${DRIZZLE_KIT_VERSION}/neon-serverless";
+			import { drizzle } from "https://esm.sh/drizzle-orm@${DRIZZLE_ORM_VERSION}/neon-serverless";
 
 			// TODO:
 			// neonConfig.webSocketConstructor = ws;
@@ -64,7 +64,7 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 
 	config.chunk.append`
 		${modImports}
-		import { Config, BuildRuntime } from ${JSON.stringify(config.relative(packagesPath))};
+		import { Config, BuildRuntime } from ${JSON.stringify(config.relative(runtimeModPath))};
 	`;
 
 	// CORS
@@ -95,7 +95,7 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 	if (opts.runtime == Runtime.Deno) {
 		entrypoint.chunk.withNewlinesPerChunk(1)
 			.append`
-				import { Runtime } from ${JSON.stringify(entrypoint.relative(packagesPath))};
+				import { Runtime } from ${JSON.stringify(entrypoint.relative(runtimeModPath))};
 				import { dependencyCaseConversionMap } from ${
 			JSON.stringify(entrypoint.relative(genDependencyCaseConversionMapPath(project)))
 		};
@@ -159,14 +159,13 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			).finished;
 		`;
 	} else if (opts.runtime == Runtime.CloudflareWorkersPlatforms) {
-		const packagesPath = projectGenPath(project, PACKAGES_PATH);
-		const serverTsPath = resolve(packagesPath, "runtime", "server.ts");
-		const errorTsPath = resolve(packagesPath, "runtime", "error.ts");
+		const serverTsPath = projectGenPath(project, PACKAGES_PATH, "runtime", "server.ts");
+		const errorTsPath = projectGenPath(project, PACKAGES_PATH, "runtime", "error.ts");
 
 		entrypoint.chunk.withNewlinesPerChunk(1)
 			.append`
 				import type { IncomingRequestCf } from 'https://raw.githubusercontent.com/skymethod/denoflare/v0.6.0/common/cloudflare_workers_types.d.ts';
-				import { Runtime, Environment } from ${JSON.stringify(entrypoint.relative(packagesPath))};
+				import { Runtime, Environment } from ${JSON.stringify(entrypoint.relative(runtimeModPath))};
 				import { RuntimeError } from ${JSON.stringify(entrypoint.relative(errorTsPath))};
 				import { dependencyCaseConversionMap } from ${
 			JSON.stringify(entrypoint.relative(genDependencyCaseConversionMapPath(project)))

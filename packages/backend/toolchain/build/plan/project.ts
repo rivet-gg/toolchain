@@ -18,7 +18,7 @@ import { nodeModulesPolyfillPlugin } from "npm:esbuild-plugins-node-modules-poly
 
 // Must match version in `esbuild_deno_loader`
 import * as esbuild from "npm:esbuild@0.20.2";
-import { denoPlugins } from "jsr:@rivet-gg/esbuild-deno-loader@0.10.3-fork.2";
+import { denoPlugins } from "jsr:@luca/esbuild-deno-loader@^0.10.3";
 import { migratePush } from "../../migrate/push.ts";
 import { migrateApply } from "../../migrate/apply.ts";
 import { migrateGenerate } from "../../migrate/generate.ts";
@@ -128,31 +128,13 @@ export async function planProjectBuild(
 				const result = await esbuild.build({
 					entryPoints: [projectGenPath(project, ENTRYPOINT_PATH)],
 					outfile: bundledFile,
-					platform: "browser",
 					format: "esm",
-					target: "es2022",
 					sourcemap: true,
-					conditions: ["workerd", "worker", "browser"],
 					plugins: [
-						// Deno
-						//
-						// This will resolve all npm, jsr, https, etc. imports. We disable
-						// the `node` specifier so it will be polyfilled later.
-						...denoPlugins({
-							// Portable loader in order to work outside of Deno-specific contexts
-							// loader: "portable",
-							loader: "native",
-							specifiers: {
-								file: true,
-								http: true,
-								https: true,
-								data: true,
-								npm: true,
-								jsr: true,
-							},
-						}),
+						// Bundle Deno dependencies
+            ...denoPlugins(),
 
-						// Node
+            // Remove unused Node imports
 						nodeModulesPolyfillPlugin({
 							globals: {
 								Buffer: true,
@@ -189,7 +171,7 @@ export async function planProjectBuild(
 						// https://community.cloudflare.com/t/not-being-able-to-import-node-crypto/613973
 						// "node:crypto",
 
-						// pg-native is overrided with pg-cloudflare at runtime
+						// pg-native is overridden with pg-cloudflare at runtime
 						"pg-native",
 
 						// Wasm must be loaded as a separate file manually, cannot be bundled

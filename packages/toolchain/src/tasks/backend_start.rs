@@ -65,7 +65,6 @@ impl task::Task for Task {
 					cmd_env.insert("OPENGB_HOSTNAME".into(), "0.0.0.0".to_string());
 					cmd_env.insert("OPENGB_TERM_COLOR".into(), "never".into());
 
-					// TODO: Does not support env
 					// Build command
 					let cmd = build_opengb_command_raw(backend::BackendCommandOpts {
 						command: "dev",

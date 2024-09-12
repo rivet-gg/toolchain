@@ -13,7 +13,7 @@ import {
 	genDependencyCaseConversionMapPath,
 	genDependencyTypedefPath,
 	genModulePublicExternal,
-	genPackagesPath,
+	genRuntimeModPath,
 	PACKAGES_PATH,
 	projectGenPath,
 	RUNTIME_CONFIG_PATH,
@@ -28,7 +28,7 @@ export async function compileModuleHelper(
 ) {
 	const helper = new GeneratedCodeBuilder(moduleHelperGen(project, module), 3);
 
-	const runtimePath = helper.relative(genPackagesPath(project));
+	const runtimePath = helper.relative(genRuntimeModPath(project));
 	const reexportPath = helper.relative(
 		projectGenPath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
 	);
