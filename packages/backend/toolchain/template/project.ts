@@ -4,7 +4,7 @@ import { ProjectConfig } from "../config/project.ts";
 export async function templateProject(rootPath: string) {
 	await Deno.mkdir(rootPath, { recursive: true });
 
-	// Create backend.json
+	// Create rivet.json
 	const defaultBackend: ProjectConfig = {
 		registries: {
 			local: {
@@ -19,7 +19,7 @@ export async function templateProject(rootPath: string) {
 		},
 	};
 	await Deno.writeTextFile(
-		resolve(rootPath, "backend.json"),
+		resolve(rootPath, "rivet.json"),
 		JSON.stringify(defaultBackend, null, "\t"),
 	);
 }

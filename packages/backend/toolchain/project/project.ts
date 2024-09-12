@@ -43,7 +43,7 @@ export function loadProjectConfigPath(opts: LoadProjectOpts): string {
 	if (path.endsWith(".json")) {
 		return path;
 	} else {
-		return resolve(path, "backend.json");
+		return resolve(path, "rivet.json");
 	}
 }
 

@@ -25,11 +25,11 @@ export async function execute(opts: Opts) {
 	if (opts.registry) moduleConfig.registry = opts.registry;
 	await fetchAndResolveModule(project.path, project.configPath, project.registries, opts.moduleName, moduleConfig);
 
-	// Add to backend.json
+	// Add to rivet.json
 	const newConfig = structuredClone(project.config);
 	newConfig.modules[opts.moduleName] = moduleConfig;
 	await Deno.writeTextFile(
-		resolve(project.path, "backend.json"),
+		resolve(project.path, "rivet.json"),
 		JSON.stringify(newConfig, null, "\t"),
 	);
 }

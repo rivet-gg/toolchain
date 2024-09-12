@@ -78,7 +78,7 @@ async function resolveRegistryLocal(
 	name: string,
 	config: RegistryConfigLocal,
 ): Promise<ResolveRegistryOutput> {
-	const projectConfigPath = resolve(projectRoot, "backend.json");
+	const projectConfigPath = resolve(projectRoot, "rivet.json");
 
 	const isExternal = config.isExternal ?? false;
 
@@ -99,7 +99,7 @@ async function resolveRegistryGit(
 	config: RegistryConfigGit,
 	signal?: AbortSignal,
 ): Promise<ResolveRegistryOutput> {
-	const projectConfigPath = resolve(projectRoot, "backend.json");
+	const projectConfigPath = resolve(projectRoot, "rivet.json");
 
 	const repoPath = resolve(await computeProjectCachePath(projectRoot), "git_registries", name);
 	const gitRef = resolveGitRef(config);

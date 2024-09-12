@@ -6,7 +6,7 @@ import dedent from "dedent";
 
 export async function templateModule(project: Project, moduleName: string) {
 	const localRegistry = getLocalRegistry(project);
-	if (!localRegistry) throw new UserError("No \`local\` registry found in backend.json.");
+	if (!localRegistry) throw new UserError("No \`local\` registry found in rivet.json.");
 	const localModulesPath = localRegistry.path;
 
 	if (project.modules.has(moduleName)) {
@@ -46,13 +46,13 @@ export async function templateModule(project: Project, moduleName: string) {
 		defaultSchema,
 	);
 
-	// Add to backend.json
+	// Add to rivet.json
 	const newConfig = structuredClone(project.config);
 	newConfig.modules[moduleName] = {
 		registry: "local",
 	};
 	await Deno.writeTextFile(
-		resolve(project.path, "backend.json"),
+		resolve(project.path, "rivet.json"),
 		JSON.stringify(newConfig, null, "\t"),
 	);
 }

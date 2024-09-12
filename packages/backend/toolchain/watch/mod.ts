@@ -38,7 +38,7 @@ export async function watch(opts: WatchOpts) {
 
 	// Attempt to load project before starting watch loop.
 	//
-	// If this fails, we'll watch for the backend.json file and try loading the
+	// If this fails, we'll watch for the rivet.json file and try loading the
 	// project again.
 	let project: Project | undefined = undefined;
 	try {
@@ -144,7 +144,7 @@ async function wrapWatchFn(
 function getWatchPaths(loadProjectOpts: LoadProjectOpts, project?: Project) {
 	if (project) {
 		const paths: string[] = [
-			resolve(project.path, "backend.json"),
+			resolve(project.path, "rivet.json"),
 		];
 		if (project) {
 			for (const module of project.modules.values()) {

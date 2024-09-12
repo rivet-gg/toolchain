@@ -81,7 +81,7 @@ export interface Module {
 	name: string;
 
 	/**
-	 * Config from the backend.json file.
+	 * Config from the rivet.json file.
 	 */
 	projectModuleConfig: ProjectModuleConfig;
 
@@ -96,7 +96,7 @@ export interface Module {
 	registry: Registry;
 
 	/**
-	 * The config passed to this module in the backend.json file.
+	 * The config passed to this module in the rivet.json file.
 	 */
 	userConfig?: unknown;
 

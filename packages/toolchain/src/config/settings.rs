@@ -70,7 +70,7 @@ impl Default for BackendDevConfig {
 
 impl BackendDevConfig {
 	fn default_config_path() -> String {
-		"backend.dev.json".to_string()
+		"rivet.dev.json".to_string()
 	}
 }
 
@@ -96,7 +96,7 @@ impl Default for BackendDeployConfig {
 
 impl BackendDeployConfig {
 	fn default_config_path() -> String {
-		"backend.json".into()
+		"rivet.json".into()
 	}
 }
 
@@ -153,9 +153,8 @@ where
 			));
 		}
 		if paths::project_settings_config_file()?.exists() {
-			config_builder = config_builder.add_source(config::File::from(
-				paths::project_settings_config_file()?,
-			));
+			config_builder = config_builder
+				.add_source(config::File::from(paths::project_settings_config_file()?));
 		}
 
 		let config = config_builder.build().await.context("find config")?;
