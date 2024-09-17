@@ -1,10 +1,8 @@
 import {
-	CreateDatabaseError,
-	DatabaseExistsError,
+	DatabaseError,
 	DatabaseInitializationError,
 	DatabaseStartError,
 	DatabaseStopError,
-	DropDatabaseError,
 } from "./error.ts";
 import { binaryDir, Settings } from "./settings.ts";
 import { verbose } from "../term/status.ts";
@@ -81,8 +79,22 @@ async function isInitialized(manager: Manager): Promise<boolean> {
 }
 
 async function isStarted(manager: Manager): Promise<boolean> {
+	// Check if PID exists
 	const pidFile = manager.settings.dataDir.concat("/postmaster.pid");
-	return await exists(pidFile);
+	if (!await exists(pidFile)) return false;
+
+	// Check if connectable
+	let client;
+	try {
+		client = await getClient(manager, BOOTSTRAP_DATABASE);
+		await client.queryObject("SELECT 1");
+	} catch (_) {
+		return false;
+	} finally {
+		await client?.end();
+	}
+
+	return true;
 }
 
 async function install(manager: Manager): Promise<void> {
@@ -258,13 +270,14 @@ export async function getClient(manager: Manager, databaseName: string): Promise
 export async function createDatabase<S extends string>(manager: Manager, databaseName: S): Promise<void> {
 	verbose(`Creating database`, databaseName);
 
-	const client = await getClient(manager, BOOTSTRAP_DATABASE);
+	let client;
 	try {
+		client = await getClient(manager, BOOTSTRAP_DATABASE);
 		await client.queryObject(`CREATE DATABASE "${databaseName}"`);
 	} catch (error) {
-		throw new CreateDatabaseError({ originalError: error as any });
+		throw new DatabaseError({ originalError: error as any });
 	} finally {
-		await client.end();
+		await client?.end();
 	}
 
 	verbose(`Created database`, databaseName);
@@ -273,30 +286,32 @@ export async function createDatabase<S extends string>(manager: Manager, databas
 export async function databaseExists<S extends string>(manager: Manager, databaseName: S): Promise<boolean> {
 	verbose(`Checking database`, databaseName);
 
-	const client = await getClient(manager, BOOTSTRAP_DATABASE);
+	let client;
 	try {
+		client = await getClient(manager, BOOTSTRAP_DATABASE);
 		const rows = await client.queryObject(
 			"SELECT * FROM pg_database WHERE datname = $1",
 			[databaseName],
 		);
 		return rows.rowCount === 1;
 	} catch (error) {
-		throw new DatabaseExistsError({ originalError: error as any });
+		throw new DatabaseError({ originalError: error as any });
 	} finally {
-		await client.end();
+		await client?.end();
 	}
 }
 
 export async function dropDatabase<S extends string>(manager: Manager, databaseName: S): Promise<void> {
 	verbose(`Dropping database`, databaseName);
 
-	const client = await getClient(manager, BOOTSTRAP_DATABASE);
+	let client;
 	try {
+		client = await getClient(manager, BOOTSTRAP_DATABASE);
 		await client.queryObject(`DROP DATABASE IF EXISTS "${databaseName}"`);
 	} catch (error) {
-		throw new DropDatabaseError({ originalError: error as any });
+		throw new DatabaseError({ originalError: error as any });
 	} finally {
-		await client.end();
+		await client?.end();
 	}
 
 	verbose(`Dropped database`, databaseName);
