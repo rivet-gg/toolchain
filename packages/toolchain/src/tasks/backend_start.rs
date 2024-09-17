@@ -207,10 +207,10 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 	}
 }
 
-/// Partial serde struct representing data we need to read from `meta.json`.
+/// Partial serde struct representing data we need to read from `project_manifest.json`.
 ///
-/// See packages/backend/toolchain/build/meta.ts
-mod backend_meta {
+/// See packages/backend/toolchain/build/project_manifest.ts
+mod project_manifest {
 	use serde::Deserialize;
 	use std::collections::HashMap;
 
@@ -233,7 +233,7 @@ mod backend_meta {
 	}
 }
 
-/// Reads the meta.json from the filesystem and converts it to an event.
+/// Reads the `project_manifest.json` from the filesystem and converts it to an event.
 ///
 /// Uses this intermediate step to convert the data in the toolchain instead of passing the direct
 /// manifest to the plugin in order to:
@@ -247,7 +247,7 @@ async fn read_meta_and_build_event(
 	// Read meta
 	let meta = tokio::task::block_in_place(|| {
 		let file = std::fs::File::open(config_path)?;
-		let meta = serde_json::from_reader::<_, backend_meta::Meta>(&file)?;
+		let meta = serde_json::from_reader::<_, project_manifest::Meta>(&file)?;
 		Ok(meta)
 	})?;
 

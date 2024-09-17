@@ -12,7 +12,7 @@ import {
   Flex,
 } from "@rivet-gg/components";
 import { addModule } from "../../lib/add-module";
-import { metaQueryOptions, useConfigMutation } from "../../queries";
+import { projectManifestQueryOptions, useConfigMutation } from "../../queries";
 import { queryClient } from "../../queries/global";
 import * as NewModuleForm from "../new-module-form";
 
@@ -30,15 +30,15 @@ export default function NewModuleDialog({
     <NewModuleForm.Form
       onSubmit={async (values, form) => {
         const slug = values.name || module.name;
-        const meta = await queryClient.fetchQuery(metaQueryOptions());
-        if (meta.config.modules[slug]) {
+        const manifest = await queryClient.fetchQuery(projectManifestQueryOptions());
+        if (projectManifestQueryOptions.config.modules[slug]) {
           return form.setError("name", {
             message: "Module with this name already exists",
           });
         }
 
-        const config = { ...meta.config };
-        addModule(meta, config, {
+        const config = { ...manifest.config };
+        addModule(manifest, config, {
           ...module,
           alias: values.name !== module.name ? values.name : undefined,
         });

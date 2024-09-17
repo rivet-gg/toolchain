@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ky from "ky";
-import { metaQueryOptions, stateQueryOptions } from "./queries";
+import { projectManifestQueryOptions, stateQueryOptions } from "./queries";
 import type { ProjectConfig } from "../lib/types";
 
 export function useConfigMutation() {
@@ -14,7 +14,7 @@ export function useConfigMutation() {
       });
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries(metaQueryOptions());
+      await queryClient.refetchQueries(projectManifestQueryOptions());
       await queryClient.invalidateQueries(stateQueryOptions());
     },
   });

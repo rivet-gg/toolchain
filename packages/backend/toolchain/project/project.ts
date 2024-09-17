@@ -333,7 +333,7 @@ export const RUNTIME_CONFIG_PATH = "runtime_config.ts";
 export const ENTRYPOINT_PATH = "entrypoint.ts";
 export const BUNDLE_PATH = "output.js";
 export const OUTPUT_MANIFEST_PATH = "output_manifest.json";
-export const META_PATH = "meta.json";
+export const PROJECT_MANIFEST_PATH = "project_manifest.json";
 export const OPEN_API_PATH = "openapi.json";
 export const CACHE_PATH = "cache.json";
 export const PACKAGES_PATH = "packages";
@@ -378,8 +378,8 @@ export function projectCachePath(project: Project, ...pathSegments: string[]): s
   return resolve(project.cachePath, ...pathSegments);
 }
 
-export function metaPath(project: Project): string {
-	return projectCachePath(project, META_PATH);
+export function projectManifestPath(project: Project): string {
+	return projectCachePath(project, PROJECT_MANIFEST_PATH);
 }
 
 /** Path where the archive for the backend packages source code are extracted. */

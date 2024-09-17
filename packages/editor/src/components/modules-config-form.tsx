@@ -4,11 +4,11 @@ import { z, type ZodString } from "zod";
 import { convertSchemaToZod } from "../lib/schema-to-zod";
 import { useConfigMutation } from "../queries";
 import { ConfigSchemaContext } from "./config-schema-context";
-import { ProjectMeta } from "../lib/types";
+import { ProjectManifest } from "../lib/types";
 
 export const CONFIG_FORM_ID = "config-form";
 
-interface ModulesConfigFormProps extends ProjectMeta {
+interface ModulesConfigFormProps extends ProjectManifest {
   children: ReactNode;
 }
 

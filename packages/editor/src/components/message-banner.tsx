@@ -5,7 +5,7 @@ import { type PropsWithChildren, useContext, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useFormContext } from "react-hook-form";
 import { download } from "../lib/download";
-import { metaQueryOptions, stateQueryOptions } from "../queries";
+import { projectManifestQueryOptions, stateQueryOptions } from "../queries";
 import { queryClient } from "../queries/global";
 import { BannerContext } from "./banner-context";
 import { ConfigSchemaContext } from "./config-schema-context";
@@ -26,7 +26,7 @@ function Content() {
 
   useEffect(() => {
     if (state?.value === "failure") {
-      queryClient.refetchQueries(metaQueryOptions()).then(() => {
+      queryClient.refetchQueries(projectManifestQueryOptions()).then(() => {
         trigger("modules", { shouldFocus: true });
       });
     }
