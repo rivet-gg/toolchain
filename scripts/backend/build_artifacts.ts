@@ -4,6 +4,10 @@ import { DRIZZLE_ORM_PACKAGE } from "../../packages/backend/toolchain/drizzle_co
 import { resolve } from "@std/path";
 import * as glob from "glob";
 
+// Hack to allow Yarn to work on Windows
+const YARN_COMMAND = Deno.build.os === "windows" ? "cmd" : "yarn";
+const YARN_ARGS = Deno.build.os === "windows" ? ["/c", "yarn"] : [];
+
 /**
  * Path to the root of the repo. Used for reading & writing files to the
  * project.
@@ -180,8 +184,10 @@ async function buildEditor() {
 
   const editorOutDir = await Deno.makeTempDir();
 
+
   console.log(`[editor] Installing packages`)
-  const installResult = await new Deno.Command("yarn", {
+  const installResult = await new Deno.Command(YARN_COMMAND, {
+    args: YARN_ARGS,
     cwd: EDITOR_PATH,
     env: {
       "NODE_ENV": "production",
@@ -195,8 +201,9 @@ async function buildEditor() {
   }
 
   console.log(`[editor] Building`)
-  const buildResult = await new Deno.Command("yarn", {
+  const buildResult = await new Deno.Command(YARN_COMMAND, {
     args: [
+      ...YARN_ARGS,
       "build",
     ],
     cwd: EDITOR_PATH,
