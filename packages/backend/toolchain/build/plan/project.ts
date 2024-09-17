@@ -9,7 +9,7 @@ import { generateDenoConfig } from "../deno_config.ts";
 import { generateEntrypoint } from "../entrypoint.ts";
 import { generateOpenApi } from "../openapi.ts";
 import { UnreachableError, UserError } from "../../error/mod.ts";
-import { generateMeta } from "../meta.ts";
+import { genProjectManifest } from "../project_manifest.ts";
 import { BUNDLE_PATH, ENTRYPOINT_PATH, OUTPUT_MANIFEST_PATH, projectCachePath, PACKAGES_PATH } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
@@ -42,11 +42,11 @@ export async function planProjectBuild(
 	planProjectValidate(buildState, project);
 
 	buildStep(buildState, {
-		id: `project.generate.meta`,
+		id: `project.generate.manifest`,
 		name: "Generate",
-		description: "meta.json",
+		description: "project_manifest.json",
 		async build() {
-			await generateMeta(project);
+			await genProjectManifest(project);
 		},
 	});
 

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Combobox, type ComboboxProps, Flex } from "@rivet-gg/components";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { forwardRef } from "react";
-import { metaQueryOptions } from "../queries";
+import { projectManifestQueryOptions } from "../queries";
 import { IndexedModuleConfig } from "../lib/types";
 
 interface ModulesSelectProps extends Omit<ComboboxProps, "options" | "onValueChange"> {
@@ -12,7 +12,7 @@ interface ModulesSelectProps extends Omit<ComboboxProps, "options" | "onValueCha
 
 export const ModulesSelect = forwardRef<HTMLButtonElement, ModulesSelectProps>(
   ({ placeholder, onValueChange, ...props }, ref) => {
-    const { data } = useSuspenseQuery(metaQueryOptions());
+    const { data } = useSuspenseQuery(projectManifestQueryOptions());
 
     const options = Object.entries(data.registries).map(([slug, registry]) => {
       const options = Object.entries(registry.modules).map(

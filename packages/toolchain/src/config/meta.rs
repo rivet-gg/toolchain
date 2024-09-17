@@ -14,7 +14,7 @@ pub struct Meta {
 	pub projects: HashMap<PathBuf, ProjectMeta>,
 }
 
-/// Config stored in .rivet/meta.json. Used to store persistent data, such as tokens & cache.
+/// Config stored in {data_dir}/meta.json. Used to store persistent data, such as tokens & cache.
 #[derive(Serialize, Deserialize)]
 pub struct ProjectMeta {
 	pub cluster: Cluster,

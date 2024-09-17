@@ -2,17 +2,17 @@ import { camelify, pascalify } from "../../case_conversion/mod.ts";
 import type { IndexedModuleConfig, ModuleConfig, ScriptConfig } from "../config/module.ts";
 import { ProjectConfig } from "../config/project.ts";
 import { RegistryConfig } from "../config/project.ts";
-import { hasUserConfigSchema, Project } from "../project/mod.ts";
-import { META_PATH, projectCachePath } from "../project/project.ts";
+import { hasUserConfigSchema, Project, projectManifestPath } from "../project/mod.ts";
+import { projectCachePath } from "../project/project.ts";
 import { AnySchemaElement } from "./schema/mod.ts";
 
-export interface ProjectMeta {
+export interface ProjectManifest {
 	config: ProjectConfig;
-	registries: Record<string, RegistryMeta>;
-	modules: Record<string, ModuleMeta>;
+	registries: Record<string, RegistryManifest>;
+	modules: Record<string, ModuleManifest>;
 }
 
-export interface RegistryMeta {
+export interface RegistryManifest {
 	path: string;
 	name: string;
 	config: RegistryConfig;
@@ -20,7 +20,7 @@ export interface RegistryMeta {
 	modules: Record<string, IndexedModuleConfig>;
 }
 
-export interface ModuleMeta {
+export interface ModuleManifest {
 	path: string;
 	name: string;
 	nameCamel: string;
@@ -29,16 +29,16 @@ export interface ModuleMeta {
 	registryName: string;
 	userConfig: unknown;
 	userConfigSchema?: AnySchemaElement;
-	scripts: Record<string, ScriptMeta>;
-	db?: ModuleDatabaseMeta;
+	scripts: Record<string, ScriptManifest>;
+	db?: ModuleDatabaseManifest;
 	hasUserConfigSchema: boolean;
 }
 
-export interface ModuleDatabaseMeta {
+export interface ModuleDatabaseManifest {
 	schema: string;
 }
 
-export interface ScriptMeta {
+export interface ScriptManifest {
 	path: string;
 	name: string;
 	nameCamel: string;
@@ -49,12 +49,12 @@ export interface ScriptMeta {
 }
 
 /**
- * Generates meta file that can be consumed externally to get information about
+ * Generates manifest file that can be consumed externally to get information about
  * this project. For example, this is used to auto-generate docs from external
  * tools.
  */
-export async function generateMeta(project: Project) {
-	const registries: Record<string, RegistryMeta> = Object.fromEntries(
+export async function genProjectManifest(project: Project) {
+	const registries: Record<string, RegistryManifest> = Object.fromEntries(
 		Array.from(project.registries.entries()).map(([name, registry]) => [name, {
 			path: registry.path,
 			name: name,
@@ -64,7 +64,7 @@ export async function generateMeta(project: Project) {
 		}]),
 	);
 
-	const modules: Record<string, ModuleMeta> = {};
+	const modules: Record<string, ModuleManifest> = {};
 	for (const module of project.modules.values()) {
 		modules[module.name] = {
 			path: module.path,
@@ -91,14 +91,14 @@ export async function generateMeta(project: Project) {
 		};
 	}
 
-	const meta: ProjectMeta = {
+	const manifest: ProjectManifest = {
 		config: project.config,
 		registries,
 		modules,
 	};
 
 	await Deno.writeTextFile(
-		projectCachePath(project, META_PATH),
-		JSON.stringify(meta, null, 4),
+    projectManifestPath(project),
+		JSON.stringify(manifest, null, 4),
 	);
 }

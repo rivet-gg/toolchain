@@ -17,7 +17,7 @@ import {
   WithTooltip,
 } from "@rivet-gg/components";
 import { useFormContext } from "react-hook-form";
-import { ModuleMeta } from "../lib/types";
+import { ModuleManifest } from "../lib/types";
 
 interface ConfigInputProps {
   moduleName: string;
@@ -87,9 +87,9 @@ function DeleteModuleButton({
 }
 
 interface ModuleCardProps {
-  module: ModuleMeta;
+  module: ModuleManifest;
   isRegistryExternal?: boolean;
-  dependants: ModuleMeta[];
+  dependants: ModuleManifest[];
 }
 
 export function ModuleCard({
