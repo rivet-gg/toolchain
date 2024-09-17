@@ -105,14 +105,17 @@ function generateSerializableTypeSchema(
 
 	if (type.isObject()) {
 		const stringIndexType = type.getStringIndexType();
+
+		let indexTypes = [];
+
 		if (stringIndexType) {
 			const indexType = generateSerializableTypeSchema(stringIndexType);
-			return s.record(indexType);
+			indexTypes.push(s.record(indexType));
 		}
 		const numberIndexType = type.getNumberIndexType();
 		if (numberIndexType) {
 			const indexType = generateSerializableTypeSchema(numberIndexType);
-			return s.record(indexType);
+			indexTypes.push(s.record(indexType));
 		}
 		const properties = type.getProperties();
 		const propMap = properties.map((prop) => {
@@ -122,7 +125,14 @@ function generateSerializableTypeSchema(
 				type ? generateSerializableTypeSchema(type) : s.unknown(),
 			];
 		});
-		return s.object(Object.fromEntries(propMap));
+
+		const objectSchema = s.object(Object.fromEntries(propMap));
+
+		if (indexTypes[0]) {
+			return s.intersection(objectSchema, indexTypes[0]);
+		}
+
+		return objectSchema;
 	}
 
 	return s.unknown();
@@ -259,6 +269,8 @@ type NonNullable<T> = T & {};
 interface Array<T> {
 	[n: number]: T;
 }
+
+type PropertyKey = string | number | symbol;
 
 // We don't want to serialize Date from typescript
 // so we need to override the Date interface
