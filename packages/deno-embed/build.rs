@@ -64,7 +64,7 @@ fn find_matching_asset<'a>(
 fn map_rust_target_to_deno(target: &str) -> &'static str {
 	match target {
 		"x86_64-unknown-linux-gnu" => "deno-x86_64-unknown-linux-gnu.zip",
-		"x86_64-pc-windows-gnu" => "deno-x86_64-pc-windows-msvc.zip",
+		"x86_64-pc-windows-msvc" => "deno-x86_64-pc-windows-msvc.zip",
 		"x86_64-apple-darwin" => "deno-x86_64-apple-darwin.zip",
 		"aarch64-apple-darwin" => "deno-aarch64-apple-darwin.zip",
 		_ => panic!("Unsupported target: {}. Set OVERRIDE_TARGET if needed.", target),
