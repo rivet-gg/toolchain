@@ -7,15 +7,17 @@ import dynamicArchive from "../../../artifacts/dynamic_archive.json" with { type
 import { unimplemented } from "@std/assert";
 
 export async function generateTypescript(project: Project, sdkGenPath: string) {
-	unimplemented("generateTypescript");
+  // Unimplemented
+  await Deno.mkdir(sdkGenPath, { recursive: true });
+
+	// await generateTsConfig(sdkGenPath);
+	// await generatePackageJson(sdkGenPath);
+	// await generateIndex(sdkGenPath);
+	// await generateRuntime(sdkGenPath);
+	// await generateApiClients(project, sdkGenPath);
 }
 
 // export async function generateTypescriptAddons(project: Project, sdkGenPath: string) {
-// 	await generateTsConfig(sdkGenPath);
-// 	await generatePackageJson(sdkGenPath);
-// 	await generateIndex(sdkGenPath);
-// 	await generateRuntime(sdkGenPath);
-// 	await generateApiClients(project, sdkGenPath);
 // }
 
 // async function generateTsConfig(sdkGenPath: string) {
