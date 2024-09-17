@@ -37,7 +37,7 @@ Deno.test("e2e", async () => {
 	assertEquals(await exists(settings.installationDir, { isDirectory: true }), true);
 	assertEquals(await exists(settings.dataDir, { isDirectory: true }), true);
 
-	assertEquals(await status(manager), Status.Started);
+	assertEquals(await status(manager), Status.Connectable);
 
 	assertEquals(await databaseExists(manager, "foo"), true);
 	assertEquals(await databaseExists(manager, "bar"), true);
@@ -61,7 +61,7 @@ Deno.test("e2e", async () => {
 	assertEquals(await status(manager), Status.Stopped);
 
 	await setup(manager);
-	assertEquals(await status(manager), Status.Started);
+	assertEquals(await status(manager), Status.Connectable);
 
 	await stop(manager);
 	assertEquals(await status(manager), Status.Stopped);
