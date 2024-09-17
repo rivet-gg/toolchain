@@ -29,7 +29,7 @@ const ENSURE_RUNNING_ONCE = createOnce<void>();
 const DEFAULT_CLIENT = createOnce<PostgresClient>();
 
 export function postgresEnabled(): boolean {
-	return !Deno.env.has("DATABASE_URL") && !Deno.env.has("BACKEND_DONT_START_POSTGRES");
+	return !Deno.env.has("DATABASE_URL") && !Deno.env.has("RIVET_BACKEND_DONT_START_POSTGRES");
 }
 
 /**

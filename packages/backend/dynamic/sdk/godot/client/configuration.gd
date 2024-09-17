@@ -45,7 +45,7 @@ func _get_configuration():
 ## - Fallback to localhost
 func _get_backend_endpoint():
 	# Use environment variable
-	var url_env = OS.get_environment("BACKEND_ENDPOINT")
+	var url_env = OS.get_environment("RIVET_BACKEND_ENDPOINT")
 	if url_env:
 		RivetLogger.log('Using endpoint from env')
 		return url_env

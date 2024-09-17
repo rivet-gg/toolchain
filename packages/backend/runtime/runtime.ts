@@ -149,16 +149,16 @@ export class Runtime<Params extends ContextParams> {
 		private actorCaseConversionMap: RegistryCallMap,
 	) {
 		// Read config
-		this.hostname = env.get("BACKEND_HOSTNAME") ?? "127.0.0.1";
-		this.port = parseInt(env.get("BACKEND_PORT") ?? "6420");
-		this.publicEndpoint = env.get("BACKEND_PUBLIC_ENDPOINT") ?? `http://${this.hostname}:${this.port}`;
+		this.hostname = env.get("RIVET_BACKEND_HOSTNAME") ?? "127.0.0.1";
+		this.port = parseInt(env.get("RIVET_BACKEND_PORT") ?? "6420");
+		this.publicEndpoint = env.get("RIVET_BACKEND_PUBLIC_ENDPOINT") ?? `http://${this.hostname}:${this.port}`;
 
 		// Configure logger
-		LOGGER_CONFIG.enableSpreadObject = env.get("_BACKEND_LOG_SPILT_OBJECT") == "1";
-		LOGGER_CONFIG.enableErrorStack = env.get("_BACKEND_LOG_ERROR_STACK") == "1";
-		if (env.get("BACKEND_TERM_COLOR") === "never") {
+		LOGGER_CONFIG.enableSpreadObject = env.get("_RIVET_BACKEND_LOG_SPILT_OBJECT") == "1";
+		LOGGER_CONFIG.enableErrorStack = env.get("_RIVET_BACKEND_LOG_ERROR_STACK") == "1";
+		if (env.get("RIVET_BACKEND_TERM_COLOR") === "never") {
 			LOGGER_CONFIG.enableColor = false;
-		} else if (env.get("BACKEND_TERM_COLOR") === "always") {
+		} else if (env.get("RIVET_BACKEND_TERM_COLOR") === "always") {
 			LOGGER_CONFIG.enableColor = true;
 		} else if (env.get("NO_COLOR") != undefined && env.get("NO_COLOR") != "") {
 			// https://no-color.org/
