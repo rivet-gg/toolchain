@@ -7,12 +7,12 @@ const client = hc<InternalApi>("/__internal", {
   fetch: (input: string, init: RequestInit | undefined) => ky<Response>(input, { ...init, timeout: 10000 }),
 });
 
-export const metaQueryOptions = () =>
+export const projectManifestQueryOptions = () =>
   queryOptions({
-    queryKey: ["meta"],
+    queryKey: ["project_manifest"],
     retry: 2,
     queryFn: async () => {
-      const response = await client["meta.json"].$get();
+      const response = await client["project_manifest.json"].$get();
       if (!response.ok) {
         throw new Error("Internal server error");
       }
@@ -46,13 +46,13 @@ export const metaQueryOptions = () =>
 
 export const registriesQueryOptions = () =>
   queryOptions({
-    ...metaQueryOptions(),
+    ...projectManifestQueryOptions(),
     select: (data) => data.registries,
   });
 
 export const moduleQueryOptions = (slug: string) =>
   queryOptions({
-    ...metaQueryOptions(),
+    ...projectManifestQueryOptions(),
     queryKey: ["module", slug],
     select: (data) =>
       Object.values(data.registries).find((registry) => registry.modules[slug])

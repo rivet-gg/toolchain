@@ -1,4 +1,4 @@
-import { IndexedModuleConfig, ProjectConfig, ProjectMeta } from "./types";
+import { IndexedModuleConfig, ProjectConfig, ProjectManifest } from "./types";
 
 export function configHasModule(config: ProjectConfig, registry: string, module: string): boolean {
     return !!config.modules[module] ||
@@ -9,11 +9,11 @@ export function configHasModule(config: ProjectConfig, registry: string, module:
  * Add a module to the project and resolve its dependencies, modifies the project object in place
  */
 export function addModule(
-    meta: ProjectMeta,
+    manifest: ProjectManifest,
     config: ProjectConfig,
     { registry, name, alias, force = true }: { registry: string; name: string; alias?: string; force?: boolean },
 ) {
-    const moduleDef = meta.registries[registry].modules[name];
+    const moduleDef = manifest.registries[registry].modules[name];
 
     if (!moduleDef) {
         throw new Error(`Module ${name} not found in registry ${registry}`);
@@ -22,10 +22,10 @@ export function addModule(
     // add dependecies
     const dependecies = Object.keys(moduleDef.dependencies || {})
         // filter out dependencies that are already in the project
-        .filter((dep) => !configHasModule(meta.config, registry, dep));
+        .filter((dep) => !configHasModule(manifest.config, registry, dep));
 
     for (const name of dependecies) {
-        addModule(meta, config, { name, registry, force: false });
+        addModule(manifest, config, { name, registry, force: false });
     }
 
     appendModule(config.modules, { name, module: moduleDef, registry, alias, force });

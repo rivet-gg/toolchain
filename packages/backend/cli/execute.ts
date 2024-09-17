@@ -4,6 +4,7 @@ import { UnreachableError } from "../toolchain/error/mod.ts";
 import * as build from "./commands/build.ts";
 import * as clean from "./commands/clean.ts";
 import * as configShow from "./commands/config/show.ts";
+import * as configManifestPath from "./commands/config/manifest_path.ts";
 import * as createActor from "./commands/create/actor.ts";
 import * as createModule from "./commands/create/module.ts";
 import * as createScript from "./commands/create/script.ts";
@@ -22,13 +23,13 @@ import * as dev from "./commands/dev.ts";
 import * as format from "./commands/format.ts";
 import * as init from "./commands/init.ts";
 import * as lint from "./commands/lint.ts";
-import * as metaPath from "./commands/meta/path.ts";
 import * as test from "./commands/test.ts";
 
 export const commandSchema = z.union([
 	z.object({ build: build.optsSchema }),
 	z.object({ clean: clean.optsSchema }),
 	z.object({ configShow: configShow.optsSchema }),
+	z.object({ configManifestPath: configManifestPath.optsSchema }),
 	z.object({ createActor: createActor.optsSchema }),
 	z.object({ createModule: createModule.optsSchema }),
 	z.object({ createScript: createScript.optsSchema }),
@@ -37,7 +38,6 @@ export const commandSchema = z.union([
 	z.object({ format: format.optsSchema }),
 	z.object({ init: init.optsSchema }),
 	z.object({ lint: lint.optsSchema }),
-	z.object({ metaPath: metaPath.optsSchema }),
 	z.object({ test: test.optsSchema }),
 	z.object({ dbInstanceStart: dbInstanceStart.optsSchema }),
 	z.object({ dbInstanceStatus: dbInstanceStatus.optsSchema }),
@@ -74,8 +74,8 @@ export async function executeCommand(command: Command) {
 		await format.execute(command.format);
 	} else if ("init" in command) {
 		await init.execute(command.init);
-	} else if ("metaPath" in command) {
-		await metaPath.execute(command.metaPath);
+	} else if ("configManifestPath" in command) {
+		await configManifestPath.execute(command.configManifestPath);
 	} else if ("lint" in command) {
 		await lint.execute(command.lint);
 	} else if ("test" in command) {

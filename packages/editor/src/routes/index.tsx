@@ -23,7 +23,7 @@ import { ModuleCard } from "../components/module-card";
 import { ModuleSearchContext } from "../components/module-search-context";
 import { ModulesConfigForm } from "../components/modules-config-form";
 import { NewModuleCard } from "../components/new-module-card";
-import { metaQueryOptions } from "../queries";
+import { projectManifestQueryOptions } from "../queries";
 
 function NewModuleButton() {
   const ref = useContext(ModuleSearchContext);
@@ -41,7 +41,7 @@ function NewModuleButton() {
 }
 
 function IndexRoute() {
-  const { data } = useSuspenseQuery(metaQueryOptions());
+  const { data } = useSuspenseQuery(projectManifestQueryOptions());
 
   return (
     <SidebarPageContent

@@ -7,8 +7,8 @@ import { decodeBase64 } from "@std/encoding";
 import editorArchive from "../../artifacts/editor_archive.json" with { type: "json" };
 import { InternalState } from "./state.ts";
 import { progress } from "../term/status.ts";
-import { metaPath } from "../project/mod.ts";
-import { ProjectMeta } from "../build/meta.ts";
+import { projectManifestPath } from "../project/mod.ts";
+import { ProjectManifest } from "../build/project_manifest.ts";
 import { ProjectConfigSchema } from "../config/project.ts";
 
 interface Env {
@@ -37,14 +37,14 @@ export const internalApi = new Hono<Env>()
 		const project = state.project;
 		return c.json(project);
 	})
-	.get("/meta.json", async (c) => {
+	.get("/project_manifest.json", async (c) => {
 		const state = c.get("state").get();
 		if (state.value === "idle") {
 			return c.json({ error: "No project loaded" }, 400);
 		}
 
-		const output = await Deno.readTextFile(metaPath(state.project));
-		return c.json<ProjectMeta>(JSON.parse(output), 200);
+		const output = await Deno.readTextFile(projectManifestPath(state.project));
+		return c.json<ProjectManifest>(JSON.parse(output), 200);
 	})
 	.patch(
 		"/config",
