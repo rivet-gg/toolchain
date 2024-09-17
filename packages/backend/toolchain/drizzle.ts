@@ -9,6 +9,7 @@ import dedent from "dedent";
 import { compileDbSchemaHelper } from "./build/gen/db_schema.ts";
 import { DRIZZLE_KIT_PACKAGE, DRIZZLE_ORM_PACKAGE, PG_PACKAGE } from "./drizzle_consts.ts";
 import { getDefaultDatabaseUrl } from "./postgres/mod.ts";
+import { denoExecutablePath } from "./utils/deno.ts";
 
 export interface RunCommandOpts {
 	args: string[];
@@ -86,7 +87,7 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 	// Install dependencies
 	//
 	// This uses node_modules since drizzle-kit depends on being able to import `drizzle-orm`.
-	const denoCache = await new Deno.Command("deno", {
+	const denoCache = await new Deno.Command(denoExecutablePath(), {
 		args: ["cache", "--node-modules-dir", DRIZZLE_ORM_PACKAGE, DRIZZLE_KIT_PACKAGE, PG_PACKAGE],
 		cwd: tempDir,
 		signal,
@@ -96,7 +97,7 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 	}
 
 	// Run drizzle-kit
-	const drizzleOutput = await new Deno.Command("deno", {
+	const drizzleOutput = await new Deno.Command(denoExecutablePath(), {
 		// TODO: Specify drizzle version
 		args: ["run", "-A", "--node-modules-dir", DRIZZLE_KIT_PACKAGE, "--config", "database.config.json", ...opts.args],
 		cwd: tempDir,

@@ -1,6 +1,7 @@
 import dedent from "dedent";
 import { dirname, format as formatPath, isAbsolute, parse as parsePath, relative, resolve } from "@std/path";
 import { autoGenHeader } from "../misc.ts";
+import { denoExecutablePath } from "../../utils/deno.ts";
 
 export enum Lang {
 	Typescript,
@@ -166,7 +167,7 @@ async function mkdirFor(path: string) {
 }
 async function writeFmt(path: string, source: string) {
 	await Deno.writeTextFile(path, source);
-	const formatResult = await new Deno.Command("deno", {
+	const formatResult = await new Deno.Command(denoExecutablePath(), {
 		args: ["fmt", path],
 	}).output();
 	if (!formatResult.success) {
