@@ -107,7 +107,7 @@ export async function execute(opts: Opts) {
 				env: {
 					"DATABASE_URL": await getDefaultDatabaseUrl(project),
 					// Force color for test logs
-					"BACKEND_TERM_COLOR": Deno.env.get("BACKEND_TERM_COLOR") ?? "always",
+					"RIVET_BACKEND_TERM_COLOR": Deno.env.get("RIVET_BACKEND_TERM_COLOR") ?? "always",
 				},
 			})
 				.output();
