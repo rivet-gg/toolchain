@@ -1,16 +1,17 @@
 import { Project } from "../project/mod.ts";
-import { OPEN_API_PATH, projectCachePath } from "../project/project.ts";
 import { OpenApiGeneratorV31, OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { convertSerializedSchemaToZod } from "./schema/mod.ts";
+import { assert } from "@std/assert";
 
 export const DEFAULT_SERVER = "http://localhost:6420";
 
-export async function generateOpenApi(project: Project) {
+export async function generateOpenApi(project: Project, path: string) {
 	const registry = new OpenAPIRegistry();
 
 	for (const mod of project.modules.values()) {
 		for (const script of mod.scripts.values()) {
 			if (!script.config.public) continue;
+      assert(script.schemas != undefined, "script schema not determined. called generateOpenApi before project build (which calls planScriptBuild).");
 
 			const requestRef = `${mod.name}__${script.name}__Request`;
 			const responseRef = `${mod.name}__${script.name}__Response`;
@@ -66,7 +67,7 @@ export async function generateOpenApi(project: Project) {
 	document = flattenOpenAPIConfig(document);
 
 	await Deno.writeTextFile(
-		projectCachePath(project, OPEN_API_PATH),
+    path,
 		JSON.stringify(document, null, 4),
 	);
 }
