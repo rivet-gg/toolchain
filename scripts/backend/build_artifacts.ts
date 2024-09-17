@@ -67,7 +67,7 @@ export async function buildArtifacts(
     }
 
     // Add to JSON
-    archiveFile += `${JSON.stringify(file)}:${JSON.stringify(content)}`;
+    archiveFile += `${JSON.stringify(forcePosixPath(file))}:${JSON.stringify(content)}`;
     if (i != files.length - 1) archiveFile += ",\n";
     else archiveFile += "\n";
 
@@ -239,6 +239,11 @@ async function main() {
     await buildDynamicArchive();
     await buildRuntimeArchive();
     await buildEditor();
+}
+
+function forcePosixPath(path: string) {
+	// TODO: This is not correct
+	return path.replaceAll("\\", "/");
 }
 
 main();

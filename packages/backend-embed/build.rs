@@ -26,6 +26,7 @@ fn main() -> Result<()> {
 	if !status.success() {
 		panic!("build artifacts failed");
 	}
+	println!("cargo:rerun-if-changed={}", script_path.display());
 
 	// Hash backend
 	let mut backend_path = PathBuf::from(manifest_dir);
@@ -33,8 +34,9 @@ fn main() -> Result<()> {
 	backend_path.push("backend");
 	println!(
 		"cargo:rustc-env=BACKEND_HASH={}",
-		hash_directory(backend_path)?
+		hash_directory(&backend_path)?
 	);
+	println!("cargo:rerun-if-changed={}", backend_path.display());
 
 	Ok(())
 }
