@@ -36,7 +36,9 @@ fn main() -> Result<()> {
 		"cargo:rustc-env=BACKEND_HASH={}",
 		hash_directory(&backend_path)?
 	);
-	println!("cargo:rerun-if-changed={}", backend_path.display());
+
+	// TODO: Add back OGBEE-129
+	// println!("cargo:rerun-if-changed={}", backend_path.display());
 
 	Ok(())
 }
