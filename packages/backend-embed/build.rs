@@ -18,12 +18,12 @@ fn main() -> Result<()> {
 	script_path.push("build_artifacts.ts");
 
 	// Run script
-	let output = Command::new("deno")
+	let status = Command::new("deno")
 		.arg("run")
 		.arg("-A")
 		.arg(&script_path)
-		.output()?;
-	if !output.status.success() {
+		.status()?;
+	if !status.success() {
 		panic!("build artifacts failed");
 	}
 
