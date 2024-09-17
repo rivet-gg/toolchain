@@ -1912,6 +1912,7 @@ dependencies = [
 name = "rivet-process-runner"
 version = "0.1.0"
 dependencies = [
+ "ctrlc",
  "lazy_static",
  "nix 0.29.0",
  "rivet-process-runner-shared",
@@ -1944,7 +1945,6 @@ dependencies = [
  "config",
  "console",
  "const_format",
- "ctrlc",
  "dirs",
  "fs_extra",
  "futures-util",

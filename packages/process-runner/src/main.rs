@@ -66,8 +66,10 @@ fn run_process(
 	command: &str,
 	command_args: &[String],
 ) -> Result<i32, ManagerError> {
-	// Set up signal handling
-	setup_signal_handling()?;
+	// Listen for SIGTERM (Unix) and SIGBREAK (Windows)
+	ctrlc::set_handler(move || {
+		HAS_RECEIVED_SIGTERM.store(true, Ordering::Relaxed);
+	}).unwrap();
 
 	// Assert that the data directory exists
 	if !Path::new(data_dir).is_dir() {
@@ -95,8 +97,11 @@ fn run_process(
 	#[cfg(target_os = "windows")]
 	{
 		use std::os::windows::process::CommandExt;
-		use windows::Win32::System::Threading::CREATE_NO_WINDOW;
-		cmd.creation_flags(CREATE_NO_WINDOW.0);
+
+		// CREATE_NEW_PROCESS_GROUP detaches from this process. This only
+		// accepts CTRL_BREAK.
+		use windows::Win32::System::Threading::CREATE_NEW_PROCESS_GROUP;
+		cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0);
 	}
 
 	let mut child = cmd.spawn().map_err(ManagerError::CommandExecutionError)?;
@@ -114,12 +119,17 @@ fn run_process(
 				"",
 			)?;
 			terminate_child(&mut child)?;
-		}
 
-		match child.try_wait() {
-			Ok(Some(status)) => break status.code().unwrap_or(1),
-			Ok(None) => {}
-			Err(e) => return Err(ManagerError::CommandExecutionError(e)),
+			match child.wait() {
+				Ok(status) => break status.code(),
+				Err(e) => return Err(ManagerError::CommandExecutionError(e)),
+			}
+		} else {
+			match child.try_wait() {
+				Ok(Some(status)) => break status.code(),
+				Ok(None) => {}
+				Err(e) => return Err(ManagerError::CommandExecutionError(e)),
+			}
 		}
 
 		std::thread::sleep(Duration::from_millis(100));
@@ -127,9 +137,9 @@ fn run_process(
 
 	// Write exit code to file
 	let exit_code_path = Path::new(data_dir).join(shared::paths::CHILD_EXIT_CODE);
-	write_to_file(&exit_code_path, &exit_code.to_string())?;
+	write_to_file(&exit_code_path, &exit_code.map_or_else(||"unknown".to_string(), |x| x.to_string()))?;
 
-	Ok(exit_code)
+	Ok(exit_code.unwrap_or(1))
 }
 
 /// Write & flush a string to a file.
@@ -137,35 +147,6 @@ fn write_to_file(path: &Path, content: &str) -> Result<(), ManagerError> {
 	let mut file = File::create(path).map_err(ManagerError::FileCreationError)?;
 	writeln!(file, "{}", content).map_err(ManagerError::FileWriteError)?;
 	file.flush().map_err(ManagerError::FileWriteError)?;
-	Ok(())
-}
-
-#[cfg(unix)]
-fn setup_signal_handling() -> Result<(), ManagerError> {
-	signal_hook::flag::register(signal_hook::consts::SIGTERM, HAS_RECEIVED_SIGTERM.clone())
-		.map(|_| ())
-		.map_err(ManagerError::RegisterSignalHookError)
-}
-
-#[cfg(windows)]
-fn setup_signal_handling() -> Result<(), ManagerError> {
-	use windows::Win32::Foundation::BOOL;
-	use windows::Win32::System::Console::SetConsoleCtrlHandler;
-
-	unsafe {
-		if !SetConsoleCtrlHandler(Some(ctrl_handler), BOOL::from(true)).as_bool() {
-			return Err(ManagerError::RegisterSignalHookError(std::io::Error::new(
-				std::io::ErrorKind::Other,
-				"Failed to set console control handler",
-			)));
-		}
-	}
-
-	unsafe extern "system" fn ctrl_handler(_: u32) -> BOOL {
-		HAS_RECEIVED_SIGTERM.store(true, Ordering::Relaxed);
-		BOOL::from(true)
-	}
-
 	Ok(())
 }
 
@@ -182,10 +163,10 @@ fn terminate_child(child: &mut Child) -> Result<(), ManagerError> {
 
 #[cfg(windows)]
 fn terminate_child(child: &mut Child) -> Result<(), ManagerError> {
-	use windows::Win32::System::Console::{GenerateConsoleCtrlEvent, CTRL_C_EVENT};
+	use windows::Win32::System::Console::{GenerateConsoleCtrlEvent, CTRL_BREAK_EVENT};
 
 	unsafe {
-		if !GenerateConsoleCtrlEvent(CTRL_C_EVENT, child.id() as u32).as_bool() {
+		if !GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, child.id() as u32).as_bool() {
 			return Err(ManagerError::SignalError(
 				"Failed to generate console control event".to_string(),
 			));
