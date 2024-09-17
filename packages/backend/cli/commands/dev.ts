@@ -9,6 +9,7 @@ import { migrateModeSchema } from "./../util.ts";
 import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
 import { InternalState } from "../../toolchain/internal_api/state.ts";
 import { createAndStartProjectInternalApiRouter } from "../../toolchain/internal_api/mod.ts";
+import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 
 export const optsSchema = z.object({
 	build: z.boolean().default(true),
@@ -75,7 +76,7 @@ export async function execute(opts: Opts) {
 
 			// Run entrypoint
 			const entrypointPath = projectCachePath(project, ENTRYPOINT_PATH);
-			const cmd = await new Deno.Command("deno", {
+			const cmd = await new Deno.Command(denoExecutablePath(), {
 				args: [
 					"run",
 					...args,

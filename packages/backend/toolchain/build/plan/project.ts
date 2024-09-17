@@ -23,6 +23,7 @@ import { migratePush } from "../../migrate/push.ts";
 import { migrateApply } from "../../migrate/apply.ts";
 import { migrateGenerate } from "../../migrate/generate.ts";
 import { generateSdk } from "../../sdk/generate.ts";
+import { denoExecutablePath } from "../../utils/deno.ts";
 
 export async function planProjectBuild(
 	buildState: BuildState,
@@ -273,7 +274,7 @@ export async function planProjectBuild(
 			name: "Check",
 			description: "entrypoint.ts",
 			async build() {
-				const checkOutput = await new Deno.Command("deno", {
+				const checkOutput = await new Deno.Command(denoExecutablePath(), {
 					args: ["check", "--quiet", projectCachePath(project, "entrypoint.ts")],
 					signal,
 				}).output();
