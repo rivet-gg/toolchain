@@ -1909,19 +1909,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "rivet-process-supervisor"
+name = "rivet-process-runner"
 version = "0.1.0"
 dependencies = [
  "lazy_static",
  "nix 0.29.0",
- "rivet-process-supervisor-shared",
+ "rivet-process-runner-shared",
  "signal-hook",
  "thiserror",
  "windows 0.48.0",
 ]
 
 [[package]]
-name = "rivet-process-supervisor-embed"
+name = "rivet-process-runner-embed"
 version = "0.1.0"
 dependencies = [
  "anyhow",
@@ -1930,7 +1930,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rivet-process-supervisor-shared"
+name = "rivet-process-runner-shared"
 version = "0.1.0"
 
 [[package]]
@@ -1965,8 +1965,8 @@ dependencies = [
  "rivet-api-ee",
  "rivet-backend-embed",
  "rivet-deno-embed",
- "rivet-process-supervisor-embed",
- "rivet-process-supervisor-shared",
+ "rivet-process-runner-embed",
+ "rivet-process-runner-shared",
  "sentry",
  "serde",
  "serde_json",

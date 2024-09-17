@@ -1,5 +1,5 @@
 use lazy_static::lazy_static;
-use rivet_process_supervisor_shared as shared;
+use rivet_process_runner_shared as shared;
 use std::{
 	fs::File,
 	io::Write,
@@ -52,7 +52,7 @@ fn main() {
 			// Write error to a file
 			//
 			// We can't recover if this write doesn't work
-			let error_path = Path::new(data_dir).join(shared::paths::SUPERVISOR_ERROR);
+			let error_path = Path::new(data_dir).join(shared::paths::RUNNER_ERROR);
 			let _ = write_to_file(&error_path, &e.to_string());
 
 			std::process::exit(1);
@@ -76,7 +76,7 @@ fn run_process(
 
 	// Write current PID to file
 	let pid = std::process::id();
-	let pid_path = Path::new(data_dir).join(shared::paths::SUPERVISOR_PID);
+	let pid_path = Path::new(data_dir).join(shared::paths::RUNNER_PID);
 	write_to_file(&pid_path, &pid.to_string())?;
 
 	// Open stdout and stderr files for writing
@@ -87,7 +87,7 @@ fn run_process(
 
 	// Run the command
 	let mut cmd = Command::new(command);
-		cmd.args(command_args)
+	cmd.args(command_args)
 		.current_dir(current_dir)
 		.stdout(Stdio::from(stdout))
 		.stderr(Stdio::from(stderr));
@@ -95,7 +95,7 @@ fn run_process(
 	#[cfg(target_os = "windows")]
 	{
 		use std::os::windows::process::CommandExt;
-		use windows::Win32::System::Threading::{CREATE_NO_WINDOW};
+		use windows::Win32::System::Threading::CREATE_NO_WINDOW;
 		cmd.creation_flags(CREATE_NO_WINDOW.0);
 	}
 
