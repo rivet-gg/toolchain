@@ -27,7 +27,7 @@ pub struct Opts {
 	pub migrate: bool,
 	#[clap(long, default_value = "generate")]
 	pub migrate_mode: Option<String>,
-	#[clap(long, default_value = "false")]
+	#[clap(long, default_value = "true")]
 	pub strict_schemas: bool,
 }
 

@@ -17,7 +17,7 @@ pub struct Opts {
 	pub build: bool,
 	#[clap(long, default_value = "true")]
 	pub check: bool,
-	#[clap(long, default_value = "false")]
+	#[clap(long, default_value = "true")]
 	pub strict_schemas: bool,
 	#[clap(long, default_value = "true")]
 	pub sdk: bool,

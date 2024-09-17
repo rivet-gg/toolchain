@@ -14,7 +14,7 @@ import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 export const optsSchema = z.object({
 	build: z.boolean().default(true),
 	check: z.boolean().default(true),
-	strictSchemas: z.boolean().default(false),
+	strictSchemas: z.boolean().default(true),
 	sdk: z.boolean().default(true),
 	migrate: z.boolean().default(true),
 	migrateMode: migrateModeSchema.default(MigrateMode.Dev),
