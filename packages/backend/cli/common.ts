@@ -3,7 +3,7 @@ import { loadProject, Project } from "../toolchain/project/mod.ts";
 
 export const globalOptsSchema = z.object({
 	/** Path to the project root or project config. */
-	project: z.string().optional(),
+	project: z.string().nullable(),
 }).catchall(z.unknown());
 
 export type GlobalOpts = z.infer<typeof globalOptsSchema>;
