@@ -1,10 +1,4 @@
 {
-	"sdks": [
-		{
-			"target": "typescript",
-			"output": "sdk"
-		}
-	],
 	"registries": {
 		"local": {
 			"local": {

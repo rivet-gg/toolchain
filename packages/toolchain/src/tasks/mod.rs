@@ -1,7 +1,6 @@
 pub mod backend_start;
 pub mod backend_stop;
 pub mod check_login_state;
-pub mod check_system_requirements;
 pub mod deploy;
 pub mod exec_command;
 pub mod game_server_start;
@@ -19,7 +18,6 @@ crate::task_registry!(
 	backend_start::Task,
 	backend_stop::Task,
 	check_login_state::Task,
-	check_system_requirements::Task,
 	deploy::Task,
 	exec_command::Task,
 	game_server_start::Task,
