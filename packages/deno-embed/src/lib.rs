@@ -79,7 +79,7 @@ mod tests {
 		);
 
 		// Run deno --version and check the output
-		let output = Command::new(&result1.executable_path)
+		let output = std::process::Command::new(&result1.executable_path)
 			.arg("--version")
 			.output()?;
 
