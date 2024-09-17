@@ -1,5 +1,4 @@
 use anyhow::*;
-use serde::Serialize;
 use std::{process::Stdio, sync::Arc};
 use tokio::{
 	io::{AsyncBufReadExt, BufReader},
@@ -7,17 +6,7 @@ use tokio::{
 	sync::{broadcast, mpsc},
 };
 
-#[derive(Serialize)]
-pub enum TaskEvent {
-	#[serde(rename = "log")]
-	Log(String),
-	#[serde(rename = "result")]
-	Result {
-		result: Box<serde_json::value::RawValue>,
-	},
-	#[serde(rename = "port_update")]
-	PortUpdate { backend_port: u16, editor_port: u16 },
-}
+use super::TaskEvent;
 
 // HACK: Tokio bug drops the channel using the native `UnboundedSender::clone`, so we have to use
 // `Arc`.
