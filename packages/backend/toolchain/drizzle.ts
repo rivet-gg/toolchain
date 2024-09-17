@@ -59,15 +59,16 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 	await Deno.writeTextFile(resolve(tempDir, "schema_reexport.ts"), schemaReexportSource);
 
 	// Write Drizzle config
+	const databaseConfigPath = resolve(tempDir, "database.config.json");
 	await Deno.writeTextFile(
-		resolve(tempDir, "database.config.json"),
+		databaseConfigPath,
 		JSON.stringify({
 			// Use the copied schema.ts
 			schema: "./schema_reexport.ts",
 			// Update migrations in-place in the project
 			//
 			// Drizzle Kit does not play nice with absolute paths
-			out: relative(tempDbPath, dbMigrationsPath(module)),
+			out: relative(databaseConfigPath, dbMigrationsPath(module)),
 			dialect: "postgresql",
 			migrations: {
 				table: "migrations",
