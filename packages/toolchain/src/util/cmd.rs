@@ -1,14 +1,7 @@
 use anyhow::*;
-#[cfg(windows)]
-use std::os::windows::process::CommandExt;
 use tokio::process::Command;
 
 use crate::util::task;
-
-#[cfg(windows)]
-mod creation_flags {
-	pub const CREATE_NO_WINDOW: u32 = 0x08000000;
-}
 
 /// Runs a command in a cross-platform compatible way.
 pub async fn run(task: task::TaskCtx, command: &str, envs: Vec<(String, String)>) -> Result<()> {
@@ -107,8 +100,10 @@ pub fn shell_cmd(cmd: &str) -> Command {
 pub fn shell_cmd_std(cmd: &str) -> std::process::Command {
 	#[cfg(windows)]
 	{
+		use std::os::windows::process::CommandExt;
+		use windows::Win32::System::Threading::CREATE_NO_WINDOW;
 		let mut cmd = std::process::Command::new(cmd);
-		cmd.creation_flags(creation_flags::CREATE_NO_WINDOW);
+		cmd.creation_flags(CREATE_NO_WINDOW.0);
 		cmd
 	}
 

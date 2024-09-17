@@ -178,6 +178,7 @@ pub async fn show_term(args: &[String]) -> Result<Child> {
 	Ok(child)
 }
 
+#[cfg(target_os = "macos")]
 fn shell_escape(s: &str) -> String {
 	if s.is_empty() {
 		return String::from("''");

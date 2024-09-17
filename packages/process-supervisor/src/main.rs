@@ -86,13 +86,20 @@ fn run_process(
 	let stderr = File::create(&stderr_path).map_err(ManagerError::FileCreationError)?;
 
 	// Run the command
-	let mut child = Command::new(command)
-		.args(command_args)
+	let mut cmd = Command::new(command);
+		cmd.args(command_args)
 		.current_dir(current_dir)
 		.stdout(Stdio::from(stdout))
-		.stderr(Stdio::from(stderr))
-		.spawn()
-		.map_err(ManagerError::CommandExecutionError)?;
+		.stderr(Stdio::from(stderr));
+
+	#[cfg(target_os = "windows")]
+	{
+		use std::os::windows::process::CommandExt;
+		use windows::Win32::System::Threading::{CREATE_NO_WINDOW};
+		cmd.creation_flags(CREATE_NO_WINDOW.0);
+	}
+
+	let mut child = cmd.spawn().map_err(ManagerError::CommandExecutionError)?;
 
 	// Write child PID to file
 	let child_pid = child.id();
