@@ -29,7 +29,11 @@ pub struct ProjectMeta {
 
 	/// Port which the dev server is running on for plugins.
 	#[serde(default)]
-	pub backend_dev_port: Option<u16>,
+	pub backend_port: Option<u16>,
+
+	/// See `backend_port`.
+	#[serde(default)]
+	pub editor_port: Option<u16>,
 }
 
 impl ProjectMeta {
@@ -39,7 +43,8 @@ impl ProjectMeta {
 			tokens: Tokens { cloud: cloud_token },
 			environments: HashMap::new(),
 			processes: HashMap::new(),
-			backend_dev_port: None,
+			backend_port: None,
+			editor_port: None,
 		}
 	}
 }

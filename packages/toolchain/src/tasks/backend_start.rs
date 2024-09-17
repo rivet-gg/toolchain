@@ -32,10 +32,15 @@ impl task::Task for Task {
 	}
 
 	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
-		// HACK: Set backend port in case the process is already running. This will result in a
-		// duplicate port dispatch if the backend was stopped.
-		if let Some(port) = meta::read_project(&paths::data_dir()?, |x| x.backend_dev_port).await? {
-			task.event(task::TaskEvent::SetBackendPort { port });
+		// Set backend port in case the process is already running. This will result in a duplicate
+		// port dispatch if the backend is not running or crashed.
+		if let (Some(backend_port), Some(editor_port)) =
+			meta::read_project(&paths::data_dir()?, |x| (x.backend_port, x.editor_port)).await?
+		{
+			task.event(task::TaskEvent::PortUpdate {
+				backend_port,
+				editor_port,
+			});
 		}
 
 		// Start or hook to backend
@@ -49,9 +54,13 @@ impl task::Task for Task {
 				},
 				|| async move {
 					// Pick dev port
-					let port = portpicker::pick_unused_port().context("no free ports")?;
-					meta::mutate_project(&paths::data_dir()?, |x| x.backend_dev_port = Some(port))
-						.await?;
+					let backend_port = portpicker::pick_unused_port().context("no free ports")?;
+					let editor_port = portpicker::pick_unused_port().context("no free ports")?;
+					meta::mutate_project(&paths::data_dir()?, |x| {
+						x.backend_port = Some(backend_port);
+						x.editor_port = Some(editor_port);
+					})
+					.await?;
 
 					// Build env
 					let (mut cmd_env, config_path) =
@@ -61,9 +70,10 @@ impl task::Task for Task {
 							Ok((env, settings.backend.dev.config_path.clone()))
 						})
 						.await?;
-					cmd_env.insert("BACKEND_PORT".into(), port.to_string());
+					cmd_env.insert("BACKEND_PORT".into(), backend_port.to_string());
 					cmd_env.insert("BACKEND_HOSTNAME".into(), "0.0.0.0".to_string());
 					cmd_env.insert("BACKEND_TERM_COLOR".into(), "never".into());
+					cmd_env.insert("RIVET_EDITOR_PORT".into(), editor_port.to_string());
 
 					// Build command
 					let cmd = build_backend_command_raw(backend::BackendCommandOpts {
@@ -77,7 +87,10 @@ impl task::Task for Task {
 					.await?;
 
 					// Publish commandevent
-					task_inner.event(task::TaskEvent::SetBackendPort { port });
+					task_inner.event(task::TaskEvent::PortUpdate {
+						backend_port,
+						editor_port,
+					});
 
 					Ok(CommandOpts {
 						command: cmd.command.display().to_string(),

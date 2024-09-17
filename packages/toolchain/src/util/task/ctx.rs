@@ -15,8 +15,8 @@ pub enum TaskEvent {
 	Result {
 		result: Box<serde_json::value::RawValue>,
 	},
-	#[serde(rename = "set_backend_port")]
-	SetBackendPort { port: u16 },
+	#[serde(rename = "port_update")]
+	PortUpdate { backend_port: u16, editor_port: u16 },
 }
 
 // HACK: Tokio bug drops the channel using the native `UnboundedSender::clone`, so we have to use
