@@ -132,9 +132,9 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 	// .await?
 	// .variables;
 	let mut update_variables = HashMap::<String, _>::new();
-	// if !variables.contains_key("BACKEND_PUBLIC_ENDPOINT") {
+	// if !variables.contains_key("RIVET_BACKEND_PUBLIC_ENDPOINT") {
 	update_variables.insert(
-		"BACKEND_PUBLIC_ENDPOINT".to_string(),
+		"RIVET_BACKEND_PUBLIC_ENDPOINT".to_string(),
 		models::EeBackendUpdateVariable {
 			text: Some(backend.endpoint.clone()),
 			..Default::default()
