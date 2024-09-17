@@ -69,6 +69,12 @@ export async function loadRegistry(
 }
 
 async function indexRegistryModules(registry: ResolveRegistryOutput): Promise<Record<string, IndexedModuleConfig>> {
+  // Don't index if modules dir doesn't exist. We do this so we can auto-add a
+  // local registry in a dev project without a modules folder existing yet.
+  if (!await exists(registry.path, { isDirectory: true })) {
+    return {};
+  }
+
 	const modules = new Map<string, IndexedModuleConfig>();
 	for await (const dirEntry of Deno.readDir(registry.path)) {
 		if (!dirEntry.isDirectory) {
@@ -85,7 +91,7 @@ async function indexRegistryModules(registry: ResolveRegistryOutput): Promise<Re
 			);
 			modules.set(dirEntry.name, { status, name, description, icon, dependencies, defaultConfig, tags });
 		} catch {
-			// ignore this module
+			// Ignore this module
 		}
 	}
 
@@ -127,20 +133,16 @@ interface ResolveRegistryOutput {
 
 async function resolveRegistryLocal(
 	projectRoot: string,
-	name: string,
+	_name: string,
 	config: RegistryConfigLocal,
 ): Promise<ResolveRegistryOutput> {
-	const projectConfigPath = resolve(projectRoot, "rivet.json");
-
 	const isExternal = config.isExternal ?? false;
 
-	// Check that registry exists
+  // Generate registry path
+  //
+  // This path doesn't need to exist. We'll throw an error if we try to load a
+  // module from this registry.
 	const path = resolve(projectRoot, config.directory);
-	if (!await exists(path)) {
-		throw new UserError(`Could not find directory ${path} for local registry \`${name}\`.`, {
-			path: projectConfigPath,
-		});
-	}
 
 	return { path, isExternal };
 }
