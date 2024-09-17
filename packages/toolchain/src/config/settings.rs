@@ -157,10 +157,10 @@ where
 				.add_source(config::File::from(paths::project_settings_config_file()?));
 		}
 
-		let config = config_builder.build().await.context("find config")?;
+		let config = config_builder.build().await.context("find settings")?;
 		let mut settings = config
 			.try_deserialize::<Settings>()
-			.context("deserialize config")?;
+			.context("deserialize settings")?;
 
 		let result = cb(&mut settings)?;
 		global_settings.insert(data_dir.clone(), settings);

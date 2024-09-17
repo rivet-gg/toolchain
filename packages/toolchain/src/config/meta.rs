@@ -82,6 +82,9 @@ pub struct ProcessState {
 
 lazy_static! {
 	static ref GLOBAL_META: Mutex<HashMap<PathBuf, Meta>> = Mutex::new(HashMap::new());
+
+	/// Lock on writing to the file.
+	static ref META_FILE_LOCK: Mutex<()> = Mutex::new(());
 }
 
 /// Gets the global config instance.
@@ -97,7 +100,8 @@ where
 		let path = paths::meta_config_file(base_data_dir)?;
 
 		let mut config = match fs::read_to_string(&path).await {
-			Result::Ok(config) => serde_json::from_str(&config)?,
+			Result::Ok(config) => serde_json::from_str(&config)
+				.context(format!("deserialize meta ({})", path.display()))?,
 			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
 			Err(err) => return Err(err.into()),
 		};
@@ -121,8 +125,12 @@ async fn write(base_data_dir: &PathBuf) -> Result<()> {
 		serde_json::to_string(meta).map_err(Into::into)
 	})
 	.await?;
-	fs::create_dir_all(paths::user_config_dir(base_data_dir)?).await?;
-	fs::write(paths::meta_config_file(base_data_dir)?, json_str).await?;
+
+	{
+		let _write_guard = META_FILE_LOCK.lock().await;
+		fs::create_dir_all(paths::user_config_dir(base_data_dir)?).await?;
+		fs::write(paths::meta_config_file(base_data_dir)?, json_str).await?;
+	}
 
 	Ok(())
 }
