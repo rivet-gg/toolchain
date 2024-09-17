@@ -10,7 +10,7 @@ import { generateEntrypoint } from "../entrypoint.ts";
 import { generateOpenApi } from "../openapi.ts";
 import { UnreachableError, UserError } from "../../error/mod.ts";
 import { generateMeta } from "../meta.ts";
-import { BUNDLE_PATH, ENTRYPOINT_PATH, MANIFEST_PATH, projectCachePath, PACKAGES_PATH } from "../../project/project.ts";
+import { BUNDLE_PATH, ENTRYPOINT_PATH, OUTPUT_MANIFEST_PATH, projectCachePath, PACKAGES_PATH } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
 import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
@@ -269,7 +269,7 @@ export async function planProjectBuild(
 					signal.throwIfAborted();
 
 					await Deno.writeTextFile(
-						projectCachePath(project, MANIFEST_PATH),
+						projectCachePath(project, OUTPUT_MANIFEST_PATH),
 						JSON.stringify(manifest),
 					);
 				}
