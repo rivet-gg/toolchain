@@ -9,6 +9,7 @@ import { UserError } from "../../toolchain/error/mod.ts";
 import { info } from "../../toolchain/term/status.ts";
 import { migrateModeSchema } from "./../util.ts";
 import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
+import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 
 export const optsSchema = z.object({
 	build: z.boolean().default(true),
@@ -96,7 +97,7 @@ export async function execute(opts: Opts) {
 
 			// Run tests
 			info("Testing", testingModules.join(", "));
-			const cmd = await new Deno.Command("deno", {
+			const cmd = await new Deno.Command(denoExecutablePath(), {
 				args: [
 					"test",
 					...args,

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { globalOptsSchema, initProject } from "../common.ts";
 import { listSourceFiles } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
+import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 
 export const optsSchema = globalOptsSchema.extend({
 	check: z.boolean().nullable(),
@@ -14,7 +15,7 @@ export async function execute(opts: Opts) {
 
 	const sourceFiles = await listSourceFiles(project, { localOnly: true });
 
-	const cmd = await new Deno.Command("deno", {
+	const cmd = await new Deno.Command(denoExecutablePath(), {
 		args: [
 			"fmt",
 			...opts.check ? ["--check"] : [],
