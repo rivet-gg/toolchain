@@ -6,7 +6,7 @@ import * as glob from "glob";
 import { readConfig as readProjectConfig } from "../config/project.ts";
 import { ProjectConfig } from "../config/project.ts";
 import { loadModule, Module } from "./module.ts";
-import { loadRegistry, Registry } from "./registry.ts";
+import { loadLocalRegistry, loadRegistry, Registry } from "./registry.ts";
 import { ProjectModuleConfig } from "../config/project.ts";
 import { validateIdentifier } from "../types/identifiers/mod.ts";
 import { Casing } from "../types/identifiers/defs.ts";
@@ -77,7 +77,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 		registries.set("default", defaultRegistry);
 	}
 	if (!registries.has("local")) {
-		const localRegistry = await loadDefaultRegistry(projectRoot, signal);
+		const localRegistry = await loadLocalRegistry(projectRoot, signal);
 		registries.set("local", localRegistry);
 	}
 
@@ -85,7 +85,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 	const localRegistry = registries.get("local");
 	if (localRegistry) {
 		if (!("local" in localRegistry.config)) {
-			throw new UserError("Registry named `local` is special and must be configured as a local registry.", {
+			throw new UserError("Registry named `local` is special and must be configured as a local registry type.", {
 				path: projectConfigPath,
 			});
 		}
