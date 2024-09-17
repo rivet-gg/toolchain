@@ -7,10 +7,9 @@ import { planModuleBuild, planModuleParse } from "./module.ts";
 import { compileTypeHelpers } from "../gen/mod.ts";
 import { generateDenoConfig } from "../deno_config.ts";
 import { generateEntrypoint } from "../entrypoint.ts";
-import { generateOpenApi } from "../openapi.ts";
 import { UnreachableError, UserError } from "../../error/mod.ts";
 import { genProjectManifest } from "../project_manifest.ts";
-import { BUNDLE_PATH, ENTRYPOINT_PATH, OUTPUT_MANIFEST_PATH, projectCachePath, PACKAGES_PATH } from "../../project/project.ts";
+import { BUNDLE_PATH, ENTRYPOINT_PATH, OUTPUT_MANIFEST_PATH, projectCachePath, PACKAGES_PATH, OPEN_API_PATH } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
 import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
@@ -115,18 +114,6 @@ export async function planProjectBuild(
 			await generateEntrypoint(project, opts);
 		},
 	});
-
-	buildStep(buildState, {
-		id: `project.generate.openapi`,
-		name: "Generate",
-		description: "openapi.json",
-		async build() {
-			await generateOpenApi(project);
-		},
-	});
-
-  // Wait for openapi.json before generating SDK
-  await waitForBuildPromises(buildState);
 
   if (opts.sdk && project.config.sdks) {
     for (const sdk of project.config.sdks) {

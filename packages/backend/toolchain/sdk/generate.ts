@@ -9,6 +9,7 @@ import { generateTypescriptAddons } from "./typescript/mod.ts";
 import { DEFAULT_PACKAGE_NAME as UNITY_DEFAULT_PACKAGE_NAME, generateUnityAddons } from "./unity/mod.ts";
 import { generateGodot } from "./godot/mod.ts";
 import { SdkConfig } from "../config/project.ts";
+import { unimplemented } from "@std/assert";
 
 export enum SdkTarget {
 	TypeScript = "typescript",
@@ -71,29 +72,30 @@ export async function generateSdk(
 	let buildOutput;
 
 	if (config.generator != "manual") {
-		// Run using deno when in docker
-    buildOutput = await new Deno.Command("docker", {
-      args: [
-        "run",
-        "--rm",
-        "-v",
-        `${project.cachePath}:/local`,
-        "openapitools/openapi-generator-cli:v7.6.0",
-        "generate",
-        "-i",
-        "/local/openapi.json",
-        "-g",
-        config.generator,
-        "-o",
-        `/local/sdk/${targetString}`,
-        "--additional-properties=" +
-        Object.entries(config.options).map(([key, value]) => `${key}=${value}`).join(","),
-      ],
-    }).output();
-
-		if (!buildOutput.success) {
-			throw new CommandError("Failed to generate OpenAPI SDK.", { commandOutput: buildOutput });
-		}
+    unimplemented("openapi generator is unimplemented");
+		// // Run using deno when in docker
+  //   buildOutput = await new Deno.Command("docker", {
+  //     args: [
+  //       "run",
+  //       "--rm",
+  //       "-v",
+  //       `${project.cachePath}:/local`,
+  //       "openapitools/openapi-generator-cli:v7.6.0",
+  //       "generate",
+  //       "-i",
+  //       "/local/openapi.json",
+  //       "-g",
+  //       config.generator,
+  //       "-o",
+  //       `/local/sdk/${targetString}`,
+  //       "--additional-properties=" +
+  //       Object.entries(config.options).map(([key, value]) => `${key}=${value}`).join(","),
+  //     ],
+  //   }).output();
+		//
+		// if (!buildOutput.success) {
+		// 	throw new CommandError("Failed to generate OpenAPI SDK.", { commandOutput: buildOutput });
+		// }
 	}
 
 	let sdkCopyPath = sdkGenPath;

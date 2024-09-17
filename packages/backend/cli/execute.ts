@@ -21,6 +21,7 @@ import * as dbSh from "./commands/db/sh.ts";
 import * as dbUrl from "./commands/db/url.ts";
 import * as dev from "./commands/dev.ts";
 import * as format from "./commands/format.ts";
+import * as genOpenApi from "./commands/gen_openapi.ts";
 import * as init from "./commands/init.ts";
 import * as lint from "./commands/lint.ts";
 import * as test from "./commands/test.ts";
@@ -36,6 +37,7 @@ export const commandSchema = z.union([
 	z.object({ createTest: createTest.optsSchema }),
 	z.object({ dev: dev.optsSchema }),
 	z.object({ format: format.optsSchema }),
+	z.object({ genOpenApi: genOpenApi.optsSchema }),
 	z.object({ init: init.optsSchema }),
 	z.object({ lint: lint.optsSchema }),
 	z.object({ test: test.optsSchema }),
@@ -72,6 +74,8 @@ export async function executeCommand(command: Command) {
 		await dev.execute(command.dev);
 	} else if ("format" in command) {
 		await format.execute(command.format);
+	} else if ("genOpenApi" in command) {
+		await genOpenApi.execute(command.genOpenApi);
 	} else if ("init" in command) {
 		await init.execute(command.init);
 	} else if ("configManifestPath" in command) {
