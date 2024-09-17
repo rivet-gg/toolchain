@@ -7,16 +7,9 @@ use uuid::Uuid;
 
 use crate::paths;
 
-/// Configuration stored globally on the file system.
-#[derive(Default, Serialize, Deserialize)]
-pub struct Meta {
-	/// Store project meta by the absolute path to the project.
-	pub projects: HashMap<PathBuf, ProjectMeta>,
-}
-
 /// Config stored in {data_dir}/meta.json. Used to store persistent data, such as tokens & cache.
 #[derive(Serialize, Deserialize)]
-pub struct ProjectMeta {
+pub struct Meta {
 	pub cluster: Cluster,
 	pub tokens: Tokens,
 	pub environments: HashMap<Uuid, Environment>,
@@ -36,9 +29,9 @@ pub struct ProjectMeta {
 	pub editor_port: Option<u16>,
 }
 
-impl ProjectMeta {
+impl Meta {
 	fn new(api_endpoint: String, cloud_token: String) -> Self {
-		ProjectMeta {
+		Meta {
 			cluster: Cluster { api_endpoint },
 			tokens: Tokens { cloud: cloud_token },
 			environments: HashMap::new(),
@@ -81,132 +74,107 @@ pub struct ProcessState {
 }
 
 lazy_static! {
-	static ref GLOBAL_META: Mutex<HashMap<PathBuf, Meta>> = Mutex::new(HashMap::new());
+	/// List of all meta paths cached in memory.
+	///
+	/// We can't assume the toolchain will only load one meta, so we need to support multiple
+	/// metas.
+	static ref META: Mutex<HashMap<PathBuf, Meta>> = Mutex::new(HashMap::new());
 
 	/// Lock on writing to the file.
 	static ref META_FILE_LOCK: Mutex<()> = Mutex::new(());
 }
 
-/// Gets the global config instance.
-///
-/// Use `read` to read properties from the config.
-async fn get_or_init<F, T>(base_data_dir: &PathBuf, cb: F) -> Result<T>
-where
-	F: FnOnce(&mut Meta) -> Result<T>,
-{
-	let mut global_meta = GLOBAL_META.lock().await;
-
-	if !global_meta.contains_key(base_data_dir) {
-		let path = paths::meta_config_file(base_data_dir)?;
-
-		let mut config = match fs::read_to_string(&path).await {
-			Result::Ok(config) => serde_json::from_str(&config)
-				.context(format!("deserialize meta ({})", path.display()))?,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
-			Err(err) => return Err(err.into()),
-		};
-
-		let result = cb(&mut config)?;
-		global_meta.insert(base_data_dir.clone(), config);
-		Ok(result)
-	} else {
-		let meta = global_meta
-			.get_mut(base_data_dir)
-			.context("global_meta[base_data_dir]")?;
-		cb(meta)
-	}
-}
-
 /// Writes the config to the file system.
 ///
 /// Use `mutate` to make changes to the config publicly.
-async fn write(base_data_dir: &PathBuf) -> Result<()> {
-	let json_str = get_or_init(base_data_dir, |meta| {
-		serde_json::to_string(meta).map_err(Into::into)
-	})
-	.await?;
+async fn write(base_data_dir: &PathBuf, meta: &Meta) -> Result<()> {
+	// Serialize meta
+	let json_str = serde_json::to_string(meta)?;
 
-	{
-		let _write_guard = META_FILE_LOCK.lock().await;
-		fs::create_dir_all(paths::user_config_dir(base_data_dir)?).await?;
-		fs::write(paths::meta_config_file(base_data_dir)?, json_str).await?;
+	// Write file
+	let _write_guard = META_FILE_LOCK.lock().await;
+	let path = paths::meta_config_file(base_data_dir)?;
+	if let Some(parent) = path.parent() {
+		fs::create_dir_all(parent).await?;
 	}
+	fs::write(path, json_str).await?;
 
 	Ok(())
-}
-
-/// Reads from the global config.
-pub async fn try_read_global<F: FnOnce(&Meta) -> Result<T>, T>(
-	base_data_dir: &PathBuf,
-	cb: F,
-) -> Result<T> {
-	get_or_init(base_data_dir, |meta| cb(&*meta)).await
 }
 
 /// Reads from the project meta.
 ///
 /// If project meta does not exist, returns the default value.
-pub async fn try_read_project<F: FnOnce(&ProjectMeta) -> Result<T>, T>(
+pub async fn try_read_project<F: FnOnce(&Meta) -> Result<T>, T>(
 	base_data_dir: &PathBuf,
 	cb: F,
 ) -> Result<T> {
-	let project_root = paths::project_root()?;
-	try_read_global(base_data_dir, |config| {
-		if let Some(project_config) = config.projects.get(&project_root) {
-			cb(project_config)
-		} else {
-			bail!("project not initiated")
-		}
-	})
-	.await
+	let meta_path = paths::meta_config_file(base_data_dir)?;
+	let mut global_meta = META.lock().await;
+	if !global_meta.contains_key(&meta_path) {
+		let mut meta = match fs::read_to_string(&meta_path).await {
+			Result::Ok(config) => serde_json::from_str::<Meta>(&config)
+				.context(format!("deserialize meta ({})", meta_path.display()))?,
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+				bail!("project not initialized")
+			}
+			Err(err) => return Err(err.into()),
+		};
+
+		let result = cb(&mut meta)?;
+		global_meta.insert(meta_path.clone(), meta);
+
+		Ok(result)
+	} else {
+		let meta = global_meta
+			.get_mut(&meta_path)
+			.context("global_meta[meta_path]")?;
+		cb(meta)
+	}
 }
 
 /// Non-failable version of `try_read_project`.
-pub async fn read_project<F: FnOnce(&ProjectMeta) -> T, T>(
-	base_data_dir: &PathBuf,
-	cb: F,
-) -> Result<T> {
+pub async fn read_project<F: FnOnce(&Meta) -> T, T>(base_data_dir: &PathBuf, cb: F) -> Result<T> {
 	try_read_project(base_data_dir, |x| Ok(cb(x))).await
-}
-
-pub async fn try_mutate_global<F: FnOnce(&mut Meta) -> Result<T>, T>(
-	base_data_dir: &PathBuf,
-	cb: F,
-) -> Result<T> {
-	let res = get_or_init(base_data_dir, |meta| {
-		// Mutate meta
-		let res = cb(&mut *meta)?;
-
-		Result::Ok(res)
-	})
-	.await?;
-
-	// Write new changes
-	write(base_data_dir).await?;
-
-	Ok(res)
 }
 
 /// Mutates the project meta.
 ///
 /// If the project meta does not exist, a default one will be inserted and modified.
-pub async fn try_mutate_project<F: FnOnce(&mut ProjectMeta) -> Result<T>, T>(
+pub async fn try_mutate_project<F: FnOnce(&mut Meta) -> Result<T>, T>(
 	base_data_dir: &PathBuf,
 	cb: F,
 ) -> Result<T> {
-	let project_root = paths::project_root()?;
-	try_mutate_global(base_data_dir, |config| {
-		let project_config = config
-			.projects
-			.get_mut(&project_root)
-			.context("project meta does not exist")?;
-		cb(project_config)
-	})
-	.await
+	// Get project
+	let meta_path = paths::meta_config_file(base_data_dir)?;
+	let mut global_meta = META.lock().await;
+	if !global_meta.contains_key(&meta_path) {
+		let mut meta = match fs::read_to_string(&meta_path).await {
+			Result::Ok(config) => serde_json::from_str::<Meta>(&config)
+				.context(format!("deserialize meta ({})", meta_path.display()))?,
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+				bail!("project not initialized")
+			}
+			Err(err) => return Err(err.into()),
+		};
+
+		let result = cb(&mut meta)?;
+		write(base_data_dir, &meta).await?;
+
+		Ok(result)
+	} else {
+		let meta = global_meta
+			.get_mut(&meta_path)
+			.context("global_meta[meta_path]")?;
+		let result = cb(meta)?;
+		write(base_data_dir, &meta).await?;
+
+		Ok(result)
+	}
 }
 
 /// Non-failable version of `try_mutate_project`.
-pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> T, T>(
+pub async fn mutate_project<F: FnOnce(&mut Meta) -> T, T>(
 	base_data_dir: &PathBuf,
 	cb: F,
 ) -> Result<T> {
@@ -214,11 +182,8 @@ pub async fn mutate_project<F: FnOnce(&mut ProjectMeta) -> T, T>(
 }
 
 pub async fn has_project(base_data_dir: &PathBuf) -> Result<bool> {
-	let project_root = paths::project_root()?;
-	let has_project = try_read_global(base_data_dir, |meta| {
-		Ok(meta.projects.contains_key(&project_root))
-	})
-	.await?;
+	let meta_path = paths::meta_config_file(base_data_dir)?;
+	let has_project = fs::try_exists(&meta_path).await?;
 	Ok(has_project)
 }
 
@@ -227,21 +192,35 @@ pub async fn insert_project(
 	api_endpoint: String,
 	cloud_token: String,
 ) -> Result<()> {
-	let project_root = paths::project_root()?;
-	try_mutate_global(base_data_dir, |meta| {
-		Ok(meta
-			.projects
-			.insert(project_root, ProjectMeta::new(api_endpoint, cloud_token)))
-	})
-	.await?;
+	// Build and serialize
+	let meta = Meta::new(api_endpoint, cloud_token);
+	let json_str = serde_json::to_string(&meta)?;
+
+	// Write meta
+	//
+	// This will replace the existing meta
+	let _write_guard = META_FILE_LOCK.lock().await;
+	let path = paths::meta_config_file(base_data_dir)?;
+	if let Some(parent) = path.parent() {
+		fs::create_dir_all(parent).await?;
+	}
+	fs::write(path, json_str).await?;
+
 	Ok(())
 }
 
 pub async fn delete_project(base_data_dir: &PathBuf) -> Result<()> {
-	let project_root = paths::project_root()?;
-	try_mutate_global(base_data_dir, |x| {
-		x.projects.remove(&project_root);
-		Ok(())
-	})
-	.await
+	let path = paths::meta_config_file(base_data_dir)?;
+
+	// Lock all resources
+	let mut global_meta = META.lock().await;
+	let _write_guard = META_FILE_LOCK.lock().await;
+
+	// Delete from cache
+	global_meta.remove(&path);
+
+	// Delete file
+	fs::remove_file(&path).await?;
+
+	Ok(())
 }
