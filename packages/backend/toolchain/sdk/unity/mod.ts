@@ -1,458 +1,207 @@
-import { camelify, pascalify } from "../../../case_conversion/mod.ts";
-import { exists } from "@std/fs";
-import { resolve } from "@std/path";
-import * as glob from "glob";
+// unity/mod.ts
+
+import { pascalify } from "../../../case_conversion/mod.ts";
+import { dirname, resolve } from "@std/path";
 import { GeneratedCodeBuilder, Lang } from "../../build/gen/code_builder.ts";
 import { Project } from "../../project/mod.ts";
-import dedent from "dedent";
+import { autoGenHeader } from "../../build/misc.ts";
 
-// Can be nested, like Foo.Bar
-export const DEFAULT_PACKAGE_NAME = "Backend";
+// C# reserved words
+const RESERVED_WORDS = [
+	"abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class",
+	"const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event",
+	"explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", 
+	"implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", 
+	"null", "object", "operator", "out", "override", "params", "private", "protected", "public", 
+	"readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", 
+	"string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", 
+	"unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
+];
 
-export async function generateUnityAddons(project: Project, sdkGenPath: string) {
-	// Remove unused backend components
-	await Deno.remove(resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Api", "BackendApi.cs"));
-	await Deno.remove(resolve(sdkGenPath, "src", `${DEFAULT_PACKAGE_NAME}.Test`), { recursive: true });
 
-	await modifyApiClient(sdkGenPath);
-	await modifyModels(project, sdkGenPath);
-	await generateApiClient(project, sdkGenPath);
-	await generateModuleApiClients(project, sdkGenPath);
+export async function generateUnity(project: Project, sdkGenPath: string) {
+  await generateBackendAndModules(project, sdkGenPath);
 }
 
-async function modifyApiClient(sdkGenPath: string) {
-	const path = resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Client", "ApiClient.cs");
+export async function generateBackendAndModules(project: Project, sdkGenPath: string) {
+  const apiBuilder = new GeneratedCodeBuilder(resolve(sdkGenPath, "Rivet.cs"), 2, Lang.CSharp);
 
-	const content = await Deno.readTextFile(path);
-	const fixedContent = content
-		.replace("using UnityEngine;", "using UnityEngine;\nusing Newtonsoft.Json.Linq;")
-		.replace(
-			"throw new ApiException((int)request.responseCode, request.error, text);",
-			dedent`
-        var jsonBody = JObject.Parse(text);
-        throw new ApiException((int)request.responseCode, request.error + " (" + jsonBody["message"] + ")", jsonBody);
-      `,
-		)
-		// HACK: Allow creating requests from background threads by running request
-		// constructor on main thread.
-		.replace(
-			/request = UnityWebRequest\.(\w+)\(uri, jsonData\);/g,
-			// TODO: Run FromCurrentSynchronizationContext once
-			dedent`
-        await Task.Factory.StartNew(() =>
+  apiBuilder.append`
+    using System;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
+
+    namespace Rivet
+    {
+      public class RivetSingleton
+      {
+        // API for interacting with modules.
+
+        // Client used to connect to the backend.
+        public Client Client { get; private set; }
+
+        // Configuration for how to connect to the backend.
+        public Configuration Configuration { get; private set; }
+
+        public RivetSingleton()
         {
-          request = UnityWebRequest.$1(uri, jsonData);
-        }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
-      `,
-		)
-		// HACK: Make `NewRequest` async so we can create the Unity request on the main thread.
-		.replace("private UnityWebRequest NewRequest<T>", "private async Task<UnityWebRequest> NewRequest<T>")
-		.replace(/public Task<ApiResponse<T>> (\w+Async)/g, "public async Task<ApiResponse<T>> $1")
-		.replace(
-			/var config = configuration \?\? GlobalConfiguration\.Instance;\s*return ExecAsync<T>\(NewRequest<T>\("(\w+)", path, options, config\), path, options, config, cancellationToken\);/gs,
-			dedent`
-        var config = configuration ?? GlobalConfiguration.Instance;
-        var request = await NewRequest<T>("$1", path, options, config);
-        return await ExecAsync<T>(request, path, options, config, cancellationToken);
-      `,
-		);
+          this.Configuration = new Configuration();
+          this.Client = new Client(this.Configuration);
+          this.InitModules();
+        }
+  `;
 
-	// Write new runtime
-	await Deno.writeTextFile(path, fixedContent);
+  const modulesCode = apiBuilder.chunk;
+
+  for (const mod of project.modules.values()) {
+    const moduleNamePascal = pascalify(mod.name);
+    const className = `Rivet${moduleNamePascal}`;
+
+    // Create module API class
+    const moduleApiBuilder = new GeneratedCodeBuilder(
+      resolve(sdkGenPath, "Modules", `${moduleNamePascal}.cs`),
+      2,
+      Lang.CSharp,
+    );
+
+    // Add module documentation
+    let moduleDocs = "";
+    if (mod.config.name) {
+      moduleDocs += `/// <summary>\n    /// ${mod.config.name}`;
+      if (mod.config.description) {
+        moduleDocs += `\n    /// ${mod.config.description}`;
+      }
+      moduleDocs += "\n    /// </summary>";
+    } else {
+      moduleDocs += `/// <summary>\n    /// ${moduleNamePascal}\n    /// </summary>`;
+    }
+
+    moduleApiBuilder.append`
+      using System;
+      using System.Collections.Generic;
+      using Newtonsoft.Json;
+
+      namespace Rivet.Modules.${moduleNamePascal}
+      {
+        ${moduleDocs}
+        public class ${className}
+        {
+          private Client _client;
+
+          public ${className}(Client client)
+          {
+            this._client = client;
+          }
+    `;
+
+    // Generate methods for each script
+    const scriptsCode = moduleApiBuilder.chunk;
+    const scriptNames = Array.from(mod.scripts.keys());
+    const escapedScriptNames = escapeReservedWords(scriptNames);
+
+    for (const [i, scriptName] of scriptNames.entries()) {
+      const escapedScriptName = escapedScriptNames[i];
+      const script = mod.scripts.get(scriptName)!;
+
+      if (!script.config.public) continue;
+
+      const path = `/modules/${mod.name}/scripts/${script.name}/call`;
+
+      // Add script documentation
+      let scriptDocs = "";
+      if (script.config.name) {
+        scriptDocs += `/// <summary>\n        /// ${script.config.name}`;
+        if (script.config.description) {
+          scriptDocs += `\n        /// ${script.config.description}`;
+        }
+        scriptDocs += "\n        /// </summary>";
+      } else {
+        scriptDocs += `/// <summary>\n        /// ${scriptName}\n        /// </summary>`;
+      }
+
+      scriptsCode.append`
+        ${scriptDocs}
+        public Request ${escapedScriptName}(Dictionary<string, object> body = null)
+        {
+          return this._client.BuildRequest("POST", "${path}", body);
+        }
+      `;
+    }
+
+    moduleApiBuilder.append`
+        }
+      }
+    `;
+
+    await moduleApiBuilder.write();
+
+    // Add module to main API class
+    modulesCode.append`
+      public ${className} ${moduleNamePascal} { get; private set; }
+    `;
+  }
+
+  // Initialize modules in the constructor
+  modulesCode.append`
+      private void InitModules()
+      {
+  `;
+
+  for (const mod of project.modules.values()) {
+    const moduleNamePascal = pascalify(mod.name);
+    const className = `Rivet${moduleNamePascal}`;
+    modulesCode.append`
+        this.${moduleNamePascal} = new ${className}(this.Client);
+    `;
+  }
+
+  modulesCode.append`
+      }
+  `;
+
+  // Close the RivetSingleton class and namespace
+  apiBuilder.append`
+      }
+    }
+  `;
+
+  await apiBuilder.write();
 }
 
-// Move module name from type name into namespace
-async function modifyModels(project: Project, sdkGenPath: string) {
-	for (const mod of project.modules.values()) {
-		// TODO: This will cause problems if one module name is a superset of
-		// another OR if a script name start with the end of another module name
+function escapeReservedWords(wordsList: string[]) {
+  const escaped = [];
+  const usedNames = new Set();
 
-		const moduleNamePascal = pascalify(mod.name);
+  for (let [i, word] of wordsList.entries()) {
+    while (RESERVED_WORDS.includes(word) || usedNames.has(word)) {
+      word = "_" + word;
+    }
 
-		const files = await glob.glob([`${moduleNamePascal}*.cs`], {
-			cwd: resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Model"),
-			ignore: "AbstractOpenAPISchema.cs",
-			nodir: true,
-		});
+    usedNames.add(word);
+    escaped[i] = word;
+  }
 
-		for (const file of files) {
-			const path = resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Model", file);
-
-			const content = await Deno.readTextFile(path);
-			const fixedContent = content
-				.replace(`${DEFAULT_PACKAGE_NAME}.Model\n`, `${DEFAULT_PACKAGE_NAME}.Model.${moduleNamePascal}\n`)
-				// Fix incorrectly generated class extensions
-				.replace(/partial class (\w+) : AbstractOpenAPISchema,\s*/gm, "partial class $1 : AbstractOpenAPISchema")
-				.replaceAll(new RegExp(`\\b${moduleNamePascal}(\\w+)`, "g"), "$1");
-
-			await Deno.writeTextFile(path, fixedContent);
-		}
-	}
+  return escaped;
 }
 
-async function generateApiClient(project: Project, sdkGenPath: string) {
-	// Update index to only export our custom api
-	const apiBuilder = new GeneratedCodeBuilder(
-		resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Client.cs"),
-		2,
-		Lang.CSharp,
-	);
-
-	const modules = apiBuilder.chunk;
-
-	for (const mod of project.modules.values()) {
-		const moduleNamePascal = pascalify(mod.name);
-		const apiName = `${moduleNamePascal}Api`;
-
-		modules.append`
-			private Modules.${apiName} _${mod.name};
-			public Modules.${apiName} ${moduleNamePascal} => _${mod.name} ??= new Modules.${apiName}(this.AsynchronousClient, this.Configuration);
-		`;
-	}
-
-	GeneratedCodeBuilder.wrap(
-		apiClassTemplate(DEFAULT_PACKAGE_NAME, "BackendClient"),
-		modules,
-		`
-			}
-		}
-		`,
-	);
-
-	await apiBuilder.write();
-}
-
-async function generateModuleApiClients(project: Project, sdkGenPath: string) {
-	// Create dir for module apis
-	try {
-		await Deno.mkdir(resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Api", "Modules"));
-	} catch (e) {
-		if (!(e instanceof Deno.errors.AlreadyExists)) {
-			throw e;
-		}
-	}
-
-	for (const mod of project.modules.values()) {
-		const moduleNamePascal = pascalify(mod.name);
-
-		// Create module api class
-		const moduleApiBuilder = new GeneratedCodeBuilder(
-			resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Modules", `${moduleNamePascal}.cs`),
-			2,
-			Lang.CSharp,
-		);
-
-		const scripts = moduleApiBuilder.chunk;
-
-		for (const script of mod.scripts.values()) {
-			const scriptNamePascal = pascalify(script.name);
-			const path = `/modules/${mod.name}/scripts/${script.name}/call`;
-
-			const requestName = `${moduleNamePascal}${scriptNamePascal}Request`;
-			const responseName = `${moduleNamePascal}${scriptNamePascal}Response`;
-			const nsRequestName = `${DEFAULT_PACKAGE_NAME}.Model.${moduleNamePascal}.${scriptNamePascal}Request`;
-			const nsResponseName = `${DEFAULT_PACKAGE_NAME}.Model.${moduleNamePascal}.${scriptNamePascal}Response`;
-
-			// Generate missing free-form objects
-			if (!await exists(resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Model", `${requestName}.cs`))) {
-				await generateFreeFormInterface(
-					moduleNamePascal,
-					`${scriptNamePascal}Request`,
-					`${mod.name}__${script.name}__Request`,
-					resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Model", `${requestName}.cs`),
-				);
-			}
-			if (!await exists(resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Model", `${responseName}.cs`))) {
-				await generateFreeFormInterface(
-					moduleNamePascal,
-					`${scriptNamePascal}Response`,
-					`${mod.name}__${script.name}__Response`,
-					resolve(sdkGenPath, "src", DEFAULT_PACKAGE_NAME, "Model", `${responseName}.cs`),
-				);
-			}
-
-			scripts.append`
-				/// <summary>
-				///  Call ${mod.name}.${script.name} script.
-				/// </summary>
-				/// <exception cref="${DEFAULT_PACKAGE_NAME}.Client.ApiException">Thrown when fails to make API call</exception>
-				/// <param name="body"> (optional)</param>
-				/// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-				/// <returns>Task of ${nsResponseName}</returns>
-				public async System.Threading.Tasks.Task<${nsResponseName}> ${scriptNamePascal}(${nsRequestName} ${
-				camelify(requestName)
-			} = default(${nsRequestName}), System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-				{
-					var task = ${scriptNamePascal}WithHttpInfo(${camelify(requestName)}, cancellationToken);
-		#if UNITY_EDITOR || !UNITY_WEBGL
-					${DEFAULT_PACKAGE_NAME}.Client.ApiResponse<${nsResponseName}> localVarResponse = await task.ConfigureAwait(false);
-		#else
-					${DEFAULT_PACKAGE_NAME}.Client.ApiResponse<${nsResponseName}> localVarResponse = await task;
-		#endif
-					return localVarResponse.Data;
-				}
-
-				/// <summary>
-				///  Call ${mod.name}.${script.name} script.
-				/// </summary>
-				/// <exception cref="${DEFAULT_PACKAGE_NAME}.Client.ApiException">Thrown when fails to make API call</exception>
-				/// <param name="body"> (optional)</param>
-				/// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-				/// <returns>Task of ApiResponse (${nsResponseName})</returns>
-				public async System.Threading.Tasks.Task<${DEFAULT_PACKAGE_NAME}.Client.ApiResponse<${nsResponseName}>> ${scriptNamePascal}WithHttpInfo(${nsRequestName} ${
-				camelify(requestName)
-			} = default(${nsRequestName}), System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-				{
-
-					${DEFAULT_PACKAGE_NAME}.Client.RequestOptions localVarRequestOptions = new ${DEFAULT_PACKAGE_NAME}.Client.RequestOptions();
-
-					string[] _contentTypes = new string[] {
-						"application/json"
-					};
-
-					// to determine the Accept header
-					string[] _accepts = new string[] {
-						"application/json"
-					};
-
-
-					var localVarContentType = ${DEFAULT_PACKAGE_NAME}.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-					if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-
-					var localVarAccept = ${DEFAULT_PACKAGE_NAME}.Client.ClientUtils.SelectHeaderAccept(_accepts);
-					if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-
-					localVarRequestOptions.Data = ${camelify(requestName)};
-
-
-					// make the HTTP request
-
-					var task = this.AsynchronousClient.PostAsync<${nsResponseName}>("${path}", localVarRequestOptions, this.Configuration, cancellationToken);
-
-		#if UNITY_EDITOR || !UNITY_WEBGL
-					var localVarResponse = await task.ConfigureAwait(false);
-		#else
-					var localVarResponse = await task;
-		#endif
-
-					if (this.ExceptionFactory != null)
-					{
-						Exception _exception = this.ExceptionFactory("${scriptNamePascal}", localVarResponse);
-						if (_exception != null) throw _exception;
-					}
-
-					return localVarResponse;
-				}
-			`;
-		}
-
-		GeneratedCodeBuilder.wrap(
-			apiClassTemplate(`${DEFAULT_PACKAGE_NAME}.Modules`, `${moduleNamePascal}Api`),
-			scripts,
-			`
-				}
-			}
-			`,
-		);
-
-		await moduleApiBuilder.write();
-	}
-}
-
-async function generateFreeFormInterface(moduleName: string, interfaceName: string, dataName: string, path: string) {
-	const schemaBuilder = new GeneratedCodeBuilder(path, 2, Lang.CSharp);
-
-	schemaBuilder.appendRaw(`
-		using System;
-		using System.Collections;
-		using System.Collections.Generic;
-		using System.Collections.ObjectModel;
-		using System.Linq;
-		using System.IO;
-		using System.Runtime.Serialization;
-		using System.Text;
-		using System.Text.RegularExpressions;
-		using Newtonsoft.Json;
-		using Newtonsoft.Json.Converters;
-		using Newtonsoft.Json.Linq;
-		using OpenAPIDateConverter = ${DEFAULT_PACKAGE_NAME}.Client.OpenAPIDateConverter;
-
-		namespace ${DEFAULT_PACKAGE_NAME}.Model.${moduleName}
-		{
-			/// <summary>
-			/// ${interfaceName}
-			/// </summary>
-			[DataContract(Name = "${dataName}")]
-			public partial class ${interfaceName}
-			{
-				/// <summary>
-				/// Initializes a new instance of the <see cref="${interfaceName}" /> class.
-				/// </summary>
-				[JsonConstructorAttribute]
-				public ${interfaceName}() { }
-
-				/// <summary>
-				/// Returns the string presentation of the object
-				/// </summary>
-				/// <returns>String presentation of the object</returns>
-				public override string ToString()
-				{
-					StringBuilder sb = new StringBuilder();
-					sb.Append("class ${interfaceName} {\\n");
-					sb.Append("}\\n");
-					return sb.ToString();
-				}
-
-				/// <summary>
-				/// Returns the JSON string presentation of the object
-				/// </summary>
-				/// <returns>JSON string presentation of the object</returns>
-				public virtual string ToJson()
-				{
-					return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
-				}
-
-			}
-		}
-	`);
-
-	await schemaBuilder.write();
-}
-
-function apiClassTemplate(namespace: string, name: string) {
-	return dedent`
-		using System;
-		using System.Collections.Generic;
-		using System.Collections.ObjectModel;
-		using System.Linq;
-		using System.Net;
-		using System.Net.Mime;
-		using ${DEFAULT_PACKAGE_NAME}.Client;
-		using ${DEFAULT_PACKAGE_NAME}.Model;
-
-		namespace ${namespace}
-		{
-			/// <summary>
-			/// Represents a collection of functions to interact with the API endpoints
-			/// </summary>
-			public partial class ${name} : IDisposable
-			{
-				/// <summary>
-				/// Initializes a new instance of the <see cref="${name}"/> class.
-				/// **IMPORTANT** This will also create an instance of HttpClient, which is less than ideal.
-				/// It's better to reuse the <see href="https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#issues-with-the-original-httpclient-class-available-in-net">HttpClient and HttpClientHandler</see>.
-				/// </summary>
-				/// <returns></returns>
-				public ${name}() : this((string)null)
-				{
-				}
-
-				/// <summary>
-				/// Initializes a new instance of the <see cref="${name}"/> class.
-				/// **IMPORTANT** This will also create an instance of HttpClient, which is less than ideal.
-				/// It's better to reuse the <see href="https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#issues-with-the-original-httpclient-class-available-in-net">HttpClient and HttpClientHandler</see>.
-				/// </summary>
-				/// <param name="basePath">The target service's base path in URL format.</param>
-				/// <exception cref="ArgumentException"></exception>
-				/// <returns></returns>
-				public ${name}(string basePath)
-				{
-					this.Configuration = ${DEFAULT_PACKAGE_NAME}.Client.Configuration.MergeConfigurations(
-						${DEFAULT_PACKAGE_NAME}.Client.GlobalConfiguration.Instance,
-						new ${DEFAULT_PACKAGE_NAME}.Client.Configuration { BasePath = basePath }
-					);
-					this.ApiClient = new ${DEFAULT_PACKAGE_NAME}.Client.ApiClient(this.Configuration.BasePath);
-					this.AsynchronousClient = this.ApiClient;
-					this.ExceptionFactory = ${DEFAULT_PACKAGE_NAME}.Client.Configuration.DefaultExceptionFactory;
-				}
-
-				/// <summary>
-				/// Initializes a new instance of the <see cref="${name}"/> class using Configuration object.
-				/// **IMPORTANT** This will also create an instance of HttpClient, which is less than ideal.
-				/// It's better to reuse the <see href="https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests#issues-with-the-original-httpclient-class-available-in-net">HttpClient and HttpClientHandler</see>.
-				/// </summary>
-				/// <param name="configuration">An instance of Configuration.</param>
-				/// <exception cref="ArgumentNullException"></exception>
-				/// <returns></returns>
-				public ${name}(${DEFAULT_PACKAGE_NAME}.Client.Configuration configuration)
-				{
-					if (configuration == null) throw new ArgumentNullException("configuration");
-
-					this.Configuration = ${DEFAULT_PACKAGE_NAME}.Client.Configuration.MergeConfigurations(
-						${DEFAULT_PACKAGE_NAME}.Client.GlobalConfiguration.Instance,
-						configuration
-					);
-					this.ApiClient = new ${DEFAULT_PACKAGE_NAME}.Client.ApiClient(this.Configuration.BasePath);
-					this.AsynchronousClient = this.ApiClient;
-					ExceptionFactory = ${DEFAULT_PACKAGE_NAME}.Client.Configuration.DefaultExceptionFactory;
-				}
-
-				/// <summary>
-				/// Initializes a new instance of the <see cref="${name}"/> class
-				/// using a Configuration object and client instance.
-				/// </summary>
-				/// <param name="asyncClient">The client interface for asynchronous API access.</param>
-				/// <param name="configuration">The configuration object.</param>
-				/// <exception cref="ArgumentNullException"></exception>
-				public ${name}(${DEFAULT_PACKAGE_NAME}.Client.IAsynchronousClient asyncClient, ${DEFAULT_PACKAGE_NAME}.Client.IReadableConfiguration configuration)
-				{
-					if (asyncClient == null) throw new ArgumentNullException("asyncClient");
-					if (configuration == null) throw new ArgumentNullException("configuration");
-
-					this.AsynchronousClient = asyncClient;
-					this.Configuration = configuration;
-					this.ExceptionFactory = ${DEFAULT_PACKAGE_NAME}.Client.Configuration.DefaultExceptionFactory;
-				}
-
-				/// <summary>
-				/// Disposes resources if they were created by us
-				/// </summary>
-				public void Dispose()
-				{
-					this.ApiClient?.Dispose();
-				}
-
-				/// <summary>
-				/// Holds the ApiClient if created
-				/// </summary>
-				public ${DEFAULT_PACKAGE_NAME}.Client.ApiClient ApiClient { get; set; } = null;
-
-				/// <summary>
-				/// The client for accessing this underlying API asynchronously.
-				/// </summary>
-				public ${DEFAULT_PACKAGE_NAME}.Client.IAsynchronousClient AsynchronousClient { get; set; }
-
-				/// <summary>
-				/// Gets the base path of the API client.
-				/// </summary>
-				/// <value>The base path</value>
-				public string GetBasePath()
-				{
-					return this.Configuration.BasePath;
-				}
-
-				/// <summary>
-				/// Gets or sets the configuration object
-				/// </summary>
-				/// <value>An instance of the Configuration</value>
-				public ${DEFAULT_PACKAGE_NAME}.Client.IReadableConfiguration Configuration { get; set; }
-
-				private ${DEFAULT_PACKAGE_NAME}.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
-
-				/// <summary>
-				/// Provides a factory method hook for the creation of exceptions.
-				/// </summary>
-				public ${DEFAULT_PACKAGE_NAME}.Client.ExceptionFactory ExceptionFactory
-				{
-					get
-					{
-						if (_exceptionFactory != null && _exceptionFactory.GetInvocationList().Length > 1)
-						{
-							throw new InvalidOperationException("Multicast delegate for ExceptionFactory is unsupported.");
-						}
-						return _exceptionFactory;
-					}
-					set { _exceptionFactory = value; }
-				}
-	`;
-}
+// // Assuming you have a function to get the schema definitions
+// function generateCSharpClassFromSchema(schemaName: string, schema: any): string {
+// 	let classCode = `public class ${schemaName}\n{\n`;
+// 	for (const [propName, propType] of Object.entries(schema.properties)) {
+// 	  // Map Zod types to C# types
+// 	  const csharpType = mapZodTypeToCSharp(propType);
+// 	  classCode += `    [JsonProperty("${propName}")]\n`;
+// 	  classCode += `    public ${csharpType} ${pascalify(propName)} { get; set; }\n\n`;
+// 	}
+// 	classCode += `}\n`;
+// 	return classCode;
+//   }
+//   
+//   function mapZodTypeToCSharp(zodType: any): string {
+// 	// Implement type mapping from Zod types to C# types
+// 	// For example:
+// 	if (zodType === 'string') return 'string';
+// 	if (zodType === 'number') return 'int'; // Adjust based on actual type
+// 	// Add other type mappings
+// 	return 'object'; // Default to object
+//   }
