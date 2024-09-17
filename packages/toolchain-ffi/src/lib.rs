@@ -26,7 +26,7 @@ lazy_static::lazy_static! {
 type EventCallback = extern "C" fn(TaskId, *const c_char);
 
 #[no_mangle]
-pub extern "C" fn run_task(
+pub extern "C" fn rivet_run_task(
 	name: *const c_char,
 	input_json: *const c_char,
 	callback: EventCallback,
@@ -99,7 +99,7 @@ pub extern "C" fn run_task(
 }
 
 #[no_mangle]
-pub extern "C" fn abort_task(task_id: TaskId) -> bool {
+pub extern "C" fn rivet_abort_task(task_id: TaskId) -> bool {
 	if let Some(handle) = TASK_HANDLES.lock().unwrap().remove(&task_id) {
 		runtime::spawn(async move {
 			let _ = handle.abort_tx.send(()).await;
@@ -112,12 +112,12 @@ pub extern "C" fn abort_task(task_id: TaskId) -> bool {
 }
 
 #[no_mangle]
-pub extern "C" fn shutdown() {
+pub extern "C" fn rivet_shutdown() {
 	runtime::shutdown();
 }
 
 #[no_mangle]
-pub extern "C" fn free_rust_string(s: *mut c_char) {
+pub extern "C" fn rivet_free_rust_string(s: *mut c_char) {
 	unsafe {
 		if s.is_null() {
 			return;
