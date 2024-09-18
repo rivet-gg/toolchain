@@ -1,3 +1,9 @@
+# Override global lf config
+#
+# This is important in order to ensure artifacts are encoded in a consistent
+# manner
+* text=auto eol=lf
+
 # Prevent from counting in the language statistics
 # 
 # https://github.com/github-linguist/linguist/blob/559a6426942abcae16b6d6b328147476432bf6cb/docs/overrides.md#vendored-code
