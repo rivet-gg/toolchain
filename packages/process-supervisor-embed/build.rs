@@ -1,7 +1,7 @@
 use sha2::{Digest, Sha256};
 use std::{env, fs::File, io::Read, path::PathBuf, process::Command};
 
-const NIGHTLY_VERSION: &str = "nightly-2024-09-06";
+const NIGHTLY_VERSION: &str = "nightly-2024-09-17";
 
 fn main() {
 	let target = env::var("OVERRIDE_TARGET").unwrap_or_else(|_| env::var("TARGET").unwrap());
