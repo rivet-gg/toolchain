@@ -32,19 +32,19 @@ export async function execute(opts: Opts) {
 	if (opts.runtime == Runtime.CloudflareWorkersPlatforms) {
 		if (opts.outputFormat != Format.Bundled) {
 			throw new Error(
-				`\`format\` must be "bundled" if \`runtime\` is "cloudflare-workers-platforms".`,
+				`\`format\` must be "${Format.Bundled}" if \`runtime\` is "${Runtime.CloudflareWorkersPlatforms}".`,
 			);
 		}
 		if (opts.dbDriver != DbDriver.NeonServerless && opts.dbDriver != DbDriver.CloudflareHyperdrive) {
 			throw new Error(
-				`\`db-driver\` must be "neon-serverless" or "cloudflare-hyperdrive" if \`runtime\` is "cloudflare-workers-platforms".`,
+				`\`db-driver\` must be "${DbDriver.NeonServerless}" or "${DbDriver.CloudflareHyperdrive}" if \`runtime\` is "${Runtime.CloudflareWorkersPlatforms}".`,
 			);
 		}
 	}
 	if (opts.runtime == Runtime.Deno) {
 		if (opts.outputFormat != Format.Native) {
 			throw new Error(
-				`\`format\` must be "native" if \`runtime\` is "deno".`,
+				`\`format\` must be "${Format.Native}" if \`runtime\` is "${Runtime.Deno}".`,
 			);
 		}
 	}
