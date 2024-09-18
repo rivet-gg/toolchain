@@ -24,24 +24,10 @@ export class CommandError extends InternalError {
 	}
 }
 
-export class CreateDatabaseError extends InternalError {
-	constructor(opts?: InternalErrorOpts) {
-		super("An error occurred while creating the database.", opts);
-		this.name = "CreateDatabaseError";
-	}
-}
-
 export class DatabaseError extends InternalError {
 	constructor(opts?: InternalErrorOpts) {
-		super("A general database error occurred.", opts);
+		super(`A general database error occurred: ${opts?.originalError ?? "?"}`, opts);
 		this.name = "DatabaseError";
-	}
-}
-
-export class DatabaseExistsError extends InternalError {
-	constructor(opts?: InternalErrorOpts) {
-		super("The database already exists.", opts);
-		this.name = "DatabaseExistsError";
 	}
 }
 
@@ -63,13 +49,6 @@ export class DatabaseStopError extends InternalError {
 	constructor(opts?: InternalErrorOpts) {
 		super("An error occurred while stopping the database.", opts);
 		this.name = "DatabaseStopError";
-	}
-}
-
-export class DropDatabaseError extends InternalError {
-	constructor(opts?: InternalErrorOpts) {
-		super("An error occurred while dropping the database.", opts);
-		this.name = "DropDatabaseError";
 	}
 }
 
