@@ -7,6 +7,7 @@ edition = "2021"
 name = "rivet-process-runner"
 
 [dependencies]
+ctrlc = { version = "3.4.5", features = ["termination"] }
 lazy_static = "1.5.0"
 rivet-process-runner-shared = { path = "../process-runner-shared" }
 signal-hook = { version = "0.3.17", features = ["iterator"], default-features = false }

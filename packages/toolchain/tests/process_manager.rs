@@ -1,16 +1,10 @@
+use std::time::Duration;
+
 use anyhow::*;
-use rivet_process_runner_shared as shared;
 use rivet_toolchain::util::{
 	process_manager::*,
 	task::{TaskCtx, TaskCtxInner, TaskEvent},
 };
-use serde::{Deserialize, Serialize};
-use std::{
-	future::Future,
-	process::{Command, Stdio},
-	time::{Duration, Instant},
-};
-use tokio::fs::File;
 use tokio::{
 	sync::{broadcast, mpsc},
 	time::sleep,
@@ -43,6 +37,13 @@ fn create_task_ctx() -> (TaskCtx, mpsc::UnboundedReceiver<TaskEvent>) {
 	(task, log_rx)
 }
 
+fn build_deno_cmd(script: &str) -> (String, Vec<String>) {
+	(
+		"deno".to_string(),
+		vec!["eval".to_string(), "--quiet".to_string(), script.to_string()]
+	)
+}
+
 #[tokio::test(flavor = "multi_thread")]
 async fn test_process_manager_lifecycle() -> Result<()> {
 	let (process_manager, temp_dir) = setup_test_environment().await?;
@@ -51,40 +52,17 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	let (task, mut log_rx) = create_task_ctx();
 
 	// Build command
-	#[cfg(windows)]
-	let (command, args) = (
-		"powershell".to_string(),
-		vec![
-			"-NoProfile".to_string(),
-			"-Command".to_string(),
-			r#"
-                $env:ENV_VAR
-                Write-Host 'Hello from stdout'
-                Write-Error 'Error message'
-                Start-Sleep -Seconds 2
-                Write-Host 'Exiting now'
-                exit 42
-            "#
-			.to_string(),
-		],
-	);
+	let script = r#"
+        console.log(`ENV_VAR: ${Deno.env.get("ENV_VAR")}`);
+        console.log("stdout test");
+        console.error("stderr test");
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log("exiting now");
+        Deno.exit(42);
+    "#;
 
-	#[cfg(not(windows))]
-	let (command, args) = (
-		"sh".to_string(),
-		vec![
-			"-c".to_string(),
-			r#"
-                echo "ENV_VAR: $ENV_VAR"
-                echo 'Hello from stdout'
-                echo 'Error message' >&2
-                sleep 2
-                echo 'Exiting now'
-                exit 42
-            "#
-			.to_string(),
-		],
-	);
+	let (command, args) = build_deno_cmd(script);
+
 	let envs = vec![("ENV_VAR".to_string(), "test_value".to_string())];
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -120,10 +98,10 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	while let Some(event) = log_rx.recv().await {
 		match event {
 			TaskEvent::Log(log) => {
-				if log.contains("[stdout]") {
-					stdout_logs.push(log);
-				} else if log.contains("[stderr]") {
-					stderr_logs.push(log);
+				if let Some(log) = log.strip_prefix("[stdout] ") {
+					stdout_logs.push(log.to_string());
+				} else if let Some(log) = log.strip_prefix("[stderr] ") {
+					stderr_logs.push(log.to_string());
 				}
 			}
 			TaskEvent::Result { .. } => break,
@@ -141,41 +119,24 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	assert_eq!(exit_code, Some(42));
 
 	// Verify logs
-	#[cfg(windows)]
-	{
-		assert!(stdout_logs.iter().any(|log| log.contains("test_value")));
-	}
-	#[cfg(not(windows))]
-	{
-		assert!(stdout_logs
-			.iter()
-			.any(|log| log.contains("ENV_VAR: test_value")));
-	}
-	assert!(stdout_logs
-		.iter()
-		.any(|log| log.contains("Hello from stdout")));
-	assert!(stdout_logs.iter().any(|log| log.contains("Exiting now")));
-	assert!(stderr_logs.iter().any(|log| log.contains("Error message")));
+	assert_eq!(stdout_logs, vec![
+		"ENV_VAR: test_value",
+		"stdout test",
+		"exiting now",
+	]);
+	assert_eq!(stderr_logs, vec![
+		"stderr test",
+	]);
 
 	// Restart the process
-	#[cfg(windows)]
-	let (command, args) = (
-		"powershell".to_string(),
-		vec![
-			"-NoProfile".to_string(),
-			"-Command".to_string(),
-			"Write-Host 'Restarted process'; Start-Sleep -Seconds 2; exit 0".to_string(),
-		],
-	);
+	let script = r#"
+        console.log("Restarted process");
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        Deno.exit(0);
+    "#;
 
-	#[cfg(not(windows))]
-	let (command, args) = (
-		"sh".to_string(),
-		vec![
-			"-c".to_string(),
-			"echo 'Restarted process'; sleep 2; exit 0".to_string(),
-		],
-	);
+	let (command, args) = build_deno_cmd(script);
+
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -231,39 +192,20 @@ async fn test_process_manager_stop_graceful() -> Result<()> {
 	let (task, _log_rx) = create_task_ctx();
 
 	// Start a long-running process with custom exit code on SIGTERM
-	#[cfg(windows)]
-	let (command, args) = (
-		"powershell".to_string(),
-		vec![
-			"-NoProfile".to_string(),
-			"-Command".to_string(),
-			r#"
-				$script:exitCode = 42
-				$handler = {
-					Write-Host "Exiting with code $script:exitCode"
-					exit $script:exitCode
-				}
-				$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action $handler
-				Write-Host 'Starting long process'
-				while ($true) { Start-Sleep -Seconds 1 }
-			"#
-			.to_string(),
-		],
-	);
+	let script = r#"
+        const signal = Deno.build.os === "windows" ? "SIGBREAK" : "SIGTERM";
+        Deno.addSignalListener(signal, () => {
+            console.log("Exiting with code 42");
+            Deno.exit(42);
+        });
+        console.log("Starting long process");
+        while (true) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    "#;
 
-	#[cfg(not(windows))]
-	let (command, args) = (
-		"sh".to_string(),
-		vec![
-			"-c".to_string(),
-			r#"
-				trap 'echo "Exiting with code 42"; exit 42' TERM
-				echo 'Starting long process'
-				tail -f /dev/null & wait
-			"#
-			.to_string(),
-		],
-	);
+	let (command, args) = build_deno_cmd(script);
+
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -338,39 +280,19 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 	let (task, _log_rx) = create_task_ctx();
 
 	// Start a process that ignores SIGTERM
-	#[cfg(windows)]
-	let (command, args) = (
-		"powershell".to_string(),
-		vec![
-			"-NoProfile".to_string(),
-			"-Command".to_string(),
-			r#"
-				$handler = {
-					Write-Host "Caught term, ignoring"
-				}
-				$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action $handler
-				Write-Host 'Starting process that ignores SIGTERM'
-				while ($true) { Start-Sleep -Seconds 1 }
-			"#
-			.to_string(),
-		],
-	);
+	let script = r#"
+        const signal = Deno.build.os === "windows" ? "SIGBREAK" : "SIGTERM";
+        Deno.addSignalListener(signal, () => {
+            console.log("Caught term, ignoring");
+        });
+        console.log("Starting process that ignores SIGTERM");
+        while (true) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    "#;
 
-	#[cfg(not(windows))]
-	let (command, args) = (
-		"sh".to_string(),
-		vec![
-			"-c".to_string(),
-			r#"
-				trap 'echo "Caught term, ignoring"' TERM
-				echo 'Starting process that ignores SIGTERM'
-				while true; do
-					sleep 1
-				done
-			"#
-			.to_string(),
-		],
-	);
+	let (command, args) = build_deno_cmd(script);
+
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -440,7 +362,8 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 	// Wait for the process to finish and get the exit code
 	let exit_code = handle.await??;
 
-	// Verify exit code (should be None due to SIGKILL)
+	// Verify exit code. This is None on Unix bc SIGKILL terminates immediately.
+	// This is Some(1) on Windows bc TerminateProcess exits with 1.
 	assert_eq!(exit_code, None, "Unexpected exit code");
 
 	Ok(())
