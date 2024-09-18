@@ -20,6 +20,7 @@ async fn setup_test_environment() -> Result<(ProcessManager, tempfile::TempDir)>
 	// Set up a temporary directory for the test
 	let temp_dir = tempfile::tempdir()?;
 	let temp_path = temp_dir.path().to_path_buf();
+	eprintln!("Proc test dir: {}", temp_path.display());
 
 	// Create a fake project in the meta file
 	let api_endpoint = "https://fake.api.endpoint".to_string();
@@ -49,20 +50,41 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	// Create a TaskCtx
 	let (task, mut log_rx) = create_task_ctx();
 
-	// Start a process that logs to stdout and stderr, then exits
-	let command = "sh".to_string();
-	let args = vec![
-		"-c".to_string(),
-		r#"
-            echo "ENV_VAR: $ENV_VAR"
-            echo 'Hello from stdout'
-            echo 'Error message' >&2
-            sleep 1
-            echo 'Exiting now'
-            exit 42
-        "#
-		.to_string(),
-	];
+	// Build command
+	#[cfg(windows)]
+	let (command, args) = (
+		"powershell".to_string(),
+		vec![
+			"-NoProfile".to_string(),
+			"-Command".to_string(),
+			r#"
+                $env:ENV_VAR
+                Write-Host 'Hello from stdout'
+                Write-Error 'Error message'
+                Start-Sleep -Seconds 2
+                Write-Host 'Exiting now'
+                exit 42
+            "#
+			.to_string(),
+		],
+	);
+
+	#[cfg(not(windows))]
+	let (command, args) = (
+		"sh".to_string(),
+		vec![
+			"-c".to_string(),
+			r#"
+                echo "ENV_VAR: $ENV_VAR"
+                echo 'Hello from stdout'
+                echo 'Error message' >&2
+                sleep 2
+                echo 'Exiting now'
+                exit 42
+            "#
+			.to_string(),
+		],
+	);
 	let envs = vec![("ENV_VAR".to_string(), "test_value".to_string())];
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -119,9 +141,16 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	assert_eq!(exit_code, Some(42));
 
 	// Verify logs
-	assert!(stdout_logs
-		.iter()
-		.any(|log| log.contains("ENV_VAR: test_value")));
+	#[cfg(windows)]
+	{
+		assert!(stdout_logs.iter().any(|log| log.contains("test_value")));
+	}
+	#[cfg(not(windows))]
+	{
+		assert!(stdout_logs
+			.iter()
+			.any(|log| log.contains("ENV_VAR: test_value")));
+	}
 	assert!(stdout_logs
 		.iter()
 		.any(|log| log.contains("Hello from stdout")));
@@ -129,11 +158,24 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	assert!(stderr_logs.iter().any(|log| log.contains("Error message")));
 
 	// Restart the process
-	let command = "sh".to_string();
-	let args = vec![
-		"-c".to_string(),
-		"echo 'Restarted process'; sleep 2; exit 0".to_string(),
-	];
+	#[cfg(windows)]
+	let (command, args) = (
+		"powershell".to_string(),
+		vec![
+			"-NoProfile".to_string(),
+			"-Command".to_string(),
+			"Write-Host 'Restarted process'; Start-Sleep -Seconds 2; exit 0".to_string(),
+		],
+	);
+
+	#[cfg(not(windows))]
+	let (command, args) = (
+		"sh".to_string(),
+		vec![
+			"-c".to_string(),
+			"echo 'Restarted process'; sleep 2; exit 0".to_string(),
+		],
+	);
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -189,16 +231,39 @@ async fn test_process_manager_stop_graceful() -> Result<()> {
 	let (task, _log_rx) = create_task_ctx();
 
 	// Start a long-running process with custom exit code on SIGTERM
-	let command = "sh".to_string();
-	let args = vec![
-		"-c".to_string(),
-		r#"
-            trap 'echo "Exiting with code 42"; exit 42' TERM
-            echo 'Starting long process'
-            tail -f /dev/null & wait
-        "#
-		.to_string(),
-	];
+	#[cfg(windows)]
+	let (command, args) = (
+		"powershell".to_string(),
+		vec![
+			"-NoProfile".to_string(),
+			"-Command".to_string(),
+			r#"
+				$script:exitCode = 42
+				$handler = {
+					Write-Host "Exiting with code $script:exitCode"
+					exit $script:exitCode
+				}
+				$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action $handler
+				Write-Host 'Starting long process'
+				while ($true) { Start-Sleep -Seconds 1 }
+			"#
+			.to_string(),
+		],
+	);
+
+	#[cfg(not(windows))]
+	let (command, args) = (
+		"sh".to_string(),
+		vec![
+			"-c".to_string(),
+			r#"
+				trap 'echo "Exiting with code 42"; exit 42' TERM
+				echo 'Starting long process'
+				tail -f /dev/null & wait
+			"#
+			.to_string(),
+		],
+	);
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();
@@ -273,18 +338,39 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 	let (task, _log_rx) = create_task_ctx();
 
 	// Start a process that ignores SIGTERM
-	let command = "sh".to_string();
-	let args = vec![
-		"-c".to_string(),
-		r#"
-        trap 'echo "Caught term, ignoring"' TERM
-        echo 'Starting process that ignores SIGTERM'
-        while true; do
-            sleep 1
-        done
-    "#
-		.to_string(),
-	];
+	#[cfg(windows)]
+	let (command, args) = (
+		"powershell".to_string(),
+		vec![
+			"-NoProfile".to_string(),
+			"-Command".to_string(),
+			r#"
+				$handler = {
+					Write-Host "Caught term, ignoring"
+				}
+				$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action $handler
+				Write-Host 'Starting process that ignores SIGTERM'
+				while ($true) { Start-Sleep -Seconds 1 }
+			"#
+			.to_string(),
+		],
+	);
+
+	#[cfg(not(windows))]
+	let (command, args) = (
+		"sh".to_string(),
+		vec![
+			"-c".to_string(),
+			r#"
+				trap 'echo "Caught term, ignoring"' TERM
+				echo 'Starting process that ignores SIGTERM'
+				while true; do
+					sleep 1
+				done
+			"#
+			.to_string(),
+		],
+	);
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
 	let base_data_dir = temp_dir.path().to_path_buf();

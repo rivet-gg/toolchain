@@ -145,8 +145,6 @@ impl ProcessManager {
 				}
 				ProcessState::Running { pid } => {
 					let process_data_dir = process_data_dir(process_id, &base_data_dir)?;
-					#[cfg(test)]
-					eprintln!("Data dir: {}", process_data_dir.display());
 
 					// Wait for process to exit & stream logs
 					let stdout_path = process_data_dir.join(shared::paths::CHILD_STDOUT);
@@ -165,23 +163,26 @@ impl ProcessManager {
 						}
 					}
 
-					// Read the exit code file asynchronously
-					let exit_code_path = process_data_dir.join(shared::paths::CHILD_EXIT_CODE);
-					let exit_code = match tokio::fs::read_to_string(&exit_code_path).await {
-						Result::Ok(content) => match content.trim().parse::<i32>() {
-							Result::Ok(code) => Some(code),
-							Err(_) => None,
-						},
-						Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
-						Err(e) => return Err(e.into()),
-					};
-
-					return Ok(exit_code);
+					// Get new process state
+					match get_process_state(process_id, &base_data_dir).await? {
+						ProcessState::Exited { exit_code, error } => {
+							// Exit
+							if let Some(error) = error {
+								bail!("process failed to run: {error}");
+							} else {
+								return Ok(exit_code);
+							}
+						}
+						x => bail!("process state should be exited, got: {x:?}"),
+					}
 				}
-				ProcessState::Exited { exit_code } => {
+				ProcessState::Exited { exit_code, error } => {
 					// Exited immediately
-
-					return Ok(exit_code);
+					if let Some(error) = error {
+						bail!("process failed to run: {error}");
+					} else {
+						return Ok(exit_code);
+					}
 				}
 				ProcessState::NotFound => {
 					bail!("unexpected, process not found")
@@ -252,7 +253,10 @@ enum ProcessState {
 	Running { pid: i32 },
 
 	/// Process exited.
-	Exited { exit_code: Option<i32> },
+	Exited {
+		exit_code: Option<i32>,
+		error: Option<String>,
+	},
 
 	/// Process data dir does not exist.
 	NotFound,
@@ -268,17 +272,23 @@ async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<
 
 	// Check if the exit_code file exists
 	let exit_code_path = process_data_dir.join(shared::paths::CHILD_EXIT_CODE);
+	let error_path = process_data_dir.join(shared::paths::RUNNER_ERROR);
+	let pid_path = process_data_dir.join(shared::paths::RUNNER_PID);
 	if exit_code_path.exists() {
 		let exit_code_str = tokio::fs::read_to_string(exit_code_path).await?;
 		let exit_code: i32 = exit_code_str.trim().parse()?;
-		return Ok(ProcessState::Exited {
+		Ok(ProcessState::Exited {
 			exit_code: Some(exit_code),
-		});
-	}
-
-	// Check if the pid file exists
-	let pid_path = process_data_dir.join(shared::paths::RUNNER_PID);
-	if pid_path.exists() {
+			error: None,
+		})
+	} else if error_path.exists() {
+		// Read the runner error
+		let error = tokio::fs::read_to_string(error_path).await?;
+		Ok(ProcessState::Exited {
+			exit_code: None,
+			error: Some(error),
+		})
+	} else if pid_path.exists() {
 		// Read the PID from the file
 		let pid_str = tokio::fs::read_to_string(pid_path).await?;
 		let pid: i32 = pid_str.trim().parse()?;
@@ -286,7 +296,7 @@ async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<
 
 		if is_pid_running(pid).await? {
 			// Process is currently running
-			return Ok(ProcessState::Running { pid });
+			Ok(ProcessState::Running { pid })
 		} else {
 			// Process did not successfully write exit code to file system.
 			//
@@ -298,12 +308,15 @@ async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<
 			// - attempts to read exit code
 			// - process crashes
 			// - arrives here and pid no longer is running
-			return Ok(ProcessState::Exited { exit_code: None });
+			Ok(ProcessState::Exited {
+				exit_code: None,
+				error: None,
+			})
 		}
+	} else {
+		// If process does not have a PID yet, it's starting
+		Ok(ProcessState::Starting)
 	}
-
-	// If process does not have a PID yet, it's starting
-	Ok(ProcessState::Starting)
 }
 
 /// Kills a process.
@@ -485,6 +498,7 @@ async fn wait_pid_exit(pid: i32) -> Result<()> {
 	{
 		use windows::Win32::{
 			Foundation::CloseHandle,
+			Foundation::WAIT_OBJECT_0,
 			System::Threading::{OpenProcess, WaitForSingleObject, INFINITE, PROCESS_SYNCHRONIZE},
 		};
 
@@ -494,16 +508,17 @@ async fn wait_pid_exit(pid: i32) -> Result<()> {
 				Err(_) => return Err(anyhow!("Failed to open process handle")),
 			}
 		};
-
-		if handle.is_invalid() {
-			return Err(anyhow!("Failed to open process handle"));
-		}
+		ensure!(!handle.is_invalid(), "failed to open process handle");
 
 		tokio::task::spawn_blocking(move || unsafe {
-			WaitForSingleObject(handle, INFINITE);
+			match WaitForSingleObject(handle, INFINITE) {
+				WAIT_OBJECT_0 => {}
+				e => bail!("error waiting for process: {e:?}"),
+			};
 			CloseHandle(handle);
+			Result::Ok(())
 		})
-		.await?;
+		.await??;
 	}
 
 	Ok(())
@@ -600,10 +615,11 @@ fn spawn_orphaned_process(
 		// Spawn process
 		//
 		// Calling `.wait()` is required in order to remove zombie processes after complete
-		Command::new(&process_runner_path)
+		let mut child = Command::new(&process_runner_path)
 			.args(&runner_args)
 			.envs(envs.iter().cloned())
-			.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0 | CREATE_NO_WINDOW.0)
+			// .creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0 | CREATE_NO_WINDOW.0)
+			// .creation_flags(CREATE_NO_WINDOW.0)
 			.stdin(Stdio::null())
 			.stdout(Stdio::null())
 			.stderr(Stdio::null())
