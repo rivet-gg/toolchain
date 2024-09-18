@@ -94,12 +94,6 @@ pub async fn build_backend_command(opts: BackendCommandOpts) -> Result<Command> 
 		.envs(cmd_raw.envs)
 		.current_dir(cmd_raw.current_dir);
 
-	#[cfg(windows)]
-	{
-		use windows::Win32::System::Threading::{CREATE_NO_WINDOW};
-		cmd.creation_flags(CREATE_NO_WINDOW.0);
-	}
-
 	Ok(cmd)
 }
 
