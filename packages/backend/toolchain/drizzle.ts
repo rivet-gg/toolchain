@@ -68,7 +68,7 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 			// Update migrations in-place in the project
 			//
 			// Drizzle Kit does not play nice with absolute paths
-			out: relative(databaseConfigPath, dbMigrationsPath(module)),
+			out: relative(tempDir, dbMigrationsPath(module)),
 			dialect: "postgresql",
 			migrations: {
 				table: "migrations",
