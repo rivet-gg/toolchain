@@ -27,6 +27,7 @@ export enum Status {
 	DefaultDatabaseNotCreated,
 	Stopped,
 	Started,
+	Connectable,
 }
 
 export interface Manager {
@@ -47,10 +48,12 @@ export async function status(manager: Manager): Promise<Status> {
 		return Status.Installed;
 	} else if (!await isStarted(manager)) {
 		return Status.Stopped;
+	} else if (!await isConnectable(manager)) {
+		return Status.Started;
 	} else if (!await isDefaultDatabaseCreated(manager)) {
 		return Status.DefaultDatabaseNotCreated;
 	} else {
-		return Status.Started;
+		return Status.Connectable;
 	}
 }
 
@@ -61,7 +64,7 @@ export async function setup(manager: Manager): Promise<void> {
 	if (!await isInitialized(manager)) {
 		await initialize(manager);
 	}
-	if (!await isStarted(manager)) {
+	if (!await isStarted(manager) || !await isConnectable(manager)) {
 		await start(manager);
 	}
 	if (!await isDefaultDatabaseCreated(manager)) {
@@ -81,20 +84,20 @@ async function isInitialized(manager: Manager): Promise<boolean> {
 async function isStarted(manager: Manager): Promise<boolean> {
 	// Check if PID exists
 	const pidFile = manager.settings.dataDir.concat("/postmaster.pid");
-	if (!await exists(pidFile)) return false;
+	return await exists(pidFile);
+}
 
-	// Check if connectable
+async function isConnectable(manager: Manager): Promise<boolean> {
 	let client;
 	try {
 		client = await getClient(manager, BOOTSTRAP_DATABASE);
 		await client.queryObject("SELECT 1");
+		return true;
 	} catch (_) {
 		return false;
 	} finally {
 		await client?.end();
 	}
-
-	return true;
 }
 
 async function install(manager: Manager): Promise<void> {
