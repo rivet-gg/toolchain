@@ -16,10 +16,10 @@ use crate::{config, util::task::TaskCtx};
 const LOG_POLL_INTERVAL: Duration = Duration::from_millis(100);
 
 #[cfg(unix)]
-type PID = i32;
+type PidRaw = i32;
 
 #[cfg(not(unix))]
-type PID = u32;
+type PidRaw = u32;
 
 #[derive(Serialize, Deserialize, PartialEq, Eq)]
 pub enum StartMode {
@@ -260,7 +260,7 @@ enum ProcessState {
 	Starting,
 
 	/// Currently running.
-	Running { pid: PID },
+	Running { pid: PidRaw },
 
 	/// Process exited.
 	Exited {
@@ -299,7 +299,7 @@ async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<
 	if exit_code_path.exists() {
 		let exit_code_str = tokio::fs::read_to_string(exit_code_path).await?;
 		if !exit_code_str.is_empty() {
-			if exit_code_str == "unknown" {
+			if exit_code_str.trim() == "unknown" {
 				return Ok(ProcessState::Exited {
 					exit_code: None,
 					error: None,
@@ -318,7 +318,7 @@ async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<
 		// Read the PID from the file
 		let pid_str = tokio::fs::read_to_string(pid_path).await?;
 		if !pid_str.is_empty() {
-			let pid: PID = pid_str.trim().parse()?;
+			let pid: PidRaw = pid_str.trim().parse()?;
 			assert!(pid > 0);
 
 			if is_pid_running(pid)? {
@@ -370,8 +370,9 @@ async fn kill_process(
 	{
 		use nix::errno::Errno;
 		use nix::sys::signal::{kill, Signal};
+		use nix::sys::wait::{waitpid, WaitPidFlag, WaitStatus};
 		use nix::unistd::Pid;
-		use tokio::time::{sleep, Duration, Instant};
+		use std::time::Instant;
 
 		assert!(pid > 0);
 
@@ -384,24 +385,27 @@ async fn kill_process(
 			Err(e) => bail!("Failed to send SIGTERM: {}", e),
 		}
 
-		todo!("switch to wait for process");
-		// // Poll for process exit
-		// let start = Instant::now();
-		// while start.elapsed() < kill_grace {
-		// 	sleep(Duration::from_millis(100)).await;
-		// 	if !is_pid_running(pid).await? {
-		// 		return Ok(true);
-		// 	}
-		// }
+		// Wait for process to exit
+		let start = Instant::now();
+		loop {
+			match tokio::task::block_in_place(|| {
+				waitpid(Pid::from_raw(pid), Some(WaitPidFlag::WNOHANG))
+			}) {
+				Result::Ok(WaitStatus::Exited(_, _))
+				| Result::Ok(WaitStatus::Signaled(_, _, _)) => return Ok(true),
+				Result::Ok(_) => {
+					if start.elapsed() >= kill_grace {
+						break;
+					}
+					tokio::time::sleep(Duration::from_millis(100)).await;
+				}
+				Err(Errno::ECHILD) => return Ok(true), // Process has already exited
+				Err(e) => bail!("Failed to wait for process: {}", e),
+			}
+		}
 
-		terminate_process_tree(pid);
-		// // TODO: Send to entire tree
-		// // Send SIGKILL if process hasn't exited
-		// match tokio::task::block_in_place(|| kill(Pid::from_raw(pid), Signal::SIGKILL)) {
-		// 	Result::Ok(_) => Ok(true),
-		// 	Err(Errno::ESRCH) => Ok(true), // Assume process was already killed by SIGTERM in race condition
-		// 	Err(e) => bail!("Failed to send SIGKILL: {}", e),
-		// }
+		// Send SIGKILL if process hasn't exited within kill_grace
+		terminate_process_tree(Pid::from_raw(pid));
 
 		Ok(true)
 	}
@@ -457,24 +461,44 @@ async fn kill_process(
 }
 
 #[cfg(unix)]
-fn terminate_process_tree(pid: PID) {
-	todo!()
+fn terminate_process_tree(pid: nix::unistd::Pid) {
+	use nix::sys::signal::{kill, Signal};
+	use nix::unistd::Pid;
+	use std::fs;
+	use std::path::Path;
+
+	// TODO: This does not work on macOS
+	// List all child processes
+	if let Result::Ok(entries) = fs::read_dir(Path::new("/proc")) {
+		for entry in entries.flatten() {
+			if let Result::Ok(file_name) = entry.file_name().into_string() {
+				if let Result::Ok(child_pid) = file_name.parse::<i32>() {
+					if let Result::Ok(content) =
+						fs::read_to_string(format!("/proc/{}/stat", child_pid))
+					{
+						let parts: Vec<&str> = content.split_whitespace().collect();
+						if parts.len() > 3 && parts[3] == pid.to_string() {
+							// This is a child process, kill it
+							let _ = terminate_process_tree(Pid::from_raw(child_pid));
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Then, kill the process itself
+	let _ = kill(pid, Signal::SIGKILL);
 }
 
 #[cfg(windows)]
-fn terminate_process_tree(pid: PID) {
-	use windows::Win32::{
-		Foundation::WAIT_OBJECT_0,
-		System::{
-			Diagnostics::ToolHelp::{
-				CreateToolhelp32Snapshot, Process32First, Process32Next, PROCESSENTRY32,
-				TH32CS_SNAPPROCESS,
-			},
-			Threading::{
-				OpenProcess, TerminateProcess, WaitForSingleObject, PROCESS_SYNCHRONIZE,
-				PROCESS_TERMINATE,
-			},
+fn terminate_process_tree(pid: PidRaw) {
+	use windows::Win32::System::{
+		Diagnostics::ToolHelp::{
+			CreateToolhelp32Snapshot, Process32First, Process32Next, PROCESSENTRY32,
+			TH32CS_SNAPPROCESS,
 		},
+		Threading::{OpenProcess, TerminateProcess, PROCESS_TERMINATE},
 	};
 
 	unsafe {
@@ -498,7 +522,7 @@ fn terminate_process_tree(pid: PID) {
 
 		// Kill this process before killing children in order to prevent the
 		// parent from doing anything more to the child processes
-		let handle = match OpenProcess(PROCESS_TERMINATE, false, pid) {
+		match OpenProcess(PROCESS_TERMINATE, false, pid) {
 			Result::Ok(handle) => {
 				if !handle.is_invalid() {
 					// Kill process
@@ -514,7 +538,7 @@ fn terminate_process_tree(pid: PID) {
 			Err(_) => {
 				eprintln!("failed to open process, likely already stopped");
 			}
-		};
+		}
 
 		loop {
 			if is_pid_running(pid).unwrap() {
@@ -535,7 +559,7 @@ fn terminate_process_tree(pid: PID) {
 /// Checks if a PID is running in a cross-platform way.
 ///
 /// Should only be called by `process_state`.
-fn is_pid_running(pid: PID) -> Result<bool> {
+fn is_pid_running(pid: PidRaw) -> Result<bool> {
 	tokio::task::block_in_place(move || {
 		#[cfg(unix)]
 		{
@@ -584,7 +608,7 @@ fn is_pid_running(pid: PID) -> Result<bool> {
 /// Wait for a PID to exit.
 ///
 /// Should only be called by `ProcessManager::start`.
-async fn wait_pid_exit(pid: PID) -> Result<()> {
+async fn wait_pid_exit(pid: PidRaw) -> Result<()> {
 	// Wait for the process to exit in a cross-platform way
 	#[cfg(unix)]
 	{
@@ -647,7 +671,6 @@ async fn wait_pid_exit(pid: PID) -> Result<()> {
 	Ok(())
 }
 
-// TODO: Make this spawn orphans
 fn spawn_process(
 	process_runner_path: PathBuf,
 	process_data_dir: PathBuf,
@@ -673,15 +696,8 @@ fn spawn_process(
 	#[cfg(target_os = "windows")]
 	{
 		use std::os::windows::process::CommandExt;
-		use windows::Win32::System::Threading::{
-			CREATE_BREAKAWAY_FROM_JOB, CREATE_NEW_CONSOLE, CREATE_NEW_PROCESS_GROUP,
-			CREATE_NO_WINDOW, DETACHED_PROCESS,
-		};
+		use windows::Win32::System::Threading::CREATE_NEW_PROCESS_GROUP;
 		cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0);
-		// cmd.creation_flags(DETACHED_PROCESS.0 | CREATE_NO_WINDOW.0);
-		// cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | CREATE_NO_WINDOW.0);
-		// cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0);
-		// cmd.creation_flags(CREATE_NO_WINDOW.0);
 	}
 
 	let mut child = cmd.spawn()?;
