@@ -23,8 +23,6 @@ enum ManagerError {
 	FileWriteError(std::io::Error),
 	#[error("Failed to execute command: {0}")]
 	CommandExecutionError(std::io::Error),
-	#[error("Failed to register signal hook: {0}")]
-	RegisterSignalHookError(std::io::Error),
 	#[error("Failed to send signal: {0}")]
 	SignalError(String),
 }
