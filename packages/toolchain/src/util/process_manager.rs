@@ -484,7 +484,7 @@ async fn wait_pid_exit(pid: i32) -> Result<()> {
 	#[cfg(windows)]
 	{
 		use windows::Win32::{
-			Foundation::{CloseHandle, HANDLE},
+			Foundation::CloseHandle,
 			System::Threading::{OpenProcess, WaitForSingleObject, INFINITE, PROCESS_SYNCHRONIZE},
 		};
 
@@ -588,13 +588,13 @@ fn spawn_orphaned_process(
 	#[cfg(target_os = "windows")]
 	{
 		use std::os::windows::process::CommandExt;
-		use windows::Win32::System::Threading::{CREATE_NEW_PROCESS_GROUP, DETACHED_PROCESS};
+		use windows::Win32::System::Threading::{CREATE_NEW_PROCESS_GROUP, DETACHED_PROCESS, CREATE_NO_WINDOW};
 
 		// Windows implementation remains the same
 		Command::new(&process_supervisor_path)
 			.args(&supervisor_args)
 			.envs(envs.iter().cloned())
-			.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0)
+			.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0 | CREATE_NO_WINDOW.0)
 			.stdin(Stdio::null())
 			.stdout(Stdio::null())
 			.stderr(Stdio::null())
