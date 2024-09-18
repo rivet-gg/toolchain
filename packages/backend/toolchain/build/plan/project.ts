@@ -24,6 +24,7 @@ import { migrateApply } from "../../migrate/apply.ts";
 import { migrateGenerate } from "../../migrate/generate.ts";
 import { generateSdk } from "../../sdk/generate.ts";
 import { denoExecutablePath } from "../../utils/deno.ts";
+import { exists } from "@std/fs";
 
 export async function planProjectBuild(
 	buildState: BuildState,
@@ -151,6 +152,28 @@ export async function planProjectBuild(
 						// Bundle Deno dependencies
             ...denoPlugins(),
 
+						// HACK: esbuild-deno-loader does not play nice with
+						// Windows paths, so we manually resolve any paths that
+						// start with a Windows path separator (\) and resolve
+						// them to the full path.
+						{
+							name: 'fix-windows-paths',
+							setup(build: esbuild.PluginBuild) {
+								build.onResolve({ filter: /^\\.*/ }, (args) => {
+									const resolvedPath = resolve(args.resolveDir, args.path);
+									if (!exists(resolvedPath, { isFile: true })) {
+										return {
+											errors: [{ text: `File could not be resolved: ${resolvedPath}` }],
+										};
+									}
+
+									return {
+										path: resolve(args.resolveDir, args.path)
+									};
+								});
+							}
+						} satisfies esbuild.Plugin,
+
             // Remove unused Node imports
 						nodeModulesPolyfillPlugin({
 							globals: {
@@ -171,6 +194,8 @@ export async function planProjectBuild(
 								buffer: true,
 							},
 						}),
+
+
 					],
 					define: {
 						// HACK: Disable `process.domain` in order to correctly handle this edge case:
