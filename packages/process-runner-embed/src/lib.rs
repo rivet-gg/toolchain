@@ -1,23 +1,23 @@
 use anyhow::Result;
 use std::{fs, path::Path};
 
-pub const PROCESS_SUPERVISOR_BINARY: &[u8] = include_bytes!(env!("PROCESS_SUPERVISOR_BINARY_PATH"));
-pub const PROCESS_SUPERVISOR_BINARY_HASH: &str = env!("PROCESS_SUPERVISOR_BINARY_HASH");
+pub const PROCESS_RUNNER_BINARY: &[u8] = include_bytes!(env!("PROCESS_RUNNER_BINARY_PATH"));
+pub const PROCESS_RUNNER_BINARY_HASH: &str = env!("PROCESS_RUNNER_BINARY_HASH");
 
 pub fn get_executable(data_dir: &Path) -> Result<std::path::PathBuf> {
 	let binary_name = if cfg!(windows) {
-		"process-supervisor.exe"
+		"process-runner.exe"
 	} else {
-		"process-supervisor"
+		"process-runner"
 	};
 	let hash_dir = data_dir
-		.join("process-supervisor")
-		.join(PROCESS_SUPERVISOR_BINARY_HASH);
+		.join("process-runner")
+		.join(PROCESS_RUNNER_BINARY_HASH);
 	let executable_path = hash_dir.join(binary_name);
 
 	if !executable_path.exists() {
 		fs::create_dir_all(&hash_dir)?;
-		fs::write(&executable_path, PROCESS_SUPERVISOR_BINARY)?;
+		fs::write(&executable_path, PROCESS_RUNNER_BINARY)?;
 
 		#[cfg(unix)]
 		{

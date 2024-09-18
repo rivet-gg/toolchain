@@ -1,14 +1,14 @@
 [package]
-name = "rivet-process-supervisor"
+name = "rivet-process-runner"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "rivet-process-supervisor"
+name = "rivet-process-runner"
 
 [dependencies]
 lazy_static = "1.5.0"
-rivet-process-supervisor-shared = { path = "../process-supervisor-shared" }
+rivet-process-runner-shared = { path = "../process-runner-shared" }
 signal-hook = { version = "0.3.17", features = ["iterator"], default-features = false }
 thiserror = "1.0.63"
 

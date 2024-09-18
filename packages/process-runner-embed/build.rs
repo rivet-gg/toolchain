@@ -51,9 +51,9 @@ fn main() {
 	// Set the target directory to a different target since it shares the same
 	// package as the current project. This way, it won't deadlock when they're
 	// both trying to lock the target dir.
-	let target_dir = PathBuf::from(env::var("OUT_DIR").unwrap()).join("process-supervisor-target");
+	let target_dir = PathBuf::from(env::var("OUT_DIR").unwrap()).join("process-runner-target");
 
-	// Build the process-supervisor package using the specific nightly version
+	// Build the process-runner package using the specific nightly version
 	//
 	// See workaround for `env_remove`:
 	// https://github.com/sagiegurari/cargo-make/pull/1060
@@ -65,7 +65,7 @@ fn main() {
 		.arg("--profile")
 		.arg(profile)
 		.arg("--package")
-		.arg("rivet-process-supervisor")
+		.arg("rivet-process-runner")
 		.arg("--target")
 		.arg(&target)
 		.arg("--target-dir")
@@ -79,22 +79,22 @@ fn main() {
 		.env_remove("RUSTDOC")
 		.env_remove("RUSTFLAGS")
 		.status()
-		.expect("failed to build process-supervisor package");
+		.expect("failed to build process-runner package");
 
 	assert!(
 		status.success(),
-		"Building process-supervisor package failed"
+		"Building process-runner package failed"
 	);
 
 	// Output binary path
 	let binary_name = if target.contains("windows") {
-		"rivet-process-supervisor.exe"
+		"rivet-process-runner.exe"
 	} else {
-		"rivet-process-supervisor"
+		"rivet-process-runner"
 	};
 	let binary_path = target_dir.join(target).join(profile).join(binary_name);
 	println!(
-		"cargo:rustc-env=PROCESS_SUPERVISOR_BINARY_PATH={}",
+		"cargo:rustc-env=PROCESS_RUNNER_BINARY_PATH={}",
 		binary_path.display()
 	);
 
@@ -108,8 +108,8 @@ fn main() {
 	hasher.update(&buffer);
 	let hash = format!("{:x}", hasher.finalize());
 
-	println!("cargo:rustc-env=PROCESS_SUPERVISOR_BINARY_HASH={}", hash);
+	println!("cargo:rustc-env=PROCESS_RUNNER_BINARY_HASH={}", hash);
 
 	// Output rebuild on change
-	println!("cargo:rerun-if-changed=../process-supervisor");
+	println!("cargo:rerun-if-changed=../process-runner");
 }

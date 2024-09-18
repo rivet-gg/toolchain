@@ -1,6 +1,6 @@
 pub mod paths {
-	pub const SUPERVISOR_PID: &str = "supervisor_pid";
-	pub const SUPERVISOR_ERROR: &str = "supervisor_error";
+	pub const RUNNER_PID: &str = "runner_pid";
+	pub const RUNNER_ERROR: &str = "runner_error";
 
 	pub const CHILD_PID: &str = "child_pid";
 	pub const CHILD_STDOUT: &str = "child_stdout";

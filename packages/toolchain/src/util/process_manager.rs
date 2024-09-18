@@ -1,5 +1,5 @@
 use anyhow::*;
-use rivet_process_supervisor_shared as shared;
+use rivet_process_runner_shared as shared;
 use serde::{Deserialize, Serialize};
 use std::{
 	future::Future,
@@ -97,10 +97,10 @@ impl ProcessManager {
 					std::fs::create_dir_all(&process_data_dir)?;
 
 					// Spawn orphan
-					let process_supervisor_path =
-						rivet_process_supervisor_embed::get_executable(&base_data_dir)?;
+					let process_runner_path =
+						rivet_process_runner_embed::get_executable(&base_data_dir)?;
 					spawn_orphaned_process(
-						process_supervisor_path,
+						process_runner_path,
 						process_data_dir,
 						&command_opts.current_dir,
 						&command_opts.command,
@@ -127,7 +127,7 @@ impl ProcessManager {
 			let process_state = get_process_state(process_id, &base_data_dir).await?;
 			match process_state {
 				ProcessState::Starting => {
-					// Process is still starting. The process supervisor will write the PID to the
+					// Process is still starting. The process runner will write the PID to the
 					// thread once ready.
 					//
 					// This may time out if the command is not found since the process manager
@@ -277,7 +277,7 @@ async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<
 	}
 
 	// Check if the pid file exists
-	let pid_path = process_data_dir.join(shared::paths::SUPERVISOR_PID);
+	let pid_path = process_data_dir.join(shared::paths::RUNNER_PID);
 	if pid_path.exists() {
 		// Read the PID from the file
 		let pid_str = tokio::fs::read_to_string(pid_path).await?;
@@ -336,7 +336,7 @@ async fn kill_process(
 
 		// Send SIGTERM
 		//
-		// Supervisor will forward the signal to the children
+		// Runner will forward the signal to the children
 		match tokio::task::block_in_place(|| kill(Pid::from_raw(pid), Signal::SIGTERM)) {
 			Result::Ok(_) => {}
 			Err(Errno::ESRCH) => return Ok(false),
@@ -513,36 +513,35 @@ async fn wait_pid_exit(pid: i32) -> Result<()> {
 ///
 /// This allows us to run processes that will stay running even after the parent exits.
 fn spawn_orphaned_process(
-	process_supervisor_path: PathBuf,
+	process_runner_path: PathBuf,
 	process_data_dir: PathBuf,
 	current_dir: &str,
 	program: &str,
 	args: &[&str],
 	envs: &[(String, String)],
 ) -> Result<()> {
-	// Prepare the arguments for the process supervisor
-	let mut supervisor_args = vec![process_data_dir.to_str().unwrap(), current_dir, program];
-	supervisor_args.extend(args.iter().map(|&s| s));
+	// Prepare the arguments for the process runner
+	let mut runner_args = vec![process_data_dir.to_str().unwrap(), current_dir, program];
+	runner_args.extend(args.iter().map(|&s| s));
 
 	#[cfg(target_family = "unix")]
 	{
 		// Spawn child
 		//
 		// Calling `.wait()` is required in order to remove zombie processes after complete
-		let mut child = Command::new(&process_supervisor_path)
-			.args(&supervisor_args)
+		let mut child = Command::new(&process_runner_path)
+			.args(&runner_args)
 			.envs(envs.iter().cloned())
 			.stdin(Stdio::null())
 			.stdout(Stdio::null())
 			.stderr(Stdio::null())
 			.spawn()?;
 		tokio::task::spawn_blocking(move || child.wait().expect("child.wait"));
-		
 
 		Ok(())
 
 		// // TODO: This works in unit tests, but doesn't play nice with forking an entire engine.
-		// We need to make this fork process supervisor directly.
+		// We need to make this fork process runnerunner.
 		// use nix::{
 		// 	sys::wait::{waitpid, WaitStatus},
 		// 	unistd::{fork, ForkResult},
@@ -569,8 +568,8 @@ fn spawn_orphaned_process(
 		// 			}
 		// 			Result::Ok(ForkResult::Child) => {
 		// 				// Exit immediately on fail in order to not leak process
-		// 				let err = Command::new(&process_supervisor_path)
-		// 					.args(&supervisor_args)
+		// 				let err = Command::new(&process_runner_path)
+		// 					.args(&runner_args)
 		// 					.envs(envs.iter().cloned())
 		// 					.stdin(Stdio::null())
 		// 					.stdout(Stdio::null())
@@ -601,8 +600,8 @@ fn spawn_orphaned_process(
 		// Spawn process
 		//
 		// Calling `.wait()` is required in order to remove zombie processes after complete
-		Command::new(&process_supervisor_path)
-			.args(&supervisor_args)
+		Command::new(&process_runner_path)
+			.args(&runner_args)
 			.envs(envs.iter().cloned())
 			.creation_flags(CREATE_NEW_PROCESS_GROUP.0 | DETACHED_PROCESS.0 | CREATE_NO_WINDOW.0)
 			.stdin(Stdio::null())
@@ -610,7 +609,6 @@ fn spawn_orphaned_process(
 			.stderr(Stdio::null())
 			.spawn()?;
 		tokio::task::spawn_blocking(move || child.wait().expect("child.wait"));
-		
 
 		Ok(())
 	}

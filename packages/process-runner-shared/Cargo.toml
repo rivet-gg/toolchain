@@ -1,5 +1,5 @@
 [package]
-name = "rivet-process-supervisor-shared"
+name = "rivet-process-runner-shared"
 version = "0.1.0"
 edition = "2021"
 

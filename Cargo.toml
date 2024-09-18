@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
   "packages/backend-embed",
-  "packages/cli", "packages/process-supervisor", "packages/process-supervisor-embed", "packages/process-supervisor-shared", "packages/deno-embed",
+  "packages/cli", "packages/process-runner", "packages/process-runner-embed", "packages/process-runner-shared", "packages/deno-embed",
   "packages/toolchain",
   "packages/toolchain-ffi",
 ]

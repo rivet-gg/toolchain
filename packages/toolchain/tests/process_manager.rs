@@ -1,5 +1,5 @@
 use anyhow::*;
-use rivet_process_supervisor_shared as shared;
+use rivet_process_runner_shared as shared;
 use rivet_toolchain::util::{
 	process_manager::*,
 	task::{TaskCtx, TaskCtxInner, TaskEvent},
