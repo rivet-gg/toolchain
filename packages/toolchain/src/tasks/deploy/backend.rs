@@ -2,6 +2,7 @@ use anyhow::*;
 use futures_util::{StreamExt, TryStreamExt};
 use rivet_api::{apis, models};
 use serde::Deserialize;
+use serde_json::json;
 use std::{
 	collections::HashMap,
 	path::{Path, PathBuf},
@@ -10,7 +11,8 @@ use std::{
 use tokio::fs;
 
 use crate::{
-	backend, config,
+	backend::{self, build_backend_command},
+	config,
 	game::TEMPEnvironment,
 	paths,
 	toolchain_ctx::ToolchainCtx,
@@ -269,12 +271,31 @@ struct GenManifest {
 }
 
 async fn read_generated_manifest(project_path: &Path) -> Result<GenManifest> {
-	let manifest_str = fs::read_to_string(
-		project_path
-			.join(".rivet")
-			.join("backend")
-			.join("output_manifest.json"),
-	)
+	// Read manifest path
+	let path_output = build_backend_command(backend::BackendCommandOpts {
+		command: "configOutputManifestPath",
+		opts: json!({
+			"project": project_path
+		}),
+		env: Default::default(),
+	})
+	.await?
+	.output()
 	.await?;
-	Ok(serde_json::from_str::<GenManifest>(&manifest_str)?)
+	ensure!(
+		path_output.status.success(),
+		"failed to get output manifest path:\n{}",
+		String::from_utf8_lossy(&path_output.stderr)
+	);
+	let manifest_path = String::from_utf8(path_output.stdout)?;
+	let manifest_path = manifest_path.trim();
+
+	// Read manifest
+	let manifest_str = fs::read_to_string(manifest_path)
+		.await
+		.context("read output manifest")?;
+	let manifest = serde_json::from_str::<GenManifest>(&manifest_str)
+		.context(format!("parse output manifest:\n{}", manifest_str))?;
+
+	Ok(manifest)
 }

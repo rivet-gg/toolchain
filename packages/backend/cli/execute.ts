@@ -5,6 +5,7 @@ import * as build from "./commands/build.ts";
 import * as clean from "./commands/clean.ts";
 import * as configShow from "./commands/config/show.ts";
 import * as configManifestPath from "./commands/config/manifest_path.ts";
+import * as configOutputManifestPath from "./commands/config/output_manifest_path.ts";
 import * as createActor from "./commands/create/actor.ts";
 import * as createModule from "./commands/create/module.ts";
 import * as createScript from "./commands/create/script.ts";
@@ -31,6 +32,7 @@ export const commandSchema = z.union([
 	z.object({ clean: clean.optsSchema }),
 	z.object({ configShow: configShow.optsSchema }),
 	z.object({ configManifestPath: configManifestPath.optsSchema }),
+	z.object({ configOutputManifestPath: configOutputManifestPath.optsSchema }),
 	z.object({ createActor: createActor.optsSchema }),
 	z.object({ createModule: createModule.optsSchema }),
 	z.object({ createScript: createScript.optsSchema }),
@@ -80,6 +82,8 @@ export async function executeCommand(command: Command) {
 		await init.execute(command.init);
 	} else if ("configManifestPath" in command) {
 		await configManifestPath.execute(command.configManifestPath);
+	} else if ("configOutputManifestPath" in command) {
+		await configOutputManifestPath.execute(command.configOutputManifestPath);
 	} else if ("lint" in command) {
 		await lint.execute(command.lint);
 	} else if ("test" in command) {

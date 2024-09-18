@@ -8,12 +8,12 @@ use crate::util::task::{run_task, TaskOutputStyle};
 #[derive(Parser)]
 pub struct Opts {
 	environment: String,
-	#[clap(long, conflicts_with = "only_backend")]
+	#[clap(long, conflicts_with = "only_modules")]
 	only_game_server: bool,
 	#[clap(long, conflicts_with = "only_game_server")]
-	only_backend: bool,
+	only_modules: bool,
 	#[clap(long)]
-	backend_skip_migrate: bool,
+	modules_skip_migrate: bool,
 }
 
 impl Opts {
@@ -58,9 +58,9 @@ impl Opts {
 					.to_string_lossy()
 					.to_string(),
 				environment_id: environment.id,
-				game_server: !self.only_backend,
+				game_server: !self.only_modules,
 				backend: !self.only_game_server,
-				backend_skip_migrate: self.backend_skip_migrate,
+				backend_skip_migrate: self.modules_skip_migrate,
 			},
 		)
 		.await
