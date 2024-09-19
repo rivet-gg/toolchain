@@ -22,6 +22,7 @@
 		"lineWidth": 120,
 		"useTabs": true
 	},
+  "vendor": true,
 	"imports": {
 		"@asteasolutions/zod-to-openapi": "npm:@asteasolutions/zod-to-openapi@^7.1.1",
 		"@bartlomieju/postgres": "jsr:@bartlomieju/postgres@^0.17.2",

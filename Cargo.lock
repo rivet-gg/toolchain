@@ -1847,6 +1847,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "include_dir",
+ "rivet-deno-embed",
  "sha2",
  "tempfile",
  "tokio",
