@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Icon } from "@rivet-gg/icons";
 import {
   Button,
   Card,
@@ -78,7 +78,7 @@ function DeleteModuleButton({
               setValue("modules", otherModules, { shouldDirty: true });
             }}
           >
-            <FontAwesomeIcon icon="trash" />
+            <Icon icon="trash" />
           </Button>
         </div>
       }
@@ -119,7 +119,7 @@ export function ModuleCard({
             justify="between"
           >
             <h4 className="font-bold bg-background-main px-1 -ml-1">
-              {module.config.icon ? <FontAwesomeIcon icon={module.config.icon} className="mr-2" /> : null}
+              {module.config.icon ? <Icon icon={module.config.icon} className="mr-2" /> : null}
               {module.config.name}
             </h4>
             <Flex gap="2" className="bg-background-main px-1 -ml-1">
@@ -139,7 +139,7 @@ export function ModuleCard({
                           target="_blank"
                           rel="noreferrer"
                         >
-                          <FontAwesomeIcon icon="book" />
+                          <Icon icon="book" />
                         </a>
                       </Button>
                     }

@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Icon } from "@rivet-gg/icons";
 import { Button, Strong, WithTooltip } from "@rivet-gg/components";
 import { useQuery } from "@tanstack/react-query";
 import { type PropsWithChildren, useContext, useEffect } from "react";
@@ -66,7 +66,7 @@ function Content() {
                   size="icon"
                   variant="outline"
                 >
-                  <FontAwesomeIcon icon="download" />
+                  <Icon icon="download" />
                 </Button>
               </div>
             }

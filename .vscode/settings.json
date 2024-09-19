@@ -6,6 +6,7 @@
             "scheme": "file"
         }
     ],
+    "deno.disablePaths": ["packages/editor"],
     "cSpell.enableFiletypes": [
         "mdx"
     ],
