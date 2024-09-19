@@ -41,7 +41,7 @@ tar = "0.4.40"
 tempfile = "3.2"
 term_size = "0.3.2"
 thiserror = "1.0"
-tokio = { version = "1.27", default-features = false, features = ["fs", "macros", "process", "rt"] }
+tokio = { version = "1.40.0", default-features = false, features = ["fs", "macros", "process", "rt", "io-util"] }
 tokio-util = { version = "0.7", default-features = false, features = ["io-util"] }
 tower = "0.4.12"
 typed-path = "0.7.0"
