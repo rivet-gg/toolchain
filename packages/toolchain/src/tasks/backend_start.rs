@@ -121,9 +121,9 @@ impl task::Task for Task {
 }
 
 async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
-	// Read meta path from backend
+	// Read manifest path from backend
 	let mut interval = tokio::time::interval(Duration::from_secs(2));
-	let meta_output = loop {
+	let manifest_path_output = loop {
 		interval.tick().await;
 
 		let output = build_backend_command(backend::BackendCommandOpts {
@@ -143,13 +143,20 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 	};
 
 	// Parse and validate meta path
-	let meta_path = String::from_utf8(meta_output.stdout)?;
-	let meta_path = meta_path.trim();
+	let manifest_path =
+		String::from_utf8(manifest_path_output.stdout.clone()).with_context(|| {
+			format!(
+				"parse manifest path output ({} bytes, lossy: {})",
+				manifest_path_output.stdout.len(),
+				String::from_utf8_lossy(&manifest_path_output.stdout)
+			)
+		})?;
+	let manifest_path = manifest_path.trim();
 	ensure!(
-		!meta_path.contains("\n"),
-		"Expected exactly one line of output, got:\n{meta_path:?}"
+		!manifest_path.contains("\n"),
+		"expected exactly one line of output, got:\n{manifest_path:?}"
 	);
-	let meta_path = Path::new(meta_path);
+	let manifest_path = Path::new(manifest_path);
 
 	// Poll the file for updates
 	//
@@ -172,7 +179,7 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 		};
 
 		// Check for file change
-		let file_modified = match tokio::fs::metadata(&meta_path).await {
+		let file_modified = match tokio::fs::metadata(&manifest_path).await {
 			Result::Ok(metadata) => match metadata.modified() {
 				Result::Ok(x) => x,
 				Err(err) => {
@@ -197,11 +204,11 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 			last_file_modified = Some(file_modified);
 			last_editor_port = Some(editor_port);
 
-			match read_meta_and_build_event(meta_path, editor_port).await {
+			match read_manifest_and_build_event(manifest_path, editor_port).await {
 				Result::Ok(event) => {
 					task_ctx.event(task::TaskEvent::BackendConfigUpdate(event));
 				}
-				Err(err) => task_ctx.log(format!("Failed to read backend meta: {err}")),
+				Err(err) => task_ctx.log(format!("failed to read backend manifest: {err}")),
 			}
 		}
 	}
@@ -240,7 +247,7 @@ mod project_manifest {
 /// - Ensure a consistent format
 /// - Reduce overhead of updates (the config is massive)
 /// - Enhance with any toolchain-specific data (e.g. edtor config url)
-async fn read_meta_and_build_event(
+async fn read_manifest_and_build_event(
 	config_path: impl AsRef<Path>,
 	editor_port: u16,
 ) -> Result<backend_config_update::Event> {
