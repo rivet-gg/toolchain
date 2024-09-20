@@ -8,7 +8,8 @@ pub struct DenoExecutable {
 	pub executable_path: PathBuf,
 }
 
-pub async fn get_or_download_executable(data_dir: &PathBuf) -> Result<DenoExecutable> {
+/// Writes the executable to the file system if needed and returns the path.
+pub async fn get_executable(data_dir: &PathBuf) -> Result<DenoExecutable> {
 	let executable_name = if cfg!(windows) { "deno.exe" } else { "deno" };
 	let executable_path = data_dir
 		.join("deno")
@@ -52,7 +53,7 @@ mod tests {
 		let data_dir = temp_dir.path().to_path_buf();
 
 		// First call: should download the executable
-		let result1 = get_or_download_executable(&data_dir).await?;
+		let result1 = get_executable(&data_dir).await?;
 		assert!(
 			result1.executable_path.exists(),
 			"Executable should be created"
@@ -72,7 +73,7 @@ mod tests {
 		}
 
 		// Second call: should return the existing executable
-		let result2 = get_or_download_executable(&data_dir).await?;
+		let result2 = get_executable(&data_dir).await?;
 		assert_eq!(
 			result1.executable_path, result2.executable_path,
 			"Should return the same executable path"
