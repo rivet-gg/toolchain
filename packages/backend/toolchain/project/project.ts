@@ -1,6 +1,6 @@
 import { assert } from "@std/assert";
 import { copy, emptyDir, exists } from "@std/fs";
-import { dirname, resolve, normalize, isAbsolute } from "@std/path";
+import { dirname, isAbsolute, join, normalize, resolve } from "@std/path";
 import { dir } from "@cross/dir";
 import * as glob from "glob";
 import { readConfig as readProjectConfig } from "../config/project.ts";
@@ -22,7 +22,7 @@ import { IndexedModuleConfig } from "../config/module.ts";
 
 export interface Project {
 	path: string;
-  cachePath: string;
+	cachePath: string;
 	configPath: string;
 	config: ProjectConfig;
 	registries: Map<string, Registry>;
@@ -194,7 +194,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 	return {
 		path: projectRoot,
-    cachePath: await computeProjectCachePath(projectRoot),
+		cachePath: await computeProjectCachePath(projectRoot),
 		configPath: projectConfigPath,
 		config: projectConfig,
 		registries,
@@ -273,7 +273,7 @@ export async function fetchAndResolveModule(
 		// original module. For example. if multiple projects are using the same
 		// local registry, we don't want conflicting generated files.
 		path = resolve(
-      await computeProjectCachePath(projectRoot),
+			await computeProjectCachePath(projectRoot),
 			"external_modules",
 			moduleName,
 		);
@@ -329,16 +329,31 @@ function moduleNameInRegistry(
 }
 
 export const GITIGNORE_PATH = ".gitignore";
-export const RUNTIME_CONFIG_PATH = "runtime_config.ts";
-export const ENTRYPOINT_PATH = "entrypoint.ts";
 export const BUNDLE_PATH = "output.js";
 export const OUTPUT_MANIFEST_PATH = "output_manifest.json";
 export const PROJECT_MANIFEST_PATH = "project_manifest.json";
 export const OPEN_API_PATH = "openapi.json";
 export const CACHE_PATH = "cache.json";
-export const PACKAGES_PATH = "packages";
 export const SDK_PATH = "sdk";
-export const DRIZZLE_ORM_REEXPORT = "drizzle_orm_reexport.ts";
+
+// Generated project source
+export const OUTPUT_SOURCE_PATH = "output_source";
+
+export const ACTOR_CASE_CONVERSION_MAP_PATH = join(OUTPUT_SOURCE_PATH, "actorCaseConversion.ts");
+export const ACTOR_TYPEDEF_PATH = join(OUTPUT_SOURCE_PATH, "actors.d.ts");
+export const DENO_JSON_PATH = join(OUTPUT_SOURCE_PATH, "deno.json");
+export const DEPENDENCY_TYPEDEF_PATH = join(OUTPUT_SOURCE_PATH, "dependencies.d.ts");
+export const DEPENDENCY_CASE_CONVERSION = join(OUTPUT_SOURCE_PATH, "dependencyCaseConversion.ts");
+export const DRIZZLE_ORM_REEXPORT = join(OUTPUT_SOURCE_PATH, "drizzle_orm_reexport.ts");
+export const ENTRYPOINT_PATH = join(OUTPUT_SOURCE_PATH, "entrypoint.ts");
+export const RUNTIME_CONFIG_PATH = join(OUTPUT_SOURCE_PATH, "runtime_config.ts");
+export const PUBLIC_UTILS_PATH = join(OUTPUT_SOURCE_PATH, "public");
+export const DEPENDENCIES_PATH = join(OUTPUT_SOURCE_PATH, "dependencies");
+
+export const PACKAGES_PATH = join(OUTPUT_SOURCE_PATH, "packages");
+export const RUNTIME_ACTOR_PATH = join(PACKAGES_PATH, "runtime", "actor", "actor.ts");
+export const RUNTIME_POSTGRES_PATH = join(PACKAGES_PATH, "runtime", "postgres.ts");
+export const RUNTIME_MOD_PATH = join(PACKAGES_PATH, "runtime", "mod.ts");
 
 /**
  * Returns the absolute path to the project cache dir.
@@ -358,41 +373,26 @@ export async function computeProjectCachePath(projectPath: string): Promise<stri
 	const normalizedPath = normalize(projectPath);
 
 	// Hash project path using md5
-  const encoder = new TextEncoder();
-  const data = encoder.encode(normalizedPath);
-  const hashBuffer = await crypto.subtle.digest("SHA-1", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+	const encoder = new TextEncoder();
+	const data = encoder.encode(normalizedPath);
+	const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+	const hashArray = Array.from(new Uint8Array(hashBuffer));
+	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 
-  // Build path
-  const cachePath = await dir("cache");
+	// Build path
+	//
+	// We don't use the cache path since we do want this data to persist.
+	const cachePath = await dir("data");
 	const path = resolve(cachePath, "rivet", "backend", hashHex);
 
-  // Create dir
-  await Deno.mkdir(path, { recursive: true });
+	// Create dir
+	await Deno.mkdir(path, { recursive: true });
 
-  return path;
+	return path;
 }
 
 export function projectCachePath(project: Project, ...pathSegments: string[]): string {
-  return resolve(project.cachePath, ...pathSegments);
-}
-
-export function projectManifestPath(project: Project): string {
-	return projectCachePath(project, PROJECT_MANIFEST_PATH);
-}
-
-/** Path where the archive for the backend packages source code are extracted. */
-export function genRuntimeModPath(project: Project): string {
-	return projectCachePath(project, PACKAGES_PATH, "runtime", "mod.ts");
-}
-
-export function genRuntimePostgresPath(project: Project): string {
-	return projectCachePath(project, PACKAGES_PATH, "runtime", "postgres.ts");
-}
-
-export function genRuntimeActorPath(project: Project): string {
-	return projectCachePath(project, PACKAGES_PATH, "runtime", "actor", "actor.ts");
+	return resolve(project.cachePath, ...pathSegments);
 }
 
 export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): string {
@@ -407,7 +407,7 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
 
 	return projectCachePath(
 		project,
-    PACKAGES_PATH,
+		PACKAGES_PATH,
 		"runtime",
 		"actor",
 		"drivers",
@@ -416,31 +416,13 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
 	);
 }
 
-export function genDependencyTypedefPath(project: Project): string {
-	return projectCachePath(project, "dependencies.d.ts");
-}
-export function genDependencyCaseConversionMapPath(project: Project): string {
-	return projectCachePath(project, "dependencyCaseConversion.ts");
-}
-
-export function genActorTypedefPath(project: Project): string {
-	return projectCachePath(project, "actors.d.ts");
-}
-export function genActorCaseConversionMapPath(project: Project): string {
-	return projectCachePath(project, "actorCaseConversion.ts");
-}
-
-function genPublicUtilsFolder(project: Project): string {
-	return projectCachePath(project, "public");
-}
-
 /**
  * Inner file used to nest any imports related to this module.
  *
  * This will be re-imported in other `genModulePublicExternal`.
  */
 export function genModulePublicInternal(project: Project, module: Module): string {
-	return resolve(genPublicUtilsFolder(project), `internal_${module.name}.ts`);
+	return projectCachePath(project, PUBLIC_UTILS_PATH, `internal_${module.name}.ts`);
 }
 
 /**
@@ -450,15 +432,11 @@ export function genModulePublicInternal(project: Project, module: Module): strin
  * their given module names.
  */
 export function genModulePublicExternal(project: Project, module: Module): string {
-	return resolve(genPublicUtilsFolder(project), `external_${module.name}.ts`);
-}
-
-function genDependenciesFolder(project: Project): string {
-	return projectCachePath(project, "dependencies");
+	return projectCachePath(project, PUBLIC_UTILS_PATH, `external_${module.name}.ts`);
 }
 
 export function genModuleDependenciesPath(project: Project, module: Module): string {
-	return resolve(genDependenciesFolder(project), `dependencies_${module.name}.ts`);
+	return projectCachePath(project, DEPENDENCIES_PATH, `dependencies_${module.name}.ts`);
 }
 
 export interface ListSourceFileOpts {
@@ -491,14 +469,14 @@ export async function listSourceFiles(
 
 export async function cleanProject(project: Project) {
 	// Delete database
-  verbose("Stopping Postgres");
+	verbose("Stopping Postgres");
 	const postgresManager = await getDefaultPostgresManager(project);
 	if (postgresManager) {
 		stop(postgresManager);
 	}
 
 	// Delete project files
-  verbose("Removing project gen path");
+	verbose("Removing project gen path");
 	await Deno.remove(projectCachePath(project), { recursive: true });
 }
 

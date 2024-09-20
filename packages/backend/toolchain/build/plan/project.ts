@@ -9,7 +9,14 @@ import { generateDenoConfig } from "../deno_config.ts";
 import { generateEntrypoint } from "../entrypoint.ts";
 import { UnreachableError, UserError } from "../../error/mod.ts";
 import { genProjectManifest } from "../project_manifest.ts";
-import { BUNDLE_PATH, ENTRYPOINT_PATH, OUTPUT_MANIFEST_PATH, projectCachePath, PACKAGES_PATH, OPEN_API_PATH } from "../../project/project.ts";
+import {
+	BUNDLE_PATH,
+	ENTRYPOINT_PATH,
+	OPEN_API_PATH,
+	OUTPUT_MANIFEST_PATH,
+	PACKAGES_PATH,
+	projectCachePath,
+} from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
 import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
@@ -113,22 +120,21 @@ export async function planProjectBuild(
 		name: "Generate",
 		description: "entrypoint.ts",
 		async build() {
-			await generateEntrypoint(project, opts);
 		},
 	});
 
-  if (opts.sdk && project.config.sdks) {
-    for (const sdk of project.config.sdks) {
-      buildStep(buildState, {
-        id: `project.generate.sdk`,
-        name: "Generate",
-        description: sdk.output,
-        async build() {
-          await generateSdk(project, sdk);
-        },
-      });
-    }
-  }
+	if (opts.sdk && project.config.sdks) {
+		for (const sdk of project.config.sdks) {
+			buildStep(buildState, {
+				id: `project.generate.sdk`,
+				name: "Generate",
+				description: sdk.output,
+				async build() {
+					await generateSdk(project, sdk);
+				},
+			});
+		}
+	}
 
 	if (opts.format == Format.Bundled) {
 		buildStep(buildState, {
@@ -150,14 +156,14 @@ export async function planProjectBuild(
 					sourcemap: true,
 					plugins: [
 						// Bundle Deno dependencies
-            ...denoPlugins(),
+						...denoPlugins(),
 
 						// HACK: esbuild-deno-loader does not play nice with
 						// Windows paths, so we manually resolve any paths that
 						// start with a Windows path separator (\) and resolve
 						// them to the full path.
 						{
-							name: 'fix-windows-paths',
+							name: "fix-windows-paths",
 							setup(build: esbuild.PluginBuild) {
 								build.onResolve({ filter: /^\\.*/ }, (args) => {
 									const resolvedPath = resolve(args.resolveDir, args.path);
@@ -168,13 +174,13 @@ export async function planProjectBuild(
 									}
 
 									return {
-										path: resolve(args.resolveDir, args.path)
+										path: resolve(args.resolveDir, args.path),
 									};
 								});
-							}
+							},
 						} satisfies esbuild.Plugin,
 
-            // Remove unused Node imports
+						// Remove unused Node imports
 						nodeModulesPolyfillPlugin({
 							globals: {
 								Buffer: true,
@@ -194,8 +200,6 @@ export async function planProjectBuild(
 								buffer: true,
 							},
 						}),
-
-
 					],
 					define: {
 						// HACK: Disable `process.domain` in order to correctly handle this edge case:
@@ -300,7 +304,7 @@ export async function planProjectBuild(
 			description: "entrypoint.ts",
 			async build() {
 				const checkOutput = await new Deno.Command(denoExecutablePath(), {
-					args: ["check", "--quiet", projectCachePath(project, "entrypoint.ts")],
+					args: ["check", "--quiet", projectCachePath(project, ENTRYPOINT_PATH)],
 					signal,
 				}).output();
 				if (!checkOutput.success) {

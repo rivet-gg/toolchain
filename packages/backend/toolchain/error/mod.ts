@@ -67,10 +67,10 @@ export class InternalError extends BuildError {
 }
 
 export class AbortError extends InternalError {
-  constructor(message: string) {
-    super(message);
-    this.name = "AbortError";
-  }
+	constructor(message: string) {
+		super(message);
+		this.name = "AbortError";
+	}
 }
 
 export class UnreachableError extends InternalError {

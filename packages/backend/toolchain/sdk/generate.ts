@@ -22,7 +22,7 @@ interface Generator {
 
 export async function generateSdk(
 	project: Project,
-  sdk: SdkConfig
+	sdk: SdkConfig,
 ) {
 	const targetString = targetToString(sdk.target);
 	const sdkGenPath = resolve(projectCachePath(project, SDK_PATH), targetString);
@@ -46,8 +46,8 @@ export async function generateSdk(
 	} else if (sdk.target == SdkTarget.Godot) {
 		await generateGodot(project, sdkGenPath);
 	} else {
-    throw new UnreachableError(sdk.target);
-  }
+		throw new UnreachableError(sdk.target);
+	}
 
 	await move(sdkCopyPath, sdk.output, { overwrite: true });
 

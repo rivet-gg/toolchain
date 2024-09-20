@@ -34,8 +34,8 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 	const signal = opts.signal;
 
 	// Build working dir
-  //
-  // Resolve real path since we need to use `relative` from the temp dir to the Rivet dir
+	//
+	// Resolve real path since we need to use `relative` from the temp dir to the Rivet dir
 	const tempDir = await Deno.realPath(await Deno.makeTempDir());
 	const tempDbPath = resolve(tempDir, "db");
 	const tempOrmReexportPath = resolve(tempDir, DRIZZLE_ORM_REEXPORT);

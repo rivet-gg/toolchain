@@ -1,4 +1,3 @@
 export function denoExecutablePath(): string {
-  return Deno.execPath();
+	return Deno.execPath();
 }
-

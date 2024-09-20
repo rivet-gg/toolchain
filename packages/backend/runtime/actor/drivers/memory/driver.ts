@@ -15,7 +15,7 @@ export interface ActorRecord {
 	instanceName: string;
 	state?: string;
 	storage: Map<string, string>;
-  timeoutIds: Set<number>;
+	timeoutIds: Set<number>;
 }
 
 export interface ActorInstance {
@@ -74,7 +74,7 @@ export class MemoryActorDriver implements ActorDriver {
 			instanceName,
 			state: undefined,
 			storage: new Map(),
-      timeoutIds: new Set(),
+			timeoutIds: new Set(),
 		};
 
 		// TODO: cache init actor in memory
@@ -141,19 +141,19 @@ export class MemoryActorDriver implements ActorDriver {
 		// TODO: Does not handle cancelling timeouts correctly
 		const id = await this.getId(moduleName, actorName, instanceName);
 
-    // Delete record
-    const actorRecord = this.actorRecords.get(id);
-    if (actorRecord) {
-      // Clear timeouts
-      for (const id of actorRecord.timeoutIds) {
-        clearTimeout(id);
-      }
-    
-      this.actorRecords.delete(id);
-    }
+		// Delete record
+		const actorRecord = this.actorRecords.get(id);
+		if (actorRecord) {
+			// Clear timeouts
+			for (const id of actorRecord.timeoutIds) {
+				clearTimeout(id);
+			}
 
-    // Delete instance
-    const actorInstance = this.actorInstances.get(id);
+			this.actorRecords.delete(id);
+		}
+
+		// Delete instance
+		const actorInstance = this.actorInstances.get(id);
 		if (actorInstance) {
 			actorInstance.actor.destroyed = true;
 			this.actorInstances.delete(id);

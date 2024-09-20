@@ -7,7 +7,7 @@ import { crypto } from "@std/crypto";
 import { encodeHex } from "@std/encoding/hex";
 
 // TODO: Replace this with the hash of the backend folder in order to auto-invalidate cache on update.
-export const CACHE_VERSION = 6;
+export const CACHE_VERSION = 7;
 
 export interface Cache {
 	persist: CachePersist;

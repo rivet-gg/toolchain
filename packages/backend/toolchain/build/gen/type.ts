@@ -1,17 +1,18 @@
-import {
-	genActorCaseConversionMapPath,
-	genActorTypedefPath,
-	genDependencyCaseConversionMapPath,
-	genDependencyTypedefPath,
-	Project,
-} from "../../project/mod.ts";
+import { Project } from "../../project/mod.ts";
 import { GeneratedCodeBuilder } from "./mod.ts";
 import { camelify, pascalify } from "../../../case_conversion/mod.ts";
 import { compilePublic } from "./public.ts";
+import {
+	ACTOR_CASE_CONVERSION_MAP_PATH,
+	ACTOR_TYPEDEF_PATH,
+	DEPENDENCY_CASE_CONVERSION,
+	DEPENDENCY_TYPEDEF_PATH,
+	projectCachePath,
+} from "../../project/project.ts";
 
 export async function compileTypeHelpers(project: Project) {
-	const typedefPath = genDependencyTypedefPath(project);
-	const caseConversionPath = genDependencyCaseConversionMapPath(project);
+	const typedefPath = projectCachePath(project, DEPENDENCY_TYPEDEF_PATH);
+	const caseConversionPath = projectCachePath(project, DEPENDENCY_CASE_CONVERSION);
 	const dependencyTypedef = new GeneratedCodeBuilder(typedefPath, 4);
 	const dependencyCaseConversionMap = new GeneratedCodeBuilder(caseConversionPath, 4);
 
@@ -136,8 +137,8 @@ export async function compileTypeHelpers(project: Project) {
 }
 
 export async function compileActorTypeHelpers(project: Project) {
-	const typedefPath = genActorTypedefPath(project);
-	const caseConversionPath = genActorCaseConversionMapPath(project);
+	const typedefPath = projectCachePath(project, ACTOR_TYPEDEF_PATH);
+	const caseConversionPath = projectCachePath(project, ACTOR_CASE_CONVERSION_MAP_PATH);
 	const actorTypedef = new GeneratedCodeBuilder(typedefPath, 4);
 	const actorCaseConversionMap = new GeneratedCodeBuilder(caseConversionPath, 4);
 

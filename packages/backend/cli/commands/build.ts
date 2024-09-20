@@ -59,7 +59,7 @@ export async function execute(opts: Opts) {
 				dbDriver: opts.dbDriver!,
 				strictSchemas: opts.strictSchemas,
 				skipDenoCheck: false,
-        sdk: opts.sdk ? {} : undefined,
+				sdk: opts.sdk ? {} : undefined,
 				migrate: opts.migrate
 					? {
 						mode: opts.migrateMode,

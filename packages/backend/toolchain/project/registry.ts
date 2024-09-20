@@ -69,11 +69,11 @@ export async function loadRegistry(
 }
 
 async function indexRegistryModules(registry: ResolveRegistryOutput): Promise<Record<string, IndexedModuleConfig>> {
-  // Don't index if modules dir doesn't exist. We do this so we can auto-add a
-  // local registry in a dev project without a modules folder existing yet.
-  if (!await exists(registry.path, { isDirectory: true })) {
-    return {};
-  }
+	// Don't index if modules dir doesn't exist. We do this so we can auto-add a
+	// local registry in a dev project without a modules folder existing yet.
+	if (!await exists(registry.path, { isDirectory: true })) {
+		return {};
+	}
 
 	const modules = new Map<string, IndexedModuleConfig>();
 	for await (const dirEntry of Deno.readDir(registry.path)) {
@@ -119,7 +119,7 @@ export async function loadLocalRegistry(projectRoot: string, signal?: AbortSigna
 		"local",
 		{
 			local: {
-				directory: "./modules"
+				directory: "./modules",
 			},
 		},
 		signal,
@@ -138,10 +138,10 @@ async function resolveRegistryLocal(
 ): Promise<ResolveRegistryOutput> {
 	const isExternal = config.isExternal ?? false;
 
-  // Generate registry path
-  //
-  // This path doesn't need to exist. We'll throw an error if we try to load a
-  // module from this registry.
+	// Generate registry path
+	//
+	// This path doesn't need to exist. We'll throw an error if we try to load a
+	// module from this registry.
 	const path = resolve(projectRoot, config.directory);
 
 	return { path, isExternal };

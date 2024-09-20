@@ -1,25 +1,19 @@
-import {
-	genActorCaseConversionMapPath,
-	genActorTypedefPath,
-	genRuntimeActorDriverPath,
-	hasUserConfigSchema,
-	Module,
-	moduleHelperGen,
-	Project,
-} from "../../project/mod.ts";
+import { genRuntimeActorDriverPath, hasUserConfigSchema, Module, moduleHelperGen, Project } from "../../project/mod.ts";
 import { GeneratedCodeBuilder } from "./mod.ts";
 import {
+	ACTOR_CASE_CONVERSION_MAP_PATH,
+	ACTOR_TYPEDEF_PATH,
+	DEPENDENCY_CASE_CONVERSION,
+	DEPENDENCY_TYPEDEF_PATH,
 	DRIZZLE_ORM_REEXPORT,
-	genDependencyCaseConversionMapPath,
-	genDependencyTypedefPath,
 	genModulePublicExternal,
-	genRuntimeModPath,
 	PACKAGES_PATH,
 	projectCachePath,
 	RUNTIME_CONFIG_PATH,
 } from "../../project/project.ts";
 import { camelify } from "../../../case_conversion/mod.ts";
 import { BuildOpts } from "../mod.ts";
+import { RUNTIME_MOD_PATH } from "../../project/project.ts";
 
 export async function compileModuleHelper(
 	project: Project,
@@ -28,12 +22,12 @@ export async function compileModuleHelper(
 ) {
 	const helper = new GeneratedCodeBuilder(moduleHelperGen(project, module), 3);
 
-	const runtimePath = helper.relative(genRuntimeModPath(project));
+	const runtimePath = helper.relative(projectCachePath(project, RUNTIME_MOD_PATH));
 	const reexportPath = helper.relative(
 		projectCachePath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
 	);
-	const dependencyCaseConversionMapPath = helper.relative(genDependencyCaseConversionMapPath(project));
-	const actorCaseConversionMapPath = helper.relative(genActorCaseConversionMapPath(project));
+	const dependencyCaseConversionMapPath = helper.relative(projectCachePath(project, DEPENDENCY_CASE_CONVERSION));
+	const actorCaseConversionMapPath = helper.relative(projectCachePath(project, ACTOR_CASE_CONVERSION_MAP_PATH));
 	const runtimeConfigPath = helper.relative(projectCachePath(project, RUNTIME_CONFIG_PATH));
 
 	// Import & re-export runtime files
@@ -103,7 +97,7 @@ function genDependencies(
 	module: Module,
 	helper: GeneratedCodeBuilder,
 ) {
-	const typedefPath = genDependencyTypedefPath(project);
+	const typedefPath = projectCachePath(project, DEPENDENCY_TYPEDEF_PATH);
 
 	helper.append`
 		import type {
@@ -150,7 +144,7 @@ function genActors(
 	module: Module,
 	helper: GeneratedCodeBuilder,
 ) {
-	const typedefPath = genActorTypedefPath(project);
+	const typedefPath = projectCachePath(project, ACTOR_TYPEDEF_PATH);
 
 	helper.append`
 		import type {

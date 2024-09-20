@@ -61,7 +61,7 @@ Deno.test("error", async () => {
 				},
 			},
 			db: {
-        drizzleFn: undefined as any,
+				drizzleFn: undefined as any,
 				createPgPool: () => unimplemented(),
 			},
 		},

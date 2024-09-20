@@ -1,6 +1,6 @@
 import { z as zod } from "zod";
 import { AnySchemaElement, is } from "./schema.ts";
-import { DEFAULT_COMPILER_OPTIONS, BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE } from "./serializer.ts";
+import { BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE, DEFAULT_COMPILER_OPTIONS } from "./serializer.ts";
 import { Project } from "@ts-morph/ts-morph";
 
 export { schemaElements } from "./schema.ts";
@@ -100,9 +100,7 @@ export const getSourceFileDependencies = (path: string, { skipInternal = true }:
 	const sourceFiles = project.getSourceFiles().map((sourceFile) => sourceFile.getFilePath());
 
 	if (skipInternal) {
-		return sourceFiles.filter((sourceFile) =>
-			!sourceFile.includes(BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE)
-		);
+		return sourceFiles.filter((sourceFile) => !sourceFile.includes(BACKEND_SCHEMA_TYPESCRIPT_LIB_FILE));
 	}
 	return sourceFiles;
 };
