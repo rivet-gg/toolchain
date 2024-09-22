@@ -47,10 +47,16 @@ export async function releaseLock(lock: FsLock) {
 	try {
 		await lock.file.unlock();
 		lock.file.close();
-		await Deno.remove(lock.path);
 	} catch (err) {
 		error("Error releasing lock", `${err}`);
 	}
+
+  try {
+		await Deno.remove(lock.path);
+  } catch (_err) {
+    // Do nothing. This file may have been deleted for many reasons (i.e.
+    // cleaning project).
+  }
 
 	lock.released = true;
 }

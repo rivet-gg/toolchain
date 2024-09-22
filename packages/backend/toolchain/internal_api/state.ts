@@ -7,18 +7,19 @@ export type ValidationError = {
 };
 type Error = { name: "CombinedError"; errors: Error[] } | ValidationError;
 
-export type State =
-	& { project: Project }
-	& ({
-		value: "idle";
-	} | {
-		value: "building";
-	} | {
-		value: "success";
-	} | {
-		value: "failure";
-		error: Error | unknown;
-	});
+export type State = {
+	value: "idle";
+} | {
+	value: "building";
+	project: Project;
+} | {
+	value: "success";
+	project: Project;
+} | {
+	value: "failure";
+	project: Project;
+	error: Error | unknown;
+};
 
 interface Events {
 	changed: (state: State) => void;
