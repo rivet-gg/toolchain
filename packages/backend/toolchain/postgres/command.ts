@@ -2,6 +2,7 @@ import { resolve } from "@std/path";
 import { verbose } from "../term/status.ts";
 import { CommandError } from "./error.ts";
 import { binaryDir, Settings } from "./settings.ts";
+import { createShutdownAbortController } from "../utils/shutdown_handler.ts";
 
 export interface Command {
 	/**
@@ -31,7 +32,7 @@ export async function execute(settings: Settings, command: Command, timeout?: nu
 	verbose(`Executing command`, `${programFile} ${command.args.map((x) => JSON.stringify(x)).join(" ")}`);
 
 	// Add timeout abort controller
-	const controller = new AbortController();
+	const controller = createShutdownAbortController();
 	const { signal } = controller;
 	let timeoutId: number | undefined;
 	if (timeout) {

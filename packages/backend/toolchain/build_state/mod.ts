@@ -3,6 +3,7 @@ import { Cache, compareFileHash, compareHash, HashValue, loadCache, writeCache }
 import { progress } from "../term/status.ts";
 import { assert } from "@std/assert";
 import { CombinedError } from "../error/mod.ts";
+import { createShutdownAbortController } from "../utils/shutdown_handler.ts";
 
 /**
  * State for the current build process.
@@ -16,7 +17,7 @@ export interface BuildState {
 
 export async function createBuildState(project: Project, signal?: AbortSignal): Promise<BuildState> {
 	const cache = await loadCache(project);
-	if (!signal) signal = new AbortController().signal;
+	if (!signal) signal = createShutdownAbortController().signal;
 	signal.throwIfAborted();
 
 	// Build state

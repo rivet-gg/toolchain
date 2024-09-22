@@ -6,6 +6,7 @@ import { info, verbose } from "../term/status.ts";
 import { AbortError, InternalError } from "../error/mod.ts";
 import { printError } from "../error/mod.ts";
 import * as colors from "@std/fmt/colors";
+import { createShutdownAbortController } from "../utils/shutdown_handler.ts";
 
 export interface WatchOpts {
 	/**
@@ -45,10 +46,10 @@ export async function watch(opts: WatchOpts) {
 
 	// Run without watching
 	if (opts.disableWatch) {
-		const signal = new AbortController().signal;
-		const project = await loadProject(opts.loadProjectOpts, signal);
+		const controller = createShutdownAbortController();
+		const project = await loadProject(opts.loadProjectOpts, controller.signal);
 		try {
-			await opts.fn(project, signal);
+			await opts.fn(project, controller.signal);
 		} finally {
 			await releaseProject(project);
 		}
@@ -82,7 +83,7 @@ export async function watch(opts: WatchOpts) {
 		// Run action in background	in an abortable way
 		let fnAbortController: AbortController | undefined;
 		if (project != undefined) {
-			fnAbortController = new AbortController();
+			fnAbortController = createShutdownAbortController();
 			abortable(
 				wrapWatchFn(project, opts, fnAbortController.signal),
 				fnAbortController.signal,
