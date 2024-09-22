@@ -3,6 +3,7 @@ import { Project } from "../project/mod.ts";
 import { DENO_JSON_PATH } from "../project/project.ts";
 import { projectCachePath } from "../project/project.ts";
 import { autoGenHeader } from "./misc.ts";
+import { exists } from "@std/fs";
 
 export async function generateDenoConfig(project: Project) {
 	// Config that will be used as a base for the user config and the generated config

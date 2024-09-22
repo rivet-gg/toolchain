@@ -20,9 +20,9 @@ import {
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
 import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
-import { nodeModulesPolyfillPlugin } from "npm:esbuild-plugins-node-modules-polyfill@1.6.4";
+import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
 import { planProjectValidate } from "../validate.ts";
-import { denoPlugins } from "jsr:@luca/esbuild-deno-loader@^0.10.3";
+import { denoPlugins } from "@rivet-gg/esbuild-deno-loader";
 import { migratePush } from "../../migrate/push.ts";
 import { migrateApply } from "../../migrate/apply.ts";
 import { migrateGenerate } from "../../migrate/generate.ts";
@@ -30,8 +30,7 @@ import { generateSdk } from "../../sdk/generate.ts";
 import { denoExecutablePath } from "../../utils/deno.ts";
 import { exists } from "@std/fs";
 
-// Must match version in `esbuild_deno_loader`
-import * as esbuild from "npm:esbuild@0.20.2";
+import * as esbuild from "esbuild";
 
 export async function planProjectBuild(
 	buildState: BuildState,
