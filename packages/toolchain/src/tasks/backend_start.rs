@@ -224,7 +224,15 @@ mod project_manifest {
 	#[derive(Deserialize)]
 	#[serde(rename_all = "camelCase")]
 	pub struct Meta {
+		pub sdks: Vec<Sdk>,
 		pub modules: HashMap<String, Module>,
+	}
+
+	#[derive(Deserialize)]
+	#[serde(rename_all = "camelCase")]
+	pub struct Sdk {
+		pub target: String,
+		pub output: String,
 	}
 
 	#[derive(Deserialize)]
@@ -259,6 +267,15 @@ async fn read_manifest_and_build_event(
 	})?;
 
 	// Convert to event
+	let sdks = meta
+		.sdks
+		.into_iter()
+		.map(|x| backend_config_update::Sdk {
+			target: x.target,
+			output: x.output,
+		})
+		.collect();
+
 	let mut modules = meta
 		.modules
 		.into_iter()
@@ -271,5 +288,5 @@ async fn read_manifest_and_build_event(
 		.collect::<Vec<_>>();
 	modules.sort_by_cached_key(|x| x.name.clone());
 
-	Ok(backend_config_update::Event { modules })
+	Ok(backend_config_update::Event { sdks, modules })
 }

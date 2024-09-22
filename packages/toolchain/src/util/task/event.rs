@@ -19,7 +19,14 @@ pub mod backend_config_update {
 
 	#[derive(Serialize)]
 	pub struct Event {
+		pub sdks: Vec<Sdk>,
 		pub modules: Vec<Module>,
+	}
+
+	#[derive(Serialize)]
+	pub struct Sdk {
+		pub target: String,
+		pub output: String,
 	}
 
 	#[derive(Serialize)]
