@@ -1,7 +1,7 @@
 import { abortable } from "@std/async";
 import { dirname, resolve, SEPARATOR } from "@std/path";
 import { Project } from "../project/mod.ts";
-import { loadProject, loadProjectConfigPath, LoadProjectOpts } from "../project/project.ts";
+import { loadProject, loadProjectConfigPath, LoadProjectOpts, releaseProject } from "../project/project.ts";
 import { info, verbose } from "../term/status.ts";
 import { AbortError, InternalError } from "../error/mod.ts";
 import { printError } from "../error/mod.ts";
@@ -24,12 +24,12 @@ export interface WatchOpts {
 	/**
 	 * Called when an error occurs during the watch loop.
 	 */
-	onError?: (error: unknown) => void;
+	onError?: (project: Project | undefined, error: unknown) => void;
 
 	/**
 	 * Called when a file changes.
 	 */
-	onFileChange?: () => void;
+	onFileChange?: (project: Project | undefined) => void;
 
 	/**
 	 * Called when the project changes.
@@ -47,7 +47,11 @@ export async function watch(opts: WatchOpts) {
 	if (opts.disableWatch) {
 		const signal = new AbortController().signal;
 		const project = await loadProject(opts.loadProjectOpts, signal);
-		await opts.fn(project, signal);
+		try {
+			await opts.fn(project, signal);
+		} finally {
+			await releaseProject(project);
+		}
 		return;
 	}
 
@@ -57,10 +61,11 @@ export async function watch(opts: WatchOpts) {
 	// project again.
 	let project: Project | undefined = undefined;
 	try {
+		// Load new project
 		project = await loadProject(opts.loadProjectOpts);
 		opts.onProjectChange?.(project);
 	} catch (err) {
-		opts?.onError?.(err);
+		opts?.onError?.(project, err);
 		printError(err);
 	}
 
@@ -114,7 +119,7 @@ export async function watch(opts: WatchOpts) {
 		// Abort previous build. Ignore if it's already aborted.
 		try {
 			fnAbortController?.abort(new AbortError("Rebuilding project due to file change."));
-			opts.onFileChange?.();
+			opts.onFileChange?.(project);
 		} catch (err) {
 			if (err instanceof Error && err.name != "AbortError") throw err;
 		}
@@ -124,6 +129,10 @@ export async function watch(opts: WatchOpts) {
 		// If this fails, it means the project is in a bad state. This will skip the next
 		// action and wait for the next change.
 		try {
+			// Unlock old project
+			if (project) await releaseProject(project);
+
+			// Load new project
 			project = await loadProject(opts.loadProjectOpts);
 			opts.onProjectChange?.(project);
 		} catch (err) {

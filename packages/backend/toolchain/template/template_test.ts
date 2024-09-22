@@ -2,7 +2,7 @@ import { DbDriver } from "../build/mod.ts";
 import { build, Format, Runtime } from "../build/mod.ts";
 import { resolve } from "@std/path";
 import { printError } from "../error/mod.ts";
-import { loadProject } from "../project/mod.ts";
+import { loadProject, releaseProject } from "../project/mod.ts";
 import dedent from "dedent";
 import { templateModule } from "./module.ts";
 import { templateProject } from "./project.ts";
@@ -20,7 +20,11 @@ Deno.test({
 
 		await templateProject(path);
 
-		await templateModule(await loadProject({ project: path }), "module_a");
+    {
+      const project = await loadProject({ project: path });
+      await templateModule(project, "module_a");
+      await releaseProject(project);
+    }
 
 		// Append test model to schema
 		const schemaPath = resolve(path, "modules", "module_a", "db", "schema.ts");
@@ -33,16 +37,22 @@ Deno.test({
 		`;
 		await Deno.writeTextFile(schemaPath, schema);
 
-		await templateScript(await loadProject({ project: path }), "module_a", "script_a");
+    {
+      const project = await loadProject({ project: path });
+      await templateScript(project, "module_a", "script_a");
+      await releaseProject(project);
+    }
 
 		try {
-			await build(await loadProject({ project: path }), {
+      const project = await loadProject({ project: path });
+			await build(project, {
 				format: Format.Native,
 				runtime: Runtime.Deno,
 				dbDriver: DbDriver.NodePostgres,
 				strictSchemas: true,
 				skipDenoCheck: false,
 			});
+      await releaseProject(project);
 		} catch (err) {
 			printError(err);
 			throw err;

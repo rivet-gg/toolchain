@@ -17,11 +17,13 @@ import { PathResolver, QualifiedPathPair } from "../../path_resolver/mod.ts";
 import { RouteCollisionError } from "../error/mod.ts";
 import { stop } from "../postgres/manager.ts";
 import { getDefaultPostgresManager } from "../postgres/mod.ts";
-import { verbose } from "../term/status.ts";
+import { info, verbose } from "../term/status.ts";
 import { IndexedModuleConfig } from "../config/module.ts";
+import { acquireLock, FsLock, releaseLock } from "../utils/fslock.ts";
 
 export interface Project {
 	path: string;
+	lock: FsLock;
 	cachePath: string;
 	configPath: string;
 	config: ProjectConfig;
@@ -51,11 +53,20 @@ export function loadProjectConfigPath(opts: LoadProjectOpts): string {
 export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): Promise<Project> {
 	const projectConfigPath = loadProjectConfigPath(opts);
 	const projectRoot = dirname(projectConfigPath);
+	const cachePath = await computeProjectCachePath(projectRoot);
 
 	// Read project config
 	const projectConfig = await readProjectConfig(
 		projectConfigPath,
 	);
+
+	// Lock project
+    const lock = await acquireLock({
+      path: resolve(cachePath, LOCK_PATH),
+      onWaiting: () => {
+        info("Waiting", "another process is currently modifying this project");
+      },
+    });
 
 	// Load registries
 	const registries = new Map();
@@ -194,7 +205,8 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 	return {
 		path: projectRoot,
-		cachePath: await computeProjectCachePath(projectRoot),
+		lock,
+		cachePath,
 		configPath: projectConfigPath,
 		config: projectConfig,
 		registries,
@@ -328,13 +340,13 @@ function moduleNameInRegistry(
 	return module.module ?? moduleName;
 }
 
-export const GITIGNORE_PATH = ".gitignore";
 export const BUNDLE_PATH = "output.js";
 export const OUTPUT_MANIFEST_PATH = "output_manifest.json";
 export const PROJECT_MANIFEST_PATH = "project_manifest.json";
 export const OPEN_API_PATH = "openapi.json";
 export const CACHE_PATH = "cache.json";
 export const SDK_PATH = "sdk";
+export const LOCK_PATH = "project_lock";
 
 // Generated project source
 export const OUTPUT_SOURCE_PATH = "output_source";
@@ -495,4 +507,13 @@ export function getLocalRegistry(
 	} else {
 		return undefined;
 	}
+}
+
+export async function releaseProject(project: Project) {
+	// Release lock
+	await releaseLock(project.lock);
+}
+
+export function ensureLocked(project: Project) {
+	assert(!project.lock.released, "project lock must not be released");
 }

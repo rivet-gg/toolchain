@@ -22,9 +22,6 @@ import { inflateArchive } from "../util.ts";
 import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
 import { nodeModulesPolyfillPlugin } from "npm:esbuild-plugins-node-modules-polyfill@1.6.4";
 import { planProjectValidate } from "../validate.ts";
-
-// Must match version in `esbuild_deno_loader`
-import * as esbuild from "npm:esbuild@0.20.2";
 import { denoPlugins } from "jsr:@luca/esbuild-deno-loader@^0.10.3";
 import { migratePush } from "../../migrate/push.ts";
 import { migrateApply } from "../../migrate/apply.ts";
@@ -32,6 +29,9 @@ import { migrateGenerate } from "../../migrate/generate.ts";
 import { generateSdk } from "../../sdk/generate.ts";
 import { denoExecutablePath } from "../../utils/deno.ts";
 import { exists } from "@std/fs";
+
+// Must match version in `esbuild_deno_loader`
+import * as esbuild from "npm:esbuild@0.20.2";
 
 export async function planProjectBuild(
 	buildState: BuildState,
@@ -120,6 +120,7 @@ export async function planProjectBuild(
 		name: "Generate",
 		description: "entrypoint.ts",
 		async build() {
+      await generateEntrypoint(project, opts);
 		},
 	});
 
