@@ -73,7 +73,8 @@ impl task::Task for Task {
 			None
 		};
 
-		task.log(format!("[Deploy Finished]"));
+		task.log("");
+		task.log("[Deploy Finished]");
 
 		Ok(Output { game_server })
 	}
