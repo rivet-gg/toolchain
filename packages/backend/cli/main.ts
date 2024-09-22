@@ -3,6 +3,13 @@ import { executeCommand } from "./execute.ts";
 import { commandSchema } from "./execute.ts";
 import { runShutdown } from "../toolchain/utils/shutdown_handler.ts";
 import { printError, UserError } from "../toolchain/error/mod.ts";
+import { verbose } from "../toolchain/term/status.ts";
+
+Deno.addSignalListener(Deno.build.os == "windows" ? "SIGBREAK" : "SIGINT", async () => {
+	verbose("Received shutdown signal");
+	await runShutdown();
+	Deno.exit(0);
+});
 
 let exitCode = 0;
 try {
@@ -33,7 +40,7 @@ try {
 	printError(err);
 	exitCode = 1;
 } finally {
-	runShutdown();
+	await runShutdown();
 }
 
 Deno.exit(exitCode);
