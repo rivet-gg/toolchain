@@ -70,7 +70,7 @@ fn find_matching_asset<'a>(
 fn map_rust_target_to_deno(target: &str) -> &'static str {
 	match target {
 		x if x.starts_with("x86_64-unknown-linux-") => "deno-x86_64-unknown-linux-gnu.zip",
-		x if x.starts_with("aarch-unknown-linux-") => "deno-aarch64-unknown-linux-gnu.zip",
+		x if x.starts_with("aarch64-unknown-linux-") => "deno-aarch64-unknown-linux-gnu.zip",
 		x if x.starts_with("x86_64-pc-windows-") => "deno-x86_64-pc-windows-msvc.zip",
 		"x86_64-apple-darwin" => "deno-x86_64-apple-darwin.zip",
 		"aarch64-apple-darwin" => "deno-aarch64-apple-darwin.zip",
