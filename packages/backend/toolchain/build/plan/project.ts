@@ -53,6 +53,7 @@ export async function planProjectBuild(
 		id: `project.generate.manifest`,
 		name: "Generate",
 		description: "project_manifest.json",
+    dontLogProgress: true,
 		async build() {
 			await genProjectManifest(project);
 		},
@@ -66,6 +67,7 @@ export async function planProjectBuild(
 		id: `project.generate.inflate_packages`,
 		name: "Generate",
 		description: "packages/",
+    dontLogProgress: true,
 		async build({ signal }) {
 			// Writes a copy of the backend runtime bundled with the CLI to the project.
 			const inflatePackagesPath = projectCachePath(project, PACKAGES_PATH);
@@ -79,6 +81,7 @@ export async function planProjectBuild(
 		id: `project.generate.dependencies`,
 		name: "Generate",
 		description: "dependencies.d.ts",
+    dontLogProgress: true,
 		condition: {
 			files: [...project.modules.values()].map((m) => resolve(m.path, "module.json")),
 		},
@@ -91,6 +94,7 @@ export async function planProjectBuild(
 		id: `project.generate.actors`,
 		name: "Generate",
 		description: "actors.d.ts",
+    dontLogProgress: true,
 		condition: {
 			files: [...project.modules.values()].map((m) => resolve(m.path, "module.json")),
 		},
@@ -103,6 +107,7 @@ export async function planProjectBuild(
 		id: `project.generate.deno_config`,
 		name: "Generate",
 		description: "deno.json",
+    dontLogProgress: true,
 		async build() {
 			await generateDenoConfig(project);
 		},
@@ -119,6 +124,7 @@ export async function planProjectBuild(
 		id: `project.generate.entrypoint`,
 		name: "Generate",
 		description: "entrypoint.ts",
+    dontLogProgress: true,
 		async build() {
       await generateEntrypoint(project, opts);
 		},
@@ -128,7 +134,7 @@ export async function planProjectBuild(
 		for (const sdk of project.config.sdks) {
 			buildStep(buildState, {
 				id: `project.generate.sdk`,
-				name: "Generate",
+				name: "Generate SDK",
 				description: sdk.output,
 				async build() {
 					await generateSdk(project, sdk);

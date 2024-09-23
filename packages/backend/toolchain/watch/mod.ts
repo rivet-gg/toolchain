@@ -138,7 +138,7 @@ export async function watch(opts: WatchOpts) {
 			opts.onProjectChange?.(project);
 		} catch (err) {
 			printError(err);
-			opts?.onError?.(err);
+			opts?.onError?.(project, err);
 			project = undefined;
 		}
 	}
@@ -153,7 +153,7 @@ async function wrapWatchFn(
 	try {
 		await opts.fn(project, signal);
 	} catch (err) {
-		opts?.onError?.(err);
+		opts?.onError?.(project, err);
 		printError(err);
 	}
 }

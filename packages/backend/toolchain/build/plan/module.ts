@@ -60,6 +60,7 @@ export async function planModuleBuild(
 		id: `module.${module.name}.generate`,
 		name: "Generate",
 		description: `module.gen.ts`,
+    dontLogProgress: true,
 		module,
 		condition: {
 			files: [resolve(module.path, "module.json"), configPath(module), publicPath(module)],
@@ -77,6 +78,7 @@ export async function planModuleBuild(
 			id: `module.${module.name}.db_schema.generate`,
 			name: "Generate",
 			description: `schema.gen.ts`,
+      dontLogProgress: true,
 			module,
 			condition: {
 				files: [resolve(module.path, "module.json")],
