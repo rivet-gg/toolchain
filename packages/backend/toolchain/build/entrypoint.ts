@@ -2,10 +2,8 @@ import { resolve } from "@std/path";
 import { genRuntimeActorDriverPath, Project } from "../project/mod.ts";
 import {
 	ACTOR_CASE_CONVERSION_MAP_PATH,
-	DENO_JSON_PATH,
 	DEPENDENCY_CASE_CONVERSION,
 	ENTRYPOINT_PATH,
-	GITIGNORE_PATH,
 	PACKAGES_PATH,
 	projectCachePath,
 	RUNTIME_CONFIG_PATH,
@@ -249,11 +247,6 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 	// Write files
 	await config.write();
 	await entrypoint.write();
-
-	await Deno.writeTextFile(
-		projectCachePath(project, GITIGNORE_PATH),
-		".",
-	);
 }
 
 function generateModImports(project: Project, path: string) {
