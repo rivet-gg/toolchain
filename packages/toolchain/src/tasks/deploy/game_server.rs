@@ -107,7 +107,7 @@ pub async fn deploy(
 	} else {
 		let dockerfile = deploy_config
 			.dockerfile_path
-			.unwrap_or_else(|| "Dockerfile".to_string());
+			.unwrap_or_else(|| "game_server.Dockerfile".to_string());
 
 		let push_output = build_and_push(
 			ctx,
