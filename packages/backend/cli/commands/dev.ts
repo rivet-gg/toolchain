@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { globalOptsSchema, initProject } from "../common.ts";
+import { globalOptsSchema } from "../common.ts";
 import { build, DbDriver, Format, MigrateMode, Runtime } from "../../toolchain/build/mod.ts";
 import { watch } from "../../toolchain/watch/mod.ts";
 import { Project } from "../../toolchain/project/mod.ts";
@@ -7,8 +7,7 @@ import { InternalError } from "../../toolchain/error/mod.ts";
 import { ENTRYPOINT_PATH, projectCachePath } from "../../toolchain/project/project.ts";
 import { migrateModeSchema } from "./../util.ts";
 import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
-import { InternalState } from "../../toolchain/internal_api/state.ts";
-import { createAndStartProjectInternalApiRouter } from "../../toolchain/internal_api/mod.ts";
+import { createAndStartProjectInternalApiRouter, InternalState, State } from "../../toolchain/internal_api/mod.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 
 export const optsSchema = z.object({
@@ -25,23 +24,31 @@ export const optsSchema = z.object({
 type Opts = z.infer<typeof optsSchema>;
 
 export async function execute(opts: Opts) {
-	const project = await initProject(opts);
-
+  // Start internal router once we receive an event from `watch`
 	const internalState = new InternalState();
-	internalState.set({ value: "building", project });
+  let startedInternalRouter = false
+  const setInternalState = (state: State) => {
+    // Start internal router if needed
+    if (!startedInternalRouter) {
+      createAndStartProjectInternalApiRouter(internalState);
+      startedInternalRouter = true;
+    }
+    
+    // Set state
+    internalState.set(state);
+  };
 
-	createAndStartProjectInternalApiRouter(internalState);
 	await watch({
 		loadProjectOpts: opts,
 		disableWatch: !opts.watch,
-		onError: (error) => {
-			internalState.set({ value: "failure", project, error });
+		onError: (project, error) => {
+			if (project) setInternalState({ value: "failure", project, error });
 		},
-		onFileChange: () => {
-			internalState.set({ value: "building", project });
+		onFileChange: (project) => {
+			if (project) setInternalState({ value: "building", project });
 		},
 		onProjectChange(project) {
-			internalState.set({ value: "building", project });
+			setInternalState({ value: "building", project });
 		},
 		async fn(project: Project, signal: AbortSignal) {
 			await ensurePostgresRunning(project);

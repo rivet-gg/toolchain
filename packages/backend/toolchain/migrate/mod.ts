@@ -1,4 +1,4 @@
-import { Module, ModuleDatabase, Project } from "../project/mod.ts";
+import { ensureLocked, Module, ModuleDatabase, Project } from "../project/mod.ts";
 import { InternalError } from "../error/mod.ts";
 import { ensurePostgresRunning } from "../postgres/mod.ts";
 import { verbose } from "../term/status.ts";
@@ -15,6 +15,7 @@ export async function forEachDatabase(
 	signal?: AbortSignal,
 ) {
 	signal?.throwIfAborted();
+	ensureLocked(project);
 
 	await ensurePostgresRunning(project);
 

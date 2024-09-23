@@ -138,7 +138,7 @@ export function createAndStartProjectInternalApiRouter(internalState: InternalSt
 		port,
 		handler: app.fetch,
 		onListen: () => {
-			progress("Rivet Editor started", `http://${hostname}:${port}`);
+			progress("Editor Started", `http://${hostname}:${port}`);
 		},
 	});
 

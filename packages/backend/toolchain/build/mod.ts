@@ -4,6 +4,7 @@ import { success } from "../term/status.ts";
 import { planProjectBuild } from "./plan/project.ts";
 import { UnreachableError } from "../error/mod.ts";
 import { ensurePostgresRunning } from "../postgres/mod.ts";
+import { ensureLocked } from "../project/mod.ts";
 
 /**
  * Which format to use for building.
@@ -59,6 +60,7 @@ export interface BuildOpts {
 
 export async function build(project: Project, opts: BuildOpts) {
 	opts.signal?.throwIfAborted();
+	ensureLocked(project);
 
 	// Required for `migrateDev` and `migrateDeploy`
 	await ensurePostgresRunning(project);

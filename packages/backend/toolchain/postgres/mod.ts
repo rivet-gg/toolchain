@@ -8,7 +8,7 @@ import { addShutdownHandler } from "../utils/shutdown_handler.ts";
 import { getClient, getDatabaseUrl, Manager, setup } from "./manager.ts";
 import { createManager } from "./manager.ts";
 import { Settings } from "./settings.ts";
-import { projectCachePath } from "../project/mod.ts";
+import { ensureLocked, projectCachePath } from "../project/mod.ts";
 
 export const DEFAULT_VERSION = "16.4.0";
 export const DEFAULT_DATABASE = "rivet-backend";
@@ -85,6 +85,7 @@ function defaultSettings(project: Project): Settings {
 export async function getDefaultClient(project: Project): Promise<PostgresClient> {
 	return await getOrInitOnce(DEFAULT_CLIENT, async () => {
 		assert(postgresEnabled());
+		ensureLocked(project);
 
 		const manager = await getDefaultPostgresManager(project);
 		assertExists(manager);
