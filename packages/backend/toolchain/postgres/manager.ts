@@ -9,7 +9,7 @@ import { ensureDir, exists, move } from "@std/fs";
 import { execute, getProgramFile } from "./command.ts";
 import { getDownloadUrl, getReleaseFileNameForCurrentHost } from "./resolver.ts";
 import { InternalError } from "../error/mod.ts";
-import * as tar from "npm:tar";
+import * as tar from "tar";
 import { readState, State, writeState } from "./state.ts";
 
 export const BOOTSTRAP_SUPERUSER = "postgres";
