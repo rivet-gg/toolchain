@@ -240,12 +240,6 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 
 		let updated_editor_port = last_editor_port.map_or(true, |last| last != editor_port);
 
-		println!(
-			"Last: file={last_file_modified:?} sdk={last_sdk_modified:?} port={last_editor_port:?}"
-		);
-		println!("Current: file={file_modified:?} sdk={sdk_modified:?} port={editor_port:?}");
-		println!("Update: file={updated_file_modified} sdk={updated_sdk_modified} port={updated_editor_port}");
-
 		if updated_file_modified || updated_sdk_modified || updated_editor_port {
 			last_file_modified = Some(file_modified);
 			last_sdk_modified = sdk_modified;
