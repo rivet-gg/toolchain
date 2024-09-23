@@ -1,15 +1,24 @@
+import { resolve } from "@std/path";
 import { camelify, pascalify } from "../../case_conversion/mod.ts";
 import type { IndexedModuleConfig, ModuleConfig, ScriptConfig } from "../config/module.ts";
 import { ProjectConfig } from "../config/project.ts";
 import { RegistryConfig } from "../config/project.ts";
 import { hasUserConfigSchema, Project, PROJECT_MANIFEST_PATH } from "../project/mod.ts";
 import { projectCachePath } from "../project/project.ts";
+import { SdkTarget } from "../sdk/generate.ts";
 import { AnySchemaElement } from "./schema/mod.ts";
 
 export interface ProjectManifest {
 	config: ProjectConfig;
+	sdks: Sdk[];
 	registries: Record<string, RegistryManifest>;
 	modules: Record<string, ModuleManifest>;
+}
+
+export interface Sdk {
+	target: SdkTarget;
+	/** Absolute path to SDK output. */
+	output: string;
 }
 
 export interface RegistryManifest {
@@ -54,6 +63,11 @@ export interface ScriptManifest {
  * tools.
  */
 export async function genProjectManifest(project: Project) {
+	const sdks = (project.config.sdks ?? []).map((sdk) => ({
+		target: sdk.target,
+		output: resolve(project.path, sdk.output),
+	}));
+
 	const registries: Record<string, RegistryManifest> = Object.fromEntries(
 		Array.from(project.registries.entries()).map(([name, registry]) => [name, {
 			path: registry.path,
@@ -93,6 +107,7 @@ export async function genProjectManifest(project: Project) {
 
 	const manifest: ProjectManifest = {
 		config: project.config,
+		sdks,
 		registries,
 		modules,
 	};
