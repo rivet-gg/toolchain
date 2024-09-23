@@ -6,7 +6,6 @@ pub mod exec_command;
 pub mod game_server_start;
 pub mod game_server_stop;
 pub mod get_bootstrap_data;
-pub mod get_hub_link;
 pub mod get_settings_paths;
 pub mod open;
 pub mod show_term;
@@ -23,7 +22,6 @@ crate::task_registry!(
 	game_server_start::Task,
 	game_server_stop::Task,
 	get_bootstrap_data::Task,
-	get_hub_link::Task,
 	get_settings_paths::Task,
 	open::Task,
 	show_term::Task,
