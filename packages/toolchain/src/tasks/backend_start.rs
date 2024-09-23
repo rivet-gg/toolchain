@@ -1,7 +1,10 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::{path::Path, time::Duration};
+use std::{
+	path::Path,
+	time::{Duration, SystemTime},
+};
 
 use crate::{
 	backend::{self, build_backend_command, build_backend_command_raw},
@@ -158,12 +161,14 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 	);
 	let manifest_path = Path::new(manifest_path);
 
+	// TODO: Switch to notify
 	// Poll the file for updates
 	//
 	// We do this instead of using a file watcher since file watchers are frequently broken across
 	// platform and will require extensive testing.
 	let mut interval = tokio::time::interval(Duration::from_secs(2));
 	let mut last_file_modified = None;
+	let mut last_sdk_modified = None;
 	let mut last_editor_port = None;
 	loop {
 		interval.tick().await;
@@ -197,14 +202,56 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 			}
 		};
 
+		// Read manifest
+		let manifest = read_manifest(&manifest_path).await?;
+
+		// Check for most recent SDK change
+		let mut sdk_modified: Option<SystemTime> = None;
+		for sdk in &manifest.sdks {
+			match tokio::fs::metadata(&sdk.output).await {
+				Result::Ok(metadata) => match metadata.modified() {
+					Result::Ok(x) => {
+						sdk_modified = Some(sdk_modified.map_or(x, |modified| modified.max(x)));
+					}
+					Err(err) => {
+						task_ctx.log(format!("Failed to read SDK modification time: {err}"));
+						continue;
+					}
+				},
+				Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+					// SDK does not exist yet. The backend likely has not written it.
+					continue;
+				}
+				Err(err) => {
+					task_ctx.log(format!("Failed to read SDK metadata: {err}"));
+					continue;
+				}
+			}
+		}
+
 		// Publish event if changed
-		let updated_file_modified = last_file_modified.map_or(true, |x| file_modified > x);
-		let updated_editor_port = last_editor_port.map_or(true, |x| x != editor_port);
-		if updated_file_modified || updated_editor_port {
+		let updated_file_modified = last_file_modified.map_or(true, |last| file_modified > last);
+
+		let updated_sdk_modified = match (last_sdk_modified, sdk_modified) {
+			(Some(last), Some(current)) => current > last,
+			(None, None) => false,
+			_ => true,
+		};
+
+		let updated_editor_port = last_editor_port.map_or(true, |last| last != editor_port);
+
+		println!(
+			"Last: file={last_file_modified:?} sdk={last_sdk_modified:?} port={last_editor_port:?}"
+		);
+		println!("Current: file={file_modified:?} sdk={sdk_modified:?} port={editor_port:?}");
+		println!("Update: file={updated_file_modified} sdk={updated_sdk_modified} port={updated_editor_port}");
+
+		if updated_file_modified || updated_sdk_modified || updated_editor_port {
 			last_file_modified = Some(file_modified);
+			last_sdk_modified = sdk_modified;
 			last_editor_port = Some(editor_port);
 
-			match read_manifest_and_build_event(manifest_path, editor_port).await {
+			match build_config_update_event(manifest, editor_port).await {
 				Result::Ok(event) => {
 					task_ctx.event(task::TaskEvent::BackendConfigUpdate(event));
 				}
@@ -248,24 +295,27 @@ mod project_manifest {
 	}
 }
 
-/// Reads the `project_manifest.json` from the filesystem and converts it to an event.
+/// Reads the `project_manifest.json` from the filesystem.
+async fn read_manifest(config_path: impl AsRef<Path>) -> Result<project_manifest::Meta> {
+	// Read meta
+	tokio::task::block_in_place(|| {
+		let file = std::fs::File::open(config_path)?;
+		let meta = serde_json::from_reader::<_, project_manifest::Meta>(&file)?;
+		Ok(meta)
+	})
+}
+
+/// Converts project manifest to an event.
 ///
 /// Uses this intermediate step to convert the data in the toolchain instead of passing the direct
 /// manifest to the plugin in order to:
 /// - Ensure a consistent format
 /// - Reduce overhead of updates (the config is massive)
 /// - Enhance with any toolchain-specific data (e.g. edtor config url)
-async fn read_manifest_and_build_event(
-	config_path: impl AsRef<Path>,
+async fn build_config_update_event(
+	meta: project_manifest::Meta,
 	editor_port: u16,
 ) -> Result<backend_config_update::Event> {
-	// Read meta
-	let meta = tokio::task::block_in_place(|| {
-		let file = std::fs::File::open(config_path)?;
-		let meta = serde_json::from_reader::<_, project_manifest::Meta>(&file)?;
-		Ok(meta)
-	})?;
-
 	// Convert to event
 	let sdks = meta
 		.sdks
