@@ -6,7 +6,7 @@ import { resolve } from "@std/path";
 import { decodeBase64 } from "@std/encoding";
 import editorArchive from "../../artifacts/editor_archive.json" with { type: "json" };
 import { InternalState } from "./state.ts";
-import { progress } from "../term/status.ts";
+import { info, progress } from "../term/status.ts";
 import { ProjectManifest } from "../build/project_manifest.ts";
 import { ProjectConfigSchema } from "../config/project.ts";
 import { PROJECT_MANIFEST_PATH, projectCachePath } from "../project/mod.ts";
@@ -138,7 +138,7 @@ export function createAndStartProjectInternalApiRouter(internalState: InternalSt
 		port,
 		handler: app.fetch,
 		onListen: () => {
-			progress("Editor Started", `http://${hostname}:${port}`);
+			info("Editor", `http://${hostname}:${port}`);
 		},
 	});
 
