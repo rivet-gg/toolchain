@@ -56,3 +56,7 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api/deno,macos
 
+# Backend
+packages/backend/vendor/
+packages/backend/node_modules/
+

@@ -13,7 +13,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 		println!("{}: {}", key, value);
 	}
 
-	let target = env::var("OVERRIDE_TARGET").unwrap_or_else(|_| env::var("TARGET").unwrap());
+	let target = if cfg!(feature = "ignore-override-target") {
+		env::var("TARGET").unwrap()
+	} else {
+		env::var("OVERRIDE_TARGET").unwrap_or_else(|_| env::var("TARGET").unwrap())
+	};
+	println!("cargo::rerun-if-env-changed=OVERRIDE_TARGET");
+
 	let out_dir = env::var("OUT_DIR")?;
 	let cache_dir = get_cache_dir()?;
 
