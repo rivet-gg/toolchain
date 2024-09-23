@@ -83,7 +83,8 @@ mod tests {
 			.arg("--version")
 			.output()?;
 
-		let version_output = String::from_utf8_lossy(&output.stdout);
+		let version_output =
+			String::from_utf8(output.stdout).context("parse deno version output")?;
 		assert!(
 			version_output.contains(DENO_VERSION),
 			"Deno version output should contain the expected version"
