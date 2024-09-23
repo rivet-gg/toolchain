@@ -31,7 +31,7 @@ export interface Project {
 
 export interface LoadProjectOpts {
 	/** Path to the project root or project config. */
-	project?: string;
+	project: string | null;
 }
 
 /**
