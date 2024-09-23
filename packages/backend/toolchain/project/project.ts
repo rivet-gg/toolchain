@@ -61,12 +61,12 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 	);
 
 	// Lock project
-    const lock = await acquireLock({
-      path: resolve(cachePath, LOCK_PATH),
-      onWaiting: () => {
-        info("Waiting", "another process is currently modifying this project");
-      },
-    });
+	const lock = await acquireLock({
+		path: resolve(cachePath, LOCK_PATH),
+		onWaiting: () => {
+			info("Waiting", "another process is currently modifying this project");
+		},
+	});
 
 	// Load registries
 	const registries = new Map();
