@@ -1,5 +1,8 @@
-use std::time::Duration;
+use std::{time::Duration, sync::Arc};
+use lazy_static::lazy_static;
 
 use crate::util::process_manager::ProcessManager;
 
-pub const PROCESS_MANAGER: ProcessManager = ProcessManager { key: "game_server", kill_grace: Duration::from_secs(2) };
+lazy_static! {
+    pub static ref PROCESS_MANAGER: Arc<ProcessManager> = ProcessManager::new("game_server", Duration::from_secs(2));
+}

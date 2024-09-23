@@ -11,15 +11,13 @@ use crate::{
 	config::{self, meta},
 	paths,
 	util::{
-		process_manager::{CommandOpts, StartMode, StartOpts},
+		process_manager::CommandOpts,
 		task::{self, backend_config_update},
 	},
 };
 
 #[derive(Deserialize)]
-pub struct Input {
-	pub start_mode: StartMode,
-}
+pub struct Input {}
 
 #[derive(Serialize)]
 pub struct Output {
@@ -36,7 +34,7 @@ impl task::Task for Task {
 		"backend_start"
 	}
 
-	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
+	async fn run(task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		// Set backend port in case the process is already running. This will result in a duplicate
 		// port dispatch if the backend is not running or crashed.
 		if let (Some(backend_port), Some(editor_port)) =
@@ -50,60 +48,53 @@ impl task::Task for Task {
 
 		// Start or hook to backend
 		let task_inner = task.clone();
-		let pm_fut = backend::PROCESS_MANAGER_DEV.start(
-			StartOpts {
-				task: task.clone(),
-				start_mode: input.start_mode,
-				base_data_dir: paths::data_dir()?,
-			},
-			|| async move {
-				// Pick dev port
-				let backend_port = portpicker::pick_unused_port().context("no free ports")?;
-				let editor_port = portpicker::pick_unused_port().context("no free ports")?;
-				meta::mutate_project(&paths::data_dir()?, |x| {
-					x.backend_port = Some(backend_port);
-					x.editor_port = Some(editor_port);
+		let pm_fut = backend::PROCESS_MANAGER_DEV.start(task.clone(), || async move {
+			// Pick dev port
+			let backend_port = portpicker::pick_unused_port().context("no free ports")?;
+			let editor_port = portpicker::pick_unused_port().context("no free ports")?;
+			meta::mutate_project(&paths::data_dir()?, |x| {
+				x.backend_port = Some(backend_port);
+				x.editor_port = Some(editor_port);
+			})
+			.await?;
+
+			// Build env
+			let (mut cmd_env, config_path) =
+				config::settings::try_read(&paths::data_dir()?, |settings| {
+					let mut env = settings.backend.command_environment.clone();
+					env.extend(settings.backend.dev.command_environment.clone());
+					Ok((env, settings.backend.dev.config_path.clone()))
 				})
 				.await?;
+			cmd_env.insert("RIVET_BACKEND_PORT".into(), backend_port.to_string());
+			cmd_env.insert("RIVET_BACKEND_HOSTNAME".into(), "0.0.0.0".to_string());
+			cmd_env.insert("RIVET_BACKEND_TERM_COLOR".into(), "never".into());
+			cmd_env.insert("RIVET_EDITOR_PORT".into(), editor_port.to_string());
 
-				// Build env
-				let (mut cmd_env, config_path) =
-					config::settings::try_read(&paths::data_dir()?, |settings| {
-						let mut env = settings.backend.command_environment.clone();
-						env.extend(settings.backend.dev.command_environment.clone());
-						Ok((env, settings.backend.dev.config_path.clone()))
-					})
-					.await?;
-				cmd_env.insert("RIVET_BACKEND_PORT".into(), backend_port.to_string());
-				cmd_env.insert("RIVET_BACKEND_HOSTNAME".into(), "0.0.0.0".to_string());
-				cmd_env.insert("RIVET_BACKEND_TERM_COLOR".into(), "never".into());
-				cmd_env.insert("RIVET_EDITOR_PORT".into(), editor_port.to_string());
+			// Build command
+			let cmd = build_backend_command_raw(backend::BackendCommandOpts {
+				command: "dev",
+				opts: serde_json::json!({
+					"project": config_path,
+					"nonInteractive": true
+				}),
+				env: cmd_env,
+			})
+			.await?;
 
-				// Build command
-				let cmd = build_backend_command_raw(backend::BackendCommandOpts {
-					command: "dev",
-					opts: serde_json::json!({
-						"project": config_path,
-						"nonInteractive": true
-					}),
-					env: cmd_env,
-				})
-				.await?;
+			// Publish commandevent
+			task_inner.event(task::TaskEvent::PortUpdate {
+				backend_port,
+				editor_port,
+			});
 
-				// Publish commandevent
-				task_inner.event(task::TaskEvent::PortUpdate {
-					backend_port,
-					editor_port,
-				});
-
-				Ok(CommandOpts {
-					command: cmd.command.display().to_string(),
-					args: cmd.args,
-					envs: cmd.envs.into_iter().collect(),
-					current_dir: cmd.current_dir.display().to_string(),
-				})
-			},
-		);
+			Ok(CommandOpts {
+				command: cmd.command.display().to_string(),
+				args: cmd.args,
+				envs: cmd.envs.into_iter().collect(),
+				current_dir: cmd.current_dir.display().to_string(),
+			})
+		});
 
 		// Poll for config file updates
 		let poll_config_fut = poll_config_file(task.clone());

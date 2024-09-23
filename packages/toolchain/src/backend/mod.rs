@@ -1,10 +1,11 @@
 pub mod database;
 
 use anyhow::*;
+use lazy_static::lazy_static;
 use rivet_api::{apis, models};
 use serde::Serialize;
 use serde_json::json;
-use std::{collections::HashMap, path::PathBuf, process::ExitCode, time::Duration};
+use std::{collections::HashMap, path::PathBuf, process::ExitCode, sync::Arc, time::Duration};
 use tokio::process::Command;
 use uuid::Uuid;
 
@@ -14,10 +15,10 @@ use crate::{
 	ToolchainCtx,
 };
 
-pub const PROCESS_MANAGER_DEV: ProcessManager = ProcessManager {
-	key: "backend_dev",
-	kill_grace: Duration::from_secs(2),
-};
+lazy_static! {
+	pub static ref PROCESS_MANAGER_DEV: Arc<ProcessManager> =
+		ProcessManager::new("backend_dev", Duration::from_secs(2));
+}
 
 pub struct BackendCommandOpts {
 	pub command: &'static str,

@@ -1,36 +1,55 @@
 use anyhow::*;
-use rivet_process_runner_shared as shared;
-use serde::{Deserialize, Serialize};
-use std::{
-	future::Future,
-	path::PathBuf,
-	process::{Command, Stdio},
-	time::{Duration, Instant},
+use std::{collections::VecDeque, future::Future, process::Stdio, sync::Arc, time::Duration};
+use tokio::{
+	io::{AsyncBufReadExt, BufReader},
+	process::Command,
+	sync::{broadcast, mpsc, watch, Mutex},
 };
-use tokio::fs::File;
-use tokio::io::{AsyncBufReadExt, BufReader};
-use uuid::Uuid;
 
-use crate::{config, util::task::TaskCtx};
+use crate::util::task::TaskCtx;
 
-const LOG_POLL_INTERVAL: Duration = Duration::from_millis(100);
+const MAX_LOG_HISTORY: usize = 512;
 
-#[cfg(unix)]
-type PidRaw = i32;
+#[derive(Debug, Clone)]
+enum ProcessStatus {
+	/// This procsss has not been started yet.
+	NotRunning,
 
-#[cfg(not(unix))]
-type PidRaw = u32;
+	/// Process is starting but the PID has not been determined yet.
+	Starting,
 
-#[derive(Serialize, Deserialize, PartialEq, Eq)]
-pub enum StartMode {
-	StartOrHook,
-	HookOnly,
+	/// Currently running.
+	#[allow(dead_code)]
+	Running { pid: u32 },
+
+	/// Currently stopping.
+	Stopping,
+
+	/// Process exited.
+	Exited {
+		exit_code: Option<i32>,
+		error: Option<String>,
+	},
 }
 
-pub struct StartOpts {
-	pub task: TaskCtx,
-	pub base_data_dir: PathBuf,
-	pub start_mode: StartMode,
+impl ProcessStatus {
+	fn is_running(&self) -> bool {
+		matches!(
+			self,
+			ProcessStatus::Starting | ProcessStatus::Running { .. } | ProcessStatus::Stopping
+		)
+	}
+}
+
+#[derive(Debug, Clone)]
+enum ProcessEvent {
+	Log(ProcessLog),
+}
+
+#[derive(Debug, Clone)]
+enum ProcessLog {
+	Stdout(String),
+	Stderr(String),
 }
 
 pub struct CommandOpts {
@@ -43,699 +62,328 @@ pub struct CommandOpts {
 /// Manages the state of a process that's detached from the parent.
 ///
 /// Allows for processes to stay running even if the engine restarts.
-#[derive(Clone)]
 pub struct ProcessManager {
 	pub key: &'static str,
 	pub kill_grace: Duration,
+
+	/// Sends a stop request to the process.
+	stop_tx: Mutex<Option<mpsc::Sender<()>>>,
+
+	/// Watch process status.
+	status_tx: watch::Sender<ProcessStatus>,
+	status_rx: watch::Receiver<ProcessStatus>,
+
+	/// Broadcast process events.
+	event_tx: broadcast::Sender<ProcessEvent>,
+
+	/// Hold unused broadcast receiver so the sender does cancel.
+	///
+	/// All receivers will use `event_tx.subscribe()`
+	_event_rx: broadcast::Receiver<ProcessEvent>,
+
+	/// History of logs.
+	logs: Mutex<VecDeque<ProcessLog>>,
 }
 
 impl ProcessManager {
+	pub fn new(key: &'static str, kill_grace: Duration) -> Arc<Self> {
+		let (status_tx, status_rx) = watch::channel(ProcessStatus::NotRunning);
+		let (event_tx, event_rx) = broadcast::channel(16);
+		Arc::new(Self {
+			key,
+			kill_grace,
+			stop_tx: Mutex::new(None),
+			status_tx,
+			status_rx,
+			event_tx,
+			_event_rx: event_rx,
+			logs: Mutex::new(VecDeque::new()),
+		})
+	}
+
 	pub async fn start<CommandFut>(
-		&self,
-		StartOpts {
-			task,
-			base_data_dir,
-			start_mode,
-		}: StartOpts,
+		self: &Arc<Self>,
+		task_ctx: TaskCtx,
 		command_builder: impl FnOnce() -> CommandFut,
 	) -> Result<Option<i32>>
 	where
 		CommandFut: Future<Output = Result<CommandOpts>>,
 	{
-		// Check if existing process exists
+		// Start new process if needed. Otherwise, will hook to the existing process.
 		//
-		// Preserving the process ID in settings serves a few purposes:
-		// - Some game engines like Unity frequently restart the plugin, so the
-		//   process need to run independently
-		// - Game server process often hog a port, so we need to kill the
-		//   previous process to ensure the port is free
-		let process_id =
-			if let Some(process_id) = self.read_state(&base_data_dir, |x| x.process_id).await? {
-				// Check if process exists
-				if matches!(
-					get_process_state(process_id, &base_data_dir).await?,
-					ProcessState::Running { .. }
-				) {
-					Some(process_id)
-				} else {
-					None
+		// Clonign value required since this holds a read lock on the inner
+		// value.
+		if !self.status_rx.borrow().is_running() {
+			// Build command
+			//
+			// Do this before assigning process id in case the builder fails
+			let command_opts = command_builder().await?;
+
+			// Spawn process
+			self.spawn_process(command_opts).await?;
+		};
+
+		// Write events to task
+		let mut event_rx = self.event_tx.subscribe();
+		let log_fut = async {
+			// Write all log history
+			{
+				let logs = self.logs.lock().await;
+				for line in logs.iter().rev() {
+					match line {
+						ProcessLog::Stdout(line) => {
+							task_ctx.log(format!("[stdout] {line}"));
+						}
+						ProcessLog::Stderr(line) => {
+							task_ctx.log(format!("[stderr] {line}"));
+						}
+					}
 				}
-			} else {
-				None
-			};
+			}
 
-		// If process does not exist, spawn a new process
-		let process_id = if let Some(process_id) = process_id {
-			process_id
-		} else {
-			match start_mode {
-				StartMode::StartOrHook => {
-					// Build command
-					//
-					// Do this before assigning process id in case the builder fails
-					let command_opts = command_builder().await?;
-
-					// Set process ID before starting to prevent race condition
-					let process_id = Uuid::new_v4();
-					self.mutate_state(&base_data_dir, |meta| meta.process_id = Some(process_id))
-						.await?;
-
-					// Create data directory if it doesn't exist
-					let process_data_dir = process_data_dir(process_id, &base_data_dir)?;
-					std::fs::create_dir_all(&process_data_dir)?;
-
-					// Spawn process
-					let process_runner_path =
-						rivet_process_runner_embed::get_executable(&base_data_dir)?;
-					spawn_process(
-						process_runner_path,
-						process_data_dir,
-						&command_opts.current_dir,
-						&command_opts.command,
-						&command_opts
-							.args
-							.iter()
-							.map(|s| s.as_str())
-							.collect::<Vec<_>>(),
-						&command_opts.envs,
-					)?;
-
-					process_id
-				}
-				StartMode::HookOnly => {
-					// Don't start new process
-					return Ok(None);
+			// Wait for events
+			while let Result::Ok(event) = event_rx.recv().await {
+				match event {
+					ProcessEvent::Log(ProcessLog::Stdout(line)) => {
+						task_ctx.log(format!("[stdout] {line}"));
+					}
+					ProcessEvent::Log(ProcessLog::Stderr(line)) => {
+						task_ctx.log(format!("[stderr] {line}"));
+					}
 				}
 			}
 		};
 
 		// Wait for process to exit
-		let started_at = Instant::now();
-		loop {
-			let process_state = get_process_state(process_id, &base_data_dir).await?;
-			match process_state {
-				ProcessState::Starting => {
-					// Process is still starting. The process runner will write the PID to the
-					// thread once ready.
-					//
-					// This may time out if the command is not found since the process manager
-					// cannot start.
+		let mut status_rx = self.status_tx.subscribe();
+		tokio::select! {
+			res = status_rx.wait_for(|x| matches!(x, ProcessStatus::Exited { .. })) => {
+				// Destructure exit
+				let ProcessStatus::Exited { exit_code, error } = res.context("wait for exit")?.clone() else {
+					bail!("unreachable");
+				};
 
-					// Time out
-					if started_at.elapsed() > Duration::from_secs(2) {
-						bail!("timed out waiting for process tos tart");
-					}
-
-					// Wait for process to start
-					tokio::time::sleep(Duration::from_millis(100)).await;
-
-					continue;
+				// Re-throw error
+				if let Some(error) = error {
+					bail!("process erorr: {error}");
 				}
-				ProcessState::Running { pid } => {
-					let process_data_dir = process_data_dir(process_id, &base_data_dir)?;
 
-					// Wait for process to exit & stream logs
-					let stdout_path = process_data_dir.join(shared::paths::CHILD_STDOUT);
-					let stderr_path = process_data_dir.join(shared::paths::CHILD_STDERR);
-					tokio::select! {
-						res = wait_pid_exit(pid) => {
-							res.context("wait pid exit")?;
-						}
-						res = tail_logs(stdout_path, task.clone(), "stdout") => {
-							res.context("tail logs stdout")?;
-							bail!("stdout logs exited early");
-						}
-						res = tail_logs(stderr_path, task.clone(), "stderr") => {
-							res.context("tail logs stderr")?;
-							bail!("stderr logs exited early");
-						}
-					}
-
-					// Get new process state
-					match get_process_state(process_id, &base_data_dir).await? {
-						ProcessState::Exited { exit_code, error } => {
-							// Exit
-							if let Some(error) = error {
-								bail!("process failed to run: {error}");
-							} else {
-								return Ok(exit_code);
-							}
-						}
-						x => {
-							bail!("process state should be exited, got: {x:?}")
-						}
-					}
-				}
-				ProcessState::Exited { exit_code, error } => {
-					// Exited immediately
-					if let Some(error) = error {
-						bail!("process failed to run: {error}");
-					} else {
-						return Ok(exit_code);
-					}
-				}
-				ProcessState::NotFound => {
-					bail!("unexpected, process not found")
-				}
+				Ok(exit_code)
+			}
+			_ = log_fut => {
+				bail!("log fut exited early");
 			}
 		}
 	}
 
-	pub async fn stop(&self, base_data_dir: &PathBuf) -> Result<bool> {
-		let did_kill = if let Some(process_id) = self
-			.mutate_state(base_data_dir, |x| x.process_id.take())
-			.await?
-		{
-			kill_process(process_id, self.kill_grace, base_data_dir).await?
-		} else {
-			false
-		};
+	pub async fn stop(&self) -> Result<bool> {
+		// Clonign value required since this holds a read lock on the inner
+		// value.
+		if matches!(
+			*self.status_rx.borrow(),
+			ProcessStatus::Running { .. } | ProcessStatus::Starting
+		) {
+			let mut status_rx = self.status_tx.subscribe();
+			let mut stop = self.stop_tx.lock().await;
 
-		Ok(did_kill)
-	}
+			// Stop can only be sent once, so take the sender
+			if let Some(stop_tx) = stop.take() {
+				stop_tx.send(()).await?;
 
-	pub async fn is_running(&self, base_data_dir: &PathBuf) -> Result<bool> {
-		if let Some(process_id) = self.read_state(base_data_dir, |x| x.process_id).await? {
-			Ok(matches!(
-				get_process_state(process_id, base_data_dir).await?,
-				ProcessState::Starting | ProcessState::Running { .. }
-			))
+				// Wait for stop
+				status_rx
+					.wait_for(|x| matches!(x, ProcessStatus::Exited { .. }))
+					.await?;
+
+				Ok(true)
+			} else {
+				Ok(false)
+			}
 		} else {
 			Ok(false)
 		}
 	}
 
-	async fn read_state<F: FnOnce(&config::meta::ProcessState) -> T, T>(
-		&self,
-		base_data_dir: &PathBuf,
-		cb: F,
-	) -> Result<T> {
-		config::meta::mutate_project(base_data_dir, |meta| {
-			cb(meta.processes.entry(self.key.to_string()).or_default())
-		})
-		.await
+	pub async fn is_running(&self) -> Result<bool> {
+		Ok(self.status_rx.borrow().is_running())
 	}
 
-	async fn mutate_state<F: FnOnce(&mut config::meta::ProcessState) -> T, T>(
-		&self,
-		base_data_dir: &PathBuf,
-		cb: F,
-	) -> Result<T> {
-		config::meta::mutate_project(base_data_dir, |meta| {
-			cb(meta.processes.entry(self.key.to_string()).or_default())
-		})
-		.await
-	}
-}
+	async fn spawn_process(self: &Arc<Self>, command_opts: CommandOpts) -> Result<()> {
+		// Create new shutdown channel
+		let (stop_tx, stop_rx) = mpsc::channel(1);
+		*self.stop_tx.lock().await = Some(stop_tx);
 
-/// Directory where the process state is stored.
-fn process_data_dir(process_id: Uuid, base_data_dir: &PathBuf) -> Result<PathBuf> {
-	let process_data_dir = base_data_dir.join("process").join(process_id.to_string());
-	Ok(process_data_dir)
-}
+		// Update status
+		self.status_tx.send(ProcessStatus::Starting)?;
 
-#[derive(Debug, Clone)]
-enum ProcessState {
-	/// Process is starting but the PID has not been determined yet.
-	Starting,
-
-	/// Currently running.
-	Running { pid: PidRaw },
-
-	/// Process exited.
-	Exited {
-		exit_code: Option<i32>,
-		error: Option<String>,
-	},
-
-	/// Process data dir does not exist.
-	NotFound,
-}
-
-async fn get_process_state(process_id: Uuid, base_data_dir: &PathBuf) -> Result<ProcessState> {
-	let process_data_dir = process_data_dir(process_id, base_data_dir)?;
-
-	// Check if the data directory exists
-	if !process_data_dir.exists() {
-		return Ok(ProcessState::NotFound);
-	}
-
-	// Check if the exit_code file exists
-	let exit_code_path = process_data_dir.join(shared::paths::CHILD_EXIT_CODE);
-	let error_path = process_data_dir.join(shared::paths::RUNNER_ERROR);
-	let pid_path = process_data_dir.join(shared::paths::RUNNER_PID);
-
-	if error_path.exists() {
-		// Read the runner error
-		let error = tokio::fs::read_to_string(error_path).await?;
-		if error.is_empty() {
-			return Ok(ProcessState::Exited {
-				exit_code: None,
-				error: Some(error),
-			});
-		}
-	}
-
-	if exit_code_path.exists() {
-		let exit_code_str = tokio::fs::read_to_string(exit_code_path).await?;
-		if !exit_code_str.is_empty() {
-			if exit_code_str.trim() == "unknown" {
-				return Ok(ProcessState::Exited {
-					exit_code: None,
-					error: None,
-				});
-			} else {
-				let exit_code: i32 = exit_code_str.trim().parse()?;
-				return Ok(ProcessState::Exited {
-					exit_code: Some(exit_code),
-					error: None,
-				});
-			}
-		}
-	}
-
-	if pid_path.exists() {
-		// Read the PID from the file
-		let pid_str = tokio::fs::read_to_string(pid_path).await?;
-		if !pid_str.is_empty() {
-			let pid: PidRaw = pid_str.trim().parse()?;
-			assert!(pid > 0);
-
-			if is_pid_running(pid)? {
-				// Process is currently running
-				return Ok(ProcessState::Running { pid });
-			} else {
-				// Process did not successfully write exit code to file system.
-				//
-				// This happens when the process manager does not exit gracefully. For example, on a
-				// system restart or force kill process.
-				//
-				// There is a rare race condition when:
-				// - process_state started
-				// - attempts to read exit code
-				// - process crashes
-				// - arrives here and pid no longer is running
-				return Ok(ProcessState::Exited {
-					exit_code: None,
-					error: None,
-				});
-			}
-		}
-	}
-
-	// If process does not have a PID yet, it's starting
-	Ok(ProcessState::Starting)
-}
-
-/// Kills a process.
-async fn kill_process(
-	process_id: Uuid,
-	kill_grace: Duration,
-	base_data_dir: &PathBuf,
-) -> Result<bool> {
-	// Wait for process to start if race condition with start command
-	let pid = loop {
-		match get_process_state(process_id, base_data_dir).await? {
-			ProcessState::Starting => {}
-			ProcessState::Running { pid } => break pid,
-			ProcessState::Exited { .. } | ProcessState::NotFound => {
-				return Ok(false);
-			}
-		}
-
-		tokio::time::sleep(Duration::from_millis(100)).await;
-	};
-
-	#[cfg(unix)]
-	{
-		use nix::errno::Errno;
-		use nix::sys::signal::{kill, Signal};
-		use nix::sys::wait::{waitpid, WaitPidFlag, WaitStatus};
-		use nix::unistd::Pid;
-		use std::time::Instant;
-
-		assert!(pid > 0);
-
-		// Send SIGTERM
-		//
-		// Runner will forward the signal to the children
-		match tokio::task::block_in_place(|| kill(Pid::from_raw(pid), Signal::SIGTERM)) {
-			Result::Ok(_) => {}
-			Err(Errno::ESRCH) => return Ok(false),
-			Err(e) => bail!("Failed to send SIGTERM: {}", e),
-		}
-
-		// Wait for process to exit
-		let start = Instant::now();
-		loop {
-			match tokio::task::block_in_place(|| {
-				waitpid(Pid::from_raw(pid), Some(WaitPidFlag::WNOHANG))
-			}) {
-				Result::Ok(WaitStatus::Exited(_, _))
-				| Result::Ok(WaitStatus::Signaled(_, _, _)) => return Ok(true),
-				Result::Ok(_) => {
-					if start.elapsed() >= kill_grace {
-						break;
-					}
-					tokio::time::sleep(Duration::from_millis(100)).await;
+		// Run inner and catch state
+		let _self = self.clone();
+		tokio::spawn(async move {
+			match _self.spawn_process_inner(command_opts, stop_rx).await {
+				Result::Ok(_) => {}
+				Err(err) => {
+					let _ = _self.status_tx.send(ProcessStatus::Exited {
+						exit_code: None,
+						error: Some(err.to_string()),
+					});
+					let _ = _self.clear_logs().await;
 				}
-				Err(Errno::ECHILD) => return Ok(true), // Process has already exited
-				Err(e) => bail!("Failed to wait for process: {}", e),
 			}
-		}
+		});
 
-		// Send SIGKILL if process hasn't exited within kill_grace
-		terminate_process_tree(Pid::from_raw(pid));
-
-		Ok(true)
+		Ok(())
 	}
 
-	#[cfg(windows)]
-	{
-		use windows::Win32::{
-			Foundation::{CloseHandle, HANDLE, WAIT_OBJECT_0, WAIT_TIMEOUT},
-			System::{
-				Console::{GenerateConsoleCtrlEvent, CTRL_BREAK_EVENT},
-				Threading::{OpenProcess, WaitForSingleObject, PROCESS_SYNCHRONIZE},
-			},
+	async fn spawn_process_inner(
+		self: &Arc<Self>,
+		command_opts: CommandOpts,
+		mut stop_rx: mpsc::Receiver<()>,
+	) -> Result<()> {
+		let mut cmd = Command::new(command_opts.command);
+		cmd.current_dir(command_opts.current_dir)
+			.args(command_opts.args)
+			.envs(command_opts.envs.iter().cloned());
+
+		// Required in case this task is cancelled
+		cmd.kill_on_drop(true);
+
+		// Configure the command to pipe stdout and stderr
+		cmd.stdout(Stdio::piped());
+		cmd.stderr(Stdio::piped());
+
+		#[cfg(windows)]
+		{
+			use windows::Win32::System::Threading::CREATE_NEW_PROCESS_GROUP;
+			cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0);
+		}
+
+		// Spawn the command
+		let mut child = cmd.spawn()?;
+
+		// Update state
+		let child_pid = child.id().expect("missing child pid");
+		self.status_tx
+			.send(ProcessStatus::Running { pid: child_pid })
+			.context("send ProcessStatus::Running")?;
+
+		// Setup log handlers
+		let stdout = child.stdout.take().expect("Failed to capture stdout");
+		let stderr = child.stderr.take().expect("Failed to capture stderr");
+
+		let mut stdout_reader = BufReader::new(stdout).lines();
+		let mut stderr_reader = BufReader::new(stderr).lines();
+
+		// Spawn tasks to handle stdout and stderr
+		let _self = self.clone();
+		let stdout_handle = tokio::spawn(async move {
+			while let Result::Ok(Some(line)) = stdout_reader.next_line().await {
+				_self.add_log(ProcessLog::Stdout(line)).await?;
+			}
+
+			Result::<()>::Ok(())
+		});
+
+		let _self = self.clone();
+		let stderr_handle = tokio::spawn(async move {
+			while let Result::Ok(Some(line)) = stderr_reader.next_line().await {
+				_self.add_log(ProcessLog::Stderr(line)).await?;
+			}
+
+			Result::<()>::Ok(())
+		});
+
+		// Wait for process
+		let exit_code = tokio::select! {
+			res = child.wait() => {
+				let status = res?;
+				status.code()
+			}
+			res = stop_rx.recv() => {
+				res.context("stop_rx.recv")?;
+
+				// Update state
+				self.status_tx.send(ProcessStatus::Stopping).context("send ProcessStatus::Stopping")?;
+
+				// Send SIGTERM to stop gracefully
+				self.send_terminate_signal(child_pid).await?;
+
+				// Wait for process to exit
+				match tokio::time::timeout(self.kill_grace, child.wait()).await {
+					Result::Ok(Result::Ok(status)) => {
+						// Stopped gracefully
+						status.code()
+					}
+					Result::Ok(Err(err)) => {
+						// Error waiting for process
+						return Err(err.into());
+					}
+					Err(_) => {
+						// Timed out, force kill
+						child.kill().await.context("kill failed")?;
+
+						None
+					}
+				}
+			}
 		};
 
-		unsafe {
-			// Attempt to terminate the process gracefully
-			if GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, pid as u32).as_bool() {
-				// Open the process
-				let process_handle: HANDLE = OpenProcess(PROCESS_SYNCHRONIZE, false, pid as u32)?;
-				if process_handle.is_invalid() {
-					return Ok(true);
-				}
+		// Wait for log handles in order to not miss any logs
+		stdout_handle.await??;
+		stderr_handle.await??;
 
-				// Wait for process exit
-				match tokio::task::block_in_place(|| {
-					WaitForSingleObject(process_handle, kill_grace.as_millis() as u32)
-				}) {
-					WAIT_OBJECT_0 => {
-						CloseHandle(process_handle);
-						Ok(true)
-					}
-					WAIT_TIMEOUT => {
-						CloseHandle(process_handle);
+		// Update state
+		self.status_tx
+			.send(ProcessStatus::Exited {
+				exit_code,
+				error: None,
+			})
+			.context("send ProcessStatus::Exited")?;
+		self.clear_logs().await?;
 
-						// Process didn't exit within grace period, force terminate process & all children
-						terminate_process_tree(pid);
-
-						// HACK: Sleep to allow process to finish terminating
-						tokio::time::sleep(Duration::from_secs(1)).await;
-
-						Ok(true)
-					}
-					err => {
-						CloseHandle(process_handle);
-						bail!("WaitForSingleObject failed: {err:?}")
-					}
-				}
-			} else {
-				bail!("failed to terminate process")
-			}
-		}
-	}
-}
-
-#[cfg(unix)]
-fn terminate_process_tree(pid: nix::unistd::Pid) {
-	use nix::sys::signal::{kill, Signal};
-	use nix::unistd::Pid;
-	use std::fs;
-	use std::path::Path;
-
-	// TODO: This does not work on macOS
-	// List all child processes
-	if let Result::Ok(entries) = fs::read_dir(Path::new("/proc")) {
-		for entry in entries.flatten() {
-			if let Result::Ok(file_name) = entry.file_name().into_string() {
-				if let Result::Ok(child_pid) = file_name.parse::<i32>() {
-					if let Result::Ok(content) =
-						fs::read_to_string(format!("/proc/{}/stat", child_pid))
-					{
-						let parts: Vec<&str> = content.split_whitespace().collect();
-						if parts.len() > 3 && parts[3] == pid.to_string() {
-							// This is a child process, kill it
-							let _ = terminate_process_tree(Pid::from_raw(child_pid));
-						}
-					}
-				}
-			}
-		}
+		Ok(())
 	}
 
-	// Then, kill the process itself
-	let _ = kill(pid, Signal::SIGKILL);
-}
-
-#[cfg(windows)]
-fn terminate_process_tree(pid: PidRaw) {
-	use windows::Win32::System::{
-		Diagnostics::ToolHelp::{
-			CreateToolhelp32Snapshot, Process32First, Process32Next, PROCESSENTRY32,
-			TH32CS_SNAPPROCESS,
-		},
-		Threading::{OpenProcess, TerminateProcess, PROCESS_TERMINATE},
-	};
-
-	unsafe {
-		// Gather child PIDs
-		let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0).unwrap();
-		let mut entry = PROCESSENTRY32::default();
-		entry.dwSize = std::mem::size_of::<PROCESSENTRY32>() as u32;
-		let mut child_pids = Vec::new();
-		if Process32First(snapshot, &mut entry).as_bool() {
-			loop {
-				if entry.th32ParentProcessID == pid {
-					// eprintln!("Child exec file: {}", String::from_utf8_lossy(&entry.szExeFile));
-					child_pids.push(entry.th32ProcessID)
-				}
-
-				if !Process32Next(snapshot, &mut entry).as_bool() {
-					break;
-				}
-			}
+	async fn add_log(&self, log: ProcessLog) -> Result<()> {
+		// Write log
+		{
+			let mut logs = self.logs.lock().await;
+			logs.push_front(log.clone());
+			logs.truncate(MAX_LOG_HISTORY);
 		}
 
-		// Kill this process before killing children in order to prevent the
-		// parent from doing anything more to the child processes
-		match OpenProcess(PROCESS_TERMINATE, false, pid) {
-			Result::Ok(handle) => {
-				if !handle.is_invalid() {
-					// Kill process
-					if !TerminateProcess(handle, 1).as_bool() {
-						eprintln!("failed to kill process");
-					} else {
-						eprintln!("terminated process");
-					}
-				} else {
-					eprintln!("handle invalid: {pid}");
-				}
-			}
-			Err(_) => {
-				eprintln!("failed to open process, likely already stopped");
-			}
-		}
+		// Publish event
+		self.event_tx.send(ProcessEvent::Log(log))?;
 
-		loop {
-			if is_pid_running(pid).unwrap() {
-				eprintln!("pid still running: {pid}");
-				std::thread::sleep(Duration::from_millis(500));
-			} else {
-				break;
-			}
-		}
-
-		// Recursively kill child processes immediately
-		for pid in child_pids {
-			terminate_process_tree(pid);
-		}
+		Ok(())
 	}
-}
 
-/// Checks if a PID is running in a cross-platform way.
-///
-/// Should only be called by `process_state`.
-fn is_pid_running(pid: PidRaw) -> Result<bool> {
-	tokio::task::block_in_place(move || {
+	async fn clear_logs(&self) -> Result<()> {
+		let mut logs = self.logs.lock().await;
+		logs.clear();
+		Ok(())
+	}
+
+	async fn send_terminate_signal(&self, pid: u32) -> Result<()> {
 		#[cfg(unix)]
 		{
-			use nix::errno::Errno;
-			use nix::sys::signal::kill;
+			use nix::sys::signal::{kill, Signal};
 			use nix::unistd::Pid;
 
-			match kill(Pid::from_raw(pid), None) {
-				Result::Ok(_) => Ok(true),      // Process exists
-				Err(Errno::ESRCH) => Ok(false), // No process
-				Err(Errno::EPERM) => bail!("does not have permission to check process status"),
-				Err(e) => {
-					bail!("unexpected error when checking process existence: {}", e)
-				}
-			}
+			kill(Pid::from_raw(pid as i32), Signal::SIGTERM)?;
 		}
 
 		#[cfg(windows)]
 		{
-			use windows::Win32::Foundation::{CloseHandle, HANDLE, STILL_ACTIVE};
-			use windows::Win32::System::Threading::{
-				GetExitCodeProcess, OpenProcess, PROCESS_QUERY_LIMITED_INFORMATION,
-			};
+			use windows::Win32::System::Console::{GenerateConsoleCtrlEvent, CTRL_BREAK_EVENT};
 
 			unsafe {
-				let handle: HANDLE =
-					match OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid as u32) {
-						Result::Ok(handle) => handle,
-						Err(_) => return Ok(false), // Process doesn't exist or we don't have permission
-					};
-
-				if handle.is_invalid() {
-					return Ok(false);
-				}
-
-				let mut exit_code = 0u32;
-				let success = GetExitCodeProcess(handle, &mut exit_code as *mut u32);
-				CloseHandle(handle);
-
-				return Ok(success.as_bool() && exit_code == STILL_ACTIVE.0 as u32);
-			}
-		}
-	})
-}
-
-/// Wait for a PID to exit.
-///
-/// Should only be called by `ProcessManager::start`.
-async fn wait_pid_exit(pid: PidRaw) -> Result<()> {
-	// Wait for the process to exit in a cross-platform way
-	#[cfg(unix)]
-	{
-		use nix::{errno::Errno, sys::signal::kill, unistd::Pid};
-		use std::time::Duration;
-
-		tokio::task::spawn_blocking(move || {
-			loop {
-				match kill(Pid::from_raw(pid), None) {
-					Result::Ok(_) => {
-						// Process still exists, continue waiting
-						std::thread::sleep(Duration::from_millis(100));
-					}
-					Err(Errno::ESRCH) => {
-						// Process no longer exists
-						return Ok(());
-					}
-					Err(Errno::EPERM) => {
-						bail!("does not have permission to check process status")
-					}
-					Err(e) => {
-						bail!("Error checking process: {}", e);
-					}
+				// Attempt to terminate the process gracefully
+				if !GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, pid as u32).as_bool() {
+					bail!("failed to terminate process")
 				}
 			}
-		})
-		.await??;
-	}
-
-	#[cfg(windows)]
-	{
-		use windows::Win32::{
-			Foundation::CloseHandle,
-			Foundation::WAIT_OBJECT_0,
-			System::Threading::{OpenProcess, WaitForSingleObject, INFINITE, PROCESS_SYNCHRONIZE},
-		};
-
-		let handle = unsafe {
-			match OpenProcess(PROCESS_SYNCHRONIZE, false, pid as u32) {
-				Result::Ok(handle) => handle,
-				Err(_) => bail!("Failed to open process handle"),
-			}
-		};
-		ensure!(!handle.is_invalid(), "failed to open process handle");
-
-		tokio::task::spawn_blocking(move || unsafe {
-			match WaitForSingleObject(handle, INFINITE) {
-				WAIT_OBJECT_0 => {}
-				e => bail!("error waiting for process: {e:?}"),
-			};
-			CloseHandle(handle);
-			Result::Ok(())
-		})
-		.await??;
-	}
-
-	// HACK: Add grace period to allow logs to finish reading
-	tokio::time::sleep(LOG_POLL_INTERVAL + Duration::from_millis(50)).await;
-
-	Ok(())
-}
-
-fn spawn_process(
-	process_runner_path: PathBuf,
-	process_data_dir: PathBuf,
-	current_dir: &str,
-	program: &str,
-	args: &[&str],
-	envs: &[(String, String)],
-) -> Result<()> {
-	// Prepare the arguments for the process runner
-	let mut runner_args = vec![process_data_dir.to_str().unwrap(), current_dir, program];
-	runner_args.extend(args.iter().map(|&s| s));
-
-	// Spawn child
-	//
-	// Calling `.wait()` is required in order to remove zombie processes after complete
-	let mut cmd = Command::new(&process_runner_path);
-	cmd.args(&runner_args)
-		.envs(envs.iter().cloned())
-		.stdin(Stdio::null())
-		.stdout(Stdio::null())
-		.stderr(Stdio::null());
-
-	#[cfg(target_os = "windows")]
-	{
-		use std::os::windows::process::CommandExt;
-		use windows::Win32::System::Threading::CREATE_NEW_PROCESS_GROUP;
-		cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0);
-	}
-
-	let mut child = cmd.spawn()?;
-
-	tokio::task::spawn_blocking(move || child.wait().expect("child.wait"));
-
-	Ok(())
-}
-
-/// Reads a log file and streams lines as they're received.
-async fn tail_logs(path: PathBuf, task: TaskCtx, stream_name: &'static str) -> Result<()> {
-	let file = File::open(&path).await?;
-	let reader = BufReader::new(file);
-
-	// `read_line` is not cancellation safe, we have to sue `lines`
-	let mut lines = reader.lines();
-
-	// This will run indefinitely until `wait_pid_exit` finishes
-	loop {
-		match lines.next_line().await {
-			Result::Ok(Some(line)) => {
-				// Trim the newline character
-				let line = line.trim_end();
-				task.log(format!("[{}] {}", stream_name, line));
-			}
-			Result::Ok(None) => {
-				// Reached EOF, wait a bit before checking for new content
-				tokio::time::sleep(LOG_POLL_INTERVAL).await;
-				continue;
-			}
-			Err(e) => {
-				let buf = lines.get_ref().buffer();
-				return Err(e).context(format!(
-					"tail log line ({} bytes, lossy: {})",
-					buf.len(),
-					String::from_utf8_lossy(buf)
-				));
-			}
 		}
+
+		Ok(())
 	}
 }

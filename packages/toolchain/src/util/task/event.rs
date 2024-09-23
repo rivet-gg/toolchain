@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub enum TaskEvent {
 	#[serde(rename = "log")]
 	Log(String),
@@ -17,19 +17,19 @@ pub enum TaskEvent {
 pub mod backend_config_update {
 	use serde::Serialize;
 
-	#[derive(Serialize)]
+	#[derive(Serialize, Debug)]
 	pub struct Event {
 		pub sdks: Vec<Sdk>,
 		pub modules: Vec<Module>,
 	}
 
-	#[derive(Serialize)]
+	#[derive(Serialize, Debug)]
 	pub struct Sdk {
 		pub target: String,
 		pub output: String,
 	}
 
-	#[derive(Serialize)]
+	#[derive(Serialize, Debug)]
 	pub struct Module {
 		pub slug: String,
 		pub name: String,
