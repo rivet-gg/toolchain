@@ -30,9 +30,9 @@ export async function generateDenoConfig(project: Project) {
 	// support.
 	for (const registry of project.registries.values()) {
 		if (registry.isExternal) continue;
-    if (!await exists(registry.path, { isDirectory: true })) continue;
+		if (!await exists(registry.path, { isDirectory: true })) continue;
 
-    await Deno.writeTextFile(resolve(registry.path, "deno.jsonc"), denoConfigWithHeader);
+		await Deno.writeTextFile(resolve(registry.path, "deno.jsonc"), denoConfigWithHeader);
 	}
 
 	// Write config to project generated project

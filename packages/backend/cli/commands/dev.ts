@@ -24,19 +24,19 @@ export const optsSchema = z.object({
 type Opts = z.infer<typeof optsSchema>;
 
 export async function execute(opts: Opts) {
-  // Start internal router once we receive an event from `watch`
+	// Start internal router once we receive an event from `watch`
 	const internalState = new InternalState();
-  let startedInternalRouter = false
-  const setInternalState = (state: State) => {
-    // Start internal router if needed
-    if (!startedInternalRouter) {
-      createAndStartProjectInternalApiRouter(internalState);
-      startedInternalRouter = true;
-    }
-    
-    // Set state
-    internalState.set(state);
-  };
+	let startedInternalRouter = false;
+	const setInternalState = (state: State) => {
+		// Start internal router if needed
+		if (!startedInternalRouter) {
+			createAndStartProjectInternalApiRouter(internalState);
+			startedInternalRouter = true;
+		}
+
+		// Set state
+		internalState.set(state);
+	};
 
 	await watch({
 		loadProjectOpts: opts,

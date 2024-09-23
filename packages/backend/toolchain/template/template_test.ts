@@ -20,11 +20,11 @@ Deno.test({
 
 		await templateProject(path);
 
-    {
-      const project = await loadProject({ project: path });
-      await templateModule(project, "module_a");
-      await releaseProject(project);
-    }
+		{
+			const project = await loadProject({ project: path });
+			await templateModule(project, "module_a");
+			await releaseProject(project);
+		}
 
 		// Append test model to schema
 		const schemaPath = resolve(path, "modules", "module_a", "db", "schema.ts");
@@ -37,14 +37,14 @@ Deno.test({
 		`;
 		await Deno.writeTextFile(schemaPath, schema);
 
-    {
-      const project = await loadProject({ project: path });
-      await templateScript(project, "module_a", "script_a");
-      await releaseProject(project);
-    }
+		{
+			const project = await loadProject({ project: path });
+			await templateScript(project, "module_a", "script_a");
+			await releaseProject(project);
+		}
 
 		try {
-      const project = await loadProject({ project: path });
+			const project = await loadProject({ project: path });
 			await build(project, {
 				format: Format.Native,
 				runtime: Runtime.Deno,
@@ -52,7 +52,7 @@ Deno.test({
 				strictSchemas: true,
 				skipDenoCheck: false,
 			});
-      await releaseProject(project);
+			await releaseProject(project);
 		} catch (err) {
 			printError(err);
 			throw err;

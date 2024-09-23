@@ -42,11 +42,11 @@ interface BuildStepOpts {
 	name: string;
 	description?: string;
 
-  /**
-   * Skips logging progress step. Commonly used for steps that take a
-   * negligible amount of time.
-   */
-  dontLogProgress?: boolean;
+	/**
+	 * Skips logging progress step. Commonly used for steps that take a
+	 * negligible amount of time.
+	 */
+	dontLogProgress?: boolean;
 
 	/** Module this build step is relevant to. Only affects printed status. */
 	module?: Module;
@@ -156,7 +156,7 @@ export function buildStep(
 }
 
 function logBuildStepStart(opts: BuildStepOpts) {
-  if (opts.dontLogProgress) return;
+	if (opts.dontLogProgress) return;
 
 	let description = opts.description;
 	if (opts.module && opts.script) {
