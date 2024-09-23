@@ -29,14 +29,14 @@ const RegistryGitConfigSchema = z.object({
 	git: z.object({
 		url: RegistryGitUrlConfigSchema,
 		directory: z.string().optional(),
-	}).and(RegistryGitRefSchema)
+	}).and(RegistryGitRefSchema),
 });
 
 const RegistryGitHubConfigSchema = z.object({
 	github: z.object({
 		repository: RegistryGitUrlConfigSchema,
 		directory: z.string().optional(),
-	}).and(RegistryGitRefSchema)
+	}).and(RegistryGitRefSchema),
 });
 
 const RegistryConfigSchema = z.union([
@@ -147,7 +147,7 @@ export async function readConfig(projectConfigPath: string, extendedFromPaths: s
 			...extendedFromPaths,
 		]);
 		config = {
-      sdks: childConfig.sdks ?? baseConfig.sdks,
+			sdks: childConfig.sdks ?? baseConfig.sdks,
 			registries: Object.assign({}, baseConfig.registries ?? {}, childConfig.registries ?? {}),
 			modules: Object.assign({}, baseConfig.modules ?? {}, childConfig.modules ?? {}),
 			runtime: Object.assign({}, baseConfig.runtime ?? {}, childConfig.runtime ?? {}),

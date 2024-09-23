@@ -41,7 +41,7 @@ export async function execute(opts: Opts) {
 					strictSchemas: opts.strictSchemas,
 					// This gets ran on `deno test`
 					skipDenoCheck: true,
-          sdk: opts.sdk ? {} : undefined,
+					sdk: opts.sdk ? {} : undefined,
 					migrate: opts.migrate
 						? {
 							mode: opts.migrateMode,
@@ -91,8 +91,8 @@ export async function execute(opts: Opts) {
 
 			if (totalTestFiles == 0) {
 				throw new UserError("No test files", {
-          suggest: "See 'rivet create test --help' to create a test."
-        });
+					suggest: "See 'rivet create test --help' to create a test.",
+				});
 			}
 
 			// Run tests

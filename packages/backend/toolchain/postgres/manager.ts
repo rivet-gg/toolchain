@@ -1,9 +1,4 @@
-import {
-	DatabaseError,
-	DatabaseInitializationError,
-	DatabaseStartError,
-	DatabaseStopError,
-} from "./error.ts";
+import { DatabaseError, DatabaseInitializationError, DatabaseStartError, DatabaseStopError } from "./error.ts";
 import { binaryDir, Settings } from "./settings.ts";
 import { verbose } from "../term/status.ts";
 import { addShutdownHandler } from "../utils/shutdown_handler.ts";

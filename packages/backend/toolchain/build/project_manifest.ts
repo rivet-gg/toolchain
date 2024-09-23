@@ -2,7 +2,7 @@ import { camelify, pascalify } from "../../case_conversion/mod.ts";
 import type { IndexedModuleConfig, ModuleConfig, ScriptConfig } from "../config/module.ts";
 import { ProjectConfig } from "../config/project.ts";
 import { RegistryConfig } from "../config/project.ts";
-import { hasUserConfigSchema, Project, projectManifestPath } from "../project/mod.ts";
+import { hasUserConfigSchema, Project, PROJECT_MANIFEST_PATH } from "../project/mod.ts";
 import { projectCachePath } from "../project/project.ts";
 import { AnySchemaElement } from "./schema/mod.ts";
 
@@ -98,7 +98,7 @@ export async function genProjectManifest(project: Project) {
 	};
 
 	await Deno.writeTextFile(
-    projectManifestPath(project),
+		projectCachePath(project, PROJECT_MANIFEST_PATH),
 		JSON.stringify(manifest, null, 4),
 	);
 }

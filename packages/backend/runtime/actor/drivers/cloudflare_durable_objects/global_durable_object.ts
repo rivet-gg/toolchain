@@ -1,4 +1,3 @@
-/// <reference types="npm:@cloudflare/workers-types" />
 import { DurableObject } from "cloudflare:workers";
 import { CloudflareDurableObjectsStorage } from "./storage.ts";
 import { CloudflareDurableObjectsSchedule } from "./schedule.ts";

@@ -83,11 +83,11 @@ export async function watch(opts: WatchOpts) {
 				fnAbortController.signal,
 			)
 				.catch((err) => {
-          // Ignore abort error
+					// Ignore abort error
 					if (err instanceof AbortError) return;
 
-          // Re-throw error
-          throw err;
+					// Re-throw error
+					throw err;
 				});
 		}
 

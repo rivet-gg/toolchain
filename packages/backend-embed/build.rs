@@ -42,6 +42,16 @@ async fn main() -> Result<()> {
 	}
 	println!("cargo:rerun-if-changed={}", script_path.display());
 
+	// Format
+	let status = Command::new(&deno_exec.executable_path)
+		.arg("task")
+		.arg("format")
+		.current_dir(&backend_path)
+		.status()?;
+	if !status.success() {
+		panic!("format failed");
+	}
+
 	// Cache dependencies
 	let status = Command::new(&deno_exec.executable_path)
 		.arg("task")

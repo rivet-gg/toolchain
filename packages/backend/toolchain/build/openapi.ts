@@ -11,7 +11,10 @@ export async function generateOpenApi(project: Project, path: string) {
 	for (const mod of project.modules.values()) {
 		for (const script of mod.scripts.values()) {
 			if (!script.config.public) continue;
-      assert(script.schemas != undefined, "script schema not determined. called generateOpenApi before project build (which calls planScriptBuild).");
+			assert(
+				script.schemas != undefined,
+				"script schema not determined. called generateOpenApi before project build (which calls planScriptBuild).",
+			);
 
 			const requestRef = `${mod.name}__${script.name}__Request`;
 			const responseRef = `${mod.name}__${script.name}__Response`;
@@ -67,7 +70,7 @@ export async function generateOpenApi(project: Project, path: string) {
 	document = flattenOpenAPIConfig(document);
 
 	await Deno.writeTextFile(
-    path,
+		path,
 		JSON.stringify(document, null, 4),
 	);
 }
