@@ -159,14 +159,14 @@ impl ProcessManager {
 					let stderr_path = process_data_dir.join(shared::paths::CHILD_STDERR);
 					tokio::select! {
 						res = wait_pid_exit(pid) => {
-							res?;
+							res.context("wait pid exit")?;
 						}
 						res = tail_logs(stdout_path, task.clone(), "stdout") => {
-							res?;
+							res.context("tail logs stdout")?;
 							bail!("stdout logs exited early");
 						}
 						res = tail_logs(stderr_path, task.clone(), "stderr") => {
-							res?;
+							res.context("tail logs stderr")?;
 							bail!("stderr logs exited early");
 						}
 					}
@@ -710,23 +710,32 @@ fn spawn_process(
 /// Reads a log file and streams lines as they're received.
 async fn tail_logs(path: PathBuf, task: TaskCtx, stream_name: &'static str) -> Result<()> {
 	let file = File::open(&path).await?;
-	let mut reader = BufReader::new(file);
-	let mut buffer = String::new();
+	let reader = BufReader::new(file);
 
+	// `read_line` is not cancellation safe, we have to sue `lines`
+	let mut lines = reader.lines();
+
+	// This will run indefinitely until `wait_pid_exit` finishes
 	loop {
-		match reader.read_line(&mut buffer).await {
-			Result::Ok(0) => {
+		match lines.next_line().await {
+			Result::Ok(Some(line)) => {
+				// Trim the newline character
+				let line = line.trim_end();
+				task.log(format!("[{}] {}", stream_name, line));
+			}
+			Result::Ok(None) => {
 				// Reached EOF, wait a bit before checking for new content
 				tokio::time::sleep(LOG_POLL_INTERVAL).await;
 				continue;
 			}
-			Result::Ok(_) => {
-				// Trim the newline character
-				let line = buffer.trim_end();
-				task.log(format!("[{}] {}", stream_name, line));
-				buffer.clear();
+			Err(e) => {
+				let buf = lines.get_ref().buffer();
+				return Err(e).context(format!(
+					"tail log line ({} bytes, lossy: {})",
+					buf.len(),
+					String::from_utf8_lossy(buf)
+				));
 			}
-			Err(e) => return Err(e.into()),
 		}
 	}
 }
