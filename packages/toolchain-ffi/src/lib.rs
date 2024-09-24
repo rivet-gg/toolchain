@@ -36,7 +36,6 @@ pub extern "C" fn rivet_run_task(
 	let name = name_tmp.to_string();
 	let input_json_tmp = unsafe { CStr::from_ptr(input_json).to_str().unwrap() };
 	let input_json = input_json_tmp.to_string();
-	println!("input {name} {input_json}");
 
 	runtime::setup();
 
@@ -55,11 +54,9 @@ pub extern "C" fn rivet_run_task(
 
 	// Run the task
 	runtime::spawn(Box::pin(async move {
-		println!("input2 {name} {input_json}");
-
 		// Spawn task
 		tokio::task::spawn(async move {
-			toolchain::tasks::run_task_json(run_config, &name, &input_json).await
+			toolchain::tasks::run_task_json(run_config, &name, &input_json).await;
 		});
 
 		// Pass events to the sync context

@@ -55,8 +55,6 @@ pkg-version = "1.0.0"
 anyhow = "1.0"
 rivet-deno-embed = { path = "../deno-embed" }
 rivet-backend-embed = { path = "../backend-embed" }
-rivet-process-runner-shared = { path = "../process-runner-shared" }
-rivet-process-runner-embed = { path = "../process-runner-embed" }
 lazy_static = "1.5.0"
 sha1 = "0.10.6"
 

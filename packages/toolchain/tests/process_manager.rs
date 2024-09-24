@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
 use anyhow::*;
 use rivet_toolchain::util::{
@@ -10,24 +10,8 @@ use tokio::{
 	time::sleep,
 };
 
-async fn setup_test_environment() -> Result<(ProcessManager, tempfile::TempDir)> {
-	// Set up a temporary directory for the test
-	let temp_dir = tempfile::tempdir()?;
-	let temp_path = temp_dir.path().to_path_buf();
-	eprintln!("Proc test dir: {}", temp_path.display());
-
-	// Create a fake project in the meta file
-	let api_endpoint = "https://fake.api.endpoint".to_string();
-	let cloud_token = "fake_cloud_token".to_string();
-	rivet_toolchain::config::meta::insert_project(&temp_path, api_endpoint, cloud_token).await?;
-
-	// Create a ProcessManager with default kill_grace
-	let process_manager = ProcessManager {
-		key: "test_process",
-		kill_grace: Duration::from_secs(5),
-	};
-
-	Ok((process_manager, temp_dir))
+async fn setup_test_environment() -> Result<Arc<ProcessManager>> {
+	Ok(ProcessManager::new("test_process", Duration::from_secs(5)))
 }
 
 fn create_task_ctx() -> (TaskCtx, mpsc::UnboundedReceiver<TaskEvent>) {
@@ -40,13 +24,17 @@ fn create_task_ctx() -> (TaskCtx, mpsc::UnboundedReceiver<TaskEvent>) {
 fn build_deno_cmd(script: &str) -> (String, Vec<String>) {
 	(
 		"deno".to_string(),
-		vec!["eval".to_string(), "--quiet".to_string(), script.to_string()]
+		vec![
+			"eval".to_string(),
+			"--quiet".to_string(),
+			script.to_string(),
+		],
 	)
 }
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_process_manager_lifecycle() -> Result<()> {
-	let (process_manager, temp_dir) = setup_test_environment().await?;
+	let process_manager = setup_test_environment().await?;
 
 	// Create a TaskCtx
 	let (task, mut log_rx) = create_task_ctx();
@@ -65,29 +53,20 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 
 	let envs = vec![("ENV_VAR".to_string(), "test_value".to_string())];
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
-	let base_data_dir = temp_dir.path().to_path_buf();
 
 	// Start the process
 	let handle = tokio::spawn({
 		let process_manager = process_manager.clone();
-		let base_data_dir = base_data_dir.clone();
 		async move {
 			process_manager
-				.start(
-					StartOpts {
-						task,
-						base_data_dir,
-						start_mode: StartMode::StartOrHook,
-					},
-					move || async move {
-						Ok(CommandOpts {
-							command,
-							args,
-							envs,
-							current_dir,
-						})
-					},
-				)
+				.start(task, move || async move {
+					Ok(CommandOpts {
+						command,
+						args,
+						envs,
+						current_dir,
+					})
+				})
 				.await
 		}
 	});
@@ -96,6 +75,7 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	let mut stdout_logs = Vec::new();
 	let mut stderr_logs = Vec::new();
 	while let Some(event) = log_rx.recv().await {
+		dbg!(&event);
 		match event {
 			TaskEvent::Log(log) => {
 				if let Some(log) = log.strip_prefix("[stdout] ") {
@@ -113,20 +93,17 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	let exit_code = handle.await??;
 
 	// Verify process is not running
-	assert!(!process_manager.is_running(&base_data_dir).await?);
+	assert!(!process_manager.is_running().await?);
 
 	// Verify exit code
 	assert_eq!(exit_code, Some(42));
 
 	// Verify logs
-	assert_eq!(stdout_logs, vec![
-		"ENV_VAR: test_value",
-		"stdout test",
-		"exiting now",
-	]);
-	assert_eq!(stderr_logs, vec![
-		"stderr test",
-	]);
+	assert_eq!(
+		stdout_logs,
+		vec!["ENV_VAR: test_value", "stdout test", "exiting now",]
+	);
+	assert_eq!(stderr_logs, vec!["stderr test",]);
 
 	// Restart the process
 	let script = r#"
@@ -139,29 +116,20 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
-	let base_data_dir = temp_dir.path().to_path_buf();
 
 	let (task, _log_rx) = create_task_ctx();
 	let handle = tokio::spawn({
 		let process_manager = process_manager.clone();
-		let base_data_dir = base_data_dir.clone();
 		async move {
 			process_manager
-				.start(
-					StartOpts {
-						task,
-						base_data_dir,
-						start_mode: StartMode::StartOrHook,
-					},
-					move || async move {
-						Ok(CommandOpts {
-							command,
-							args,
-							envs,
-							current_dir,
-						})
-					},
-				)
+				.start(task, move || async move {
+					Ok(CommandOpts {
+						command,
+						args,
+						envs,
+						current_dir,
+					})
+				})
 				.await
 		}
 	});
@@ -170,7 +138,7 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	sleep(Duration::from_millis(200)).await;
 
 	// Verify process is running
-	assert!(process_manager.is_running(&base_data_dir).await?);
+	assert!(process_manager.is_running().await?);
 
 	// Wait for the process to finish
 	let exit_code = handle.await??;
@@ -179,14 +147,14 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	assert_eq!(exit_code, Some(0));
 
 	// Verify process is not running after completion
-	assert!(!process_manager.is_running(&base_data_dir).await?);
+	assert!(!process_manager.is_running().await?);
 
 	Ok(())
 }
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_process_manager_stop_graceful() -> Result<()> {
-	let (process_manager, temp_dir) = setup_test_environment().await?;
+	let process_manager = setup_test_environment().await?;
 
 	// Create a TaskCtx
 	let (task, _log_rx) = create_task_ctx();
@@ -208,29 +176,20 @@ async fn test_process_manager_stop_graceful() -> Result<()> {
 
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
-	let base_data_dir = temp_dir.path().to_path_buf();
 
 	// Start the process
 	let handle = tokio::spawn({
 		let process_manager = process_manager.clone();
-		let base_data_dir = base_data_dir.clone();
 		async move {
 			process_manager
-				.start(
-					StartOpts {
-						task,
-						base_data_dir,
-						start_mode: StartMode::StartOrHook,
-					},
-					move || async move {
-						Ok(CommandOpts {
-							command,
-							args,
-							envs,
-							current_dir,
-						})
-					},
-				)
+				.start(task, move || async move {
+					Ok(CommandOpts {
+						command,
+						args,
+						envs,
+						current_dir,
+					})
+				})
 				.await
 		}
 	});
@@ -240,24 +199,24 @@ async fn test_process_manager_stop_graceful() -> Result<()> {
 
 	// Verify process is running
 	assert!(
-		process_manager.is_running(&base_data_dir).await?,
+		process_manager.is_running().await?,
 		"process not running"
 	);
 	assert!(!handle.is_finished(), "handle not running");
 
 	// Stop the process
 	assert!(
-		process_manager.stop(&base_data_dir).await?,
+		process_manager.stop().await?,
 		"did not stop process"
 	);
 	assert!(
-		!process_manager.stop(&base_data_dir).await?,
+		!process_manager.stop().await?,
 		"stop should not return true if no process"
 	);
 
 	// Verify process is not running
 	assert!(
-		!process_manager.is_running(&base_data_dir).await?,
+		!process_manager.is_running().await?,
 		"process is still running"
 	);
 
@@ -274,7 +233,7 @@ async fn test_process_manager_stop_graceful() -> Result<()> {
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_process_manager_stop_timeout() -> Result<()> {
-	let (process_manager, temp_dir) = setup_test_environment().await?;
+	let process_manager = setup_test_environment().await?;
 
 	// Create a TaskCtx
 	let (task, _log_rx) = create_task_ctx();
@@ -295,29 +254,20 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 
 	let envs = Vec::new();
 	let current_dir = std::env::current_dir()?.to_string_lossy().to_string();
-	let base_data_dir = temp_dir.path().to_path_buf();
 
 	// Start the process
 	let handle = tokio::spawn({
 		let process_manager = process_manager.clone();
-		let base_data_dir = base_data_dir.clone();
 		async move {
 			process_manager
-				.start(
-					StartOpts {
-						task,
-						base_data_dir,
-						start_mode: StartMode::StartOrHook,
-					},
-					move || async move {
-						Ok(CommandOpts {
-							command,
-							args,
-							envs,
-							current_dir,
-						})
-					},
-				)
+				.start(task, move || async move {
+					Ok(CommandOpts {
+						command,
+						args,
+						envs,
+						current_dir,
+					})
+				})
 				.await
 		}
 	});
@@ -327,21 +277,20 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 
 	// Verify process is running
 	assert!(
-		process_manager.is_running(&base_data_dir).await?,
+		process_manager.is_running().await?,
 		"process not running"
 	);
 
 	// Attempt to stop the process in the background
 	let stop_handle = tokio::spawn({
 		let process_manager = process_manager.clone();
-		let base_data_dir = base_data_dir.clone();
-		async move { process_manager.stop(&base_data_dir).await }
+		async move { process_manager.stop().await }
 	});
 
 	// Verify the process is still running before the end of the grace period
 	sleep(process_manager.kill_grace - Duration::from_millis(500)).await;
 	assert!(
-		!process_manager.is_running(&base_data_dir).await?,
+		process_manager.is_running().await?,
 		"process stopped too early"
 	);
 
@@ -351,7 +300,7 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 	// 500ms after the expected kill
 	sleep(Duration::from_secs(1)).await;
 	assert!(
-		!process_manager.is_running(&base_data_dir).await?,
+		!process_manager.is_running().await?,
 		"process is still running"
 	);
 

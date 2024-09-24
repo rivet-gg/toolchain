@@ -1,7 +1,7 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{paths, util::task};
+use crate::{util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -21,7 +21,7 @@ impl task::Task for Task {
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
 		crate::game_server::PROCESS_MANAGER
-			.stop(&paths::data_dir()?)
+			.stop()
 			.await?;
 		Ok(Output {})
 	}
