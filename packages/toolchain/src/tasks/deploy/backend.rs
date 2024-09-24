@@ -101,7 +101,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 	}
 
 	// Read files for upload
-	let gen_manifest = read_generated_manifest(&project_path).await?;
+	let gen_manifest = read_generated_manifest().await?;
 	let bundle_path = project_path.join(gen_manifest.bundle);
 	let wasm_path = gen_manifest.wasm.map(|x| project_path.join(x));
 	let mut files = vec![upload::prepare_upload_file(
@@ -272,26 +272,10 @@ struct GenManifest {
 	wasm: Option<String>,
 }
 
-async fn read_generated_manifest(project_path: &Path) -> Result<GenManifest> {
-	// Read manifest path
-	let path_output = build_backend_command(backend::BackendCommandOpts {
-		task_path: "config/output_manifest_path.ts",
-		input: json!({
-			"project": project_path
-		}),
-		env: Default::default(),
-		data_type: paths::BackendDataType::Dev,
-	})
-	.await?
-	.output()
-	.await?;
-	ensure!(
-		path_output.status.success(),
-		"failed to get output manifest path:\n{}",
-		String::from_utf8_lossy(&path_output.stderr)
-	);
-	let manifest_path = String::from_utf8(path_output.stdout)?;
-	let manifest_path = manifest_path.trim();
+async fn read_generated_manifest() -> Result<GenManifest> {
+	let manifest_path =
+		paths::backend_data_dir(&paths::data_dir()?, paths::BackendDataType::Deploy)?
+			.join("output_manifest.json");
 
 	// Read manifest
 	let manifest_str = fs::read_to_string(manifest_path)

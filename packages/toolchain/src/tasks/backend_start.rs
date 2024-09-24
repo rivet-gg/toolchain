@@ -118,43 +118,8 @@ impl task::Task for Task {
 }
 
 async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
-	// Read manifest path from backend
-	let mut interval = tokio::time::interval(Duration::from_secs(2));
-	let manifest_path_output = loop {
-		interval.tick().await;
-
-		let output = build_backend_command(backend::BackendCommandOpts {
-			task_path: "config/manifest_path.ts",
-			input: json!({
-				"project": null
-			}),
-			env: Default::default(),
-			data_type: paths::BackendDataType::Dev,
-		})
-		.await?
-		.output()
-		.await?;
-
-		if output.status.success() {
-			break output;
-		}
-	};
-
-	// Parse and validate meta path
-	let manifest_path =
-		String::from_utf8(manifest_path_output.stdout.clone()).with_context(|| {
-			format!(
-				"parse manifest path output ({} bytes, lossy: {})",
-				manifest_path_output.stdout.len(),
-				String::from_utf8_lossy(&manifest_path_output.stdout)
-			)
-		})?;
-	let manifest_path = manifest_path.trim();
-	ensure!(
-		!manifest_path.contains("\n"),
-		"expected exactly one line of output, got:\n{manifest_path:?}"
-	);
-	let manifest_path = Path::new(manifest_path);
+	let manifest_path = paths::backend_data_dir(&paths::data_dir()?, paths::BackendDataType::Dev)?
+		.join("project_manifest.json");
 
 	// TODO: Switch to notify
 	// Poll the file for updates
