@@ -8,8 +8,8 @@ import { relative, resolve } from "@std/path";
 import dedent from "dedent";
 import { compileDbSchemaHelper } from "./build/gen/db_schema.ts";
 import { DRIZZLE_KIT_PACKAGE, DRIZZLE_ORM_PACKAGE, PG_PACKAGE } from "./drizzle_consts.ts";
-import { getDefaultDatabaseUrl } from "./postgres/mod.ts";
 import { denoExecutablePath } from "./utils/deno.ts";
+import { getDatabaseUrl } from "./postgres.ts";
 
 export interface RunCommandOpts {
 	args: string[];
@@ -78,7 +78,7 @@ export async function runDrizzleCommand(project: Project, module: Module, opts: 
 				prefix: "unix",
 			},
 			dbCredentials: {
-				url: await getDefaultDatabaseUrl(project),
+				url: getDatabaseUrl(project),
 			},
 			verbose: Deno.env.get("VERBOSE") == "1",
 			schemaFilter: [module.db.schema],

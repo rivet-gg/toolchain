@@ -1,11 +1,12 @@
 use anyhow::*;
-use std::io::Write;
+use std::{io::Write, process::ExitCode};
 use tokio::{
 	sync::{broadcast, mpsc},
 	task::block_in_place,
 };
 use toolchain::util::task::{self, TaskEvent};
 
+/// Runs a task in a CLI-friendly way.
 pub async fn run_task<T>(output_style: TaskOutputStyle, input: T::Input) -> Result<T::Output>
 where
 	T: task::Task,
@@ -28,6 +29,21 @@ where
 	};
 
 	result
+}
+
+/// Runs a task and returns an exit code. Useful for commands that are a thin wrapper around a
+/// task.
+pub async fn run_task_simple<T>(input: T::Input) -> ExitCode
+where
+	T: task::Task,
+{
+	match run_task::<T>(TaskOutputStyle::PlainNoResult, input).await {
+		Result::Ok(_) => ExitCode::SUCCESS,
+		Err(e) => {
+			eprintln!("Error: {e:?}");
+			ExitCode::from(1)
+		}
+	}
 }
 
 pub async fn run_task_json(

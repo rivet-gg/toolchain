@@ -10,7 +10,7 @@ use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
-	config, paths,
+	config, paths, postgres,
 	util::{process_manager::ProcessManager, task},
 	ToolchainCtx,
 };
@@ -51,8 +51,13 @@ pub struct CommandRaw {
 	pub current_dir: PathBuf,
 }
 
-pub async fn build_backend_command_raw(opts: BackendCommandOpts) -> Result<CommandRaw> {
+pub async fn build_backend_command_raw(mut opts: BackendCommandOpts) -> Result<CommandRaw> {
 	let base_url = base_url().await?;
+
+	// Get Postgres URL
+	let postgres = postgres::get(&paths::data_dir()?).await?;
+	let db_url = postgres.url("postgres").await;
+	opts.env.insert("DATABASE_URL".into(), db_url);
 
 	// Get Deno executable
 	let deno = rivet_deno_embed::get_executable(&crate::paths::data_dir()?).await?;

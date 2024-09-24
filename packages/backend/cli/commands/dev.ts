@@ -6,9 +6,9 @@ import { Project } from "../../toolchain/project/mod.ts";
 import { InternalError } from "../../toolchain/error/mod.ts";
 import { ENTRYPOINT_PATH, projectCachePath } from "../../toolchain/project/project.ts";
 import { migrateModeSchema } from "./../util.ts";
-import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
 import { createAndStartProjectInternalApiRouter, InternalState, State } from "../../toolchain/internal_api/mod.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
+import { getDatabaseUrl } from "../../toolchain/postgres.ts";
 
 export const optsSchema = z.object({
 	build: z.boolean().default(true),
@@ -51,8 +51,6 @@ export async function execute(opts: Opts) {
 			setInternalState({ value: "building", project });
 		},
 		async fn(project: Project, signal: AbortSignal) {
-			await ensurePostgresRunning(project);
-
 			// Build project
 			if (opts.build) {
 				await build(project, {
@@ -93,7 +91,7 @@ export async function execute(opts: Opts) {
 				stderr: "inherit",
 				signal,
 				env: {
-					"DATABASE_URL": await getDefaultDatabaseUrl(project),
+					"DATABASE_URL": getDatabaseUrl(project),
 				},
 			})
 				.output();

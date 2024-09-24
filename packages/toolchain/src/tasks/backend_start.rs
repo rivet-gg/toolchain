@@ -9,7 +9,7 @@ use std::{
 use crate::{
 	backend::{self, build_backend_command, build_backend_command_raw},
 	config::{self, meta},
-	paths,
+	paths, postgres,
 	util::{
 		process_manager::CommandOpts,
 		task::{self, backend_config_update},
@@ -35,6 +35,8 @@ impl task::Task for Task {
 	}
 
 	async fn run(task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
+		postgres::get_and_start(&paths::data_dir()?).await?;
+
 		// Set backend port in case the process is already running. This will result in a duplicate
 		// port dispatch if the backend is not running or crashed.
 		if let (Some(backend_port), Some(editor_port)) =

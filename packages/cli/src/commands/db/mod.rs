@@ -1,6 +1,5 @@
 pub mod instance;
 pub mod migrate;
-pub mod reset;
 pub mod sh;
 pub mod url;
 
@@ -10,7 +9,6 @@ use std::process::ExitCode;
 /// Manage Postgres database
 #[derive(Subcommand)]
 pub enum SubCommand {
-	Reset(reset::Opts),
 	Sh(sh::Opts),
 	Url(url::Opts),
 	Migrate {

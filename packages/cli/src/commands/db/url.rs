@@ -1,21 +1,26 @@
 use clap::Parser;
 use serde::Serialize;
 use std::process::ExitCode;
-use toolchain::backend::run_backend_command_passthrough;
 
-use crate::util::global_opts::GlobalOpts;
+use crate::util::{global_opts::GlobalOpts, postgres};
 
 /// Print database URL
 #[derive(Parser, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Opts {
-	#[clap(flatten)]
-	#[serde(flatten)]
-	global: GlobalOpts,
+	#[clap(long)]
+	database: Option<String>,
 }
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("dbUrl", self).await
+		let Ok(postgres) = postgres::ensure_running().await else {
+			return ExitCode::FAILURE;
+		};
+
+		let db = self.database.map(|x| x.as_str()).unwrap_or("postgres");
+		println!("{}", postgres.url(db).await);
+
+		ExitCode::SUCCESS
 	}
 }

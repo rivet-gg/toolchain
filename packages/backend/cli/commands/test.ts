@@ -8,8 +8,8 @@ import { Project } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
 import { info } from "../../toolchain/term/status.ts";
 import { migrateModeSchema } from "./../util.ts";
-import { ensurePostgresRunning, getDefaultDatabaseUrl } from "../../toolchain/postgres/mod.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
+import { getDatabaseUrl } from "../../toolchain/postgres.ts";
 
 export const optsSchema = z.object({
 	build: z.boolean().default(true),
@@ -30,8 +30,6 @@ export async function execute(opts: Opts) {
 		loadProjectOpts: opts,
 		disableWatch: !opts.watch,
 		fn: async (project: Project, signal: AbortSignal) => {
-			await ensurePostgresRunning(project);
-
 			// Build project
 			if (opts.build) {
 				await build(project, {
@@ -106,7 +104,7 @@ export async function execute(opts: Opts) {
 				stderr: "inherit",
 				signal,
 				env: {
-					"DATABASE_URL": await getDefaultDatabaseUrl(project),
+					"DATABASE_URL": getDatabaseUrl(project),
 					// Force color for test logs
 					"RIVET_BACKEND_TERM_COLOR": Deno.env.get("RIVET_BACKEND_TERM_COLOR") ?? "always",
 				},

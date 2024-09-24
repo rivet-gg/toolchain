@@ -3,7 +3,7 @@ use serde::Serialize;
 use std::process::ExitCode;
 use toolchain::backend::run_backend_command_passthrough;
 
-use crate::util::global_opts::GlobalOpts;
+use crate::util::{global_opts::GlobalOpts, postgres};
 
 /// Compile the backend for self-hosting
 #[derive(Parser, Serialize)]
@@ -33,6 +33,10 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
+		let Ok(_) = postgres::ensure_running().await else {
+			return ExitCode::FAILURE;
+		};
+
 		run_backend_command_passthrough("build", self).await
 	}
 }
