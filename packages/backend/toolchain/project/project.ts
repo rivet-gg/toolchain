@@ -51,8 +51,8 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 	const projectConfigPath = loadProjectConfigPath(opts);
 	const projectRoot = dirname(projectConfigPath);
 
-  // Create data dir if needed
-  await Deno.mkdir(backendDataDir(), { recursive: true });
+	// Create data dir if needed
+	await Deno.mkdir(backendDataDir(), { recursive: true });
 
 	// Read project config
 	const projectConfig = await readProjectConfig(
