@@ -1,7 +1,7 @@
 import { resolve } from "@std/path";
 import { Project } from "../project/mod.ts";
 import { DENO_JSON_PATH } from "../project/project.ts";
-import { projectCachePath } from "../project/project.ts";
+import { projectDataPath } from "../project/project.ts";
 import { autoGenHeader } from "./misc.ts";
 import { exists } from "@std/fs";
 
@@ -36,5 +36,5 @@ export async function generateDenoConfig(project: Project) {
 	}
 
 	// Write config to project generated project
-	await Deno.writeTextFile(projectCachePath(project, DENO_JSON_PATH), denoConfigWithHeader);
+	await Deno.writeTextFile(projectDataPath(project, DENO_JSON_PATH), denoConfigWithHeader);
 }

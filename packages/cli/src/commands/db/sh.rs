@@ -2,7 +2,8 @@ use clap::Parser;
 use serde::Serialize;
 use std::process::{ExitCode, Stdio};
 use tokio::process::Command;
-use toolchain::{paths, postgres};
+
+use crate::util::postgres;
 
 /// Open shell to query database
 #[derive(Parser, Serialize)]
@@ -18,7 +19,7 @@ impl Opts {
 		// Spawn psql
 		let psql_path = postgres.bin_dir().await.join("psql");
 		let status = Command::new(psql_path)
-			.args(postgres.url("postgres").await)
+			.arg(postgres.url("postgres").await)
 			.stdin(Stdio::inherit())
 			.stdout(Stdio::inherit())
 			.stderr(Stdio::inherit())

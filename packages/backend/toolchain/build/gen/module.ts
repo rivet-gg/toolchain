@@ -8,7 +8,7 @@ import {
 	DRIZZLE_ORM_REEXPORT,
 	genModulePublicExternal,
 	PACKAGES_PATH,
-	projectCachePath,
+	projectDataPath,
 	RUNTIME_CONFIG_PATH,
 } from "../../project/project.ts";
 import { camelify } from "../../../case_conversion/mod.ts";
@@ -22,13 +22,13 @@ export async function compileModuleHelper(
 ) {
 	const helper = new GeneratedCodeBuilder(moduleHelperGen(project, module), 3);
 
-	const runtimePath = helper.relative(projectCachePath(project, RUNTIME_MOD_PATH));
+	const runtimePath = helper.relative(projectDataPath(project, RUNTIME_MOD_PATH));
 	const reexportPath = helper.relative(
-		projectCachePath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
+		projectDataPath(project, PACKAGES_PATH, "runtime", "export_to_module.ts"),
 	);
-	const dependencyCaseConversionMapPath = helper.relative(projectCachePath(project, DEPENDENCY_CASE_CONVERSION));
-	const actorCaseConversionMapPath = helper.relative(projectCachePath(project, ACTOR_CASE_CONVERSION_MAP_PATH));
-	const runtimeConfigPath = helper.relative(projectCachePath(project, RUNTIME_CONFIG_PATH));
+	const dependencyCaseConversionMapPath = helper.relative(projectDataPath(project, DEPENDENCY_CASE_CONVERSION));
+	const actorCaseConversionMapPath = helper.relative(projectDataPath(project, ACTOR_CASE_CONVERSION_MAP_PATH));
+	const runtimeConfigPath = helper.relative(projectDataPath(project, RUNTIME_CONFIG_PATH));
 
 	// Import & re-export runtime files
 	//
@@ -97,7 +97,7 @@ function genDependencies(
 	module: Module,
 	helper: GeneratedCodeBuilder,
 ) {
-	const typedefPath = projectCachePath(project, DEPENDENCY_TYPEDEF_PATH);
+	const typedefPath = projectDataPath(project, DEPENDENCY_TYPEDEF_PATH);
 
 	helper.append`
 		import type {
@@ -144,7 +144,7 @@ function genActors(
 	module: Module,
 	helper: GeneratedCodeBuilder,
 ) {
-	const typedefPath = projectCachePath(project, ACTOR_TYPEDEF_PATH);
+	const typedefPath = projectDataPath(project, ACTOR_TYPEDEF_PATH);
 
 	helper.append`
 		import type {
@@ -171,7 +171,7 @@ function genModule(
 	// Database
 	if (module.db) {
 		helper.append`
-    export * as Query from ${JSON.stringify(helper.relative(projectCachePath(project, DRIZZLE_ORM_REEXPORT)))};
+    export * as Query from ${JSON.stringify(helper.relative(projectDataPath(project, DRIZZLE_ORM_REEXPORT)))};
     export * as Database from "./db/schema.ts";
     `;
 		helper.append`

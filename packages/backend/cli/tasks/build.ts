@@ -18,58 +18,57 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
-	// Defaults based on runtime
-	if (input.runtime == Runtime.Deno) {
-		if (input.outputFormat == undefined) input.outputFormat = Format.Native;
-		if (input.dbDriver == undefined) input.dbDriver = DbDriver.NodePostgres;
-	} else if (input.runtime == Runtime.CloudflareWorkersPlatforms) {
-		if (input.outputFormat == undefined) input.outputFormat = Format.Bundled;
-		if (input.dbDriver == undefined) input.dbDriver = DbDriver.NeonServerless;
-	}
-
-	// Validate
-	if (input.runtime == Runtime.CloudflareWorkersPlatforms) {
-		if (input.outputFormat != Format.Bundled) {
-			throw new Error(
-				`\`format\` must be "${Format.Bundled}" if \`runtime\` is "${Runtime.CloudflareWorkersPlatforms}".`,
-			);
+	inputSchema,
+	async run(input) {
+		// Defaults based on runtime
+		if (input.runtime == Runtime.Deno) {
+			if (input.outputFormat == undefined) input.outputFormat = Format.Native;
+			if (input.dbDriver == undefined) input.dbDriver = DbDriver.NodePostgres;
+		} else if (input.runtime == Runtime.CloudflareWorkersPlatforms) {
+			if (input.outputFormat == undefined) input.outputFormat = Format.Bundled;
+			if (input.dbDriver == undefined) input.dbDriver = DbDriver.NeonServerless;
 		}
-		if (input.dbDriver != DbDriver.NeonServerless && input.dbDriver != DbDriver.CloudflareHyperdrive) {
-			throw new Error(
-				`\`db-driver\` must be "${DbDriver.NeonServerless}" or "${DbDriver.CloudflareHyperdrive}" if \`runtime\` is "${Runtime.CloudflareWorkersPlatforms}".`,
-			);
-		}
-	}
-	if (input.runtime == Runtime.Deno) {
-		if (input.outputFormat != Format.Native) {
-			throw new Error(
-				`\`format\` must be "${Format.Native}" if \`runtime\` is "${Runtime.Deno}".`,
-			);
-		}
-	}
 
-	await watch({
-		loadProjectOpts: input,
-		disableWatch: !input.watch,
-		async fn(project: Project, signal: AbortSignal) {
-			await build(project, {
-				format: input.outputFormat!,
-				runtime: input.runtime,
-				dbDriver: input.dbDriver!,
-				strictSchemas: input.strictSchemas,
-				skipDenoCheck: false,
-				sdk: input.sdk ? {} : undefined,
-				migrate: input.migrate
-					? {
-						mode: input.migrateMode,
-					}
-					: undefined,
-				signal,
-			});
-		},
-	});
+		// Validate
+		if (input.runtime == Runtime.CloudflareWorkersPlatforms) {
+			if (input.outputFormat != Format.Bundled) {
+				throw new Error(
+					`\`format\` must be "${Format.Bundled}" if \`runtime\` is "${Runtime.CloudflareWorkersPlatforms}".`,
+				);
+			}
+			if (input.dbDriver != DbDriver.NeonServerless && input.dbDriver != DbDriver.CloudflareHyperdrive) {
+				throw new Error(
+					`\`db-driver\` must be "${DbDriver.NeonServerless}" or "${DbDriver.CloudflareHyperdrive}" if \`runtime\` is "${Runtime.CloudflareWorkersPlatforms}".`,
+				);
+			}
+		}
+		if (input.runtime == Runtime.Deno) {
+			if (input.outputFormat != Format.Native) {
+				throw new Error(
+					`\`format\` must be "${Format.Native}" if \`runtime\` is "${Runtime.Deno}".`,
+				);
+			}
+		}
 
-  }
-})
+		await watch({
+			loadProjectOpts: input,
+			disableWatch: !input.watch,
+			async fn(project: Project, signal: AbortSignal) {
+				await build(project, {
+					format: input.outputFormat!,
+					runtime: input.runtime,
+					dbDriver: input.dbDriver!,
+					strictSchemas: input.strictSchemas,
+					skipDenoCheck: false,
+					sdk: input.sdk ? {} : undefined,
+					migrate: input.migrate
+						? {
+							mode: input.migrateMode,
+						}
+						: undefined,
+					signal,
+				});
+			},
+		});
+	},
+});

@@ -7,7 +7,7 @@ import { ModuleConfig } from "../config/module.ts";
 import { Script } from "./script.ts";
 import { Actor } from "./actor.ts";
 import { Route } from "./route.ts";
-import { Project, projectCachePath } from "./project.ts";
+import { Project, projectDataPath } from "./project.ts";
 import { Registry } from "./registry.ts";
 import { validateIdentifier } from "../types/identifiers/mod.ts";
 import { Casing } from "../types/identifiers/defs.ts";
@@ -431,7 +431,7 @@ export function moduleHelperGen(
 }
 
 export function moduleGenPath(project: Project, module: Module, ...pathSegments: string[]): string {
-	return projectCachePath(project, "modules", module.name, ...pathSegments);
+	return projectDataPath(project, "modules", module.name, ...pathSegments);
 }
 
 export function dbSchemaHelperPath(

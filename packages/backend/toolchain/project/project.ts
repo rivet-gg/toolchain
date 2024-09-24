@@ -1,4 +1,4 @@
-import { assert } from "@std/assert";
+import { assert, assertExists } from "@std/assert";
 import { copy, emptyDir, exists } from "@std/fs";
 import { dirname, isAbsolute, join, normalize, resolve } from "@std/path";
 import { dir } from "@cross/dir";
@@ -22,7 +22,6 @@ import { acquireLock, FsLock, releaseLock } from "../utils/fslock.ts";
 export interface Project {
 	path: string;
 	lock: FsLock;
-	cachePath: string;
 	configPath: string;
 	config: ProjectConfig;
 	registries: Map<string, Registry>;
@@ -51,7 +50,9 @@ export function loadProjectConfigPath(opts: LoadProjectOpts): string {
 export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): Promise<Project> {
 	const projectConfigPath = loadProjectConfigPath(opts);
 	const projectRoot = dirname(projectConfigPath);
-	const cachePath = await computeProjectCachePath(projectRoot);
+
+  // Create data dir if needed
+  await Deno.mkdir(backendDataDir(), { recursive: true });
 
 	// Read project config
 	const projectConfig = await readProjectConfig(
@@ -60,7 +61,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 	// Lock project
 	const lock = await acquireLock({
-		path: resolve(cachePath, LOCK_PATH),
+		path: resolve(backendDataDir(), LOCK_PATH),
 		onWaiting: () => {
 			info("Waiting", "another process is currently modifying this project");
 		},
@@ -204,7 +205,6 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 	return {
 		path: projectRoot,
 		lock,
-		cachePath,
 		configPath: projectConfigPath,
 		config: projectConfig,
 		registries,
@@ -214,7 +214,7 @@ export async function loadProject(opts: LoadProjectOpts, signal?: AbortSignal): 
 
 interface FetchAndResolveModuleOutput {
 	/**
-	 * Path the module was copied to in cache dir.
+	 * Path the module was copied to in data dir.
 	 */
 	path: string;
 
@@ -283,7 +283,7 @@ export async function fetchAndResolveModule(
 		// original module. For example. if multiple projects are using the same
 		// local registry, we don't want conflicting generated files.
 		path = resolve(
-			await computeProjectCachePath(projectRoot),
+			backendDataDir(),
 			"external_modules",
 			moduleName,
 		);
@@ -366,43 +366,17 @@ export const RUNTIME_POSTGRES_PATH = join(PACKAGES_PATH, "runtime", "postgres.ts
 export const RUNTIME_MOD_PATH = join(PACKAGES_PATH, "runtime", "mod.ts");
 
 /**
- * Returns the absolute path to the project cache dir.
- *
- * This is done by hashing the absolute path of the project and returning a path in the user's cache dir.
- *
- * We do this instead of storing in the project dir (e.g. under `.cache`):
- * - Prevent accidentally committing cache to git if cache was in the project dir.
- * - Triggering reloads on file watchers
- * - Prevent fringe errors when mounting with systems like WSL
+ * Path at which all backend data is stored, including caches, build outputs,
+ * etc.
  */
-export async function computeProjectCachePath(projectPath: string): Promise<string> {
-	// Assert project path is absolute
-	assert(isAbsolute(projectPath), "Project path must be absolute");
-
-	// Normalize project path
-	const normalizedPath = normalize(projectPath);
-
-	// Hash project path using md5
-	const encoder = new TextEncoder();
-	const data = encoder.encode(normalizedPath);
-	const hashBuffer = await crypto.subtle.digest("SHA-1", data);
-	const hashArray = Array.from(new Uint8Array(hashBuffer));
-	const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-
-	// Build path
-	//
-	// We don't use the cache path since we do want this data to persist.
-	const cachePath = await dir("data");
-	const path = resolve(cachePath, "rivet", "backend", hashHex);
-
-	// Create dir
-	await Deno.mkdir(path, { recursive: true });
-
-	return path;
+export function backendDataDir(): string {
+	let dataDir = Deno.env.get("BACKEND_DATA_DIR");
+	assertExists(dataDir, "missing BACKEND_DATA_DIR");
+	return dataDir;
 }
 
-export function projectCachePath(project: Project, ...pathSegments: string[]): string {
-	return resolve(project.cachePath, ...pathSegments);
+export function projectDataPath(_project: Project, ...pathSegments: string[]): string {
+	return resolve(backendDataDir(), ...pathSegments);
 }
 
 export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): string {
@@ -415,7 +389,7 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
 		throw new UnreachableError(runtime);
 	}
 
-	return projectCachePath(
+	return projectDataPath(
 		project,
 		PACKAGES_PATH,
 		"runtime",
@@ -432,7 +406,7 @@ export function genRuntimeActorDriverPath(project: Project, runtime: Runtime): s
  * This will be re-imported in other `genModulePublicExternal`.
  */
 export function genModulePublicInternal(project: Project, module: Module): string {
-	return projectCachePath(project, PUBLIC_UTILS_PATH, `internal_${module.name}.ts`);
+	return projectDataPath(project, PUBLIC_UTILS_PATH, `internal_${module.name}.ts`);
 }
 
 /**
@@ -442,11 +416,11 @@ export function genModulePublicInternal(project: Project, module: Module): strin
  * their given module names.
  */
 export function genModulePublicExternal(project: Project, module: Module): string {
-	return projectCachePath(project, PUBLIC_UTILS_PATH, `external_${module.name}.ts`);
+	return projectDataPath(project, PUBLIC_UTILS_PATH, `external_${module.name}.ts`);
 }
 
 export function genModuleDependenciesPath(project: Project, module: Module): string {
-	return projectCachePath(project, DEPENDENCIES_PATH, `dependencies_${module.name}.ts`);
+	return projectDataPath(project, DEPENDENCIES_PATH, `dependencies_${module.name}.ts`);
 }
 
 export interface ListSourceFileOpts {
@@ -480,7 +454,7 @@ export async function listSourceFiles(
 export async function cleanProject(project: Project) {
 	// Delete project files
 	verbose("Removing project gen path");
-	await Deno.remove(projectCachePath(project), { recursive: true });
+	await Deno.remove(projectDataPath(project), { recursive: true });
 }
 
 export function getDefaultRegistry(project: Project): Registry | undefined {

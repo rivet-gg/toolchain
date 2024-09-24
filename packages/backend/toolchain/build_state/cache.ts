@@ -1,7 +1,7 @@
 import { AnySchemaElement } from "../build/schema/mod.ts";
 import { exists } from "@std/fs";
 import { UnreachableError } from "../error/mod.ts";
-import { CACHE_PATH, Project, projectCachePath } from "../project/project.ts";
+import { CACHE_PATH, Project, projectDataPath } from "../project/project.ts";
 import { verbose } from "../term/status.ts";
 import { crypto } from "@std/crypto";
 import { encodeHex } from "@std/encoding/hex";
@@ -35,7 +35,7 @@ export interface CacheScriptSchema {
 }
 
 export async function loadCache(project: Project): Promise<Cache> {
-	const buildCachePath = projectCachePath(project, CACHE_PATH);
+	const buildCachePath = projectDataPath(project, CACHE_PATH);
 
 	// Read hashes from file
 	let persist: CachePersist;
@@ -66,7 +66,7 @@ export async function loadCache(project: Project): Promise<Cache> {
 }
 
 export async function writeCache(project: Project, cache: Cache) {
-	const buildCachePath = projectCachePath(project, CACHE_PATH);
+	const buildCachePath = projectDataPath(project, CACHE_PATH);
 
 	// Write cache
 	await Deno.writeTextFile(

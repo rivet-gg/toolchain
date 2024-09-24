@@ -9,7 +9,7 @@ import { InternalState } from "./state.ts";
 import { info, progress } from "../term/status.ts";
 import { ProjectManifest } from "../build/project_manifest.ts";
 import { ProjectConfigSchema } from "../config/project.ts";
-import { PROJECT_MANIFEST_PATH, projectCachePath } from "../project/mod.ts";
+import { PROJECT_MANIFEST_PATH, projectDataPath } from "../project/mod.ts";
 
 interface Env {
 	Variables: {
@@ -43,7 +43,7 @@ export const internalApi = new Hono<Env>()
 			return c.json({ error: "No project loaded" }, 400);
 		}
 
-		const output = await Deno.readTextFile(projectCachePath(state.project, PROJECT_MANIFEST_PATH));
+		const output = await Deno.readTextFile(projectDataPath(state.project, PROJECT_MANIFEST_PATH));
 		return c.json<ProjectManifest>(JSON.parse(output), 200);
 	})
 	.patch(

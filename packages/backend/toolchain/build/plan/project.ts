@@ -15,7 +15,7 @@ import {
 	OPEN_API_PATH,
 	OUTPUT_MANIFEST_PATH,
 	PACKAGES_PATH,
-	projectCachePath,
+	projectDataPath,
 } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
 import { inflateArchive } from "../util.ts";
@@ -69,7 +69,7 @@ export async function planProjectBuild(
 		dontLogProgress: true,
 		async build({ signal }) {
 			// Writes a copy of the backend runtime bundled with the CLI to the project.
-			const inflatePackagesPath = projectCachePath(project, PACKAGES_PATH);
+			const inflatePackagesPath = projectDataPath(project, PACKAGES_PATH);
 			await inflateArchive(packagesArchive, inflatePackagesPath, "string", signal);
 		},
 	});
@@ -148,7 +148,7 @@ export async function planProjectBuild(
 			name: "Bundle",
 			description: "bundle.js",
 			async build({ signal }) {
-				const bundledFile = projectCachePath(project, BUNDLE_PATH);
+				const bundledFile = projectDataPath(project, BUNDLE_PATH);
 
 				// See Cloudflare Wrangler implementation:
 				//
@@ -156,7 +156,7 @@ export async function planProjectBuild(
 				const analyzeResult = Deno.env.get("_BACKEND_ESBUILD_META") == "1";
 				const noMinify = Deno.env.get("_BACKEND_ESBUILD_NO_MINIFY") == "1";
 				const result = await esbuild.build({
-					entryPoints: [projectCachePath(project, ENTRYPOINT_PATH)],
+					entryPoints: [projectDataPath(project, ENTRYPOINT_PATH)],
 					outfile: bundledFile,
 					format: "esm",
 					sourcemap: true,
@@ -292,7 +292,7 @@ export async function planProjectBuild(
 					signal.throwIfAborted();
 
 					await Deno.writeTextFile(
-						projectCachePath(project, OUTPUT_MANIFEST_PATH),
+						projectDataPath(project, OUTPUT_MANIFEST_PATH),
 						JSON.stringify(manifest),
 					);
 				}
@@ -310,7 +310,7 @@ export async function planProjectBuild(
 			description: "entrypoint.ts",
 			async build() {
 				const checkOutput = await new Deno.Command(denoExecutablePath(), {
-					args: ["check", "--quiet", projectCachePath(project, ENTRYPOINT_PATH)],
+					args: ["check", "--quiet", projectDataPath(project, ENTRYPOINT_PATH)],
 					signal,
 				}).output();
 				if (!checkOutput.success) {

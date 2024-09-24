@@ -10,18 +10,17 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
+	inputSchema,
+	async run(input) {
+		const project = await initProject(input);
+		const modules = resolveModules(project, input.modules);
 
-	const project = await initProject(input);
-	const modules = resolveModules(project, input.modules);
-
-	for (const module of modules) {
-		if (module.registry.isExternal) {
-			throw new UserError(`Cannot run this command against external module: ${module.name}`);
+		for (const module of modules) {
+			if (module.registry.isExternal) {
+				throw new UserError(`Cannot run this command against external module: ${module.name}`);
+			}
 		}
-	}
 
-	await migrateGenerate(project, modules);
-  }
-})
+		await migrateGenerate(project, modules);
+	},
+});

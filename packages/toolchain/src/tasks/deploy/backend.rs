@@ -58,6 +58,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 				"project": config_path,
 			}),
 			env: cmd_env,
+			data_type: paths::BackendDataType::Deploy,
 		},
 	)
 	.await?;
@@ -92,6 +93,7 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 					"project": config_path,
 				}),
 				env: migrate_env,
+				data_type: paths::BackendDataType::Deploy,
 			},
 		)
 		.await?;
@@ -278,6 +280,7 @@ async fn read_generated_manifest(project_path: &Path) -> Result<GenManifest> {
 			"project": project_path
 		}),
 		env: Default::default(),
+		data_type: paths::BackendDataType::Dev,
 	})
 	.await?
 	.output()

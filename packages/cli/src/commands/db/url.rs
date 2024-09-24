@@ -2,7 +2,7 @@ use clap::Parser;
 use serde::Serialize;
 use std::process::ExitCode;
 
-use crate::util::{global_opts::GlobalOpts, postgres};
+use crate::util::postgres;
 
 /// Print database URL
 #[derive(Parser, Serialize)]
@@ -18,7 +18,11 @@ impl Opts {
 			return ExitCode::FAILURE;
 		};
 
-		let db = self.database.map(|x| x.as_str()).unwrap_or("postgres");
+		let db = self
+			.database
+			.as_ref()
+			.map(String::as_str)
+			.unwrap_or("postgres");
 		println!("{}", postgres.url(db).await);
 
 		ExitCode::SUCCESS

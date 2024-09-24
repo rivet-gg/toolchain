@@ -7,12 +7,11 @@ import { runTask } from "../../task.ts";
 export const inputSchema = z.object({}).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
-	// Don't load project since that requires acquiring a lock on the project
+	inputSchema,
+	async run(input) {
+		// Don't load project since that requires acquiring a lock on the project
 
-	const config = await readConfig(loadProjectConfigPath(input));
-	console.log(JSON.stringify(config, null, "\t"));
-
-  }
-})
+		const config = await readConfig(loadProjectConfigPath(input));
+		console.log(JSON.stringify(config, null, "\t"));
+	},
+});

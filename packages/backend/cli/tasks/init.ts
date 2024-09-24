@@ -8,15 +8,14 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
-	await templateProject(input.dir);
+	inputSchema,
+	async run(input) {
+		await templateProject(input.dir);
 
-	console.log("Welcome to Rivet");
-	console.log("");
-	console.log("Created rivet.json");
-	console.log("");
-	console.log("Get started at https://rivet.gg/docs");
-
-  }
-})
+		console.log("Welcome to Rivet");
+		console.log("");
+		console.log("Created rivet.json");
+		console.log("");
+		console.log("Get started at https://rivet.gg/docs");
+	},
+});

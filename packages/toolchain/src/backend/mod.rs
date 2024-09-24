@@ -10,7 +10,9 @@ use tokio::process::Command;
 use uuid::Uuid;
 
 use crate::{
-	config, paths, postgres,
+	config,
+	paths::{self, BackendDataType},
+	postgres,
 	util::{process_manager::ProcessManager, task},
 	ToolchainCtx,
 };
@@ -24,6 +26,7 @@ pub struct BackendCommandOpts {
 	pub task_path: &'static str,
 	pub input: serde_json::Value,
 	pub env: HashMap<String, String>,
+	pub data_type: BackendDataType,
 }
 
 async fn base_url() -> Result<String> {
@@ -53,6 +56,13 @@ pub struct CommandRaw {
 
 pub async fn build_backend_command_raw(mut opts: BackendCommandOpts) -> Result<CommandRaw> {
 	let base_url = base_url().await?;
+
+	// Get data dir
+	let backend_data_dir = paths::backend_data_dir(&paths::data_dir()?, opts.data_type)?;
+	opts.env.insert(
+		"BACKEND_DATA_DIR".into(),
+		backend_data_dir.display().to_string(),
+	);
 
 	// Get Postgres URL
 	let postgres = postgres::get(&paths::data_dir()?).await?;
@@ -113,6 +123,7 @@ pub async fn run_backend_command_from_task(
 pub async fn run_backend_command_passthrough(
 	task_path: &'static str,
 	input: &impl Serialize,
+	data_type: BackendDataType,
 ) -> ExitCode {
 	let input_json = match serde_json::to_value(input) {
 		Result::Ok(x) => x,
@@ -126,6 +137,7 @@ pub async fn run_backend_command_passthrough(
 		task_path,
 		input: input_json,
 		env: HashMap::new(),
+		data_type,
 	})
 	.await
 	{

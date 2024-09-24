@@ -9,13 +9,11 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
+	inputSchema,
+	async run(input) {
+		const project = await initProject(input);
+		const modules = resolveModules(project, input.modules);
 
-	const project = await initProject(input);
-	const modules = resolveModules(project, input.modules);
-
-	await migrateApply(project, modules);
-  }
-})
-
+		await migrateApply(project, modules);
+	},
+});

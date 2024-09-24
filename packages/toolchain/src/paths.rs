@@ -48,6 +48,32 @@ pub fn meta_config_file(base_data_dir: &PathBuf) -> Result<PathBuf> {
 	Ok(project_data_dir(base_data_dir)?.join("meta.json"))
 }
 
+/// Specifies which type of backend dir to use.
+///
+/// We store different backend dirs since they need to be locked independently.
+///
+/// This is akin to subdirectores in Rust `target` dirs.
+pub enum BackendDataType {
+	Dev,
+	Deploy,
+}
+
+impl BackendDataType {
+	fn as_str(&self) -> &str {
+		match self {
+			BackendDataType::Dev => "dev",
+			BackendDataType::Deploy => "deploy",
+		}
+	}
+}
+
+/// Stores all backend-related data.
+pub fn backend_data_dir(base_data_dir: &PathBuf, data_type: BackendDataType) -> Result<PathBuf> {
+	Ok(project_data_dir(base_data_dir)?
+		.join("backend")
+		.join(data_type.as_str()))
+}
+
 /// Stores Postgres-related data.
 pub fn postgres_base(base_data_dir: &PathBuf) -> Result<PathBuf> {
 	Ok(project_data_dir(base_data_dir)?.join("postgres"))

@@ -11,12 +11,11 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
-	validateIdentifier(input.module, Casing.Snake);
-	validateIdentifier(input.script, Casing.Snake);
+	inputSchema,
+	async run(input) {
+		validateIdentifier(input.module, Casing.Snake);
+		validateIdentifier(input.script, Casing.Snake);
 
-	await templateScript(await initProject(input), input.module, input.script);
-
-  }
-})
+		await templateScript(await initProject(input), input.module, input.script);
+	},
+});
