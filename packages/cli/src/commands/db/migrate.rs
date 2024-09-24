@@ -47,7 +47,7 @@ pub struct ApplyOpts {
 
 impl ApplyOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("dbMigrateApply", self).await
+		run_backend_command_passthrough("db/migrate/apply.ts", self).await
 	}
 }
 
@@ -64,7 +64,7 @@ pub struct DropOpts {
 
 impl DropOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("dbMigrateDrop", self).await
+		run_backend_command_passthrough("db/migrate/drop.ts", self).await
 	}
 }
 
@@ -81,7 +81,7 @@ pub struct GenerateOpts {
 
 impl GenerateOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("dbMigrateGenerate", self).await
+		run_backend_command_passthrough("db/migrate/generate.ts", self).await
 	}
 }
 
@@ -98,6 +98,6 @@ pub struct PushOpts {
 
 impl PushOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("dbMigratePush", self).await
+		run_backend_command_passthrough("db/migrate/push.ts", self).await
 	}
 }

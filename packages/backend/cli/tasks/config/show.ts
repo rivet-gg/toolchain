@@ -2,14 +2,17 @@ import { z } from "zod";
 import { globalOptsSchema } from "../../common.ts";
 import { readConfig } from "../../../toolchain/config/project.ts";
 import { loadProjectConfigPath } from "../../../toolchain/project/mod.ts";
+import { runTask } from "../../task.ts";
 
-export const optsSchema = z.object({}).merge(globalOptsSchema);
+export const inputSchema = z.object({}).merge(globalOptsSchema);
 
-type Opts = z.infer<typeof optsSchema>;
-
-export async function execute(opts: Opts) {
+runTask({
+  inputSchema,
+  async run(input) {
 	// Don't load project since that requires acquiring a lock on the project
 
-	const config = await readConfig(loadProjectConfigPath(opts));
+	const config = await readConfig(loadProjectConfigPath(input));
 	console.log(JSON.stringify(config, null, "\t"));
-}
+
+  }
+})

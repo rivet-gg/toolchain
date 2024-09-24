@@ -75,8 +75,8 @@ impl task::Task for Task {
 
 			// Build command
 			let cmd = build_backend_command_raw(backend::BackendCommandOpts {
-				command: "dev",
-				opts: serde_json::json!({
+				task_path: "dev.ts",
+				input: serde_json::json!({
 					"project": config_path,
 					"nonInteractive": true
 				}),
@@ -123,8 +123,8 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 		interval.tick().await;
 
 		let output = build_backend_command(backend::BackendCommandOpts {
-			command: "configManifestPath",
-			opts: json!({
+			task_path: "config/manifest_path.ts",
+			input: json!({
 				"project": null
 			}),
 			env: Default::default(),

@@ -3,16 +3,18 @@ import { globalOptsSchema, initProject } from "../../../common.ts";
 import { migrateGenerate } from "../../../../toolchain/migrate/generate.ts";
 import { resolveModules } from "../../../util.ts";
 import { UserError } from "../../../../toolchain/error/mod.ts";
+import { runTask } from "../../../task.ts";
 
-export const optsSchema = z.object({
+export const inputSchema = z.object({
 	modules: z.array(z.string()).default([]),
 }).merge(globalOptsSchema);
 
-type Opts = z.infer<typeof optsSchema>;
+runTask({
+  inputSchema,
+  async run(input) {
 
-export async function execute(opts: Opts) {
-	const project = await initProject(opts);
-	const modules = resolveModules(project, opts.modules);
+	const project = await initProject(input);
+	const modules = resolveModules(project, input.modules);
 
 	for (const module of modules) {
 		if (module.registry.isExternal) {
@@ -21,4 +23,5 @@ export async function execute(opts: Opts) {
 	}
 
 	await migrateGenerate(project, modules);
-}
+  }
+})

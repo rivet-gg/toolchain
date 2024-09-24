@@ -9,8 +9,9 @@ import { migrateModeSchema } from "./../util.ts";
 import { createAndStartProjectInternalApiRouter, InternalState, State } from "../../toolchain/internal_api/mod.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 import { getDatabaseUrl } from "../../toolchain/postgres.ts";
+import { runTask } from "../task.ts";
 
-export const optsSchema = z.object({
+export const inputSchema = z.object({
 	build: z.boolean().default(true),
 	check: z.boolean().default(true),
 	strictSchemas: z.boolean().default(true),
@@ -21,9 +22,9 @@ export const optsSchema = z.object({
 	nonInteractive: z.boolean().default(false),
 }).merge(globalOptsSchema);
 
-type Opts = z.infer<typeof optsSchema>;
-
-export async function execute(opts: Opts) {
+runTask({
+  inputSchema,
+async run(input) {
 	// Start internal router once we receive an event from `watch`
 	const internalState = new InternalState();
 	let startedInternalRouter = false;
@@ -39,8 +40,8 @@ export async function execute(opts: Opts) {
 	};
 
 	await watch({
-		loadProjectOpts: opts,
-		disableWatch: !opts.watch,
+		loadProjectOpts: input,
+		disableWatch: !input.watch,
 		onError: (project, error) => {
 			if (project) setInternalState({ value: "failure", project, error });
 		},
@@ -52,18 +53,18 @@ export async function execute(opts: Opts) {
 		},
 		async fn(project: Project, signal: AbortSignal) {
 			// Build project
-			if (opts.build) {
+			if (input.build) {
 				await build(project, {
 					runtime: Runtime.Deno,
 					format: Format.Native,
 					dbDriver: DbDriver.NodePostgres,
-					strictSchemas: opts.strictSchemas,
+					strictSchemas: input.strictSchemas,
 					// This gets ran on `deno run`
 					skipDenoCheck: true,
-					sdk: opts.sdk ? {} : undefined,
-					migrate: opts.migrate
+					sdk: input.sdk ? {} : undefined,
+					migrate: input.migrate
 						? {
-							mode: opts.migrateMode,
+							mode: input.migrateMode,
 						}
 						: undefined,
 					signal,
@@ -77,7 +78,7 @@ export async function execute(opts: Opts) {
 				"--allow-net",
 				"--allow-read",
 			];
-			if (opts.check) args.push("--check");
+			if (input.check) args.push("--check");
 
 			// Run entrypoint
 			const entrypointPath = projectCachePath(project, ENTRYPOINT_PATH);
@@ -99,3 +100,4 @@ export async function execute(opts: Opts) {
 		},
 	});
 }
+});

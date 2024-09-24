@@ -3,15 +3,18 @@ import { templateModule } from "../../../toolchain/template/module.ts";
 import { Casing } from "../../../toolchain/types/identifiers/defs.ts";
 import { validateIdentifier } from "../../../toolchain/types/identifiers/mod.ts";
 import { globalOptsSchema, initProject } from "../../common.ts";
+import { runTask } from "../../task.ts";
 
-export const optsSchema = z.object({
+export const inputSchema = z.object({
 	module: z.string(),
 }).merge(globalOptsSchema);
 
-type Opts = z.infer<typeof optsSchema>;
+runTask({
+  inputSchema,
+  async run(input) {
 
-export async function execute(opts: Opts) {
-	validateIdentifier(opts.module, Casing.Snake);
-	const project = await initProject(opts);
+	validateIdentifier(input.module, Casing.Snake);
+	const project = await initProject(input);
 	await templateModule(project, opts.module);
-}
+  }
+})

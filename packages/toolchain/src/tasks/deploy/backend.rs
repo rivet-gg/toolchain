@@ -48,8 +48,8 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 	let cmd = backend::run_backend_command_from_task(
 		task.clone(),
 		backend::BackendCommandOpts {
-			command: "build",
-			opts: serde_json::json!({
+			task_path: "build.ts",
+			input: serde_json::json!({
 				"watch": false,
 				"runtime": "cloudflare_workers_platforms",
 				"outputFormat": "bundled",
@@ -87,8 +87,8 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 		let migrate_cmd = backend::run_backend_command_from_task(
 			task.clone(),
 			backend::BackendCommandOpts {
-				command: "dbMigrateApply",
-				opts: serde_json::json!({
+				task_path: "db/migrate/apply.ts",
+				input: serde_json::json!({
 					"project": config_path,
 				}),
 				env: migrate_env,
@@ -273,8 +273,8 @@ struct GenManifest {
 async fn read_generated_manifest(project_path: &Path) -> Result<GenManifest> {
 	// Read manifest path
 	let path_output = build_backend_command(backend::BackendCommandOpts {
-		command: "configOutputManifestPath",
-		opts: json!({
+		task_path: "config/output_manifest_path.ts",
+		input: json!({
 			"project": project_path
 		}),
 		env: Default::default(),

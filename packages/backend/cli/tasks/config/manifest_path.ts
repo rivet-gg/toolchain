@@ -6,16 +6,18 @@ import {
 	PROJECT_MANIFEST_PATH,
 } from "../../../toolchain/project/mod.ts";
 import { dirname, resolve } from "@std/path";
+import { runTask } from "../../task.ts";
 
-export const optsSchema = z.object({}).merge(globalOptsSchema);
+export const inputSchema = z.object({}).merge(globalOptsSchema);
 
-type Opts = z.infer<typeof optsSchema>;
-
-export async function execute(opts: Opts) {
+runTask({
+  inputSchema,
+  async run(input) {
 	// Don't load project since that requires acquiring a lock on the project
 
-	const projectRoot = dirname(loadProjectConfigPath(opts));
+	const projectRoot = dirname(loadProjectConfigPath(input));
 	const cachePath = await computeProjectCachePath(projectRoot);
 	const manifestPath = resolve(cachePath, PROJECT_MANIFEST_PATH);
 	console.log(manifestPath);
-}
+  }
+})
