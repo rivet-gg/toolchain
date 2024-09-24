@@ -21,8 +21,8 @@ lazy_static! {
 }
 
 pub struct BackendCommandOpts {
-	pub command: &'static str,
-	pub opts: serde_json::Value,
+	pub task_path: &'static str,
+	pub input: serde_json::Value,
 	pub env: HashMap<String, String>,
 }
 
@@ -63,9 +63,7 @@ pub async fn build_backend_command_raw(mut opts: BackendCommandOpts) -> Result<C
 	let deno = rivet_deno_embed::get_executable(&crate::paths::data_dir()?).await?;
 
 	// Serialize command
-	let backend_cmd = serde_json::to_string(&json!({
-		opts.command: opts.opts
-	}))?;
+	let input_json = serde_json::to_string(&opts.input)?;
 
 	// Run backend
 	Ok(CommandRaw {
@@ -84,9 +82,9 @@ pub async fn build_backend_command_raw(mut opts: BackendCommandOpts) -> Result<C
 			format!("{base_url}/deno.jsonc"),
 			"--lock".into(),
 			format!("{base_url}/deno.lock"),
-			format!("{base_url}/cli/main.ts"),
-			"--command".into(),
-			backend_cmd,
+			format!("{base_url}/cli/tasks/{}", opts.task_path),
+			"--input".into(),
+			input_json,
 		],
 		envs: opts.env,
 		current_dir: paths::project_root()?,
@@ -113,10 +111,10 @@ pub async fn run_backend_command_from_task(
 }
 
 pub async fn run_backend_command_passthrough(
-	command: &'static str,
-	opts: &impl Serialize,
+	task_path: &'static str,
+	input: &impl Serialize,
 ) -> ExitCode {
-	let opts_json = match serde_json::to_value(opts) {
+	let input_json = match serde_json::to_value(input) {
 		Result::Ok(x) => x,
 		Err(err) => {
 			eprintln!("Serialize failed: {err:?}");
@@ -125,8 +123,8 @@ pub async fn run_backend_command_passthrough(
 	};
 
 	let mut cmd = match build_backend_command(BackendCommandOpts {
-		command,
-		opts: opts_json,
+		task_path,
+		input: input_json,
 		env: HashMap::new(),
 	})
 	.await

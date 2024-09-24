@@ -3,21 +3,22 @@ import { globalOptsSchema, initProject } from "../common.ts";
 import { listSourceFiles } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
+import { runTask } from "../task.ts";
 
-export const optsSchema = z.object({
-	// Add any command-specific options here
-}).merge(globalOptsSchema);
+export const inputSchema = globalOptsSchema.extend({
+	check: z.boolean().nullable(),
+});
 
-type Opts = z.infer<typeof optsSchema>;
-
-export async function execute(opts: Opts) {
-	const project = await initProject(opts);
+runTask({inputSchema,
+        async run(input) {
+	const project = await initProject(input);
 
 	const sourceFiles = await listSourceFiles(project, { localOnly: true });
 
 	const cmd = await new Deno.Command(denoExecutablePath(), {
 		args: [
-			"lint",
+			"fmt",
+			...input.check ? ["--check"] : [],
 			...sourceFiles,
 		],
 		stdout: "inherit",
@@ -25,6 +26,7 @@ export async function execute(opts: Opts) {
 	}).output();
 
 	if (!cmd.success) {
-		throw new UserError("Lint failed.", { paths: sourceFiles });
+		throw new UserError("Format failed.", { paths: sourceFiles });
 	}
 }
+})

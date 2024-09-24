@@ -37,6 +37,6 @@ impl Opts {
 			return ExitCode::FAILURE;
 		};
 
-		run_backend_command_passthrough("dev", self).await
+		run_backend_command_passthrough("dev.ts", self).await
 	}
 }

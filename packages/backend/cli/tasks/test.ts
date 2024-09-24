@@ -10,8 +10,9 @@ import { info } from "../../toolchain/term/status.ts";
 import { migrateModeSchema } from "./../util.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 import { getDatabaseUrl } from "../../toolchain/postgres.ts";
+import { runTask } from "../task.ts";
 
-export const optsSchema = z.object({
+export const inputSchema = z.object({
 	build: z.boolean().default(true),
 	check: z.boolean().default(true),
 	strictSchemas: z.boolean().default(true),
@@ -23,26 +24,26 @@ export const optsSchema = z.object({
 	modulesFilter: z.array(z.string()),
 }).merge(globalOptsSchema);
 
-type Opts = z.infer<typeof optsSchema>;
-
-export async function execute(opts: Opts) {
+runTask({
+  inputSchema,
+  async run(input) {
 	await watch({
-		loadProjectOpts: opts,
-		disableWatch: !opts.watch,
+		loadProjectOpts: input,
+		disableWatch: !input.watch,
 		fn: async (project: Project, signal: AbortSignal) => {
 			// Build project
-			if (opts.build) {
+			if (input.build) {
 				await build(project, {
 					runtime: Runtime.Deno,
 					format: Format.Native,
 					dbDriver: DbDriver.NodePostgres,
-					strictSchemas: opts.strictSchemas,
+					strictSchemas: input.strictSchemas,
 					// This gets ran on `deno test`
 					skipDenoCheck: true,
-					sdk: opts.sdk ? {} : undefined,
-					migrate: opts.migrate
+					sdk: input.sdk ? {} : undefined,
+					migrate: input.migrate
 						? {
-							mode: opts.migrateMode,
+							mode: input.migrateMode,
 						}
 						: undefined,
 					signal,
@@ -55,20 +56,20 @@ export async function execute(opts: Opts) {
 				"--allow-net",
 				"--allow-read",
 			];
-			if (opts.check) args.push("--check");
-			if (opts.filter) args.push(`--filter=${opts.filter}`);
+			if (input.check) args.push("--check");
+			if (input.filter) args.push(`--filter=${input.filter}`);
 
 			// Find test scripts
 			const testingModules = [];
 			let totalTestFiles = 0;
 			for (const module of project.modules.values()) {
 				// Filter modules
-				if (opts.modulesFilter.length == 0) {
+				if (input.modulesFilter.length == 0) {
 					// Only test local modules
 					if (module.registry.isExternal) continue;
 				} else {
 					// Only test specified modules. This allows for testing remote modules.
-					if (!opts.modulesFilter.includes(module.name)) continue;
+					if (!input.modulesFilter.includes(module.name)) continue;
 				}
 
 				testingModules.push(module.name);
@@ -114,3 +115,4 @@ export async function execute(opts: Opts) {
 		},
 	});
 }
+})

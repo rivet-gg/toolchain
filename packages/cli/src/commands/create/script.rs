@@ -21,6 +21,6 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("createScript", self).await
+		run_backend_command_passthrough("create/script.ts", self).await
 	}
 }

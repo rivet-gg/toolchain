@@ -18,6 +18,6 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("format", self).await
+		run_backend_command_passthrough("format.ts", self).await
 	}
 }
