@@ -1,6 +1,6 @@
 import { DatabaseError, DatabaseInitializationError, DatabaseStartError, DatabaseStopError } from "./error.ts";
 import { binaryDir, Settings } from "./settings.ts";
-import { verbose } from "../term/status.ts";
+import { progress, verbose } from "../term/status.ts";
 import { addShutdownHandler } from "../utils/shutdown_handler.ts";
 import { Client as PostgresClient } from "@bartlomieju/postgres";
 import { assertExists } from "@std/assert";
@@ -83,15 +83,22 @@ async function isStarted(manager: Manager): Promise<boolean> {
 }
 
 async function isConnectable(manager: Manager): Promise<boolean> {
-	let client;
 	try {
-		client = await getClient(manager, BOOTSTRAP_DATABASE);
-		await client.queryObject("SELECT 1");
-		return true;
+		// Probe the port to see if it's open
+		const conn = await Deno.connect({ hostname: manager.settings.host, port: manager.state.port! });
+		conn.close();
+		
+		// If port is open, try to establish a database connection
+		let client;
+		try {
+			client = await getClient(manager, BOOTSTRAP_DATABASE);
+			await client.queryObject("SELECT 1");
+			return true;
+		} finally {
+			await client?.end();
+		}
 	} catch (_) {
 		return false;
-	} finally {
-		await client?.end();
 	}
 }
 
@@ -255,7 +262,16 @@ export async function getClient(manager: Manager, databaseName: string): Promise
 	const databaseUrl = getDatabaseUrl(manager, databaseName);
 
 	const client = new PostgresClient(databaseUrl);
-	await client.connect();
+
+	await Promise.race([
+		client.connect(),
+		new Promise((_, reject) => {
+			setTimeout(() => {
+				reject(new InternalError("Database connection timed out"));
+				client.end();
+			}, 5000);
+		}),
+	]);
 
 	addShutdownHandler(async () => {
 		verbose("Shutting down default database client");
