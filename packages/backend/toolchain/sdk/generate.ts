@@ -2,7 +2,7 @@ import { move } from "@std/fs";
 import { resolve } from "@std/path";
 import { CommandError, UnreachableError } from "../error/mod.ts";
 import { Project } from "../project/mod.ts";
-import { projectCachePath, SDK_PATH } from "../project/project.ts";
+import { projectDataPath, SDK_PATH } from "../project/project.ts";
 import { progress, success } from "../term/status.ts";
 
 import { generateTypescript } from "./typescript/mod.ts";
@@ -25,7 +25,7 @@ export async function generateSdk(
 	sdk: SdkConfig,
 ) {
 	const targetString = targetToString(sdk.target);
-	const sdkGenPath = resolve(projectCachePath(project, SDK_PATH), targetString);
+	const sdkGenPath = resolve(projectDataPath(project, SDK_PATH), targetString);
 
 	// Clear artifacts
 	try {

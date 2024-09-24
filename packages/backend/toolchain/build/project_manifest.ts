@@ -4,7 +4,7 @@ import type { IndexedModuleConfig, ModuleConfig, ScriptConfig } from "../config/
 import { ProjectConfig } from "../config/project.ts";
 import { RegistryConfig } from "../config/project.ts";
 import { hasUserConfigSchema, Project, PROJECT_MANIFEST_PATH } from "../project/mod.ts";
-import { projectCachePath } from "../project/project.ts";
+import { projectDataPath } from "../project/project.ts";
 import { SdkTarget } from "../sdk/generate.ts";
 import { AnySchemaElement } from "./schema/mod.ts";
 
@@ -113,7 +113,7 @@ export async function genProjectManifest(project: Project) {
 	};
 
 	await Deno.writeTextFile(
-		projectCachePath(project, PROJECT_MANIFEST_PATH),
+		projectDataPath(project, PROJECT_MANIFEST_PATH),
 		JSON.stringify(manifest, null, 4),
 	);
 }

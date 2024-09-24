@@ -1,4 +1,4 @@
-import { dbSchemaHelperPath, DRIZZLE_ORM_REEXPORT, Module, Project, projectCachePath } from "../../project/mod.ts";
+import { dbSchemaHelperPath, DRIZZLE_ORM_REEXPORT, Module, Project, projectDataPath } from "../../project/mod.ts";
 import { GeneratedCodeBuilder } from "./mod.ts";
 import { InternalError } from "../../error/mod.ts";
 import drizzleOrmArtifact from "../../../artifacts/drizzle_orm.json" with { type: "json" };
@@ -23,7 +23,7 @@ export async function compileDbSchemaHelper(
 	}
 
 	const dbPath = opts.overrideDbPath ?? dbSchemaHelperPath(project, module);
-	const ormReexportPath = opts.overrideOrmReexportPath ?? projectCachePath(project, DRIZZLE_ORM_REEXPORT);
+	const ormReexportPath = opts.overrideOrmReexportPath ?? projectDataPath(project, DRIZZLE_ORM_REEXPORT);
 	const ormPackage = opts.forceNodeModules ? DRIZZLE_ORM_PACKAGE_NPM : DRIZZLE_ORM_PACKAGE;
 
 	await generateOrmReexport(ormReexportPath, ormPackage);

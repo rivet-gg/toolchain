@@ -24,7 +24,6 @@ pub enum SubCommand {
 impl SubCommand {
 	pub async fn execute(&self) -> ExitCode {
 		match self {
-			SubCommand::Reset(opts) => opts.execute().await,
 			SubCommand::Sh(opts) => opts.execute().await,
 			SubCommand::Url(opts) => opts.execute().await,
 			SubCommand::Migrate { subcommand } => subcommand.execute().await,

@@ -12,28 +12,26 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
-	const project = await initProject(input);
+	inputSchema,
+	async run(input) {
+		const project = await initProject(input);
 
-	// Ensure not already installed
-	if (input.moduleName in project.config.modules) {
-		throw new UserError(`Module \`${input.moduleName}\` is already installed`);
-	}
+		// Ensure not already installed
+		if (input.moduleName in project.config.modules) {
+			throw new UserError(`Module \`${input.moduleName}\` is already installed`);
+		}
 
-	// Attempt to fetch module
-	const moduleConfig: ProjectModuleConfig = {};
-	if (input.registry) moduleConfig.registry = input.registry;
-	await fetchAndResolveModule(project.path, project.configPath, project.registries, input.moduleName, moduleConfig);
+		// Attempt to fetch module
+		const moduleConfig: ProjectModuleConfig = {};
+		if (input.registry) moduleConfig.registry = input.registry;
+		await fetchAndResolveModule(project.path, project.configPath, project.registries, input.moduleName, moduleConfig);
 
-	// Add to rivet.json
-	const newConfig = structuredClone(project.config);
-	newConfig.modules[input.moduleName] = moduleConfig;
-	await Deno.writeTextFile(
-		resolve(project.path, "rivet.json"),
-		JSON.stringify(newConfig, null, "\t"),
-	);
-
-  }
+		// Add to rivet.json
+		const newConfig = structuredClone(project.config);
+		newConfig.modules[input.moduleName] = moduleConfig;
+		await Deno.writeTextFile(
+			resolve(project.path, "rivet.json"),
+			JSON.stringify(newConfig, null, "\t"),
+		);
+	},
 });
-

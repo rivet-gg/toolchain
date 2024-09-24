@@ -81,6 +81,7 @@ impl task::Task for Task {
 					"nonInteractive": true
 				}),
 				env: cmd_env,
+				data_type: paths::BackendDataType::Dev,
 			})
 			.await?;
 
@@ -128,6 +129,7 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 				"project": null
 			}),
 			env: Default::default(),
+			data_type: paths::BackendDataType::Dev,
 		})
 		.await?
 		.output()

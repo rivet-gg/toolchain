@@ -7,12 +7,12 @@ import {
 	ACTOR_TYPEDEF_PATH,
 	DEPENDENCY_CASE_CONVERSION,
 	DEPENDENCY_TYPEDEF_PATH,
-	projectCachePath,
+	projectDataPath,
 } from "../../project/project.ts";
 
 export async function compileTypeHelpers(project: Project) {
-	const typedefPath = projectCachePath(project, DEPENDENCY_TYPEDEF_PATH);
-	const caseConversionPath = projectCachePath(project, DEPENDENCY_CASE_CONVERSION);
+	const typedefPath = projectDataPath(project, DEPENDENCY_TYPEDEF_PATH);
+	const caseConversionPath = projectDataPath(project, DEPENDENCY_CASE_CONVERSION);
 	const dependencyTypedef = new GeneratedCodeBuilder(typedefPath, 4);
 	const dependencyCaseConversionMap = new GeneratedCodeBuilder(caseConversionPath, 4);
 
@@ -137,8 +137,8 @@ export async function compileTypeHelpers(project: Project) {
 }
 
 export async function compileActorTypeHelpers(project: Project) {
-	const typedefPath = projectCachePath(project, ACTOR_TYPEDEF_PATH);
-	const caseConversionPath = projectCachePath(project, ACTOR_CASE_CONVERSION_MAP_PATH);
+	const typedefPath = projectDataPath(project, ACTOR_TYPEDEF_PATH);
+	const caseConversionPath = projectDataPath(project, ACTOR_CASE_CONVERSION_MAP_PATH);
 	const actorTypedef = new GeneratedCodeBuilder(typedefPath, 4);
 	const actorCaseConversionMap = new GeneratedCodeBuilder(caseConversionPath, 4);
 

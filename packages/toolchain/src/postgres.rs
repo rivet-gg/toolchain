@@ -1,8 +1,8 @@
 use anyhow::*;
 use lazy_static::lazy_static;
-use postgresql_embedded::{PostgreSQL, Settings, Status, VersionReq};
+use postgresql_embedded::{PostgreSQL, Settings, VersionReq};
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, path::PathBuf, sync::Arc, time::Duration};
+use std::{collections::HashMap, fmt, path::PathBuf, sync::Arc, time::Duration};
 use tokio::{net::TcpStream, sync::Mutex};
 
 use crate::paths;
@@ -75,7 +75,7 @@ impl PostgresManager {
 		postgresql.setup().await.context("PostgreSQL::setup")?;
 
 		// Otherwise, this will kill existing processes.
-		if is_running(&postgresql).await {
+		if !is_running(&postgresql).await {
 			// Start Postgres
 			postgresql.start().await.context("PostgreSQL::start")?;
 
@@ -115,7 +115,19 @@ impl PostgresManager {
 
 	pub async fn status(&self) -> Result<Status> {
 		let postgresql = self.postgresql.lock().await;
-		Ok(postgresql.status())
+		let status = match postgresql.status() {
+			postgresql_embedded::Status::NotInstalled => Status::NotInstalled,
+			postgresql_embedded::Status::Installed => Status::Installed,
+			postgresql_embedded::Status::Started => {
+				if is_connectable(&postgresql).await {
+					Status::Ready
+				} else {
+					Status::Started
+				}
+			}
+			postgresql_embedded::Status::Stopped => Status::Stopped,
+		};
+		Ok(status)
 	}
 
 	pub async fn bin_dir(&self) -> PathBuf {
@@ -132,12 +144,15 @@ impl PostgresManager {
 /// Adds an extra check if the port is connectable to cover the edge case where the process was
 /// force killed (or the system restarted).
 async fn is_running(postgresql: &PostgreSQL) -> bool {
-	postgresql.status() != Status::Started
-		|| !probe_tcp_addr(
-			postgresql.settings().host.as_str(),
-			postgresql.settings().port,
-		)
-		.await
+	postgresql.status() == postgresql_embedded::Status::Started && is_connectable(postgresql).await
+}
+
+async fn is_connectable(postgresql: &PostgreSQL) -> bool {
+	probe_tcp_addr(
+		postgresql.settings().host.as_str(),
+		postgresql.settings().port,
+	)
+	.await
 }
 
 /// Checks if can connect to a TCP addr.
@@ -189,4 +204,32 @@ where
 	tokio::fs::write(&state_path, state_json).await?;
 
 	Ok(res)
+}
+
+#[derive(Serialize)]
+pub enum Status {
+	/// Archive not installed
+	NotInstalled,
+	/// Installation complete; not initialized
+	Installed,
+	/// Server started but not connectable
+	///
+	/// This state may indicate that a PID file exists but there is no actual server running
+	Started,
+	/// Server connectable
+	Ready,
+	/// Server initialized and stopped
+	Stopped,
+}
+
+impl fmt::Display for Status {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		match self {
+			Status::NotInstalled => write!(f, "Stopped (Not Installed)"),
+			Status::Installed => write!(f, "Stopped (Installed)"),
+			Status::Started => write!(f, "Unkown (Started)"),
+			Status::Ready => write!(f, "Ready"),
+			Status::Stopped => write!(f, "Stopped (Not Running)"),
+		}
+	}
 }

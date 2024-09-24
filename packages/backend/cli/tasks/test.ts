@@ -25,94 +25,94 @@ export const inputSchema = z.object({
 }).merge(globalOptsSchema);
 
 runTask({
-  inputSchema,
-  async run(input) {
-	await watch({
-		loadProjectOpts: input,
-		disableWatch: !input.watch,
-		fn: async (project: Project, signal: AbortSignal) => {
-			// Build project
-			if (input.build) {
-				await build(project, {
-					runtime: Runtime.Deno,
-					format: Format.Native,
-					dbDriver: DbDriver.NodePostgres,
-					strictSchemas: input.strictSchemas,
-					// This gets ran on `deno test`
-					skipDenoCheck: true,
-					sdk: input.sdk ? {} : undefined,
-					migrate: input.migrate
-						? {
-							mode: input.migrateMode,
-						}
-						: undefined,
-					signal,
-				});
-			}
-
-			// Determine args
-			const args = [
-				"--allow-env",
-				"--allow-net",
-				"--allow-read",
-			];
-			if (input.check) args.push("--check");
-			if (input.filter) args.push(`--filter=${input.filter}`);
-
-			// Find test scripts
-			const testingModules = [];
-			let totalTestFiles = 0;
-			for (const module of project.modules.values()) {
-				// Filter modules
-				if (input.modulesFilter.length == 0) {
-					// Only test local modules
-					if (module.registry.isExternal) continue;
-				} else {
-					// Only test specified modules. This allows for testing remote modules.
-					if (!input.modulesFilter.includes(module.name)) continue;
+	inputSchema,
+	async run(input) {
+		await watch({
+			loadProjectOpts: input,
+			disableWatch: !input.watch,
+			fn: async (project: Project, signal: AbortSignal) => {
+				// Build project
+				if (input.build) {
+					await build(project, {
+						runtime: Runtime.Deno,
+						format: Format.Native,
+						dbDriver: DbDriver.NodePostgres,
+						strictSchemas: input.strictSchemas,
+						// This gets ran on `deno test`
+						skipDenoCheck: true,
+						sdk: input.sdk ? {} : undefined,
+						migrate: input.migrate
+							? {
+								mode: input.migrateMode,
+							}
+							: undefined,
+						signal,
+					});
 				}
 
-				testingModules.push(module.name);
+				// Determine args
+				const args = [
+					"--allow-env",
+					"--allow-net",
+					"--allow-read",
+				];
+				if (input.check) args.push("--check");
+				if (input.filter) args.push(`--filter=${input.filter}`);
 
-				// Test all modules or filter module tests
-				const testPaths = (await glob.glob("*.ts", {
-					cwd: resolve(module.path, "tests"),
-				}))
-					.map((path) => resolve(module.path, "tests", path));
-				totalTestFiles += testPaths.length;
-				args.push(...testPaths);
-			}
+				// Find test scripts
+				const testingModules = [];
+				let totalTestFiles = 0;
+				for (const module of project.modules.values()) {
+					// Filter modules
+					if (input.modulesFilter.length == 0) {
+						// Only test local modules
+						if (module.registry.isExternal) continue;
+					} else {
+						// Only test specified modules. This allows for testing remote modules.
+						if (!input.modulesFilter.includes(module.name)) continue;
+					}
 
-			if (testingModules.length == 0) {
-				info("Finished", "No modules to test");
-				return;
-			}
+					testingModules.push(module.name);
 
-			if (totalTestFiles == 0) {
-				throw new UserError("No test files", {
-					suggest: "See 'rivet create test --help' to create a test.",
-				});
-			}
+					// Test all modules or filter module tests
+					const testPaths = (await glob.glob("*.ts", {
+						cwd: resolve(module.path, "tests"),
+					}))
+						.map((path) => resolve(module.path, "tests", path));
+					totalTestFiles += testPaths.length;
+					args.push(...testPaths);
+				}
 
-			// Run tests
-			info("Testing", testingModules.join(", "));
-			const cmd = await new Deno.Command(denoExecutablePath(), {
-				args: [
-					"test",
-					...args,
-				],
-				stdout: "inherit",
-				stderr: "inherit",
-				signal,
-				env: {
-					"DATABASE_URL": getDatabaseUrl(project),
-					// Force color for test logs
-					"RIVET_BACKEND_TERM_COLOR": Deno.env.get("RIVET_BACKEND_TERM_COLOR") ?? "always",
-				},
-			})
-				.output();
-			if (!cmd.success) throw new UserError("Tests failed.");
-		},
-	});
-}
-})
+				if (testingModules.length == 0) {
+					info("Finished", "No modules to test");
+					return;
+				}
+
+				if (totalTestFiles == 0) {
+					throw new UserError("No test files", {
+						suggest: "See 'rivet create test --help' to create a test.",
+					});
+				}
+
+				// Run tests
+				info("Testing", testingModules.join(", "));
+				const cmd = await new Deno.Command(denoExecutablePath(), {
+					args: [
+						"test",
+						...args,
+					],
+					stdout: "inherit",
+					stderr: "inherit",
+					signal,
+					env: {
+						"DATABASE_URL": getDatabaseUrl(project),
+						// Force color for test logs
+						"RIVET_BACKEND_TERM_COLOR": Deno.env.get("RIVET_BACKEND_TERM_COLOR") ?? "always",
+					},
+				})
+					.output();
+				if (!cmd.success) throw new UserError("Tests failed.");
+			},
+		});
+	},
+});

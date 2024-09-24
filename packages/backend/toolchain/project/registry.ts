@@ -5,10 +5,10 @@ import { progress, warn } from "../term/status.ts";
 import { UnreachableError, UserError } from "../error/mod.ts";
 import { CommandError } from "../error/mod.ts";
 import registryDefaultReg from "./registry_default_rev.json" with { type: "json" };
-import { computeProjectCachePath } from "./mod.ts";
 import { Casing } from "../types/identifiers/defs.ts";
 import { validateIdentifier } from "../types/identifiers/mod.ts";
 import { type IndexedModuleConfig, readConfig as readModuleConfig } from "../config/module.ts";
+import { backendDataDir } from "./project.ts";
 
 export interface Registry {
 	path: string;
@@ -155,7 +155,7 @@ async function resolveRegistryGit(
 ): Promise<ResolveRegistryOutput> {
 	const projectConfigPath = resolve(projectRoot, "rivet.json");
 
-	const repoPath = resolve(await computeProjectCachePath(projectRoot), "git_registries", name);
+	const repoPath = resolve(backendDataDir(), "git_registries", name);
 	const gitRef = resolveGitRef(config);
 
 	// Clone repo if needed

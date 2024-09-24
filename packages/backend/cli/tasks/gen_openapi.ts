@@ -9,19 +9,19 @@ export const inputSchema = globalOptsSchema.extend({
 });
 
 runTask({
-  inputSchema,
-  async run(input) {
-	const project = await initProject(input);
+	inputSchema,
+	async run(input) {
+		const project = await initProject(input);
 
-	await build(project, {
-		format: Format.Native,
-		runtime: Runtime.Deno,
-		dbDriver: DbDriver.NodePostgres,
-		// Require schemas to be generated in order to build OpenAPI types
-		strictSchemas: true,
-		skipDenoCheck: true,
-	});
+		await build(project, {
+			format: Format.Native,
+			runtime: Runtime.Deno,
+			dbDriver: DbDriver.NodePostgres,
+			// Require schemas to be generated in order to build OpenAPI types
+			strictSchemas: true,
+			skipDenoCheck: true,
+		});
 
-	await generateOpenApi(project, input.output);
-  }
+		await generateOpenApi(project, input.output);
+	},
 });

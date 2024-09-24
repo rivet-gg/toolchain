@@ -1,7 +1,7 @@
 use clap::Parser;
 use serde::Serialize;
 use std::process::ExitCode;
-use toolchain::backend::run_backend_command_passthrough;
+use toolchain::{backend::run_backend_command_passthrough, paths};
 
 use crate::util::{global_opts::GlobalOpts, postgres};
 
@@ -37,6 +37,6 @@ impl Opts {
 			return ExitCode::FAILURE;
 		};
 
-		run_backend_command_passthrough("build.ts", self).await
+		run_backend_command_passthrough("build.ts", self, paths::BackendDataType::Dev).await
 	}
 }

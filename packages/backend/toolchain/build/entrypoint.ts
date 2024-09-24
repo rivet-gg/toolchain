@@ -5,7 +5,7 @@ import {
 	DEPENDENCY_CASE_CONVERSION,
 	ENTRYPOINT_PATH,
 	PACKAGES_PATH,
-	projectCachePath,
+	projectDataPath,
 	RUNTIME_CONFIG_PATH,
 	RUNTIME_MOD_PATH,
 } from "../project/project.ts";
@@ -17,10 +17,10 @@ import { GeneratedCodeBuilder } from "./gen/mod.ts";
 import { convertSerializedSchemaToZodExpression } from "./schema/mod.ts";
 
 export async function generateEntrypoint(project: Project, opts: BuildOpts) {
-	const runtimeModPath = projectCachePath(project, RUNTIME_MOD_PATH);
+	const runtimeModPath = projectDataPath(project, RUNTIME_MOD_PATH);
 
-	const entrypoint = new GeneratedCodeBuilder(projectCachePath(project, ENTRYPOINT_PATH), 2);
-	const config = new GeneratedCodeBuilder(projectCachePath(project, RUNTIME_CONFIG_PATH), 2);
+	const entrypoint = new GeneratedCodeBuilder(projectDataPath(project, ENTRYPOINT_PATH), 2);
+	const config = new GeneratedCodeBuilder(projectDataPath(project, RUNTIME_CONFIG_PATH), 2);
 
 	// Generate module configs
 	const [modImports, modConfig] = generateModImports(project, entrypoint.path!);
@@ -97,23 +97,23 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			.append`
 				import { Runtime } from ${JSON.stringify(entrypoint.relative(runtimeModPath))};
 				import { dependencyCaseConversionMap } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, DEPENDENCY_CASE_CONVERSION)))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, DEPENDENCY_CASE_CONVERSION)))
 		};
 				import { actorCaseConversionMap } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, ACTOR_CASE_CONVERSION_MAP_PATH)))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, ACTOR_CASE_CONVERSION_MAP_PATH)))
 		};
 				import type { DependenciesSnake, DependenciesCamel } from "./dependencies.d.ts";
 				import type { ActorsSnake, ActorsCamel } from "./actors.d.ts";
 				import config from "./runtime_config.ts";
 				import { handleRequest } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "runtime", "server.ts")))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, PACKAGES_PATH, "runtime", "server.ts")))
 		};
 				import { ActorDriver } from ${JSON.stringify(entrypoint.relative(actorDriverPath))};
 				import { PathResolver } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
 		};
 				import { log } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "runtime", "logger.ts")))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, PACKAGES_PATH, "runtime", "logger.ts")))
 		};
 			`;
 
@@ -159,8 +159,8 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			).finished;
 		`;
 	} else if (opts.runtime == Runtime.CloudflareWorkersPlatforms) {
-		const serverTsPath = projectCachePath(project, PACKAGES_PATH, "runtime", "server.ts");
-		const errorTsPath = projectCachePath(project, PACKAGES_PATH, "runtime", "error.ts");
+		const serverTsPath = projectDataPath(project, PACKAGES_PATH, "runtime", "server.ts");
+		const errorTsPath = projectDataPath(project, PACKAGES_PATH, "runtime", "error.ts");
 
 		entrypoint.chunk.withNewlinesPerChunk(1)
 			.append`
@@ -168,10 +168,10 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 				import { Runtime, Environment } from ${JSON.stringify(entrypoint.relative(runtimeModPath))};
 				import { RuntimeError } from ${JSON.stringify(entrypoint.relative(errorTsPath))};
 				import { dependencyCaseConversionMap } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, DEPENDENCY_CASE_CONVERSION)))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, DEPENDENCY_CASE_CONVERSION)))
 		};
 				import { actorCaseConversionMap } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, ACTOR_CASE_CONVERSION_MAP_PATH)))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, ACTOR_CASE_CONVERSION_MAP_PATH)))
 		};
 				import type { DependenciesSnake, DependenciesCamel } from "./dependencies.d.ts";
 				import type { ActorsSnake, ActorsCamel } from "./actors.d.ts";
@@ -181,7 +181,7 @@ export async function generateEntrypoint(project: Project, opts: BuildOpts) {
 			JSON.stringify(entrypoint.relative(actorDriverPath))
 		};
 				import { PathResolver } from ${
-			JSON.stringify(entrypoint.relative(projectCachePath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
+			JSON.stringify(entrypoint.relative(projectDataPath(project, PACKAGES_PATH, "path_resolver", "mod.ts")))
 		};
 			`;
 

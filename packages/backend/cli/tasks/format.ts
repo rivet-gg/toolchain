@@ -9,24 +9,25 @@ export const inputSchema = globalOptsSchema.extend({
 	check: z.boolean().nullable(),
 });
 
-runTask({inputSchema,
-        async run(input) {
-	const project = await initProject(input);
+runTask({
+	inputSchema,
+	async run(input) {
+		const project = await initProject(input);
 
-	const sourceFiles = await listSourceFiles(project, { localOnly: true });
+		const sourceFiles = await listSourceFiles(project, { localOnly: true });
 
-	const cmd = await new Deno.Command(denoExecutablePath(), {
-		args: [
-			"fmt",
-			...input.check ? ["--check"] : [],
-			...sourceFiles,
-		],
-		stdout: "inherit",
-		stderr: "inherit",
-	}).output();
+		const cmd = await new Deno.Command(denoExecutablePath(), {
+			args: [
+				"fmt",
+				...input.check ? ["--check"] : [],
+				...sourceFiles,
+			],
+			stdout: "inherit",
+			stderr: "inherit",
+		}).output();
 
-	if (!cmd.success) {
-		throw new UserError("Format failed.", { paths: sourceFiles });
-	}
-}
-})
+		if (!cmd.success) {
+			throw new UserError("Format failed.", { paths: sourceFiles });
+		}
+	},
+});

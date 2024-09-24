@@ -1,14 +1,9 @@
-pub mod apply;
-pub mod drop;
-pub mod generate;
-pub mod push;
-
 use clap::{Parser, Subcommand};
 use serde::Serialize;
 use std::process::ExitCode;
-use toolchain::backend::run_backend_command_passthrough;
+use toolchain::{backend::run_backend_command_passthrough, paths};
 
-use crate::util::global_opts::GlobalOpts;
+use crate::util::{global_opts::GlobalOpts, postgres};
 
 /// Manage changes to the database schema
 #[derive(Subcommand)]
@@ -47,7 +42,8 @@ pub struct ApplyOpts {
 
 impl ApplyOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("db/migrate/apply.ts", self).await
+		run_backend_command_passthrough("db/migrate/apply.ts", self, paths::BackendDataType::Dev)
+			.await
 	}
 }
 
@@ -64,7 +60,8 @@ pub struct DropOpts {
 
 impl DropOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("db/migrate/drop.ts", self).await
+		run_backend_command_passthrough("db/migrate/drop.ts", self, paths::BackendDataType::Dev)
+			.await
 	}
 }
 
@@ -81,7 +78,8 @@ pub struct GenerateOpts {
 
 impl GenerateOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("db/migrate/generate.ts", self).await
+		run_backend_command_passthrough("db/migrate/generate.ts", self, paths::BackendDataType::Dev)
+			.await
 	}
 }
 
@@ -98,6 +96,7 @@ pub struct PushOpts {
 
 impl PushOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("db/migrate/push.ts", self).await
+		run_backend_command_passthrough("db/migrate/push.ts", self, paths::BackendDataType::Dev)
+			.await
 	}
 }

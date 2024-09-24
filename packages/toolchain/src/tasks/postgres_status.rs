@@ -7,7 +7,9 @@ use crate::{paths, postgres, util::task};
 pub struct Input {}
 
 #[derive(Serialize)]
-pub struct Output {}
+pub struct Output {
+	pub status: postgres::Status,
+}
 
 pub struct Task;
 
@@ -20,7 +22,7 @@ impl task::Task for Task {
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
-		postgres::get(&paths::data_dir()?).await?.status().await?;
-		Ok(Output {})
+		let status = postgres::get(&paths::data_dir()?).await?.status().await?;
+		Ok(Output { status })
 	}
 }

@@ -2,11 +2,14 @@ use clap::Parser;
 use clap::Subcommand;
 use serde::Serialize;
 use std::process::ExitCode;
+use toolchain::tasks::postgres_reset;
 use toolchain::tasks::postgres_start;
 use toolchain::tasks::postgres_status;
 use toolchain::tasks::postgres_stop;
 
+use crate::util::task::run_task;
 use crate::util::task::run_task_simple;
+use crate::util::task::TaskOutputStyle;
 
 /// Manage the development database
 #[derive(Subcommand)]
@@ -57,7 +60,21 @@ pub struct StatusOpts {}
 
 impl StatusOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_task_simple::<postgres_status::Task>(postgres_status::Input {}).await
+		match run_task::<postgres_status::Task>(
+			TaskOutputStyle::PlainNoResult,
+			postgres_status::Input {},
+		)
+		.await
+		{
+			Result::Ok(output) => {
+				println!("{}", output.status);
+				ExitCode::SUCCESS
+			}
+			Err(e) => {
+				eprintln!("Error: {e:?}");
+				ExitCode::from(1)
+			}
+		}
 	}
 }
 
