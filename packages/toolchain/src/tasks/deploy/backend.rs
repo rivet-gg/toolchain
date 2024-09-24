@@ -2,17 +2,11 @@ use anyhow::*;
 use futures_util::{StreamExt, TryStreamExt};
 use rivet_api::{apis, models};
 use serde::Deserialize;
-use serde_json::json;
-use std::{
-	collections::HashMap,
-	path::{Path, PathBuf},
-	sync::Arc,
-};
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use tokio::fs;
 
 use crate::{
-	backend::{self, build_backend_command},
-	config,
+	backend, config,
 	game::TEMPEnvironment,
 	paths,
 	toolchain_ctx::ToolchainCtx,

@@ -1,13 +1,12 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::{
 	path::Path,
 	time::{Duration, SystemTime},
 };
 
 use crate::{
-	backend::{self, build_backend_command, build_backend_command_raw},
+	backend::{self, build_backend_command_raw},
 	config::{self, meta},
 	paths, postgres,
 	util::{
