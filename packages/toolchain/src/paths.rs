@@ -47,3 +47,28 @@ pub fn project_data_dir(base_data_dir: &PathBuf) -> Result<PathBuf> {
 pub fn meta_config_file(base_data_dir: &PathBuf) -> Result<PathBuf> {
 	Ok(project_data_dir(base_data_dir)?.join("meta.json"))
 }
+
+/// Stores Postgres-related data.
+pub fn postgres_base(base_data_dir: &PathBuf) -> Result<PathBuf> {
+	Ok(project_data_dir(base_data_dir)?.join("postgres"))
+}
+
+/// Stores Postgres password data.
+pub fn postgres_password_file(base_data_dir: &PathBuf) -> Result<PathBuf> {
+	Ok(postgres_base(base_data_dir)?.join(".pgpass"))
+}
+
+/// Stores Postgres config data.
+pub fn postgres_state_file(base_data_dir: &PathBuf) -> Result<PathBuf> {
+	Ok(postgres_base(base_data_dir)?.join("state.json"))
+}
+
+/// Where Postgres gets installed.
+pub fn postgres_install_dir(base_data_dir: &PathBuf) -> Result<PathBuf> {
+	Ok(postgres_base(base_data_dir)?.join("install"))
+}
+
+/// Stores postgres data.
+pub fn postgres_data_dir(base_data_dir: &PathBuf) -> Result<PathBuf> {
+	Ok(postgres_base(base_data_dir)?.join("data"))
+}

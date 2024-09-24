@@ -10,16 +10,10 @@ import * as createActor from "./commands/create/actor.ts";
 import * as createModule from "./commands/create/module.ts";
 import * as createScript from "./commands/create/script.ts";
 import * as createTest from "./commands/create/test.ts";
-import * as dbInstanceStart from "./commands/db/instance/start.ts";
-import * as dbInstanceStatus from "./commands/db/instance/status.ts";
-import * as dbInstanceStop from "./commands/db/instance/stop.ts";
 import * as dbMigrateApply from "./commands/db/migrate/apply.ts";
 import * as dbMigrateDrop from "./commands/db/migrate/drop.ts";
 import * as dbMigrateGenerate from "./commands/db/migrate/generate.ts";
 import * as dbMigratePush from "./commands/db/migrate/push.ts";
-import * as dbReset from "./commands/db/reset.ts";
-import * as dbSh from "./commands/db/sh.ts";
-import * as dbUrl from "./commands/db/url.ts";
 import * as dev from "./commands/dev.ts";
 import * as format from "./commands/format.ts";
 import * as genOpenApi from "./commands/gen_openapi.ts";
@@ -43,16 +37,10 @@ export const commandSchema = z.union([
 	z.object({ init: init.optsSchema }),
 	z.object({ lint: lint.optsSchema }),
 	z.object({ test: test.optsSchema }),
-	z.object({ dbInstanceStart: dbInstanceStart.optsSchema }),
-	z.object({ dbInstanceStatus: dbInstanceStatus.optsSchema }),
-	z.object({ dbInstanceStop: dbInstanceStop.optsSchema }),
 	z.object({ dbMigrateApply: dbMigrateApply.optsSchema }),
 	z.object({ dbMigrateDrop: dbMigrateDrop.optsSchema }),
 	z.object({ dbMigrateGenerate: dbMigrateGenerate.optsSchema }),
 	z.object({ dbMigratePush: dbMigratePush.optsSchema }),
-	z.object({ dbReset: dbReset.optsSchema }),
-	z.object({ dbSh: dbSh.optsSchema }),
-	z.object({ dbUrl: dbUrl.optsSchema }),
 ]);
 
 type Command = z.infer<typeof commandSchema>;
@@ -88,12 +76,6 @@ export async function executeCommand(command: Command) {
 		await lint.execute(command.lint);
 	} else if ("test" in command) {
 		await test.execute(command.test);
-	} else if ("dbInstanceStart" in command) {
-		await dbInstanceStart.execute(command.dbInstanceStart);
-	} else if ("dbInstanceStatus" in command) {
-		await dbInstanceStatus.execute(command.dbInstanceStatus);
-	} else if ("dbInstanceStop" in command) {
-		await dbInstanceStop.execute(command.dbInstanceStop);
 	} else if ("dbMigrateApply" in command) {
 		await dbMigrateApply.execute(command.dbMigrateApply);
 	} else if ("dbMigrateDrop" in command) {
@@ -102,12 +84,6 @@ export async function executeCommand(command: Command) {
 		await dbMigrateGenerate.execute(command.dbMigrateGenerate);
 	} else if ("dbMigratePush" in command) {
 		await dbMigratePush.execute(command.dbMigratePush);
-	} else if ("dbReset" in command) {
-		await dbReset.execute(command.dbReset);
-	} else if ("dbSh" in command) {
-		await dbSh.execute(command.dbSh);
-	} else if ("dbUrl" in command) {
-		await dbUrl.execute(command.dbUrl);
 	} else {
 		throw new UnreachableError(command);
 	}

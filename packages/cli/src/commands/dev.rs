@@ -33,6 +33,10 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
+		let Ok(_) = postgres::ensure_running().await else {
+			return ExitCode::FAILURE;
+		};
+
 		run_backend_command_passthrough("dev", self).await
 	}
 }

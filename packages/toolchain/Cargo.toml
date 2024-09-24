@@ -57,6 +57,7 @@ rivet-deno-embed = { path = "../deno-embed" }
 rivet-backend-embed = { path = "../backend-embed" }
 lazy_static = "1.5.0"
 sha1 = "0.10.6"
+postgresql_embedded = { version = "0.16.3", features = ["rustls-tls", "theseus", "tokio"], default-features = false }
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }

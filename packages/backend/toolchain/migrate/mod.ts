@@ -1,6 +1,5 @@
 import { ensureLocked, Module, ModuleDatabase, Project } from "../project/mod.ts";
 import { InternalError } from "../error/mod.ts";
-import { ensurePostgresRunning } from "../postgres/mod.ts";
 import { verbose } from "../term/status.ts";
 
 export type ForEachDatabaseCallback = (
@@ -16,8 +15,6 @@ export async function forEachDatabase(
 ) {
 	signal?.throwIfAborted();
 	ensureLocked(project);
-
-	await ensurePostgresRunning(project);
 
 	for (const mod of modules) {
 		if (!mod.db) continue;

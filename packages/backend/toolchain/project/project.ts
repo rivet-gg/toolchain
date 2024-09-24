@@ -15,8 +15,6 @@ import { UnreachableError, UserError } from "../error/mod.ts";
 import { Runtime } from "../build/mod.ts";
 import { PathResolver, QualifiedPathPair } from "../../path_resolver/mod.ts";
 import { RouteCollisionError } from "../error/mod.ts";
-import { stop } from "../postgres/manager.ts";
-import { getDefaultPostgresManager } from "../postgres/mod.ts";
 import { info, verbose } from "../term/status.ts";
 import { IndexedModuleConfig } from "../config/module.ts";
 import { acquireLock, FsLock, releaseLock } from "../utils/fslock.ts";
@@ -480,13 +478,6 @@ export async function listSourceFiles(
 }
 
 export async function cleanProject(project: Project) {
-	// Delete database
-	verbose("Stopping Postgres");
-	const postgresManager = await getDefaultPostgresManager(project);
-	if (postgresManager) {
-		stop(postgresManager);
-	}
-
 	// Delete project files
 	verbose("Removing project gen path");
 	await Deno.remove(projectCachePath(project), { recursive: true });
