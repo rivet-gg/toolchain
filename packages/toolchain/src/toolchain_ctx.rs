@@ -30,9 +30,25 @@ pub struct CtxInner {
 	pub openapi_config_cloud: apis::configuration::Configuration,
 }
 
+pub async fn try_load() -> Result<Option<ToolchainCtx>> {
+	let data = config::meta::read_project(&paths::data_dir()?, |x| {
+		x.cloud
+			.as_ref()
+			.map(|cloud| (cloud.api_endpoint.clone(), cloud.cloud_token.clone()))
+	})
+	.await?;
+	if let Some((api_endpoint, token)) = data {
+		let ctx = init(api_endpoint, token).await?;
+		Ok(Some(ctx))
+	} else {
+		Ok(None)
+	}
+}
+
 pub async fn load() -> Result<ToolchainCtx> {
-	let (api_endpoint, token) = config::meta::read_project(&paths::data_dir()?, |x| {
-		(x.cluster.api_endpoint.clone(), x.tokens.cloud.clone())
+	let (api_endpoint, token) = config::meta::try_read_project(&paths::data_dir()?, |x| {
+		let cloud = x.cloud.as_ref().context("not signed in")?;
+		Ok((cloud.api_endpoint.clone(), cloud.cloud_token.clone()))
 	})
 	.await?;
 	init(api_endpoint, token).await

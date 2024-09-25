@@ -6,9 +6,9 @@ pub mod db;
 pub mod deploy;
 pub mod dev;
 pub mod init;
-pub mod login;
-pub mod logout;
 pub mod module;
+pub mod sign_in;
+pub mod sign_out;
 pub mod task;
 
 use clap::Parser;
@@ -16,9 +16,11 @@ use std::process::ExitCode;
 
 #[derive(Parser)]
 pub enum SubCommand {
-	Init(login::Opts),
-	Login(login::Opts),
-	Logout(logout::Opts),
+	Init(init::Opts),
+	#[clap(alias = "login")]
+	Signin(sign_in::Opts),
+	#[clap(alias = "logout")]
+	Signout(sign_out::Opts),
 	Dev(dev::Opts),
 	Deploy(deploy::Opts),
 	Config {
@@ -52,8 +54,8 @@ impl SubCommand {
 	pub async fn execute(&self) -> ExitCode {
 		match self {
 			SubCommand::Init(opts) => opts.execute().await,
-			SubCommand::Login(opts) => opts.execute().await,
-			SubCommand::Logout(opts) => opts.execute().await,
+			SubCommand::Signin(opts) => opts.execute().await,
+			SubCommand::Signout(opts) => opts.execute().await,
 			SubCommand::Dev(opts) => opts.execute().await,
 			SubCommand::Deploy(opts) => opts.execute().await,
 			SubCommand::Config { subcommand } => subcommand.execute().await,

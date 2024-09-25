@@ -19,8 +19,15 @@ pub async fn provision_database(
 	.await?;
 
 	// Fetch remote DB URL
-	let mut env_config = config::meta::mutate_project(&paths::data_dir()?, |config| {
-		config.environments.entry(env_id).or_default().clone()
+	let mut env_config = config::meta::try_mutate_project(&paths::data_dir()?, |config| {
+		Ok(config
+			.cloud
+			.as_mut()
+			.context("config.cloud")?
+			.environments
+			.entry(env_id)
+			.or_default()
+			.clone())
 	})
 	.await?;
 
@@ -39,7 +46,12 @@ pub async fn provision_database(
 
 		// Update cache
 		config::meta::try_mutate_project(&paths::data_dir()?, |config| {
-			config.environments.insert(env_id, env_config.clone());
+			config
+				.cloud
+				.as_mut()
+				.context("config.cloud")?
+				.environments
+				.insert(env_id, env_config.clone());
 			Ok(())
 		})
 		.await?;

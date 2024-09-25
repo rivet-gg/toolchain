@@ -20,7 +20,7 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"wait_for_login"
+		"auth.wait_for_sign_in"
 	}
 
 	async fn run(_task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
@@ -64,7 +64,10 @@ impl task::Task for Task {
 		)
 		.await?;
 
-		config::meta::insert_project(&paths::data_dir()?, input.api_endpoint, token).await?;
+		config::meta::mutate_project(&paths::data_dir()?, |meta| {
+			meta.cloud = Some(config::meta::Cloud::new(input.api_endpoint, token))
+		})
+		.await?;
 
 		Ok(Output {})
 	}

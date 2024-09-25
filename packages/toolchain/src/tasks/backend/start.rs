@@ -30,7 +30,7 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"backend_start"
+		"backend.start"
 	}
 
 	async fn run(task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {

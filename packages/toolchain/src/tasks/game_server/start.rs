@@ -1,9 +1,7 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-	util::{process_manager::CommandOpts, task},
-};
+use crate::util::{process_manager::CommandOpts, task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -24,7 +22,7 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"game_server_start"
+		"game_server.start"
 	}
 
 	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {

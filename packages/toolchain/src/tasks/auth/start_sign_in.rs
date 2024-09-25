@@ -22,7 +22,7 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"start_device_link"
+		"auth.start_sign_in"
 	}
 
 	async fn run(_task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {

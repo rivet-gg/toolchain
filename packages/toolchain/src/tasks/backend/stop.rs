@@ -1,7 +1,7 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{paths, postgres, util::task};
+use crate::{backend, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -16,11 +16,11 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"postgres_stop"
+		"backend.stop"
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
-		postgres::get(&paths::data_dir()?).await?.stop().await?;
+		backend::PROCESS_MANAGER_DEV.stop().await?;
 		Ok(Output {})
 	}
 }

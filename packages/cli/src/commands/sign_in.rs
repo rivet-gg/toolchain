@@ -1,6 +1,6 @@
 use clap::Parser;
 use std::process::ExitCode;
-use toolchain::tasks::{check_login_state, start_device_link, wait_for_login};
+use toolchain::tasks;
 
 use crate::util::task::{run_task, TaskOutputStyle};
 
@@ -14,15 +14,15 @@ pub struct Opts {
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
 		// Check if linked
-		match run_task::<check_login_state::Task>(
+		match run_task::<tasks::auth::check_state::Task>(
 			TaskOutputStyle::None,
-			check_login_state::Input {},
+			tasks::auth::check_state::Input {},
 		)
 		.await
 		{
 			Ok(output) => {
-				if output.logged_in {
-					eprintln!("Already logged in. Sign out with `rivet unlink`.");
+				if output.signed_in {
+					eprintln!("Already logged in. Sign out with `rivet logout`.");
 					return ExitCode::SUCCESS;
 				}
 			}
@@ -33,9 +33,9 @@ impl Opts {
 		}
 
 		// Start device link
-		let device_link_output = match run_task::<start_device_link::Task>(
+		let device_link_output = match run_task::<tasks::auth::start_sign_in::Task>(
 			TaskOutputStyle::None,
-			start_device_link::Input {
+			tasks::auth::start_sign_in::Input {
 				api_endpoint: self.api_endpoint.clone(),
 			},
 		)
@@ -50,9 +50,9 @@ impl Opts {
 		eprintln!("{}", device_link_output.device_link_url);
 
 		// Wait for finish
-		match run_task::<wait_for_login::Task>(
+		match run_task::<tasks::auth::wait_for_sign_in::Task>(
 			TaskOutputStyle::None,
-			wait_for_login::Input {
+			tasks::auth::wait_for_sign_in::Input {
 				api_endpoint: self.api_endpoint.clone(),
 				device_link_token: device_link_output.device_link_token,
 			},
