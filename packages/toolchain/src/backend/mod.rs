@@ -64,10 +64,14 @@ pub async fn build_backend_command_raw(mut opts: BackendCommandOpts) -> Result<C
 		backend_data_dir.display().to_string(),
 	);
 
-	// Get Postgres URL
-	let postgres = postgres::get(&paths::data_dir()?).await?;
-	let db_url = postgres.url("postgres").await;
-	opts.env.insert("DATABASE_URL".into(), db_url);
+	// Add development Postgres URL if not already specified
+	//
+	// When deploying, this will already be specified
+	if !opts.env.contains_key("DATABASE_URL") {
+		let postgres = postgres::get(&paths::data_dir()?).await?;
+		let db_url = postgres.url("postgres").await;
+		opts.env.insert("DATABASE_URL".into(), db_url);
+	}
 
 	// Get Deno executable
 	let deno = rivet_deno_embed::get_executable(&crate::paths::data_dir()?).await?;
