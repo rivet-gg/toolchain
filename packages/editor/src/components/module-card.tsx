@@ -89,12 +89,14 @@ function DeleteModuleButton({
 interface ModuleCardProps {
   module: ModuleManifest;
   isRegistryExternal?: boolean;
+  isHighlighted?: boolean;
   dependants: ModuleManifest[];
 }
 
 export function ModuleCard({
   module,
   isRegistryExternal,
+  isHighlighted,
   dependants,
 }: ModuleCardProps) {
   const { watch, resetField } = useFormContext();
@@ -104,11 +106,12 @@ export function ModuleCard({
     (m) => modules[m.name] === undefined,
   );
   return (
-    <section className="w-full scroll-mt-16" id={module.name}>
+    <section className="w-full scroll-m-16" id={module.name}>
       <Card
         w="full"
-        className={cn("my-2 bg-transparent", {
+        className={cn("my-2 bg-transparent transition-colors", {
           "border-destructive opacity-40 pointer-events-none": isRemoved,
+          "bg-secondary/30": isHighlighted,
         })}
       >
         <header className="px-6">
