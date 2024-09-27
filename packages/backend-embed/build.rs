@@ -1,10 +1,7 @@
 use anyhow::*;
-use sha2::{Digest, Sha256};
-use std::fs::File;
-use std::io::Read;
+use merkle_hash::MerkleTree;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use walkdir::WalkDir;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -88,23 +85,14 @@ async fn main() -> Result<()> {
 }
 
 fn hash_directory<P: AsRef<Path>>(path: P) -> Result<String> {
-	let mut hasher = Sha256::new();
-
-	for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
-		let path = entry.path();
-		if path.is_file() {
-			let mut file = File::open(path)?;
-			let mut buffer = [0; 1024];
-			loop {
-				let count = file.read(&mut buffer)?;
-				if count == 0 {
-					break;
-				}
-				hasher.update(&buffer[..count]);
-			}
-		}
-	}
-
-	let result = hasher.finalize();
-	Ok(format!("{:x}", result))
+	let tree = MerkleTree::builder(&path.as_ref().display().to_string()).build()?;
+	let hash = tree
+		.root
+		.item
+		.hash
+		.iter()
+		.map(|b| format!("{:02x}", b))
+		.collect::<Vec<String>>()
+		.join("");
+	Ok(hash)
 }
