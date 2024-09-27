@@ -4,17 +4,18 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import vitePluginFaviconsInject from "vite-plugin-favicons-inject";
 
-console.log('path', resolve(__dirname, "src", "assets", "favicon.svg"))
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     TanStackRouterVite(),
-    vitePluginFaviconsInject(resolve(__dirname, "src", "assets", "favicon.svg"), {
-      appName: "Rivet Editor",
-      theme_color: "#ff4f00",
-    }),
+    vitePluginFaviconsInject(
+      resolve(__dirname, "src", "assets", "favicon.svg"),
+      {
+        appName: "Rivet Editor",
+        theme_color: "#ff4f00",
+      },
+    ),
   ],
   build: {
     // biome-ignore lint/style/noNonNullAssertion: it does not matter
