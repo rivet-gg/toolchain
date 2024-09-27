@@ -83,7 +83,7 @@ function IndexRoute() {
             <Flex gap="2">
               <Button variant="outline" asChild>
                 <a
-                  href="https://opengb.dev/docs/build/overview"
+                  href="https://rivet.gg/docs/general/modules/build/overview"
                   target="_blank"
                   rel="noreferrer"
                 >
