@@ -15,8 +15,8 @@ import {
   SidebarPageContent,
 } from "@rivet-gg/components";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useContext } from "react";
+import { createFileRoute, Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useContext, useLayoutEffect } from "react";
 import { MessageBanner } from "../components/message-banner";
 import { ModuleCard } from "../components/module-card";
 import { ModuleSearchContext } from "../components/module-search-context";
@@ -40,7 +40,24 @@ function NewModuleButton() {
 }
 
 function IndexRoute() {
+  const {hash} = useLocation();
+  const navigate = useNavigate();
   const { data } = useSuspenseQuery(projectManifestQueryOptions());
+
+  useLayoutEffect(() => {
+    if(!hash) {
+      return;
+    }
+
+    window.document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start'});
+    const timeout = setTimeout(() => {
+      navigate({ hash: false });
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [hash]);
 
   return (
     <SidebarPageContent
@@ -50,7 +67,7 @@ function IndexRoute() {
           <NewModuleButton />
           {Object.entries(data?.modules).map(([name, module]) => {
             return (
-              <Link to="/" hash={name} key={name}>
+              <Link to="/" hash={name} key={name} className="hover:text-foreground transition-colors">
                 {module.config.icon ? <Icon icon={module.config.icon} className="mr-1" /> : null}
                 {module.config.name || module.namePascal}
               </Link>
@@ -71,6 +88,7 @@ function IndexRoute() {
               dependants={Object.values(data.modules).filter(
                 (m) => m.config.dependencies?.[name] !== undefined,
               )}
+              isHighlighted={hash === name}
               isRegistryExternal={data.registries[module.registryName]?.isExternal}
             />
           ))}
