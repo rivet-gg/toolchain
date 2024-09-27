@@ -31,11 +31,6 @@ async fn main() -> Result<()> {
 		.arg("run")
 		.arg("-A")
 		.arg(&script_path)
-		// shhh font awesome can suck it, we'll fix this soon (tm)
-		.env(
-			"FONTAWESOME_PACKAGE_TOKEN",
-			"E7A94808-3467-4150-B90D-EABDAEB9E0B4",
-		)
 		.status()?;
 	if !status.success() {
 		panic!("build artifacts failed");

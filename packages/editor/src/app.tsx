@@ -1,5 +1,5 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/pro-solid-svg-icons";
+import { iconPack } from "@rivet-gg/icons";
 import {
   FullscreenLoading,
   Toaster,
@@ -12,7 +12,8 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { queryClient } from "./queries/global";
 import { routeTree } from "./routeTree.gen";
-library.add(fas);
+
+library.add(iconPack);
 
 declare module "@tanstack/react-router" {
   interface Register {

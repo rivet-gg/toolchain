@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Icon } from "@rivet-gg/icons";
 import { Badge, Combobox, type ComboboxProps, Flex } from "@rivet-gg/components";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { forwardRef } from "react";
@@ -79,7 +79,7 @@ function ModulesSelectOption({
     <Flex gap="2" direction="col" asChild>
       <span>
         <span className="flex items-center gap-1">
-          {module.icon ? <FontAwesomeIcon icon={module.icon} className="w-4" /> : null}
+          {module.icon ? <Icon icon={module.icon} className="w-4" /> : null}
           <span className="text-left">
             {module.name
               ? (

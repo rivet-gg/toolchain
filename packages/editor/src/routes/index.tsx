@@ -1,5 +1,4 @@
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Icon,faPlus } from "@rivet-gg/icons";
 import {
   Button,
   Card,
@@ -31,7 +30,7 @@ function NewModuleButton() {
     <Button
       size="sm"
       className="text-foreground"
-      startIcon={<FontAwesomeIcon icon={faPlus} />}
+      startIcon={<Icon icon={faPlus} />}
       variant="outline"
       onClick={() => ref?.current?.click()}
     >
@@ -52,7 +51,7 @@ function IndexRoute() {
           {Object.entries(data?.modules).map(([name, module]) => {
             return (
               <Link to="/" hash={name} key={name}>
-                {module.config.icon ? <FontAwesomeIcon icon={module.config.icon} className="mr-1" /> : null}
+                {module.config.icon ? <Icon icon={module.config.icon} className="mr-1" /> : null}
                 {module.config.name || module.namePascal}
               </Link>
             );
