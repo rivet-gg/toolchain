@@ -18,8 +18,6 @@ import {
 	projectDataPath,
 } from "../../project/project.ts";
 import { compileActorTypeHelpers } from "../gen/mod.ts";
-import { inflateArchive } from "../util.ts";
-import packagesArchive from "../../../artifacts/packages_archive.json" with { type: "json" };
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
 import { planProjectValidate } from "../validate.ts";
 import { denoPlugins } from "@rivet-gg/esbuild-deno-loader";
@@ -28,9 +26,10 @@ import { migrateApply } from "../../migrate/apply.ts";
 import { migrateGenerate } from "../../migrate/generate.ts";
 import { generateSdk } from "../../sdk/generate.ts";
 import { denoExecutablePath } from "../../utils/deno.ts";
-import { exists } from "@std/fs";
+import { copy, exists } from "@std/fs";
 
 import * as esbuild from "esbuild";
+import { BACKEND_ROOT } from "../../utils/paths.ts";
 
 export async function planProjectBuild(
 	buildState: BuildState,
@@ -63,14 +62,26 @@ export async function planProjectBuild(
 
 	// TODO: Add way to compare runtime artifacts (or let this be handled by the cache version and never rerun?)
 	buildStep(buildState, {
-		id: `project.generate.inflate_packages`,
+		id: `project.generate.copy_runtime`,
 		name: "Generate",
 		description: "packages/",
 		dontLogProgress: true,
 		async build({ signal }) {
-			// Writes a copy of the backend runtime bundled with the CLI to the project.
-			const inflatePackagesPath = projectDataPath(project, PACKAGES_PATH);
-			await inflateArchive(packagesArchive, inflatePackagesPath, "string", signal);
+			const destDir = projectDataPath(project, PACKAGES_PATH);
+
+			// Clear dest dir
+			if (await exists(destDir, { isDirectory: true })) {
+				await Deno.remove(destDir, { recursive: true });
+			}
+
+			// Copy runtime source files to the dest path
+			const sourceDir = resolve(BACKEND_ROOT);
+			const directories = ["runtime", "case_conversion", "path_resolver"];
+			for (const dir of directories) {
+				const sourcePath = resolve(sourceDir, dir);
+				const destPath = resolve(destDir, dir);
+				await copy(sourcePath, destPath);
+			}
 		},
 	});
 

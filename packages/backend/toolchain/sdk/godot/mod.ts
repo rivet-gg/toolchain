@@ -4,9 +4,9 @@ import * as glob from "glob";
 import { resolve } from "@std/path";
 import { GeneratedCodeBuilder, Lang } from "../../build/gen/code_builder.ts";
 import { Project } from "../../project/mod.ts";
-import dynamicArchive from "../../../artifacts/dynamic_archive.json" with { type: "json" };
 import dedent from "dedent";
 import { autoGenHeader } from "../../build/misc.ts";
+import { BACKEND_ROOT } from "../../utils/paths.ts";
 
 // https://docs.godotengine.org/en/stable/classes/class_object.html#class-object
 const RESERVED_WORDS = [
@@ -73,23 +73,22 @@ export async function generateGodot(project: Project, sdkGenPath: string) {
 }
 
 export async function copyBase(sdkGenPath: string) {
-	for (const key in dynamicArchive) {
-		if (!key.startsWith("sdk/godot/")) continue;
+	const sourceDir = resolve(BACKEND_ROOT, "dynamic", "sdk", "godot");
+	const paths = await glob.glob("**/*.{ts,gd,cfg}", { cwd: sourceDir });
+	for (const path of paths) {
+		const sourcePath = resolve(sourceDir, path);
+		const destPath = resolve(sdkGenPath, path);
 
-		// "sdk/godot/".length = 10
-		const path = resolve(sdkGenPath, key.slice(10));
-
-		// Create dir for module apis
 		try {
-			await Deno.mkdir(dirname(path), { recursive: true });
+			await Deno.mkdir(dirname(destPath), { recursive: true });
 		} catch (e) {
 			if (!(e instanceof Deno.errors.AlreadyExists)) {
 				throw e;
 			}
 		}
 
-		const content = autoGenHeader("#") + "\n\n" + (dynamicArchive as Record<string, string>)[key];
-		await Deno.writeTextFile(path, content);
+		const content = autoGenHeader("#") + "\n\n" + await Deno.readTextFile(sourcePath);
+		await Deno.writeTextFile(destPath, content);
 	}
 
 	// Create dirs for apis
@@ -196,7 +195,7 @@ export async function generateBackendAndModules(project: Project, sdkGenPath: st
 			scripts.append`
 				${scriptDocs}
 				func ${escapedScriptName}(body: Dictionary = {}) -> RivetRequest:
-					return self._client.build_request(HTTPClient.METHOD_POST, "${path}", body)
+					return self._client.build_request("${mod.name}.${script.name}", HTTPClient.METHOD_POST, "${path}", body)
 			`;
 		}
 		await moduleApiBuilder.write();

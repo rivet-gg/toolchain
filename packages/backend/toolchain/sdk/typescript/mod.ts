@@ -3,7 +3,6 @@ import { exists } from "@std/fs";
 import { resolve } from "@std/path";
 import { GeneratedCodeBuilder } from "../../build/gen/code_builder.ts";
 import { Project } from "../../project/mod.ts";
-import dynamicArchive from "../../../artifacts/dynamic_archive.json" with { type: "json" };
 import { unimplemented } from "@std/assert";
 
 export async function generateTypescript(project: Project, sdkGenPath: string) {
