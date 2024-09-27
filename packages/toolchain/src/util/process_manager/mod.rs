@@ -6,7 +6,7 @@ use tokio::{
 	sync::{broadcast, mpsc, watch, Mutex},
 };
 
-use crate::util::task::TaskCtx;
+use crate::{config::meta, paths, util::task::TaskCtx};
 
 #[cfg(unix)]
 mod unix;
@@ -119,6 +119,17 @@ impl ProcessManager {
 	where
 		CommandFut: Future<Output = Result<CommandOpts>>,
 	{
+		// Terminate the previous process if needed
+		if let Some(old_pid) = meta::mutate_project(&paths::data_dir()?, |x| {
+			x.process_manager_state
+				.get_mut(self.key)
+				.and_then(|x| x.pid.take())
+		})
+		.await?
+		{
+			os::kill_process_tree(old_pid).await?;
+		}
+
 		// Start new process if needed. Otherwise, will hook to the existing process.
 		//
 		// Clonign value required since this holds a read lock on the inner
@@ -175,7 +186,7 @@ impl ProcessManager {
 
 				// Re-throw error
 				if let Some(error) = error {
-					bail!("process erorr: {error}");
+					bail!("process error: {error}");
 				}
 
 				Ok(exit_code)
@@ -269,9 +280,18 @@ impl ProcessManager {
 
 		// Spawn the command
 		let mut child = cmd.spawn()?;
+		let child_pid = child.id().expect("missing child pid");
+
+		// Save the PID
+		meta::mutate_project(&paths::data_dir()?, |x| {
+			x.process_manager_state
+				.entry(self.key.to_string())
+				.or_default()
+				.pid = Some(child_pid);
+		})
+		.await?;
 
 		// Update state
-		let child_pid = child.id().expect("missing child pid");
 		self.status_tx
 			.send(ProcessStatus::Running { pid: child_pid })
 			.context("send ProcessStatus::Running")?;
@@ -340,6 +360,16 @@ impl ProcessManager {
 		// Wait for log handles in order to not miss any logs
 		stdout_handle.await??;
 		stderr_handle.await??;
+
+		// Remove PID
+		meta::mutate_project(&paths::data_dir()?, |x| {
+			x.process_manager_state.get_mut(self.key).map(|x| {
+				if x.pid == Some(child_pid) {
+					x.pid = None;
+				}
+			})
+		})
+		.await?;
 
 		// Update state
 		self.status_tx
