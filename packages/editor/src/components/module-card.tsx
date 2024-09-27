@@ -135,7 +135,7 @@ export function ModuleCard({
                         asChild
                       >
                         <a
-                          href={`https://opengb.dev/modules/${module.name}`}
+                          href={`https://rivet.gg/modules/${module.name}`}
                           target="_blank"
                           rel="noreferrer"
                         >
