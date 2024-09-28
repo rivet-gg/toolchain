@@ -1,19 +1,17 @@
-# \ServersLogsApi
+# \ServersDatacentersApi
 
 All URIs are relative to *https://api.rivet.gg*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**servers_logs_get**](ServersLogsApi.md#servers_logs_get) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id}/logs | 
+[**servers_datacenters_list**](ServersDatacentersApi.md#servers_datacenters_list) | **GET** /games/{game_id}/environments/{environment_id}/datacenters | 
 
 
 
-## servers_logs_get
+## servers_datacenters_list
 
-> crate::models::ServersGetServerLogsResponse servers_logs_get(game_id, environment_id, server_id, stream, watch_index)
+> crate::models::ServersListDatacentersResponse servers_datacenters_list(game_id, environment_id)
 
-
-Returns the logs for a given server.
 
 ### Parameters
 
@@ -22,13 +20,10 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **game_id** | **uuid::Uuid** |  | [required] |
 **environment_id** | **uuid::Uuid** |  | [required] |
-**server_id** | **uuid::Uuid** |  | [required] |
-**stream** | [**ServersLogStream**](.md) |  | [required] |
-**watch_index** | Option<**String**> | A query parameter denoting the requests watch index. |  |
 
 ### Return type
 
-[**crate::models::ServersGetServerLogsResponse**](ServersGetServerLogsResponse.md)
+[**crate::models::ServersListDatacentersResponse**](ServersListDatacentersResponse.md)
 
 ### Authorization
 
