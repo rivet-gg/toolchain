@@ -1,250 +1,246 @@
 import { camelify, pascalify } from "../../../case_conversion/mod.ts";
-import { exists } from "@std/fs";
-import { resolve } from "@std/path";
-import { GeneratedCodeBuilder } from "../../build/gen/code_builder.ts";
+import { dirname, resolve } from "@std/path";
+import * as glob from "glob";
+import { GeneratedCodeBuilder, Lang } from "../../build/gen/code_builder.ts";
 import { Project } from "../../project/mod.ts";
-import { unimplemented } from "@std/assert";
+import { autoGenHeader } from "../../build/misc.ts";
+import { BACKEND_ROOT } from "../../utils/paths.ts";
+
+// List of reserved JavaScript words to avoid naming collisions
+const RESERVED_WORDS = [
+	"break",
+	"case",
+	"catch",
+	"class",
+	"const",
+	"continue",
+	"debugger",
+	"default",
+	"delete",
+	"do",
+	"else",
+	"export",
+	"extends",
+	"finally",
+	"for",
+	"function",
+	"if",
+	"import",
+	"in",
+	"instanceof",
+	"new",
+	"return",
+	"super",
+	"switch",
+	"this",
+	"throw",
+	"try",
+	"typeof",
+	"var",
+	"void",
+	"while",
+	"with",
+	"yield",
+];
 
 export async function generateTypescript(project: Project, sdkGenPath: string) {
-	// Unimplemented
-	await Deno.mkdir(sdkGenPath, { recursive: true });
-
-	// await generateTsConfig(sdkGenPath);
-	// await generatePackageJson(sdkGenPath);
-	// await generateIndex(sdkGenPath);
-	// await generateRuntime(sdkGenPath);
-	// await generateApiClients(project, sdkGenPath);
+	await copyBase(sdkGenPath);
+	await generateBackendAndModules(project, sdkGenPath);
+	await generateModuleAddons(project, sdkGenPath);
 }
 
-// export async function generateTypescriptAddons(project: Project, sdkGenPath: string) {
-// }
+export async function copyBase(sdkGenPath: string) {
+	const sourceDir = resolve(BACKEND_ROOT, "dynamic", "sdk", "typescript");
+	const paths = await glob.glob("**/*.{ts,json}", { cwd: sourceDir });
+	for (const path of paths) {
+		const sourcePath = resolve(sourceDir, path);
+		const destPath = resolve(sdkGenPath, path);
 
-// async function generateTsConfig(sdkGenPath: string) {
-// 	await Deno.writeTextFile(
-// 		resolve(sdkGenPath, "tsconfig.json"),
-// 		JSON.stringify({
-// 			"compilerOptions": {
-// 				"declaration": true,
-// 				"target": "es2022",
-// 				"module": "commonjs",
-// 				"moduleResolution": "node",
-// 				"outDir": "dist",
-// 				"typeRoots": [
-// 					"node_modules/@types",
-// 				],
-// 			},
-// 			"exclude": [
-// 				"dist",
-// 				"node_modules",
-// 			],
-// 		}),
-// 	);
-// }
+		try {
+			await Deno.mkdir(dirname(destPath), { recursive: true });
+		} catch (e) {
+			if (!(e instanceof Deno.errors.AlreadyExists)) {
+				throw e;
+			}
+		}
 
-// async function generatePackageJson(sdkGenPath: string) {
-// 	await Deno.writeTextFile(
-// 		resolve(sdkGenPath, "package.json"),
-// 		JSON.stringify({
-// 			"name": "rivet-sdk",
-// 			"version": "1.0.0",
-// 			"repository": {
-// 				"type": "git",
-// 				"url": "https://github.com/rivet-gg/rivet.git",
-// 			},
-// 			"main": "./dist/index.js",
-// 			"typings": "./dist/index.d.ts",
-// 			"module": "./dist/esm/index.js",
-// 			"sideEffects": false,
-// 			"scripts": {
-// 				"build": "tsc && tsc -p tsconfig.esm.json",
-// 				"prepare": "npm run build",
-// 			},
-// 			"devDependencies": {
-// 				"typescript": "^4.0 || ^5.0",
-// 			},
-// 		}),
-// 	);
-// }
+		let content = "";
+		if (path.endsWith(".ts")) content += autoGenHeader("//") + "\n\n";
+		content += await Deno.readTextFile(sourcePath);
+		await Deno.writeTextFile(destPath, content);
+	}
 
-// async function generateIndex(sdkGenPath: string) {
-// 	// Update index to only export our custom api
-// 	const indexBuilder = new GeneratedCodeBuilder(resolve(sdkGenPath, "src", "apis", "index.ts"));
+	// Create dirs for apis
+	try {
+		await Deno.mkdir(resolve(sdkGenPath, "modules"), { recursive: true });
+	} catch (e) {
+		if (!(e instanceof Deno.errors.AlreadyExists)) {
+			throw e;
+		}
+	}
+}
 
-// 	indexBuilder.chunk.append`
-// 		/* tslint:disable */
-// 		/* eslint-disable */
-// 		export * from './backend';
-// 	`;
+async function generateTsConfig(sdkGenPath: string) {
+	await Deno.writeTextFile(
+		resolve(sdkGenPath, "tsconfig.json"),
+		JSON.stringify({
+			"compilerOptions": {
+				"declaration": true,
+				"target": "es2022",
+				"module": "commonjs",
+				"moduleResolution": "node",
+				"outDir": "dist",
+				"typeRoots": [
+					"node_modules/@types",
+				],
+			},
+			"exclude": [
+				"dist",
+				"node_modules",
+			],
+		}),
+	);
+}
 
-// 	// Delete openapi generated client
-// 	const backendApiPath = resolve(sdkGenPath, "src", "apis", "BackendApi.ts");
-// 	if (await exists(backendApiPath, { isFile: true })) {
-// 		await Deno.remove(backendApiPath);
-// 	}
+export async function generateBackendAndModules(project: Project, sdkGenPath: string) {
+	const apiBuilder = new GeneratedCodeBuilder(resolve(sdkGenPath, "src", "index.ts"), 2, Lang.TypeScript);
 
-// 	await indexBuilder.write();
-// }
+	apiBuilder.append`
+        import { Client } from "./client/client.ts";
+        import { Configuration, ConfigurationOpts } from "./client/configuration.ts";
+    `;
 
-// async function generateRuntime(sdkGenPath: string) {
-// 	// Write new runtime
-// 	await Deno.writeTextFile(
-// 		resolve(sdkGenPath, "src", `runtime.ts`),
-// 		dynamicArchive["sdk/typescript/runtime.ts"],
-// 	);
-// }
+	const imports = apiBuilder.chunk;
 
-// async function generateApiClients(project: Project, sdkGenPath: string) {
-// 	const apiBuilder = new GeneratedCodeBuilder(resolve(sdkGenPath, "src", "apis", "backend.ts"));
+	apiBuilder.append`
+    /** Singleton class for Rivet API */
+    export class Rivet {
+        /** Configuration for interacting with Rivet. */
+        public configuration: Configuration;
 
-// 	apiBuilder.append`import * as runtime from '../runtime';`;
+        /** Client used to connect to the backend. */
+        private client: Client;
+    `;
+	const properties = apiBuilder.chunk;
+	apiBuilder.append`
+      constructor(opts?: ConfigurationOpts) {
+		  this.configuration = new Configuration(opts);
+          this.client = new Client(this.configuration);
+    `;
+	const constructProperties = apiBuilder.chunk;
+	apiBuilder.append`
+            }
+        }
+    `;
 
-// 	const moduleImports = apiBuilder.chunk;
-// 	const modules = apiBuilder.chunk;
+	for (const mod of project.modules.values()) {
+		const moduleNamePascal = pascalify(mod.name);
+		const className = `Rivet${moduleNamePascal}`;
 
-// 	// Create dir for module apis
-// 	try {
-// 		await Deno.mkdir(resolve(sdkGenPath, "src", "apis", "modules"));
-// 	} catch (e) {
-// 		if (!(e instanceof Deno.errors.AlreadyExists)) {
-// 			throw e;
-// 		}
-// 	}
+		// Create module API class
+		const moduleApiBuilder = new GeneratedCodeBuilder(
+			resolve(sdkGenPath, "src", "modules", `${mod.name}.ts`),
+			2,
+			Lang.TypeScript,
+		);
 
-// 	for (const mod of project.modules.values()) {
-// 		const moduleNameCamel = camelify(mod.name);
-// 		const moduleNamePascal = pascalify(mod.name);
+		// Generate module docs
+		let moduleDocs = "";
+		if (mod.config.name) {
+			moduleDocs += mod.config.name;
+			if (mod.config.description) {
+				moduleDocs += "\n\n" + mod.config.description;
+			}
+		} else {
+			moduleDocs += moduleNamePascal;
+		}
 
-// 		// Create module api class
-// 		const moduleApiBuilder = new GeneratedCodeBuilder(
-// 			resolve(sdkGenPath, "src", "apis", "modules", `${mod.name}.ts`),
-// 		);
+		// Write class
+		moduleApiBuilder.append`
+			import { Client } from "../client/client.ts";
 
-// 		moduleApiBuilder.append`import * as runtime from '../../runtime';`;
+			${convertToDocComment(moduleDocs)}
+			export class ${className} {
+				client: Client;
 
-// 		const scriptImports = moduleApiBuilder.chunk;
-// 		const scripts = moduleApiBuilder.chunk;
+				constructor(client: Client) {
+					this.client = client;
+				}
+        `;
+		const scripts = moduleApiBuilder.chunk;
+		moduleApiBuilder.append`
+			}
+        `;
 
-// 		for (const script of mod.scripts.values()) {
-// 			const scriptNameCamel = camelify(script.name);
-// 			const scriptNamePascal = pascalify(script.name);
-// 			const requestName = `${moduleNamePascal}${scriptNamePascal}Request`;
-// 			const responseName = `${moduleNamePascal}${scriptNamePascal}Response`;
-// 			const path = `/modules/${mod.name}/scripts/${script.name}/call`;
+		const scriptNames = Array.from(mod.scripts.keys());
+		const escapedScriptNames = escapeReservedWords(scriptNames);
 
-// 			// Generate missing free-form objects
-// 			if (!await exists(resolve(sdkGenPath, "src", "models", `${requestName}.ts`))) {
-// 				await generateFreeFormInterface(requestName, resolve(sdkGenPath, "src", "models", `${requestName}.ts`));
-// 				await Deno.writeTextFile(
-// 					resolve(sdkGenPath, "src", "models", `index.ts`),
-// 					`export * from './${requestName}';\n`,
-// 					{ append: true },
-// 				);
-// 			}
-// 			if (!await exists(resolve(sdkGenPath, "src", "models", `${responseName}.ts`))) {
-// 				await generateFreeFormInterface(responseName, resolve(sdkGenPath, "src", "models", `${responseName}.ts`));
-// 				await Deno.writeTextFile(
-// 					resolve(sdkGenPath, "src", "models", `index.ts`),
-// 					`export * from './${responseName}';\n`,
-// 					{ append: true },
-// 				);
-// 			}
+		for (const [i, scriptName] of scriptNames.entries()) {
+			const escapedScriptName = escapedScriptNames[i]!;
+			const script = mod.scripts.get(scriptName)!;
 
-// 			scriptImports.append`
-// 				import type { ${requestName}, ${responseName} } from '../../models/index';
-// 				import { ${requestName}ToJSON, ${responseName}FromJSON } from '../../models/index';
-// 			`;
-// 			scripts.append`
-// 				public async ${scriptNameCamel}(request: ${requestName}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<${responseName}> {
-// 					const queryParameters: any = {};
+			if (!script.config.public) continue;
 
-// 					const headerParameters: runtime.HTTPHeaders = {};
-// 					headerParameters['Content-Type'] = 'application/json';
+			const path = `/modules/${mod.name}/scripts/${script.name}/call`;
 
-// 					const response = await this.request({
-// 						path: \`${path}\`,
-// 						method: 'POST',
-// 						headers: headerParameters,
-// 						query: queryParameters,
-// 						body: ${requestName}ToJSON(request),
-// 					}, initOverrides);
+			// Add script docs
+			let scriptDocs = "";
+			if (script.config.name) {
+				scriptDocs += script.config.name + "\n";
+				if (script.config.description) {
+					scriptDocs += script.config.description + "\n";
+				}
+			} else {
+				scriptDocs += scriptName;
+			}
 
-// 					return ${responseName}FromJSON(await response.json());
-// 				}
-// 			`;
-// 		}
+			scripts.append`
+                ${convertToDocComment(scriptDocs)}
+                ${camelify(escapedScriptName)}(body: any = {}): Promise<any> {
+                    return this.client.buildRequest("${mod.name}.${script.name}", "POST", "${path}", body);
+                }
+            `;
+		}
 
-// 		GeneratedCodeBuilder.wrap(
-// 			`export class ${moduleNamePascal} extends runtime.BaseAPI {`,
-// 			scripts,
-// 			"}",
-// 		);
+		await moduleApiBuilder.write();
 
-// 		await moduleApiBuilder.write();
+		// Add module to main API class
+		imports.append`import { ${className} } from "./modules/${mod.name}.ts";`;
+		properties.append`${mod.name}: ${className};`;
+		constructProperties.append`this.${mod.name} = new ${className}(this.client);`;
+	}
 
-// 		// Add module to main api class
-// 		moduleImports.append`import { ${moduleNamePascal} } from './modules/${mod.name}';`;
-// 		modules.append`
-// 			protected _${moduleNameCamel}: ${moduleNamePascal} | undefined;
+	await apiBuilder.write();
+}
 
-// 			public get ${moduleNameCamel}(): ${moduleNamePascal} {
-// 				return this._${moduleNameCamel} ??= new ${moduleNamePascal}(this.configuration);
-// 			}
-// 		`;
-// 	}
+function escapeReservedWords(wordsList: string[]) {
+	const escaped = [];
+	const usedNames = new Set<string>();
 
-// 	GeneratedCodeBuilder.wrap(
-// 		`
-// 		export class Backend extends runtime.BaseAPI {
-// 			constructor(config: runtime.ConfigurationParameters) {
-// 				super(new runtime.Configuration(config));
-// 			}
-// 		`,
-// 		modules,
-// 		"}",
-// 	);
+	for (let word of wordsList) {
+		while (RESERVED_WORDS.includes(word) || usedNames.has(word)) {
+			word = "call_" + word;
+		}
 
-// 	await apiBuilder.write();
-// }
+		usedNames.add(word);
+		escaped.push(word);
+	}
 
-// async function generateFreeFormInterface(interfaceName: string, path: string) {
-// 	const schemaBuilder = new GeneratedCodeBuilder(path);
+	return escaped;
+}
 
-// 	schemaBuilder.append`
-// 		/* tslint:disable */
-// 		/* eslint-disable */
+export async function generateModuleAddons(project: Project, sdkGenPath: string) {
+	for (const module of project.modules.values()) {
+		const sdkAddonsPath = resolve(module.path, "sdk_addons", "typescript");
+		const files = await glob.glob("**/*.ts", { cwd: sdkAddonsPath });
+		for (const file of files) {
+			const bodyRaw = await Deno.readTextFile(resolve(sdkAddonsPath, file));
+			const body = autoGenHeader("//") + "\n\n" + bodyRaw;
+			await Deno.writeTextFile(resolve(sdkGenPath, "src", file), body);
+		}
+	}
+}
 
-// 		/**
-// 		 *
-// 		 * @export
-// 		 * @interface ${interfaceName}
-// 		 */
-// 		export interface ${interfaceName} { }
-
-// 		/**
-// 		 * Check if a given object implements the ${interfaceName} interface.
-// 		 */
-// 		export function instanceOf${interfaceName}(_value: object): _value is ${interfaceName} {
-// 			return true;
-// 		}
-
-// 		export function ${interfaceName}FromJSON(json: any): ${interfaceName} {
-// 			return ${interfaceName}FromJSONTyped(json, false);
-// 		}
-
-// 		export function ${interfaceName}FromJSONTyped(json: any, ignoreDiscriminator: boolean): ${interfaceName} {
-// 			if (json == null) {
-// 				return json;
-// 			}
-// 			return { };
-// 		}
-
-// 		export function ${interfaceName}ToJSON(value?: ${interfaceName} | null): any {
-// 			if (value == null) {
-// 				return value;
-// 			}
-// 			return { };
-// 		}
-// 	`;
-
-// 	await schemaBuilder.write();
-// }
+function convertToDocComment(input: string): string {
+	return `/**\n * ${input.split("\n").join("\n * ")}\n */`;
+}

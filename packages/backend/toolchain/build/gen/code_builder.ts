@@ -5,7 +5,7 @@ import { denoExecutablePath } from "../../utils/deno.ts";
 import { CommandError } from "../../error/mod.ts";
 
 export enum Lang {
-	Typescript,
+	TypeScript,
 	CSharp,
 	GDScript,
 }
@@ -31,7 +31,7 @@ export class GeneratedCodeBuilder {
 	public constructor(
 		public path?: string,
 		private newlinesPerChunk = 2,
-		private lang: Lang = Lang.Typescript,
+		private lang: Lang = Lang.TypeScript,
 	) {}
 
 	public static from(...args: Parameters<typeof dedent>) {
@@ -135,7 +135,7 @@ export class GeneratedCodeBuilder {
 	public async write() {
 		if (!this.path) throw new Error("Cannot write a file without a path");
 
-		if (this.lang == Lang.Typescript) {
+		if (this.lang == Lang.TypeScript) {
 			await mkdirWriteFmt(this.path, this.toString(true));
 		} else {
 			await mkdirFor(this.path);
