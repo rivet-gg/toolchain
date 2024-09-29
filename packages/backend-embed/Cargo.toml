@@ -12,6 +12,7 @@ tokio = { version = "1.40.0", default-features = false, features = ["fs", "rt-mu
 
 [build-dependencies]
 anyhow = "1.0"
+merkle_hash = "3.7.0"
 rivet-deno-embed = { path = "../deno-embed", features = ["ignore-override-target"] }
 sha2 = "0.10.8"
 tempfile = "3.2"
