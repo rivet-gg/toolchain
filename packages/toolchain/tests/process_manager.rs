@@ -75,7 +75,6 @@ async fn test_process_manager_lifecycle() -> Result<()> {
 	let mut stdout_logs = Vec::new();
 	let mut stderr_logs = Vec::new();
 	while let Some(event) = log_rx.recv().await {
-		dbg!(&event);
 		match event {
 			TaskEvent::Log(log) => {
 				if let Some(log) = log.strip_prefix("[stdout] ") {
@@ -198,17 +197,11 @@ async fn test_process_manager_stop_graceful() -> Result<()> {
 	sleep(Duration::from_millis(200)).await;
 
 	// Verify process is running
-	assert!(
-		process_manager.is_running().await?,
-		"process not running"
-	);
+	assert!(process_manager.is_running().await?, "process not running");
 	assert!(!handle.is_finished(), "handle not running");
 
 	// Stop the process
-	assert!(
-		process_manager.stop().await?,
-		"did not stop process"
-	);
+	assert!(process_manager.stop().await?, "did not stop process");
 	assert!(
 		!process_manager.stop().await?,
 		"stop should not return true if no process"
@@ -276,10 +269,7 @@ async fn test_process_manager_stop_timeout() -> Result<()> {
 	sleep(Duration::from_millis(200)).await;
 
 	// Verify process is running
-	assert!(
-		process_manager.is_running().await?,
-		"process not running"
-	);
+	assert!(process_manager.is_running().await?, "process not running");
 
 	// Attempt to stop the process in the background
 	let stop_handle = tokio::spawn({
