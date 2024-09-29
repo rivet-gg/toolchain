@@ -22,6 +22,10 @@ pub struct Meta {
 	/// See `backend_port`.
 	#[serde(default)]
 	pub editor_port: Option<u16>,
+
+	/// See `backend_port`.
+	#[serde(default)]
+	pub process_manager_state: HashMap<String, ProcessManagerState>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -56,6 +60,15 @@ pub struct Environment {
 pub struct Backend {
 	#[serde(default)]
 	pub db_url: Option<String>,
+}
+
+#[derive(Default, Clone, Serialize, Deserialize)]
+pub struct ProcessManagerState {
+	/// Stores the PID of the current child process.
+	///
+	/// We use this to kill the existing PID in case the parent process dies without gracefully
+	/// killing the children.
+	pub pid: Option<u32>,
 }
 
 lazy_static! {
