@@ -8,6 +8,16 @@ use tokio::{
 
 use crate::util::task::TaskCtx;
 
+#[cfg(unix)]
+mod unix;
+#[cfg(windows)]
+mod windows;
+
+#[cfg(unix)]
+use unix as os;
+#[cfg(windows)]
+use windows as os;
+
 const MAX_LOG_HISTORY: usize = 512;
 
 #[derive(Debug, Clone)]
@@ -305,7 +315,7 @@ impl ProcessManager {
 				self.status_tx.send(ProcessStatus::Stopping).context("send ProcessStatus::Stopping")?;
 
 				// Send SIGTERM to stop gracefully
-				self.send_terminate_signal(child_pid).await?;
+				os::send_terminate_signal(child_pid).await?;
 
 				// Wait for process to exit
 				match tokio::time::timeout(self.kill_grace, child.wait()).await {
@@ -319,7 +329,7 @@ impl ProcessManager {
 					}
 					Err(_) => {
 						// Timed out, force kill
-						child.kill().await.context("kill failed")?;
+						os::kill_process_tree(child_pid).await?;
 
 						None
 					}
@@ -360,30 +370,6 @@ impl ProcessManager {
 	async fn clear_logs(&self) -> Result<()> {
 		let mut logs = self.logs.lock().await;
 		logs.clear();
-		Ok(())
-	}
-
-	async fn send_terminate_signal(&self, pid: u32) -> Result<()> {
-		#[cfg(unix)]
-		{
-			use nix::sys::signal::{kill, Signal};
-			use nix::unistd::Pid;
-
-			kill(Pid::from_raw(pid as i32), Signal::SIGTERM)?;
-		}
-
-		#[cfg(windows)]
-		{
-			use windows::Win32::System::Console::{GenerateConsoleCtrlEvent, CTRL_BREAK_EVENT};
-
-			unsafe {
-				// Attempt to terminate the process gracefully
-				if !GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, pid as u32).as_bool() {
-					bail!("failed to terminate process")
-				}
-			}
-		}
-
 		Ok(())
 	}
 }
