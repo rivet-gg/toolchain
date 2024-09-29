@@ -1,4 +1,4 @@
-import { move } from "@std/fs";
+import { exists, move } from "@std/fs";
 import { resolve } from "@std/path";
 import { CommandError, UnreachableError } from "../error/mod.ts";
 import { Project } from "../project/mod.ts";
@@ -49,6 +49,9 @@ export async function generateSdk(
 		throw new UnreachableError(sdk.target);
 	}
 
+	if (await exists(sdk.output, { isDirectory: true })) {
+		await Deno.remove(sdk.output, { recursive: true });
+	}
 	await move(sdkCopyPath, sdk.output, { overwrite: true });
 
 	success("Success");
