@@ -120,14 +120,25 @@ impl ProcessManager {
 		CommandFut: Future<Output = Result<CommandOpts>>,
 	{
 		// Terminate the previous process if needed
-		if let Some(old_pid) = meta::mutate_project(&paths::data_dir()?, |x| {
+		let old_pid = meta::mutate_project(&paths::data_dir()?, |x| {
 			x.process_manager_state
 				.get_mut(self.key)
-				.and_then(|x| x.pid.take())
+				.and_then(|x| x.pid)
 		})
-		.await?
-		{
-			os::kill_process_tree(old_pid).await?;
+		.await?;
+		if let Some(old_pid) = dbg!(old_pid) {
+			// Kill old PID
+			tokio::task::block_in_place(|| dbg!(os::kill_process_tree(old_pid)));
+
+			// Delete old pID
+			meta::mutate_project(&paths::data_dir()?, |x| {
+				x.process_manager_state.get_mut(self.key).map(|x| {
+					if x.pid == Some(old_pid) {
+						x.pid = None;
+					}
+				})
+			})
+			.await?;
 		}
 
 		// Start new process if needed. Otherwise, will hook to the existing process.
@@ -335,7 +346,7 @@ impl ProcessManager {
 				self.status_tx.send(ProcessStatus::Stopping).context("send ProcessStatus::Stopping")?;
 
 				// Send SIGTERM to stop gracefully
-				os::send_terminate_signal(child_pid).await?;
+				tokio::task::block_in_place(|| os::send_terminate_signal(child_pid));
 
 				// Wait for process to exit
 				match tokio::time::timeout(self.kill_grace, child.wait()).await {
@@ -349,7 +360,7 @@ impl ProcessManager {
 					}
 					Err(_) => {
 						// Timed out, force kill
-						os::kill_process_tree(child_pid).await?;
+						tokio::task::block_in_place(|| os::kill_process_tree(child_pid));
 
 						None
 					}
