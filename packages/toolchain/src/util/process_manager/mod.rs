@@ -119,33 +119,34 @@ impl ProcessManager {
 	where
 		CommandFut: Future<Output = Result<CommandOpts>>,
 	{
-		// Terminate the previous process if needed
-		let old_pid = meta::mutate_project(&paths::data_dir()?, |x| {
-			x.process_manager_state
-				.get_mut(self.key)
-				.and_then(|x| x.pid)
-		})
-		.await?;
-		if let Some(old_pid) = dbg!(old_pid) {
-			// Kill old PID
-			tokio::task::block_in_place(|| dbg!(os::kill_process_tree(old_pid)));
-
-			// Delete old pID
-			meta::mutate_project(&paths::data_dir()?, |x| {
-				x.process_manager_state.get_mut(self.key).map(|x| {
-					if x.pid == Some(old_pid) {
-						x.pid = None;
-					}
-				})
-			})
-			.await?;
-		}
-
 		// Start new process if needed. Otherwise, will hook to the existing process.
 		//
 		// Clonign value required since this holds a read lock on the inner
 		// value.
 		if !self.status_rx.borrow().is_running() {
+			// Terminate the previous process if needed. This will kill any zombie process from a
+			// previous instance.
+			let old_pid = meta::mutate_project(&paths::data_dir()?, |x| {
+				x.process_manager_state
+					.get_mut(self.key)
+					.and_then(|x| x.pid)
+			})
+			.await?;
+			if let Some(old_pid) = old_pid {
+				// Kill old PID
+				tokio::task::block_in_place(|| os::kill_process_tree(old_pid));
+
+				// Delete old pID
+				meta::mutate_project(&paths::data_dir()?, |x| {
+					x.process_manager_state.get_mut(self.key).map(|x| {
+						if x.pid == Some(old_pid) {
+							x.pid = None;
+						}
+					})
+				})
+				.await?;
+			}
+
 			// Build command
 			//
 			// Do this before assigning process id in case the builder fails
@@ -216,21 +217,24 @@ impl ProcessManager {
 			ProcessStatus::Running { .. } | ProcessStatus::Starting
 		) {
 			let mut status_rx = self.status_tx.subscribe();
-			let mut stop = self.stop_tx.lock().await;
 
 			// Stop can only be sent once, so take the sender
-			if let Some(stop_tx) = stop.take() {
-				stop_tx.send(()).await?;
+			let did_stop = {
+				let mut stop = self.stop_tx.lock().await;
+				if let Some(stop_tx) = stop.take() {
+					stop_tx.send(()).await?;
+					true
+				} else {
+					false
+				}
+			};
 
-				// Wait for stop
-				status_rx
-					.wait_for(|x| matches!(x, ProcessStatus::Exited { .. }))
-					.await?;
+			// Wait for stop
+			status_rx
+				.wait_for(|x| matches!(x, ProcessStatus::Exited { .. }))
+				.await?;
 
-				Ok(true)
-			} else {
-				Ok(false)
-			}
+			Ok(did_stop)
 		} else {
 			Ok(false)
 		}
@@ -243,7 +247,9 @@ impl ProcessManager {
 	async fn spawn_process(self: &Arc<Self>, command_opts: CommandOpts) -> Result<()> {
 		// Create new shutdown channel
 		let (stop_tx, stop_rx) = mpsc::channel(1);
-		*self.stop_tx.lock().await = Some(stop_tx);
+		{
+			*self.stop_tx.lock().await = Some(stop_tx);
+		}
 
 		// Update status
 		self.status_tx.send(ProcessStatus::Starting)?;
@@ -254,6 +260,7 @@ impl ProcessManager {
 			match _self.spawn_process_inner(command_opts, stop_rx).await {
 				Result::Ok(_) => {}
 				Err(err) => {
+					eprintln!("Failed to spawn process: {err:?}");
 					let _ = _self.status_tx.send(ProcessStatus::Exited {
 						exit_code: None,
 						error: Some(err.to_string()),
@@ -368,9 +375,9 @@ impl ProcessManager {
 			}
 		};
 
-		// Wait for log handles in order to not miss any logs
-		stdout_handle.await??;
-		stderr_handle.await??;
+		// Stop log tasks
+		stdout_handle.abort();
+		stderr_handle.abort();
 
 		// Remove PID
 		meta::mutate_project(&paths::data_dir()?, |x| {
