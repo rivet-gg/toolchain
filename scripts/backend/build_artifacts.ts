@@ -85,7 +85,7 @@ async function buildEditor() {
   }).output();
 
   if (!installResult.success) {
-    throw new Error(`Failed to install packages: ${new TextDecoder().decode(installResult.stderr)}`);
+    throw new Error(`Failed to install packages`);
   }
 
   console.log(`[editor] Building`)
@@ -105,7 +105,7 @@ async function buildEditor() {
   }).output();
 
   if (!buildResult.success) {
-    throw new Error(`Failed to build editor: ${new TextDecoder().decode(buildResult.stderr)}`);
+    throw new Error(`Failed to build editor`);
   }
 
   console.log(`[editor] Copying to artifacts`)
