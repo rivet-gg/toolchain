@@ -16,7 +16,7 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"postgres_start"
+		"postgres.start"
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {

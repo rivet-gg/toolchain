@@ -30,9 +30,13 @@ impl Opts {
 				return ExitCode::FAILURE;
 			}
 		};
+		let Some(cloud_data) = bootstrap_data.cloud else {
+			eprintln!("Not signed in");
+			return ExitCode::FAILURE;
+		};
 
 		// Find environment
-		let environment = match bootstrap_data
+		let environment = match cloud_data
 			.envs
 			.iter()
 			.find(|env| env.slug == self.environment)
@@ -43,7 +47,7 @@ impl Opts {
 					"Environment '{}' not found. Available environments:",
 					self.environment
 				);
-				for env in &bootstrap_data.envs {
+				for env in &cloud_data.envs {
 					eprintln!("- {}", env.slug);
 				}
 				return ExitCode::FAILURE;

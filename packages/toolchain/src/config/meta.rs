@@ -8,17 +8,12 @@ use uuid::Uuid;
 use crate::paths;
 
 /// Config stored in {data_dir}/meta.json. Used to store persistent data, such as tokens & cache.
-#[derive(Serialize, Deserialize)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct Meta {
-	pub cluster: Cluster,
-	pub tokens: Tokens,
-	pub environments: HashMap<Uuid, Environment>,
-
-	/// Stores the state for all of the processes.
+	/// If signed in to Rivet, this will include relevant information.
 	///
-	/// Key is the key in the `ProcessManager` config.
-	#[serde(default)]
-	pub processes: HashMap<String, ProcessState>,
+	/// If not signed in, will be None.
+	pub cloud: Option<Cloud>,
 
 	/// Port which the dev server is running on for plugins.
 	#[serde(default)]
@@ -29,28 +24,26 @@ pub struct Meta {
 	pub editor_port: Option<u16>,
 }
 
-impl Meta {
-	fn new(api_endpoint: String, cloud_token: String) -> Self {
-		Meta {
-			cluster: Cluster { api_endpoint },
-			tokens: Tokens { cloud: cloud_token },
+#[derive(Serialize, Deserialize)]
+pub struct Cloud {
+	/// Rivet API endpoint to connect to.
+	pub api_endpoint: String,
+
+	/// Cloud token used to authenticate all API requests.
+	pub cloud_token: String,
+
+	/// Cache of all environments for this game.
+	pub environments: HashMap<Uuid, Environment>,
+}
+
+impl Cloud {
+	pub fn new(api_endpoint: String, cloud_token: String) -> Self {
+		Self {
+			api_endpoint,
+			cloud_token,
 			environments: HashMap::new(),
-			processes: HashMap::new(),
-			backend_port: None,
-			editor_port: None,
 		}
 	}
-}
-
-#[derive(Default, Serialize, Deserialize)]
-pub struct Cluster {
-	pub api_endpoint: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Tokens {
-	/// Cloud token used to authenticate all API requests.
-	pub cloud: String,
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
@@ -63,14 +56,6 @@ pub struct Environment {
 pub struct Backend {
 	#[serde(default)]
 	pub db_url: Option<String>,
-}
-
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct ProcessState {
-	/// ID of the running process.
-	///
-	/// This is not the same as the PID.
-	pub process_id: Option<Uuid>,
 }
 
 lazy_static! {
@@ -115,9 +100,7 @@ pub async fn try_read_project<F: FnOnce(&Meta) -> Result<T>, T>(
 		let mut meta = match fs::read_to_string(&meta_path).await {
 			Result::Ok(config) => serde_json::from_str::<Meta>(&config)
 				.context(format!("deserialize meta ({})", meta_path.display()))?,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-				bail!("project not initialized")
-			}
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
 			Err(err) => return Err(err.into()),
 		};
 
@@ -152,9 +135,7 @@ pub async fn try_mutate_project<F: FnOnce(&mut Meta) -> Result<T>, T>(
 		let mut meta = match fs::read_to_string(&meta_path).await {
 			Result::Ok(config) => serde_json::from_str::<Meta>(&config)
 				.context(format!("deserialize meta ({})", meta_path.display()))?,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-				bail!("project not initialized")
-			}
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
 			Err(err) => return Err(err.into()),
 		};
 
@@ -179,48 +160,4 @@ pub async fn mutate_project<F: FnOnce(&mut Meta) -> T, T>(
 	cb: F,
 ) -> Result<T> {
 	try_mutate_project(base_data_dir, |x| Ok(cb(x))).await
-}
-
-pub async fn has_project(base_data_dir: &PathBuf) -> Result<bool> {
-	let meta_path = paths::meta_config_file(base_data_dir)?;
-	let has_project = fs::try_exists(&meta_path).await?;
-	Ok(has_project)
-}
-
-pub async fn insert_project(
-	base_data_dir: &PathBuf,
-	api_endpoint: String,
-	cloud_token: String,
-) -> Result<()> {
-	// Build and serialize
-	let meta = Meta::new(api_endpoint, cloud_token);
-	let json_str = serde_json::to_string(&meta)?;
-
-	// Write meta
-	//
-	// This will replace the existing meta
-	let _write_guard = META_FILE_LOCK.lock().await;
-	let path = paths::meta_config_file(base_data_dir)?;
-	if let Some(parent) = path.parent() {
-		fs::create_dir_all(parent).await?;
-	}
-	fs::write(path, json_str).await?;
-
-	Ok(())
-}
-
-pub async fn delete_project(base_data_dir: &PathBuf) -> Result<()> {
-	let path = paths::meta_config_file(base_data_dir)?;
-
-	// Lock all resources
-	let mut global_meta = META.lock().await;
-	let _write_guard = META_FILE_LOCK.lock().await;
-
-	// Delete from cache
-	global_meta.remove(&path);
-
-	// Delete file
-	fs::remove_file(&path).await?;
-
-	Ok(())
 }

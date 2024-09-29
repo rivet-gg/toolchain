@@ -62,6 +62,9 @@ pub async fn deploy(ctx: &ToolchainCtx, task: task::TaskCtx, opts: DeployOpts) -
 
 	let db_url = config::meta::try_read_project(&paths::data_dir()?, |config| {
 		let env_config = config
+			.cloud
+			.as_ref()
+			.context("config.cloud")?
 			.environments
 			.get(&opts.env.id)
 			.context("could not find environment")?;

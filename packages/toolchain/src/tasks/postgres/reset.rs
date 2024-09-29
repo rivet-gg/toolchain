@@ -1,7 +1,7 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, paths, util::task};
+use crate::{paths, postgres, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -16,11 +16,11 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"unlink"
+		"postgres.reset"
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
-		config::meta::delete_project(&paths::data_dir()?).await?;
+		postgres::get(&paths::data_dir()?).await?.reset().await?;
 		Ok(Output {})
 	}
 }

@@ -2,10 +2,7 @@ use clap::Parser;
 use clap::Subcommand;
 use serde::Serialize;
 use std::process::ExitCode;
-use toolchain::tasks::postgres_reset;
-use toolchain::tasks::postgres_start;
-use toolchain::tasks::postgres_status;
-use toolchain::tasks::postgres_stop;
+use toolchain::tasks;
 
 use crate::util::task::run_task;
 use crate::util::task::run_task_simple;
@@ -38,7 +35,7 @@ pub struct StartOpts {}
 
 impl StartOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_task_simple::<postgres_start::Task>(postgres_start::Input {}).await
+		run_task_simple::<tasks::postgres::start::Task>(tasks::postgres::start::Input {}).await
 	}
 }
 
@@ -49,7 +46,7 @@ pub struct StopOpts {}
 
 impl StopOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_task_simple::<postgres_stop::Task>(postgres_stop::Input {}).await
+		run_task_simple::<tasks::postgres::stop::Task>(tasks::postgres::stop::Input {}).await
 	}
 }
 
@@ -60,9 +57,9 @@ pub struct StatusOpts {}
 
 impl StatusOpts {
 	pub async fn execute(&self) -> ExitCode {
-		match run_task::<postgres_status::Task>(
+		match run_task::<tasks::postgres::status::Task>(
 			TaskOutputStyle::PlainNoResult,
-			postgres_status::Input {},
+			tasks::postgres::status::Input {},
 		)
 		.await
 		{
@@ -85,6 +82,6 @@ pub struct ResetOpts {}
 
 impl ResetOpts {
 	pub async fn execute(&self) -> ExitCode {
-		run_task_simple::<postgres_reset::Task>(postgres_reset::Input {}).await
+		run_task_simple::<tasks::postgres::reset::Task>(tasks::postgres::reset::Input {}).await
 	}
 }

@@ -1,13 +1,15 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{util::task};
+use crate::{paths, postgres, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
 
 #[derive(Serialize)]
-pub struct Output {}
+pub struct Output {
+	pub status: postgres::Status,
+}
 
 pub struct Task;
 
@@ -16,13 +18,11 @@ impl task::Task for Task {
 	type Output = Output;
 
 	fn name() -> &'static str {
-		"game_server_stop"
+		"postgres.status"
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
-		crate::game_server::PROCESS_MANAGER
-			.stop()
-			.await?;
-		Ok(Output {})
+		let status = postgres::get(&paths::data_dir()?).await?.status().await?;
+		Ok(Output { status })
 	}
 }
