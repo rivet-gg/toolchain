@@ -1,12 +1,9 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
-use std::{
-	path::Path,
-	time::{Duration, SystemTime},
-};
+use std::time::{Duration, SystemTime};
 
 use crate::{
-	backend::{self, build_backend_command_raw},
+	backend::{self, build_backend_command_raw, project_manifest},
 	config::{self, meta},
 	paths, postgres,
 	util::{
@@ -117,8 +114,7 @@ impl task::Task for Task {
 }
 
 async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
-	let manifest_path = paths::backend_data_dir(&paths::data_dir()?, paths::BackendDataType::Dev)?
-		.join("project_manifest.json");
+	let manifest_path = project_manifest::path(&paths::data_dir()?, paths::BackendDataType::Dev)?;
 
 	// TODO: Switch to notify
 	// Poll the file for updates
@@ -162,7 +158,8 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 		};
 
 		// Read manifest
-		let manifest = read_manifest(&manifest_path).await?;
+		let manifest =
+			project_manifest::read(&paths::data_dir()?, paths::BackendDataType::Dev).await?;
 
 		// Check for most recent SDK change
 		let mut sdk_modified: Option<SystemTime> = None;
@@ -212,50 +209,6 @@ async fn poll_config_file(task_ctx: task::TaskCtx) -> Result<()> {
 			}
 		}
 	}
-}
-
-/// Partial serde struct representing data we need to read from `project_manifest.json`.
-///
-/// See packages/backend/toolchain/build/project_manifest.ts
-mod project_manifest {
-	use serde::Deserialize;
-	use std::collections::HashMap;
-
-	#[derive(Deserialize)]
-	#[serde(rename_all = "camelCase")]
-	pub struct Meta {
-		pub sdks: Vec<Sdk>,
-		pub modules: HashMap<String, Module>,
-	}
-
-	#[derive(Deserialize)]
-	#[serde(rename_all = "camelCase")]
-	pub struct Sdk {
-		pub target: String,
-		pub output: String,
-	}
-
-	#[derive(Deserialize)]
-	#[serde(rename_all = "camelCase")]
-	pub struct Module {
-		pub config: ModuleConfig,
-	}
-
-	#[derive(Deserialize)]
-	#[serde(rename_all = "camelCase")]
-	pub struct ModuleConfig {
-		pub name: String,
-	}
-}
-
-/// Reads the `project_manifest.json` from the filesystem.
-async fn read_manifest(config_path: impl AsRef<Path>) -> Result<project_manifest::Meta> {
-	// Read meta
-	tokio::task::block_in_place(|| {
-		let file = std::fs::File::open(config_path)?;
-		let meta = serde_json::from_reader::<_, project_manifest::Meta>(&file)?;
-		Ok(meta)
-	})
 }
 
 /// Converts project manifest to an event.

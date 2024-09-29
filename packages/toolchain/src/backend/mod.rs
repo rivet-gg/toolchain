@@ -1,4 +1,5 @@
 pub mod database;
+pub mod project_manifest;
 
 use anyhow::*;
 use lazy_static::lazy_static;
