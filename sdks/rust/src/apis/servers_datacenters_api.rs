@@ -15,10 +15,10 @@ use crate::apis::ResponseContent;
 use super::{Error, configuration};
 
 
-/// struct for typed errors of method [`servers_logs_get`]
+/// struct for typed errors of method [`servers_datacenters_list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ServersLogsGetError {
+pub enum ServersDatacentersListError {
     Status400(crate::models::ErrorBody),
     Status403(crate::models::ErrorBody),
     Status404(crate::models::ErrorBody),
@@ -29,19 +29,14 @@ pub enum ServersLogsGetError {
 }
 
 
-/// Returns the logs for a given server.
-pub async fn servers_logs_get(configuration: &configuration::Configuration, game_id: &str, environment_id: &str, server_id: &str, stream: crate::models::ServersLogStream, watch_index: Option<&str>) -> Result<crate::models::ServersGetServerLogsResponse, Error<ServersLogsGetError>> {
+pub async fn servers_datacenters_list(configuration: &configuration::Configuration, game_id: &str, environment_id: &str) -> Result<crate::models::ServersListDatacentersResponse, Error<ServersDatacentersListError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/games/{game_id}/environments/{environment_id}/servers/{server_id}/logs", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), environment_id=crate::apis::urlencode(environment_id), server_id=crate::apis::urlencode(server_id));
+    let local_var_uri_str = format!("{}/games/{game_id}/environments/{environment_id}/datacenters", local_var_configuration.base_path, game_id=crate::apis::urlencode(game_id), environment_id=crate::apis::urlencode(environment_id));
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
-    local_var_req_builder = local_var_req_builder.query(&[("stream", &stream.to_string())]);
-    if let Some(ref local_var_str) = watch_index {
-        local_var_req_builder = local_var_req_builder.query(&[("watch_index", &local_var_str.to_string())]);
-    }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
@@ -58,7 +53,7 @@ pub async fn servers_logs_get(configuration: &configuration::Configuration, game
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ServersLogsGetError> = serde_json::from_str(&local_var_content).ok();
+        let local_var_entity: Option<ServersDatacentersListError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
         Err(Error::ResponseError(local_var_error))
     }

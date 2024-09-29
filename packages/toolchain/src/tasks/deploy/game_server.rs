@@ -7,7 +7,7 @@ use uuid::Uuid;
 use crate::{
 	config,
 	game::TEMPEnvironment,
-	paths,
+	game_server, paths,
 	toolchain_ctx::ToolchainCtx,
 	util::{
 		cmd::{self, shell_cmd},
@@ -15,10 +15,6 @@ use crate::{
 		task,
 	},
 };
-
-const VERSION_BUILD_TAG: &str = "version";
-const ENABLED_BUILD_TAG: &str = "enabled";
-const CURRENT_BUILD_TAG: &str = "current";
 
 pub struct DeployOpts {
 	pub env: TEMPEnvironment,
@@ -80,11 +76,23 @@ pub async fn deploy(
 	// Indicates the latest build to use for this environment. Used if not providing a client-side
 	// version.
 	let tags = HashMap::from([
-		(VERSION_BUILD_TAG.to_string(), version_name.clone()),
-		(ENABLED_BUILD_TAG.to_string(), "true".to_string()),
-		(CURRENT_BUILD_TAG.to_string(), "true".to_string()),
+		(
+			game_server::VERSION_BUILD_TAG.to_string(),
+			version_name.clone(),
+		),
+		(
+			game_server::ENABLED_BUILD_TAG.to_string(),
+			"true".to_string(),
+		),
+		(
+			game_server::CURRENT_BUILD_TAG.to_string(),
+			"true".to_string(),
+		),
 	]);
-	let exclusive_tags = vec![VERSION_BUILD_TAG.to_string(), CURRENT_BUILD_TAG.to_string()];
+	let exclusive_tags = vec![
+		game_server::VERSION_BUILD_TAG.to_string(),
+		game_server::CURRENT_BUILD_TAG.to_string(),
+	];
 
 	// Deploy Docker image
 	let image_id = if let Some(docker_image) = deploy_config.docker_image.as_ref() {

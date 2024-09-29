@@ -70,7 +70,7 @@ pub async fn push_tar(
 		size = upload::format_file_size(image_file_meta.len())?
 	));
 
-	let build_res = apis::servers_builds_api::servers_builds_prepare_build(
+	let build_res = apis::servers_builds_api::servers_builds_prepare(
 		&ctx.openapi_config_cloud,
 		&game_id_str,
 		&env_id_str,
@@ -137,7 +137,7 @@ pub async fn push_tar(
 		.await?;
 	}
 
-	let complete_res = apis::servers_builds_api::servers_builds_complete_build(
+	let complete_res = apis::servers_builds_api::servers_builds_complete(
 		&ctx.openapi_config_cloud,
 		&game_id_str,
 		&env_id_str,

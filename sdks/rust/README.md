@@ -186,12 +186,13 @@ Class | Method | HTTP request | Description
 *ServersApi* | [**servers_destroy**](docs/ServersApi.md#servers_destroy) | **DELETE** /games/{game_id}/environments/{environment_id}/servers/{server_id} | 
 *ServersApi* | [**servers_get**](docs/ServersApi.md#servers_get) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id} | 
 *ServersApi* | [**servers_list**](docs/ServersApi.md#servers_list) | **GET** /games/{game_id}/environments/{environment_id}/servers | 
-*ServersBuildsApi* | [**servers_builds_complete_build**](docs/ServersBuildsApi.md#servers_builds_complete_build) | **POST** /games/{game_id}/environments/{environment_id}/builds/{build_id}/complete | 
-*ServersBuildsApi* | [**servers_builds_get_build**](docs/ServersBuildsApi.md#servers_builds_get_build) | **GET** /games/{game_id}/environments/{environment_id}/builds/{build_id} | 
-*ServersBuildsApi* | [**servers_builds_list_builds**](docs/ServersBuildsApi.md#servers_builds_list_builds) | **GET** /games/{game_id}/environments/{environment_id}/builds | 
+*ServersBuildsApi* | [**servers_builds_complete**](docs/ServersBuildsApi.md#servers_builds_complete) | **POST** /games/{game_id}/environments/{environment_id}/builds/{build_id}/complete | 
+*ServersBuildsApi* | [**servers_builds_get**](docs/ServersBuildsApi.md#servers_builds_get) | **GET** /games/{game_id}/environments/{environment_id}/builds/{build_id} | 
+*ServersBuildsApi* | [**servers_builds_list**](docs/ServersBuildsApi.md#servers_builds_list) | **GET** /games/{game_id}/environments/{environment_id}/builds | 
 *ServersBuildsApi* | [**servers_builds_patch_tags**](docs/ServersBuildsApi.md#servers_builds_patch_tags) | **PATCH** /games/{game_id}/environments/{environment_id}/builds/{build_id}/tags | 
-*ServersBuildsApi* | [**servers_builds_prepare_build**](docs/ServersBuildsApi.md#servers_builds_prepare_build) | **POST** /games/{game_id}/environments/{environment_id}/builds/prepare | 
-*ServersLogsApi* | [**servers_logs_get_server_logs**](docs/ServersLogsApi.md#servers_logs_get_server_logs) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id}/logs | 
+*ServersBuildsApi* | [**servers_builds_prepare**](docs/ServersBuildsApi.md#servers_builds_prepare) | **POST** /games/{game_id}/environments/{environment_id}/builds/prepare | 
+*ServersDatacentersApi* | [**servers_datacenters_list**](docs/ServersDatacentersApi.md#servers_datacenters_list) | **GET** /games/{game_id}/environments/{environment_id}/datacenters | 
+*ServersLogsApi* | [**servers_logs_get**](docs/ServersLogsApi.md#servers_logs_get) | **GET** /games/{game_id}/environments/{environment_id}/servers/{server_id}/logs | 
 
 
 ## Documentation For Models
@@ -556,11 +557,13 @@ Class | Method | HTTP request | Description
  - [ServersCreateServerRequest](docs/ServersCreateServerRequest.md)
  - [ServersCreateServerResponse](docs/ServersCreateServerResponse.md)
  - [ServersCreateServerRuntimeRequest](docs/ServersCreateServerRuntimeRequest.md)
+ - [ServersDatacenter](docs/ServersDatacenter.md)
  - [ServersGetBuildResponse](docs/ServersGetBuildResponse.md)
  - [ServersGetServerLogsResponse](docs/ServersGetServerLogsResponse.md)
  - [ServersGetServerResponse](docs/ServersGetServerResponse.md)
  - [ServersLifecycle](docs/ServersLifecycle.md)
  - [ServersListBuildsResponse](docs/ServersListBuildsResponse.md)
+ - [ServersListDatacentersResponse](docs/ServersListDatacentersResponse.md)
  - [ServersListServersResponse](docs/ServersListServersResponse.md)
  - [ServersLogStream](docs/ServersLogStream.md)
  - [ServersNetwork](docs/ServersNetwork.md)
