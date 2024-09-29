@@ -1,15 +1,15 @@
 import { Hono, type MiddlewareHandler } from "@hono/hono";
 import { createFactory } from "@hono/hono/factory";
-import { serveStatic as baseServeStatic, type ServeStaticOptions } from "@hono/hono/serve-static";
+import { serveStatic } from "@hono/hono/deno";
 import { validator } from "@hono/hono/validator";
 import { resolve } from "@std/path";
 import { decodeBase64 } from "@std/encoding";
-import editorArchive from "../../artifacts/editor_archive.json" with { type: "json" };
 import { InternalState } from "./state.ts";
 import { info, progress } from "../term/status.ts";
 import { ProjectManifest } from "../build/project_manifest.ts";
 import { ProjectConfigSchema } from "../config/project.ts";
 import { PROJECT_MANIFEST_PATH, projectDataPath } from "../project/mod.ts";
+import { BACKEND_ROOT } from "../utils/paths.ts";
 
 interface Env {
 	Variables: {
@@ -84,29 +84,6 @@ export const internalApi = new Hono<Env>()
 
 export type InternalApi = typeof internalApi;
 
-// copied and modified from `@hono/hono/deno -> serveStatic.ts`
-const serveStaticEditorArtifacts = <E extends Env = Env>(
-	options: ServeStaticOptions<E>,
-): MiddlewareHandler => {
-	return async function serveStatic(c, next) {
-		const getContent = async (path: string) => {
-			try {
-				const file = (editorArchive as Record<string, string>)[path];
-				return file ? decodeBase64(file) : null;
-			} catch (e) {
-				console.warn(`${e}`);
-			}
-			return null;
-		};
-		const pathResolve = (path: string) => path;
-		return baseServeStatic({
-			...options,
-			getContent,
-			pathResolve,
-		})(c, next);
-	};
-};
-
 export function createProjectInternalApiRouter(internalState: InternalState) {
 	const factory = createFactory<Env>({
 		initApp: (app) => {
@@ -122,7 +99,7 @@ export function createProjectInternalApiRouter(internalState: InternalState) {
 	app.route("/__internal", internalApi);
 	app.get(
 		"/*",
-		serveStaticEditorArtifacts({ root: "/" }),
+		serveStatic({ root: resolve(BACKEND_ROOT, "artifacts", "editor") }),
 	);
 
 	return app;
