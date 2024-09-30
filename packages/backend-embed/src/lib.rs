@@ -1,5 +1,5 @@
 use anyhow::*;
-use include_dir::{include_dir, Dir, DirEntry};
+use include_dir::{include_dir, Dir};
 use std::path::PathBuf;
 use tokio::fs;
 
@@ -29,6 +29,7 @@ pub async fn backend_dir(data_dir: &PathBuf) -> Result<PathBuf> {
 /// bundling the vendored folders strips permissions, so executables can't be ran.
 #[cfg(unix)]
 async fn set_executables(dir: &Dir<'_>, fs_path: &PathBuf) -> Result<()> {
+	use include_dir::DirEntry;
 	use std::os::unix::fs::PermissionsExt;
 
 	for entry in dir.entries() {
