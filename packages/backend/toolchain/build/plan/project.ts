@@ -30,6 +30,7 @@ import { copy, exists } from "@std/fs";
 
 import * as esbuild from "esbuild";
 import { BACKEND_ROOT } from "../../utils/paths.ts";
+import { assert } from "@std/assert";
 
 export async function planProjectBuild(
 	buildState: BuildState,
@@ -416,7 +417,12 @@ export async function planProjectBuild(
 
 		// Run apply in parallel since it's non-interactive
 		for (const module of applyMigrations) {
-			const migrations = await glob.glob(resolve(module.path, "db", "migrations", "*.sql"));
+			// List all migrations
+			const migrationsCwd = resolve(module.path, "db", "migrations")
+			const migrationsRelative = await glob.glob("*.sql", { cwd: migrationsCwd });
+			assert(migrationsRelative.length > 0, `must have more than 1 migration for module ${module.name}`);
+			const migrations = migrationsRelative.map(x => resolve(migrationsCwd, x));
+
 			buildStep(buildState, {
 				id: `module.${module.name}.migrate.apply`,
 				name: "Migrate Database",
