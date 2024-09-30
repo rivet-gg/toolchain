@@ -29,6 +29,9 @@
 				"gameIdVariable": "RIVET_GAME_ID",
 				"environmentIdVariable": "RIVET_ENVIRONMENT_ID"
 			}
+		},
+		"actors_test": {
+			"registry": "local"
 		}
 	}
 }

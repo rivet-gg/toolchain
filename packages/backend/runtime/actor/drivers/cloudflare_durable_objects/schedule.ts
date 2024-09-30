@@ -15,7 +15,7 @@ export class CloudflareDurableObjectsSchedule implements ScheduleDriver {
 		const keys = await this.durableObject.storage.list({ prefix: "schedule:" });
 		const alarm = await this.durableObject.storage.getAlarm();
 		return {
-			keys,
+			keys: Object.fromEntries(keys),
 			alarm,
 		};
 	}
