@@ -46,7 +46,7 @@ pub fn kill_process_tree(pid_raw: u32) {
 		match fs::read_to_string(&proc_dir) {
 			Result::Ok(children) => {
 				for child_pid in children.split_whitespace() {
-					if let Ok(child_pid) = child_pid.parse::<u32>() {
+					if let Result::Ok(child_pid) = child_pid.parse::<u32>() {
 						kill_process_tree(child_pid);
 					}
 				}
