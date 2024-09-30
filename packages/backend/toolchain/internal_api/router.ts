@@ -1,11 +1,10 @@
 import { Hono, type MiddlewareHandler } from "@hono/hono";
 import { createFactory } from "@hono/hono/factory";
-import { serveStatic } from "@hono/hono/deno";
+import { serveStatic as baseServeStatic, type ServeStaticOptions } from "@hono/hono/serve-static";
 import { validator } from "@hono/hono/validator";
 import { resolve } from "@std/path";
-import { decodeBase64 } from "@std/encoding";
 import { InternalState } from "./state.ts";
-import { info, progress } from "../term/status.ts";
+import { info } from "../term/status.ts";
 import { ProjectManifest } from "../build/project_manifest.ts";
 import { ProjectConfigSchema } from "../config/project.ts";
 import { PROJECT_MANIFEST_PATH, projectDataPath } from "../project/mod.ts";
@@ -84,6 +83,30 @@ export const internalApi = new Hono<Env>()
 
 export type InternalApi = typeof internalApi;
 
+const serveStaticEditorArtifacts = <E extends Env = Env>(
+	options: ServeStaticOptions<E>,
+): MiddlewareHandler => {
+	return async function serveStatic(c, next) {
+		const getContent = async (path: string) => {
+			try {
+				const filePath = resolve(BACKEND_ROOT, "artifacts", "editor", ...path.split("/"));
+				console.log("req path", path);
+				console.log("file path", filePath);
+				return await Deno.readFile(filePath);
+			} catch (e) {
+				console.warn(`${e}`);
+			}
+			return null;
+		};
+		const pathResolve = (path: string) => path;
+		return baseServeStatic({
+			...options,
+			getContent,
+			pathResolve,
+		})(c, next);
+	};
+};
+
 export function createProjectInternalApiRouter(internalState: InternalState) {
 	const factory = createFactory<Env>({
 		initApp: (app) => {
@@ -99,7 +122,7 @@ export function createProjectInternalApiRouter(internalState: InternalState) {
 	app.route("/__internal", internalApi);
 	app.get(
 		"/*",
-		serveStatic({ root: resolve(BACKEND_ROOT, "artifacts", "editor") }),
+		serveStaticEditorArtifacts({ root: "/" }),
 	);
 
 	return app;
