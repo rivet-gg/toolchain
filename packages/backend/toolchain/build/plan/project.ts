@@ -418,10 +418,10 @@ export async function planProjectBuild(
 		// Run apply in parallel since it's non-interactive
 		for (const module of applyMigrations) {
 			// List all migrations
-			const migrationsCwd = resolve(module.path, "db", "migrations")
+			const migrationsCwd = resolve(module.path, "db", "migrations");
 			const migrationsRelative = await glob.glob("*.sql", { cwd: migrationsCwd });
 			assert(migrationsRelative.length > 0, `must have more than 1 migration for module ${module.name}`);
-			const migrations = migrationsRelative.map(x => resolve(migrationsCwd, x));
+			const migrations = migrationsRelative.map((x) => resolve(migrationsCwd, x));
 
 			buildStep(buildState, {
 				id: `module.${module.name}.migrate.apply`,
