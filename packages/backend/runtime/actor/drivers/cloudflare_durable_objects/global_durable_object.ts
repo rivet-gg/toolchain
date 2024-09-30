@@ -17,6 +17,7 @@ import { newTrace } from "../../../trace.ts";
 import { errorToLogEntries, log } from "../../../logger.ts";
 import { captureRpcOutput, RpcOutput } from "./rpc_output.ts";
 import { CloudflareDurableObjectsInstance } from "./instance.ts";
+import { serializeError } from "../../../error.ts";
 
 const KEYS = {
 	META: {
@@ -29,6 +30,9 @@ const KEYS = {
 		EVENT_PREFIX: "schedule:event:",
 		event(id: string): string {
 			return `${this.EVENT_PREFIX}${id}`;
+		},
+		alarmError(fn: string): string {
+			return `schedule:alarm_error:${fn}`;
 		},
 	},
 	STATE: "state",
@@ -426,11 +430,29 @@ export function buildGlobalDurableObjectClass(
 			for (const eventKey of eventKeys) {
 				const event = scheduleEvents.get(eventKey)!;
 				try {
-					// TODO: how do we handle this promise cleanly?
-					const res = this.callRpc({ fn: event.fn, request: event.request, trace: newTrace({ actorSchedule: {} }) });
-					if (res instanceof Promise) await res;
+					// Call function
+					const res = await this.callRpc({
+						fn: event.fn,
+						request: event.request,
+						trace: newTrace({ actorSchedule: {} }),
+					});
+
+					// Write error if needed
+					if ("error" in res.result) {
+						await this.ctx.storage.put(KEYS.SCHEDULE.alarmError(event.fn), {
+							error: res.result.error,
+							logs: res.logs,
+							timestamp: now,
+						});
+					}
 				} catch (err) {
 					log("error", "failed to run scheduled event", ["fn", event.fn], ...errorToLogEntries("error", err));
+
+					// Write internal error
+					await this.ctx.storage.put(KEYS.SCHEDULE.alarmError(event.fn), {
+						error: serializeError(err),
+						timestamp: now,
+					});
 				}
 				this.assertGeneration(generation);
 			}
