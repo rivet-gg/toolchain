@@ -292,7 +292,7 @@ impl ProcessManager {
 
 		#[cfg(windows)]
 		{
-			use windows::Win32::System::Threading::CREATE_NEW_PROCESS_GROUP;
+			use ::windows::Win32::System::Threading::CREATE_NEW_PROCESS_GROUP;
 			cmd.creation_flags(CREATE_NEW_PROCESS_GROUP.0);
 		}
 
