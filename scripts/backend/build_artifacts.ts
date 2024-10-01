@@ -2,7 +2,7 @@
 
 import { DRIZZLE_ORM_PACKAGE } from "../../packages/backend/toolchain/drizzle_consts.ts";
 import { resolve } from "@std/path";
-import { copy, exists } from "@std/fs";
+import { copy, exists, ensureDir } from "@std/fs";
 
 // Hack to allow Yarn to work on Windows
 const YARN_COMMAND = Deno.build.os === "windows" ? "cmd" : "yarn";
@@ -28,6 +28,13 @@ async function getPackageExports(
     (key) => !excludedSymbols.includes(key),
   );
   return symbols;
+}
+
+/**
+ * Get the target directory from the environment variable or use a default
+ */
+function getTargetDirectory() {
+  return Deno.env.get("ARTIFACTS_TARGET_DIR") ?? resolve(projectRoot(), "artifacts");
 }
 
 async function generateDrizzleOrmArtifacts() {
@@ -60,7 +67,9 @@ async function generateDrizzleOrmArtifacts() {
     ),
   };
 
-  const outputPath = resolve(projectRoot(), "artifacts", "drizzle_orm.json");
+  const targetDir = getTargetDirectory();
+  const outputPath = resolve(targetDir, "drizzle_orm.json");
+  await ensureDir(targetDir);
   await Deno.writeTextFile(
     outputPath,
     JSON.stringify({ exports }),
@@ -109,17 +118,19 @@ async function buildEditor() {
   }
 
   console.log(`[editor] Copying to artifacts`)
-  const artifactsPath = resolve(projectRoot(), "artifacts", "editor");
+  const targetDir = getTargetDirectory();
+  const artifactsPath = resolve(targetDir, "editor");
   if (await exists(artifactsPath, { isDirectory: true })) {
-	  await Deno.remove(artifactsPath, { recursive: true });
+    await Deno.remove(artifactsPath, { recursive: true });
   }
   await copy(editorOutDir, artifactsPath);
 }
 
 async function main() {
-	await Deno.mkdir(resolve(projectRoot(), "artifacts"), { recursive: true });
-    await generateDrizzleOrmArtifacts();
-    await buildEditor();
+  const targetDir = getTargetDirectory();
+  await ensureDir(targetDir);
+  await generateDrizzleOrmArtifacts();
+  await buildEditor();
 }
 
 main();
