@@ -2,7 +2,7 @@
 
 import { DRIZZLE_ORM_PACKAGE } from "../../packages/backend/toolchain/drizzle_consts.ts";
 import { resolve } from "@std/path";
-import { exists } from "@std/fs";
+import { copy, exists } from "@std/fs";
 
 // Hack to allow Yarn to work on Windows
 const YARN_COMMAND = Deno.build.os === "windows" ? "cmd" : "yarn";
@@ -113,7 +113,7 @@ async function buildEditor() {
   if (await exists(artifactsPath, { isDirectory: true })) {
 	  await Deno.remove(artifactsPath, { recursive: true });
   }
-  await Deno.rename(editorOutDir, artifactsPath)
+  await copy(editorOutDir, artifactsPath);
 }
 
 async function main() {
