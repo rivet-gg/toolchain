@@ -101,21 +101,21 @@ async function buildAndCopyCrossPlatform(outDir: string) {
     await Deno.remove(outDir, { recursive: true }).catch(() => {});
 
     const platforms = [
-        // {
-        //     name: "linux_x86_64",
-        //     target: "x86_64-unknown-linux-gnu",
-        //     files: ["rivet", "librivet_toolchain_ffi.so"],
-        // },
-        // {
-        //     name: "windows_x86_64",
-        //     target: "x86_64-pc-windows-gnu",
-        //     files: ["rivet.exe", "rivet_toolchain_ffi.dll"],
-        // },
-        // {
-        //     name: "macos_x86_64",
-        //     target: "x86_64-apple-darwin",
-        //     files: ["rivet", "librivet_toolchain_ffi.dylib"],
-        // },
+        {
+            name: "linux_x86_64",
+            target: "x86_64-unknown-linux-gnu",
+            files: ["rivet", "librivet_toolchain_ffi.so"],
+        },
+        {
+            name: "windows_x86_64",
+            target: "x86_64-pc-windows-gnu",
+            files: ["rivet.exe", "rivet_toolchain_ffi.dll"],
+        },
+        {
+            name: "macos_x86_64",
+            target: "x86_64-apple-darwin",
+            files: ["rivet", "librivet_toolchain_ffi.dylib"],
+        },
         {
             name: "macos_arm64",
             target: "aarch64-apple-darwin",
