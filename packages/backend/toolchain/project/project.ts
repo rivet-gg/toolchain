@@ -263,13 +263,13 @@ export async function fetchAndResolveModule(
 			// Has alias
 			throw new UserError(
 				`Module \`${pathModuleName}\` (alias of \`${moduleName}\`) not found in registry \`${registryName}\`.`,
-				{ path: projectConfigPath },
+				{ paths: [projectConfigPath, registry.path] },
 			);
 		} else {
 			// No alias
 			throw new UserError(
 				`Module \`${pathModuleName}\` not found in registry \`${registryName}\`.`,
-				{ path: projectConfigPath },
+				{ paths: [projectConfigPath, registry.path] },
 			);
 		}
 	}
