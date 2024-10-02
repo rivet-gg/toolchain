@@ -67,6 +67,11 @@ impl PostgresManager {
 	}
 
 	pub async fn start(&self) -> Result<()> {
+		ensure!(
+            !crate::util::os::is_root(),
+            "Cannot run this command as root.\n\nPlease run this command as a non-root user (using, e.g., \"su\").\n\nLearn more about user management here: https://linuxize.com/post/how-to-create-users-in-linux-using-the-useradd-command/#how-to-create-a-new-user-in-linux\n\nYou may need to run `rivet clean` before re-running this command as a non-root user.",
+        );
+
 		// Ensure data dir exists
 		tokio::fs::create_dir_all(paths::postgres_base(&self.data_dir)?).await?;
 
