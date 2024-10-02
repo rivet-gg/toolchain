@@ -352,6 +352,7 @@ export const OUTPUT_SOURCE_PATH = "output_source";
 export const ACTOR_CASE_CONVERSION_MAP_PATH = join(OUTPUT_SOURCE_PATH, "actorCaseConversion.ts");
 export const ACTOR_TYPEDEF_PATH = join(OUTPUT_SOURCE_PATH, "actors.d.ts");
 export const DENO_JSON_PATH = join(OUTPUT_SOURCE_PATH, "deno.jsonc");
+export const DENO_LOCK_PATH = join(OUTPUT_SOURCE_PATH, "deno.lock");
 export const DEPENDENCY_TYPEDEF_PATH = join(OUTPUT_SOURCE_PATH, "dependencies.d.ts");
 export const DEPENDENCY_CASE_CONVERSION = join(OUTPUT_SOURCE_PATH, "dependencyCaseConversion.ts");
 export const DRIZZLE_ORM_REEXPORT = join(OUTPUT_SOURCE_PATH, "drizzle_orm_reexport.ts");

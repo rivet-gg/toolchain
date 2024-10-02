@@ -11,8 +11,8 @@
 		// The deno.lock needs to be cleared to prevent from caching unused
 		// dependencies.
 		//
-    // strip_cross_platform removes files that are not cross-platform & deletes
-    // broken symlinks.
+		// strip_cross_platform removes files that are not cross-platform & deletes
+		// broken symlinks.
 		"cache": "deno task cache:purge && deno task cache:download",
 		"cache:purge": "rm -rf deno.lock vendor node_modules",
 		"cache:download": "deno cache cli/tasks/**/*.ts",
