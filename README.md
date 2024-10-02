@@ -1,4 +1,4 @@
-# Rivet Toolchain
+# ⛓️ Rivet Toolchain
 
 ## Installation
 
@@ -100,3 +100,47 @@ Options:
   -h, --help     Print help
   -V, --version  Print version
 ```
+
+## Quick Start
+
+After installation, you can quickly get started with Rivet by following these steps:
+
+1. Initialize a new Rivet project:
+   ```sh
+   rivet init
+   ```
+
+2. Start the development server:
+   ```sh
+   rivet dev
+   ```
+
+3. Deploy your game:
+   ```sh
+   rivet login
+   rivet deploy
+   ```
+## Troubleshooting
+
+If you encounter any issues while using Rivet, try the following:
+
+1. Ensure you're using the latest version of Rivet
+2. Use the `rivet clean` command to remove any artifacts that might be causing problems
+3. Join our [Discord](https://rivet.gg/discord) for support
+
+Please [open an issue](https://github.com/rivet-gg/toolchain/issues) for any issues you run in to.
+
+## Contributing
+
+We welcome contributions to the Rivet Toolchain! If you'd like to contribute, please:
+
+1. Fork the repository
+2. Create a new branch for your feature
+3. Make your changes
+4. Submit a pull request
+
+For more detailed information, see our [contribution guidelines](CONTRIBUTING.md).
+
+## License
+
+Rivet Toolchain is released under the [Apache 2.0 License](LICENSE).
