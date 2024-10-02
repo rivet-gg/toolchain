@@ -1,5 +1,6 @@
 pub mod build;
 pub mod gen_openapi;
+pub mod gen_sdk;
 pub mod show;
 
 use clap::Subcommand;
@@ -12,6 +13,8 @@ pub enum SubCommand {
 	Show(show::Opts),
 	#[clap(name = "generate-openapi")]
 	GenerateOpenApi(gen_openapi::Opts),
+	#[clap(name = "generate-sdk")]
+	GenerateSdk(gen_sdk::Opts),
 }
 
 impl SubCommand {
@@ -20,6 +23,7 @@ impl SubCommand {
 			SubCommand::Build(opts) => opts.execute().await,
 			SubCommand::Show(opts) => opts.execute().await,
 			SubCommand::GenerateOpenApi(opts) => opts.execute().await,
+			SubCommand::GenerateSdk(opts) => opts.execute().await,
 		}
 	}
 }
