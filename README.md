@@ -1,68 +1,56 @@
-# Rivet CLI
+# Rivet Toolchain
 
 ## Installation
 
 <details>
-<summary><b>macOS & Linux & WSL</b></summary>
-
-**Install latest version**
+<summary><b>Windows (x86)</b></summary>
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/main/install/unix.sh | sh
+curl -L https://releases.rivet.gg/toolchain/v2.0.0-rc.5/windows_x86_64/rivet.exe.zip -o rivet.exe.zip
+unzip rivet.exe.zip
 ```
 
-**Install specific version**
-
-We recommend specifying the CLI version in CI environments. This also allows you to install prerelease versions of the CLI.
-
-```sh
-export RIVET_CLI_VERSION="v1.0.0"
-curl -fsSL https://raw.githubusercontent.com/rivet-gg/cli/${RIVET_CLI_VERSION}/install/unix.sh | sh
-```
-
-_The `export` keyword is important. The variable `RIVET_CLI_VERSION` needs to be accessible inside the install script._
+Add the directory containing rivet.exe to your PATH environment variable.
 </details>
 
 <details>
-<summary><b>Windows (cmd)</b></summary>
-
-**Install latest version**
-
-```ps1
-powershell -Command "iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex"
-```
-
-**Install specific version**
-
-We recommend specifying the CLI version in CI environments. This also allows you to install prerelease versions of the CLI.
+<summary><b>macOS (Apple Silicon)</b></summary>
 
 ```sh
-powershell -Command "$env:RIVET_CLI_VERSION='v1.0.0'; iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex"
+curl -L https://releases.rivet.gg/toolchain/v2.0.0-rc.5/macos_arm64/rivet.zip -o rivet.zip
+unzip rivet.zip
+chmod +x rivet
+sudo mv rivet /usr/local/bin/
 ```
 </details>
 
 <details>
-<summary><b>Windows (PowerShell)</b></summary>
+<summary><b>macOS (Intel)</b></summary>
 
-**Install latest version**
-
-```
-iwr https://raw.githubusercontent.com/rivet-gg/cli/main/install/windows.ps1 -useb | iex
-```
-
-**Install specific version**
-
-We recommend specifying the CLI version in CI environments. This also allows you to install prerelease versions of the CLI.
-
-```ps1
-$env:RIVET_CLI_VERSION='v1.0.0'
-iwr https://raw.githubusercontent.com/rivet-gg/cli/$env:RIVET_CLI_VERSION/install/windows.ps1 -useb | iex
+```sh
+curl -L https://releases.rivet.gg/toolchain/v2.0.0-rc.5/macos_x86_64/rivet.zip -o rivet.zip
+unzip rivet.zip
+chmod +x rivet
+sudo mv rivet /usr/local/bin/
 ```
 </details>
 
 <details>
-<summary><b>Build from source (<code>cargo install</code>)</b></summary>
+<summary><b>Linux (x86)</b></summary>
 
+```sh
+curl -L https://releases.rivet.gg/toolchain/v2.0.0-rc.5/linux_x86_64/rivet.zip -o rivet.zip
+unzip rivet.zip
+chmod +x rivet
+sudo mv rivet /usr/local/bin/
+```
+</details>
+
+<details>
+<summary><b>Build from source (`cargo install`)</b></summary>
+
+1. [Install Rust](https://rustup.sh)
+2. Install Rivet
 
 ```sh
 cargo install --git=https://github.com/rivet-gg/toolchain rivet-cli
@@ -70,10 +58,13 @@ cargo install --git=https://github.com/rivet-gg/toolchain rivet-cli
 </details>
 
 <details>
-<summary><b>Build from source (<code>cargo build</code>)</b></summary>
+<summary><b>Build from source (`cargo build`)</b></summary>
+
+1. [Install Rust](https://rustup.sh)
+2. Install Rivet
 
 ```sh
-git clone https://github.com/rivet-gg/toolchain
+git clone https://github.com/rivet-gg/toolchain.git
 cd packages/cli
 cargo build
 ```
