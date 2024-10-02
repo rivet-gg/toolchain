@@ -1,5 +1,5 @@
 /// <reference path="./sdk/index.d.mts" />
-import { Rivet } from './sdk/index.mjs';
+import { Rivet } from 'rivet-sdk';
 
 const urlParams = new URLSearchParams(window.location.search);
 
