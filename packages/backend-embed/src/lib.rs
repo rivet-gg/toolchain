@@ -3,7 +3,7 @@ use include_dir::{include_dir, Dir};
 use std::path::PathBuf;
 use tokio::fs;
 
-const BACKEND_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../backend");
+const BACKEND_DIR: Dir = include_dir!("$BACKEND_PATH");
 const BACKEND_HASH: &'static str = env!("BACKEND_HASH");
 
 /// Return a path for the backend. If one does not exist, the backend dir will automatically be
