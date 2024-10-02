@@ -4,7 +4,7 @@ import * as glob from "glob";
 import { globalOptsSchema } from "../common.ts";
 import { build, DbDriver, Format, MigrateMode, Runtime } from "../../toolchain/build/mod.ts";
 import { watch } from "../../toolchain/watch/mod.ts";
-import { Project } from "../../toolchain/project/mod.ts";
+import { DENO_JSON_PATH, DENO_LOCK_PATH, Project, projectDataPath } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
 import { info } from "../../toolchain/term/status.ts";
 import { migrateModeSchema } from "./../util.ts";
@@ -52,6 +52,7 @@ runTask({
 
 				// Determine args
 				const args = [
+          "--config", projectDataPath(project, DENO_JSON_PATH), "--lock", projectDataPath(project, DENO_LOCK_PATH),
 					"--allow-env",
 					"--allow-net",
 					"--allow-read",

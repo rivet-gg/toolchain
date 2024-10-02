@@ -2,7 +2,7 @@ import { z } from "zod";
 import { globalOptsSchema } from "../common.ts";
 import { build, DbDriver, Format, MigrateMode, Runtime } from "../../toolchain/build/mod.ts";
 import { watch } from "../../toolchain/watch/mod.ts";
-import { Project } from "../../toolchain/project/mod.ts";
+import { DENO_JSON_PATH, DENO_LOCK_PATH, Project } from "../../toolchain/project/mod.ts";
 import { InternalError } from "../../toolchain/error/mod.ts";
 import { ENTRYPOINT_PATH, projectDataPath } from "../../toolchain/project/project.ts";
 import { migrateModeSchema } from "./../util.ts";
@@ -74,6 +74,7 @@ runTask({
 
 				// Determine args
 				const args = [
+          "--config", projectDataPath(project, DENO_JSON_PATH), "--lock", projectDataPath(project, DENO_LOCK_PATH),
 					"--allow-env",
 					"--allow-net",
 					"--allow-read",

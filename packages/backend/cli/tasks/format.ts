@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { globalOptsSchema, initProject } from "../common.ts";
-import { listSourceFiles } from "../../toolchain/project/mod.ts";
+import { DENO_JSON_PATH, DENO_LOCK_PATH, listSourceFiles, projectDataPath } from "../../toolchain/project/mod.ts";
 import { UserError } from "../../toolchain/error/mod.ts";
 import { denoExecutablePath } from "../../toolchain/utils/deno.ts";
 import { runTask } from "../task.ts";
@@ -19,6 +19,8 @@ runTask({
 		const cmd = await new Deno.Command(denoExecutablePath(), {
 			args: [
 				"fmt",
+        "--config", projectDataPath(project, DENO_JSON_PATH),
+        "--lock", projectDataPath(project, DENO_LOCK_PATH),
 				...input.check ? ["--check"] : [],
 				...sourceFiles,
 			],

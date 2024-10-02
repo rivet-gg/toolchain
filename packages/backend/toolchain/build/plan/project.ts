@@ -1,7 +1,7 @@
 import { BuildState, buildStep, waitForBuildPromises } from "../../build_state/mod.ts";
 import * as glob from "glob";
 import { relative, resolve } from "@std/path";
-import { Project } from "../../project/mod.ts";
+import { DENO_JSON_PATH, DENO_LOCK_PATH, Project } from "../../project/mod.ts";
 import { BuildOpts, Format, MigrateMode, Runtime } from "../mod.ts";
 import { planModuleBuild, planModuleParse } from "./module.ts";
 import { compileTypeHelpers } from "../gen/mod.ts";
@@ -322,7 +322,7 @@ export async function planProjectBuild(
 			description: "entrypoint.ts",
 			async build() {
 				const checkOutput = await new Deno.Command(denoExecutablePath(), {
-					args: ["check", "--quiet", projectDataPath(project, ENTRYPOINT_PATH)],
+					args: ["check", "--config", projectDataPath(project, DENO_JSON_PATH), "--lock", projectDataPath(project, DENO_LOCK_PATH), "--quiet", projectDataPath(project, ENTRYPOINT_PATH)],
 					signal,
 				}).output();
 				if (!checkOutput.success) {
