@@ -10,9 +10,21 @@ pub fn project_root() -> Result<PathBuf> {
 /// Returns a unique hash to the current project's path.
 pub fn project_path_hash() -> Result<String> {
 	let project_root = project_root()?;
+
+	// Build clean file name
+	let file_name = project_root
+		.file_name()
+		.map(|name| name.to_string_lossy().to_lowercase())
+		.unwrap_or_default()
+		.replace(|c: char| !c.is_alphanumeric(), "_");
+
+	// Hash the full path to ensure it's unique
 	let mut hasher = Sha1::new();
 	hasher.update(project_root.to_string_lossy().as_bytes());
-	Ok(format!("{:x}", hasher.finalize()))
+	let hash = format!("{:.16x}", hasher.finalize());
+	
+	// Return a human-readable name
+	Ok(format!("{}_{}", file_name, hash))
 }
 
 /// Where all data gets stored globally.
