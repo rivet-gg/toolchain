@@ -2,7 +2,6 @@
 	"extends": "./rivet.json",
 	"modules": {
 		"lobbies": {
-			"registry": "local",
 			"config": {
 				"lobbies": {
 					"regions": ["local"],
@@ -10,7 +9,7 @@
 						"localDevelopment": {
 							"tags": {},
 							"ports": {
-								"game": {"protocol": "http", "port": 7778}
+								"game": {"protocol": "http", "port": 7777}
 							}
 						}
 					}

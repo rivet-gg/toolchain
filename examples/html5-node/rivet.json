@@ -1,26 +1,14 @@
 {
-	"sdks": [{"output": "packages/rivet_sdk", "target": "typescript"}],
+	"sdks": [{"output": "packages/rivet-sdk", "target": "typescript"}],
 	"runtime": {
 		"cors": {
 			"origins": ["http://127.0.0.1:8080", "http://localhost:8080"]
 		}
 	},
-	"registries": {
-		"local": {
-			"local": {
-				"directory": "../../../modules/modules"
-			}
-		}
-	},
 	"modules": {
-		"rate_limit": {
-			"registry": "local"
-		},
-		"tokens": {
-			"registry": "local"
-		},
+		"rate_limit": {},
+		"tokens": {},
 		"lobbies": {
-			"registry": "local",
 			"config": {
 				"lobbies": {
 					"regions": ["atl"],
@@ -32,7 +20,7 @@
 							"ports": {
 								"game": {
 									"protocol": "https",
-									"internalPort": 7778
+									"internalPort": 7777
 								}
 							},
 							"resources": {
@@ -44,8 +32,6 @@
 				}
 			}
 		},
-		"rivet": {
-			"registry": "local"
-		}
+		"rivet": {}
 	}
 }
