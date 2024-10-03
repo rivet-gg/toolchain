@@ -12,9 +12,48 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_sha: ${{ steps.release.outputs.sha }}
+
     steps:
-        - uses: googleapis/release-please-action@v4
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            config-file: release-please-config.json
-            skip-github-release: true
+      - id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+
+  publish:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    name: Publish to Godot Asset Store
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: 1.46.1
+
+      - name: Build & Release
+        env:
+          OUTPUT_DIR: /tmp/artifacts/
+          TOOLCHAIN_VERSION: ${{ needs.release-please.outputs.tag_name }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          CROSS_DELETE_TARGET: 1
+        run: |
+          ./scripts/release.ts
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: rivet-plugin
+          path: /tmp/artifacts//*.zip
+
