@@ -1,5 +1,6 @@
 use anyhow::*;
 use tokio::process::Command;
+use std::collections::HashMap;
 
 use crate::util::task;
 
@@ -98,33 +99,47 @@ pub fn shell_cmd(cmd: &str) -> Command {
 }
 
 pub fn shell_cmd_std(cmd: &str) -> std::process::Command {
-	#[cfg(windows)]
-	{
-		use std::os::windows::process::CommandExt;
-		use windows::Win32::System::Threading::CREATE_NO_WINDOW;
-		let mut cmd = std::process::Command::new(cmd);
-		cmd.creation_flags(CREATE_NO_WINDOW.0);
-		cmd
-	}
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        use windows::Win32::System::Threading::CREATE_NO_WINDOW;
+        let mut cmd = std::process::Command::new(cmd);
+        cmd.creation_flags(CREATE_NO_WINDOW.0);
+        cmd
+    }
 
-	#[cfg(not(windows))]
-	{
-		// Load the user's profile & shell on Linux in order to ensure we have the correct $PATH
-		let shell = std::env::var("SHELL").unwrap_or_else(|_| String::from("/bin/sh"));
+    #[cfg(not(windows))]
+    {
+        // Load the env from the user's profile
+        let shell = std::env::var("SHELL").unwrap_or_else(|_| String::from("/bin/sh"));
+        let env_command = format!(
+            "{} -l -i -c 'env; echo ---ENVIRONMENT_END---'",
+            shell
+        );
+        let output = std::process::Command::new("sh")
+            .arg("-c")
+            .arg(&env_command)
+            .output()
+            .expect("Failed to execute profile loading command");
+        let env_output = String::from_utf8(output.stdout)
+            .expect("Failed to parse environment output");
 
-		let mut shell_cmd = std::process::Command::new(&shell);
-		shell_cmd
-			// Load profile
-			.arg("-l")
-			// Load rc file
-			.arg("-i")
-			.arg("-c")
-			// Will accept the cmd & all following args
-			.arg("\"$@\"")
-			// This arg is ignored
-			.arg("noop")
-			// Pass the actual command
-			.arg(cmd);
-		shell_cmd
-	}
+        // Parse env vars
+        let env_vars: HashMap<String, String> = env_output
+            .lines()
+            .take_while(|&line| line != "---ENVIRONMENT_END---")
+            .filter_map(|line| {
+                let mut parts = line.splitn(2, '=');
+                Some((
+                    parts.next()?.to_string(),
+                    parts.next()?.to_string(),
+                ))
+            })
+            .collect();
+
+        // Execute the actual command with the envs from the profile
+        let mut cmd = std::process::Command::new(cmd);
+        cmd.envs(&env_vars);
+        cmd
+    }
 }
