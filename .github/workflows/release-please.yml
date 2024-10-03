@@ -49,11 +49,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           CROSS_DELETE_TARGET: 1
         run: |
-          ./scripts/release.ts
+          ./scripts/release/release.ts
 
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v3
         with:
           name: rivet-plugin
-          path: /tmp/artifacts//*.zip
+          path: /tmp/artifacts/*.zip
 
