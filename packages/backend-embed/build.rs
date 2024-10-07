@@ -1,4 +1,5 @@
 use anyhow::*;
+use fs_extra::dir::{copy, CopyOptions};
 use merkle_hash::MerkleTree;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -28,16 +29,12 @@ async fn main() -> Result<()> {
 		fs::remove_dir_all(&out_backend_path).context("fs::remove_dir_all")?;
 	}
 
-	// TODO: Use native copy dir
-	let status = std::process::Command::new("cp")
-		.arg("-R")
-		.arg(&backend_path)
-		.arg(&out_backend_path)
-		.status()
-		.context("Failed to execute cp command")?;
-	if !status.success() {
-		return Err(anyhow!("cp command failed"));
-	}
+	// Copy backend directory to out_dir
+	let mut copy_options = CopyOptions::new();
+	copy_options.overwrite = true;
+	copy_options.copy_inside = true;
+	copy(&backend_path, &out_backend_path, &copy_options)
+		.with_context(|| format!("failed to copy directory from {} to {}", backend_path.display(), out_backend_path.display()))?;
 
 	// Install deno
 	let deno_dir = Path::new(&out_dir).join("deno");
@@ -63,6 +60,8 @@ async fn main() -> Result<()> {
 	let status = Command::new(&deno_exec.executable_path)
 		.arg("task")
 		.arg("prepare")
+		// Deno runs out of memory on Windows
+		.env("DENO_V8_FLAGS", "--max-heap-size=8192,--max-old-space-size=8192")
 		.current_dir(&out_backend_path)
 		.status()?;
 	if !status.success() {
