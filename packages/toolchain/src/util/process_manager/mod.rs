@@ -98,7 +98,7 @@ pub struct ProcessManager {
 impl ProcessManager {
 	pub fn new(key: &'static str, kill_grace: Duration) -> Arc<Self> {
 		let (status_tx, status_rx) = watch::channel(ProcessStatus::NotRunning);
-		let (event_tx, event_rx) = broadcast::channel(16);
+		let (event_tx, event_rx) = broadcast::channel(1024);
 		Arc::new(Self {
 			key,
 			kill_grace,
@@ -175,13 +175,19 @@ impl ProcessManager {
 			}
 
 			// Wait for events
-			while let Result::Ok(event) = event_rx.recv().await {
-				match event {
-					ProcessEvent::Log(ProcessLog::Stdout(line)) => {
+			loop {
+				match event_rx.recv().await {
+					Result::Ok(ProcessEvent::Log(ProcessLog::Stdout(line))) => {
 						task_ctx.log(format!("[stdout] {line}"));
 					}
-					ProcessEvent::Log(ProcessLog::Stderr(line)) => {
+					Result::Ok(ProcessEvent::Log(ProcessLog::Stderr(line))) => {
 						task_ctx.log(format!("[stderr] {line}"));
+					}
+					Err(broadcast::error::RecvError::Lagged(amount)) => {
+						eprintln!("event_rx lagged by {amount}");
+					}
+					Err(broadcast::error::RecvError::Closed) => {
+						break;
 					}
 				}
 			}
