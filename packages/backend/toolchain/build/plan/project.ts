@@ -322,7 +322,15 @@ export async function planProjectBuild(
 			description: "entrypoint.ts",
 			async build() {
 				const checkOutput = await new Deno.Command(denoExecutablePath(), {
-					args: ["check", "--config", projectDataPath(project, DENO_JSON_PATH), "--lock", projectDataPath(project, DENO_LOCK_PATH), "--quiet", projectDataPath(project, ENTRYPOINT_PATH)],
+					args: [
+						"check",
+						"--config",
+						projectDataPath(project, DENO_JSON_PATH),
+						"--lock",
+						projectDataPath(project, DENO_LOCK_PATH),
+						"--quiet",
+						projectDataPath(project, ENTRYPOINT_PATH),
+					],
 					signal,
 				}).output();
 				if (!checkOutput.success) {
