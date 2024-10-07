@@ -12,7 +12,7 @@ interface Platform {
 const REPO_DIR = resolve(import.meta.dirname!, "..", "..");
 const DOCKER_IMAGE = "rust-cross-compiler";
 const DOCKERFILE = `
-FROM rust:1.80
+FROM rust:1.81
 RUN apt-get update && apt-get install -y \\
     gcc-mingw-w64-x86-64 \\
     gcc-x86-64-linux-gnu \\
@@ -106,26 +106,26 @@ async function buildAndCopyCrossPlatform(outDir: string, packages: string[] = []
     console.log("Building and copying cross-platform...");
     await Deno.remove(outDir, { recursive: true }).catch(() => {});
 
-    const platforms = [
-        {
-            name: "linux_x86_64",
-            target: "x86_64-unknown-linux-gnu",
-            files: ["rivet", "librivet_toolchain_ffi.so"],
-        },
+    const platforms: Platform[] = [
+        // {
+        //     name: "linux_x86_64",
+        //     target: "x86_64-unknown-linux-gnu",
+        //     files: [],
+        // },
         {
             name: "windows_x86_64",
             target: "x86_64-pc-windows-gnu",
-            files: ["rivet.exe", "rivet_toolchain_ffi.dll"],
+            files: [],
         },
-        {
-            name: "macos_x86_64",
-            target: "x86_64-apple-darwin",
-            files: ["rivet", "librivet_toolchain_ffi.dylib"],
-        },
+        // {
+        //     name: "macos_x86_64",
+        //     target: "x86_64-apple-darwin",
+        //     files: [],
+        // },
         {
             name: "macos_arm64",
             target: "aarch64-apple-darwin",
-            files: ["rivet", "librivet_toolchain_ffi.dylib"],
+            files: [],
         },
     ];
 
@@ -152,6 +152,28 @@ async function buildAndCopyCrossPlatform(outDir: string, packages: string[] = []
 
     for (const platform of platforms) {
         console.log(`Building for ${platform.name}...`);
+        const dockerArgs = [
+            "run",
+            "--rm",
+            "-v",
+            `${REPO_DIR}:/app`,
+            "-e",
+            `OVERRIDE_TARGET=${platform.target}`,
+        ];
+
+        // Add GITHUB_TOKEN if it exists
+        const githubToken = Deno.env.get("GITHUB_TOKEN");
+        if (githubToken) {
+            dockerArgs.push("-e", `GITHUB_TOKEN=${githubToken}`);
+        }
+
+        dockerArgs.push(
+            DOCKER_IMAGE,
+            "/bin/sh",
+            "-c",
+            `cargo build --manifest-path Cargo.toml --target ${platform.target} --release && chown -R ${Deno.uid()}:${Deno.gid()} /app/target`,
+        );
+
         const command = new Deno.Command("docker", {
             args: dockerArgs,
             stdin: "inherit",

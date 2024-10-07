@@ -2069,7 +2069,7 @@ dependencies = [
 [[package]]
 name = "postgresql_archive"
 version = "0.17.2"
-source = "git+https://github.com/rivet-gg/postgresql-embedded?rev=d62273c226a8558a2c5dd34135cabb35e14d4c25#d62273c226a8558a2c5dd34135cabb35e14d4c25"
+source = "git+https://github.com/rivet-gg/postgresql-embedded?rev=569e7f6b8e54511aee025bd85ad7178ab80ac6a2#569e7f6b8e54511aee025bd85ad7178ab80ac6a2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2102,7 +2102,7 @@ dependencies = [
 [[package]]
 name = "postgresql_commands"
 version = "0.17.2"
-source = "git+https://github.com/rivet-gg/postgresql-embedded?rev=d62273c226a8558a2c5dd34135cabb35e14d4c25#d62273c226a8558a2c5dd34135cabb35e14d4c25"
+source = "git+https://github.com/rivet-gg/postgresql-embedded?rev=569e7f6b8e54511aee025bd85ad7178ab80ac6a2#569e7f6b8e54511aee025bd85ad7178ab80ac6a2"
 dependencies = [
  "anyhow",
  "thiserror",
@@ -2112,7 +2112,7 @@ dependencies = [
 [[package]]
 name = "postgresql_embedded"
 version = "0.17.2"
-source = "git+https://github.com/rivet-gg/postgresql-embedded?rev=d62273c226a8558a2c5dd34135cabb35e14d4c25#d62273c226a8558a2c5dd34135cabb35e14d4c25"
+source = "git+https://github.com/rivet-gg/postgresql-embedded?rev=569e7f6b8e54511aee025bd85ad7178ab80ac6a2#569e7f6b8e54511aee025bd85ad7178ab80ac6a2"
 dependencies = [
  "anyhow",
  "home",
