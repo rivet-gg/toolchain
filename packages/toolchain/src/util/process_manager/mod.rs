@@ -111,6 +111,7 @@ impl ProcessManager {
 		})
 	}
 
+	/// Starts a new task or hooks in to the existing task.
 	pub async fn start<CommandFut>(
 		self: &Arc<Self>,
 		task_ctx: TaskCtx,
@@ -156,6 +157,20 @@ impl ProcessManager {
 			self.spawn_process(command_opts).await?;
 		};
 
+		self.hook_inner(task_ctx).await
+	}
+
+	/// Hooks in to an existing task, if exists.
+	pub async fn hook(self: &Arc<Self>, task_ctx: TaskCtx) -> Result<Option<i32>> {
+		// Check if task exists already
+		if !self.status_rx.borrow().is_running() {
+			return Ok(None);
+		}
+
+		self.hook_inner(task_ctx).await
+	}
+
+	async fn hook_inner(self: &Arc<Self>, task_ctx: TaskCtx) -> Result<Option<i32>> {
 		// Write events to task
 		let mut event_rx = self.event_tx.subscribe();
 		let log_fut = async {

@@ -18,6 +18,7 @@ crate::task_registry!(
 	backend::stop::Task,
 	deploy::Task,
 	exec_command::Task,
+	game_server::hook::Task,
 	game_server::start::Task,
 	game_server::stop::Task,
 	get_bootstrap_data::Task,
