@@ -1,13 +1,11 @@
 use anyhow::*;
 use lazy_static::lazy_static;
-use postgresql_embedded::{PostgreSQL, Settings, VersionReq};
+use postgresql_embedded::{PostgreSQL, Settings};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt, path::PathBuf, sync::Arc, time::Duration};
 use tokio::{net::TcpStream, sync::Mutex};
 
 use crate::paths;
-
-const DEFAULT_POSTGRES_VERSION: &str = "=16.4.0";
 
 lazy_static! {
 	/// Holds the Postgres managers for each data dir.
@@ -45,7 +43,6 @@ impl PostgresManager {
 		let state = read_state(data_dir).await?;
 
 		let mut settings = Settings::new();
-		settings.version = VersionReq::parse(DEFAULT_POSTGRES_VERSION).unwrap();
 		settings.installation_dir = paths::postgres_install_dir(data_dir)?;
 		settings.host = "127.0.0.1".into();
 		if let Some(port) = state.port {

@@ -3,6 +3,12 @@
 import { resolve } from "jsr:@std/path";
 import { ensureDir } from "jsr:@std/fs";
 
+interface Platform {
+    name: string;
+    target: string;
+    files: string[];
+}
+
 const REPO_DIR = resolve(import.meta.dirname!, "..", "..");
 const DOCKER_IMAGE = "rust-cross-compiler";
 const DOCKERFILE = `
@@ -96,7 +102,7 @@ async function buildDockerImage() {
     }
 }
 
-async function buildAndCopyCrossPlatform(outDir: string) {
+async function buildAndCopyCrossPlatform(outDir: string, packages: string[] = []) {
     console.log("Building and copying cross-platform...");
     await Deno.remove(outDir, { recursive: true }).catch(() => {});
 
@@ -123,21 +129,31 @@ async function buildAndCopyCrossPlatform(outDir: string) {
         },
     ];
 
+    // Determine which files to include based on the packages
+    const includeAll = packages.length === 0 || packages.includes("all");
+    for (const platform of platforms) {
+        if (includeAll || packages.includes("rivet-cli")) {
+            platform.files.push(platform.name.includes("windows") ? "rivet.exe" : "rivet");
+        }
+        if (includeAll || packages.includes("rivet-toolchain-ffi")) {
+            let ffiLibrary: string;
+            if (platform.name.includes("windows")) {
+                ffiLibrary = "rivet_toolchain_ffi.dll";
+            } else if (platform.name.includes("linux")) {
+                ffiLibrary = "librivet_toolchain_ffi.so";
+            } else if (platform.name.includes("macos")) {
+                ffiLibrary = "librivet_toolchain_ffi.dylib";
+            } else {
+                throw new Error(`Unsupported platform: ${platform.name}`);
+            }
+            platform.files.push(ffiLibrary);
+        }
+    }
+
     for (const platform of platforms) {
         console.log(`Building for ${platform.name}...`);
         const command = new Deno.Command("docker", {
-            args: [
-                "run",
-                "--rm",
-                "-v",
-                `${REPO_DIR}:/app`,
-                "-e",
-                `OVERRIDE_TARGET=${platform.target}`,
-                DOCKER_IMAGE,
-                "/bin/sh",
-                "-c",
-                `cargo build --manifest-path Cargo.toml --target ${platform.target} --release && chown -R ${Deno.uid()}:${Deno.gid()} /app/target`,
-            ],
+            args: dockerArgs,
             stdin: "inherit",
             stdout: "inherit",
             stderr: "inherit",
@@ -172,8 +188,7 @@ async function buildAndCopyCrossPlatform(outDir: string) {
     }
 }
 
-export async function buildCross(outDir: string) {
+export async function buildCross(outDir: string, packages: string[] = []) {
     await buildDockerImage();
-    await buildAndCopyCrossPlatform(outDir);
+    await buildAndCopyCrossPlatform(outDir, packages);
 }
-
