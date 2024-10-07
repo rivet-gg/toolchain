@@ -39,10 +39,13 @@ fn fetch_release_data() -> Result<Value, Box<dyn std::error::Error>> {
 	println!("Fetching release information from: {}", release_url);
 
 	let client = Client::new();
-	let response = client
-		.get(&release_url)
-		.header(reqwest::header::USER_AGENT, USER_AGENT)
-		.send()?;
+	let mut request = client.get(&release_url).header(reqwest::header::USER_AGENT, USER_AGENT);
+
+	if let Ok(token) = env::var("GITHUB_TOKEN") {
+		request = request.header(reqwest::header::AUTHORIZATION, format!("token {}", token));
+	}
+
+	let response = request.send()?;
 	let status = response.status();
 	if !status.is_success() {
 		let error_text = response.text()?;
@@ -93,11 +96,13 @@ fn download_binary_if_needed(
 		println!("Downloading Deno binary from: {}", download_url);
 
 		let client = Client::new();
-		let response = client
-			.get(download_url)
-			.header(reqwest::header::USER_AGENT, USER_AGENT)
-			.send()?
-			.error_for_status()?;
+		let mut request = client.get(download_url).header(reqwest::header::USER_AGENT, USER_AGENT);
+
+		if let Ok(token) = env::var("GITHUB_TOKEN") {
+			request = request.header(reqwest::header::AUTHORIZATION, format!("token {}", token));
+		}
+
+		let response = request.send()?.error_for_status()?;
 
 		let mut file = fs::File::create(&zip_path)?;
 		std::io::copy(&mut response.bytes()?.as_ref(), &mut file)?;
