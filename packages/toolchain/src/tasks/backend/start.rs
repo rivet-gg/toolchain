@@ -66,7 +66,6 @@ impl task::Task for Task {
 				.await?;
 			cmd_env.insert("RIVET_BACKEND_PORT".into(), backend_port.to_string());
 			cmd_env.insert("RIVET_BACKEND_HOSTNAME".into(), "0.0.0.0".to_string());
-			cmd_env.insert("RIVET_BACKEND_TERM_COLOR".into(), "never".into());
 			cmd_env.insert("RIVET_EDITOR_PORT".into(), editor_port.to_string());
 
 			// Build command
