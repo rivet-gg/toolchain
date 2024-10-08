@@ -22,7 +22,7 @@ export async function generateSdk(
 ) {
 	const targetString = targetToString(sdk.target);
 	const sdkGenPath = resolve(projectDataPath(project, SDK_PATH), targetString);
-  const sdkOutput = resolve(Deno.cwd(), sdk.output);
+	const sdkOutput = resolve(Deno.cwd(), sdk.output);
 
 	// Clear artifacts
 	try {
@@ -35,52 +35,52 @@ export async function generateSdk(
 
 	progress("Building SDK", targetString);
 
-  // Generate files
-  //
-  // preservePaths is used for preserving generated artifacts from things like
-  // `npm install`.
-  let preservePaths: string[];
+	// Generate files
+	//
+	// preservePaths is used for preserving generated artifacts from things like
+	// `npm install`.
+	let preservePaths: string[];
 	if (sdk.target == SdkTarget.TypeScript) {
-    preservePaths = ["dist"];
+		preservePaths = ["dist"];
 		await generateTypescript(project, sdkGenPath);
 	} else if (sdk.target == SdkTarget.Unity) {
-    preservePaths = [];
+		preservePaths = [];
 		await generateUnity(project, sdkGenPath);
 	} else if (sdk.target == SdkTarget.Godot) {
-    preservePaths = [];
+		preservePaths = [];
 		await generateGodot(project, sdkGenPath);
 	} else {
 		throw new UnreachableError(sdk.target);
 	}
 
-  // Delete target dir
-  const preserveTempDir = await Deno.makeTempDir();
+	// Delete target dir
+	const preserveTempDir = await Deno.makeTempDir();
 	if (await exists(sdkOutput, { isDirectory: true })) {
-    // Preserve files before deleting the output path
-    for (const path of preservePaths) {
-      const srcPreservePath = resolve(sdkOutput, path);
-      const dstPreservePath = resolve(preserveTempDir, path);
-      if (await exists(srcPreservePath)) {
-        await move(srcPreservePath, dstPreservePath);
-      } else {
-      }
-    }
+		// Preserve files before deleting the output path
+		for (const path of preservePaths) {
+			const srcPreservePath = resolve(sdkOutput, path);
+			const dstPreservePath = resolve(preserveTempDir, path);
+			if (await exists(srcPreservePath)) {
+				await move(srcPreservePath, dstPreservePath);
+			} else {
+			}
+		}
 
-    // Remove output
+		// Remove output
 		await Deno.remove(sdkOutput, { recursive: true });
 	}
 
-  // Move generated SDK
+	// Move generated SDK
 	await move(sdkGenPath, sdkOutput, { overwrite: true });
 
-  // Move back preserved files
-  for (const path of preservePaths) {
-    const srcPreservePath = resolve(preserveTempDir, path);
-    const dstPreservePath = resolve(sdkOutput, path);
-    if (await exists(srcPreservePath, { isDirectory: true })) {
-      await move(srcPreservePath, dstPreservePath, { overwrite: false });
-    }
-  }
+	// Move back preserved files
+	for (const path of preservePaths) {
+		const srcPreservePath = resolve(preserveTempDir, path);
+		const dstPreservePath = resolve(sdkOutput, path);
+		if (await exists(srcPreservePath, { isDirectory: true })) {
+			await move(srcPreservePath, dstPreservePath, { overwrite: false });
+		}
+	}
 
 	success("Success");
 }

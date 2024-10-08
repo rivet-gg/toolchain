@@ -19,7 +19,10 @@ runTask({
 		const cmd = await new Deno.Command(denoExecutablePath(), {
 			args: [
 				"lint",
-        "--config", projectDataPath(project, DENO_JSON_PATH), "--lock", projectDataPath(project, DENO_LOCK_PATH),
+				"--config",
+				projectDataPath(project, DENO_JSON_PATH),
+				"--lock",
+				projectDataPath(project, DENO_LOCK_PATH),
 				...sourceFiles,
 			],
 			stdout: "inherit",
@@ -35,4 +38,3 @@ runTask({
 function projectDataPath(project: Project, DENO_JSON_PATH: any): string {
 	throw new Error("Function not implemented.");
 }
-

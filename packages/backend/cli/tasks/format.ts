@@ -19,8 +19,10 @@ runTask({
 		const cmd = await new Deno.Command(denoExecutablePath(), {
 			args: [
 				"fmt",
-        "--config", projectDataPath(project, DENO_JSON_PATH),
-        "--lock", projectDataPath(project, DENO_LOCK_PATH),
+				"--config",
+				projectDataPath(project, DENO_JSON_PATH),
+				"--lock",
+				projectDataPath(project, DENO_LOCK_PATH),
 				...input.check ? ["--check"] : [],
 				...sourceFiles,
 			],

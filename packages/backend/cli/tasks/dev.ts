@@ -74,7 +74,10 @@ runTask({
 
 				// Determine args
 				const args = [
-          "--config", projectDataPath(project, DENO_JSON_PATH), "--lock", projectDataPath(project, DENO_LOCK_PATH),
+					"--config",
+					projectDataPath(project, DENO_JSON_PATH),
+					"--lock",
+					projectDataPath(project, DENO_LOCK_PATH),
 					"--allow-env",
 					"--allow-net",
 					"--allow-read",
