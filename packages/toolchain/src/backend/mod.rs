@@ -64,6 +64,8 @@ pub async fn build_backend_command_raw(mut opts: BackendCommandOpts) -> Result<C
 		"BACKEND_DATA_DIR".into(),
 		backend_data_dir.display().to_string(),
 	);
+	opts.env
+		.insert("RIVET_BACKEND_TERM_COLOR".into(), "never".into());
 
 	// Add development Postgres URL if not already specified
 	//
