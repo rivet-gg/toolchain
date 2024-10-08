@@ -38,7 +38,7 @@ sysinfo = "0.30.0"
 portpicker = "0.1"
 tabled = "0.8.0"
 tar = "0.4.40"
-tempfile = "3.2"
+tempfile = "3.13.0"
 term_size = "0.3.2"
 thiserror = "1.0"
 tokio = { version = "1.40.0", default-features = false, features = ["fs", "macros", "process", "rt", "io-util"] }
@@ -57,7 +57,12 @@ rivet-deno-embed = { path = "../deno-embed" }
 rivet-backend-embed = { path = "../backend-embed" }
 lazy_static = "1.5.0"
 sha1 = "0.10.6"
-postgresql_embedded = { version = "0.16.3", features = ["rustls-tls", "theseus"], default-features = false}
+
+[dependencies.postgresql_embedded]
+git = "https://github.com/rivet-gg/postgresql-embedded"
+rev = "569e7f6b8e54511aee025bd85ad7178ab80ac6a2"
+features = ["rustls-tls", "theseus", "bundled"]
+default-features = false
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }
