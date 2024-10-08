@@ -123,7 +123,7 @@ pub async fn build_image(
 			.await?;
 		}
 		DockerBuildMethod::Buildx => {
-			let builder_name = "rivet_cli";
+			let builder_name = "rivet_toolchain";
 
 			// Determine if needs to create a new builder
 			let mut inspect_cmd = shell_cmd("docker");
