@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
@@ -8,6 +10,7 @@ pub struct Input {
 	pub cmd: String,
 	pub args: Vec<String>,
 	pub cwd: String,
+	pub envs: HashMap<String, String>,
 }
 
 #[derive(Serialize)]
@@ -31,7 +34,7 @@ impl task::Task for Task {
 				Ok(CommandOpts {
 					command: input.cmd,
 					args: input.args,
-					envs: Vec::new(),
+					envs: input.envs.into_iter().collect(),
 					current_dir: input.cwd,
 				})
 			})
