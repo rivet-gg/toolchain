@@ -4,9 +4,9 @@ import { resolve } from "jsr:@std/path";
 import { ensureDir } from "jsr:@std/fs";
 
 interface Platform {
-    name: string;
-    target: string;
-    files: string[];
+	name: string;
+	target: string;
+	files: string[];
 }
 
 const REPO_DIR = resolve(import.meta.dirname!, "..", "..");
@@ -87,130 +87,141 @@ ar = "aarch64-apple-darwin20.4-ar"\\n\\
 `;
 
 async function buildDockerImage() {
-    console.log("Building Docker image...");
-    const command = new Deno.Command("docker", {
-        args: ["build", "-t", DOCKER_IMAGE, "-"],
-        stdin: "piped",
-    });
-    const process = command.spawn();
-    const writer = process.stdin.getWriter();
-    await writer.write(new TextEncoder().encode(DOCKERFILE));
-    await writer.close();
-    const { code } = await process.output();
-    if (code !== 0) {
-        throw new Error("Docker build failed");
-    }
+	console.log("Building Docker image...");
+	const command = new Deno.Command("docker", {
+		args: ["build", "-t", DOCKER_IMAGE, "-"],
+		stdin: "piped",
+	});
+	const process = command.spawn();
+	const writer = process.stdin.getWriter();
+	await writer.write(new TextEncoder().encode(DOCKERFILE));
+	await writer.close();
+	const { code } = await process.output();
+	if (code !== 0) {
+		throw new Error("Docker build failed");
+	}
 }
 
-async function buildAndCopyCrossPlatform(outDir: string, packages: string[] = []) {
-    console.log("Building and copying cross-platform...");
-    await Deno.remove(outDir, { recursive: true }).catch(() => {});
+async function buildAndCopyCrossPlatform(
+	outDir: string,
+	packages: string[] = [],
+) {
+	console.log("Building and copying cross-platform...");
+	await Deno.remove(outDir, { recursive: true }).catch(() => {});
 
-    const platforms: Platform[] = [
-        // {
-        //     name: "linux_x86_64",
-        //     target: "x86_64-unknown-linux-gnu",
-        //     files: [],
-        // },
-        {
-            name: "windows_x86_64",
-            target: "x86_64-pc-windows-gnu",
-            files: [],
-        },
-        // {
-        //     name: "macos_x86_64",
-        //     target: "x86_64-apple-darwin",
-        //     files: [],
-        // },
-        {
-            name: "macos_arm64",
-            target: "aarch64-apple-darwin",
-            files: [],
-        },
-    ];
+	const platforms: Platform[] = [
+		// {
+		//     name: "linux_x86_64",
+		//     target: "x86_64-unknown-linux-gnu",
+		//     files: [],
+		// },
+		{
+			name: "windows_x86_64",
+			target: "x86_64-pc-windows-gnu",
+			files: [],
+		},
+		// {
+		//     name: "macos_x86_64",
+		//     target: "x86_64-apple-darwin",
+		//     files: [],
+		// },
+		{
+			name: "macos_arm64",
+			target: "aarch64-apple-darwin",
+			files: [],
+		},
+	];
 
-    // Determine which files to include based on the packages
-    const includeAll = packages.length === 0 || packages.includes("all");
-    for (const platform of platforms) {
-        if (includeAll || packages.includes("rivet-cli")) {
-            platform.files.push(platform.name.includes("windows") ? "rivet.exe" : "rivet");
-        }
-        if (includeAll || packages.includes("rivet-toolchain-ffi")) {
-            let ffiLibrary: string;
-            if (platform.name.includes("windows")) {
-                ffiLibrary = "rivet_toolchain_ffi.dll";
-            } else if (platform.name.includes("linux")) {
-                ffiLibrary = "librivet_toolchain_ffi.so";
-            } else if (platform.name.includes("macos")) {
-                ffiLibrary = "librivet_toolchain_ffi.dylib";
-            } else {
-                throw new Error(`Unsupported platform: ${platform.name}`);
-            }
-            platform.files.push(ffiLibrary);
-        }
-    }
+	// Determine which files to include based on the packages
+	const includeAll = packages.length === 0 || packages.includes("all");
+	for (const platform of platforms) {
+		if (includeAll || packages.includes("rivet-cli")) {
+			platform.files.push(
+				platform.name.includes("windows") ? "rivet.exe" : "rivet",
+			);
+		}
+		if (includeAll || packages.includes("rivet-toolchain-ffi")) {
+			let ffiLibrary: string;
+			if (platform.name.includes("windows")) {
+				ffiLibrary = "rivet_toolchain_ffi.dll";
+			} else if (platform.name.includes("linux")) {
+				ffiLibrary = "librivet_toolchain_ffi.so";
+			} else if (platform.name.includes("macos")) {
+				ffiLibrary = "librivet_toolchain_ffi.dylib";
+			} else {
+				throw new Error(`Unsupported platform: ${platform.name}`);
+			}
+			platform.files.push(ffiLibrary);
+		}
+	}
 
-    for (const platform of platforms) {
-        console.log(`Building for ${platform.name}...`);
-        const dockerArgs = [
-            "run",
-            "--rm",
-            "-v",
-            `${REPO_DIR}:/app`,
-            "-e",
-            `OVERRIDE_TARGET=${platform.target}`,
-        ];
+	for (const platform of platforms) {
+		console.log(`Building for ${platform.name}...`);
+		const dockerArgs = [
+			"run",
+			"--rm",
+			"-v",
+			`${REPO_DIR}:/app`,
+			"-e",
+			`OVERRIDE_TARGET=${platform.target}`,
+		];
 
-        // Add GITHUB_TOKEN if it exists
-        const githubToken = Deno.env.get("GITHUB_TOKEN");
-        if (githubToken) {
-            dockerArgs.push("-e", `GITHUB_TOKEN=${githubToken}`);
-        }
+		// Add GITHUB_TOKEN if it exists
+		const githubToken = Deno.env.get("GITHUB_TOKEN");
+		if (githubToken) {
+			dockerArgs.push("-e", `GITHUB_TOKEN=${githubToken}`);
+		}
 
-        dockerArgs.push(
-            DOCKER_IMAGE,
-            "/bin/sh",
-            "-c",
-            `cargo build --manifest-path Cargo.toml --target ${platform.target} --release && chown -R ${Deno.uid()}:${Deno.gid()} /app/target`,
-        );
+		dockerArgs.push(
+			DOCKER_IMAGE,
+			"/bin/sh",
+			"-c",
+			`cargo build -vv --manifest-path Cargo.toml --target ${platform.target} --release && chown -R ${Deno.uid()}:${Deno.gid()} /app/target`,
+		);
 
-        const command = new Deno.Command("docker", {
-            args: dockerArgs,
-            stdin: "inherit",
-            stdout: "inherit",
-            stderr: "inherit",
-        });
+		const command = new Deno.Command("docker", {
+			args: dockerArgs,
+			stdin: "inherit",
+			stdout: "inherit",
+			stderr: "inherit",
+		});
 
-        const { code } = await command.output();
+		const { code } = await command.output();
 
-        if (code !== 0) {
-            throw new Error(`Build failed for ${platform.name}`);
-        }
+		if (code !== 0) {
+			throw new Error(`Build failed for ${platform.name}`);
+		}
 
-        for (const file of platform.files) {
-            const srcPath = resolve(
-                REPO_DIR,
-                "target",
-                platform.target,
-                "release",
-                file,
-            );
-            const destPath = resolve(REPO_DIR, outDir, platform.name, file);
-            await ensureDir(resolve(REPO_DIR, outDir, platform.name));
-            await Deno.copyFile(srcPath, destPath);
-            console.log(`Copied ${srcPath} to ${destPath}`);
-        }
+		for (const file of platform.files) {
+			const srcPath = resolve(
+				REPO_DIR,
+				"target",
+				platform.target,
+				"release",
+				file,
+			);
+			const destPath = resolve(REPO_DIR, outDir, platform.name, file);
+			await ensureDir(resolve(REPO_DIR, outDir, platform.name));
+			await Deno.copyFile(srcPath, destPath);
+			console.log(`Copied ${srcPath} to ${destPath}`);
+		}
 
-        // Delete target if needed
-        if (Deno.env.get("CROSS_DELETE_TARGET") == "1") {
-            const targetPath = resolve(REPO_DIR, "target", platform.target);
-            await Deno.remove(targetPath, { recursive: true });
-            console.log(`Deleted ${targetPath}`);
-        }
-    }
+		// Delete target if needed
+		if (Deno.env.get("CROSS_DELETE_TARGET") == "1") {
+			const targetPath = resolve(REPO_DIR, "target", platform.target);
+			await Deno.remove(targetPath, { recursive: true });
+			console.log(`Deleted ${targetPath}`);
+		}
+	}
 }
 
 export async function buildCross(outDir: string, packages: string[] = []) {
-    await buildDockerImage();
-    await buildAndCopyCrossPlatform(outDir, packages);
+	await buildDockerImage();
+	await buildAndCopyCrossPlatform(outDir, packages);
+}
+
+if (import.meta.main) {
+	const dir = await Deno.makeTempDir();
+  console.log(dir);
+	await buildCross(dir);
 }
