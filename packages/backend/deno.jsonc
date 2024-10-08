@@ -7,19 +7,14 @@
 		"check": "deno check cli/**/*.ts toolchain/**/*.ts runtime/**/*.ts",
 
 		// Remove old vendored files in order to ensure a consistent cache.
-		//
-		// The deno.lock needs to be cleared to prevent from caching unused
-		// dependencies.
-		//
-		// strip_cross_platform removes files that are not cross-platform & deletes
-		// broken symlinks.
 		"cache": "deno task cache:purge && deno task cache:download",
-		"cache:purge": "rm -rf deno.lock vendor node_modules",
+		"cache:purge": "rm -rf vendor node_modules",
 		"cache:download": "deno cache cli/tasks/**/*.ts",
 
-		// Cache must be the last step in order to prevent unwanted extra cached
-		// files
-		"prepare": "deno task format && deno task check && deno task cache",
+    // Clear cache first in order to have as clean an environment as possible.
+    // Cache must be the last step in order to prevent unwanted extra cached
+    // files. Need to download cache before check in order to prevent error.
+		"prepare": "deno clean && deno task format && deno task check && deno task cache",
 
 		"lint": "deno lint cli/**/*.ts toolchain/**/*.ts runtime/**/*.ts",
 		"lint:fix": "deno lint cli/**/*.ts toolchain/**/*.ts runtime/**/*.ts",
