@@ -2574,6 +2574,7 @@ name = "rivet-backend-embed"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "fs_extra",
  "include_dir",
  "merkle_hash",
  "rivet-deno-embed",
