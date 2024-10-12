@@ -2,7 +2,7 @@
 
 import { DRIZZLE_ORM_PACKAGE } from "../../packages/backend/toolchain/drizzle_consts.ts";
 import { resolve } from "@std/path";
-import { copy, exists, ensureDir } from "@std/fs";
+import { copy, ensureDir, exists } from "@std/fs";
 
 // Hack to allow Yarn to work on Windows
 const YARN_COMMAND = Deno.build.os === "windows" ? "cmd" : "yarn";
@@ -82,7 +82,7 @@ async function buildEditor() {
 
   const editorOutDir = await Deno.makeTempDir();
 
-  console.log(`[editor] Installing packages`)
+  console.log(`[editor] Installing packages`);
   const installResult = await new Deno.Command(YARN_COMMAND, {
     args: YARN_ARGS,
     cwd: EDITOR_PATH,
@@ -97,7 +97,7 @@ async function buildEditor() {
     throw new Error(`Failed to install packages`);
   }
 
-  console.log(`[editor] Building`)
+  console.log(`[editor] Building`);
   const buildResult = await new Deno.Command(YARN_COMMAND, {
     args: [
       ...YARN_ARGS,
@@ -117,7 +117,7 @@ async function buildEditor() {
     throw new Error(`Failed to build editor`);
   }
 
-  console.log(`[editor] Copying to artifacts`)
+  console.log(`[editor] Copying to artifacts`);
   const targetDir = getTargetDirectory();
   const artifactsPath = resolve(targetDir, "editor");
   if (await exists(artifactsPath, { isDirectory: true })) {
