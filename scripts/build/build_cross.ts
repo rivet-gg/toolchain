@@ -1,5 +1,6 @@
 #!/usr/bin/env -S deno run -A
 
+import { parseArgs } from "jsr:@std/cli/parse-args";
 import { resolve } from "jsr:@std/path";
 import { ensureDir } from "jsr:@std/fs";
 
@@ -221,7 +222,11 @@ export async function buildCross(outDir: string, packages: string[] = []) {
 }
 
 if (import.meta.main) {
-	const dir = await Deno.makeTempDir();
-  console.log(dir);
-	await buildCross(dir);
+	const flags = parseArgs(Deno.args, { string: ["out"] });
+	const outDir = flags.out;
+	if (!outDir) {
+		console.error("Missing --out");
+		Deno.exit(1);
+	}
+	await buildCross(outDir);
 }
