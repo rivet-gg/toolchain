@@ -110,21 +110,21 @@ async function buildAndCopyCrossPlatform(
 	await Deno.remove(outDir, { recursive: true }).catch(() => {});
 
 	const platforms: Platform[] = [
-		// {
-		//     name: "linux_x86_64",
-		//     target: "x86_64-unknown-linux-gnu",
-		//     files: [],
-		// },
+		{
+		    name: "linux_x86_64",
+		    target: "x86_64-unknown-linux-gnu",
+		    files: [],
+		},
 		{
 			name: "windows_x86_64",
 			target: "x86_64-pc-windows-gnu",
 			files: [],
 		},
-		// {
-		//     name: "macos_x86_64",
-		//     target: "x86_64-apple-darwin",
-		//     files: [],
-		// },
+		{
+		    name: "macos_x86_64",
+		    target: "x86_64-apple-darwin",
+		    files: [],
+		},
 		{
 			name: "macos_arm64",
 			target: "aarch64-apple-darwin",
