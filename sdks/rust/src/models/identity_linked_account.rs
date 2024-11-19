@@ -14,8 +14,8 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IdentityLinkedAccount {
-    #[serde(rename = "access_token", skip_serializing_if = "Option::is_none")]
-    pub access_token: Option<Box<crate::models::IdentityAccessTokenLinkedAccount>>,
+    #[serde(rename = "default_user", skip_serializing_if = "Option::is_none")]
+    pub default_user: Option<bool>,
     #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
     pub email: Option<Box<crate::models::IdentityEmailLinkedAccount>>,
 }
@@ -24,7 +24,7 @@ impl IdentityLinkedAccount {
     /// A union representing an identity's linked accounts.
     pub fn new() -> IdentityLinkedAccount {
         IdentityLinkedAccount {
-            access_token: None,
+            default_user: None,
             email: None,
         }
     }

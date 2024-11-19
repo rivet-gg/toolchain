@@ -25,16 +25,17 @@ All URIs are relative to *https://api.rivet.gg*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AdminApi* | [**admin_login**](docs/AdminApi.md#admin_login) | **POST** /admin/login | 
-*AdminClustersApi* | [**admin_clusters_create**](docs/AdminClustersApi.md#admin_clusters_create) | **POST** /admin/clusters | 
-*AdminClustersApi* | [**admin_clusters_list**](docs/AdminClustersApi.md#admin_clusters_list) | **GET** /admin/clusters | 
-*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_create**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_create) | **POST** /admin/clusters/{cluster_id}/datacenters | 
-*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_list**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_list) | **GET** /admin/clusters/{cluster_id}/datacenters | 
-*AdminClustersDatacentersApi* | [**admin_clusters_datacenters_update**](docs/AdminClustersDatacentersApi.md#admin_clusters_datacenters_update) | **PATCH** /admin/clusters/{cluster_id}/datacenters/{datacenter_id} | 
-*AdminClustersServersApi* | [**admin_clusters_servers_destroy**](docs/AdminClustersServersApi.md#admin_clusters_servers_destroy) | **POST** /admin/clusters/{cluster_id}/servers/destroy | 
-*AdminClustersServersApi* | [**admin_clusters_servers_list**](docs/AdminClustersServersApi.md#admin_clusters_servers_list) | **GET** /admin/clusters/{cluster_id}/servers | 
-*AdminClustersServersApi* | [**admin_clusters_servers_taint**](docs/AdminClustersServersApi.md#admin_clusters_servers_taint) | **POST** /admin/clusters/{cluster_id}/servers/taint | 
-*AuthIdentityAccessTokenApi* | [**auth_identity_access_token_complete_access_token_verification**](docs/AuthIdentityAccessTokenApi.md#auth_identity_access_token_complete_access_token_verification) | **POST** /auth/identity/access-token/complete-verification | 
+*ActorApi* | [**actor_create**](docs/ActorApi.md#actor_create) | **POST** /actors | 
+*ActorApi* | [**actor_destroy**](docs/ActorApi.md#actor_destroy) | **DELETE** /actors/{actor} | 
+*ActorApi* | [**actor_get**](docs/ActorApi.md#actor_get) | **GET** /actors/{actor} | 
+*ActorApi* | [**actor_list**](docs/ActorApi.md#actor_list) | **GET** /actors | 
+*ActorBuildsApi* | [**actor_builds_complete**](docs/ActorBuildsApi.md#actor_builds_complete) | **POST** /builds/{build}/complete | 
+*ActorBuildsApi* | [**actor_builds_get**](docs/ActorBuildsApi.md#actor_builds_get) | **GET** /builds/{build} | 
+*ActorBuildsApi* | [**actor_builds_list**](docs/ActorBuildsApi.md#actor_builds_list) | **GET** /builds | 
+*ActorBuildsApi* | [**actor_builds_patch_tags**](docs/ActorBuildsApi.md#actor_builds_patch_tags) | **PATCH** /builds/{build}/tags | 
+*ActorBuildsApi* | [**actor_builds_prepare**](docs/ActorBuildsApi.md#actor_builds_prepare) | **POST** /builds/prepare | 
+*ActorLogsApi* | [**actor_logs_get**](docs/ActorLogsApi.md#actor_logs_get) | **GET** /actors/{actor}/logs | 
+*ActorRegionsApi* | [**actor_regions_list**](docs/ActorRegionsApi.md#actor_regions_list) | **GET** /regions | 
 *AuthIdentityEmailApi* | [**auth_identity_email_complete_email_verification**](docs/AuthIdentityEmailApi.md#auth_identity_email_complete_email_verification) | **POST** /auth/identity/email/complete-verification | 
 *AuthIdentityEmailApi* | [**auth_identity_email_start_email_verification**](docs/AuthIdentityEmailApi.md#auth_identity_email_start_email_verification) | **POST** /auth/identity/email/start-verification | 
 *AuthTokensApi* | [**auth_tokens_refresh_identity_token**](docs/AuthTokensApi.md#auth_tokens_refresh_identity_token) | **POST** /auth/tokens/identity | 
@@ -118,7 +119,6 @@ Class | Method | HTTP request | Description
 *GroupApi* | [**group_leave**](docs/GroupApi.md#group_leave) | **POST** /group/groups/{group_id}/leave | 
 *GroupApi* | [**group_list_suggested**](docs/GroupApi.md#group_list_suggested) | **GET** /group/groups | 
 *GroupApi* | [**group_prepare_avatar_upload**](docs/GroupApi.md#group_prepare_avatar_upload) | **POST** /group/groups/avatar-upload/prepare | 
-*GroupApi* | [**group_search**](docs/GroupApi.md#group_search) | **GET** /group/groups/search | 
 *GroupApi* | [**group_transfer_ownership**](docs/GroupApi.md#group_transfer_ownership) | **POST** /group/groups/{group_id}/transfer-owner | 
 *GroupApi* | [**group_unban_identity**](docs/GroupApi.md#group_unban_identity) | **DELETE** /group/groups/{group_id}/bans/{identity_id} | 
 *GroupApi* | [**group_update_profile**](docs/GroupApi.md#group_update_profile) | **POST** /group/groups/{group_id}/profile | 
@@ -129,44 +129,23 @@ Class | Method | HTTP request | Description
 *GroupJoinRequestsApi* | [**group_join_requests_create_join_request**](docs/GroupJoinRequestsApi.md#group_join_requests_create_join_request) | **POST** /group/groups/{group_id}/join-request | 
 *GroupJoinRequestsApi* | [**group_join_requests_resolve_join_request**](docs/GroupJoinRequestsApi.md#group_join_requests_resolve_join_request) | **POST** /group/groups/{group_id}/join-request/{identity_id} | 
 *IdentityApi* | [**identity_complete_avatar_upload**](docs/IdentityApi.md#identity_complete_avatar_upload) | **POST** /identity/identities/avatar-upload/{upload_id}/complete | 
-*IdentityApi* | [**identity_follow**](docs/IdentityApi.md#identity_follow) | **POST** /identity/identities/{identity_id}/follow | 
 *IdentityApi* | [**identity_get_handles**](docs/IdentityApi.md#identity_get_handles) | **GET** /identity/identities/batch/handle | 
 *IdentityApi* | [**identity_get_profile**](docs/IdentityApi.md#identity_get_profile) | **GET** /identity/identities/{identity_id}/profile | 
 *IdentityApi* | [**identity_get_self_profile**](docs/IdentityApi.md#identity_get_self_profile) | **GET** /identity/identities/self/profile | 
 *IdentityApi* | [**identity_get_summaries**](docs/IdentityApi.md#identity_get_summaries) | **GET** /identity/identities/batch/summary | 
-*IdentityApi* | [**identity_ignore_recent_follower**](docs/IdentityApi.md#identity_ignore_recent_follower) | **POST** /identity/identities/self/recent-followers/{identity_id}/ignore | 
-*IdentityApi* | [**identity_list_followers**](docs/IdentityApi.md#identity_list_followers) | **GET** /identity/identities/{identity_id}/followers | 
-*IdentityApi* | [**identity_list_following**](docs/IdentityApi.md#identity_list_following) | **GET** /identity/identities/{identity_id}/following | 
-*IdentityApi* | [**identity_list_friends**](docs/IdentityApi.md#identity_list_friends) | **GET** /identity/identities/self/friends | 
-*IdentityApi* | [**identity_list_mutual_friends**](docs/IdentityApi.md#identity_list_mutual_friends) | **GET** /identity/identities/{identity_id}/mutual-friends | 
-*IdentityApi* | [**identity_list_recent_followers**](docs/IdentityApi.md#identity_list_recent_followers) | **GET** /identity/identities/self/recent-followers | 
 *IdentityApi* | [**identity_mark_deletion**](docs/IdentityApi.md#identity_mark_deletion) | **POST** /identity/identities/self/delete-request | 
 *IdentityApi* | [**identity_prepare_avatar_upload**](docs/IdentityApi.md#identity_prepare_avatar_upload) | **POST** /identity/identities/avatar-upload/prepare | 
 *IdentityApi* | [**identity_remove_game_activity**](docs/IdentityApi.md#identity_remove_game_activity) | **DELETE** /identity/identities/self/activity | 
-*IdentityApi* | [**identity_report**](docs/IdentityApi.md#identity_report) | **POST** /identity/identities/{identity_id}/report | 
-*IdentityApi* | [**identity_search**](docs/IdentityApi.md#identity_search) | **GET** /identity/identities/search | 
 *IdentityApi* | [**identity_set_game_activity**](docs/IdentityApi.md#identity_set_game_activity) | **POST** /identity/identities/self/activity | 
 *IdentityApi* | [**identity_setup**](docs/IdentityApi.md#identity_setup) | **POST** /identity/identities | 
 *IdentityApi* | [**identity_signup_for_beta**](docs/IdentityApi.md#identity_signup_for_beta) | **POST** /identity/identities/self/beta-signup | 
-*IdentityApi* | [**identity_unfollow**](docs/IdentityApi.md#identity_unfollow) | **DELETE** /identity/identities/{identity_id}/follow | 
 *IdentityApi* | [**identity_unmark_deletion**](docs/IdentityApi.md#identity_unmark_deletion) | **DELETE** /identity/identities/self/delete-request | 
 *IdentityApi* | [**identity_update_profile**](docs/IdentityApi.md#identity_update_profile) | **POST** /identity/identities/self/profile | 
 *IdentityApi* | [**identity_update_status**](docs/IdentityApi.md#identity_update_status) | **POST** /identity/identities/identities/self/status | 
 *IdentityApi* | [**identity_validate_profile**](docs/IdentityApi.md#identity_validate_profile) | **POST** /identity/identities/self/profile/validate | 
 *IdentityActivitiesApi* | [**identity_activities_list**](docs/IdentityActivitiesApi.md#identity_activities_list) | **GET** /identity/activities | 
 *IdentityEventsApi* | [**identity_events_watch**](docs/IdentityEventsApi.md#identity_events_watch) | **GET** /identity/events/live | 
-*IdentityLinksApi* | [**identity_links_cancel**](docs/IdentityLinksApi.md#identity_links_cancel) | **POST** /identity/game-links/cancel | 
-*IdentityLinksApi* | [**identity_links_complete**](docs/IdentityLinksApi.md#identity_links_complete) | **POST** /identity/game-links/complete | 
-*IdentityLinksApi* | [**identity_links_get**](docs/IdentityLinksApi.md#identity_links_get) | **GET** /identity/game-links | 
-*IdentityLinksApi* | [**identity_links_prepare**](docs/IdentityLinksApi.md#identity_links_prepare) | **POST** /identity/game-links | 
 *JobRunApi* | [**job_run_cleanup**](docs/JobRunApi.md#job_run_cleanup) | **POST** /job/runs/cleanup | 
-*KvApi* | [**kv_delete**](docs/KvApi.md#kv_delete) | **DELETE** /kv/entries | 
-*KvApi* | [**kv_delete_batch**](docs/KvApi.md#kv_delete_batch) | **DELETE** /kv/entries/batch | 
-*KvApi* | [**kv_get**](docs/KvApi.md#kv_get) | **GET** /kv/entries | 
-*KvApi* | [**kv_get_batch**](docs/KvApi.md#kv_get_batch) | **GET** /kv/entries/batch | 
-*KvApi* | [**kv_list**](docs/KvApi.md#kv_list) | **GET** /kv/entries/list | 
-*KvApi* | [**kv_put**](docs/KvApi.md#kv_put) | **PUT** /kv/entries | 
-*KvApi* | [**kv_put_batch**](docs/KvApi.md#kv_put_batch) | **PUT** /kv/entries/batch | 
 *MatchmakerLobbiesApi* | [**matchmaker_lobbies_create**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_create) | **POST** /matchmaker/lobbies/create | 
 *MatchmakerLobbiesApi* | [**matchmaker_lobbies_find**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_find) | **POST** /matchmaker/lobbies/find | 
 *MatchmakerLobbiesApi* | [**matchmaker_lobbies_get_state**](docs/MatchmakerLobbiesApi.md#matchmaker_lobbies_get_state) | **GET** /matchmaker/lobbies/{lobby_id}/state | 
@@ -197,27 +176,38 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
- - [AdminClustersBuildDeliveryMethod](docs/AdminClustersBuildDeliveryMethod.md)
- - [AdminClustersCluster](docs/AdminClustersCluster.md)
- - [AdminClustersCreateClusterRequest](docs/AdminClustersCreateClusterRequest.md)
- - [AdminClustersCreateClusterResponse](docs/AdminClustersCreateClusterResponse.md)
- - [AdminClustersCreateDatacenterRequest](docs/AdminClustersCreateDatacenterRequest.md)
- - [AdminClustersCreateDatacenterResponse](docs/AdminClustersCreateDatacenterResponse.md)
- - [AdminClustersDatacenter](docs/AdminClustersDatacenter.md)
- - [AdminClustersHardware](docs/AdminClustersHardware.md)
- - [AdminClustersListClustersResponse](docs/AdminClustersListClustersResponse.md)
- - [AdminClustersListDatacentersResponse](docs/AdminClustersListDatacentersResponse.md)
- - [AdminClustersListServersResponse](docs/AdminClustersListServersResponse.md)
- - [AdminClustersPool](docs/AdminClustersPool.md)
- - [AdminClustersPoolType](docs/AdminClustersPoolType.md)
- - [AdminClustersPoolUpdate](docs/AdminClustersPoolUpdate.md)
- - [AdminClustersProvider](docs/AdminClustersProvider.md)
- - [AdminClustersServer](docs/AdminClustersServer.md)
- - [AdminClustersUpdateDatacenterRequest](docs/AdminClustersUpdateDatacenterRequest.md)
- - [AdminLoginRequest](docs/AdminLoginRequest.md)
- - [AdminLoginResponse](docs/AdminLoginResponse.md)
+ - [ActorActor](docs/ActorActor.md)
+ - [ActorBuild](docs/ActorBuild.md)
+ - [ActorBuildCompression](docs/ActorBuildCompression.md)
+ - [ActorBuildKind](docs/ActorBuildKind.md)
+ - [ActorCreateActorNetworkRequest](docs/ActorCreateActorNetworkRequest.md)
+ - [ActorCreateActorPortRequest](docs/ActorCreateActorPortRequest.md)
+ - [ActorCreateActorRequest](docs/ActorCreateActorRequest.md)
+ - [ActorCreateActorResponse](docs/ActorCreateActorResponse.md)
+ - [ActorCreateActorRuntimeRequest](docs/ActorCreateActorRuntimeRequest.md)
+ - [ActorGameGuardRouting](docs/ActorGameGuardRouting.md)
+ - [ActorGetActorLogsResponse](docs/ActorGetActorLogsResponse.md)
+ - [ActorGetActorResponse](docs/ActorGetActorResponse.md)
+ - [ActorGetBuildResponse](docs/ActorGetBuildResponse.md)
+ - [ActorLifecycle](docs/ActorLifecycle.md)
+ - [ActorListActorsResponse](docs/ActorListActorsResponse.md)
+ - [ActorListBuildsResponse](docs/ActorListBuildsResponse.md)
+ - [ActorListRegionsResponse](docs/ActorListRegionsResponse.md)
+ - [ActorLogStream](docs/ActorLogStream.md)
+ - [ActorNetwork](docs/ActorNetwork.md)
+ - [ActorNetworkMode](docs/ActorNetworkMode.md)
+ - [ActorPatchBuildTagsRequest](docs/ActorPatchBuildTagsRequest.md)
+ - [ActorPort](docs/ActorPort.md)
+ - [ActorPortAuthorization](docs/ActorPortAuthorization.md)
+ - [ActorPortProtocol](docs/ActorPortProtocol.md)
+ - [ActorPortQueryAuthorization](docs/ActorPortQueryAuthorization.md)
+ - [ActorPortRouting](docs/ActorPortRouting.md)
+ - [ActorPrepareBuildRequest](docs/ActorPrepareBuildRequest.md)
+ - [ActorPrepareBuildResponse](docs/ActorPrepareBuildResponse.md)
+ - [ActorRegion](docs/ActorRegion.md)
+ - [ActorResources](docs/ActorResources.md)
+ - [ActorRuntime](docs/ActorRuntime.md)
  - [AuthCompleteStatus](docs/AuthCompleteStatus.md)
- - [AuthIdentityCompleteAccessTokenVerificationRequest](docs/AuthIdentityCompleteAccessTokenVerificationRequest.md)
  - [AuthIdentityCompleteEmailVerificationRequest](docs/AuthIdentityCompleteEmailVerificationRequest.md)
  - [AuthIdentityCompleteEmailVerificationResponse](docs/AuthIdentityCompleteEmailVerificationResponse.md)
  - [AuthIdentityStartEmailVerificationRequest](docs/AuthIdentityStartEmailVerificationRequest.md)
@@ -460,46 +450,30 @@ Class | Method | HTTP request | Description
  - [GroupProfile](docs/GroupProfile.md)
  - [GroupPublicity](docs/GroupPublicity.md)
  - [GroupResolveJoinRequestRequest](docs/GroupResolveJoinRequestRequest.md)
- - [GroupSearchResponse](docs/GroupSearchResponse.md)
  - [GroupSummary](docs/GroupSummary.md)
  - [GroupTransferOwnershipRequest](docs/GroupTransferOwnershipRequest.md)
  - [GroupUpdateProfileRequest](docs/GroupUpdateProfileRequest.md)
  - [GroupValidateProfileRequest](docs/GroupValidateProfileRequest.md)
  - [GroupValidateProfileResponse](docs/GroupValidateProfileResponse.md)
- - [IdentityAccessTokenLinkedAccount](docs/IdentityAccessTokenLinkedAccount.md)
- - [IdentityCancelGameLinkRequest](docs/IdentityCancelGameLinkRequest.md)
- - [IdentityCompleteGameLinkRequest](docs/IdentityCompleteGameLinkRequest.md)
  - [IdentityDevState](docs/IdentityDevState.md)
  - [IdentityEmailLinkedAccount](docs/IdentityEmailLinkedAccount.md)
  - [IdentityExternalLinks](docs/IdentityExternalLinks.md)
  - [IdentityGameActivity](docs/IdentityGameActivity.md)
  - [IdentityGameLinkStatus](docs/IdentityGameLinkStatus.md)
- - [IdentityGetGameLinkNewIdentity](docs/IdentityGetGameLinkNewIdentity.md)
- - [IdentityGetGameLinkResponse](docs/IdentityGetGameLinkResponse.md)
  - [IdentityGetHandlesResponse](docs/IdentityGetHandlesResponse.md)
  - [IdentityGetProfileResponse](docs/IdentityGetProfileResponse.md)
  - [IdentityGetSummariesResponse](docs/IdentityGetSummariesResponse.md)
  - [IdentityGlobalEvent](docs/IdentityGlobalEvent.md)
  - [IdentityGlobalEventIdentityUpdate](docs/IdentityGlobalEventIdentityUpdate.md)
  - [IdentityGlobalEventKind](docs/IdentityGlobalEventKind.md)
- - [IdentityGlobalEventMatchmakerLobbyJoin](docs/IdentityGlobalEventMatchmakerLobbyJoin.md)
  - [IdentityGlobalEventNotification](docs/IdentityGlobalEventNotification.md)
  - [IdentityGroup](docs/IdentityGroup.md)
  - [IdentityHandle](docs/IdentityHandle.md)
  - [IdentityLinkedAccount](docs/IdentityLinkedAccount.md)
  - [IdentityListActivitiesResponse](docs/IdentityListActivitiesResponse.md)
- - [IdentityListFollowersResponse](docs/IdentityListFollowersResponse.md)
- - [IdentityListFollowingResponse](docs/IdentityListFollowingResponse.md)
- - [IdentityListFriendsResponse](docs/IdentityListFriendsResponse.md)
- - [IdentityListMutualFriendsResponse](docs/IdentityListMutualFriendsResponse.md)
- - [IdentityListRecentFollowersResponse](docs/IdentityListRecentFollowersResponse.md)
  - [IdentityPrepareAvatarUploadRequest](docs/IdentityPrepareAvatarUploadRequest.md)
  - [IdentityPrepareAvatarUploadResponse](docs/IdentityPrepareAvatarUploadResponse.md)
- - [IdentityPrepareGameLinkResponse](docs/IdentityPrepareGameLinkResponse.md)
- - [IdentityPresence](docs/IdentityPresence.md)
  - [IdentityProfile](docs/IdentityProfile.md)
- - [IdentityReportRequest](docs/IdentityReportRequest.md)
- - [IdentitySearchResponse](docs/IdentitySearchResponse.md)
  - [IdentitySetGameActivityRequest](docs/IdentitySetGameActivityRequest.md)
  - [IdentitySetupRequest](docs/IdentitySetupRequest.md)
  - [IdentitySetupResponse](docs/IdentitySetupResponse.md)
@@ -511,13 +485,6 @@ Class | Method | HTTP request | Description
  - [IdentityUpdateStatusRequest](docs/IdentityUpdateStatusRequest.md)
  - [IdentityValidateProfileResponse](docs/IdentityValidateProfileResponse.md)
  - [IdentityWatchEventsResponse](docs/IdentityWatchEventsResponse.md)
- - [KvEntry](docs/KvEntry.md)
- - [KvGetBatchResponse](docs/KvGetBatchResponse.md)
- - [KvGetResponse](docs/KvGetResponse.md)
- - [KvListResponse](docs/KvListResponse.md)
- - [KvPutBatchRequest](docs/KvPutBatchRequest.md)
- - [KvPutEntry](docs/KvPutEntry.md)
- - [KvPutRequest](docs/KvPutRequest.md)
  - [MatchmakerCreateLobbyResponse](docs/MatchmakerCreateLobbyResponse.md)
  - [MatchmakerCustomLobbyPublicity](docs/MatchmakerCustomLobbyPublicity.md)
  - [MatchmakerFindLobbyResponse](docs/MatchmakerFindLobbyResponse.md)

@@ -16,6 +16,8 @@ pub enum CloudBootstrapAccess {
     Public,
     #[serde(rename = "private")]
     Private,
+    #[serde(rename = "development")]
+    Development,
 
 }
 
@@ -24,6 +26,7 @@ impl ToString for CloudBootstrapAccess {
         match self {
             Self::Public => String::from("public"),
             Self::Private => String::from("private"),
+            Self::Development => String::from("development"),
         }
     }
 }

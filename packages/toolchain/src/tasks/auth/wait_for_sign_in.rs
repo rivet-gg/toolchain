@@ -2,7 +2,7 @@ use anyhow::*;
 use rivet_api::apis;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, paths, toolchain_ctx, util::task};
+use crate::{meta, paths, toolchain_ctx, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -64,8 +64,8 @@ impl task::Task for Task {
 		)
 		.await?;
 
-		config::meta::mutate_project(&paths::data_dir()?, |meta| {
-			meta.cloud = Some(config::meta::Cloud::new(input.api_endpoint, token))
+		meta::mutate_project(&paths::data_dir()?, |meta| {
+			meta.cloud = Some(meta::Cloud::new(input.api_endpoint, token))
 		})
 		.await?;
 

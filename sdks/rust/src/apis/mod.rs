@@ -90,11 +90,10 @@ pub fn parse_deep_object(prefix: &str, value: &serde_json::Value) -> Vec<(String
     unimplemented!("Only objects are supported with style=deepObject")
 }
 
-pub mod admin_api;
-pub mod admin_clusters_api;
-pub mod admin_clusters_datacenters_api;
-pub mod admin_clusters_servers_api;
-pub mod auth_identity_access_token_api;
+pub mod actor_api;
+pub mod actor_builds_api;
+pub mod actor_logs_api;
+pub mod actor_regions_api;
 pub mod auth_identity_email_api;
 pub mod auth_tokens_api;
 pub mod cloud_api;
@@ -125,9 +124,7 @@ pub mod group_join_requests_api;
 pub mod identity_api;
 pub mod identity_activities_api;
 pub mod identity_events_api;
-pub mod identity_links_api;
 pub mod job_run_api;
-pub mod kv_api;
 pub mod matchmaker_lobbies_api;
 pub mod matchmaker_players_api;
 pub mod matchmaker_regions_api;

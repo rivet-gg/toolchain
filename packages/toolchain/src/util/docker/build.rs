@@ -1,57 +1,14 @@
 use anyhow::*;
-use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, path::Path};
 
 use crate::{
-	config, paths,
+	config::{self},
 	toolchain_ctx::ToolchainCtx,
 	util::{
 		cmd::{self, shell_cmd},
 		task,
 	},
 };
-
-#[derive(PartialEq, Serialize, Deserialize, Clone)]
-pub enum DockerBuildMethod {
-	/// Create & use a Buildx builder on this machine. Required for cross-platform compliation.
-	Buildx,
-
-	/// Use the native Docker build command. Only used if Buildx is not available.
-	Native,
-}
-
-impl Default for DockerBuildMethod {
-	fn default() -> Self {
-		Self::Buildx
-	}
-}
-
-impl DockerBuildMethod {
-	pub async fn from_env(task: task::TaskCtx) -> Result<Self> {
-		// Determine build method from env
-		let build_method = config::settings::try_read(&paths::data_dir()?, |x| {
-			Ok(x.game_server.deploy.build_method.clone())
-		})
-		.await?;
-
-		if build_method == DockerBuildMethod::Buildx {
-			// Validate that Buildx is installed
-			let mut buildx_version_cmd = shell_cmd("docker");
-			buildx_version_cmd.args(&["buildx", "version"]);
-			let buildx_version =
-				cmd::execute_docker_cmd_silent_fallible(buildx_version_cmd).await?;
-
-			if buildx_version.status.success() {
-				Ok(DockerBuildMethod::Buildx)
-			} else {
-				task.log("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
-				Ok(DockerBuildMethod::Native)
-			}
-		} else {
-			Ok(build_method)
-		}
-	}
-}
 
 pub struct BuildImageOutput {
 	pub tag: String,
@@ -62,17 +19,35 @@ pub struct BuildImageOutput {
 pub async fn build_image(
 	ctx: &ToolchainCtx,
 	task: task::TaskCtx,
-	current_dir: &Path,
+	build_path: &Path,
 	dockerfile: &Path,
-	build_kind: super::BuildKind,
-	build_compression: super::BuildCompression,
+	build_method: config::build::docker::BuildMethod,
+	build_kind: config::build::docker::BundleKind,
+	build_compression: config::build::Compression,
 	build_args: Option<&[String]>,
+	build_target: Option<&str>,
+	allow_root: bool,
 ) -> Result<BuildImageOutput> {
-	let build_method = DockerBuildMethod::from_env(task.clone()).await?;
+	// Determine build method
+	let build_method = if build_method == config::build::docker::BuildMethod::Buildx {
+		// Validate that Buildx is installed
+		let mut buildx_version_cmd = shell_cmd("docker");
+		buildx_version_cmd.args(&["buildx", "version"]);
+		let buildx_version = cmd::execute_docker_cmd_silent_fallible(buildx_version_cmd).await?;
+
+		if buildx_version.status.success() {
+			config::build::docker::BuildMethod::Buildx
+		} else {
+			task.log("Docker Buildx not installed. Falling back to native build method.\n\nPlease install Buildx here: https://github.com/docker/buildx#installing");
+			config::build::docker::BuildMethod::Native
+		}
+	} else {
+		build_method
+	};
 
 	let buildx_info = match build_method {
-		DockerBuildMethod::Native => " (with native)",
-		DockerBuildMethod::Buildx => " (with buildx)",
+		config::build::docker::BuildMethod::Native => " (with native)",
+		config::build::docker::BuildMethod::Buildx => " (with buildx)",
 	};
 	task.log(format!(
 		"[Building Image] {}{buildx_info}",
@@ -98,7 +73,7 @@ pub async fn build_image(
 	// Build image
 	let image_tag = super::generate_unique_image_tag();
 	match build_method {
-		DockerBuildMethod::Native => {
+		config::build::docker::BuildMethod::Native => {
 			let mut build_cmd = shell_cmd("docker");
 			build_cmd
 				.arg("build")
@@ -113,8 +88,11 @@ pub async fn build_image(
 						.iter()
 						.map(|(k, v)| format!("--build-arg={}={}", k, v))
 						.collect::<Vec<String>>(),
-				)
-				.arg(current_dir);
+				);
+			if let Some(build_target) = build_target {
+				build_cmd.arg("--target").arg(build_target);
+			}
+			build_cmd.arg(build_path);
 			cmd::execute_docker_cmd(
 				task.clone(),
 				build_cmd,
@@ -122,7 +100,7 @@ pub async fn build_image(
 			)
 			.await?;
 		}
-		DockerBuildMethod::Buildx => {
+		config::build::docker::BuildMethod::Buildx => {
 			let builder_name = "rivet_toolchain";
 
 			// Determine if needs to create a new builder
@@ -181,8 +159,11 @@ pub async fn build_image(
 						.collect::<Vec<String>>(),
 				)
 				.arg("--output")
-				.arg("type=docker")
-				.arg(".");
+				.arg("type=docker");
+			if let Some(build_target) = build_target {
+				build_cmd.arg("--target").arg(build_target);
+			}
+			build_cmd.arg(build_path);
 			cmd::execute_docker_cmd(
 				task.clone(),
 				build_cmd,
@@ -193,9 +174,14 @@ pub async fn build_image(
 	}
 
 	// Build archive
-	let build_tar_path =
-		super::archive::create_archive(task.clone(), &image_tag, build_kind, build_compression)
-			.await?;
+	let build_tar_path = super::archive::create_archive(
+		task.clone(),
+		&image_tag,
+		build_kind,
+		build_compression,
+		allow_root,
+	)
+	.await?;
 
 	// Clean up image from the registry
 	let mut remove_img_cmd = shell_cmd("docker");

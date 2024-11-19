@@ -2,26 +2,23 @@ use anyhow::*;
 use futures_util::stream::{StreamExt, TryStreamExt};
 use rivet_api::{apis, models};
 use serde::Serialize;
-use std::{collections::HashMap, path::PathBuf, sync::Arc};
+use std::{path::PathBuf, sync::Arc};
 use tokio::fs;
 use uuid::Uuid;
 
 use crate::{
-	config, paths,
+	config,
+	project::environment::TEMPEnvironment,
 	toolchain_ctx::ToolchainCtx,
 	util::{net::upload, task, term},
 };
 
-use super::{BuildCompression, BuildKind};
-
 pub struct PushOpts {
-	pub env_id: Uuid,
+	pub config: config::Config,
+	pub env: TEMPEnvironment,
 
 	/// Path to already created tar.
 	pub path: PathBuf,
-
-	pub tags: HashMap<String, String>,
-	pub exclusive_tags: Vec<String>,
 
 	/// Docker inside the image.
 	pub docker_tag: String,
@@ -29,14 +26,14 @@ pub struct PushOpts {
 	/// Name of the image
 	pub name: Option<String>,
 
-	pub kind: BuildKind,
+	pub bundle: config::build::docker::BundleKind,
 
-	pub compression: BuildCompression,
+	pub compression: config::build::Compression,
 }
 
 #[derive(Serialize)]
 pub struct PushOutput {
-	pub image_id: Uuid,
+	pub build_id: Uuid,
 }
 
 pub async fn push_tar(
@@ -44,14 +41,9 @@ pub async fn push_tar(
 	task: task::TaskCtx,
 	push_opts: &PushOpts,
 ) -> Result<PushOutput> {
-	let multipart_enabled =
-		config::settings::try_read(&paths::data_dir()?, |x| Ok(!x.net.disable_upload_multipart))
-			.await?;
+	let multipart_enabled: bool = push_opts.config.unstable().multipart_enabled();
 
 	let reqwest_client = Arc::new(reqwest::Client::new());
-
-	let game_id_str = ctx.game_id.to_string();
-	let env_id_str = push_opts.env_id.to_string();
 
 	// Inspect the image
 	let image_file_meta = fs::metadata(&push_opts.path).await?;
@@ -70,11 +62,9 @@ pub async fn push_tar(
 		size = upload::format_file_size(image_file_meta.len())?
 	));
 
-	let build_res = apis::servers_builds_api::servers_builds_prepare(
+	let build_res = apis::actor_builds_api::actor_builds_prepare(
 		&ctx.openapi_config_cloud,
-		&game_id_str,
-		&env_id_str,
-		models::ServersCreateBuildRequest {
+		models::ActorPrepareBuildRequest {
 			name: display_name.clone(),
 			image_tag: push_opts.docker_tag.clone(),
 			image_file: Box::new(models::UploadPrepareFile {
@@ -82,23 +72,29 @@ pub async fn push_tar(
 				content_type: Some(content_type.into()),
 				content_length: image_file_meta.len() as i64,
 			}),
-			kind: Some(match push_opts.kind {
-				BuildKind::DockerImage => models::ServersBuildKind::DockerImage,
-				BuildKind::OciBundle => models::ServersBuildKind::OciBundle,
+			kind: Some(match push_opts.bundle {
+				config::build::docker::BundleKind::DockerImage => {
+					models::ActorBuildKind::DockerImage
+				}
+				config::build::docker::BundleKind::OciBundle => models::ActorBuildKind::OciBundle,
 			}),
 			compression: Some(match push_opts.compression {
-				BuildCompression::None => models::ServersBuildCompression::None,
-				BuildCompression::Lz4 => models::ServersBuildCompression::Lz4,
+				config::build::Compression::None => models::ActorBuildCompression::None,
+				config::build::Compression::Lz4 => models::ActorBuildCompression::Lz4,
 			}),
 			multipart_upload: Some(multipart_enabled),
+			// TODO:
+			prewarm_regions: None,
 		},
+		Some(&ctx.project.name_id),
+		Some(&push_opts.env.slug),
 	)
 	.await;
 	if let Err(err) = build_res.as_ref() {
 		task.log(format!("{err:?}"))
 	}
 	let build_res = build_res.context("build_res")?;
-	let image_id = build_res.build;
+	let build_id = build_res.build;
 	let pb = term::EitherProgressBar::Multi(term::multi_progress_bar(task.clone()));
 
 	if multipart_enabled {
@@ -137,37 +133,19 @@ pub async fn push_tar(
 		.await?;
 	}
 
-	let complete_res = apis::servers_builds_api::servers_builds_complete(
+	let complete_res = apis::actor_builds_api::actor_builds_complete(
 		&ctx.openapi_config_cloud,
-		&game_id_str,
-		&env_id_str,
 		&build_res.build.to_string(),
+		Some(&ctx.project.name_id),
+		Some(&push_opts.env.slug),
 	)
 	.await;
 	if let Err(err) = complete_res.as_ref() {
 		task.log(format!("{err:?}"));
 	}
 	complete_res.context("complete_res")?;
-
-	let complete_res = apis::servers_builds_api::servers_builds_patch_tags(
-		&ctx.openapi_config_cloud,
-		&game_id_str,
-		&env_id_str,
-		&build_res.build.to_string(),
-		models::ServersPatchBuildTagsRequest {
-			tags: Some(serde_json::to_value(&push_opts.tags)?),
-			exclusive_tags: Some(push_opts.exclusive_tags.clone()),
-		},
-	)
-	.await;
-	if let Err(err) = complete_res.as_ref() {
-		task.log(format!("{err:?}"));
-	}
-	complete_res.context("complete_res")?;
-
-	task.log(format!("[Image Upload Complete] {image_id}"));
 
 	Ok(PushOutput {
-		image_id: image_id.to_owned(),
+		build_id: build_id.to_owned(),
 	})
 }

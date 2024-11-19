@@ -1,11 +1,11 @@
 mod ctx;
 pub mod event;
-mod register;
+mod registry;
 mod run;
 mod task;
 
 pub use ctx::*;
 pub use event::*;
-pub use register::*;
+pub use registry::*;
 pub use run::*;
 pub use task::*;

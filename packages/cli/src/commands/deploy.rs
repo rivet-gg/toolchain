@@ -8,12 +8,6 @@ use crate::util::task::{run_task, TaskOutputStyle};
 #[derive(Parser)]
 pub struct Opts {
 	environment: String,
-	#[clap(long, conflicts_with = "only_modules")]
-	only_game_server: bool,
-	#[clap(long, conflicts_with = "only_game_server")]
-	only_modules: bool,
-	#[clap(long)]
-	modules_skip_migrate: bool,
 }
 
 impl Opts {
@@ -54,17 +48,19 @@ impl Opts {
 			}
 		};
 
+		let config = match toolchain::config::Config::load(None).await {
+			Ok(x) => x,
+			Err(e) => {
+				eprintln!("Failed to load config: {e}");
+				return ExitCode::FAILURE;
+			}
+		};
+
 		match run_task::<deploy::Task>(
 			TaskOutputStyle::Plain,
 			deploy::Input {
-				cwd: std::env::current_dir()
-					.unwrap_or_default()
-					.to_string_lossy()
-					.to_string(),
+				config,
 				environment_id: environment.id,
-				game_server: !self.only_modules,
-				backend: !self.only_game_server,
-				backend_skip_migrate: self.modules_skip_migrate,
 			},
 		)
 		.await
