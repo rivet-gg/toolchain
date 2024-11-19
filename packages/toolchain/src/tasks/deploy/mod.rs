@@ -1,18 +1,19 @@
 use std::collections::HashMap;
 
 use anyhow::*;
-use rivet_api::apis;
-use rivet_api::models;
-use serde::Deserialize;
-use serde::Serialize;
+use rivet_api::{apis, models};
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::build;
-use crate::project::environment::TEMPEnvironment;
-use crate::ToolchainCtx;
-use crate::{config, util::task};
+use crate::{
+	build,
+	project::environment::TEMPEnvironment,
+	ToolchainCtx,
+	{config, util::task},
+};
 
 mod docker;
+mod js;
 
 #[derive(Deserialize)]
 pub struct Input {
@@ -97,13 +98,13 @@ async fn build_and_upload(
 		build::tags::CURRENT.to_string(),
 	];
 
-	// Deploy build
+	// Build & upload
 	let build_id = match &build.runtime {
 		config::build::Runtime::Docker(docker) => {
 			docker::build_and_upload(
 				&ctx,
 				task.clone(),
-				docker::DeployBuildOpts {
+				docker::BuildAndUploadOpts {
 					env: env.clone(),
 					config: config.clone(),
 					build_config: docker.clone(),
@@ -113,7 +114,17 @@ async fn build_and_upload(
 			.await?
 		}
 		config::build::Runtime::JavaScript(js) => {
-			todo!()
+			js::build_and_upload(
+				&ctx,
+				task.clone(),
+				js::BuildAndUploadOpts {
+					env: env.clone(),
+					config: config.clone(),
+					build_config: js.clone(),
+					version_name: version_name.to_string(),
+				},
+			)
+			.await?
 		}
 	};
 

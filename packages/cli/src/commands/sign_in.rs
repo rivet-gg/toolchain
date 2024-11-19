@@ -4,7 +4,7 @@ use toolchain::tasks;
 
 use crate::util::task::{run_task, TaskOutputStyle};
 
-/// Login to a game
+/// Login to a project
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(long, default_value = "https://api.rivet.gg")]

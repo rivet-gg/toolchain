@@ -1,9 +1,16 @@
-export async function build() {
-	// const bundledFile = projectDataPath(project, BUNDLE_PATH);
-	//
-	// // See Cloudflare Wrangler implementation:
-	// //
-	// // https://github.com/cloudflare/workers-sdk/blob/e8997b879605fb2eabc3e241086feb7aa219ef03/packages/wrangler/src/deployment-bundle/bundle.ts#L276
+import { relative, resolve } from "@std/path";
+// import {
+// 	ENTRYPOINT_PATH,
+// 	OUTPUT_MANIFEST_PATH,
+// 	projectDataPath,
+// } from "../../project/project.ts";
+import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
+import { denoPlugins } from "@rivet-gg/esbuild-deno-loader";
+import { exists } from "@std/fs";
+import * as esbuild from "esbuild";
+import { Input } from "./task.ts";
+
+export async function build(input: Input) {
 	// const analyzeResult = Deno.env.get("_BACKEND_ESBUILD_META") == "1";
 	// const noMinify = Deno.env.get("_BACKEND_ESBUILD_NO_MINIFY") == "1";
 	// const result = await esbuild.build({
@@ -64,25 +71,13 @@ export async function build() {
 	// 		"process.domain": "undefined",
 	// 	},
 	// 	external: [
-	// 		// Check supported compat by Cloudflare Workers:
-	// 		// https://developers.cloudflare.com/workers/runtime-apis/nodejs/
 	// 		"node:process",
 	// 		"node:stream",
 	// 		"node:util",
 	//
-	// 		// TODO: Why is node:crypto not working? Are any of these external imports working?
-	// 		// https://community.cloudflare.com/t/not-being-able-to-import-node-crypto/613973
-	// 		// "node:crypto",
-	//
-	// 		// pg-native is overridden with pg-cloudflare at runtime
-	// 		"pg-native",
-	//
 	// 		// Wasm must be loaded as a separate file manually, cannot be bundled
 	// 		"*.wasm",
 	// 		"*.wasm?module",
-	//
-	// 		// This import only exists when running on cloudflare
-	// 		"cloudflare:*",
 	// 	],
 	// 	bundle: true,
 	// 	minify: !noMinify,
@@ -95,7 +90,6 @@ export async function build() {
 	// 	console.log(await esbuild.analyzeMetafile(result.metafile));
 	// }
 	//
-	// if (opts.runtime == Runtime.CloudflareWorkersPlatforms) {
 	// 	const bundleStr = await Deno.readTextFile(bundledFile);
 	//
 	// 	// TODO: Add ability for injecting WASM modules
@@ -140,5 +134,4 @@ export async function build() {
 	// 		projectDataPath(project, OUTPUT_MANIFEST_PATH),
 	// 		JSON.stringify(manifest),
 	// 	);
-	// }
 }
