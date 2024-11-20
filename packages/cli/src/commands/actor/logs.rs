@@ -1,4 +1,5 @@
 use anyhow::*;
+use base64::{engine::general_purpose::STANDARD, Engine};
 use clap::{Parser, ValueEnum};
 use std::process::ExitCode;
 use toolchain::rivet_api::{apis, models};
@@ -22,6 +23,9 @@ pub struct Opts {
 
 	#[clap(long)]
 	id: String,
+
+	#[clap(long)]
+	no_timestamps: bool,
 
 	#[clap(long)]
 	no_follow: bool,
@@ -66,7 +70,19 @@ impl Opts {
 			}
 
 			for (ts, line) in res.timestamps.iter().zip(res.lines.iter()) {
-				println!("{ts} {line}");
+				let decoded_line = match STANDARD.decode(line) {
+					Result::Ok(bytes) => String::from_utf8_lossy(&bytes).to_string(),
+					Err(_) => {
+						eprintln!("Failed to decode base64: {line}");
+						continue;
+					}
+				};
+
+				if self.no_timestamps {
+					println!("{decoded_line}");
+				} else {
+					println!("{ts} {decoded_line}");
+				}
 			}
 		}
 
