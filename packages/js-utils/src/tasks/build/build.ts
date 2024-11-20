@@ -1,137 +1,77 @@
-import { relative, resolve } from "@std/path";
-// import {
-// 	ENTRYPOINT_PATH,
-// 	OUTPUT_MANIFEST_PATH,
-// 	projectDataPath,
-// } from "../../project/project.ts";
-import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
+import { resolve } from "@std/path";
 import { denoPlugins } from "@rivet-gg/esbuild-deno-loader";
 import { exists } from "@std/fs";
 import * as esbuild from "esbuild";
-import { Input } from "./task.ts";
+import { Input, Output } from "./mod.ts";
 
-export async function build(input: Input) {
-	// const analyzeResult = Deno.env.get("_BACKEND_ESBUILD_META") == "1";
-	// const noMinify = Deno.env.get("_BACKEND_ESBUILD_NO_MINIFY") == "1";
-	// const result = await esbuild.build({
-	// 	entryPoints: [projectDataPath(project, ENTRYPOINT_PATH)],
-	// 	outfile: bundledFile,
-	// 	format: "esm",
-	// 	sourcemap: true,
-	// 	plugins: [
-	// 		// Bundle Deno dependencies
-	// 		...denoPlugins(),
-	//
-	// 		// HACK: esbuild-deno-loader does not play nice with
-	// 		// Windows paths, so we manually resolve any paths that
-	// 		// start with a Windows path separator (\) and resolve
-	// 		// them to the full path.
-	// 		{
-	// 			name: "fix-windows-paths",
-	// 			setup(build: esbuild.PluginBuild) {
-	// 				build.onResolve({ filter: /^\\.*/ }, (args) => {
-	// 					const resolvedPath = resolve(args.resolveDir, args.path);
-	// 					if (!exists(resolvedPath, { isFile: true })) {
-	// 						return {
-	// 							errors: [{ text: `File could not be resolved: ${resolvedPath}` }],
-	// 						};
-	// 					}
-	//
-	// 					return {
-	// 						path: resolve(args.resolveDir, args.path),
-	// 					};
-	// 				});
-	// 			},
-	// 		} satisfies esbuild.Plugin,
-	//
-	// 		// Remove unused Node imports
-	// 		nodeModulesPolyfillPlugin({
-	// 			globals: {
-	// 				Buffer: true,
-	// 				process: true,
-	// 			},
-	// 			modules: {
-	// 				// Not used:
-	// 				// https://github.com/brianc/node-postgres/blob/50c06f9bc6ff2ca1e8d7b7268b9af54ce49d72c1/packages/pg/lib/crypto/utils.js#L3
-	// 				crypto: "empty",
-	// 				dns: "empty",
-	// 				events: true,
-	// 				fs: "empty",
-	// 				net: "empty",
-	// 				path: "empty",
-	// 				string_decoder: true,
-	// 				tls: "empty",
-	// 				buffer: true,
-	// 			},
-	// 		}),
-	// 	],
-	// 	define: {
-	// 		// HACK: Disable `process.domain` in order to correctly handle this edge case:
-	// 		// https://github.com/brianc/node-postgres/blob/50c06f9bc6ff2ca1e8d7b7268b9af54ce49d72c1/packages/pg/lib/native/query.js#L126
-	// 		"process.domain": "undefined",
-	// 	},
-	// 	external: [
-	// 		"node:process",
-	// 		"node:stream",
-	// 		"node:util",
-	//
-	// 		// Wasm must be loaded as a separate file manually, cannot be bundled
-	// 		"*.wasm",
-	// 		"*.wasm?module",
-	// 	],
-	// 	bundle: true,
-	// 	minify: !noMinify,
-	//
-	// 	logLevel: analyzeResult ? "debug" : "error",
-	// 	metafile: analyzeResult,
-	// });
-	//
-	// if (result.metafile) {
-	// 	console.log(await esbuild.analyzeMetafile(result.metafile));
-	// }
-	//
-	// 	const bundleStr = await Deno.readTextFile(bundledFile);
-	//
-	// 	// TODO: Add ability for injecting WASM modules
-	// 	// // Find any `query-engine.wasm`
-	// 	// let wasmPath;
-	// 	// for (const module of project.modules.values()) {
-	// 	// 	const moduleWasmPath = resolve(
-	// 	// 		genPrismaOutputFolder(project, module),
-	// 	// 		"query_engine_bg.wasm",
-	// 	// 	);
-	// 	//
-	// 	// 	if (await exists(moduleWasmPath)) {
-	// 	// 		wasmPath = moduleWasmPath;
-	// 	// 		break;
-	// 	// 	}
-	// 	// }
-	// 	//
-	// 	// // Check if wasm is actually required
-	// 	// if (wasmPath) {
-	// 	// 	// Make wasm import relative
-	// 	// 	bundleStr = bundleStr.replaceAll(
-	// 	// 		/file:[\w\\/\.\-]+query_engine_bg\.wasm/g,
-	// 	// 		"query-engine.wasm",
-	// 	// 	);
-	// 	// } else if (/file:[\w\\/\.\-]+query_engine_bg\.wasm/.test(bundleStr)) {
-	// 	// 	throw new InternalError("Failed to find required query_engine_bg.wasm", { path: bundledFile });
-	// 	// }
-	//
-	// 	await Deno.writeTextFile(bundledFile, bundleStr);
-	//
-	// 	// Write manifest of file paths for easier upload from Rivet CLI
-	// 	//
-	// 	// These modules are relative to the project root in case this was
-	// 	// generated from a Docker container.
-	// 	const manifest = {
-	// 		bundle: relative(project.path, bundledFile),
-	// 		wasm: undefined,
-	// 		// wasm: wasmPath ? relative(project.path, wasmPath) : undefined,
-	// 	};
-	//
-	// 	await Deno.writeTextFile(
-	// 		projectDataPath(project, OUTPUT_MANIFEST_PATH),
-	// 		JSON.stringify(manifest),
-	// 	);
+export async function build(input: Input): Promise<Output> {
+	console.log("cwd", Deno.cwd())
+	console.log("version", Deno.version)
+	let outfile = resolve(input.outDir, "index.js");
+	const result = await esbuild.build({
+		entryPoints: [input.entryPoint],
+		outfile,
+		format: "esm",
+		sourcemap: true,
+		plugins: [
+			// Bundle Deno dependencies
+			...denoPlugins({
+				loader: "native",
+				configPath: input.deno.configPath,
+				importMapURL: input.deno.importMapUrl,
+				lockPath: input.deno.lockPath,
+			}),
+
+			// HACK: esbuild-deno-loader does not play nice with
+			// Windows paths, so we manually resolve any paths that
+			// start with a Windows path separator (\) and resolve
+			// them to the full path.
+			// {
+			// 	name: "fix-windows-paths",
+			// 	setup(build: esbuild.PluginBuild) {
+			// 		build.onResolve({ filter: /^\\.*/ }, (args) => {
+			// 			const resolvedPath = resolve(args.resolveDir, args.path);
+			// 			if (!exists(resolvedPath, { isFile: true })) {
+			// 				return {
+			// 					errors: [{ text: `File could not be resolved: ${resolvedPath}` }],
+			// 				};
+			// 			}
+
+			// 			return {
+			// 				path: resolve(args.resolveDir, args.path),
+			// 			};
+			// 		});
+			// 	},
+			// } satisfies esbuild.Plugin,
+		],
+		define: {
+			// HACK: Disable `process.domain` in order to correctly handle this edge case:
+			// https://github.com/brianc/node-postgres/blob/50c06f9bc6ff2ca1e8d7b7268b9af54ce49d72c1/packages/pg/lib/native/query.js#L126
+			"process.domain": "undefined",
+		},
+		external: [
+			// Provided by Deno
+			"node:*",
+
+			// Wasm must be loaded as a separate file manually, cannot be bundled
+			"*.wasm",
+			"*.wasm?module",
+		],
+		bundle: true,
+		minify: input.bundle.minify,
+
+		// TODO: Remove any
+		logLevel: input.bundle.logLevel as any,
+		metafile: input.bundle.analyzeResult,
+	});
+
+	let analyzedMetafile = undefined;
+	if (result.metafile) {
+		analyzedMetafile = await esbuild.analyzeMetafile(result.metafile);
+	}
+
+	return {
+		files: ["index.js"],
+		analyzedMetafile,
+	};
 }

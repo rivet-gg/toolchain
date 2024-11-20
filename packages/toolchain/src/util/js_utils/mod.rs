@@ -1,9 +1,12 @@
 use anyhow::*;
+use serde::de::DeserializeOwned;
 use serde::Serialize;
-use std::{collections::HashMap, path::PathBuf, process::ExitCode};
+use std::{collections::HashMap, path::PathBuf};
 use tokio::process::Command;
 
 use crate::{paths, util::task};
+
+pub mod schemas;
 
 pub struct CommandOpts {
 	pub task_path: &'static str,
@@ -59,7 +62,7 @@ pub async fn build_backend_command_raw(opts: CommandOpts) -> Result<CommandRaw> 
 			format!("{base_url}/deno.jsonc"),
 			"--lock".into(),
 			format!("{base_url}/deno.lock"),
-			format!("{base_url}/cli/tasks/{}", opts.task_path),
+			format!("{base_url}/{}", opts.task_path),
 			"--input".into(),
 			input_json,
 		],
@@ -71,6 +74,7 @@ pub async fn build_backend_command_raw(opts: CommandOpts) -> Result<CommandRaw> 
 pub async fn build_backend_command(opts: CommandOpts) -> Result<Command> {
 	let cmd_raw = build_backend_command_raw(opts).await?;
 	let mut cmd = Command::new(cmd_raw.command);
+	cmd.kill_on_drop(true);
 	cmd.args(cmd_raw.args)
 		.envs(cmd_raw.envs)
 		.current_dir(cmd_raw.current_dir);
@@ -84,43 +88,45 @@ pub async fn run_backend_command_from_task(task: task::TaskCtx, opts: CommandOpt
 	Ok(exit_code.code().unwrap_or(0))
 }
 
-pub async fn run_backend_command_passthrough(
-	task_path: &'static str,
-	input: &impl Serialize,
-) -> ExitCode {
-	let input_json = match serde_json::to_value(input) {
-		Result::Ok(x) => x,
-		Err(err) => {
-			eprintln!("Serialize failed: {err:?}");
-			return ExitCode::FAILURE;
-		}
-	};
+pub async fn run_command_and_parse_output<Input: Serialize, Output: DeserializeOwned>(
+	js_task_path: &'static str,
+	input: &Input,
+) -> Result<Output> {
+	let input_json =
+		serde_json::to_value(input).map_err(|err| anyhow!("Failed to serialize input: {err}"))?;
 
-	let mut cmd = match build_backend_command(CommandOpts {
-		task_path,
+	let mut cmd = build_backend_command(CommandOpts {
+		task_path: js_task_path,
 		input: input_json,
 		env: HashMap::new(),
 	})
 	.await
-	{
-		Result::Ok(x) => x,
-		Err(err) => {
-			eprintln!("Error building command: {err:?}");
-			return ExitCode::FAILURE;
-		}
-	};
+	.map_err(|err| anyhow!("Failed to build command: {err}"))?;
 
-	let exit_code = match cmd.status().await {
-		Result::Ok(x) => x,
-		Err(err) => {
-			eprintln!("Error running command: {err:?}");
-			return ExitCode::FAILURE;
-		}
-	};
+	let output = cmd
+		.output()
+		.await
+		.map_err(|err| anyhow!("Failed to run command: {err}"))?;
 
-	if exit_code.success() {
-		ExitCode::SUCCESS
+	let stdout = String::from_utf8_lossy(&output.stdout);
+	let stderr = String::from_utf8_lossy(&output.stderr);
+
+	if output.status.success() {
+		if let Some(last_line) = stdout.lines().rev().find(|line| !line.trim().is_empty()) {
+			serde_json::from_str(last_line).map_err(|err| {
+				anyhow!("Failed to parse JSON from output: {err}\nOutput: {last_line}")
+			})
+		} else {
+			Err(anyhow!("No non-blank lines in output\nStdout: {stdout}\nStderr: {stderr}"))
+		}
 	} else {
-		ExitCode::FAILURE
+		let mut error_message = format!("Command failed with status: {}", output.status);
+		if !stdout.is_empty() {
+			error_message.push_str(&format!("\nstdout:\n{stdout}"));
+		}
+		if !stderr.is_empty() {
+			error_message.push_str(&format!("\nstderr:\n{stderr}"));
+		}
+		Err(anyhow!(error_message))
 	}
 }
