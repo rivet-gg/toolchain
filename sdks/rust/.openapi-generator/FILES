@@ -14,10 +14,10 @@ docs/ActorCreateActorPortRequest.md
 docs/ActorCreateActorRequest.md
 docs/ActorCreateActorResponse.md
 docs/ActorCreateActorRuntimeRequest.md
-docs/ActorGameGuardRouting.md
 docs/ActorGetActorLogsResponse.md
 docs/ActorGetActorResponse.md
 docs/ActorGetBuildResponse.md
+docs/ActorGuardRouting.md
 docs/ActorLifecycle.md
 docs/ActorListActorsResponse.md
 docs/ActorListBuildsResponse.md
@@ -38,6 +38,7 @@ docs/ActorRegion.md
 docs/ActorRegionsApi.md
 docs/ActorResources.md
 docs/ActorRuntime.md
+docs/ActorUpgradeActorRequest.md
 docs/AuthCompleteStatus.md
 docs/AuthIdentityCompleteEmailVerificationRequest.md
 docs/AuthIdentityCompleteEmailVerificationResponse.md
@@ -379,7 +380,10 @@ docs/PortalNotificationRegisterFirebaseService.md
 docs/PortalNotificationRegisterService.md
 docs/PortalNotificationUnregisterService.md
 docs/ProvisionDatacentersApi.md
+docs/ProvisionDatacentersGetServersResponse.md
 docs/ProvisionDatacentersGetTlsResponse.md
+docs/ProvisionPoolType.md
+docs/ProvisionServer.md
 docs/ProvisionServersApi.md
 docs/ProvisionServersGetInfoResponse.md
 docs/ServersApi.md
@@ -476,10 +480,10 @@ src/models/actor_create_actor_port_request.rs
 src/models/actor_create_actor_request.rs
 src/models/actor_create_actor_response.rs
 src/models/actor_create_actor_runtime_request.rs
-src/models/actor_game_guard_routing.rs
 src/models/actor_get_actor_logs_response.rs
 src/models/actor_get_actor_response.rs
 src/models/actor_get_build_response.rs
+src/models/actor_guard_routing.rs
 src/models/actor_lifecycle.rs
 src/models/actor_list_actors_response.rs
 src/models/actor_list_builds_response.rs
@@ -498,6 +502,7 @@ src/models/actor_prepare_build_response.rs
 src/models/actor_region.rs
 src/models/actor_resources.rs
 src/models/actor_runtime.rs
+src/models/actor_upgrade_actor_request.rs
 src/models/auth_complete_status.rs
 src/models/auth_identity_complete_email_verification_request.rs
 src/models/auth_identity_complete_email_verification_response.rs
@@ -804,7 +809,10 @@ src/models/portal_get_suggested_games_response.rs
 src/models/portal_notification_register_firebase_service.rs
 src/models/portal_notification_register_service.rs
 src/models/portal_notification_unregister_service.rs
+src/models/provision_datacenters_get_servers_response.rs
 src/models/provision_datacenters_get_tls_response.rs
+src/models/provision_pool_type.rs
+src/models/provision_server.rs
 src/models/provision_servers_get_info_response.rs
 src/models/servers_build.rs
 src/models/servers_build_compression.rs

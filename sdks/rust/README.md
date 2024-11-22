@@ -29,6 +29,7 @@ Class | Method | HTTP request | Description
 *ActorApi* | [**actor_destroy**](docs/ActorApi.md#actor_destroy) | **DELETE** /actors/{actor} | 
 *ActorApi* | [**actor_get**](docs/ActorApi.md#actor_get) | **GET** /actors/{actor} | 
 *ActorApi* | [**actor_list**](docs/ActorApi.md#actor_list) | **GET** /actors | 
+*ActorApi* | [**actor_upgrade**](docs/ActorApi.md#actor_upgrade) | **POST** /actors/{actor}/upgrade | 
 *ActorBuildsApi* | [**actor_builds_complete**](docs/ActorBuildsApi.md#actor_builds_complete) | **POST** /builds/{build}/complete | 
 *ActorBuildsApi* | [**actor_builds_get**](docs/ActorBuildsApi.md#actor_builds_get) | **GET** /builds/{build} | 
 *ActorBuildsApi* | [**actor_builds_list**](docs/ActorBuildsApi.md#actor_builds_list) | **GET** /builds | 
@@ -159,6 +160,7 @@ Class | Method | HTTP request | Description
 *MatchmakerPlayersApi* | [**matchmaker_players_get_statistics**](docs/MatchmakerPlayersApi.md#matchmaker_players_get_statistics) | **GET** /matchmaker/players/statistics | 
 *MatchmakerRegionsApi* | [**matchmaker_regions_list**](docs/MatchmakerRegionsApi.md#matchmaker_regions_list) | **GET** /matchmaker/regions | 
 *PortalGamesApi* | [**portal_games_get_game_profile**](docs/PortalGamesApi.md#portal_games_get_game_profile) | **GET** /portal/games/{game_name_id}/profile | 
+*ProvisionDatacentersApi* | [**provision_datacenters_get_servers**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_servers) | **GET** /datacenters/{datacenter_id}/servers | 
 *ProvisionDatacentersApi* | [**provision_datacenters_get_tls**](docs/ProvisionDatacentersApi.md#provision_datacenters_get_tls) | **GET** /datacenters/{datacenter_id}/tls | 
 *ProvisionServersApi* | [**provision_servers_get_info**](docs/ProvisionServersApi.md#provision_servers_get_info) | **GET** /servers/{ip} | 
 *ServersApi* | [**servers_create**](docs/ServersApi.md#servers_create) | **POST** /games/{game_id}/environments/{environment_id}/servers | 
@@ -185,10 +187,10 @@ Class | Method | HTTP request | Description
  - [ActorCreateActorRequest](docs/ActorCreateActorRequest.md)
  - [ActorCreateActorResponse](docs/ActorCreateActorResponse.md)
  - [ActorCreateActorRuntimeRequest](docs/ActorCreateActorRuntimeRequest.md)
- - [ActorGameGuardRouting](docs/ActorGameGuardRouting.md)
  - [ActorGetActorLogsResponse](docs/ActorGetActorLogsResponse.md)
  - [ActorGetActorResponse](docs/ActorGetActorResponse.md)
  - [ActorGetBuildResponse](docs/ActorGetBuildResponse.md)
+ - [ActorGuardRouting](docs/ActorGuardRouting.md)
  - [ActorLifecycle](docs/ActorLifecycle.md)
  - [ActorListActorsResponse](docs/ActorListActorsResponse.md)
  - [ActorListBuildsResponse](docs/ActorListBuildsResponse.md)
@@ -207,6 +209,7 @@ Class | Method | HTTP request | Description
  - [ActorRegion](docs/ActorRegion.md)
  - [ActorResources](docs/ActorResources.md)
  - [ActorRuntime](docs/ActorRuntime.md)
+ - [ActorUpgradeActorRequest](docs/ActorUpgradeActorRequest.md)
  - [AuthCompleteStatus](docs/AuthCompleteStatus.md)
  - [AuthIdentityCompleteEmailVerificationRequest](docs/AuthIdentityCompleteEmailVerificationRequest.md)
  - [AuthIdentityCompleteEmailVerificationResponse](docs/AuthIdentityCompleteEmailVerificationResponse.md)
@@ -512,7 +515,10 @@ Class | Method | HTTP request | Description
  - [PortalNotificationRegisterFirebaseService](docs/PortalNotificationRegisterFirebaseService.md)
  - [PortalNotificationRegisterService](docs/PortalNotificationRegisterService.md)
  - [PortalNotificationUnregisterService](docs/PortalNotificationUnregisterService.md)
+ - [ProvisionDatacentersGetServersResponse](docs/ProvisionDatacentersGetServersResponse.md)
  - [ProvisionDatacentersGetTlsResponse](docs/ProvisionDatacentersGetTlsResponse.md)
+ - [ProvisionPoolType](docs/ProvisionPoolType.md)
+ - [ProvisionServer](docs/ProvisionServer.md)
  - [ProvisionServersGetInfoResponse](docs/ProvisionServersGetInfoResponse.md)
  - [ServersBuild](docs/ServersBuild.md)
  - [ServersBuildCompression](docs/ServersBuildCompression.md)
