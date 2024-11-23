@@ -89,10 +89,12 @@ async fn build_and_upload(
 	//
 	// Indicates the latest build to use for this environment. Used if not providing a client-side
 	// version.
-	let tags = HashMap::from([
+	let mut tags = HashMap::from([
 		(build::tags::VERSION.to_string(), version_name.to_string()),
 		(build::tags::CURRENT.to_string(), "true".to_string()),
 	]);
+	tags.extend(build.tags.clone());
+
 	let exclusive_tags = vec![
 		build::tags::VERSION.to_string(),
 		build::tags::CURRENT.to_string(),
