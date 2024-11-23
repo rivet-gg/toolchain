@@ -4,7 +4,6 @@ use toolchain::tasks::{deploy, get_bootstrap_data};
 
 use crate::util::task::{run_task, TaskOutputStyle};
 
-/// Build & upload the game server & backend
 #[derive(Parser)]
 pub struct Opts {
 	environment: String,
@@ -57,7 +56,7 @@ impl Opts {
 		};
 
 		match run_task::<deploy::Task>(
-			TaskOutputStyle::Plain,
+			TaskOutputStyle::PlainNoResult,
 			deploy::Input {
 				config,
 				environment_id: environment.id,

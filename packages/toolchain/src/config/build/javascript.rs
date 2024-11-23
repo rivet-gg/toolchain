@@ -2,14 +2,40 @@ use serde::{Deserialize, Serialize};
 
 use super::Compression;
 
+// TODO: Add back `deny_unknown_fields` after https://github.com/serde-rs/serde/issues/1600
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
+#[serde(rename_all = "snake_case")]
 pub struct Build {
-	pub path: String,
+	#[serde(flatten)]
+	pub bundler: Bundler,
 	#[serde(skip_serializing_if = "Option::is_none")]
-	pub mode: Option<String>,
+	pub unstable: Option<Unstable>,
+}
+
+impl Build {
+	pub fn unstable(&self) -> Unstable {
+		self.unstable.clone().unwrap_or_default()
+	}
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", tag = "bundler", deny_unknown_fields)]
+pub enum Bundler {
+	// Deno(DenoBuildMethod),
+	None(NoBuildMethod),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", tag = "bundler", deny_unknown_fields)]
+pub struct NoBuildMethod {
+	pub index_path: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", tag = "bundler", deny_unknown_fields)]
+pub struct DenoBuildMethod {
 	#[serde(skip_serializing_if = "Option::is_none")]
-	pub command: Option<String>,
+	pub build_path: Option<String>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub import_map: Option<String>,
 	#[serde(skip_serializing_if = "Option::is_none")]
@@ -32,8 +58,16 @@ pub struct Bundle {
 	pub minify: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Unstable {
-	pub compression: Compression,
+	// TODO(RVT-4127): Add compression support
+	// pub compression: Option<Compression>,
+}
+
+impl Unstable {
+	// TODO(RVT-4127): Add compression support
+	pub fn compression(&self) -> Compression {
+		Compression::None
+	}
 }

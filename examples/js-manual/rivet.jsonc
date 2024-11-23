@@ -1,0 +1,14 @@
+{
+  "version": "2.0",
+  "builds": [
+    {
+      "tags": { "name": "echo-http" },
+      "runtime": "javascript",
+      "bundler": "none",
+      "index_path": "echo_http.js"
+    }
+  ],
+  "unstable": {
+    "multipart_enabled": false
+  }
+}

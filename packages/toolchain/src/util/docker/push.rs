@@ -66,7 +66,7 @@ pub async fn push_tar(
 		&ctx.openapi_config_cloud,
 		models::ActorPrepareBuildRequest {
 			name: display_name.clone(),
-			image_tag: push_opts.docker_tag.clone(),
+			image_tag: Some(push_opts.docker_tag.clone()),
 			image_file: Box::new(models::UploadPrepareFile {
 				path: "image.tar".into(),
 				content_type: Some(content_type.into()),
@@ -83,7 +83,7 @@ pub async fn push_tar(
 				config::build::Compression::Lz4 => models::ActorBuildCompression::Lz4,
 			}),
 			multipart_upload: Some(multipart_enabled),
-			// TODO:
+			// TODO(RVT-4124):
 			prewarm_regions: None,
 		},
 		Some(&ctx.project.name_id),

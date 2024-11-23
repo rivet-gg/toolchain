@@ -13,7 +13,7 @@ use crate::{
 	},
 };
 
-pub struct DeployBuildOpts {
+pub struct BuildAndUploadOpts {
 	pub env: TEMPEnvironment,
 	pub config: config::Config,
 	pub build_config: config::build::docker::Build,
@@ -24,7 +24,7 @@ pub struct DeployBuildOpts {
 pub async fn build_and_upload(
 	ctx: &ToolchainCtx,
 	task: task::TaskCtx,
-	opts: DeployBuildOpts,
+	opts: BuildAndUploadOpts,
 ) -> Result<Uuid> {
 	task.log("[Build]");
 
