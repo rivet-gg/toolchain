@@ -5,10 +5,7 @@
       "tags": { "name": "echo-http" },
       "runtime": "javascript",
       "bundler": "none",
-      "index_path": "echo_http.js"
+      "script": "echo_http.js"
     }
-  ],
-  "unstable": {
-    "multipart_enabled": false
-  }
+  ]
 }

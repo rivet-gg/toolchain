@@ -5,7 +5,7 @@ use std::{env, fs, path::Path};
 use zip::ZipArchive;
 
 const GITHUB_API_URL: &str = "https://api.github.com/repos/denoland/deno";
-const DENO_VERSION: &str = "1.46.3";
+const DENO_VERSION: &str = "2.0.6";
 const USER_AGENT: &str = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -39,7 +39,9 @@ fn fetch_release_data() -> Result<Value, Box<dyn std::error::Error>> {
 	println!("Fetching release information from: {}", release_url);
 
 	let client = Client::new();
-	let mut request = client.get(&release_url).header(reqwest::header::USER_AGENT, USER_AGENT);
+	let mut request = client
+		.get(&release_url)
+		.header(reqwest::header::USER_AGENT, USER_AGENT);
 
 	if let Ok(token) = env::var("GITHUB_TOKEN") {
 		request = request.header(reqwest::header::AUTHORIZATION, format!("token {}", token));
@@ -96,7 +98,9 @@ fn download_binary_if_needed(
 		println!("Downloading Deno binary from: {}", download_url);
 
 		let client = Client::new();
-		let mut request = client.get(download_url).header(reqwest::header::USER_AGENT, USER_AGENT);
+		let mut request = client
+			.get(download_url)
+			.header(reqwest::header::USER_AGENT, USER_AGENT);
 
 		if let Ok(token) = env::var("GITHUB_TOKEN") {
 			request = request.header(reqwest::header::AUTHORIZATION, format!("token {}", token));

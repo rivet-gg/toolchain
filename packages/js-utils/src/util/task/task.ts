@@ -41,8 +41,6 @@ export async function runTask<T extends z.ZodType>(task: Task<T>) {
 	} catch (err) {
 		printError(err);
 		exitCode = 1;
-	} finally {
-		console.log("Exiting");
 	}
 
 	Deno.exit(exitCode);

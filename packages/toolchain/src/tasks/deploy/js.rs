@@ -9,7 +9,7 @@ use crate::{
 	config, paths,
 	project::environment::TEMPEnvironment,
 	toolchain_ctx::ToolchainCtx,
-	util::{net::upload, task, term},
+	util::{js_utils, net::upload, task, term},
 };
 
 const BUILD_INDEX_NAME: &str = "index.js";
@@ -31,20 +31,90 @@ pub async fn build_and_upload(
 
 	let project_root = paths::project_root()?;
 
-	// Determine build attributes
-	let build_config_unstable = opts.build_config.unstable();
-	let compression = build_config_unstable.compression();
-
+	// Create dir to write build artifacts to
 	let build_dir = tempfile::TempDir::new()?;
 
-	match opts.build_config.bundler {
-		config::build::javascript::Bundler::None(opts) => {
-			// Copy index file to build dir
-			fs::copy(
-				project_root.join(opts.index_path),
-				build_dir.path().join(BUILD_INDEX_NAME),
+	// Bundle JS
+	let compression = opts.build_config.unstable.compression();
+	match opts.build_config.bundler() {
+		config::build::javascript::Bundler::Deno => {
+			// Validate that the script path has a .ts or .js extension
+			let script_path = project_root.join(&opts.build_config.script);
+			ensure!(
+				script_path.extension().and_then(|s| s.to_str()) == Some("ts")
+					|| script_path.extension().and_then(|s| s.to_str()) == Some("js"),
+				"script file must have a .ts or .js extension for Deno bundler"
+			);
+
+			// Search for deno.json or deno.jsonc
+			let deno_config_path = ["deno.json", "deno.jsonc"]
+				.iter()
+				.find_map(|file_name| {
+					let path = project_root.join(file_name);
+					if path.exists() {
+						Some(path.display().to_string())
+					} else {
+						None
+					}
+				});
+
+			// Search for a Deno lockfile
+			let deno_lockfile_path = ["deno.lock"]
+				.iter()
+				.find_map(|file_name| {
+					let path = project_root.join(file_name);
+					if path.exists() {
+						Some(path.display().to_string())
+					} else {
+						None
+					}
+				});
+
+			// Build the bundle to the output dir. This will bundle all Deno dependencies into a
+			// single JS file.
+			//
+			// The Deno command is run in the project root, so `config_path`, `lock_path`, etc can
+			// all safely be passed as relative paths without joining with `project_root`.
+			let output = js_utils::run_command_and_parse_output::<
+				js_utils::schemas::build::Input,
+				js_utils::schemas::build::Output,
+			>(
+				"src/tasks/build/mod.ts",
+				&js_utils::schemas::build::Input {
+					entry_point: script_path,
+					out_dir: build_dir.path().to_path_buf(),
+					deno: js_utils::schemas::build::Deno {
+						config_path: deno_config_path.or_else(|| opts
+							.build_config
+							.deno
+							.config_path
+							.map(|x| project_root.join(x).display().to_string())),
+						import_map_url: opts.build_config.deno.import_map_url.clone(),
+						lock_path: deno_lockfile_path.or_else(|| opts.build_config.deno.lock_path.clone()),
+					},
+					bundle: js_utils::schemas::build::Bundle {
+						minify: opts.build_config.unstable.minify(),
+						analyze_result: opts.build_config.unstable.analyze_result(),
+						log_level: opts.build_config.unstable.esbuild_log_level(),
+					},
+				},
 			)
 			.await?;
+			if let Some(analyze_result) = output.analyzed_metafile {
+				task.log("[Bundle Analysis]");
+				task.log(analyze_result);
+			}
+		}
+		config::build::javascript::Bundler::None => {
+			// Ensure the script path has a .js extension
+			let script_path = project_root.join(opts.build_config.script);
+			ensure!(
+				script_path.extension().and_then(|s| s.to_str()) == Some("js"),
+				"script file must have a .js extension when not using a bundler"
+			);
+
+			// Copy index file to build dir
+			fs::copy(script_path, build_dir.path().join(BUILD_INDEX_NAME)).await?;
 		}
 	};
 

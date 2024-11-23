@@ -6,66 +6,60 @@ use super::Compression;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Build {
-	#[serde(flatten)]
-	pub bundler: Bundler,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub unstable: Option<Unstable>,
+	pub script: String,
+	pub bundler: Option<Bundler>,
+	#[serde(default)]
+	pub deno: Deno,
+	#[serde(default)]
+	pub unstable: Unstable,
 }
 
 impl Build {
-	pub fn unstable(&self) -> Unstable {
-		self.unstable.clone().unwrap_or_default()
+	pub fn bundler(&self) -> Bundler {
+		self.bundler.unwrap_or(Bundler::Deno)
 	}
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "bundler", deny_unknown_fields)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Bundler {
-	// Deno(DenoBuildMethod),
-	None(NoBuildMethod),
+	Deno,
+	None,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "bundler", deny_unknown_fields)]
-pub struct NoBuildMethod {
-	pub index_path: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", tag = "bundler", deny_unknown_fields)]
-pub struct DenoBuildMethod {
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub build_path: Option<String>,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub import_map: Option<String>,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub deno: Option<Deno>,
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub bundle: Option<Bundle>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Deno {
-	pub config: String,
-	pub no_lock: bool,
-	pub no_remote: bool,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct Bundle {
-	pub minify: bool,
+	pub config_path: Option<String>,
+	pub import_map_url: Option<String>,
+	pub lock_path: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Unstable {
+	pub minify: Option<bool>,
+	pub analyze_result: Option<bool>,
+	pub esbuild_log_level: Option<String>,
 	// TODO(RVT-4127): Add compression support
 	// pub compression: Option<Compression>,
 }
 
 impl Unstable {
+	pub fn minify(&self) -> bool {
+		self.minify.unwrap_or(true)
+	}
+
+	pub fn analyze_result(&self) -> bool {
+		self.analyze_result.unwrap_or(false)
+	}
+
+	pub fn esbuild_log_level(&self) -> String {
+		self.esbuild_log_level
+			.clone()
+			.unwrap_or_else(|| "error".to_string())
+	}
+
 	// TODO(RVT-4127): Add compression support
 	pub fn compression(&self) -> Compression {
 		Compression::None
