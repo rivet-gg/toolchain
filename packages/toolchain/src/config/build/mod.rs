@@ -12,6 +12,7 @@ pub enum Runtime {
 }
 
 #[derive(Debug, Copy, Clone, Serialize, Deserialize, strum::AsRefStr)]
+#[serde(rename_all = "snake_case")]
 pub enum Compression {
 	/// No compression.
 	#[strum(serialize = "none")]

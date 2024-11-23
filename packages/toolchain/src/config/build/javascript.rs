@@ -41,8 +41,7 @@ pub struct Unstable {
 	pub minify: Option<bool>,
 	pub analyze_result: Option<bool>,
 	pub esbuild_log_level: Option<String>,
-	// TODO(RVT-4127): Add compression support
-	// pub compression: Option<Compression>,
+	pub compression: Option<Compression>,
 }
 
 impl Unstable {
@@ -60,8 +59,8 @@ impl Unstable {
 			.unwrap_or_else(|| "error".to_string())
 	}
 
-	// TODO(RVT-4127): Add compression support
 	pub fn compression(&self) -> Compression {
-		Compression::None
+		// TODO: Change back to Lz4 default
+		self.compression.unwrap_or(Compression::None)
 	}
 }

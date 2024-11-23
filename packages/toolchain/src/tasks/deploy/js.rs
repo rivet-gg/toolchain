@@ -12,11 +12,11 @@ use crate::{
 	util::{js_utils, net::upload, task, term},
 };
 
+/// File name for the index path to the script.
 const BUILD_INDEX_NAME: &str = "index.js";
 
 pub struct BuildAndUploadOpts {
 	pub env: TEMPEnvironment,
-	pub config: config::Config,
 	pub build_config: config::build::javascript::Build,
 	pub version_name: String,
 }
@@ -35,7 +35,6 @@ pub async fn build_and_upload(
 	let build_dir = tempfile::TempDir::new()?;
 
 	// Bundle JS
-	let compression = opts.build_config.unstable.compression();
 	match opts.build_config.bundler() {
 		config::build::javascript::Bundler::Deno => {
 			// Validate that the script path has a .ts or .js extension
@@ -47,28 +46,24 @@ pub async fn build_and_upload(
 			);
 
 			// Search for deno.json or deno.jsonc
-			let deno_config_path = ["deno.json", "deno.jsonc"]
-				.iter()
-				.find_map(|file_name| {
-					let path = project_root.join(file_name);
-					if path.exists() {
-						Some(path.display().to_string())
-					} else {
-						None
-					}
-				});
+			let deno_config_path = ["deno.json", "deno.jsonc"].iter().find_map(|file_name| {
+				let path = project_root.join(file_name);
+				if path.exists() {
+					Some(path.display().to_string())
+				} else {
+					None
+				}
+			});
 
 			// Search for a Deno lockfile
-			let deno_lockfile_path = ["deno.lock"]
-				.iter()
-				.find_map(|file_name| {
-					let path = project_root.join(file_name);
-					if path.exists() {
-						Some(path.display().to_string())
-					} else {
-						None
-					}
-				});
+			let deno_lockfile_path = ["deno.lock"].iter().find_map(|file_name| {
+				let path = project_root.join(file_name);
+				if path.exists() {
+					Some(path.display().to_string())
+				} else {
+					None
+				}
+			});
 
 			// Build the bundle to the output dir. This will bundle all Deno dependencies into a
 			// single JS file.
@@ -84,13 +79,15 @@ pub async fn build_and_upload(
 					entry_point: script_path,
 					out_dir: build_dir.path().to_path_buf(),
 					deno: js_utils::schemas::build::Deno {
-						config_path: deno_config_path.or_else(|| opts
-							.build_config
-							.deno
-							.config_path
-							.map(|x| project_root.join(x).display().to_string())),
+						config_path: deno_config_path.or_else(|| {
+							opts.build_config
+								.deno
+								.config_path
+								.map(|x| project_root.join(x).display().to_string())
+						}),
 						import_map_url: opts.build_config.deno.import_map_url.clone(),
-						lock_path: deno_lockfile_path.or_else(|| opts.build_config.deno.lock_path.clone()),
+						lock_path: deno_lockfile_path
+							.or_else(|| opts.build_config.deno.lock_path.clone()),
 					},
 					bundle: js_utils::schemas::build::Bundle {
 						minify: opts.build_config.unstable.minify(),
@@ -123,14 +120,10 @@ pub async fn build_and_upload(
 		ctx,
 		task.clone(),
 		&UploadBundleOpts {
-			config: opts.config.clone(),
 			env: opts.env,
 			version_name: opts.version_name,
 			build_path: build_dir.path().into(),
-			build_manifest: BuildManifest {
-				files: vec![BUILD_INDEX_NAME.into()],
-			},
-			compression,
+			compression: opts.build_config.unstable.compression(),
 		},
 	)
 	.await?;
@@ -138,36 +131,12 @@ pub async fn build_and_upload(
 	Ok(build_id)
 }
 
-// pub struct JsBundleOpts {
-// 	pub config: config::Config,
-// 	pub env: TEMPEnvironment,
-// }
-//
-// pub struct JsBundleOutput {
-// 	pub path: PathBuf,
-// 	pub manifest: BuildManafest,
-// }
-//
-// /// Bundle a JS build
-// pub async fn bundle_js(
-// 	ctx: &ToolchainCtx,
-// 	task: task::TaskCtx,
-// 	current_dir: &Path,
-// 	bundle_opts: &JsBundleOpts,
-// ) -> Result<()> {
-// 	todo!()
-// }
-
 struct UploadBundleOpts {
-	config: config::Config,
 	env: TEMPEnvironment,
 	version_name: String,
 
 	/// Path to the root of the built files.
 	build_path: PathBuf,
-
-	/// Manifest of files in the bundle.
-	build_manifest: BuildManifest,
 
 	compression: config::build::Compression,
 }
@@ -178,25 +147,38 @@ async fn upload_bundle(
 	task: task::TaskCtx,
 	push_opts: &UploadBundleOpts,
 ) -> Result<Uuid> {
-	let multipart_enabled: bool = push_opts.config.unstable().multipart_enabled();
+	// Validate bundle
+	match fs::metadata(push_opts.build_path.join(BUILD_INDEX_NAME)).await {
+		Result::Ok(_) => {}
+		Err(err) => {
+			if err.kind() == std::io::ErrorKind::NotFound {
+				bail!("index.js does not exist in javascript bundle")
+			} else {
+				bail!("error reading javascript index.js: {err}")
+			}
+		}
+	}
 
-	// Prepare index for upload
-	ensure!(
-		push_opts.build_manifest.files.len() == 1,
-		"must only upload bundle file"
-	);
-	ensure!(
-		push_opts.build_manifest.files[0] == BUILD_INDEX_NAME,
-		"build file must be named `{}`",
-		BUILD_INDEX_NAME
-	);
-	let index_path = push_opts
-		.build_path
-		.join(&push_opts.build_manifest.files[0]);
+	// Archive build
+	let build_tar_file = tempfile::NamedTempFile::new()?;
+	let mut build_archive = tar::Builder::new(build_tar_file);
+	build_archive.append_dir_all(".", &push_opts.build_path)?;
+	let build_tar_file = build_archive.into_inner()?;
+
+	let build_kind = models::ActorBuildKind::Javascript;
+	let build_compression = match push_opts.compression {
+		config::build::Compression::None => models::ActorBuildCompression::None,
+		config::build::Compression::Lz4 => models::ActorBuildCompression::Lz4,
+	};
+
+	// Compress build
+	let compressed_path =
+		crate::util::build::compress_build(build_tar_file.as_ref(), push_opts.compression).await?;
+
 	let image_file = upload::prepare_upload_file(
-		&index_path,
-		&push_opts.build_manifest.files[0],
-		fs::metadata(&index_path).await?,
+		&compressed_path,
+		&crate::util::build::file_name(build_kind, build_compression),
+		fs::metadata(&compressed_path).await?,
 	)?;
 	let files = vec![image_file.clone()];
 
@@ -220,14 +202,8 @@ async fn upload_bundle(
 			name: push_opts.version_name.clone(),
 			image_tag: None,
 			image_file: Box::new(image_file.prepared),
-			kind: Some(models::ActorBuildKind::Javascript),
-			compression: Some(match push_opts.compression {
-				config::build::Compression::None => models::ActorBuildCompression::None,
-				config::build::Compression::Lz4 => models::ActorBuildCompression::Lz4,
-			}),
-			multipart_upload: Some(multipart_enabled),
-			// TODO(RVT-4124):
-			prewarm_regions: None,
+			kind: Some(build_kind),
+			compression: Some(build_compression),
 		},
 		Some(&ctx.project.name_id),
 		Some(&push_opts.env.slug),
@@ -239,15 +215,7 @@ async fn upload_bundle(
 	let reqwest_client = Arc::new(reqwest::Client::new());
 	let pb = term::EitherProgressBar::Multi(term::multi_progress_bar(task.clone()));
 
-	let presigned_requests = if let Some(presigned_requests) = prepare_res.image_presigned_requests
-	{
-		presigned_requests
-	} else if let Some(image_presigned_request) = prepare_res.image_presigned_request {
-		vec![*image_presigned_request]
-	} else {
-		bail!("neither `image_presigned_request` or `image_presigned_requests` provided")
-	};
-	futures_util::stream::iter(presigned_requests)
+	futures_util::stream::iter(prepare_res.presigned_requests)
 		.map(Ok)
 		.try_for_each_concurrent(8, |presigned_req| {
 			let task = task.clone();
@@ -290,8 +258,4 @@ async fn upload_bundle(
 	complete_res.context("complete_res")?;
 
 	Ok(prepare_res.build)
-}
-
-struct BuildManifest {
-	files: Vec<String>,
 }
