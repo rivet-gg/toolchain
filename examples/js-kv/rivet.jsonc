@@ -2,9 +2,10 @@
   "version": "2.0",
   "builds": [
     {
-      "tags": { "name": "rng" },
+      "tags": { "name": "kv" },
       "runtime": "javascript",
-      "script": "rng_http.ts"
+      "bundler": "none",
+      "script": "index.js"
     }
   ]
 }

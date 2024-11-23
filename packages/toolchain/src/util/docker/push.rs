@@ -41,8 +41,6 @@ pub async fn push_tar(
 	task: task::TaskCtx,
 	push_opts: &PushOpts,
 ) -> Result<PushOutput> {
-	let multipart_enabled: bool = push_opts.config.unstable().multipart_enabled();
-
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
 	// Inspect the image
@@ -62,29 +60,28 @@ pub async fn push_tar(
 		size = upload::format_file_size(image_file_meta.len())?
 	));
 
+	let build_kind = match push_opts.bundle {
+		config::build::docker::BundleKind::DockerImage => models::ActorBuildKind::DockerImage,
+		config::build::docker::BundleKind::OciBundle => models::ActorBuildKind::OciBundle,
+	};
+
+	let build_compression = match push_opts.compression {
+		config::build::Compression::None => models::ActorBuildCompression::None,
+		config::build::Compression::Lz4 => models::ActorBuildCompression::Lz4,
+	};
+
 	let build_res = apis::actor_builds_api::actor_builds_prepare(
 		&ctx.openapi_config_cloud,
 		models::ActorPrepareBuildRequest {
 			name: display_name.clone(),
 			image_tag: Some(push_opts.docker_tag.clone()),
 			image_file: Box::new(models::UploadPrepareFile {
-				path: "image.tar".into(),
+				path: crate::util::build::file_name(build_kind, build_compression),
 				content_type: Some(content_type.into()),
 				content_length: image_file_meta.len() as i64,
 			}),
-			kind: Some(match push_opts.bundle {
-				config::build::docker::BundleKind::DockerImage => {
-					models::ActorBuildKind::DockerImage
-				}
-				config::build::docker::BundleKind::OciBundle => models::ActorBuildKind::OciBundle,
-			}),
-			compression: Some(match push_opts.compression {
-				config::build::Compression::None => models::ActorBuildCompression::None,
-				config::build::Compression::Lz4 => models::ActorBuildCompression::Lz4,
-			}),
-			multipart_upload: Some(multipart_enabled),
-			// TODO(RVT-4124):
-			prewarm_regions: None,
+			kind: Some(build_kind),
+			compression: Some(build_compression),
 		},
 		Some(&ctx.project.name_id),
 		Some(&push_opts.env.slug),
@@ -97,41 +94,28 @@ pub async fn push_tar(
 	let build_id = build_res.build;
 	let pb = term::EitherProgressBar::Multi(term::multi_progress_bar(task.clone()));
 
-	if multipart_enabled {
-		// Upload chunks in parallel
-		futures_util::stream::iter(build_res.image_presigned_requests.unwrap())
-			.map(|presigned_request| {
-				let task = task.clone();
-				let reqwest_client = reqwest_client.clone();
-				let pb = pb.clone();
+	// Upload chunks in parallel
+	futures_util::stream::iter(build_res.presigned_requests)
+		.map(|presigned_request| {
+			let task = task.clone();
+			let reqwest_client = reqwest_client.clone();
+			let pb = pb.clone();
 
-				async move {
-					upload::upload_file(
-						task.clone(),
-						&reqwest_client,
-						&presigned_request,
-						&push_opts.path,
-						Some(content_type),
-						pb,
-					)
-					.await
-				}
-			})
-			.buffer_unordered(8)
-			.try_collect::<Vec<_>>()
-			.await?;
-	} else {
-		// Upload file
-		upload::upload_file(
-			task.clone(),
-			&reqwest_client,
-			&build_res.image_presigned_request.unwrap(),
-			&push_opts.path,
-			Some(content_type),
-			pb,
-		)
+			async move {
+				upload::upload_file(
+					task.clone(),
+					&reqwest_client,
+					&presigned_request,
+					&push_opts.path,
+					Some(content_type),
+					pb,
+				)
+				.await
+			}
+		})
+		.buffer_unordered(8)
+		.try_collect::<Vec<_>>()
 		.await?;
-	}
 
 	let complete_res = apis::actor_builds_api::actor_builds_complete(
 		&ctx.openapi_config_cloud,

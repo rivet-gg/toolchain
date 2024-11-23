@@ -121,7 +121,6 @@ async fn build_and_upload(
 				task.clone(),
 				js::BuildAndUploadOpts {
 					env: env.clone(),
-					config: config.clone(),
 					build_config: js.clone(),
 					version_name: version_name.to_string(),
 				},

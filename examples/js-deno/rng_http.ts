@@ -1,8 +1,9 @@
 import { randomIntegerBetween, randomSeeded } from "@std/random";
 
+console.log("Hello, world!");
 console.log(Deno.env.toObject());
 
-const portStr = Deno.env.get("PORT_ds_http") ?? Deno.env.get("HTTP_PORT");
+const portStr = Deno.env.get("PORT_http") ?? Deno.env.get("HTTP_PORT");
 if (!portStr) throw "Missing port";
 const port = parseInt(portStr);
 if (!isFinite(port)) throw "Invalid port";

@@ -64,13 +64,4 @@ pub struct Build {
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
-pub struct Unstable {
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub multipart_enabled: Option<bool>,
-}
-
-impl Unstable {
-	pub fn multipart_enabled(&self) -> bool {
-		self.multipart_enabled.unwrap_or(true)
-	}
-}
+pub struct Unstable {}

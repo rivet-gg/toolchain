@@ -1,4 +1,5 @@
 pub mod api;
+pub mod build;
 pub mod cmd;
 pub mod docker;
 pub mod js_utils;

@@ -1,7 +1,7 @@
 use anyhow::*;
 use serde::Deserialize;
 use serde_json::json;
-use std::{io::Read, path::Path};
+use std::io::Read;
 use typed_path::{TryAsRef, UnixPath};
 use uuid::Uuid;
 
@@ -9,7 +9,7 @@ use crate::{
 	config::{self},
 	util::{
 		cmd::{self, shell_cmd, shell_cmd_std},
-		lz4, task,
+		task,
 	},
 };
 
@@ -37,7 +37,8 @@ pub async fn create_archive(
 	};
 
 	// Compress archive
-	let compressed_path = compress_archive(build_tar_path.as_ref(), build_compression).await?;
+	let compressed_path =
+		crate::util::build::compress_build(build_tar_path.as_ref(), build_compression).await?;
 
 	Ok(compressed_path)
 }
@@ -424,28 +425,4 @@ fn copy_container_to_rootfs(
 		passwd_file,
 		group_file,
 	})
-}
-
-async fn compress_archive(
-	build_tar_path: &Path,
-	compression: config::build::Compression,
-) -> Result<tempfile::TempPath> {
-	// Compress the bundle
-	let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
-	let build_tar_compressed_path = build_tar_compressed_file.into_temp_path();
-	match compression {
-		config::build::Compression::None => {
-			tokio::fs::rename(&build_tar_path, &build_tar_compressed_path).await?;
-		}
-		config::build::Compression::Lz4 => {
-			let build_tar_path = build_tar_path.to_owned();
-			let build_tar_compressed_path = build_tar_compressed_path.to_owned();
-			tokio::task::spawn_blocking(move || {
-				lz4::compress(&build_tar_path, &build_tar_compressed_path)
-			})
-			.await??;
-		}
-	}
-
-	Ok(build_tar_compressed_path)
 }

@@ -19,12 +19,8 @@ pub struct ActorPrepareBuildRequest {
 	pub image_tag: Option<String>,
 	#[serde(rename = "kind", skip_serializing_if = "Option::is_none")]
 	pub kind: Option<crate::models::ActorBuildKind>,
-	#[serde(rename = "multipart_upload", skip_serializing_if = "Option::is_none")]
-	pub multipart_upload: Option<bool>,
 	#[serde(rename = "name")]
 	pub name: String,
-	#[serde(rename = "prewarm_regions", skip_serializing_if = "Option::is_none")]
-	pub prewarm_regions: Option<Vec<String>>,
 }
 
 impl ActorPrepareBuildRequest {
@@ -37,9 +33,7 @@ impl ActorPrepareBuildRequest {
 			image_file: Box::new(image_file),
 			image_tag: None,
 			kind: None,
-			multipart_upload: None,
 			name,
-			prewarm_regions: None,
 		}
 	}
 }
