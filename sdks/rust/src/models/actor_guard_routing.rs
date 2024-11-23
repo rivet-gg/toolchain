@@ -9,14 +9,14 @@
  */
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct ActorGameGuardRouting {
+pub struct ActorGuardRouting {
 	#[serde(rename = "authorization", skip_serializing_if = "Option::is_none")]
 	pub authorization: Option<Box<crate::models::ActorPortAuthorization>>,
 }
 
-impl ActorGameGuardRouting {
-	pub fn new() -> ActorGameGuardRouting {
-		ActorGameGuardRouting {
+impl ActorGuardRouting {
+	pub fn new() -> ActorGuardRouting {
+		ActorGuardRouting {
 			authorization: None,
 		}
 	}

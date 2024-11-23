@@ -10,8 +10,8 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ActorPortRouting {
-	#[serde(rename = "game_guard", skip_serializing_if = "Option::is_none")]
-	pub game_guard: Option<Box<crate::models::ActorGameGuardRouting>>,
+	#[serde(rename = "guard", skip_serializing_if = "Option::is_none")]
+	pub guard: Option<Box<crate::models::ActorGuardRouting>>,
 	#[serde(rename = "host", skip_serializing_if = "Option::is_none")]
 	pub host: Option<serde_json::Value>,
 }
@@ -19,7 +19,7 @@ pub struct ActorPortRouting {
 impl ActorPortRouting {
 	pub fn new() -> ActorPortRouting {
 		ActorPortRouting {
-			game_guard: None,
+			guard: None,
 			host: None,
 		}
 	}
