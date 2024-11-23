@@ -1,11 +1,10 @@
 [workspace]
 resolver = "2"
 members = [
-  "packages/backend-embed",
   "packages/cli",
   "packages/deno-embed",
+  "packages/js-utils-embed",
   "packages/toolchain",
-  "packages/toolchain-ffi",
 ]
 
 # Config for 'cargo dist'

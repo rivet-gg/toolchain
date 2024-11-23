@@ -1,9 +1,9 @@
 use anyhow::*;
 use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
-use rivet_api::apis;
+use rivet_api::{apis, models};
 use std::{env, sync::Arc};
 
-use crate::{config, paths};
+use crate::{meta, paths};
 
 pub const VERSION: &str = {
 	const MAJOR: u32 = pkg_version_major!();
@@ -22,7 +22,7 @@ pub type ToolchainCtx = Arc<CtxInner>;
 pub struct CtxInner {
 	pub api_endpoint: String,
 	pub access_token: String,
-	pub game_id: String,
+	pub project: models::CloudGameFull,
 
 	/// Domains that host parts of Rivet
 	pub bootstrap: rivet_api::models::CloudBootstrapResponse,
@@ -31,7 +31,7 @@ pub struct CtxInner {
 }
 
 pub async fn try_load() -> Result<Option<ToolchainCtx>> {
-	let data = config::meta::read_project(&paths::data_dir()?, |x| {
+	let data = meta::read_project(&paths::data_dir()?, |x| {
 		x.cloud
 			.as_ref()
 			.map(|cloud| (cloud.api_endpoint.clone(), cloud.cloud_token.clone()))
@@ -46,7 +46,7 @@ pub async fn try_load() -> Result<Option<ToolchainCtx>> {
 }
 
 pub async fn load() -> Result<ToolchainCtx> {
-	let (api_endpoint, token) = config::meta::try_read_project(&paths::data_dir()?, |x| {
+	let (api_endpoint, token) = meta::try_read_project(&paths::data_dir()?, |x| {
 		let cloud = x.cloud.as_ref().context("not signed in")?;
 		Ok((cloud.api_endpoint.clone(), cloud.cloud_token.clone()))
 	})
@@ -93,16 +93,24 @@ pub async fn init(api_endpoint: String, cloud_token: String) -> Result<Toolchain
 		}
 	)?;
 
-	let game_id = if let Some(game_cloud) = inspect_response.agent.game_cloud {
+	let project_id = if let Some(game_cloud) = inspect_response.agent.game_cloud {
 		game_cloud.game_id
 	} else {
 		bail!("invalid agent kind")
 	};
 
+	let project_res = apis::cloud_games_api::cloud_games_get_game_by_id(
+		&openapi_config_cloud,
+		&project_id.to_string(),
+		None,
+	)
+	.await
+	.context("get project failed")?;
+
 	Ok(Arc::new(CtxInner {
 		api_endpoint,
 		access_token: cloud_token,
-		game_id: game_id.to_string(),
+		project: *project_res.game,
 		bootstrap: bootstrap_response,
 		openapi_config_cloud,
 	}))

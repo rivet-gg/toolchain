@@ -1,7 +1,6 @@
 use clap::Parser;
 use serde::Serialize;
 use std::process::ExitCode;
-use toolchain::{backend::run_backend_command_passthrough, paths};
 
 use crate::util::global_opts::GlobalOpts;
 
@@ -19,6 +18,6 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		run_backend_command_passthrough("init.ts", self, paths::BackendDataType::Dev).await
+		todo!()
 	}
 }

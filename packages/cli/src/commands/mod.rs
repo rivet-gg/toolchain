@@ -1,15 +1,9 @@
-pub mod backend;
-pub mod clean;
-pub mod config;
-pub mod create;
-pub mod db;
+pub mod build;
 pub mod deploy;
-pub mod dev;
 pub mod init;
-pub mod module;
+pub mod metadata;
 pub mod sign_in;
 pub mod sign_out;
-pub mod task;
 
 use clap::Parser;
 use std::process::ExitCode;
@@ -21,32 +15,18 @@ pub enum SubCommand {
 	Signin(sign_in::Opts),
 	#[clap(alias = "logout")]
 	Signout(sign_out::Opts),
-	Dev(dev::Opts),
+	#[clap(alias = "d")]
 	Deploy(deploy::Opts),
-	Config {
+	#[clap(alias = "a")]
+	#[clap(alias = "b")]
+	Build {
 		#[clap(subcommand)]
-		subcommand: config::SubCommand,
+		subcommand: build::SubCommand,
 	},
-	Clean(clean::Opts),
-	Create {
+	#[clap(alias = "meta")]
+	Metadata {
 		#[clap(subcommand)]
-		subcommand: create::SubCommand,
-	},
-	Db {
-		#[clap(subcommand)]
-		subcommand: db::SubCommand,
-	},
-	Backend {
-		#[clap(subcommand)]
-		subcommand: backend::SubCommand,
-	},
-	Module {
-		#[clap(subcommand)]
-		subcommand: module::SubCommand,
-	},
-	Task {
-		#[clap(subcommand)]
-		subcommand: task::SubCommand,
+		subcommand: metadata::SubCommand,
 	},
 }
 
@@ -56,15 +36,9 @@ impl SubCommand {
 			SubCommand::Init(opts) => opts.execute().await,
 			SubCommand::Signin(opts) => opts.execute().await,
 			SubCommand::Signout(opts) => opts.execute().await,
-			SubCommand::Dev(opts) => opts.execute().await,
 			SubCommand::Deploy(opts) => opts.execute().await,
-			SubCommand::Config { subcommand } => subcommand.execute().await,
-			SubCommand::Clean(opts) => opts.execute().await,
-			SubCommand::Create { subcommand } => subcommand.execute().await,
-			SubCommand::Db { subcommand } => subcommand.execute().await,
-			SubCommand::Backend { subcommand } => subcommand.execute().await,
-			SubCommand::Module { subcommand } => subcommand.execute().await,
-			SubCommand::Task { subcommand } => subcommand.execute().await,
+			SubCommand::Build { subcommand } => subcommand.execute().await,
+			SubCommand::Metadata { subcommand } => subcommand.execute().await,
 		}
 	}
 }

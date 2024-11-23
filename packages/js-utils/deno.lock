@@ -1,0 +1,73 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "jsr:@std/assert@^0.213.1": "jsr:@std/assert@0.213.1",
+      "jsr:@std/cli@^1.0.5": "jsr:@std/cli@1.0.6",
+      "jsr:@std/fmt@^1.0.1": "jsr:@std/fmt@1.0.2",
+      "jsr:@std/path@0.213": "jsr:@std/path@0.213.1",
+      "npm:zod-validation-error@^3.3.1": "npm:zod-validation-error@3.4.0_zod@3.23.8",
+      "npm:zod@^3.23.8": "npm:zod@3.23.8"
+    },
+    "jsr": {
+      "@std/assert@0.213.1": {
+        "integrity": "24c28178b30c8e0782c18e8e94ea72b16282207569cdd10ffb9d1d26f2edebfe"
+      },
+      "@std/cli@1.0.6": {
+        "integrity": "d22d8b38c66c666d7ad1f2a66c5b122da1704f985d3c47f01129f05abb6c5d3d"
+      },
+      "@std/fmt@1.0.2": {
+        "integrity": "87e9dfcdd3ca7c066e0c3c657c1f987c82888eb8103a3a3baa62684ffeb0f7a7"
+      },
+      "@std/path@0.213.1": {
+        "integrity": "f187bf278a172752e02fcbacf6bd78a335ed320d080a7ed3a5a59c3e88abc673",
+        "dependencies": [
+          "jsr:@std/assert@^0.213.1"
+        ]
+      }
+    },
+    "npm": {
+      "zod-validation-error@3.4.0_zod@3.23.8": {
+        "integrity": "sha512-ZOPR9SVY6Pb2qqO5XHt+MkkTRxGXb4EVtnjc9JpXUOtUB1T9Ru7mZOT361AN3MsetVe7R0a1KZshJDZdgp9miQ==",
+        "dependencies": {
+          "zod": "zod@3.23.8"
+        }
+      },
+      "zod@3.23.8": {
+        "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==",
+        "dependencies": {}
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "dependencies": [
+      "jsr:@bartlomieju/postgres@^0.17.2",
+      "jsr:@cross/dir@^1.1.0",
+      "jsr:@hono/hono@^4.6.3",
+      "jsr:@rivet-gg/esbuild-deno-loader@^0.10.3-fork.3",
+      "jsr:@std/assert@0.213",
+      "jsr:@std/async@^1.0.4",
+      "jsr:@std/cli@^1.0.5",
+      "jsr:@std/collections@^1.0.5",
+      "jsr:@std/crypto@^1.0.3",
+      "jsr:@std/encoding@^1.0.3",
+      "jsr:@std/fmt@^1.0.1",
+      "jsr:@std/fs@0.213",
+      "jsr:@std/jsonc@0.213",
+      "jsr:@std/path@0.213",
+      "jsr:@ts-morph/ts-morph@^23.0.0",
+      "npm:@asteasolutions/zod-to-openapi@^7.1.1",
+      "npm:@cloudflare/workers-types",
+      "npm:dedent@^1.5.3",
+      "npm:esbuild-plugins-node-modules-polyfill@1.6.4",
+      "npm:esbuild@^0.20.2",
+      "npm:glob@^11.0.0",
+      "npm:nanoevents@^9.0.0",
+      "npm:tar@^7.4.3",
+      "npm:typescript-json-schema@^0.62.0",
+      "npm:zod-validation-error@^3.3.1",
+      "npm:zod@^3.23.8"
+    ]
+  }
+}

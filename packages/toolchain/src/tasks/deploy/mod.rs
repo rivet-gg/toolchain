@@ -1,26 +1,27 @@
-mod backend;
-mod game_server;
+use std::collections::HashMap;
 
 use anyhow::*;
-use serde::{Deserialize, Serialize};
+use rivet_api::apis;
+use rivet_api::models;
+use serde::Deserialize;
+use serde::Serialize;
 use uuid::Uuid;
 
-use crate::util::task;
+use crate::build;
+use crate::project::environment::TEMPEnvironment;
+use crate::ToolchainCtx;
+use crate::{config, util::task};
+
+mod docker;
 
 #[derive(Deserialize)]
 pub struct Input {
-	pub cwd: String,
+	pub config: config::Config,
 	pub environment_id: Uuid,
-	pub game_server: bool,
-	pub backend: bool,
-	#[serde(default)]
-	pub backend_skip_migrate: bool,
 }
 
 #[derive(Serialize)]
-pub struct Output {
-	game_server: Option<game_server::DeployOutput>,
-}
+pub struct Output {}
 
 pub struct Task;
 
@@ -33,49 +34,107 @@ impl task::Task for Task {
 	}
 
 	async fn run(task: task::TaskCtx, input: Self::Input) -> Result<Self::Output> {
-		// Deploy the backend before the game server in order to ensure that new APIs are exposed
-		// before the new game server is deployed.
-
 		let ctx = crate::toolchain_ctx::load().await?;
 
-		let env = crate::game::get_env(&ctx, input.environment_id).await?;
+		let env = crate::project::environment::get_env(&ctx, input.environment_id).await?;
 
-		if input.backend {
-			backend::deploy(
+		// Reserve version name
+		let reserve_res =
+			apis::cloud_games_versions_api::cloud_games_versions_reserve_version_name(
+				&ctx.openapi_config_cloud,
+				&ctx.project.game_id.to_string(),
+			)
+			.await?;
+		let version_name = reserve_res.version_display_name;
+
+		for build in &input.config.builds {
+			let _build_id = build_and_upload(
 				&ctx,
 				task.clone(),
-				backend::DeployOpts {
-					env: env.clone(),
-					project_path: input.cwd.clone(),
-					skip_migrate: input.backend_skip_migrate,
-				},
+				input.config.clone(),
+				&env,
+				&version_name,
+				build,
 			)
 			.await?;
 		}
 
-		let game_server = if input.game_server {
-			// TODO: Add support for configuring in project config.
-			// Should support multiple dockerfiles and passing from args/env.
-
-			// Game server
-			let deploy = game_server::deploy(
-				&ctx,
-				task.clone(),
-				game_server::DeployOpts {
-					env: env.clone(),
-					build_dir: input.cwd.clone(),
-				},
-			)
-			.await?;
-
-			Some(deploy)
-		} else {
-			None
-		};
-
 		task.log("");
 		task.log("[Deploy Finished]");
 
-		Ok(Output { game_server })
+		Ok(Output {})
 	}
+}
+
+/// Builds the required resources and uploads it to Rivet.
+///
+/// Returns the resulting build ID.
+async fn build_and_upload(
+	ctx: &ToolchainCtx,
+	task: task::TaskCtx,
+	config: config::Config,
+	env: &TEMPEnvironment,
+	version_name: &str,
+	build: &config::Build,
+) -> Result<Uuid> {
+	// Build tags
+	//
+	// **version**
+	//
+	// Unique ident for this build. Used for figuring out which server to start when
+	// passing dynamic version from client.
+	//
+	// **latest**
+	//
+	// Indicates the latest build to use for this environment. Used if not providing a client-side
+	// version.
+	let tags = HashMap::from([
+		(build::tags::VERSION.to_string(), version_name.to_string()),
+		(build::tags::CURRENT.to_string(), "true".to_string()),
+	]);
+	let exclusive_tags = vec![
+		build::tags::VERSION.to_string(),
+		build::tags::CURRENT.to_string(),
+	];
+
+	// Deploy build
+	let build_id = match &build.runtime {
+		config::build::Runtime::Docker(docker) => {
+			docker::build_and_upload(
+				&ctx,
+				task.clone(),
+				docker::DeployBuildOpts {
+					env: env.clone(),
+					config: config.clone(),
+					build_config: docker.clone(),
+					version_name: version_name.to_string(),
+				},
+			)
+			.await?
+		}
+		config::build::Runtime::JavaScript(js) => {
+			todo!()
+		}
+	};
+
+	// Tag build
+	let complete_res = apis::actor_builds_api::actor_builds_patch_tags(
+		&ctx.openapi_config_cloud,
+		&build_id.to_string(),
+		models::ActorPatchBuildTagsRequest {
+			tags: Some(serde_json::to_value(&tags)?),
+			exclusive_tags: Some(exclusive_tags.clone()),
+		},
+		Some(&ctx.project.name_id),
+		Some(&env.slug),
+	)
+	.await;
+	if let Err(err) = complete_res.as_ref() {
+		task.log(format!("{err:?}"));
+	}
+	complete_res.context("complete_res")?;
+
+	task.log(format!("[Build Upload Complete] {build_id}"));
+
+	Ok(build_id)
 }

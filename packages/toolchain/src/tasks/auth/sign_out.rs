@@ -1,7 +1,7 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
 
-use crate::{config, paths, util::task};
+use crate::{meta, paths, util::task};
 
 #[derive(Deserialize)]
 pub struct Input {}
@@ -20,7 +20,7 @@ impl task::Task for Task {
 	}
 
 	async fn run(_task: task::TaskCtx, _input: Self::Input) -> Result<Self::Output> {
-		config::meta::mutate_project(&paths::data_dir()?, |meta| {
+		meta::mutate_project(&paths::data_dir()?, |meta| {
 			meta.cloud = None;
 		})
 		.await?;

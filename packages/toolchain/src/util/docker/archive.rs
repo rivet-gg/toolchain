@@ -6,20 +6,19 @@ use typed_path::{TryAsRef, UnixPath};
 use uuid::Uuid;
 
 use crate::{
-	config, paths,
+	config::{self},
 	util::{
 		cmd::{self, shell_cmd, shell_cmd_std},
 		lz4, task,
 	},
 };
 
-use super::{BuildCompression, BuildKind};
-
 pub async fn create_archive(
 	task: task::TaskCtx,
 	image_tag: &str,
-	build_kind: BuildKind,
-	build_compression: BuildCompression,
+	build_kind: config::build::docker::BundleKind,
+	build_compression: config::build::Compression,
+	allow_root: bool,
 ) -> Result<tempfile::TempPath> {
 	task.log(format!(
 		"[Archiving Image] {} {}",
@@ -29,8 +28,12 @@ pub async fn create_archive(
 
 	// Build archive
 	let build_tar_path = match build_kind {
-		BuildKind::DockerImage => archive_docker_image(task, &image_tag).await?,
-		BuildKind::OciBundle => archive_oci_bundle(task, &image_tag).await?,
+		config::build::docker::BundleKind::DockerImage => {
+			archive_docker_image(task, &image_tag).await?
+		}
+		config::build::docker::BundleKind::OciBundle => {
+			archive_oci_bundle(task, &image_tag, allow_root).await?
+		}
 	};
 
 	// Compress archive
@@ -62,7 +65,11 @@ async fn archive_docker_image(task: task::TaskCtx, image_tag: &str) -> Result<te
 /// This entire operation works by manipulating TAR files without touching the
 /// host's file system in order to preserve file permissions & ownership on
 /// Windows.
-async fn archive_oci_bundle(task: task::TaskCtx, image_tag: &str) -> Result<tempfile::TempPath> {
+async fn archive_oci_bundle(
+	task: task::TaskCtx,
+	image_tag: &str,
+	allow_root: bool,
+) -> Result<tempfile::TempPath> {
 	// Create OCI bundle
 	let oci_bundle_tar_file = tempfile::NamedTempFile::new()?;
 	let mut oci_bundle_archive = tar::Builder::new(oci_bundle_tar_file);
@@ -219,10 +226,6 @@ async fn archive_oci_bundle(task: task::TaskCtx, image_tag: &str) -> Result<temp
 			// Validate not running as root
 			//
 			// See Kubernetes implementation https://github.com/kubernetes/kubernetes/blob/cea1d4e20b4a7886d8ff65f34c6d4f95efcb4742/pkg/kubelet/kuberuntime/security_context_others.go#L44C4-L44C4
-			let allow_root = config::settings::try_read(&paths::data_dir()?, |x| {
-				Ok(x.game_server.deploy.allow_root)
-			})
-			.await?;
 			if !allow_root {
 				if uid == 0 {
 					bail!("cannot run Docker container as root user (i.e. uid 0) for security. see https://rivet.gg/docs/dynamic-servers/concepts/docker-root-user")
@@ -319,7 +322,7 @@ fn copy_container_to_rootfs(
 
 		// Update headers to point to rootfs
 		//
-		// Don't use `header.set_path` because `builder.apend_data` will handle long path names for
+		// Don't use `header.set_path` because `builder.append_data` will handle long path names for
 		// us
 		let old_path_bytes = header.path_bytes();
 		let old_path = UnixPath::new(old_path_bytes.as_ref() as &[u8]);
@@ -425,16 +428,16 @@ fn copy_container_to_rootfs(
 
 async fn compress_archive(
 	build_tar_path: &Path,
-	compression: BuildCompression,
+	compression: config::build::Compression,
 ) -> Result<tempfile::TempPath> {
 	// Compress the bundle
 	let build_tar_compressed_file = tempfile::NamedTempFile::new()?;
 	let build_tar_compressed_path = build_tar_compressed_file.into_temp_path();
 	match compression {
-		BuildCompression::None => {
+		config::build::Compression::None => {
 			tokio::fs::rename(&build_tar_path, &build_tar_compressed_path).await?;
 		}
-		BuildCompression::Lz4 => {
+		config::build::Compression::Lz4 => {
 			let build_tar_path = build_tar_path.to_owned();
 			let build_tar_compressed_path = build_tar_compressed_path.to_owned();
 			tokio::task::spawn_blocking(move || {
