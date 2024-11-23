@@ -20,7 +20,7 @@ struct Port {
 	name: String,
 	protocol: models::ActorPortProtocol,
 	internal_port: Option<i32>,
-	game_guard: Option<models::ActorGameGuardRouting>,
+	guard: Option<models::ActorGuardRouting>,
 	#[serde(default)]
 	host: bool,
 }
@@ -36,8 +36,11 @@ pub struct Opts {
 	#[clap(long, short = 't')]
 	tags: Option<String>,
 
+	#[clap(long)]
+	build: Option<String>,
+
 	#[clap(long, short = 'b')]
-	build: String,
+	build_tags: Option<String>,
 
 	#[clap(long = "arg")]
 	arguments: Option<Vec<String>>,
@@ -59,6 +62,9 @@ pub struct Opts {
 
 	#[clap(long)]
 	kill_timeout: Option<i64>,
+
+	#[clap(long)]
+	durable: bool,
 }
 
 impl Opts {
@@ -83,6 +89,13 @@ impl Opts {
 			.transpose()?
 			.unwrap_or_else(|| HashMap::new());
 
+		// Parse build tags
+		let build_tags = self
+			.build_tags
+			.as_ref()
+			.map(|tags_str| kv_str::from_str::<HashMap<String, String>>(tags_str))
+			.transpose()?;
+
 		// Parse ports
 		let ports = self
 			.ports
@@ -98,7 +111,7 @@ impl Opts {
 								internal_port: port.internal_port,
 								protocol: port.protocol,
 								routing: Some(Box::new(models::ActorPortRouting {
-									game_guard: port.game_guard.map(Box::new),
+									guard: port.guard.map(Box::new),
 									host: if port.host {
 										Some(serde_json::json!({}))
 									} else {
@@ -131,8 +144,14 @@ impl Opts {
 		let request = models::ActorCreateActorRequest {
 			region: self.region.clone(),
 			tags: Some(serde_json::json!(tags)),
+			build: self
+				.build
+                .as_ref()
+				.map(|b| Uuid::parse_str(&b))
+				.transpose()
+				.context("invalid build uuid")?,
+			build_tags: build_tags.map(|bt| Some(serde_json::json!(bt))),
 			runtime: Box::new(models::ActorCreateActorRuntimeRequest {
-				build: Uuid::parse_str(&self.build).context("invalid build uuid")?,
 				arguments: self.arguments.clone(),
 				environment: env_vars,
 			}),
@@ -148,6 +167,7 @@ impl Opts {
 				memory: self.memory,
 			}),
 			lifecycle: Some(Box::new(models::ActorLifecycle {
+				durable: Some(self.durable),
 				kill_timeout: self.kill_timeout,
 			})),
 		};
