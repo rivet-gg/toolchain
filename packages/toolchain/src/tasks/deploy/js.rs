@@ -110,8 +110,17 @@ pub async fn build_and_upload(
 				"script file must have a .js extension when not using a bundler"
 			);
 
+			// Validate script exists
+			match fs::metadata(&script_path).await {
+				Result::Ok(_) => {}
+				Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+					bail!("script not found: {}", script_path.display())
+				}
+				Err(err) => bail!("failed to read script at {}: {err}", script_path.display()),
+			}
+
 			// Copy index file to build dir
-			fs::copy(script_path, build_dir.path().join(BUILD_INDEX_NAME)).await?;
+			fs::copy(&script_path, build_dir.path().join(BUILD_INDEX_NAME)).await?;
 		}
 	};
 

@@ -65,6 +65,12 @@ pub struct Opts {
 
 	#[clap(long)]
 	durable: bool,
+
+	#[clap(long)]
+	logs: bool,
+
+	#[clap(long)]
+	log_stream: Option<crate::util::actor::logs::LogStream>,
 }
 
 impl Opts {
@@ -146,7 +152,7 @@ impl Opts {
 			tags: Some(serde_json::json!(tags)),
 			build: self
 				.build
-                .as_ref()
+				.as_ref()
 				.map(|b| Uuid::parse_str(&b))
 				.transpose()
 				.context("invalid build uuid")?,
@@ -172,7 +178,7 @@ impl Opts {
 			})),
 		};
 
-		match apis::actor_api::actor_create(
+		let actor_id = match apis::actor_api::actor_create(
 			&ctx.openapi_config_cloud,
 			request,
 			Some(&ctx.project.name_id),
@@ -182,12 +188,32 @@ impl Opts {
 		{
 			Result::Ok(response) => {
 				println!("Created actor:\n{:#?}", response.actor);
-				Ok(ExitCode::SUCCESS)
+				response.actor.id
 			}
 			Err(e) => {
 				eprintln!("Failed to create actor: {}", e);
-				Ok(ExitCode::FAILURE)
+				return Ok(ExitCode::FAILURE);
 			}
+		};
+
+		// Tail logs
+		if self.logs {
+			crate::util::actor::logs::tail(
+				&ctx,
+				crate::util::actor::logs::TailOpts {
+					environment: &self.environment,
+					actor_id,
+					stream: self
+						.log_stream
+						.clone()
+						.unwrap_or(crate::util::actor::logs::LogStream::StdOut),
+					follow: true,
+					timestamps: true,
+				},
+			)
+			.await?;
 		}
+
+		Ok(ExitCode::SUCCESS)
 	}
 }
