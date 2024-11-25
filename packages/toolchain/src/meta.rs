@@ -5,15 +5,32 @@ use std::{collections::HashMap, path::PathBuf};
 use tokio::{fs, sync::Mutex};
 use uuid::Uuid;
 
-use crate::paths;
+use crate::{errors, paths};
 
 /// Config stored in {data_dir}/meta.json. Used to store persistent data, such as tokens & cache.
-#[derive(Default, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Meta {
+	/// Unique ID for this instance of the toolchain.
+	///
+	/// This ID is unique to each project folder.
+	pub toolchain_instance_id: Uuid,
+
 	/// If logged in to Rivet, this will include relevant information.
 	///
 	/// If not logged in, will be None.
 	pub cloud: Option<Cloud>,
+
+	pub telemetry_disabled: bool,
+}
+
+impl Meta {
+	fn new() -> Self {
+		Self {
+			toolchain_instance_id: Uuid::new_v4(),
+			cloud: None,
+			telemetry_disabled: false,
+		}
+	}
 }
 
 impl Meta {
@@ -21,14 +38,14 @@ impl Meta {
 		Ok(self
 			.cloud
 			.as_ref()
-			.context("Not logged in. Please run `rivet login`.")?)
+			.ok_or_else(|| errors::UserError::new("Not logged in. Please run `rivet login`."))?)
 	}
 
 	pub fn cloud_mut(&mut self) -> Result<&mut Cloud> {
 		Ok(self
 			.cloud
 			.as_mut()
-			.context("Not logged in. Please run `rivet login`.")?)
+			.ok_or_else(|| errors::UserError::new("Not logged in. Please run `rivet login`."))?)
 	}
 }
 
@@ -96,7 +113,7 @@ pub async fn try_read_project<F: FnOnce(&Meta) -> Result<T>, T>(
 		let mut meta = match fs::read_to_string(&meta_path).await {
 			Result::Ok(config) => serde_json::from_str::<Meta>(&config)
 				.context(format!("deserialize meta ({})", meta_path.display()))?,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::new(),
 			Err(err) => return Err(err.into()),
 		};
 
@@ -131,7 +148,7 @@ pub async fn try_mutate_project<F: FnOnce(&mut Meta) -> Result<T>, T>(
 		let mut meta = match fs::read_to_string(&meta_path).await {
 			Result::Ok(config) => serde_json::from_str::<Meta>(&config)
 				.context(format!("deserialize meta ({})", meta_path.display()))?,
-			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::default(),
+			Err(err) if err.kind() == std::io::ErrorKind::NotFound => Meta::new(),
 			Err(err) => return Err(err.into()),
 		};
 

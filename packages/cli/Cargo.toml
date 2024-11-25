@@ -10,6 +10,10 @@ repository = "https://github.com/rivet-gg/cli"
 name = "rivet"
 path = "src/main.rs"
 
+[features]
+default = ["sentry"]
+sentry = []
+
 [dependencies]
 clap = { version = "4.5.9", features = ["derive"] }
 toolchain = { version = "0.1.0", path = "../toolchain", package = "rivet-toolchain" }
@@ -23,6 +27,13 @@ base64 = "0.22.1"
 kv-str = { version = "0.1.0", path = "../kv-str" }
 inquire = "0.7.5"
 webbrowser = "1.0.2"
+sentry = { version = "0.34.0", features = ["anyhow"] }
+sysinfo = "0.32.0"
+ctrlc = "3.4.5"
+
+[dependencies.async-posthog]
+git = "https://github.com/rivet-gg/posthog-rs"
+rev = "ef4e80e"
 
 [build-dependencies]
 anyhow = "1.0"

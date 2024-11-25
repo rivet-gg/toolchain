@@ -2,6 +2,7 @@ use anyhow::*;
 use pkg_version::{pkg_version_major, pkg_version_minor, pkg_version_patch};
 use rivet_api::{apis, models};
 use std::{env, sync::Arc};
+use tokio::sync::OnceCell;
 
 use crate::{meta, paths};
 
@@ -30,6 +31,8 @@ pub struct CtxInner {
 	pub openapi_config_cloud: apis::configuration::Configuration,
 }
 
+static TOOLCHAIN_CTX: OnceCell<ToolchainCtx> = OnceCell::const_new();
+
 pub async fn try_load() -> Result<Option<ToolchainCtx>> {
 	let data = meta::read_project(&paths::data_dir()?, |x| {
 		x.cloud
@@ -38,8 +41,10 @@ pub async fn try_load() -> Result<Option<ToolchainCtx>> {
 	})
 	.await?;
 	if let Some((api_endpoint, token)) = data {
-		let ctx = init(api_endpoint, token).await?;
-		Ok(Some(ctx))
+		let ctx = TOOLCHAIN_CTX
+			.get_or_try_init(|| async { init(api_endpoint, token).await })
+			.await?;
+		Ok(Some(ctx.clone()))
 	} else {
 		Ok(None)
 	}
@@ -51,7 +56,10 @@ pub async fn load() -> Result<ToolchainCtx> {
 		Ok((cloud.api_endpoint.clone(), cloud.cloud_token.clone()))
 	})
 	.await?;
-	init(api_endpoint, token).await
+	let ctx = TOOLCHAIN_CTX
+		.get_or_try_init(|| async { init(api_endpoint, token).await })
+		.await?;
+	Ok(ctx.clone())
 }
 
 pub async fn init(api_endpoint: String, cloud_token: String) -> Result<ToolchainCtx> {
