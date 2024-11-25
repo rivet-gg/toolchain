@@ -117,7 +117,9 @@ pub async fn run_command_and_parse_output<Input: Serialize, Output: DeserializeO
 				anyhow!("Failed to parse JSON from output: {err}\nOutput: {last_line}")
 			})
 		} else {
-			Err(anyhow!("No non-blank lines in output\nStdout: {stdout}\nStderr: {stderr}"))
+			Err(anyhow!(
+				"No non-blank lines in output\nStdout: {stdout}\nStderr: {stderr}"
+			))
 		}
 	} else {
 		let mut error_message = format!("Command failed with status: {}", output.status);

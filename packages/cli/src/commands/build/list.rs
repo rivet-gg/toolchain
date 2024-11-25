@@ -5,8 +5,8 @@ use toolchain::rivet_api::apis;
 
 #[derive(Parser)]
 pub struct Opts {
-	#[clap(index = 1)]
-	environment: String,
+	#[clap(long, alias = "env", short = 'e')]
+	environment: Option<String>,
 
 	#[clap(long)]
 	tags: Option<String>,
@@ -26,6 +26,8 @@ impl Opts {
 	pub async fn execute_inner(&self) -> Result<ExitCode> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
+		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
+
 		// Parse tags
 		let tags = self
 			.tags
@@ -37,7 +39,7 @@ impl Opts {
 		match apis::actor_builds_api::actor_builds_list(
 			&ctx.openapi_config_cloud,
 			Some(&ctx.project.name_id),
-			Some(&self.environment),
+			Some(&env),
 			tags_json.as_deref(),
 		)
 		.await

@@ -28,8 +28,8 @@ struct Port {
 
 #[derive(Parser)]
 pub struct Opts {
-	#[clap(index = 1)]
-	environment: String,
+	#[clap(long, alias = "env", short = 'e')]
+	environment: Option<String>,
 
 	#[clap(long, short = 'r')]
 	region: Option<String>,
@@ -49,7 +49,7 @@ pub struct Opts {
 	#[clap(long, short = 'b')]
 	build_tags: Option<String>,
 
-	#[clap(long = "env")]
+	#[clap(long = "env-var")]
 	env_vars: Option<Vec<String>>,
 
 	#[clap(long, value_enum)]
@@ -97,6 +97,8 @@ impl Opts {
 
 	pub async fn execute_inner(&self) -> Result<ExitCode> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
+
+		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
 
 		// Parse tags
 		let actor_tags = if let Some(t) = &self.actor_tags {
@@ -179,7 +181,7 @@ impl Opts {
 
 			// Deploys erver
 			match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
-				environment: &self.environment,
+				environment: &env,
 				build_tags: Some(build_tags),
 			})
 			.await
@@ -218,7 +220,7 @@ impl Opts {
 			let regions = apis::actor_regions_api::actor_regions_list(
 				&ctx.openapi_config_cloud,
 				Some(&ctx.project.name_id.to_string()),
-				Some(&self.environment),
+				Some(&env),
 			)
 			.await?;
 
@@ -269,7 +271,7 @@ impl Opts {
 			&ctx.openapi_config_cloud,
 			request,
 			Some(&ctx.project.name_id),
-			Some(&self.environment),
+			Some(&env),
 		)
 		.await
 		{
@@ -288,7 +290,7 @@ impl Opts {
 			crate::util::actor::logs::tail(
 				&ctx,
 				crate::util::actor::logs::TailOpts {
-					environment: &self.environment,
+					environment: &env,
 					actor_id,
 					stream: self
 						.log_stream
