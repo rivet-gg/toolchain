@@ -2,7 +2,10 @@ use anyhow::*;
 use clap::{Parser, ValueEnum};
 use serde::Deserialize;
 use std::{collections::HashMap, process::ExitCode};
-use toolchain::rivet_api::{apis, models};
+use toolchain::{
+	build,
+	rivet_api::{apis, models},
+};
 use uuid::Uuid;
 
 use crate::util::kv_str;
@@ -33,17 +36,20 @@ pub struct Opts {
 	#[clap(long, short = 'r')]
 	region: String,
 
-	#[clap(long, short = 't')]
-	tags: Option<String>,
+	/// Tags to use for both the actor & build tags. This allows for creating actors quickly since
+	/// the tags are often identical between the two.
+	#[clap(long = "tags", short = 't')]
+	universal_tags: Option<String>,
 
+	#[clap(long, short = 'a')]
+	actor_tags: Option<String>,
+
+	/// Build ID.
 	#[clap(long)]
 	build: Option<String>,
 
 	#[clap(long, short = 'b')]
 	build_tags: Option<String>,
-
-	#[clap(long = "arg")]
-	arguments: Option<Vec<String>>,
 
 	#[clap(long = "env")]
 	env_vars: Option<Vec<String>>,
@@ -65,6 +71,10 @@ pub struct Opts {
 
 	#[clap(long)]
 	durable: bool,
+
+	/// If included, the `current` tag will not be automatically inserted to the build tag.
+	#[clap(long)]
+	no_build_current_tag: bool,
 
 	#[clap(long)]
 	logs: bool,
@@ -88,19 +98,32 @@ impl Opts {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
 		// Parse tags
-		let tags = self
-			.tags
-			.as_ref()
-			.map(|tags_str| kv_str::from_str::<HashMap<String, String>>(tags_str))
-			.transpose()?
-			.unwrap_or_else(|| HashMap::new());
+		let actor_tags = if let Some(t) = &self.actor_tags {
+			kv_str::from_str::<HashMap<String, String>>(t)?
+		} else if let Some(t) = &self.universal_tags {
+			kv_str::from_str::<HashMap<String, String>>(t)?
+		} else {
+			// No tags
+			HashMap::new()
+		};
 
 		// Parse build tags
-		let build_tags = self
-			.build_tags
-			.as_ref()
-			.map(|tags_str| kv_str::from_str::<HashMap<String, String>>(tags_str))
-			.transpose()?;
+		let mut build_tags = if let Some(t) = &self.build_tags {
+			Some(kv_str::from_str::<HashMap<String, String>>(t)?)
+		} else if let Some(t) = &self.universal_tags {
+			Some(kv_str::from_str::<HashMap<String, String>>(t)?)
+		} else {
+			None
+		};
+
+		// Automatically add `current` tag to make querying easier
+		if !self.no_build_current_tag {
+			if let Some(build_tags) = build_tags.as_mut() {
+				if !build_tags.contains_key(build::tags::VERSION) {
+					build_tags.insert(build::tags::CURRENT.into(), "true".into());
+				}
+			}
+		}
 
 		// Parse ports
 		let ports = self
@@ -149,7 +172,7 @@ impl Opts {
 
 		let request = models::ActorCreateActorRequest {
 			region: self.region.clone(),
-			tags: Some(serde_json::json!(tags)),
+			tags: Some(serde_json::json!(actor_tags)),
 			build: self
 				.build
 				.as_ref()
@@ -158,7 +181,7 @@ impl Opts {
 				.context("invalid build uuid")?,
 			build_tags: build_tags.map(|bt| Some(serde_json::json!(bt))),
 			runtime: Box::new(models::ActorCreateActorRuntimeRequest {
-				arguments: self.arguments.clone(),
+				arguments: None,
 				environment: env_vars,
 			}),
 			network: Some(Box::new(models::ActorCreateActorNetworkRequest {
