@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::Parser;
-use toolchain::rivet_api::apis;
+use toolchain::{errors, rivet_api::apis};
 use uuid::Uuid;
 
 #[derive(Parser)]
@@ -21,7 +21,8 @@ impl Opts {
 
 		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
 
-		let actor_id = Uuid::parse_str(&self.id).context("invalid id uuid")?;
+		let actor_id =
+			Uuid::parse_str(&self.id).map_err(|_| errors::UserError::new("invalid id uuid"))?;
 
 		apis::actor_api::actor_destroy(
 			&ctx.openapi_config_cloud,

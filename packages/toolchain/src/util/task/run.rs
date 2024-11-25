@@ -3,6 +3,8 @@ use tokio::sync::{broadcast, mpsc};
 
 use super::{Task, TaskCtxInner, TaskEvent};
 
+use crate::errors;
+
 /// Run config passed to the task.
 pub struct RunConfig {
 	pub abort_rx: mpsc::Receiver<()>,
@@ -71,7 +73,7 @@ where
 			// Shutdown
 			shutdown_tx.send(())?;
 
-			Err(anyhow!("task aborted"))
+			Err(errors::GracefulExit.into())
 		},
 	}
 }

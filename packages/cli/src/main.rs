@@ -3,8 +3,7 @@ pub mod util;
 
 use clap::{builder::styling, Parser};
 use std::process::ExitCode;
-
-use crate::util::errors;
+use toolchain::errors;
 
 const STYLES: styling::Styles = styling::Styles::styled()
 	.header(styling::AnsiColor::Red.on_default().bold())
@@ -35,22 +34,68 @@ struct Cli {
 	command: commands::SubCommand,
 }
 
-#[tokio::main]
-async fn main() -> ExitCode {
+fn main() -> ExitCode {
+	// We use a sync main for Sentry. Read more: https://docs.sentry.io/platforms/rust/#async-main-function
+
+	// This has a 2 second deadline to flush any remaining events which is sufficient for
+	// short-lived commands.
+	let _guard = sentry::init(("https://b329eb15c63e1002611fb3b7a58a1dfa@o4504307129188352.ingest.us.sentry.io/4508361147809792", sentry::ClientOptions {
+    release: sentry::release_name!(),
+    ..Default::default()
+}));
+
+	// Run main
+	let exit_code = tokio::runtime::Builder::new_multi_thread()
+		.enable_all()
+		.build()
+		.unwrap()
+		.block_on(async move { main_async().await });
+
+	exit_code
+}
+
+async fn main_async() -> ExitCode {
 	let cli = Cli::parse();
-	match cli.command.execute().await {
+	let exit_code = match cli.command.execute().await {
 		Ok(()) => ExitCode::SUCCESS,
 		Err(err) => {
-			if err.is::<errors::GracefulExit>() {
+			// TODO(TOOL-438): Catch 400 API errors as user errors
+			if err.is::<errors::GracefulExit>() || err.is::<errors::CtrlC>() {
 				// Don't print anything, already handled
 			} else if let Some(err) = err.downcast_ref::<errors::UserError>() {
+				// Don't report error since this is a user error
 				eprintln!("{err}");
 			} else {
+				// This is an internal error, report error
 				eprintln!("{err}");
-				// TODO: Report error
+				report_error(err).await;
 			}
 
 			ExitCode::FAILURE
 		}
+	};
+
+	// Wait for telemetry to publish
+	util::telemetry::wait_all().await;
+
+	exit_code
+}
+
+async fn report_error(err: anyhow::Error) {
+	let event_id = sentry::integrations::anyhow::capture_anyhow(&err);
+
+	// Capture event in PostHog
+	let capture_res = util::telemetry::capture_event(
+        "$exception",
+        Some(|event: &mut async_posthog::Event| {
+            event.insert_prop("errors", format!("{}", err))?;
+            event.insert_prop("$sentry_event_id", event_id.to_string())?;
+            event.insert_prop("$sentry_url", format!("https://sentry.io/organizations/rivet-gaming/issues/?project=4508361147809792&query={event_id}"))?;
+            Ok(())
+        }),
+    )
+    .await;
+	if let Err(err) = capture_res {
+		eprintln!("Failed to capture event in PostHog: {:?}", err);
 	}
 }

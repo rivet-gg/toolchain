@@ -1,12 +1,12 @@
 use anyhow::*;
 use std::collections::HashMap;
-use toolchain::tasks::{deploy, get_bootstrap_data};
+use toolchain::{
+	errors,
+	tasks::{deploy, get_bootstrap_data},
+};
 use uuid::Uuid;
 
-use crate::util::{
-	errors,
-	task::{run_task, TaskOutputStyle},
-};
+use crate::util::task::{run_task, TaskOutputStyle};
 
 pub struct DeployOpts<'a> {
 	pub environment: &'a str,
