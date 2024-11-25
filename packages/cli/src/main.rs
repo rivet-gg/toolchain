@@ -64,10 +64,10 @@ async fn main_async() -> ExitCode {
 				// Don't print anything, already handled
 			} else if let Some(err) = err.downcast_ref::<errors::UserError>() {
 				// Don't report error since this is a user error
-				eprintln!("{err}");
+				eprintln!("\n{err}");
 			} else {
 				// This is an internal error, report error
-				eprintln!("{err}");
+				eprintln!("\n{err}");
 				report_error(err).await;
 			}
 

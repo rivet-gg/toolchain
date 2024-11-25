@@ -10,17 +10,12 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ActorCreateActorRuntimeRequest {
-	#[serde(rename = "arguments", skip_serializing_if = "Option::is_none")]
-	pub arguments: Option<Vec<String>>,
 	#[serde(rename = "environment", skip_serializing_if = "Option::is_none")]
 	pub environment: Option<::std::collections::HashMap<String, String>>,
 }
 
 impl ActorCreateActorRuntimeRequest {
 	pub fn new() -> ActorCreateActorRuntimeRequest {
-		ActorCreateActorRuntimeRequest {
-			arguments: None,
-			environment: None,
-		}
+		ActorCreateActorRuntimeRequest { environment: None }
 	}
 }

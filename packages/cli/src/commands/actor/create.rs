@@ -231,7 +231,6 @@ impl Opts {
 			build: build_id,
 			build_tags: build_tags.map(|bt| Some(serde_json::json!(bt))),
 			runtime: Box::new(models::ActorCreateActorRuntimeRequest {
-				arguments: None,
 				environment: env_vars,
 			}),
 			network: Some(Box::new(models::ActorCreateActorNetworkRequest {
