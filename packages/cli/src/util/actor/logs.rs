@@ -1,6 +1,7 @@
 use anyhow::*;
 use base64::{engine::general_purpose::STANDARD, Engine};
 use clap::ValueEnum;
+use tokio::signal;
 use toolchain::rivet_api::{apis, models};
 use uuid::Uuid;
 
@@ -21,6 +22,15 @@ pub struct TailOpts<'a> {
 }
 
 pub async fn tail(ctx: &toolchain::ToolchainCtx, opts: TailOpts<'_>) -> Result<()> {
+	tokio::select! {
+		result = inner_tail(ctx, opts) => result,
+		_ = signal::ctrl_c() => {
+			Ok(())
+		}
+	}
+}
+
+async fn inner_tail(ctx: &toolchain::ToolchainCtx, opts: TailOpts<'_>) -> Result<()> {
 	let mut watch_index: Option<String> = None;
 
 	let stream = match opts.stream {
@@ -64,3 +74,4 @@ pub async fn tail(ctx: &toolchain::ToolchainCtx, opts: TailOpts<'_>) -> Result<(
 
 	Ok(())
 }
+
