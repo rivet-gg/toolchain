@@ -1,74 +1,39 @@
 use clap::Parser;
-use std::process::ExitCode;
-use toolchain::tasks::{deploy, get_bootstrap_data};
+use std::{collections::HashMap, process::ExitCode};
 
-use crate::util::task::{run_task, TaskOutputStyle};
+use crate::util::kv_str;
 
 #[derive(Parser)]
 pub struct Opts {
 	environment: String,
+
+	#[clap(long, short = 't')]
+	tags: Option<String>,
 }
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
-		let bootstrap_data = match run_task::<get_bootstrap_data::Task>(
-			TaskOutputStyle::None,
-			get_bootstrap_data::Input {},
-		)
-		.await
+		let build_tags = match self
+			.tags
+			.as_ref()
+			.map(|b| kv_str::from_str::<HashMap<String, String>>(b))
+			.transpose()
 		{
-			Ok(x) => x,
-			Err(e) => {
-				eprintln!("Error getting bootstrap: {e}");
-				return ExitCode::FAILURE;
-			}
-		};
-		let Some(cloud_data) = bootstrap_data.cloud else {
-			eprintln!("Not signed in");
-			return ExitCode::FAILURE;
-		};
-
-		// Find environment
-		let environment = match cloud_data
-			.envs
-			.iter()
-			.find(|env| env.slug == self.environment)
-		{
-			Some(env) => env,
-			None => {
-				eprintln!(
-					"Environment '{}' not found. Available environments:",
-					self.environment
-				);
-				for env in &cloud_data.envs {
-					eprintln!("- {}", env.slug);
-				}
+			Ok(t) => t,
+			Err(err) => {
+				eprintln!("Failed to parse build tags: {err:?}");
 				return ExitCode::FAILURE;
 			}
 		};
 
-		let config = match toolchain::config::Config::load(None).await {
-			Ok(x) => x,
-			Err(e) => {
-				eprintln!("Failed to load config: {e}");
-				return ExitCode::FAILURE;
-			}
-		};
-
-		match run_task::<deploy::Task>(
-			TaskOutputStyle::PlainNoResult,
-			deploy::Input {
-				config,
-				environment_id: environment.id,
-			},
-		)
+		match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
+			environment: &self.environment,
+			build_tags,
+		})
 		.await
 		{
 			Ok(_) => ExitCode::SUCCESS,
-			Err(e) => {
-				eprintln!("Error during deployment: {e}");
-				ExitCode::FAILURE
-			}
+			Err(code) => code,
 		}
 	}
 }

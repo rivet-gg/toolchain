@@ -81,6 +81,9 @@ pub struct Opts {
 
 	#[clap(long)]
 	log_stream: Option<crate::util::actor::logs::LogStream>,
+
+	#[clap(long)]
+	deploy: bool,
 }
 
 impl Opts {
@@ -106,6 +109,14 @@ impl Opts {
 			// No tags
 			HashMap::new()
 		};
+
+		// Parse build ID
+		let mut build_id = self
+			.build
+			.as_ref()
+			.map(|b| Uuid::parse_str(&b))
+			.transpose()
+			.context("invalid build uuid")?;
 
 		// Parse build tags
 		let mut build_tags = if let Some(t) = &self.build_tags {
@@ -170,6 +181,36 @@ impl Opts {
 			})
 			.transpose()?;
 
+		// Auto-deploy
+		if self.deploy {
+			// Remove build tags, since we'll be using the build ID
+			let build_tags = build_tags
+				.take()
+				.context("must define build tags when using deploy flag")?;
+
+			// Deploys erver
+			match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
+				environment: &self.environment,
+				build_tags: Some(build_tags),
+			})
+			.await
+			{
+				Result::Ok(deploy_build_ids) => {
+					if deploy_build_ids.len() > 1 {
+						println!("Warning: Multiple build IDs match tags, proceeding with first");
+					}
+
+					let deploy_build_id = deploy_build_ids
+						.first()
+						.context("No builds matched build tags")?;
+					build_id = Some(*deploy_build_id);
+				}
+				Err(code) => {
+					return Ok(code);
+				}
+			};
+		}
+
 		// Auto-select region if needed
 		let region = if let Some(region) = &self.region {
 			region.clone()
@@ -201,12 +242,7 @@ impl Opts {
 		let request = models::ActorCreateActorRequest {
 			region,
 			tags: Some(serde_json::json!(actor_tags)),
-			build: self
-				.build
-				.as_ref()
-				.map(|b| Uuid::parse_str(&b))
-				.transpose()
-				.context("invalid build uuid")?,
+			build: build_id,
 			build_tags: build_tags.map(|bt| Some(serde_json::json!(bt))),
 			runtime: Box::new(models::ActorCreateActorRuntimeRequest {
 				arguments: None,
