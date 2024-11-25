@@ -1,12 +1,13 @@
 use anyhow::*;
 use clap::{Parser, ValueEnum};
 use serde::Deserialize;
-use std::{collections::HashMap, process::ExitCode};
+use std::collections::HashMap;
 use toolchain::{
 	build,
 	rivet_api::{apis, models},
 };
 use uuid::Uuid;
+
 
 #[derive(ValueEnum, Clone)]
 enum NetworkMode {
@@ -85,17 +86,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
-		match self.execute_inner().await {
-			Result::Ok(code) => code,
-			Err(err) => {
-				eprintln!("{err}");
-				ExitCode::FAILURE
-			}
-		}
-	}
-
-	pub async fn execute_inner(&self) -> Result<ExitCode> {
+	pub async fn execute(&self) -> Result<()> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
 		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
@@ -180,26 +171,20 @@ impl Opts {
 				.context("must define build tags when using deploy flag")?;
 
 			// Deploys erver
-			match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
+			let deploy_build_ids = crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
 				environment: &env,
 				build_tags: Some(build_tags),
 			})
-			.await
-			{
-				Result::Ok(deploy_build_ids) => {
-					if deploy_build_ids.len() > 1 {
-						println!("Warning: Multiple build IDs match tags, proceeding with first");
-					}
+			.await?;
 
-					let deploy_build_id = deploy_build_ids
-						.first()
-						.context("No builds matched build tags")?;
-					build_id = Some(*deploy_build_id);
-				}
-				Err(code) => {
-					return Ok(code);
-				}
-			};
+			if deploy_build_ids.len() > 1 {
+				println!("Warning: Multiple build IDs match tags, proceeding with first");
+			}
+
+			let deploy_build_id = deploy_build_ids
+				.first()
+				.context("No builds matched build tags")?;
+			build_id = Some(*deploy_build_id);
 		}
 
 		// Automatically add `current` tag to make querying easier
@@ -267,23 +252,14 @@ impl Opts {
 			})),
 		};
 
-		let actor_id = match apis::actor_api::actor_create(
+		let response = apis::actor_api::actor_create(
 			&ctx.openapi_config_cloud,
 			request,
 			Some(&ctx.project.name_id),
 			Some(&env),
 		)
-		.await
-		{
-			Result::Ok(response) => {
-				println!("Created actor:\n{:#?}", response.actor);
-				response.actor.id
-			}
-			Err(e) => {
-				eprintln!("Failed to create actor: {}", e);
-				return Ok(ExitCode::FAILURE);
-			}
-		};
+		.await?;
+		println!("Created actor:\n{:#?}", response.actor);
 
 		// Tail logs
 		if self.logs {
@@ -291,7 +267,7 @@ impl Opts {
 				&ctx,
 				crate::util::actor::logs::TailOpts {
 					environment: &env,
-					actor_id,
+					actor_id: response.actor.id,
 					stream: self
 						.log_stream
 						.clone()
@@ -303,6 +279,6 @@ impl Opts {
 			.await?;
 		}
 
-		Ok(ExitCode::SUCCESS)
+		Ok(())
 	}
 }

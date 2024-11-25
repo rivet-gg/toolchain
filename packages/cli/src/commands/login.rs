@@ -1,5 +1,5 @@
+use anyhow::*;
 use clap::Parser;
-use std::process::ExitCode;
 use toolchain::tasks;
 
 use crate::util::{
@@ -16,51 +16,30 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
+	pub async fn execute(&self) -> Result<()> {
 		// Check if linked
-		match run_task::<tasks::auth::check_state::Task>(
+		let output = run_task::<tasks::auth::check_state::Task>(
 			TaskOutputStyle::None,
 			tasks::auth::check_state::Input {},
 		)
-		.await
-		{
-			Ok(output) => {
-				if output.signed_in {
-					eprintln!("Already logged in. Log out with `rivet logout`.");
-					return ExitCode::SUCCESS;
-				}
-			}
-			Err(e) => {
-				eprintln!("Error checking login state: {}", e);
-				return ExitCode::from(1);
-			}
+		.await?;
+		if output.signed_in {
+			eprintln!("Already logged in. Log out with `rivet logout`.");
+			return Ok(());
 		}
 
 		// Start device link
-		let device_link_output = match run_task::<tasks::auth::start_sign_in::Task>(
+		let device_link_output = run_task::<tasks::auth::start_sign_in::Task>(
 			TaskOutputStyle::None,
 			tasks::auth::start_sign_in::Input {
 				api_endpoint: self.api_endpoint.clone(),
 			},
 		)
-		.await
-		{
-			Ok(output) => output,
-			Err(e) => {
-				eprintln!("Error starting device link: {}", e);
-				return ExitCode::from(2);
-			}
-		};
+		.await?;
 
 		// Prompt user to press enter to open browser
 		println!("Press Enter to login in your browser");
-		match term::wait_for_enter().await {
-			Ok(_) => {}
-			Err(err) => {
-				eprintln!("Failed to read term: {err}");
-				return ExitCode::FAILURE;
-			}
-		}
+		term::wait_for_enter().await?;
 
 		// Open link in browser
 		//
@@ -82,23 +61,16 @@ impl Opts {
 		}
 
 		// Wait for finish
-		match run_task::<tasks::auth::wait_for_sign_in::Task>(
+		run_task::<tasks::auth::wait_for_sign_in::Task>(
 			TaskOutputStyle::None,
 			tasks::auth::wait_for_sign_in::Input {
 				api_endpoint: self.api_endpoint.clone(),
 				device_link_token: device_link_output.device_link_token,
 			},
 		)
-		.await
-		{
-			Ok(_) => {
-				eprintln!("Logged in");
-				ExitCode::SUCCESS
-			}
-			Err(e) => {
-				eprintln!("Error waiting for login: {}", e);
-				ExitCode::from(3)
-			}
-		}
+		.await?;
+		eprintln!("Logged in");
+
+		Ok(())
 	}
 }

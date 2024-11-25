@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::Parser;
-use std::{collections::HashMap, process::ExitCode};
+use std::collections::HashMap;
 use toolchain::rivet_api::apis;
 
 #[derive(Parser)]
@@ -19,17 +19,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
-		match self.execute_inner().await {
-			Result::Ok(code) => code,
-			Err(err) => {
-				eprintln!("{err}");
-				ExitCode::FAILURE
-			}
-		}
-	}
-
-	pub async fn execute_inner(&self) -> Result<ExitCode> {
+	pub async fn execute(&self) -> Result<()> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
 		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
@@ -42,7 +32,7 @@ impl Opts {
 			.transpose()?;
 		let tags_json = tags.map(|t| serde_json::to_string(&t)).transpose()?;
 
-		match apis::actor_api::actor_list(
+		let res = apis::actor_api::actor_list(
 			&ctx.openapi_config_cloud,
 			Some(&ctx.project.name_id),
 			Some(&env),
@@ -50,16 +40,9 @@ impl Opts {
 			Some(self.include_destroyed),
 			self.cursor.as_deref(),
 		)
-		.await
-		{
-			Result::Ok(res) => {
-				println!("{:#?}", res.actors);
-				Ok(ExitCode::SUCCESS)
-			}
-			Err(e) => {
-				eprintln!("Failed to list actors: {}", e);
-				Ok(ExitCode::FAILURE)
-			}
-		}
+		.await?;
+
+		println!("{:#?}", res.actors);
+		Ok(())
 	}
 }

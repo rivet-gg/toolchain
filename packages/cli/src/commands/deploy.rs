@@ -1,5 +1,6 @@
+use anyhow::*;
 use clap::Parser;
-use std::{collections::HashMap, process::ExitCode};
+use std::collections::HashMap;
 
 #[derive(Parser)]
 pub struct Opts {
@@ -11,44 +12,24 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
-		let ctx = match toolchain::toolchain_ctx::load().await {
-			Ok(c) => c,
-			Err(err) => {
-				eprintln!("Failed to load ctx: {err:?}");
-				return ExitCode::FAILURE;
-			}
-		};
+	pub async fn execute(&self) -> Result<()> {
+		let ctx = toolchain::toolchain_ctx::load().await?;
 
-		let env = match crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await {
-			Ok(e) => e,
-			Err(err) => {
-				eprintln!("Failed to select env: {err:?}");
-				return ExitCode::FAILURE;
-			}
-		};
+		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
 
-		let build_tags = match self
+		let build_tags = self
 			.tags
 			.as_ref()
 			.map(|b| kv_str::from_str::<HashMap<String, String>>(b))
 			.transpose()
-		{
-			Ok(t) => t,
-			Err(err) => {
-				eprintln!("Failed to parse build tags: {err:?}");
-				return ExitCode::FAILURE;
-			}
-		};
+			.context("Failed to parse build tags")?;
 
-		match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
+		crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
 			environment: &env,
 			build_tags,
 		})
-		.await
-		{
-			Ok(_) => ExitCode::SUCCESS,
-			Err(code) => code,
-		}
+		.await?;
+
+		Ok(())
 	}
 }

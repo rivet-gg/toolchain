@@ -4,8 +4,8 @@ pub mod get;
 pub mod list;
 pub mod logs;
 
+use anyhow::*;
 use clap::Subcommand;
-use std::process::ExitCode;
 
 #[derive(Subcommand)]
 pub enum SubCommand {
@@ -17,7 +17,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self) -> ExitCode {
+	pub async fn execute(&self) -> Result<()> {
 		match &self {
 			SubCommand::Create(opts) => opts.execute().await,
 			SubCommand::Get(opts) => opts.execute().await,

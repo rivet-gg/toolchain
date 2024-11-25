@@ -1,5 +1,5 @@
+use anyhow::*;
 use clap::Subcommand;
-use std::process::ExitCode;
 use toolchain::paths;
 
 #[derive(Subcommand)]
@@ -8,7 +8,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self) -> ExitCode {
+	pub async fn execute(&self) -> Result<()> {
 		match self {
 			SubCommand::Path => {
 				println!(
@@ -17,7 +17,7 @@ impl SubCommand {
 						.expect("project_data_dir")
 						.display()
 				);
-				ExitCode::SUCCESS
+				Ok(())
 			}
 		}
 	}

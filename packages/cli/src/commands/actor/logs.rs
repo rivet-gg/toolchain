@@ -1,6 +1,5 @@
 use anyhow::*;
 use clap::Parser;
-use std::process::ExitCode;
 use uuid::Uuid;
 
 #[derive(Parser)]
@@ -22,17 +21,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
-		match self.execute_inner().await {
-			Result::Ok(code) => code,
-			Err(err) => {
-				eprintln!("{err}");
-				ExitCode::FAILURE
-			}
-		}
-	}
-
-	pub async fn execute_inner(&self) -> Result<ExitCode> {
+	pub async fn execute(&self) -> Result<()> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
 		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
@@ -54,6 +43,6 @@ impl Opts {
 		)
 		.await?;
 
-		Ok(ExitCode::SUCCESS)
+		Ok(())
 	}
 }
