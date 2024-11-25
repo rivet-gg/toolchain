@@ -1,0 +1,9 @@
+[package]
+name = "kv-str"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.93"
+envy = "0.4.2"
+serde = "1.0.215"

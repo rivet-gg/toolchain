@@ -123,7 +123,12 @@ pub async fn upload_file(
 		let pb = pb.clone();
 
 		// Read file
-		let mut file = File::open(file_path.as_ref()).await?;
+		let mut file = File::open(file_path.as_ref()).await.with_context(|| {
+			anyhow!(
+				"failed to open file to upload: {}",
+				file_path.as_ref().display()
+			)
+		})?;
 		let file_meta = file.metadata().await?;
 		let file_len = file_meta.len();
 

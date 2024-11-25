@@ -44,7 +44,9 @@ pub async fn push_tar(
 	let reqwest_client = Arc::new(reqwest::Client::new());
 
 	// Inspect the image
-	let image_file_meta = fs::metadata(&push_opts.path).await?;
+	let image_file_meta = fs::metadata(&push_opts.path)
+		.await
+		.with_context(|| anyhow!("failed to open image file: {}", push_opts.path.display()))?;
 	ensure!(image_file_meta.len() > 0, "docker image archive is empty");
 
 	// Create image

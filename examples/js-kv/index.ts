@@ -1,3 +1,5 @@
+import Rivet from "@rivet-gg/actors-core";
+
 await Rivet.kv.put("count", 0);
 
 console.log('Started', Deno.env.toObject());

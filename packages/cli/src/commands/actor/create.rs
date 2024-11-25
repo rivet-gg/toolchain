@@ -2,10 +2,11 @@ use anyhow::*;
 use clap::{Parser, ValueEnum};
 use serde::Deserialize;
 use std::{collections::HashMap, process::ExitCode};
-use toolchain::rivet_api::{apis, models};
+use toolchain::{
+	build,
+	rivet_api::{apis, models},
+};
 use uuid::Uuid;
-
-use crate::util::kv_str;
 
 #[derive(ValueEnum, Clone)]
 enum NetworkMode {
@@ -31,19 +32,22 @@ pub struct Opts {
 	environment: String,
 
 	#[clap(long, short = 'r')]
-	region: String,
+	region: Option<String>,
 
-	#[clap(long, short = 't')]
-	tags: Option<String>,
+	/// Tags to use for both the actor & build tags. This allows for creating actors quickly since
+	/// the tags are often identical between the two.
+	#[clap(long = "tags", short = 't')]
+	universal_tags: Option<String>,
 
+	#[clap(long, short = 'a')]
+	actor_tags: Option<String>,
+
+	/// Build ID.
 	#[clap(long)]
 	build: Option<String>,
 
 	#[clap(long, short = 'b')]
 	build_tags: Option<String>,
-
-	#[clap(long = "arg")]
-	arguments: Option<Vec<String>>,
 
 	#[clap(long = "env")]
 	env_vars: Option<Vec<String>>,
@@ -65,6 +69,19 @@ pub struct Opts {
 
 	#[clap(long)]
 	durable: bool,
+
+	/// If included, the `current` tag will not be automatically inserted to the build tag.
+	#[clap(long)]
+	no_build_current_tag: bool,
+
+	#[clap(long)]
+	logs: bool,
+
+	#[clap(long)]
+	log_stream: Option<crate::util::actor::logs::LogStream>,
+
+	#[clap(long)]
+	deploy: bool,
 }
 
 impl Opts {
@@ -82,19 +99,31 @@ impl Opts {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
 		// Parse tags
-		let tags = self
-			.tags
+		let actor_tags = if let Some(t) = &self.actor_tags {
+			kv_str::from_str::<HashMap<String, String>>(t)?
+		} else if let Some(t) = &self.universal_tags {
+			kv_str::from_str::<HashMap<String, String>>(t)?
+		} else {
+			// No tags
+			HashMap::new()
+		};
+
+		// Parse build ID
+		let mut build_id = self
+			.build
 			.as_ref()
-			.map(|tags_str| kv_str::from_str::<HashMap<String, String>>(tags_str))
-			.transpose()?
-			.unwrap_or_else(|| HashMap::new());
+			.map(|b| Uuid::parse_str(&b))
+			.transpose()
+			.context("invalid build uuid")?;
 
 		// Parse build tags
-		let build_tags = self
-			.build_tags
-			.as_ref()
-			.map(|tags_str| kv_str::from_str::<HashMap<String, String>>(tags_str))
-			.transpose()?;
+		let mut build_tags = if let Some(t) = &self.build_tags {
+			Some(kv_str::from_str::<HashMap<String, String>>(t)?)
+		} else if let Some(t) = &self.universal_tags {
+			Some(kv_str::from_str::<HashMap<String, String>>(t)?)
+		} else {
+			None
+		};
 
 		// Parse ports
 		let ports = self
@@ -141,18 +170,82 @@ impl Opts {
 			})
 			.transpose()?;
 
+		// Auto-deploy
+		if self.deploy {
+			// Remove build tags, since we'll be using the build ID
+			let build_tags = build_tags
+				.take()
+				.context("must define build tags when using deploy flag")?;
+
+			// Deploys erver
+			match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
+				environment: &self.environment,
+				build_tags: Some(build_tags),
+			})
+			.await
+			{
+				Result::Ok(deploy_build_ids) => {
+					if deploy_build_ids.len() > 1 {
+						println!("Warning: Multiple build IDs match tags, proceeding with first");
+					}
+
+					let deploy_build_id = deploy_build_ids
+						.first()
+						.context("No builds matched build tags")?;
+					build_id = Some(*deploy_build_id);
+				}
+				Err(code) => {
+					return Ok(code);
+				}
+			};
+		}
+
+		// Automatically add `current` tag to make querying easier
+		//
+		// Do this AFTER the deploy since this will mess up the build filter.
+		if !self.no_build_current_tag {
+			if let Some(build_tags) = build_tags.as_mut() {
+				if !build_tags.contains_key(build::tags::VERSION) {
+					build_tags.insert(build::tags::CURRENT.into(), "true".into());
+				}
+			}
+		}
+
+		// Auto-select region if needed
+		let region = if let Some(region) = &self.region {
+			region.clone()
+		} else {
+			let regions = apis::actor_regions_api::actor_regions_list(
+				&ctx.openapi_config_cloud,
+				Some(&ctx.project.name_id.to_string()),
+				Some(&self.environment),
+			)
+			.await?;
+
+			// TODO(RVT-4207): Improve automatic region selection logic
+			// Choose a region
+			let auto_region = if let Some(ideal_region) = regions
+				.regions
+				.iter()
+				.filter(|r| r.id == "lax" || r.id == "local")
+				.next()
+			{
+				ideal_region.id.clone()
+			} else {
+				regions.regions.first().context("no regions")?.id.clone()
+			};
+			println!("Automatically selected region: {auto_region}");
+
+			auto_region
+		};
+
 		let request = models::ActorCreateActorRequest {
-			region: self.region.clone(),
-			tags: Some(serde_json::json!(tags)),
-			build: self
-				.build
-                .as_ref()
-				.map(|b| Uuid::parse_str(&b))
-				.transpose()
-				.context("invalid build uuid")?,
+			region,
+			tags: Some(serde_json::json!(actor_tags)),
+			build: build_id,
 			build_tags: build_tags.map(|bt| Some(serde_json::json!(bt))),
 			runtime: Box::new(models::ActorCreateActorRuntimeRequest {
-				arguments: self.arguments.clone(),
+				arguments: None,
 				environment: env_vars,
 			}),
 			network: Some(Box::new(models::ActorCreateActorNetworkRequest {
@@ -172,7 +265,7 @@ impl Opts {
 			})),
 		};
 
-		match apis::actor_api::actor_create(
+		let actor_id = match apis::actor_api::actor_create(
 			&ctx.openapi_config_cloud,
 			request,
 			Some(&ctx.project.name_id),
@@ -182,12 +275,32 @@ impl Opts {
 		{
 			Result::Ok(response) => {
 				println!("Created actor:\n{:#?}", response.actor);
-				Ok(ExitCode::SUCCESS)
+				response.actor.id
 			}
 			Err(e) => {
 				eprintln!("Failed to create actor: {}", e);
-				Ok(ExitCode::FAILURE)
+				return Ok(ExitCode::FAILURE);
 			}
+		};
+
+		// Tail logs
+		if self.logs {
+			crate::util::actor::logs::tail(
+				&ctx,
+				crate::util::actor::logs::TailOpts {
+					environment: &self.environment,
+					actor_id,
+					stream: self
+						.log_stream
+						.clone()
+						.unwrap_or(crate::util::actor::logs::LogStream::StdOut),
+					follow: true,
+					timestamps: true,
+				},
+			)
+			.await?;
 		}
+
+		Ok(ExitCode::SUCCESS)
 	}
 }

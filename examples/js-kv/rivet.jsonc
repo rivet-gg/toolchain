@@ -4,8 +4,8 @@
     {
       "tags": { "name": "kv" },
       "runtime": "javascript",
-      "bundler": "none",
-      "script": "index.js"
+      "bundler": "deno",
+      "script": "index.ts"
     }
   ]
 }

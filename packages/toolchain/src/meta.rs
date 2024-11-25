@@ -10,9 +10,9 @@ use crate::paths;
 /// Config stored in {data_dir}/meta.json. Used to store persistent data, such as tokens & cache.
 #[derive(Default, Serialize, Deserialize)]
 pub struct Meta {
-	/// If signed in to Rivet, this will include relevant information.
+	/// If logged in to Rivet, this will include relevant information.
 	///
-	/// If not signed in, will be None.
+	/// If not logged in, will be None.
 	pub cloud: Option<Cloud>,
 }
 
