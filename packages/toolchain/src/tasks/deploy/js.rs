@@ -193,13 +193,8 @@ async fn upload_bundle(
 		.iter()
 		.fold(0, |acc, x| acc + x.prepared.content_length);
 
-	// task.log(format!(
-	// 	"[Uploading Build] {count} files, {size} total",
-	// 	count = files.len(),
-	// 	size = upload::format_file_size(total_len as u64)?,
-	// ));
 	task.log(format!(
-		"[Uploading Build] {size}",
+		"[Uploading] {size}",
 		size = upload::format_file_size(total_len as u64)?,
 	));
 

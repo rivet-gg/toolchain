@@ -14,17 +14,17 @@ pub enum EitherProgressBar {
 	Multi(MultiProgress),
 }
 
-pub fn multi_progress_bar(task: task::TaskCtx) -> MultiProgress {
+pub fn multi_progress_bar(_task: task::TaskCtx) -> MultiProgress {
 	let pb = MultiProgress::new();
-	pb.set_draw_target(get_pb_draw_target(task));
+	// pb.set_draw_target(get_pb_draw_target(task));
 	pb
 }
 
-pub fn progress_bar(task: task::TaskCtx) -> ProgressBar {
+pub fn progress_bar(_task: task::TaskCtx) -> ProgressBar {
 	// Don't draw the first iteration until the pb is styled
 	let pb = ProgressBar::hidden();
 	pb.set_style(pb_style_file(false));
-	pb.set_draw_target(get_pb_draw_target(task));
+	// pb.set_draw_target(get_pb_draw_target(task));
 	pb.enable_steady_tick(Duration::from_millis(1000));
 	pb
 }

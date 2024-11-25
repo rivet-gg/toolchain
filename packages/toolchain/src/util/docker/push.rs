@@ -57,7 +57,7 @@ pub async fn push_tar(
 	let content_type = "binary/octet-stream";
 
 	task.log(format!(
-		"[Uploading Image] {name} ({size})",
+		"[Uploading] {name} ({size})",
 		name = display_name,
 		size = upload::format_file_size(image_file_meta.len())?
 	));

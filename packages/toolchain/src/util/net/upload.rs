@@ -152,7 +152,7 @@ pub async fn upload_file(
 				// Hack to fix weird bug with `MultiProgress` where it renders an empty progress bar and leaves
 				// it there
 				if !pb_added {
-					pb.set_draw_target(term::get_pb_draw_target(task.clone()));
+					// pb.set_draw_target(term::get_pb_draw_target(task.clone()));
 					mpb.add(pb.clone());
 
 					pb_added = true;
