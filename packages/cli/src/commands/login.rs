@@ -2,7 +2,11 @@ use clap::Parser;
 use std::process::ExitCode;
 use toolchain::tasks;
 
-use crate::util::task::{run_task, TaskOutputStyle};
+use crate::util::{
+	os,
+	task::{run_task, TaskOutputStyle},
+	term,
+};
 
 /// Login to a project
 #[derive(Parser)]
@@ -47,7 +51,35 @@ impl Opts {
 				return ExitCode::from(2);
 			}
 		};
-		eprintln!("{}", device_link_output.device_link_url);
+
+		// Prompt user to press enter to open browser
+		println!("Press Enter to login in your browser");
+		match term::wait_for_enter().await {
+			Ok(_) => {}
+			Err(err) => {
+				eprintln!("Failed to read term: {err}");
+				return ExitCode::FAILURE;
+			}
+		}
+
+		// Open link in browser
+		//
+		// Linux root users often cannot open the browser, so we fallback to printing the URL
+		if !os::is_linux_and_root()
+			&& webbrowser::open_browser_with_options(
+				webbrowser::Browser::Default,
+				&device_link_output.device_link_url,
+				webbrowser::BrowserOptions::new().with_suppress_output(true),
+			)
+			.is_ok()
+		{
+			println!("Waiting for browser...");
+		} else {
+			println!(
+				"Failed to open browser.\n\nVisit this URL:\n{}",
+				device_link_output.device_link_url
+			);
+		}
 
 		// Wait for finish
 		match run_task::<tasks::auth::wait_for_sign_in::Task>(

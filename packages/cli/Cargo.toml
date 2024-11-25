@@ -22,6 +22,7 @@ url = { version = "2.5.3", features = ["serde"] }
 base64 = "0.22.1"
 kv-str = { version = "0.1.0", path = "../kv-str" }
 inquire = "0.7.5"
+webbrowser = "1.0.2"
 
 [build-dependencies]
 anyhow = "1.0"
