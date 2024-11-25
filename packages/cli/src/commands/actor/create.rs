@@ -34,7 +34,7 @@ pub struct Opts {
 	environment: String,
 
 	#[clap(long, short = 'r')]
-	region: String,
+	region: Option<String>,
 
 	/// Tags to use for both the actor & build tags. This allows for creating actors quickly since
 	/// the tags are often identical between the two.
@@ -170,8 +170,36 @@ impl Opts {
 			})
 			.transpose()?;
 
+		// Auto-select region if needed
+		let region = if let Some(region) = &self.region {
+			region.clone()
+		} else {
+			let regions = apis::actor_regions_api::actor_regions_list(
+				&ctx.openapi_config_cloud,
+				Some(&ctx.project.name_id.to_string()),
+				Some(&self.environment),
+			)
+			.await?;
+
+			// TODO(RVT-4207): Improve automatic region selection logic
+			// Choose a region
+			let auto_region = if let Some(ideal_region) = regions
+				.regions
+				.iter()
+				.filter(|r| r.id == "lax" || r.id == "local")
+				.next()
+			{
+				ideal_region.id.clone()
+			} else {
+				regions.regions.first().context("no regions")?.id.clone()
+			};
+			println!("Automatically selected region: {auto_region}");
+
+			auto_region
+		};
+
 		let request = models::ActorCreateActorRequest {
-			region: self.region.clone(),
+			region,
 			tags: Some(serde_json::json!(actor_tags)),
 			build: self
 				.build
