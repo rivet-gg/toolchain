@@ -3,10 +3,10 @@ pub mod build;
 pub mod deploy;
 pub mod environment;
 pub mod init;
+pub mod login;
+pub mod logout;
 pub mod metadata;
 pub mod region;
-pub mod sign_in;
-pub mod sign_out;
 
 use clap::Parser;
 use std::process::ExitCode;
@@ -14,10 +14,10 @@ use std::process::ExitCode;
 #[derive(Parser)]
 pub enum SubCommand {
 	Init(init::Opts),
-	#[clap(alias = "login")]
-	Signin(sign_in::Opts),
-	#[clap(alias = "logout")]
-	Signout(sign_out::Opts),
+	#[clap(alias = "signin")]
+	Login(login::Opts),
+	#[clap(alias = "signout")]
+	Logout(logout::Opts),
 	#[clap(alias = "d")]
 	Deploy(deploy::Opts),
 	#[clap(alias = "e", alias = "env")]
@@ -50,8 +50,8 @@ impl SubCommand {
 	pub async fn execute(&self) -> ExitCode {
 		match self {
 			SubCommand::Init(opts) => opts.execute().await,
-			SubCommand::Signin(opts) => opts.execute().await,
-			SubCommand::Signout(opts) => opts.execute().await,
+			SubCommand::Login(opts) => opts.execute().await,
+			SubCommand::Logout(opts) => opts.execute().await,
 			SubCommand::Deploy(opts) => opts.execute().await,
 			SubCommand::Environment { subcommand } => subcommand.execute().await,
 			SubCommand::Actor { subcommand } => subcommand.execute().await,
