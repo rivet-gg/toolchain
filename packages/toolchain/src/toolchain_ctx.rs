@@ -47,10 +47,7 @@ pub async fn try_load() -> Result<Option<ToolchainCtx>> {
 
 pub async fn load() -> Result<ToolchainCtx> {
 	let (api_endpoint, token) = meta::try_read_project(&paths::data_dir()?, |x| {
-		let cloud = x
-			.cloud
-			.as_ref()
-			.context("Not logged in. Please run `rivet login`.")?;
+		let cloud = x.cloud()?;
 		Ok((cloud.api_endpoint.clone(), cloud.cloud_token.clone()))
 	})
 	.await?;

@@ -16,6 +16,22 @@ pub struct Meta {
 	pub cloud: Option<Cloud>,
 }
 
+impl Meta {
+	pub fn cloud(&self) -> Result<&Cloud> {
+		Ok(self
+			.cloud
+			.as_ref()
+			.context("Not logged in. Please run `rivet login`.")?)
+	}
+
+	pub fn cloud_mut(&mut self) -> Result<&mut Cloud> {
+		Ok(self
+			.cloud
+			.as_mut()
+			.context("Not logged in. Please run `rivet login`.")?)
+	}
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct Cloud {
 	/// Rivet API endpoint to connect to.
@@ -24,8 +40,8 @@ pub struct Cloud {
 	/// Cloud token used to authenticate all API requests.
 	pub cloud_token: String,
 
-	/// Cache of all environments for this game.
-	pub environments: HashMap<Uuid, Environment>,
+	/// Environment to use by default for all actions.
+	pub selected_environment: Option<Uuid>,
 }
 
 impl Cloud {
@@ -33,13 +49,10 @@ impl Cloud {
 		Self {
 			api_endpoint,
 			cloud_token,
-			environments: HashMap::new(),
+			selected_environment: None,
 		}
 	}
 }
-
-#[derive(Default, Clone, Serialize, Deserialize)]
-pub struct Environment {}
 
 lazy_static! {
 	/// List of all meta paths cached in memory.
