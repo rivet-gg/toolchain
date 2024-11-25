@@ -49,10 +49,7 @@ pub async fn build_image(
 		config::build::docker::BuildMethod::Native => " (with native)",
 		config::build::docker::BuildMethod::Buildx => " (with buildx)",
 	};
-	task.log(format!(
-		"[Building Image] {}{buildx_info}",
-		dockerfile.display()
-	));
+	task.log(format!("[Building] {}{buildx_info}", dockerfile.display()));
 
 	// Build args
 	let mut build_arg_flags = HashMap::<String, String>::new();

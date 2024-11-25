@@ -60,7 +60,7 @@ impl task::Task for Task {
 				}
 			}
 
-			task.log(format!("[Build] {}", kv_str::to_str(&build.tags)?));
+			task.log(format!("[Building] {}", kv_str::to_str(&build.tags)?));
 
 			// Build
 			let build_id = build_and_upload(
@@ -163,7 +163,7 @@ async fn build_and_upload(
 	}
 	complete_res.context("complete_res")?;
 
-	task.log(format!("[Build Upload Complete] {build_id}"));
+	task.log(format!("[Build Finished] {build_id}"));
 
 	Ok(build_id)
 }
