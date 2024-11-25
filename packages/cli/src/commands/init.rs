@@ -1,6 +1,6 @@
+use anyhow::*;
 use clap::Parser;
 use serde::Serialize;
-use std::process::ExitCode;
 
 use crate::util::global_opts::GlobalOpts;
 
@@ -17,7 +17,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
+	pub async fn execute(&self) -> Result<()> {
 		todo!()
 	}
 }

@@ -1,6 +1,6 @@
 use anyhow::*;
 use clap::Parser;
-use std::{collections::HashMap, process::ExitCode};
+use std::collections::HashMap;
 use toolchain::rivet_api::{apis, models};
 
 #[derive(Parser)]
@@ -19,17 +19,7 @@ pub struct Opts {
 }
 
 impl Opts {
-	pub async fn execute(&self) -> ExitCode {
-		match self.execute_inner().await {
-			Result::Ok(code) => code,
-			Err(err) => {
-				eprintln!("{err}");
-				ExitCode::FAILURE
-			}
-		}
-	}
-
-	pub async fn execute_inner(&self) -> Result<ExitCode> {
+	pub async fn execute(&self) -> Result<()> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
 		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
@@ -46,7 +36,7 @@ impl Opts {
 				.collect::<Vec<String>>()
 		});
 
-		match apis::actor_builds_api::actor_builds_patch_tags(
+		apis::actor_builds_api::actor_builds_patch_tags(
 			&ctx.openapi_config_cloud,
 			&self.build,
 			models::ActorPatchBuildTagsRequest {
@@ -56,16 +46,9 @@ impl Opts {
 			Some(&ctx.project.name_id),
 			Some(&env),
 		)
-		.await
-		{
-			Result::Ok(_) => {
-				println!("Patched tags");
-				Ok(ExitCode::SUCCESS)
-			}
-			Err(e) => {
-				eprintln!("Failed to patch tags: {}", e);
-				Ok(ExitCode::FAILURE)
-			}
-		}
+		.await?;
+
+		println!("Patched tags");
+		Ok(())
 	}
 }
