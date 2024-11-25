@@ -295,7 +295,7 @@ impl Opts {
 					stream: self
 						.log_stream
 						.clone()
-						.unwrap_or(crate::util::actor::logs::LogStream::StdOut),
+						.unwrap_or(crate::util::actor::logs::LogStream::All),
 					follow: true,
 					timestamps: true,
 				},

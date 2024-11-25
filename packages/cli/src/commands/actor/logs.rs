@@ -47,7 +47,7 @@ impl Opts {
 				stream: self
 					.stream
 					.clone()
-					.unwrap_or(crate::util::actor::logs::LogStream::StdOut),
+					.unwrap_or(crate::util::actor::logs::LogStream::All),
 				follow: !self.no_follow,
 				timestamps: !self.no_timestamps,
 			},
