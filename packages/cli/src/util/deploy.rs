@@ -23,7 +23,7 @@ pub async fn deploy(opts: DeployOpts<'_>) -> Result<Vec<Uuid>, ExitCode> {
 		}
 	};
 	let Some(cloud_data) = bootstrap_data.cloud else {
-		eprintln!("Not signed in");
+		eprintln!("Not signed in. Please run `rivet login`.");
 		return Err(ExitCode::FAILURE);
 	};
 
@@ -66,7 +66,7 @@ pub async fn deploy(opts: DeployOpts<'_>) -> Result<Vec<Uuid>, ExitCode> {
 	{
 		Ok(build) => Ok(build.build_ids),
 		Err(e) => {
-			eprintln!("Error during deployment: {e}");
+			eprintln!("Error during deploy: {e}");
 			Err(ExitCode::FAILURE)
 		}
 	}

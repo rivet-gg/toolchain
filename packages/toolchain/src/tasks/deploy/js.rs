@@ -27,8 +27,6 @@ pub async fn build_and_upload(
 	task: task::TaskCtx,
 	opts: BuildAndUploadOpts,
 ) -> Result<Uuid> {
-	task.log("[Build]");
-
 	let project_root = paths::project_root()?;
 
 	// Create dir to write build artifacts to

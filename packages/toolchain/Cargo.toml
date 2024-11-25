@@ -42,6 +42,7 @@ rivet-js-utils-embed = { path = "../js-utils-embed" }
 lazy_static = "1.5.0"
 sha1 = "0.10.6"
 jsonc-parser = { version = "0.26.2", features = ["serde"] }
+kv-str = { version = "0.1.0", path = "../kv-str" }
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.27", default-features = false, features = ["user", "signal"] }

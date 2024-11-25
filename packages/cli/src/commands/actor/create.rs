@@ -8,8 +8,6 @@ use toolchain::{
 };
 use uuid::Uuid;
 
-use crate::util::kv_str;
-
 #[derive(ValueEnum, Clone)]
 enum NetworkMode {
 	Bridge,
@@ -127,15 +125,6 @@ impl Opts {
 			None
 		};
 
-		// Automatically add `current` tag to make querying easier
-		if !self.no_build_current_tag {
-			if let Some(build_tags) = build_tags.as_mut() {
-				if !build_tags.contains_key(build::tags::VERSION) {
-					build_tags.insert(build::tags::CURRENT.into(), "true".into());
-				}
-			}
-		}
-
 		// Parse ports
 		let ports = self
 			.ports
@@ -209,6 +198,17 @@ impl Opts {
 					return Ok(code);
 				}
 			};
+		}
+
+		// Automatically add `current` tag to make querying easier
+		//
+		// Do this AFTER the deploy since this will mess up the build filter.
+		if !self.no_build_current_tag {
+			if let Some(build_tags) = build_tags.as_mut() {
+				if !build_tags.contains_key(build::tags::VERSION) {
+					build_tags.insert(build::tags::CURRENT.into(), "true".into());
+				}
+			}
 		}
 
 		// Auto-select region if needed

@@ -1,8 +1,7 @@
-use std::collections::HashMap;
-
 use anyhow::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::{
@@ -51,6 +50,7 @@ impl task::Task for Task {
 			.await?;
 		let version_name = reserve_res.version_display_name;
 
+		// Build
 		let mut build_ids = Vec::new();
 		for build in &input.config.builds {
 			// Filter out builds that match the tags
@@ -59,6 +59,8 @@ impl task::Task for Task {
 					continue;
 				}
 			}
+
+			task.log(format!("[Build] {}", kv_str::to_str(&build.tags)?));
 
 			// Build
 			let build_id = build_and_upload(
@@ -72,6 +74,8 @@ impl task::Task for Task {
 			.await?;
 			build_ids.push(build_id);
 		}
+
+		ensure!(!build_ids.is_empty(), "No builds matched build tags");
 
 		task.log("");
 		task.log("[Deploy Finished]");

@@ -1,8 +1,6 @@
 use clap::Parser;
 use std::{collections::HashMap, process::ExitCode};
 
-use crate::util::kv_str;
-
 #[derive(Parser)]
 pub struct Opts {
 	environment: String,
