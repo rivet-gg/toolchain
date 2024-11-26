@@ -31,11 +31,13 @@ pub async fn get_or_select(
 	}
 
 	// Prompt user for selection
-	select(ctx).await
+	select(ctx, false).await
 }
 
 /// Select an environment.
-pub async fn select(ctx: &toolchain::ToolchainCtx) -> Result<String> {
+///
+/// Forcing selection will prompt the user for selection, even if there's only 1 item.
+pub async fn select(ctx: &toolchain::ToolchainCtx, force_select: bool) -> Result<String> {
 	// Build selections
 	let mut envs = ctx
 		.project
@@ -48,6 +50,12 @@ pub async fn select(ctx: &toolchain::ToolchainCtx) -> Result<String> {
 		})
 		.collect::<Vec<_>>();
 	envs.sort_by_key(|e| e.name.clone());
+
+	// If only one env, don't prompt
+	if !force_select && envs.len() == 1 {
+		let env = envs.into_iter().next().expect("should have 1 env value");
+		return Ok(env.slug);
+	}
 
 	// Choose starting index
 	let start_env_id =
