@@ -1,7 +1,11 @@
 use anyhow::*;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
-use std::{collections::HashMap, ops::Deref, path::Path};
+use std::{
+	collections::HashMap,
+	ops::Deref,
+	path::{Path, PathBuf},
+	sync::Arc,
+};
 
 pub mod build;
 
@@ -9,7 +13,7 @@ pub mod build;
 pub struct Config(Arc<Root>);
 
 impl Config {
-	pub async fn load(path: Option<&Path>) -> Result<Self> {
+	pub async fn config_path(path: Option<&Path>) -> Result<PathBuf> {
 		let path = path.unwrap_or_else(|| Path::new("."));
 		let jsonc_path = path.join("rivet.jsonc");
 		let json_path = path.join("rivet.json");
@@ -17,9 +21,15 @@ impl Config {
 		let file_path = match (jsonc_path.exists(), json_path.exists()) {
 			(true, true) => bail!("Both rivet.jsonc and rivet.json exist. Please remove one."),
 			(false, false) => bail!("Neither rivet.jsonc nor rivet.json exist."),
-			(true, false) => &jsonc_path,
-			(false, true) => &json_path,
+			(true, false) => jsonc_path,
+			(false, true) => json_path,
 		};
+
+		Ok(file_path)
+	}
+
+	pub async fn load(path: Option<&Path>) -> Result<Self> {
+		let file_path = Self::config_path(path).await?;
 		let content = tokio::fs::read_to_string(&file_path)
 			.await
 			.with_context(|| anyhow!("failed to open config: {}", file_path.display()))?;
@@ -45,7 +55,6 @@ impl Deref for Config {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub struct Root {
-	pub version: String,
 	pub builds: Vec<Build>,
 	pub unstable: Option<Unstable>,
 }
