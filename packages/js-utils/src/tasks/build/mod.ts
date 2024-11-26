@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { globalOptsSchema } from "../../util/task/common.ts";
 import { runTask } from "../../util/task/task.ts";
 import { build } from "./build.ts";
 
@@ -16,7 +15,7 @@ export const inputSchema = z.object({
 		analyzeResult: z.boolean(),
 		logLevel: z.string(),
 	}),
-}).merge(globalOptsSchema);
+});
 
 export type Input = z.infer<typeof inputSchema>;
 

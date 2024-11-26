@@ -42,10 +42,22 @@ fn build_client() -> async_posthog::Client {
 /// Builds a new PostHog event with associated data.
 ///
 /// This is slightly expensive, so it should not be used frequently.
-pub async fn capture_event<F: FnOnce(&mut async_posthog::Event) -> Result<()>>(
-	name: &str,
-	mutate: Option<F>,
-) -> Result<()> {
+pub async fn capture_event<F>(name: &str, mutate: Option<F>)
+where
+	F: FnOnce(&mut async_posthog::Event) -> Result<()>,
+{
+	let capture_res = capture_event_inner(name, mutate).await;
+	if cfg!(debug_assertions) {
+		if let Err(err) = capture_res {
+			eprintln!("Failed to capture event in PostHog: {:?}", err);
+		}
+	}
+}
+
+async fn capture_event_inner<F>(name: &str, mutate: Option<F>) -> Result<()>
+where
+	F: FnOnce(&mut async_posthog::Event) -> Result<()>,
+{
 	// Check if telemetry disabled
 	let (toolchain_instance_id, telemetry_disabled, api_endpoint) =
 		meta::read_project(&paths::data_dir()?, |x| {
