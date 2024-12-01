@@ -7,7 +7,7 @@ pub struct Opts {}
 impl Opts {
 	pub async fn execute(&self) -> Result<()> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
-		crate::util::env::select(&ctx).await?;
+		crate::util::env::select(&ctx, true).await?;
 		Ok(())
 	}
 }
