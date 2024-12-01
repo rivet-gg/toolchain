@@ -54,14 +54,12 @@ pub async fn build_and_upload(
 			});
 
 			// Search for a Deno lockfile
-			let deno_lockfile_path = ["deno.lock"].iter().find_map(|file_name| {
-				let path = project_root.join(file_name);
-				if path.exists() {
-					Some(path.display().to_string())
-				} else {
-					None
-				}
-			});
+			let project_deno_lockfile_path = project_root.join("deno.lock");
+			let deno_lockfile_path = if project_deno_lockfile_path.exists() {
+				Some(project_deno_lockfile_path.display().to_string())
+			} else {
+				opts.build_config.deno.lock_path.clone()
+			};
 
 			// Build the bundle to the output dir. This will bundle all Deno dependencies into a
 			// single JS file.
@@ -84,8 +82,7 @@ pub async fn build_and_upload(
 								.map(|x| project_root.join(x).display().to_string())
 						}),
 						import_map_url: opts.build_config.deno.import_map_url.clone(),
-						lock_path: deno_lockfile_path
-							.or_else(|| opts.build_config.deno.lock_path.clone()),
+						lock_path: deno_lockfile_path,
 					},
 					bundle: js_utils::schemas::build::Bundle {
 						minify: opts.build_config.unstable.minify(),
