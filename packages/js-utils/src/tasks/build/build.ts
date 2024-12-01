@@ -1,12 +1,9 @@
 import { resolve } from "@std/path";
 import { denoPlugins } from "@rivet-gg/esbuild-deno-loader";
-import { exists } from "@std/fs";
 import * as esbuild from "esbuild";
 import { Input, Output } from "./mod.ts";
 
 export async function build(input: Input): Promise<Output> {
-	console.log("cwd", Deno.cwd())
-	console.log("version", Deno.version)
 	let outfile = resolve(input.outDir, "index.js");
 	const result = await esbuild.build({
 		entryPoints: [input.entryPoint],
