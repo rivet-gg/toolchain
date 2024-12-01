@@ -22,7 +22,7 @@ impl Opts {
 		{
 			Ok(output) => {
 				if output.signed_in {
-					eprintln!("Already logged in. Sign out with `rivet logout`.");
+					eprintln!("Already logged in. Log out with `rivet logout`.");
 					return ExitCode::SUCCESS;
 				}
 			}
