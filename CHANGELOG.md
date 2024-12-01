@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0-rc.6](https://github.com/rivet-gg/toolchain/compare/v2.0.0-rc.6...v2.1.0-rc.6) (2024-12-01)
+
+
+### Features
+
+* add --logs command to `rivet actor create` ([#584](https://github.com/rivet-gg/toolchain/issues/584)) ([762eb98](https://github.com/rivet-gg/toolchain/commit/762eb98a1b103f145cf786a7c7f06ac218419749))
+* add env selector ([#585](https://github.com/rivet-gg/toolchain/issues/585)) ([ca90737](https://github.com/rivet-gg/toolchain/commit/ca90737eedf291bca761db34a6cd658dcc59f9bc))
+* allow creating actors with build tags & add durable actors ([#580](https://github.com/rivet-gg/toolchain/issues/580)) ([da8619a](https://github.com/rivet-gg/toolchain/commit/da8619af20f24161c8f7ac173e7d86eca87cf5e0))
+* pretty-print api errors ([#593](https://github.com/rivet-gg/toolchain/issues/593)) ([66fd193](https://github.com/rivet-gg/toolchain/commit/66fd193c0928e845b07ee40ea6029393742b7fa7))
+
+
+### Bug Fixes
+
+* actor logs base64 ([#578](https://github.com/rivet-gg/toolchain/issues/578)) ([31bb18b](https://github.com/rivet-gg/toolchain/commit/31bb18b973c130fecb5c9a70e2ed4a593ca885bb))
+* correctly extend tags to builds ([#581](https://github.com/rivet-gg/toolchain/issues/581)) ([f5c588b](https://github.com/rivet-gg/toolchain/commit/f5c588b83de80141e0a2b489729214885eaeae2a))
+* **deno-embed:** accept github token to increase rate limits ([#566](https://github.com/rivet-gg/toolchain/issues/566)) ([7d59328](https://github.com/rivet-gg/toolchain/commit/7d59328c2de342835422fae17769a13ff663970f))
+* fix searching for deno lockfile ([#598](https://github.com/rivet-gg/toolchain/issues/598)) ([0545d90](https://github.com/rivet-gg/toolchain/commit/0545d9037484301cf1a636a5f8120b934d6514a7))
+* gracefully handle all ffi unwraps ([#562](https://github.com/rivet-gg/toolchain/issues/562)) ([9cb8253](https://github.com/rivet-gg/toolchain/commit/9cb825362d1d434184a26ee983dc478341af392a))
+* revert back to using native cp ([#569](https://github.com/rivet-gg/toolchain/issues/569)) ([598d2e5](https://github.com/rivet-gg/toolchain/commit/598d2e51f85a7365e2121e4481bbf626475cefe7))
+* **toolchain:** disable term color by default for backend ([#564](https://github.com/rivet-gg/toolchain/issues/564)) ([a39d231](https://github.com/rivet-gg/toolchain/commit/a39d2317f0bf98ce6597f1032dbcf401941c892c))
+* **toolchain:** fix backend-embed build on windows ([#565](https://github.com/rivet-gg/toolchain/issues/565)) ([e106174](https://github.com/rivet-gg/toolchain/commit/e106174de91537a2ea9425125e62522367ff4408))
+
+
+### Chores
+
+* add --out flag to build_cross.ts ([#573](https://github.com/rivet-gg/toolchain/issues/573)) ([a19b225](https://github.com/rivet-gg/toolchain/commit/a19b225f7aa479cfcbf67c82ad63a4d06cf85828))
+* add back all platforms to cross build ([#572](https://github.com/rivet-gg/toolchain/issues/572)) ([3e2ec00](https://github.com/rivet-gg/toolchain/commit/3e2ec00c7a9322857fdfb78f5f5929bc832ad7ed))
+* add deno uploads ([#577](https://github.com/rivet-gg/toolchain/issues/577)) ([8bef249](https://github.com/rivet-gg/toolchain/commit/8bef249f02573736afa2b4ad1ab59db7ec32852f))
+* add manual js uploads ([#576](https://github.com/rivet-gg/toolchain/issues/576)) ([0bf6e5a](https://github.com/rivet-gg/toolchain/commit/0bf6e5ad7d01a771cddc9e91d6fb66345dbecbe8))
+* add sentry integration ([#592](https://github.com/rivet-gg/toolchain/issues/592)) ([d7a6508](https://github.com/rivet-gg/toolchain/commit/d7a6508dbfc76cafc8fe8902e88a59032ff08f98))
+* add support for tar images for js ([#582](https://github.com/rivet-gg/toolchain/issues/582)) ([5930aa1](https://github.com/rivet-gg/toolchain/commit/5930aa1615c6626211812aa9f10cc01c02d7e07c))
+* allow tailing both stdout and stderr & log when actor shuts down ([#589](https://github.com/rivet-gg/toolchain/issues/589)) ([1f4c38f](https://github.com/rivet-gg/toolchain/commit/1f4c38f8e6c6a352c21fc46142c7535d2fff30fd))
+* auto-open browser on login ([#588](https://github.com/rivet-gg/toolchain/issues/588)) ([f4a1f74](https://github.com/rivet-gg/toolchain/commit/f4a1f7488d1ae64292d324ddca8f13bf3daf696b))
+* **backend:** format ([#568](https://github.com/rivet-gg/toolchain/issues/568)) ([ace84b7](https://github.com/rivet-gg/toolchain/commit/ace84b7a4c6be72654c73b4ff88860183cf983d6))
+* bundle postgres & fix github rate limit issue ([#567](https://github.com/rivet-gg/toolchain/issues/567)) ([a6e373d](https://github.com/rivet-gg/toolchain/commit/a6e373d69253a110d9f6c2c5fe7b70cfc65bc910))
+* clean up cli error handling ([#591](https://github.com/rivet-gg/toolchain/issues/591)) ([8126ac2](https://github.com/rivet-gg/toolchain/commit/8126ac2238c3d76405994eae6ac377688101fba6))
+* don't prompt env selection if there's only one env ([#595](https://github.com/rivet-gg/toolchain/issues/595)) ([3f6cf8e](https://github.com/rivet-gg/toolchain/commit/3f6cf8ea62e8712d0b6406b0925bf060985e01f3))
+* fix deploy progress bar ([#590](https://github.com/rivet-gg/toolchain/issues/590)) ([c124282](https://github.com/rivet-gg/toolchain/commit/c124282879e1234eaaa1d56dee3ea48abde30d6d))
+* fix js lints ([#597](https://github.com/rivet-gg/toolchain/issues/597)) ([17b1561](https://github.com/rivet-gg/toolchain/commit/17b15615f81121c2f8681891909c678f42dbf3d7))
+* impl `rivet init` ([#594](https://github.com/rivet-gg/toolchain/issues/594)) ([a5e4ac6](https://github.com/rivet-gg/toolchain/commit/a5e4ac6e4d593f0dabd8e0e6c43e74cbc6fb6b28))
+* remove legacy rivet modules code (postgres, backend, etc) ([#575](https://github.com/rivet-gg/toolchain/issues/575)) ([d9d47f4](https://github.com/rivet-gg/toolchain/commit/d9d47f4f6a9a642f6d43eee5aae083526827c6bc))
+* rename build patch-tags ([#596](https://github.com/rivet-gg/toolchain/issues/596)) ([21853b2](https://github.com/rivet-gg/toolchain/commit/21853b2e4002baf7a5629166bebda6a399e0eb6d))
+* rename primary command signin -&gt; login ([#587](https://github.com/rivet-gg/toolchain/issues/587)) ([37041a2](https://github.com/rivet-gg/toolchain/commit/37041a26b179c0a8c8eed59dc97922f23c37e2d5))
+* support ctrl c in logs ([#586](https://github.com/rivet-gg/toolchain/issues/586)) ([5f1f034](https://github.com/rivet-gg/toolchain/commit/5f1f034ea93b27603bbc428db4f9191db9637de2))
+* temporarily fix tag patching ([#599](https://github.com/rivet-gg/toolchain/issues/599)) ([59c6e2f](https://github.com/rivet-gg/toolchain/commit/59c6e2fb75fe58795e1a6ec92d44ac170c68ccc4))
+* **toolchain:** allow hooking to existing game server process ([#563](https://github.com/rivet-gg/toolchain/issues/563)) ([ba8a189](https://github.com/rivet-gg/toolchain/commit/ba8a189904cd8ce4a1b0e17fe99aee06f533c9ce))
+* **toolchain:** rename default buildx builder from rivet_cli -&gt; rivet_toolchain ([#560](https://github.com/rivet-gg/toolchain/issues/560)) ([6d18ff8](https://github.com/rivet-gg/toolchain/commit/6d18ff83b5ea205cc06e83f4b37d1c10d1bff992))
+* update sdk ([#579](https://github.com/rivet-gg/toolchain/issues/579)) ([2899185](https://github.com/rivet-gg/toolchain/commit/289918595347e2deb09d7a53720d5c0888da0e8f))
+
 ## [2.0.0-rc.6](https://github.com/rivet-gg/toolchain/compare/v2.0.0-rc.5...v2.0.0-rc.6) (2024-10-03)
 
 
