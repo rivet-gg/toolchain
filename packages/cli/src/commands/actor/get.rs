@@ -7,10 +7,10 @@ use uuid::Uuid;
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(index = 1)]
-	environment: String,
-
-	#[clap(long)]
 	id: String,
+
+	#[clap(long, alias = "env", short = 'e')]
+	environment: Option<String>,
 }
 
 impl Opts {
@@ -27,13 +27,15 @@ impl Opts {
 	pub async fn execute_inner(&self) -> Result<ExitCode> {
 		let ctx = toolchain::toolchain_ctx::load().await?;
 
+		let env = crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await?;
+
 		let actor_id = Uuid::parse_str(&self.id).context("invalid id uuid")?;
 
 		match apis::actor_api::actor_get(
 			&ctx.openapi_config_cloud,
 			&actor_id.to_string(),
 			Some(&ctx.project.name_id),
-			Some(&self.environment),
+			Some(&env),
 		)
 		.await
 		{

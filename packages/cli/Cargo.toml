@@ -21,6 +21,7 @@ uuid = { version = "1.11.0", features = ["v4"] }
 url = { version = "2.5.3", features = ["serde"] }
 base64 = "0.22.1"
 kv-str = { version = "0.1.0", path = "../kv-str" }
+inquire = "0.7.5"
 
 [build-dependencies]
 anyhow = "1.0"

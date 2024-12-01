@@ -3,7 +3,8 @@ use std::{collections::HashMap, process::ExitCode};
 
 #[derive(Parser)]
 pub struct Opts {
-	environment: String,
+	#[clap(long, alias = "env", short = 'e')]
+	environment: Option<String>,
 
 	#[clap(long, short = 't')]
 	tags: Option<String>,
@@ -11,6 +12,22 @@ pub struct Opts {
 
 impl Opts {
 	pub async fn execute(&self) -> ExitCode {
+		let ctx = match toolchain::toolchain_ctx::load().await {
+			Ok(c) => c,
+			Err(err) => {
+				eprintln!("Failed to load ctx: {err:?}");
+				return ExitCode::FAILURE;
+			}
+		};
+
+		let env = match crate::util::env::get_or_select(&ctx, self.environment.as_ref()).await {
+			Ok(e) => e,
+			Err(err) => {
+				eprintln!("Failed to select env: {err:?}");
+				return ExitCode::FAILURE;
+			}
+		};
+
 		let build_tags = match self
 			.tags
 			.as_ref()
@@ -25,7 +42,7 @@ impl Opts {
 		};
 
 		match crate::util::deploy::deploy(crate::util::deploy::DeployOpts {
-			environment: &self.environment,
+			environment: &env,
 			build_tags,
 		})
 		.await
