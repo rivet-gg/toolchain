@@ -14,7 +14,7 @@ pub struct Opts {
 	#[clap(short = 't', long = "tag")]
 	tags: Option<String>,
 
-	#[clap(short = 'e', long = "exclusive-tag")]
+	#[clap(short = 'e', long = "exclusive-tags")]
 	exclusive_tags: Option<String>,
 }
 
