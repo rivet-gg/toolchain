@@ -85,7 +85,7 @@ async fn report_error(err: anyhow::Error) {
 	let event_id = sentry::integrations::anyhow::capture_anyhow(&err);
 
 	// Capture event in PostHog
-	let capture_res = util::telemetry::capture_event(
+	util::telemetry::capture_event(
         "$exception",
         Some(|event: &mut async_posthog::Event| {
             event.insert_prop("errors", format!("{}", err))?;
@@ -95,7 +95,4 @@ async fn report_error(err: anyhow::Error) {
         }),
     )
     .await;
-	if let Err(err) = capture_res {
-		eprintln!("Failed to capture event in PostHog: {:?}", err);
-	}
 }
