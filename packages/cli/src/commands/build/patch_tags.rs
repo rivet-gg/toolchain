@@ -3,8 +3,6 @@ use clap::Parser;
 use std::{collections::HashMap, process::ExitCode};
 use toolchain::rivet_api::{apis, models};
 
-use crate::util::kv_str;
-
 #[derive(Parser)]
 pub struct Opts {
 	#[clap(index = 1)]

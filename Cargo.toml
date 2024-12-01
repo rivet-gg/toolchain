@@ -3,7 +3,7 @@ resolver = "2"
 members = [
   "packages/cli",
   "packages/deno-embed",
-  "packages/js-utils-embed",
+  "packages/js-utils-embed", "packages/kv-str",
   "packages/toolchain",
 ]
 

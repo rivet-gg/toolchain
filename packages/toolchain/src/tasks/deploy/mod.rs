@@ -1,8 +1,7 @@
-use std::collections::HashMap;
-
 use anyhow::*;
 use rivet_api::{apis, models};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::{
@@ -19,10 +18,13 @@ mod js;
 pub struct Input {
 	pub config: config::Config,
 	pub environment_id: Uuid,
+	pub build_tags: Option<HashMap<String, String>>,
 }
 
 #[derive(Serialize)]
-pub struct Output {}
+pub struct Output {
+	pub build_ids: Vec<Uuid>,
+}
 
 pub struct Task;
 
@@ -48,8 +50,20 @@ impl task::Task for Task {
 			.await?;
 		let version_name = reserve_res.version_display_name;
 
+		// Build
+		let mut build_ids = Vec::new();
 		for build in &input.config.builds {
-			let _build_id = build_and_upload(
+			// Filter out builds that match the tags
+			if let Some(filter) = &input.build_tags {
+				if !filter.iter().all(|(k, v)| build.tags.get(k) == Some(v)) {
+					continue;
+				}
+			}
+
+			task.log(format!("[Build] {}", kv_str::to_str(&build.tags)?));
+
+			// Build
+			let build_id = build_and_upload(
 				&ctx,
 				task.clone(),
 				input.config.clone(),
@@ -58,12 +72,15 @@ impl task::Task for Task {
 				build,
 			)
 			.await?;
+			build_ids.push(build_id);
 		}
+
+		ensure!(!build_ids.is_empty(), "No builds matched build tags");
 
 		task.log("");
 		task.log("[Deploy Finished]");
 
-		Ok(Output {})
+		Ok(Output { build_ids })
 	}
 }
 

@@ -14,12 +14,15 @@ impl Config {
 		let jsonc_path = path.join("rivet.jsonc");
 		let json_path = path.join("rivet.json");
 
-		let (file_path, content) = match (jsonc_path.exists(), json_path.exists()) {
+		let file_path = match (jsonc_path.exists(), json_path.exists()) {
 			(true, true) => bail!("Both rivet.jsonc and rivet.json exist. Please remove one."),
 			(false, false) => bail!("Neither rivet.jsonc nor rivet.json exist."),
-			(true, false) => (&jsonc_path, tokio::fs::read_to_string(&jsonc_path).await?),
-			(false, true) => (&json_path, tokio::fs::read_to_string(&json_path).await?),
+			(true, false) => &jsonc_path,
+			(false, true) => &json_path,
 		};
+		let content = tokio::fs::read_to_string(&file_path)
+			.await
+			.with_context(|| anyhow!("failed to open config: {}", file_path.display()))?;
 
 		let parsed_value = jsonc_parser::parse_to_serde_value(&content, &Default::default())
 			.map_err(|err| anyhow!("Failed to parse {}: {err}", file_path.display()))?
