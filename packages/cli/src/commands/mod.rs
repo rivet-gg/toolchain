@@ -20,7 +20,7 @@ pub enum SubCommand {
 	Signout(sign_out::Opts),
 	#[clap(alias = "d")]
 	Deploy(deploy::Opts),
-	#[clap(alias = "e")]
+	#[clap(alias = "e", alias = "env")]
 	Environment {
 		#[clap(subcommand)]
 		subcommand: environment::SubCommand,
