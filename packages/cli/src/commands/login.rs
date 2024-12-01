@@ -5,7 +5,6 @@ use toolchain::tasks;
 use crate::util::{
 	os,
 	task::{run_task, TaskOutputStyle},
-	term,
 };
 
 /// Login to a project
@@ -37,10 +36,6 @@ impl Opts {
 		)
 		.await?;
 
-		// Prompt user to press enter to open browser
-		println!("Press Enter to login in your browser");
-		term::wait_for_enter().await?;
-
 		// Open link in browser
 		//
 		// Linux root users often cannot open the browser, so we fallback to printing the URL
@@ -52,10 +47,13 @@ impl Opts {
 			)
 			.is_ok()
 		{
-			println!("Waiting for browser...");
+			println!(
+				"Waiting for browser...\n\nIf browser did not open, open this URL to login:\n{}",
+				device_link_output.device_link_url
+			);
 		} else {
 			println!(
-				"Failed to open browser.\n\nVisit this URL:\n{}",
+				"Open this URL to login:\n{}",
 				device_link_output.device_link_url
 			);
 		}

@@ -1,5 +1,6 @@
 pub mod build;
 pub mod config;
+pub mod errors;
 pub mod meta;
 pub mod paths;
 pub mod project;

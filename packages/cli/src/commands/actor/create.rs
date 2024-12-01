@@ -8,7 +8,6 @@ use toolchain::{
 };
 use uuid::Uuid;
 
-
 #[derive(ValueEnum, Clone)]
 enum NetworkMode {
 	Bridge,
