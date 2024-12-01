@@ -4,6 +4,8 @@ pub mod util;
 use clap::{builder::styling, Parser};
 use std::process::ExitCode;
 
+use crate::util::errors;
+
 const STYLES: styling::Styles = styling::Styles::styled()
 	.header(styling::AnsiColor::Red.on_default().bold())
 	.usage(styling::AnsiColor::Red.on_default().bold())
@@ -36,5 +38,19 @@ struct Cli {
 #[tokio::main]
 async fn main() -> ExitCode {
 	let cli = Cli::parse();
-	cli.command.execute().await
+	match cli.command.execute().await {
+		Ok(()) => ExitCode::SUCCESS,
+		Err(err) => {
+			if err.is::<errors::GracefulExit>() {
+				// Don't print anything, already handled
+			} else if let Some(err) = err.downcast_ref::<errors::UserError>() {
+				eprintln!("{err}");
+			} else {
+				eprintln!("{err}");
+				// TODO: Report error
+			}
+
+			ExitCode::FAILURE
+		}
+	}
 }

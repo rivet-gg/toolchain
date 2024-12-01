@@ -1,5 +1,5 @@
+use anyhow::*;
 use clap::Subcommand;
-use std::process::ExitCode;
 
 mod select;
 
@@ -10,7 +10,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self) -> ExitCode {
+	pub async fn execute(&self) -> Result<()> {
 		match &self {
 			SubCommand::Select(opts) => opts.execute().await,
 		}

@@ -8,8 +8,8 @@ pub mod logout;
 pub mod metadata;
 pub mod region;
 
+use anyhow::*;
 use clap::Parser;
-use std::process::ExitCode;
 
 #[derive(Parser)]
 pub enum SubCommand {
@@ -47,7 +47,7 @@ pub enum SubCommand {
 }
 
 impl SubCommand {
-	pub async fn execute(&self) -> ExitCode {
+	pub async fn execute(&self) -> Result<()> {
 		match self {
 			SubCommand::Init(opts) => opts.execute().await,
 			SubCommand::Login(opts) => opts.execute().await,
