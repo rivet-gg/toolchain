@@ -1,3 +1,7 @@
+# Archived Repository
+
+⚠️ **This repository is archived and no longer maintained. It has been moved to [rivet-gg/rivet](https://github.com/rivet-gg/rivet).** ⚠️
+
 # ⛓️ Rivet Toolchain
 
 ## Installation
